@@ -196,13 +196,16 @@ class ListingFileUploadedEventHandlerTest {
         assertEquals(result.quality, imageArg.firstValue.imageQuality)
         assertEquals(result.reason, imageArg.firstValue.rejectionReason)
 
-        verify(listingService, never()).save(any(), anyOrNull())
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), eq(image.createdById))
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
     }
 
     private fun createFileEvent(ownerType: ObjectType = ObjectType.LISTING): FileUploadedEvent {
         return FileUploadedEvent(
             fileId = file.id!!,
             tenantId = file.tenantId,
+            fileType = FileType.FILE,
             owner = ObjectReference(listing.id!!, ownerType),
         )
     }
@@ -211,6 +214,7 @@ class ListingFileUploadedEventHandlerTest {
         return FileUploadedEvent(
             fileId = image.id!!,
             tenantId = image.tenantId,
+            fileType = FileType.IMAGE,
             owner = ObjectReference(listing.id!!, ObjectType.LISTING),
         )
     }
