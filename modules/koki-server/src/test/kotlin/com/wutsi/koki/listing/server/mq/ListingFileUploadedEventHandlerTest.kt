@@ -84,9 +84,9 @@ class ListingFileUploadedEventHandlerTest {
         doReturn(image).whenever(fileService).get(image.id!!, file.tenantId)
         doReturn(File("/foo/bar")).whenever(fileService).download(any())
         doReturn(totalFiles).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerTypeAndStatus(eq(FileType.FILE), any(), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.FILE), any(), any())
         doReturn(totalImages).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerTypeAndStatus(eq(FileType.IMAGE), any(), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.IMAGE), any(), any())
         doReturn(listing).whenever(listingService).get(any(), any())
         doReturn(agent).whenever(agentFactory).createImageReviewerAgent(any())
     }
