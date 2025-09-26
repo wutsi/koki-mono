@@ -51,15 +51,41 @@
     <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
     <div class="margin-left-small">
         <b th:text="${me.displayName}">NAME</b><br/>
-        <span th:text="${me.employer}">EMPLOYER</span>
+        <div th:text="${me.employer}">EMPLOYER</div>
+        <div class="flex margin-top-small">
+            <div class="margin-right" th:if="${me.whatsappUrl}">
+                <a class="btn btn-light btn-sm" th:href="${me.whatsappUrl}">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span class="d-none d-sm-inline" th:text="#{button.whatsapp}">Whatsapp</span>
+                </a>
+            </div>
+            <div th:if="${me.mobile}">
+                <a class="btn btn-light btn-sm" th:href="${me.mobileUrl}">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span class="d-none d-sm-inline" th:text="#{button.call}">XXXX</span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="flex" th:fragment="user-card(me)" th:if="${me}">
+<div class="flex" th:fragment="user-card(me, sendMessage)" th:if="${me}">
     <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
     <div class="margin-left-small w-100">
         <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
         <div th:text="${me.employer}">EMPLOYER</div>
+        <div class="margin-top-small" th:if="${sendMessage} AND ${me.whatsappUrl}">
+            <a class="btn btn-sm btn-whatsapp w-100" id="btn-whatsapp" target="_blank" th:href="${me.whatsappUrl}">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.whatsapp}">Whatsapp</span>
+            </a>
+        </div>
+        <div class="margin-top-small" th:if="${sendMessage} AND ${me.mobile}">
+            <a class="btn btn-sm btn-primary w-100" id="btn-call" th:href="${me.mobileUrl}">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <span th:text="#{button.call}">XXXX</span>
+            </a>
+        </div>
     </div>
 </div>
 

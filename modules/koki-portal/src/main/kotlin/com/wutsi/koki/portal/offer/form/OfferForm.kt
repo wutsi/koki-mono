@@ -23,4 +23,5 @@ data class OfferForm(
     val status: OfferStatus? = null,
     val comment: String? = null,
     val closedAt: String? = null,
+    val closedAtMax: String? = null,
 )

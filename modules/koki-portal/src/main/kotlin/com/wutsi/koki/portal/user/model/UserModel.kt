@@ -27,6 +27,7 @@ data class UserModel(
     val category: CategoryModel? = null,
     val city: LocationModel? = null,
     val country: String? = null,
+    val whatsappUrl: String? = null,
 ) {
     fun hasRole(roleId: Long): Boolean {
         return roles.find { role -> role.id == roleId } != null
@@ -61,5 +62,5 @@ data class UserModel(
     }
 
     val mobileUrl: String?
-        get() = mobile?.let { "https://wa.me/" + (mobile.substring(1)) }
+        get() = mobile?.let { "tel:" + mobile }
 }

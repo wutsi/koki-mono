@@ -38,12 +38,13 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
+            whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) },
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             category = category,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
                 .distinctBy { permission -> permission.id }
-                .map { permission -> permission.name }
+                .map { permission -> permission.name },
         )
     }
 
@@ -63,6 +64,7 @@ class UserMapper : TenantAwareMapper() {
             employer = entity.employer,
             photoUrl = entity.photoUrl,
             mobile = entity.mobile,
+            whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) },
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             city = city,
             country = entity.country,

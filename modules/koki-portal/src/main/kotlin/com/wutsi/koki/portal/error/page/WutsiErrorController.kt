@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.error.page
 
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.common.model.PageModel
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
+import jakarta.servlet.RequestDispatcher
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
@@ -12,6 +14,8 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.lang.StringBuilder
 import kotlin.jvm.java
 import kotlin.let
@@ -26,22 +30,29 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
     @GetMapping("/error")
     fun error(request: HttpServletRequest, model: Model): String {
         val msg = StringBuilder()
+        var ex: Throwable? = null
         try {
             val message = request.getAttribute("jakarta.servlet.error.message") as String?
+            model.addAttribute("message", message)
             message?.let {
                 msg.append(" error_message=$message")
-                model.addAttribute("message", message)
             }
 
-            val ex = getException(request)
+            val originalUrl = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI)
+            model.addAttribute("originalUrl", originalUrl)
+
+            ex = getException(request)
             if (ex != null) {
+                val sw = StringWriter()
+                ex.printStackTrace(PrintWriter(sw))
+                model.addAttribute("stacktrace", HtmlUtils.toHtml(sw.toString()))
+
                 return handleException(ex, model)
             } else {
                 val code = request.getAttribute("jakarta.servlet.error.status_code") as Int?
                 return handleStatusCode(code, model)
             }
         } finally {
-            val ex = request.getAttribute("jakarta.servlet.error.exception") as Throwable?
             if (ex != null) {
                 LOGGER.error(msg.toString(), ex)
             } else {

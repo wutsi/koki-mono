@@ -135,14 +135,10 @@ class ListingClosedMailetTest {
             """
                 Bonjour RAY SPONSIBLE,<br/><br/>
 
-                Je suis vraiment ravi(e) que nous ayons pu clôturer la transaction
-                du listing <a href="/listings/111">#24309500</a> situé au <b>340 Pascal, Bastos, Yaounde</b>.
-                Ce fut un plaisir de travailler avec vous.<br/><br/>
+                Nous avons le plaisir de vous informer que la transaction du listing <a href="/listings/111">#24309500</a>
+                situé au <b>340 Pascal, Bastos, Yaounde</b> a été clôturée.<br/><br/>
 
-                Je voulais juste confirmer que votre commission pour cette transaction était de <b>C${'$'} 50,000.00 (3.0%)</b>.
-                Votre collaboration a rendu l'ensemble du processus incroyablement fluide.<br/><br/>
-
-                J'espère avoir l'occasion de travailler à nouveau avec vous dans le futur.<br/><br/>
+                Nous vous confirmons que votre commission pour cette transaction est de <b>C${'$'} 50,000.00 (3.0%)</b>.
 
                 Cordialement,<br/><br/>
 

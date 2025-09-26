@@ -69,27 +69,21 @@
                             <div
                                 th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
                         </tr>
-                        <tr th:if="${contacts}"
-                            th:replace="~{__components/contact :: load-more(${moreUrl})}">
-                        </tr>
-                        <tr th:if="!${contacts}">
-                            <td colspan="7" th:text="#{page.contact.list.none-found}">EMPTY</td>
+                        <tr id="contact-load-more" th:if="${moreUrl}">
+                            <td class="text-center" colspan="7">
+                                <button
+                                    class="btn btn-sm btn-light w-100-mobile"
+                                    data-component-id="load-more"
+                                    data-container-id="contact-load-more"
+                                    th:data-url="${moreUrl}"
+                                    th:text="#{button.load_more}"
+                                >
+                                    Load more...
+                                </button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
-
-                    <div th:if="!${contacts} AND !${keyword}">
-                        <div class="alert alert-warning">
-                            <div th:text="#{page.contact.list.empty}">MESSAGE</div>
-                            <div class="margin-top"
-                                 th:if="${user?.hasPermission('contact:manage')} OR ${user.hasFullAccess('contact')}">
-                                <a class="btn-create btn btn-primary btn-sm" href="/contacts/create">
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span th:text="#{button.contact}">Contact</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

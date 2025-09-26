@@ -49,7 +49,8 @@ class EditContactController(
             firstName = contact.firstName,
             email = contact.email,
             accountId = contact.account?.id ?: -1,
-            preferredCommunicationMethod = contact.preferredCommunicationMethod,
+            preferredCommunicationMethod = contact.preferredCommunicationMethod?.let { method -> method }
+                ?: PreferredCommunicationMethod.UNKNOWN,
             street = contact.address?.street,
             cityId = contact.address?.city?.id,
             postalCode = contact.address?.postalCode,

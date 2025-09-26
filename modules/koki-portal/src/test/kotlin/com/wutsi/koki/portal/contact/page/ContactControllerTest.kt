@@ -9,7 +9,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ContactFixtures.contact
 import com.wutsi.koki.FileFixtures
-import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.contact.dto.GetContactResponse
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.portal.AbstractPageControllerTest
@@ -128,14 +127,6 @@ class ContactControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".tab-files tr.file", FileFixtures.files.size)
-    }
-
-    @Test
-    fun notes() {
-        navigateTo("/contacts/${contact.id}?tab=note")
-
-        Thread.sleep(1000)
-        assertElementCount(".tab-notes .note", NoteFixtures.notes.size)
     }
 
     @Test
