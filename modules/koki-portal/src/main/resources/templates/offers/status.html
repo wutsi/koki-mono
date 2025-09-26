@@ -44,7 +44,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="text-small" th:text="#{page.offer.closed-at.help}"></div>
-                            <input th:field="*{closedAt}" type="date"/>
+                            <input expired th:field="*{closedAt}" type="date" th:max="*{closedAtMax}"/>
                         </div>
                         <div class="section-item">
                             <label class="title">

@@ -122,6 +122,11 @@
                                 <td>
                                     <a th:href="${contact.mobileUrl}"
                                        th:text="${contact.mobileFormatted}">MOBILE</a>
+
+                                    <a class="btn btn-sm btn-whatsapp margin-left" th:href="${contact.whatsappUrl}">
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                        <span th:text="#{button.whatsapp}">Whatsapp</span>
+                                    </a>
                                 </td>
                             </tr>
                             <tr th:if="${contact.phone}">
@@ -131,7 +136,7 @@
                                        th:text="${contact.phoneFormatted}">PHONE</a>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.phone}">
+                            <tr th:if="${contact.preferredCommunicationMethod}">
                                 <td><b th:text="#{page.contact.contact_via}">Contact me via</b></td>
                                 <td th:text="#{'preferred-communication-method.' + ${contact.preferredCommunicationMethod}}">
                                     METHOD

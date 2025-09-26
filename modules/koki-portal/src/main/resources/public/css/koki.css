@@ -6,6 +6,10 @@ body {
     margin-top: 4.8em;
 }
 
+/*.fa-whatsapp {*/
+/*    color: #075E54*/
+/*}*/
+
 .flex {
     display: flex;
 }
@@ -574,6 +578,11 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border-radius: 1em;
 }
 
+.user-photo-empty {
+    width: 64px;
+    height: 1px;
+}
+
 .user-photo-small {
     width: 32px;
     height: 32px;
@@ -617,6 +626,17 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .btn-light {
     border: 1px solid gray;
+}
+
+.btn-whatsapp {
+    background: #075E54;
+    color: white;
+    border: 1px solid gray;
+}
+
+.btn-whatsapp:hover {
+    background: #25D366;
+    color: black;
 }
 
 a.btn-back {
@@ -673,6 +693,11 @@ table tr.entity td a {
     color: black !important;
     text-decoration: none !important;
 }
+
+a.phone {
+    text-decoration: none;
+}
+
 
 /* ===== SETTINGS ====== */
 .settings-container {

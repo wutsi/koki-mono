@@ -55,7 +55,7 @@ class ListContactControllerTest : AbstractPageControllerTest() {
         assertElementCount("tr.contact", entries.size)
 
         scrollToBottom()
-        click("#contact-load-more a")
+        click("#contact-load-more button")
         assertElementCount("tr.contact", 2 * entries.size)
     }
 

@@ -73,6 +73,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".btn-section-edit", 8)
+
+        assertElementNotPresent("#btn-whatsapp")
+        assertElementNotPresent("#btn-call")
+        assertElementNotPresent("#btn-offer")
+        assertElementNotPresent("#btn-whatsapp-sticky")
+        assertElementNotPresent("#btn-call-sticky")
+        assertElementNotPresent("#btn-offer-sticky")
     }
 
     @Test
@@ -90,6 +97,41 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementCount(".btn-section-edit", 0)
+
+        assertElementNotPresent("#btn-whatsapp")
+        assertElementNotPresent("#btn-call")
+        assertElementPresent("#btn-offer")
+        assertElementNotPresent("#btn-whatsapp-sticky")
+        assertElementNotPresent("#btn-call-sticky")
+        assertElementPresent("#btn-offer-sticky")
+    }
+
+    @Test
+    fun `view ACTIVE listing - another agent`() {
+        setupListing(status = ListingStatus.ACTIVE, sellerAgentUserId = users[1].id)
+
+        navigateTo("/listings/${listing.id}")
+        assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent("#btn-map")
+        assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-edit")
+        assertElementNotPresent("#btn-publish")
+        assertElementNotPresent("#btn-status")
+
+        Thread.sleep(1000)
+        assertElementCount(".btn-section-edit", 0)
+
+        assertElementPresent("#btn-whatsapp")
+        assertElementPresent("#btn-call")
+        assertElementPresent("#btn-offer")
+        assertElementPresent("#btn-whatsapp-sticky")
+        assertElementPresent("#btn-call-sticky")
+        assertElementPresent("#btn-offer-sticky")
+
+        assertElementsAttributeSame("#btn-whatsapp", "#btn-whatsapp-sticky", "href")
+        assertElementsAttributeSame("#btn-call", "#btn-call-sticky", "href")
+        assertElementsAttributeSame("#btn-offer", "#btn-offer-sticky", "href")
     }
 
     @Test
@@ -122,6 +164,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#final-seller-agent-commission")
         assertElementPresent("#final-buyer-agent-commission")
         assertElementCount(".btn-section-edit", 0)
+
+        assertElementNotPresent("#btn-whatsapp")
+        assertElementNotPresent("#btn-call")
+        assertElementNotPresent("#btn-offer")
+        assertElementNotPresent("#btn-whatsapp-sticky")
+        assertElementNotPresent("#btn-call-sticky")
+        assertElementNotPresent("#btn-offer-sticky")
     }
 
     @Test
@@ -153,6 +202,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#buyer-contact-info")
         assertElementNotPresent("#final-seller-agent-commission")
         assertElementCount(".btn-section-edit", 0)
+
+        assertElementPresent("#btn-whatsapp")
+        assertElementPresent("#btn-call")
+        assertElementNotPresent("#btn-offer")
+        assertElementPresent("#btn-whatsapp-sticky")
+        assertElementPresent("#btn-call-sticky")
+        assertElementNotPresent("#btn-offer-sticky")
     }
 
     @Test

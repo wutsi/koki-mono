@@ -40,6 +40,7 @@ class ContactMapper : TenantAwareMapper() {
             phoneFormatted = entity.phone?.let { number -> formatPhoneNumber(number) },
             mobileFormatted = entity.mobile?.let { number -> formatPhoneNumber(number) },
             email = entity.email,
+            whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) }
         )
     }
 
@@ -75,7 +76,8 @@ class ContactMapper : TenantAwareMapper() {
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayName },
             preferredCommunicationMethod = entity.preferredCommunicationMethod,
-            address = toAddress(entity.address, locations)
+            address = toAddress(entity.address, locations),
+            whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) }
         )
     }
 
@@ -90,7 +92,7 @@ class ContactMapper : TenantAwareMapper() {
             postalCode = address.postalCode,
             countryName = address.country?.let { country ->
                 Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
-            }
+            },
         )
     }
 }

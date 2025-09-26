@@ -21,6 +21,7 @@ import com.wutsi.koki.refdata.dto.Money
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import java.net.URLEncoder
 import java.util.Locale
 
 @Service
@@ -115,7 +116,11 @@ class ListingMapper(
             totalImages = entity.totalImages,
             totalOffers = entity.totalOffers,
 
-            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
+                users[id]?.copy(
+                whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
+            )
+            },
             createdBy = entity.createdById?.let { id -> users[id] },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -158,7 +163,11 @@ class ListingMapper(
                 )
             },
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
-            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
+                users[id]?.copy(
+                whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
+            )
+            },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
@@ -226,5 +235,16 @@ class ListingMapper(
                 )
             }
         }
+    }
+
+    private fun whatsappUrl(listingId: Long, listingNumber: Long, mobileUrl: String?): String? {
+        if (mobileUrl.isNullOrEmpty()) {
+            return null
+        }
+
+        val locale = LocaleContextHolder.getLocale()
+        val url = currentTenant.get()?.portalUrl + "/listings/$listingId"
+        val text = messages.getMessage("page.listing.whatsapp.body", arrayOf(url, listingNumber), locale)
+        return "https://wa.me?" + mobileUrl.substring(1) + "&text=" + URLEncoder.encode(text, "utf-8")
     }
 }

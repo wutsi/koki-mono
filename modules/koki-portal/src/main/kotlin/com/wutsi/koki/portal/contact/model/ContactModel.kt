@@ -34,6 +34,7 @@ data class ContactModel(
     val readOnly: Boolean = false,
     val preferredCommunicationMethod: PreferredCommunicationMethod = PreferredCommunicationMethod.UNKNOWN,
     val address: AddressModel? = null,
+    val whatsappUrl: String? = null
 ) {
     val name: String
         get() = ((salutation ?: "") + " $firstName $lastName").trim()
@@ -42,12 +43,7 @@ data class ContactModel(
         get() = phone?.let { "tel:$phone" }
 
     val mobileUrl: String?
-        get() = mobile?.let {
-            when (preferredCommunicationMethod) {
-                PreferredCommunicationMethod.WHATSAPP -> "https://wa.me/" + (mobile.substring(1))
-                else -> "tel:$phone"
-            }
-        }
+        get() = mobile?.let { "tel:$mobile" }
 
     val emailUrl: String?
         get() = email?.let { "mailto:$email" }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Controller
 @RequestMapping("/offers/status")
@@ -23,7 +25,11 @@ class ChangeOfferStatusController : AbstractEditOfferController() {
         @RequestParam status: OfferStatus,
         model: Model
     ): String {
-        return status(OfferForm(id = id, status = status), model)
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        return status(
+            form = OfferForm(id = id, status = status, closedAtMax = df.format(Date())),
+            model = model,
+        )
     }
 
     private fun status(form: OfferForm, model: Model): String {

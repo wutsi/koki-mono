@@ -1,4 +1,16 @@
 <tr class="contact entity" th:each="contact : ${contacts}">
     <div th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
 </tr>
-<tr th:replace="~{__components/contact :: load-more(${moreUrl})}"></tr>
+<tr id="contact-load-more" th:if="${moreUrl}">
+    <td class="text-center" colspan="7">
+        <button
+            class="btn btn-sm btn-light w-100-mobile"
+            data-component-id="load-more"
+            data-container-id="contact-load-more"
+            th:data-url="${moreUrl}"
+            th:text="#{button.load_more}"
+        >
+            Load more...
+        </button>
+    </td>
+</tr>
