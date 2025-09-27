@@ -127,7 +127,8 @@
                 <tr th:if="${showAgent} AND ${listing.sellerAgentUser}">
                     <th th:text="#{page.listing.agent}" valign="top">AGENT</th>
                     <td class="padding-left-small">
-                        <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
+                        <div
+                            th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
                     </td>
                 </tr>
             </table>
@@ -135,7 +136,7 @@
     </td>
     <td class="d-none d-md-table-cell" th:if="${showAgent}">
         <a target="_blank" th:href="'/listings/' + ${listing.id}">
-            <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
+            <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, true)}"></div>
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${sold}">
@@ -256,7 +257,7 @@
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
             <div class="margin-top-small" th:if="${listing.sellerAgentUser}">
-                <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser})}"></div>
+                <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, true)}"></div>
             </div>
         </a>
     </div>

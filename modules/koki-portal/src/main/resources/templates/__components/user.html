@@ -47,12 +47,12 @@
     });
 </script>
 
-<div class="text-small flex" th:fragment="user-small-card(me)" th:if="${me}">
+<div class="text-small flex" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
     <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
     <div class="margin-left-small">
         <b th:text="${me.displayName}">NAME</b><br/>
         <div th:text="${me.employer}">EMPLOYER</div>
-        <div class="flex margin-top-small">
+        <div class="flex margin-top-small" th:if="${sendMessage}">
             <div class="margin-right" th:if="${me.whatsappUrl}">
                 <a class="btn btn-light btn-sm" th:href="${me.whatsappUrl}">
                     <i class="fa-brands fa-whatsapp"></i>

@@ -12,14 +12,14 @@
             <b th:text="#{page.offer.submitted-by}">BY</b>
         </td>
         <td>
-            <div class="flex">
-                <div>
+            <div>
+                <div class="margin-bottom-small">
                     <div th:replace="~{__components/offer :: offer-party-badge(${version.submittingParty})}"></div>
                 </div>
-                <div class="margin-left-small" th:if="${version.submittingParty.name() == 'BUYER'}">
+                <div th:if="${version.submittingParty.name() == 'BUYER'}">
                     <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
                 </div>
-                <div class="margin-left-small" th:if="${version.submittingParty.name() == 'SELLER'}">
+                <div th:if="${version.submittingParty.name() == 'SELLER'}">
                     <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
                 </div>
             </div>
