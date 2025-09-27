@@ -125,8 +125,7 @@
                     </td>
                 </tr>
                 <tr th:if="${showAgent} AND ${listing.sellerAgentUser}">
-                    <th th:text="#{page.listing.agent}" valign="top">AGENT</th>
-                    <td class="padding-left-small">
+                    <td colspan="2">
                         <div
                             th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
                     </td>

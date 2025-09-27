@@ -17,10 +17,10 @@
                     <div th:replace="~{__components/offer :: offer-party-badge(${version.submittingParty})}"></div>
                 </div>
                 <div th:if="${version.submittingParty.name() == 'BUYER'}">
-                    <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
+                    <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser}, true)}"></div>
                 </div>
                 <div th:if="${version.submittingParty.name() == 'SELLER'}">
-                    <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
+                    <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser}, true)}"></div>
                 </div>
             </div>
         </td>
@@ -30,10 +30,10 @@
             <b th:text="#{page.offer.submitted-to}">TO</b>
         </td>
         <td th:if="${version.submittingParty.name() == 'BUYER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}"></div>
+            <div th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser}, true)}"></div>
         </td>
         <td th:if="${version.submittingParty.name() == 'SELLER'}">
-            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}"></div>
+            <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser}, true)}"></div>
         </td>
     </tr>
     <tr>
