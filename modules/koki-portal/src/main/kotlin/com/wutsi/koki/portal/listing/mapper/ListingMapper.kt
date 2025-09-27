@@ -118,8 +118,8 @@ class ListingMapper(
 
             sellerAgentUser = entity.sellerAgentUserId?.let { id ->
                 users[id]?.copy(
-                whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
-            )
+                    whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobile)
+                )
             },
             createdBy = entity.createdById?.let { id -> users[id] },
             createdAt = entity.createdAt,
@@ -165,8 +165,8 @@ class ListingMapper(
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentUser = entity.sellerAgentUserId?.let { id ->
                 users[id]?.copy(
-                whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
-            )
+                    whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
+                )
             },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
@@ -245,6 +245,6 @@ class ListingMapper(
         val locale = LocaleContextHolder.getLocale()
         val url = currentTenant.get()?.portalUrl + "/listings/$listingId"
         val text = messages.getMessage("page.listing.whatsapp.body", arrayOf(url, listingNumber), locale)
-        return "https://wa.me?" + mobileUrl.substring(1) + "&text=" + URLEncoder.encode(text, "utf-8")
+        return "https://wa.me/" + mobileUrl.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
     }
 }

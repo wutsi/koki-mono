@@ -32,12 +32,12 @@
                             <label class="title" th:text="#{page.offer.submitted-to}">TO</label>
                             <div th:if="*{submittingParty.name() == 'BUYER'}" th:remove="tag">
                                 <div
-                                    th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
+                                    th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser}, true)}">
                                 </div>
                             </div>
                             <div th:if="*{submittingParty.name() == 'SELLER'}" th:remove="tag">
                                 <div
-                                    th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
+                                    th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser}, true)}">
                                 </div>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                             <label class="title" th:text="#{page.offer.submitted-by}">BY</label>
                             <div th:if="*{submittingParty.name() == 'BUYER'}" th:remove="tag">
                                 <div
-                                    th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser})}">
+                                    th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser}, true)}">
                                 </div>
                             </div>
                             <div th:if="*{submittingParty.name() == 'SELLER'}" th:remove="tag">
                                 <div
-                                    th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser})}">
+                                    th:replace="~{__components/user :: user-small-card(${offer.sellerAgentUser}, true)}">
                                 </div>
                             </div>
                         </div>
