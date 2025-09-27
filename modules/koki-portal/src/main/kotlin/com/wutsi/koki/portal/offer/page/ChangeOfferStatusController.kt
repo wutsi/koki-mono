@@ -35,7 +35,7 @@ class ChangeOfferStatusController : AbstractOfferStatusController() {
     private fun status(form: OfferForm, model: Model): String {
         val offer = when (form.status) {
             OfferStatus.SUBMITTED -> findSubmittedOffer(form.id)
-            OfferStatus.REJECTED,OfferStatus.ACCEPTED -> findAcceptedRejectedOffer(form.id)
+            OfferStatus.REJECTED, OfferStatus.ACCEPTED -> findAcceptedRejectedOffer(form.id)
             else -> findOffer(form.id)
         }
         model.addAttribute("offer", offer)
