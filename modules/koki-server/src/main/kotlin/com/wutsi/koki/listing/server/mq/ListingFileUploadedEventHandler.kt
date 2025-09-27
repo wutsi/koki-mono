@@ -23,6 +23,12 @@ class ListingFileUploadedEventHandler(
     private val logger: KVLogger,
 ) {
     fun handle(event: FileUploadedEvent) {
+        logger.add("event_file_id", event.fileId)
+        logger.add("event_file_type", event.fileType)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_owner_id", event.owner?.id)
+        logger.add("event_owner_type", event.owner?.type)
+
         if (!accept(event)) {
             return
         }

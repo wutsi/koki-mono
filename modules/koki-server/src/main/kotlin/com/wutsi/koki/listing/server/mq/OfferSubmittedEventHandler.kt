@@ -14,6 +14,11 @@ class OfferSubmittedEventHandler(
     private val logger: KVLogger,
 ) {
     fun handle(event: OfferSubmittedEvent) {
+        logger.add("event_offer_id", event.offerId)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_owner_id", event.owner?.id)
+        logger.add("event_owner_type", event.owner?.type)
+
         if (!accept(event)) {
             return
         }
@@ -25,8 +30,6 @@ class OfferSubmittedEventHandler(
             event.tenantId,
         )
         listingService.save(listing)
-
-        logger.add("listing_id", listing.id)
         logger.add("listing_total_offers", listing.totalOffers)
     }
 

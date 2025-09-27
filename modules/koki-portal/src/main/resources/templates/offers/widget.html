@@ -18,7 +18,7 @@
                         <div th:replace="~{__components/offer :: offer-listing(${offer.listing})}"></div>
 
                         <table class="margin-top-small text-small d-block d-md-none">
-                            <tr>
+                            <tr th:if="${offer.version.expiresAt}">
                                 <th th:text="#{page.offer.expires-at}">EXPIRY</th>
                                 <td class="padding-left" th:text="${offer.version.expiresAtText}">yyy-MM-dd</td>
                             </tr>

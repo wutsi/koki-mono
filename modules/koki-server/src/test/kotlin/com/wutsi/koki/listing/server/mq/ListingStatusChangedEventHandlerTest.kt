@@ -10,7 +10,9 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.email.ListingClosedMailet
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
+import org.junit.jupiter.api.AfterEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,9 +21,11 @@ class ListingStatusChangedEventHandlerTest {
     private val publisher = mock<Publisher>()
     private val listingPublisher = mock<ListingPublisher>()
     private val listingClosedMailet = mock<ListingClosedMailet>()
+    private val logger = DefaultKVLogger()
     private val handler = ListingStatusChangedEventHandler(
         listingPublisher = listingPublisher,
         listingClosedMailet = listingClosedMailet,
+        logger = logger,
         publisher = publisher,
     )
 
@@ -34,6 +38,11 @@ class ListingStatusChangedEventHandlerTest {
         totalFiles = null,
         status = ListingStatus.ACTIVE
     )
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
+    }
 
     @Test
     fun onPublishing() {

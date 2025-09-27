@@ -5,6 +5,7 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageProvider
+import com.wutsi.koki.platform.logger.KVLogger
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
@@ -23,8 +24,15 @@ class FileUploadedEventHandler(
     private val extractorProvider: FileInfoExtractorProvider,
     private val fileService: FileService,
     private val storageProvider: StorageProvider,
+    private val logger: KVLogger,
 ) {
     fun handle(event: FileUploadedEvent) {
+        logger.add("event_file_id", event.fileId)
+        logger.add("event_file_type", event.fileType)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_owner_id", event.owner?.id)
+        logger.add("event_owner_type", event.owner?.type)
+
         val file = fileService.get(id = event.fileId, tenantId = event.tenantId)
         val f = download(file)
         try {

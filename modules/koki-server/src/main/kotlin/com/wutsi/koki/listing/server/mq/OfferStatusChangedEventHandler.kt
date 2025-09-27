@@ -23,15 +23,15 @@ class OfferStatusChangedEventHandler(
     private val publisher: Publisher,
 ) {
     fun handle(event: OfferStatusChangedEvent) {
+        logger.add("event_status", event.status)
+        logger.add("event_offer_id", event.offerId)
+        logger.add("event_tenant_id", event.tenantId)
+        logger.add("event_owner_id", event.owner?.id)
+        logger.add("event_owner_type", event.owner?.type)
+
         if (!accept(event)) {
             return
         }
-
-        logger.add("event", event::class.java.simpleName)
-        logger.add("event_status", event.status)
-        logger.add("event_offer_id", event.offerId)
-        logger.add("event_owner_id", event.owner?.id)
-        logger.add("event_owner_type", event.owner?.type)
 
         val offer = offerService.get(event.offerId, event.tenantId)
         if (offer.status != event.status) {
