@@ -5,9 +5,6 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.security.RequiresPermission
-import io.lettuce.core.KillArgs.Builder.id
-import io.lettuce.core.KillArgs.Builder.user
-import io.micrometer.core.instrument.Metrics.counter
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,10 +17,10 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/offers/counter")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class CounterOfferController : AbstractEditOfferController() {
+class CounterOfferController : AbstractOfferStatusController() {
     @GetMapping
     fun counter(@RequestParam id: Long, model: Model): String {
-        val offer = findOffer(id)
+        val offer = findSubmittedOffer(id)
         model.addAttribute("offer", offer)
 
         val user = userHolder.get()

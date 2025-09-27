@@ -83,6 +83,7 @@ object OfferFixtures {
             status = OfferStatus.SUBMITTED,
             expiresAt = DateUtils.addDays(Date(), 3),
             closingAt = DateUtils.addMonths(Date(), 3),
+            assigneeUserId = USER_ID,
             createdAt = Date(),
             contingencies = """
                 One common example is when one or both parties need to wrap up other real estate deals in order for the transaction to close.

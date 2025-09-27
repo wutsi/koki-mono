@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/offers/counter/done")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class CounterOfferDoneController : AbstractOfferDetailsController() {
+class CounterOfferDoneController : AbstractOfferStatusController() {
     @GetMapping
     fun done(@RequestParam id: Long, model: Model): String {
         val offer = findOffer(id)
