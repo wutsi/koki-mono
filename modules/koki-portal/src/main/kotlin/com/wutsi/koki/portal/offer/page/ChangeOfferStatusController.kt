@@ -18,7 +18,7 @@ import java.util.Date
 @Controller
 @RequestMapping("/offers/status")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class ChangeOfferStatusController : AbstractEditOfferController() {
+class ChangeOfferStatusController : AbstractOfferStatusController() {
     @GetMapping
     fun status(
         @RequestParam id: Long,
@@ -33,7 +33,11 @@ class ChangeOfferStatusController : AbstractEditOfferController() {
     }
 
     private fun status(form: OfferForm, model: Model): String {
-        val offer = findOffer(form.id)
+        val offer = when (form.status) {
+            OfferStatus.SUBMITTED -> findSubmittedOffer(form.id)
+            OfferStatus.REJECTED,OfferStatus.ACCEPTED -> findAcceptedRejectedOffer(form.id)
+            else -> findOffer(form.id)
+        }
         model.addAttribute("offer", offer)
         model.addAttribute("form", form)
 
