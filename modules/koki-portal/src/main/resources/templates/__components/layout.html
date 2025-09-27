@@ -139,17 +139,13 @@
     </div>
 </div>
 
-<div class="margin-top-4x border margin background-white" th:fragment="error-details(url, message, stacktrace)">
-    <div class="error text-small padding-small">
+<div class="margin-top-4x border margin text-small background-white"
+     th:fragment="error-details(url, message, stacktrace)">
+    <div class="error padding-small">
         <span th:text="${url}">URL</span>
         <span th:text="${message}">MESSAGE</span>
     </div>
-    <div class="text-small margin-top padding-top border-top padding-top"
-         th:if="${stacktrace}"
-         th:utext="${stacktrace}"
-    >
-        STACKTRACE
-    </div>
+    <div class="padding-small border-top" th:if="${stacktrace}" th:utext="${stacktrace}">STACKTRACE</div>
 </div>
 
 </body>
