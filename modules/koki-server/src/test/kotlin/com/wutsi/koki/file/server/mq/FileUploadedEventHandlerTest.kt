@@ -12,7 +12,9 @@ import com.wutsi.koki.file.server.service.FileInfoExtractor
 import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageProvider
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.StorageService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,10 +26,12 @@ class FileUploadedEventHandlerTest {
     private val extractor = mock<FileInfoExtractor>()
     private val extractorProvider = mock<FileInfoExtractorProvider>()
     private val fileService = mock<FileService>()
+    private val logger = DefaultKVLogger()
     private val handler = FileUploadedEventHandler(
         storageProvider = storageProvider,
         extractorProvider = extractorProvider,
         fileService = fileService,
+        logger = logger,
     )
 
     private val file = FileEntity(
@@ -52,6 +56,11 @@ class FileUploadedEventHandlerTest {
 
         doReturn(info).whenever(extractor).extract(any())
         doReturn(extractor).whenever(extractorProvider).get(any())
+    }
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
     }
 
     @Test
