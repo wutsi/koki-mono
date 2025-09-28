@@ -66,6 +66,9 @@ class ListingPublishedMailet(
             "listingUrl" to "${tenant.portalUrl}/listings/${listing.id}",
         )
         val body = templateResolver.resolve("/listing/email/published.html", data)
+
+        logger.add("recipient_user_id", agent.id)
+        logger.add("recipient_user_email", agent.email)
         sender.send(
             recipient = agent,
             subject = SUBJECT,

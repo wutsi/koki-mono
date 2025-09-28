@@ -76,6 +76,8 @@ class ListingClosedMailet(
         ).filter { entry -> entry.value != null } as Map<String, Any>
         val body = templateResolver.resolve("/listing/email/closed-buyer.html", data)
 
+        logger.add("recipient_user_id", buyerAgent.id)
+        logger.add("recipient_user_email", buyerAgent.email)
         sender.send(
             recipient = buyerAgent,
             subject = SUBJECT.replace("{{address}}", address).replace("{{recipient}}", recipient),
