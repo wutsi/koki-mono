@@ -43,20 +43,29 @@ data class OfferModel(
     val statusRejected: Boolean
         get() = status == OfferStatus.REJECTED
 
+    val assigneeUser: UserModel?
+        get() = if (version.submittingParty == OfferParty.SELLER) {
+            sellerAgentUser
+        } else if (version.submittingParty == OfferParty.BUYER) {
+            buyerAgentUser
+        } else {
+            null
+        }
+
     /**
      * - User can access AND user is the seller or byuer agent
      * - user has full access
      */
     fun canAccess(user: UserModel?): Boolean {
-        return ((user?.canAccess("offer") == true) && (user.id == sellerAgentUser?.id || user.id == buyerAgentUser?.id)) ||
-            (user?.hasFullAccess("offer") == true)
+        return (user?.canAccess("offer") == true) || (user?.hasFullAccess("offer") == true)
     }
 
     /**
      * - ...
      */
     fun canManage(user: UserModel?): Boolean {
-        return (user?.canManage("offer") == true) && (user.id == sellerAgentUser.id)
+        return (user?.canManage("offer") == true) &&
+            ((user.id == sellerAgentUser.id) || user.id == version.assigneeUserId)
     }
 
     fun canAcceptOrRejectOrCounter(user: UserModel?): Boolean {
@@ -66,15 +75,8 @@ data class OfferModel(
     }
 
     fun canCloseOrCancel(user: UserModel?): Boolean {
-        return canManage(user) && (status == OfferStatus.ACCEPTED)
-    }
-
-    fun canWithdraw(user: UserModel?): Boolean {
-        return (user?.canManage("offer") == true) &&
-            (status == OfferStatus.SUBMITTED) &&
-            (user.id == buyerAgentUser.id &&
-                version.submittingParty == OfferParty.BUYER ||
-                user.id == sellerAgentUser.id &&
-                version.submittingParty == OfferParty.SELLER)
+        return canManage(user) &&
+            (status == OfferStatus.ACCEPTED) &&
+            (user?.id == sellerAgentUser.id)
     }
 }

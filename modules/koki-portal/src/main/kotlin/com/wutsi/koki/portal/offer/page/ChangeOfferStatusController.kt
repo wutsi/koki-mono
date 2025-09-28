@@ -4,6 +4,7 @@ import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.security.RequiresPermission
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ import java.util.Date
 @Controller
 @RequestMapping("/offers/status")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class ChangeOfferStatusController : AbstractOfferStatusController() {
+class ChangeOfferStatusController : AbstractEditOfferController() {
     @GetMapping
     fun status(
         @RequestParam id: Long,
@@ -34,8 +35,22 @@ class ChangeOfferStatusController : AbstractOfferStatusController() {
 
     private fun status(form: OfferForm, model: Model): String {
         val offer = when (form.status) {
-            OfferStatus.SUBMITTED -> findSubmittedOffer(form.id)
-            OfferStatus.REJECTED, OfferStatus.ACCEPTED -> findAcceptedRejectedOffer(form.id)
+            OfferStatus.REJECTED, OfferStatus.ACCEPTED -> {
+                val tmp = findOffer(form.id)
+                if (!tmp.statusSubmitted || !tmp.canAcceptOrRejectOrCounter(getUser())) {
+                    throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+                }
+                tmp
+            }
+
+            OfferStatus.CLOSED, OfferStatus.CANCELLED -> {
+                val tmp = findOffer(form.id)
+                if (!(tmp.statusAccepted || tmp.statusRejected) || !tmp.canCloseOrCancel(getUser())) {
+                    throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+                }
+                tmp
+            }
+
             else -> findOffer(form.id)
         }
         model.addAttribute("offer", offer)

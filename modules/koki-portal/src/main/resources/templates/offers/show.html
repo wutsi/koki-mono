@@ -59,26 +59,10 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-7">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/offer :: offer-summary(${offer})}"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-5">
-            <div class="widget" id="widget-offer-agents" th:if="${offer.sellerAgentUser}">
-                <div class="widget-body flex flex-space-between flex-wrap">
-                    <div class="w-49 w-100-mobile margin-bottom-mobile">
-                        <span class="badge text-bg-light border margin-bottom-small"
-                              th:text="#{'offer-party.SELLER'}">BUYER</span>
-                        <div th:replace="~{__components/user :: user-card(${offer.sellerAgentUser}, true)}"></div>
-                    </div>
-                    <div class="w-49 w-100-mobile">
-                        <span class="badge text-bg-light border margin-bottom-small"
-                              th:text="#{'offer-party.BUYER'}">BUYER</span>
-                        <div th:replace="~{__components/user :: user-card(${offer.buyerAgentUser}, true)}"></div>
-                    </div>
                 </div>
             </div>
         </div>

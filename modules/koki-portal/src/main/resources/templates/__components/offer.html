@@ -10,8 +10,11 @@
           th:if="${status.name() == 'REJECTED'} OR ${status.name() == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'}  OR ${status.name() == 'CANCELLED'}"
           th:text="#{'offer-status.' + ${status}}">REJECTED</span>
 
-    <span class="badge text-bg-success" th:if="${status.name() == 'ACCEPTED'} OR ${status.name() == 'CLOSED'}"
+    <span class="badge text-bg-warning" th:if="${status.name() == 'ACCEPTED'}"
           th:text="#{'offer-status.' + ${status}}">ACCEPTED</span>
+
+    <span class="badge text-bg-success" th:if="${status.name() == 'CLOSED'}"
+          th:text="#{'offer-status.' + ${status}}">CLOSED</span>
 </div>
 
 <div th:fragment="offer-party-badge(party)" th:remove="tag">

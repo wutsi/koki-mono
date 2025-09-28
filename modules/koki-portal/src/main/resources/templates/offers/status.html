@@ -30,8 +30,28 @@
                         <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                     </div>
 
-                    <div class="section-item" id="tab-details-content">
-                        <div th:replace="~{__components/offer :: offer-details(${offer})}"></div>
+                    <div class="section-item">
+                        <div th:replace="~{__components/offer :: offer-listing(${offer.listing})}"></div>
+                    </div>
+                    <div class="section-item">
+                        <label class="title" th:text="#{page.offer.amount}">AMOUNT</label>
+                        <div th:text="${offer.version.price.displayText}">$$$</div>
+                    </div>
+                    <div class="section-item" th:if="${form.status.name() == 'CLOSED'}">
+                        <label class="title" th:text="#{page.offer.buyer-agent}">BUYER-AGENT</label>
+                        <div th:replace="~{__components/user :: user-small-card(${offer.buyerAgentUser}, false)}"></div>
+                    </div>
+                    <div class="section-item"
+                         th:if="${form.status.name() == 'ACCEPTED'} OR ${form.status.name() == 'REJECTED'}">
+                        <label class="title" th:text="#{page.offer.submitted-by}">SUBMITTED-BY</label>
+                        <div>
+                            <div
+                                th:replace="~{__components/offer :: offer-party-badge(${offer.version.submittingParty})}"></div>
+                            <div class="margin-top-small">
+                                <div
+                                    th:replace="~{__components/user :: user-small-card(${offer.assigneeUser}, false)}"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <form class="form" method="post" th:action="@{/offers/status}" th:object="${form}">
@@ -44,7 +64,7 @@
                                 <span class="required">*</span>
                             </label>
                             <div class="text-small" th:text="#{page.offer.closed-at.help}"></div>
-                            <input expired th:field="*{closedAt}" type="date" th:max="*{closedAtMax}"/>
+                            <input expired th:field="*{closedAt}" th:max="*{closedAtMax}" type="date"/>
                         </div>
                         <div class="section-item">
                             <label class="title">

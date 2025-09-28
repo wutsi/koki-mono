@@ -5,6 +5,7 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.security.RequiresPermission
+import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,10 +18,14 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/offers/counter")
 @RequiresPermission(["offer:manage", "offer:full_access"])
-class CounterOfferController : AbstractOfferStatusController() {
+class CounterOfferController : AbstractEditOfferController() {
     @GetMapping
     fun counter(@RequestParam id: Long, model: Model): String {
-        val offer = findSubmittedOffer(id)
+        val offer = findOffer(id)
+        if (!offer.statusSubmitted || !offer.canAcceptOrRejectOrCounter(getUser())) {
+            throw HttpClientErrorException(HttpStatusCode.valueOf(403))
+        }
+
         model.addAttribute("offer", offer)
 
         val user = userHolder.get()
