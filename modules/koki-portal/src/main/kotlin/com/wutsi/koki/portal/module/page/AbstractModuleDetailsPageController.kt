@@ -42,7 +42,8 @@ abstract class AbstractModuleDetailsPageController : AbstractModulePageControlle
                         if (!user.canAccess(module)) null else module
                     }
                 }
-            }.toMap()
+            }.toMap(),
+            assetUrl = assetUrl,
         )
     }
 }

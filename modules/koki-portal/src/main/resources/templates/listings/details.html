@@ -320,7 +320,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
+        <div class="col-12 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
             <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
             <div th:replace="~{__components/user :: user-small-card(${listing.buyerAgentUser}, true)}"></div>
         </div>

@@ -138,7 +138,7 @@ class ListingClosedMailetTest {
                 Nous avons le plaisir de vous informer que la transaction du listing <a href="/listings/111">#24309500</a>
                 situé au <b>340 Pascal, Bastos, Yaounde</b> a été clôturée.<br/><br/>
 
-                Nous vous confirmons que votre commission pour cette transaction est de <b>C${'$'} 50,000.00 (3.0%)</b>.
+                Nous vous confirmons que votre commission pour cette transaction est de <b>C${'$'} 50,000.00 (3.0%)</b>.<br/><br/>
 
                 Cordialement,<br/><br/>
 
