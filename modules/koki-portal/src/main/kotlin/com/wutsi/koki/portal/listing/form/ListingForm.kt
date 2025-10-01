@@ -12,7 +12,7 @@ import java.time.LocalDate
 data class ListingForm(
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    val listingNumber: Long? = null,
+    val listingNumber: String? = null,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,

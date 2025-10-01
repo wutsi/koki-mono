@@ -27,7 +27,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
     protected fun toListingForm(listing: ListingModel, city: LocationModel? = null): ListingForm {
         return ListingForm(
             id = listing.id,
-            listingNumber = listing.listingNumber,
+            listingNumber = listing.listingNumber.toString(),
             listingType = listing.listingType,
             propertyType = listing.propertyType,
             bedrooms = listing.bedrooms,

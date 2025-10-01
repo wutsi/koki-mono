@@ -4,6 +4,7 @@ import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.contact.model.ContactModel
@@ -41,10 +42,11 @@ class ListingMapper(
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
         val df = createDateFormat()
+        val address = toAddress(entity.address, locations)
         return ListingModel(
             id = entity.id,
             status = entity.status,
-            listingNumber = entity.listingNumber,
+            listingNumber = entity.listingNumber.toString(),
             listingType = entity.listingType,
             propertyType = entity.propertyType,
             bedrooms = entity.bedrooms,
@@ -65,7 +67,7 @@ class ListingMapper(
             furnitureType = entity.furnitureType,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
 
-            address = toAddress(entity.address, locations),
+            address = address,
 
             geoLocation = toGeoLocation(entity.geoLocation),
 
@@ -118,7 +120,15 @@ class ListingMapper(
 
             sellerAgentUser = entity.sellerAgentUserId?.let { id ->
                 users[id]?.copy(
-                    whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobile)
+                    whatsappUrl = whatsappUrl(
+                        listingNumber = entity.listingNumber.toString(),
+                        propertyType = entity.propertyType,
+                        address = address,
+                        bathrooms = entity.bathrooms,
+                        bedrooms = entity.bedrooms,
+                        area = entity.propertyArea ?: entity.lotArea,
+                        mobile = users[id]?.mobile,
+                    )
                 )
             },
             createdBy = entity.createdById?.let { id -> users[id] },
@@ -139,10 +149,11 @@ class ListingMapper(
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val df = createDateFormat()
+        val address = toAddress(entity.address, locations)
         return ListingModel(
             id = entity.id,
             status = entity.status,
-            listingNumber = entity.listingNumber,
+            listingNumber = entity.listingNumber.toString(),
             listingType = entity.listingType,
             propertyType = entity.propertyType,
             bedrooms = entity.bedrooms,
@@ -152,7 +163,7 @@ class ListingMapper(
             propertyArea = entity.propertyArea,
             heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
             furnitureType = entity.furnitureType,
-            address = toAddress(entity.address, locations),
+            address = address,
             price = price,
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             sellerAgentCommission = entity.sellerAgentCommission,
@@ -165,7 +176,16 @@ class ListingMapper(
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentUser = entity.sellerAgentUserId?.let { id ->
                 users[id]?.copy(
-                    whatsappUrl = whatsappUrl(entity.id, entity.listingNumber, users[id]?.mobileUrl)
+                    whatsappUrl = whatsappUrl(
+                        listingNumber = entity.listingNumber.toString(),
+                        propertyType = entity.propertyType,
+                        address = address,
+                        bathrooms = entity.bathrooms,
+                        bedrooms = entity.bedrooms,
+                        area = entity.propertyArea ?: entity.lotArea,
+                        mobile = users[id]?.mobile,
+                    )
+
                 )
             },
             transactionDate = entity.transactionDate,
@@ -237,14 +257,39 @@ class ListingMapper(
         }
     }
 
-    private fun whatsappUrl(listingId: Long, listingNumber: Long, mobileUrl: String?): String? {
-        if (mobileUrl.isNullOrEmpty()) {
+    private fun whatsappUrl(
+        listingNumber: String,
+        propertyType: PropertyType?,
+        address: AddressModel?,
+        bedrooms: Int?,
+        bathrooms: Int?,
+        area: Int?,
+        mobile: String?,
+    ): String? {
+        if (mobile.isNullOrEmpty()) {
             return null
         }
 
         val locale = LocaleContextHolder.getLocale()
-        val url = currentTenant.get()?.portalUrl + "/listings/$listingId"
-        val text = messages.getMessage("page.listing.whatsapp.body", arrayOf(url, listingNumber), locale)
-        return "https://wa.me/" + mobileUrl.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
+        val details = listOf(
+            messages.getMessage("property-type.$propertyType", arrayOf(), locale),
+
+            address?.toText(includeCountry = false)?.ifEmpty { null },
+
+            listOf(
+                bedrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bedrooms-abbreviation") },
+                bathrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bathrooms-abbreviation") },
+                area?.let { area -> area.toString() + "m2" }
+            ).filterNotNull()
+                .joinToString(separator = " ")
+                .ifEmpty { null }
+        ).filterNotNull().joinToString(separator = " - ")
+        val text = getMessage("page.listing.whatsapp.body", arrayOf(listingNumber, details))
+        return "https://wa.me/" + mobile.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
+    }
+
+    private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
+        val locale = LocaleContextHolder.getLocale()
+        return messages.getMessage(key, args, locale)
     }
 }
