@@ -71,7 +71,7 @@
 
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <maven-exec-plugin.version>3.5.1</maven-exec-plugin.version>
+        <maven-exec-plugin.version>3.6.0</maven-exec-plugin.version>
         <maven.minify-maven-plugin.version>1.7.6</maven.minify-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
@@ -91,7 +91,7 @@
         <feign.version>13.6</feign.version>
         <flyway.version>10.18.0</flyway.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <greenmail.version>2.1.5</greenmail.version>
+        <greenmail.version>2.1.6</greenmail.version>
         <hibernate-types-60.version>2.21.1</hibernate-types-60.version>
         <hikari-cp.version>7.0.2</hikari-cp.version>
         <jackson.version>2.17.2</jackson.version>
