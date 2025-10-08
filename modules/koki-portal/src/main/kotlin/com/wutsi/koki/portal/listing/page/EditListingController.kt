@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -37,6 +38,7 @@ class EditListingController : AbstractEditListingController() {
         model.addAttribute("basementTypes", BasementType.entries)
         model.addAttribute("parkingTypes", ParkingType.entries)
         model.addAttribute("fenceTypes", FenceType.entries)
+        model.addAttribute("roadPavements", RoadPavement.entries)
         return "listings/edit"
     }
 

@@ -25,6 +25,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
     }
 
     protected fun toListingForm(listing: ListingModel, city: LocationModel? = null): ListingForm {
+        val df = SimpleDateFormat("yyyy-MM-dd")
         return ListingForm(
             id = listing.id,
             listingNumber = listing.listingNumber.toString(),
@@ -43,6 +44,9 @@ abstract class AbstractListingController : AbstractModulePageController() {
             lotArea = listing.lotArea,
             propertyArea = listing.propertyArea,
             year = listing.year,
+            roadPavement = listing.roadPavement,
+            distanceFromMainRoad = listing.distanceFromMainRoad,
+            availableAt = listing.availableAt?.let { date -> df.format(date) },
 
             furnitureType = listing.furnitureType,
             amenityIds = listing.amenities.map { amenity -> amenity.id },
@@ -70,7 +74,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
 
             sellerContactId = listing.sellerContact?.id,
 
-            transactionDate = listing.transactionDate?.let { date -> SimpleDateFormat("yyyy-MM-dd").format(date) },
+            transactionDate = listing.transactionDate?.let { date -> df.format(date) },
             transactionPrice = (listing.transactionPrice ?: listing.price)?.amount?.toLong(),
         )
     }

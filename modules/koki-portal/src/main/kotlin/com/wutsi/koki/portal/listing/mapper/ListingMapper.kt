@@ -63,6 +63,10 @@ class ListingMapper(
             propertyArea = entity.propertyArea,
             year = entity.year,
             heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            distanceFromMainRoad = entity.distanceFromMainRoad,
+            roadPavement = entity.roadPavement,
+            availableAt = entity.availableAt,
+            availableAtText = entity.availableAt?.let { date -> df.format(date) },
 
             furnitureType = entity.furnitureType,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },

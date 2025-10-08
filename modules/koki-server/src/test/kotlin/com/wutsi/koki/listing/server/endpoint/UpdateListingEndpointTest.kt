@@ -8,11 +8,15 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.server.dao.ListingRepository
+import org.apache.commons.lang3.time.DateUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -36,11 +40,16 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         bathrooms = 3,
         fenceType = FenceType.CONCRETE,
         floors = 3,
-        year = 1990
+        year = 1990,
+        roadPavement = RoadPavement.CONCRETE,
+        availableAt = DateUtils.addMonths(Date(), 3),
+        distanceFromMainRoad = 150,
     )
 
     @Test
     fun update() {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+
         val response = rest.postForEntity("/v1/listings/100", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -62,6 +71,9 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.fenceType, listing.fenceType)
         assertEquals(request.floors, listing.floors)
         assertEquals(request.year, listing.year)
+        assertEquals(request.roadPavement, listing.roadPavement)
+        assertEquals(request.distanceFromMainRoad, listing.distanceFromMainRoad)
+        assertEquals(df.format(request.availableAt), df.format(listing.availableAt))
         assertEquals(USER_ID, listing.modifiedById)
     }
 

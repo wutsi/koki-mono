@@ -12,7 +12,6 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
-import io.micrometer.core.instrument.Metrics.summary
 import org.springframework.stereotype.Service
 
 @Service
@@ -38,6 +37,9 @@ class ListingMapper {
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             year = entity.year,
+            distanceFromMainRoad = entity.distanceFromMainRoad,
+            roadPavement = entity.roadPavement,
+            availableAt = entity.availableAt,
 
             furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
             amenityIds = entity.amenities.map { amenity -> amenity.id },

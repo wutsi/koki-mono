@@ -12,6 +12,7 @@ import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
@@ -56,6 +57,9 @@ object ListingFixtures {
         parkings = 2,
         fenceType = FenceType.CONCRETE,
         year = 1990,
+        availableAt = DateUtils.addDays(Date(), 15),
+        distanceFromMainRoad = 200,
+        roadPavement = RoadPavement.GRAVEL,
 
         furnitureType = FurnitureType.FULLY_FURNISHED,
         amenityIds = listOf(

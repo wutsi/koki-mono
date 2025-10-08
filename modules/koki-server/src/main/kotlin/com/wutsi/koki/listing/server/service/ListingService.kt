@@ -407,6 +407,10 @@ class ListingService(
                 lotArea = request.lotArea,
                 propertyArea = request.propertyArea,
                 year = request.year,
+                availableAt = request.availableAt,
+                distanceFromMainRoad = request.distanceFromMainRoad,
+                roadPavement = request.roadPavement,
+
                 sellerAgentUserId = userId,
                 createdAt = now,
                 modifiedAt = now,
@@ -445,6 +449,9 @@ class ListingService(
         listing.lotArea = request.lotArea
         listing.propertyArea = request.propertyArea
         listing.year = request.year
+        listing.availableAt = request.availableAt
+        listing.distanceFromMainRoad = request.distanceFromMainRoad
+        listing.roadPavement = request.roadPavement
         save(listing)
     }
 
@@ -582,6 +589,7 @@ class ListingService(
                     throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
                 }
             }
+
             else -> throwInvalidStatus("Invalid status")
         }
 
