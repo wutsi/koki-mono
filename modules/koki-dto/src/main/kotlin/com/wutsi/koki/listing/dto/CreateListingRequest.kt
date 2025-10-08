@@ -1,6 +1,7 @@
 package com.wutsi.koki.listing.dto
 
 import jakarta.validation.constraints.NotNull
+import java.util.Date
 
 data class CreateListingRequest(
     @get:NotNull val listingType: ListingType? = null,
@@ -18,4 +19,7 @@ data class CreateListingRequest(
     val lotArea: Int? = null,
     val propertyArea: Int? = null,
     val year: Int? = null,
+    val availableAt: Date? = null,
+    val roadPavement: RoadPavement? = null,
+    val distanceFromMainRoad: Int? = null,
 )

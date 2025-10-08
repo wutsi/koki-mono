@@ -25,28 +25,40 @@ data class Listing(
     val lotArea: Int? = null,
     val propertyArea: Int? = null,
     val year: Int? = null,
+    val availableAt: Date? = null,
+    val roadPavement: RoadPavement? = null,
+    val distanceFromMainRoad: Int? = null,
+
     val furnitureType: FurnitureType? = null,
     val amenityIds: List<Long> = emptyList(),
+
     val address: Address? = null,
+
     val geoLocation: GeoLocation? = null,
+
     val price: Money? = null,
     val visitFees: Money? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: Money? = null,
     val buyerAgentCommissionMoney: Money? = null,
+
     val securityDeposit: Money? = null,
     val advanceRent: Int? = null,
     val leaseTerm: Int? = null,
     val noticePeriod: Int? = null,
+
     val sellerContactId: Long? = null,
+
     val agentRemarks: String? = null,
     val publicRemarks: String? = null,
+
     val buyerAgentUserId: Long? = null,
     val buyerContactId: Long? = null,
     val closedOfferId: Long? = null,
     var transactionDate: Date? = null,
     var transactionPrice: Money? = null,
+
     var title: String? = null,
     var summary: String? = null,
     var description: String? = null,
@@ -57,6 +69,7 @@ data class Listing(
     val totalFiles: Int? = null,
     val totalOffers: Int? = null,
     val sellerAgentUserId: Long? = null,
+
     val createdById: Long? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
