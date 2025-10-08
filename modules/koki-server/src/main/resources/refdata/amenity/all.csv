@@ -1,32 +1,33 @@
 id,category,amenity,fr
 1000,Basic Essentials,Electricity,Électricité
-1001,Basic Essentials,Running Water,Eau courante
-1002,Basic Essentials,Heating,Chauffage
-1003,Basic Essentials,Air Conditioning,Climatisation
-1004,Basic Essentials,Hot Water,Eau chaude
-1005,Basic Essentials,Wi-Fi,Wi-Fi
-1007,Kitchen & Dining,Refrigerator,Réfrigérateur
-1008,Kitchen & Dining,Microwave,Micro-ondes
-1009,Kitchen & Dining,Stove,Cuisinière
-1010,Kitchen & Dining,Oven,Four
-1011,Kitchen & Dining,Dishwasher,Lave-vaisselle
-1012,Kitchen & Dining,Coffee Maker,Cafetière
-1013,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base
-1014,Kitchen & Dining,Dining Table,Table à manger
-1015,Kitchen & Dining,Toaster,Grille-pain
-1016,Kitchen & Dining,Blender,Mixeur
-1017,Bathroom Amenities,Hair Dryer,Sèche-cheveux
-1018,Bathroom Amenities,Bath Towels,Serviettes de bain
-1019,Bathroom Amenities,Shower Gel/Shampoo,Gel douche/Shampoing
-1020,Bathroom Amenities,Bidet,Bidet
-1021,Bathroom Amenities,Bathtub,Baignoire
-1022,Bathroom Amenities,Jacuzzi,Jacuzzi
-1023,Bedroom Amenities,Bed Linens,Draps
-1024,Bedroom Amenities,Pillows,Oreillers
-1025,Bedroom Amenities,Wardrobe,Armoire
-1026,Bedroom Amenities,Closet,Placard
-1027,Bedroom Amenities,Dresser,Commode
-1028,Bedroom Amenities,Blackout Curtains,Rideaux occultants
+1001,Basic Essentials,Prepaid meter,Compteur prépayé
+1002,Basic Essentials,Running Water,Eau courante
+1003,Basic Essentials,Hot Water,Eau chaude
+1004,Basic Essentials,Water drilling,Forage d'eau
+1005,Basic Essentials,Cubitainer,Cubitainer
+1006,Basic Essentials,Air Conditioning,Climatisation
+1007,Basic Essentials,Heating,Chauffage
+1008,Basic Essentials,Wi-Fi,Wi-Fi
+1009,Kitchen & Dining,Refrigerator,Réfrigérateur
+1010,Kitchen & Dining,Microwave,Micro-ondes
+1011,Kitchen & Dining,Stove,Cuisinière
+1012,Kitchen & Dining,Oven,Four
+1013,Kitchen & Dining,Dishwasher,Lave-vaisselle
+1014,Kitchen & Dining,Coffee Maker,Cafetière
+1015,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base
+1016,Kitchen & Dining,Dining Table,Table à manger
+1017,Kitchen & Dining,Toaster,Grille-pain
+1018,Kitchen & Dining,Blender,Mixeur
+1019,Bathroom Amenities,Hair Dryer,Sèche-cheveux
+1020,Bathroom Amenities,Bath Towels,Serviettes de bain
+1021,Bathroom Amenities,Bidet,Bidet
+1022,Bathroom Amenities,Bathtub,Baignoire
+1023,Bathroom Amenities,Jacuzzi,Jacuzzi
+1024,Bedroom Amenities,Bed Linens,Draps
+1025,Bedroom Amenities,Pillows,Oreillers
+1026,Bedroom Amenities,Wardrobe,Armoire
+1027,Bedroom Amenities,Closet,Placard
+1028,Bedroom Amenities,Dresser,Commode
 1029,Bedroom Amenities,Safe,Coffre-fort
 1030,Bedroom Amenities,Locker,Casier
 1031,Entertainment & Electronics,TV,Télévision
@@ -49,20 +50,11 @@ id,category,amenity,fr
 1048,Outdoor & Recreational,Yard,Cour
 1049,Outdoor & Recreational,BBQ Grill,Barbecue
 1050,Outdoor & Recreational,Patio,Terrasse
-1051,Outdoor & Recreational,Balcony,Balcon
-1052,Outdoor & Recreational,Beach Access,Accès à la plage
-1053,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée
-1060,Safety & Security,Smoke Detector,Détecteur de fumée
-1061,Safety & Security,Carbon Monoxide Detector,Détecteur de monoxyde de carbone
-1062,Safety & Security,First Aid Kit,Trousse de premiers secours
-1063,Safety & Security,Fire Extinguisher,Extincteur
-1064,Safety & Security,Security Cameras,Caméras de sécurité
-1065,Safety & Security,Smart Lock,Serrure intelligente
-1066,Safety & Security,Keyless Entry,Accès sans clé
-1081,Luxury & Premium,Hot Tub,Bain à remous
-1082,Luxury & Premium,Spa,Spa
-1083,Luxury & Premium,Sauna,Sauna
-1084,Luxury & Premium,Home Theater,Home cinéma
-1085,Luxury & Premium,Wine Cooler,Cave à vin
-1086,Luxury & Premium,Smart Home System,Système de maison intelligente
-1087,Luxury & Premium,Concierge Service,Service de conciergerie
+1051,Outdoor & Recreational,Rooftop,Toit-terrasse
+1052,Outdoor & Recreational,Balcony,Balcon
+1053,Outdoor & Recreational,Mountain view,Vue sur la montage
+1054,Outdoor & Recreational,Beach view,Vue sur la plage
+1055,Outdoor & Recreational,Beach Access,Accès à la plage
+1056,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée
+1057,Safety & Security,Security Cameras,Caméras de sécurité
+1058,Safety & Security,Security guard,Gardien de sécurité

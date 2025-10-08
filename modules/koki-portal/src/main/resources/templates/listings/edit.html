@@ -128,6 +128,32 @@
                                 </div>
                             </div>
                             <div class="section-item">
+                                <label class="title" th:text="#{page.listing.distance-from-main-road}">TYPE</label>
+                                <div class="input-group">
+                                    <input class="form-control" step="0" th:field="*{distanceFromMainRoad}"
+                                           type="number"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span>m</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.road-pavement}">TYPE</label>
+                                <select class="form-select" th:field="*{roadPavement}">
+                                    <option th:each="roadPavement : ${roadPavements}"
+                                            th:text="#{'road-pavement.' + ${roadPavement}}"
+                                            th:value="${roadPavement}">
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.available-at}">YEAR</label>
+                                <input class="form-control" th:field="*{availableAt}" type="date"/>
+                            </div>
+                            <div class="section-item">
                                 <label class="title" th:text="#{page.listing.year}">YEAR</label>
                                 <input class="form-control" step="0" th:field="*{year}" type="number"/>
                             </div>

@@ -18,6 +18,7 @@ import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -53,7 +54,10 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         select("#fenceType", 1)
         input("#lotArea", "1000")
         input("#propertyArea", "800")
+        input("#distanceFromMainRoad", "1000")
+        select("#roadPavement", 2)
         input("#year", "1990")
+        scrollToBottom()
         click("button[type=submit]")
         val req1 = argumentCaptor<UpdateListingRequest>()
         verify(rest).postForEntity(
@@ -74,6 +78,8 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(1, req1.firstValue.parkings)
         assertEquals(1000, req1.firstValue.lotArea)
         assertEquals(800, req1.firstValue.propertyArea)
+        assertEquals(1000, req1.firstValue.distanceFromMainRoad)
+        assertEquals(RoadPavement.CONCRETE, req1.firstValue.roadPavement)
         assertEquals(1990, req1.firstValue.year)
 
         assertCurrentPageIs(PageName.LISTING_EDIT_AMENITIES)

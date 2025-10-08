@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -48,6 +49,9 @@ data class ListingEntity(
     var lotArea: Int? = null,
     var propertyArea: Int? = null,
     var year: Int? = null,
+    var availableAt: Date? = null,
+    var roadPavement: RoadPavement? = null,
+    var distanceFromMainRoad: Int? = null,
 
     @ManyToMany
     @JoinTable(

@@ -36,20 +36,28 @@ CREATE TABLE T_LISTING(
   lot_area                  INT,
   property_area             INT,
   year                      INT,
+  available_at              DATE,
+  distance_from_main_road   INT,
+  road_pavement             INT,
+
   furniture_type            INT,
+
   city_fk                   BIGINT,
   state_fk                  BIGINT,
   neighbourhood_fk          BIGINT,
   street                    VARCHAR(255),
   postal_code               VARCHAR(30),
   country                   VARCHAR(2),
+
   latitude                  DOUBLE,
   longitude                 DOUBLE,
+
   price                     BIGINT,
   visit_fees                BIGINT,
   currency                  VARCHAR(3),
   seller_agent_commission   DECIMAL(5, 2),
   buyer_agent_commission    DECIMAL(5, 2),
+
   seller_agent_commission_amount   BIGINT,
   buyer_agent_commission_amount    BIGINT,
   security_deposit          BIGINT,
