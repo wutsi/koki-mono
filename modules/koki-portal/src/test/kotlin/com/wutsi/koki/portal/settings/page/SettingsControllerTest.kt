@@ -34,13 +34,6 @@ class SettingsControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun invoice() {
-        navigateTo("/settings")
-        click(".btn-invoice")
-        assertCurrentPageIs(PageName.INVOICE_SETTINGS)
-    }
-
-    @Test
     fun ai() {
         navigateTo("/settings")
         click(".btn-ai")

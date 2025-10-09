@@ -87,37 +87,6 @@ object ModuleFixtures {
             jsUrl = null,
         ),
 
-        Module(
-            id = 190,
-            name = "product",
-            title = "Products",
-            homeUrl = "/products",
-            tabUrl = null,
-            settingsUrl = null,
-            jsUrl = "/js/products.js",
-        ),
-
-        Module(
-            id = 200,
-            name = "invoice",
-            title = "Invoices",
-            homeUrl = "/invoices",
-            tabUrl = "/invoices/tab",
-            settingsUrl = "/settings/invoices",
-            jsUrl = "/js/invoices.js",
-            objectType = ObjectType.INVOICE,
-        ),
-
-        Module(
-            id = 210,
-            name = "payment",
-            title = "Payments",
-            homeUrl = "/payments",
-            tabUrl = "/payments/tab",
-            settingsUrl = "/settings/payments",
-            jsUrl = "/js/payments.js",
-            objectType = ObjectType.PAYMENT,
-        ),
 
         Module(
             id = 220,
@@ -200,20 +169,6 @@ object ModuleFixtures {
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
-
-        Permission(id = 1901, moduleId = 190, name = "product", description = "Access products"),
-        Permission(id = 1902, moduleId = 190, name = "product:admin", description = "Configure products"),
-        Permission(id = 1903, moduleId = 190, name = "product:manage", description = "Manage products"),
-        Permission(id = 1904, moduleId = 190, name = "product:delete", description = "Delete products"),
-
-        Permission(id = 2001, moduleId = 200, name = "invoice", description = "Access invoices"),
-        Permission(id = 2002, moduleId = 200, name = "invoice:admin", description = "Configure invoices"),
-        Permission(id = 2003, moduleId = 200, name = "invoice:void", description = "Void invoices"),
-        Permission(id = 2004, moduleId = 200, name = "invoice:manage", description = "Manage invoices"),
-
-        Permission(id = 2101, moduleId = 210, name = "payment", description = "Access payment"),
-        Permission(id = 2102, moduleId = 210, name = "payment:admin", description = "Configure payment"),
-        Permission(id = 2103, moduleId = 210, name = "payment:manage", description = "Manage payment"),
 
         Permission(id = 2200, moduleId = 220, name = "ai:admin", description = "Configure AI"),
 

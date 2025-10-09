@@ -11,14 +11,11 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
-import com.wutsi.koki.InvoiceFixtures
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.OfferFixtures
-import com.wutsi.koki.PaymentFixtures
-import com.wutsi.koki.ProductFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.TenantFixtures
@@ -40,10 +37,6 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.invoice.dto.CreateInvoiceRequest
-import com.wutsi.koki.invoice.dto.CreateInvoiceResponse
-import com.wutsi.koki.invoice.dto.GetInvoiceResponse
-import com.wutsi.koki.invoice.dto.SearchInvoiceResponse
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
@@ -66,22 +59,8 @@ import com.wutsi.koki.offer.dto.GetOfferResponse
 import com.wutsi.koki.offer.dto.GetOfferVersionResponse
 import com.wutsi.koki.offer.dto.SearchOfferResponse
 import com.wutsi.koki.offer.dto.SearchOfferVersionResponse
-import com.wutsi.koki.payment.dto.CreateCashPaymentRequest
-import com.wutsi.koki.payment.dto.CreateCheckPaymentRequest
-import com.wutsi.koki.payment.dto.CreateInteracPaymentRequest
-import com.wutsi.koki.payment.dto.CreatePaymentResponse
-import com.wutsi.koki.payment.dto.GetTransactionResponse
-import com.wutsi.koki.payment.dto.SearchTransactionResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.portal.file.service.FileUploadUrlProvider
-import com.wutsi.koki.product.dto.CreatePriceRequest
-import com.wutsi.koki.product.dto.CreatePriceResponse
-import com.wutsi.koki.product.dto.CreateProductRequest
-import com.wutsi.koki.product.dto.CreateProductResponse
-import com.wutsi.koki.product.dto.GetPriceResponse
-import com.wutsi.koki.product.dto.GetProductResponse
-import com.wutsi.koki.product.dto.SearchPriceResponse
-import com.wutsi.koki.product.dto.SearchProductResponse
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
@@ -248,9 +227,6 @@ abstract class AbstractPageControllerTest {
         setupOfferModule()
 
         setupAccountModule()
-        setupProductModule()
-        setupInvoiceModule()
-        setupPaymentModule()
     }
 
     protected fun setupFileUploads() {
@@ -758,78 +734,6 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    private fun setupProductModule() {
-        // Products
-        doReturn(
-            ResponseEntity(
-                SearchProductResponse(ProductFixtures.products),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchProductResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetProductResponse(ProductFixtures.product),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetProductResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateProductResponse(555L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateProductRequest>(),
-                eq(CreateProductResponse::class.java)
-            )
-
-        // Prices
-        doReturn(
-            ResponseEntity(
-                SearchPriceResponse(ProductFixtures.prices),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchPriceResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetPriceResponse(ProductFixtures.price),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetPriceResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreatePriceResponse(777L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreatePriceRequest>(),
-                eq(CreatePriceResponse::class.java)
-            )
-    }
-
     private fun setupContactModule() {
         // Contacts
         doReturn(
@@ -864,101 +768,6 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateContactRequest>(),
                 eq(CreateContactResponse::class.java)
-            )
-    }
-
-    fun setupInvoiceModule() {
-        // Invoice
-        doReturn(
-            ResponseEntity(
-                SearchInvoiceResponse(InvoiceFixtures.invoices),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchInvoiceResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetInvoiceResponse(InvoiceFixtures.invoice),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetInvoiceResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateInvoiceResponse(3333L),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateInvoiceRequest>(),
-                eq(CreateInvoiceResponse::class.java)
-            )
-    }
-
-    fun setupPaymentModule() {
-        doReturn(
-            ResponseEntity(
-                SearchTransactionResponse(PaymentFixtures.transactions),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchTransactionResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetTransactionResponse(PaymentFixtures.transaction),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetTransactionResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreatePaymentResponse(UUID.randomUUID().toString()),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateCashPaymentRequest>(),
-                eq(CreatePaymentResponse::class.java)
-            )
-        doReturn(
-            ResponseEntity(
-                CreatePaymentResponse(UUID.randomUUID().toString()),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateCheckPaymentRequest>(),
-                eq(CreatePaymentResponse::class.java)
-            )
-        doReturn(
-            ResponseEntity(
-                CreatePaymentResponse(UUID.randomUUID().toString()),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateInteracPaymentRequest>(),
-                eq(CreatePaymentResponse::class.java)
             )
     }
 
@@ -1147,6 +956,7 @@ abstract class AbstractPageControllerTest {
             assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         }
     }
+
     protected fun assertElementsAttributeSame(selector1: String, selector2: String, name: String) {
         val value1 = driver.findElement(By.cssSelector(selector1)).getDomAttribute(name)
         val value2 = driver.findElement(By.cssSelector(selector2)).getDomAttribute(name)

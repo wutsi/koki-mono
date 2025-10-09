@@ -1,4 +1,0 @@
-<tr class="price" th:each="price : ${prices}">
-    <div th:replace="~{__components/product :: price-columns(${price})}"></div>
-</tr>
-<tr th:replace="~{__components/product :: load-more(${moreUrl})}"></tr>

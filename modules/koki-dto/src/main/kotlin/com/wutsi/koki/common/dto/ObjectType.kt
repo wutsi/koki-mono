@@ -10,6 +10,7 @@ enum class ObjectType {
     @Deprecated("Module retired")
     EMAIL,
 
+    @Deprecated("Module retired")
     PRODUCT,
 
     @Deprecated("Module retired")
@@ -18,7 +19,10 @@ enum class ObjectType {
     @Deprecated("Module retired")
     TAX,
 
+    @Deprecated("Module retired")
     INVOICE,
+
+    @Deprecated("Module retired")
     PAYMENT,
 
     @Deprecated("Module retired")
