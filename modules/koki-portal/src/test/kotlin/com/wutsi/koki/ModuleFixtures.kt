@@ -87,7 +87,6 @@ object ModuleFixtures {
             jsUrl = null,
         ),
 
-
         Module(
             id = 220,
             name = "ai",
