@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
@@ -37,6 +38,10 @@ data class ListingModel(
     val lotArea: Int? = null,
     val propertyArea: Int? = null,
     val year: Int? = null,
+    var availableAt: Date? = null,
+    var availableAtText: String? = null,
+    var roadPavement: RoadPavement? = null,
+    var distanceFromMainRoad: Int? = null,
     val furnitureType: FurnitureType? = null,
     val amenities: List<AmenityModel> = mutableListOf<AmenityModel>(),
     val address: AddressModel? = null,

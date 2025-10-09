@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import java.time.LocalDate
 
 data class ListingForm(
@@ -28,6 +29,9 @@ data class ListingForm(
     val lotArea: Int? = null,
     val propertyArea: Int? = null,
     val year: Int? = null,
+    var availableAt: String? = null,
+    var roadPavement: RoadPavement? = null,
+    var distanceFromMainRoad: Int? = null,
     val furnitureType: FurnitureType? = null,
     val amenityIds: List<Long> = mutableListOf<Long>(),
     val country: String? = null,
