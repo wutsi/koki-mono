@@ -15,12 +15,7 @@ __Example__:
     "tabs": [
         "account",
         "contact",
-        "employee",
-        "form",
-        "product",
-        "tax",
-        "invoice",
-        "payment"
+        "listing"
     ]
 }
 ```
@@ -50,13 +45,10 @@ __Example__:
     "tabs": {
         "main": [
             "contact",
-            "file",
-            "tax",
-            "invoice"
+            "file"
         ],
         "side": [
-            "note",
-            "email"
+            "note"
         ]
     }
 }

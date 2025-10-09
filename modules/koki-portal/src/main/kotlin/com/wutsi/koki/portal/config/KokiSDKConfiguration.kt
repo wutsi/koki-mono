@@ -11,15 +11,12 @@ import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiFiles
-import com.wutsi.koki.sdk.KokiInvoices
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiOffer
 import com.wutsi.koki.sdk.KokiOfferVersion
-import com.wutsi.koki.sdk.KokiPayments
-import com.wutsi.koki.sdk.KokiProducts
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRoles
 import com.wutsi.koki.sdk.KokiTenants
@@ -82,11 +79,6 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiInvoices(): KokiInvoices {
-        return KokiInvoices(urlBuilder(), tenantProvider, rest())
-    }
-
-    @Bean
     fun kokiListings(): KokiListings {
         return KokiListings(urlBuilder(), rest())
     }
@@ -114,16 +106,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiOfferVersion(): KokiOfferVersion {
         return KokiOfferVersion(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiPayments(): KokiPayments {
-        return KokiPayments(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiProducts(): KokiProducts {
-        return KokiProducts(urlBuilder(), rest())
     }
 
     @Bean

@@ -1,4 +1,0 @@
-<tr class="payment" th:each="payment : ${payments}">
-    <div th:replace="~{__components/payment :: columns(${payment}, ${showInvoice})}"></div>
-</tr>
-<tr th:replace="~{__components/payment :: load-more(${moreUrl})}"></tr>

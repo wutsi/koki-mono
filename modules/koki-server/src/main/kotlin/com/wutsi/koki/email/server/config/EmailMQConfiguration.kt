@@ -29,7 +29,7 @@ class EmailMQConfiguration(
         setupConsumer(queue, consumer, consumerDelay)
     }
 
-    @Scheduled(cron = "\${koki.module.notification.mq.dlq-cron}")
+    @Scheduled(cron = "\${koki.module.email.mq.dlq-cron}")
     fun processNotificationDlq() {
         processDlq(queue, dlq)
     }
