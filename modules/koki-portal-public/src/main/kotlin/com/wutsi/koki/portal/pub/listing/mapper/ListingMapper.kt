@@ -1,28 +1,25 @@
-package com.wutsi.koki.portal.listing.mapper
+package com.wutsi.koki.portal.pub.listing.mapper
 
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.listing.dto.PropertyType
-import com.wutsi.koki.portal.common.mapper.MoneyMapper
-import com.wutsi.koki.portal.common.model.MoneyModel
-import com.wutsi.koki.portal.common.service.Moment
-import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.file.model.FileModel
-import com.wutsi.koki.portal.listing.model.ListingModel
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.refdata.model.AddressModel
-import com.wutsi.koki.portal.refdata.model.AmenityModel
-import com.wutsi.koki.portal.refdata.model.GeoLocationModel
-import com.wutsi.koki.portal.refdata.model.LocationModel
-import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.portal.pub.common.service.Moment
+import com.wutsi.koki.portal.pub.listing.model.ListingModel
+import com.wutsi.koki.portal.pub.refdata.model.AddressModel
+import com.wutsi.koki.portal.pub.refdata.model.AmenityModel
+import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
+import com.wutsi.koki.portal.pub.user.model.UserModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
-import java.net.URLEncoder
 import java.util.Locale
 
 @Service
@@ -37,7 +34,6 @@ class ListingMapper(
         users: Map<Long, UserModel>,
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>,
-        contacts: Map<Long, ContactModel>,
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
@@ -79,12 +75,6 @@ class ListingMapper(
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
-            buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
 
             securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
             advanceRent = entity.advanceRent,
@@ -92,26 +82,13 @@ class ListingMapper(
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
-            sellerContact = entity.sellerContactId?.let { id -> contacts[id] },
-
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,
 
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
-            buyerContact = entity.buyerContactId?.let { id -> contacts[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
-            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
-            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
 
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
@@ -122,20 +99,7 @@ class ListingMapper(
             totalImages = entity.totalImages,
             totalOffers = entity.totalOffers,
 
-            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
-                users[id]?.copy(
-                    whatsappUrl = whatsappUrl(
-                        listingNumber = entity.listingNumber.toString(),
-                        propertyType = entity.propertyType,
-                        address = address,
-                        bathrooms = entity.bathrooms,
-                        bedrooms = entity.bedrooms,
-                        area = entity.propertyArea ?: entity.lotArea,
-                        mobile = users[id]?.mobile,
-                    )
-                )
-            },
-            createdBy = entity.createdById?.let { id -> users[id] },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             publishedAt = entity.publishedAt,
@@ -172,39 +136,10 @@ class ListingMapper(
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
-            sellerAgentCommissionMoney = entity.sellerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
-            buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
-            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
-                users[id]?.copy(
-                    whatsappUrl = whatsappUrl(
-                        listingNumber = entity.listingNumber.toString(),
-                        propertyType = entity.propertyType,
-                        address = address,
-                        bathrooms = entity.bathrooms,
-                        bedrooms = entity.bedrooms,
-                        area = entity.propertyArea ?: entity.lotArea,
-                        mobile = users[id]?.mobile,
-                    )
-
-                )
-            },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
             transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
-            finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
-            finalBuyerAgentCommissionMoney = entity.finalBuyerAgentCommissionMoney?.let { money ->
-                moneyMapper.toMoneyModel(
-                    money
-                )
-            },
         )
     }
 
@@ -259,41 +194,5 @@ class ListingMapper(
                 )
             }
         }
-    }
-
-    private fun whatsappUrl(
-        listingNumber: String,
-        propertyType: PropertyType?,
-        address: AddressModel?,
-        bedrooms: Int?,
-        bathrooms: Int?,
-        area: Int?,
-        mobile: String?,
-    ): String? {
-        if (mobile.isNullOrEmpty()) {
-            return null
-        }
-
-        val locale = LocaleContextHolder.getLocale()
-        val details = listOf(
-            messages.getMessage("property-type.$propertyType", arrayOf(), locale),
-
-            address?.toText(includeCountry = false)?.ifEmpty { null },
-
-            listOf(
-                bedrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bedrooms-abbreviation") },
-                bathrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bathrooms-abbreviation") },
-                area?.let { area -> area.toString() + "m2" }
-            ).filterNotNull()
-                .joinToString(separator = " ")
-                .ifEmpty { null }
-        ).filterNotNull().joinToString(separator = " - ")
-        val text = getMessage("page.listing.whatsapp.body", arrayOf(listingNumber, details))
-        return "https://wa.me/" + mobile.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
-    }
-
-    private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
-        val locale = LocaleContextHolder.getLocale()
-        return messages.getMessage(key, args, locale)
     }
 }

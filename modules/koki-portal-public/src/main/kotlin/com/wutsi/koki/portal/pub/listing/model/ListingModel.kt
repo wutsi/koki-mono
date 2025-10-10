@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.listing.model
+package com.wutsi.koki.portal.pub.listing.model
 
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
@@ -9,12 +9,11 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.util.HtmlUtils
-import com.wutsi.koki.portal.common.model.MoneyModel
-import com.wutsi.koki.portal.contact.model.ContactModel
-import com.wutsi.koki.portal.refdata.model.AddressModel
-import com.wutsi.koki.portal.refdata.model.AmenityModel
-import com.wutsi.koki.portal.refdata.model.GeoLocationModel
-import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.portal.pub.refdata.model.AddressModel
+import com.wutsi.koki.portal.pub.refdata.model.AmenityModel
+import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
+import com.wutsi.koki.portal.pub.user.model.UserModel
 import java.util.Date
 
 data class ListingModel(
@@ -54,24 +53,17 @@ data class ListingModel(
     var advanceRent: Int? = null,
     var advanceRentMoney: MoneyModel? = null,
     var noticePeriod: Int? = null,
-    val sellerContact: ContactModel? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
-    val sellerAgentCommissionMoney: MoneyModel? = null,
-    val buyerAgentCommissionMoney: MoneyModel? = null,
     val buyerAgentUser: UserModel? = null,
-    val buyerContact: ContactModel? = null,
     var transactionDate: Date? = null,
     var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
-    val finalSellerAgentCommissionMoney: MoneyModel? = null,
-    val finalBuyerAgentCommissionMoney: MoneyModel? = null,
     val description: String? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
     val publicUrl: String? = null,
     val sellerAgentUser: UserModel? = null,
-    val createdBy: UserModel? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
     var publishedAt: Date? = null,
@@ -93,9 +85,6 @@ data class ListingModel(
     val listingTypeSale: Boolean
         get() = listingType == ListingType.SALE
 
-    val readOnly: Boolean
-        get() = statusOffMarket
-
     val statusDraft: Boolean
         get() = status == ListingStatus.DRAFT
 
@@ -105,73 +94,11 @@ data class ListingModel(
     val statusOnMarket: Boolean
         get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES
 
-    val statusOffMarket: Boolean
-        get() = status == ListingStatus.SOLD ||
-            status == ListingStatus.RENTED ||
-            status == ListingStatus.EXPIRED ||
-            status == ListingStatus.WITHDRAWN ||
-            status == ListingStatus.CANCELLED
-
-    fun commission(user: UserModel?): MoneyModel? {
-        return if (statusSold) {
-            if (user?.id == sellerAgentUser?.id) {
-                finalSellerAgentCommissionMoney
-            } else {
-                finalBuyerAgentCommissionMoney
-            }
-        } else {
-            if (user?.id == sellerAgentUser?.id) {
-                sellerAgentCommissionMoney
-            } else {
-                buyerAgentCommissionMoney
-            }
-        }
-    }
-
     val statusSold: Boolean
         get() = status == ListingStatus.SOLD ||
             status == ListingStatus.RENTED
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
-    }
-
-    fun canSendMessage(user: UserModel?): Boolean {
-        return (user != null) &&
-            (sellerAgentUser != null) &&
-            !sellerAgentUser.mobile.isNullOrEmpty() &&
-            (sellerAgentUser.id != user.id)
-    }
-
-    fun canMakeOffer(user: UserModel?): Boolean {
-        return (user != null) &&
-            statusActive &&
-            (sellerAgentUser != null)
-    }
-
-    fun canManage(user: UserModel?): Boolean {
-        /**
-         * - User can manage AND user is the seller agent
-         * - user has full access
-         */
-        return ((user?.canManage("listing") == true) && (user.id == sellerAgentUser?.id)) ||
-            (user?.hasFullAccess("listing") == true)
-    }
-
-    fun canAccess(user: UserModel?): Boolean {
-        /**
-         * - User can access AND user is the seller agent or listing is not draft
-         * - user has full access
-         */
-        return ((user?.canAccess("listing") == true) && (user.id == sellerAgentUser?.id || !statusDraft)) ||
-            (user?.hasFullAccess("listing") == true)
-    }
-
-    fun sellerAgent(user: UserModel?): Boolean {
-        return sellerAgentUser?.id == user?.id
-    }
-
-    fun buyerAgent(user: UserModel?): Boolean {
-        return buyerAgentUser?.id == user?.id
     }
 }

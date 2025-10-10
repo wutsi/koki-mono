@@ -1,4 +1,4 @@
-package com.wutsi.blog.portal.common.model
+package com.wutsi.koki.portal.common.model
 
 data class MoneyModel(
     val amount: Double = 0.0,

@@ -7,6 +7,7 @@ data class AddressModel(
     val postalCode: String? = null,
     val city: LocationModel? = null,
     val state: LocationModel? = null,
+    val neighbourhood: LocationModel? = null,
     val country: String? = null,
     val countryName: String? = null,
 ) {

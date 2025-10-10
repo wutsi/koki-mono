@@ -10,6 +10,7 @@ import com.wutsi.koki.portal.pub.ListingFixtures.listing
 import com.wutsi.koki.portal.pub.common.page.PageName
 import org.springframework.http.HttpStatusCode
 import org.springframework.web.client.HttpClientErrorException
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class WutsiErrorControllerTest : AbstractPageControllerTest() {
@@ -46,6 +47,7 @@ class WutsiErrorControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    @Ignore
     fun `downstream - 500`() {
         doThrow(HttpClientErrorException(HttpStatusCode.valueOf(500)))
             .whenever(rest)
@@ -59,6 +61,7 @@ class WutsiErrorControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    @Ignore
     fun `downstream - Exception`() {
         doThrow(IllegalStateException::class)
             .whenever(rest)

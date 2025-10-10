@@ -1,15 +1,19 @@
 package com.wutsi.koki.portal.pub.common.mapper
 
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
 import java.lang.IllegalStateException
 import java.text.NumberFormat
 import kotlin.collections.forEach
 import kotlin.let
-import kotlin.text.get
 
 @Service
 class MoneyMapper : TenantAwareMapper() {
+    fun toMoneyModel(money: Money): MoneyModel {
+        return toMoneyModel(money.amount, money.currency)
+    }
+
     fun toMoneyModel(amount: Double, currency: String?): MoneyModel {
         val xcurrency = currency ?: currentTenant.get()?.currency
         return MoneyModel(
