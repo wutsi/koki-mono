@@ -12,7 +12,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koki-room-web</artifactId>
+    <artifactId>koki-portal-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <scm>

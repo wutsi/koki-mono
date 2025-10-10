@@ -58,7 +58,7 @@ logging:
 
 koki:
     webapp:
-        client-id: koki-room-web
+        client-id: koki-portal-public
         base-url: http://localhost:${server.port}
         asset-url: ""
     rest:

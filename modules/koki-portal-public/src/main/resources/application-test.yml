@@ -1,6 +1,6 @@
 koki:
     webapp:
-        asset-url: https://com-wutsi-koki-test.s3.amazonaws.com/static/koki-room-web
+        asset-url: https://com-wutsi-koki-test.s3.amazonaws.com/static/koki-portal-public
         base-url: ${APP_URL}
 
     sdk:
