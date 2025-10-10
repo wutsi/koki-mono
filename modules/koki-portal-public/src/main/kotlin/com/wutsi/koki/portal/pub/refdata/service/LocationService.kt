@@ -1,8 +1,8 @@
 package com.wutsi.koki.portal.pub.refdata.service
 
-import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.portal.pub.refdata.mapper.LocationMapper
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.sdk.KokiRefData
 import org.springframework.stereotype.Service
 

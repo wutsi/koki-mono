@@ -7,7 +7,6 @@ import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.platform.tracing.spring.ClientRestInterceptor
 import com.wutsi.koki.platform.tracing.spring.DeviceIdRestInterceptor
-import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles

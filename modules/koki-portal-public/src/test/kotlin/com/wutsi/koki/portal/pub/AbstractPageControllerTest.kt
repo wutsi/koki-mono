@@ -8,20 +8,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.account.dto.CreateAccountRequest
-import com.wutsi.koki.account.dto.CreateAccountResponse
-import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.GetAttributeResponse
-import com.wutsi.koki.account.dto.SearchAccountResponse
-import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
-import com.wutsi.koki.file.dto.GetFileResponse
-import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.file.dto.UploadFileResponse
-import com.wutsi.koki.message.dto.SendMessageRequest
-import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
@@ -29,6 +18,8 @@ import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.portal.pub.RefDataFixtures
 import com.wutsi.koki.portal.pub.TenantFixtures
+import com.wutsi.koki.portal.pub.TenantFixtures.tenants
+import com.wutsi.koki.portal.pub.UserFixtures
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
@@ -36,8 +27,6 @@ import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.refdata.dto.SearchUnitResponse
-import com.wutsi.koki.portal.pub.TenantFixtures.tenants
-import com.wutsi.koki.portal.pub.UserFixtures
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -71,7 +60,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity

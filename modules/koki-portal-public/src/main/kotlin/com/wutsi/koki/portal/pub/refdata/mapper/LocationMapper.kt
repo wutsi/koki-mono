@@ -1,9 +1,9 @@
 package com.wutsi.koki.portal.pub.refdata.mapper
 
 import com.wutsi.koki.platform.util.StringUtils
-import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
+import com.wutsi.koki.refdata.dto.Location
 import org.springframework.stereotype.Service
 
 @Service
