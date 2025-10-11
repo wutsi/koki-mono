@@ -10,6 +10,7 @@ import com.wutsi.koki.platform.tracing.spring.DeviceIdRestInterceptor
 import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles
+import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiRefData
@@ -60,8 +61,8 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiMessages(): KokiMessages {
-        return KokiMessages(urlBuilder(), rest())
+    fun kokiListings(): KokiListings {
+        return KokiListings(urlBuilder(), rest())
     }
 
     @Bean
