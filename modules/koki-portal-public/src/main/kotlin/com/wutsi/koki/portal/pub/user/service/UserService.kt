@@ -3,10 +3,7 @@ package com.wutsi.koki.portal.pub.user.service
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.portal.pub.user.mapper.UserMapper
 import com.wutsi.koki.portal.pub.user.model.UserModel
-import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.sdk.KokiUsers
-import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import org.springframework.stereotype.Service
 
@@ -57,37 +54,5 @@ class UserService(
             ).associateBy { city -> city.id }
         }
         return users.map { user -> mapper.toUserModel(user, cities) }
-    }
-
-    fun create(form: UserForm): Long {
-        return koki.create(
-            CreateUserRequest(
-                displayName = form.displayName,
-                username = form.username,
-                email = form.email,
-                roleIds = form.roleIds,
-                language = form.language,
-                password = form.password,
-            )
-        ).userId
-    }
-
-    fun update(id: Long, form: UserForm) {
-        val user = koki.user(id).user
-        koki.update(
-            id,
-            UpdateUserRequest(
-                displayName = form.displayName,
-                email = form.email,
-                roleIds = form.roleIds,
-                language = form.language,
-
-                mobile = user.mobile,
-                categoryId = user.categoryId,
-                employer = user.employer,
-                cityId = user.cityId,
-                country = user.country,
-            )
-        )
     }
 }

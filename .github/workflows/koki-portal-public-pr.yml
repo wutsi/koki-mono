@@ -1,4 +1,4 @@
-name: koki-portal-pub-pr
+name: koki-portal-public-pr
 
 on:
     pull_request:

@@ -1,4 +1,4 @@
-name: koki-portal-pub
+name: koki-portal-public
 
 on:
     push:
