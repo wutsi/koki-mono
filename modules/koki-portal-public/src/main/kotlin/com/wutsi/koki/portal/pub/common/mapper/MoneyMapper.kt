@@ -1,10 +1,12 @@
-package com.wutsi.koki.portal.common.mapper
+package com.wutsi.koki.portal.pub.common.mapper
 
-import com.wutsi.koki.portal.common.model.MoneyModel
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
+import java.lang.IllegalStateException
 import java.text.NumberFormat
+import kotlin.collections.forEach
+import kotlin.let
 
 @Service
 class MoneyMapper : TenantAwareMapper() {
@@ -12,24 +14,12 @@ class MoneyMapper : TenantAwareMapper() {
         return toMoneyModel(money.amount, money.currency)
     }
 
-    fun toMoneyModel(amount: Double): MoneyModel {
-        val text = createMoneyFormat().format(amount)
-        return MoneyModel(
-            amount = amount,
-            currency = currentTenant.get()?.currency ?: "",
-            text = text,
-            displayText = text,
-        )
-    }
-
     fun toMoneyModel(amount: Double, currency: String?): MoneyModel {
-        val xcurrency = currency ?: currentTenant.get()?.currency ?: ""
-        val text = xcurrency.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
+        val xcurrency = currency ?: currentTenant.get()?.currency
         return MoneyModel(
-            amount = amount,
-            currency = xcurrency,
-            text = text,
-            displayText = text
+            value = amount,
+            currency = xcurrency ?: "",
+            text = xcurrency?.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
         )
     }
 

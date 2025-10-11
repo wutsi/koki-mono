@@ -1,5 +1,5 @@
 INSERT INTO T_TENANT(id, status, name, domain_name, locale, country, number_format, currency, currency_symbol, monetary_format, date_format, time_format, date_time_format, logo_url, icon_url, portal_url, client_portal_url) VALUES
-    (1, 1, 'wutsi', 'koki-portal-test-5bc3b457d6f5.herokuapp.com', 'fr-CM', 'CM', '#,###,##0.00', 'XAF', 'XAF', '#,###,##0 FCFA', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://com-wutsi-koki-test.s3.us-east-1.amazonaws.com/tenant/1/logo/logo.png', 'https://com-wutsi-koki-test.s3.us-east-1.amazonaws.com/tenant/1/logo/icon.png', 'https://koki-portal-test-5bc3b457d6f5.herokuapp.com', 'https://koki-room-web-test-527b49e505ab.herokuapp.com');
+    (1, 1, 'wutsi', 'koki-portal-test-5bc3b457d6f5.herokuapp.com', 'fr-CM', 'CM', '#,###,##0.00', 'XAF', 'XAF', '#,###,##0 FCFA', 'yyyy-MM-dd', 'hh:mm a', 'yyyy-MM-dd hh:mm a', 'https://com-wutsi-koki-test.s3.us-east-1.amazonaws.com/tenant/1/logo/logo.png', 'https://com-wutsi-koki-test.s3.us-east-1.amazonaws.com/tenant/1/logo/icon.png', 'https://koki-portal-test-5bc3b457d6f5.herokuapp.com', 'https://koki-portal-public-test-9ed11f1892bd.herokuapp.com/');
 
 INSERT INTO T_TENANT_MODULE(tenant_fk, module_fk)
     SELECT 1, id FROM T_MODULE;

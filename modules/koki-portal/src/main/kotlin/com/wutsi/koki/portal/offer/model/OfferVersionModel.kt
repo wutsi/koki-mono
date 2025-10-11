@@ -1,9 +1,9 @@
 package com.wutsi.koki.portal.offer.model
 
-import com.wutsi.blog.portal.common.model.MoneyModel
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.platform.util.HtmlUtils
+import com.wutsi.koki.portal.common.model.MoneyModel
 import java.util.Date
 
 data class OfferVersionModel(
