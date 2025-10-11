@@ -51,13 +51,13 @@ jobs:
                 uses: actions/upload-artifact@v4
                 with:
                     name: appbundle
-                    path: modules/koki-portal-pub/target/*.jar
+                    path: modules/koki-portal-public/target/*.jar
 
             -   name: Upload JaCoCo Report
                 uses: actions/upload-artifact@v4
                 with:
                     name: jacoco-report
-                    path: modules/koki-portal-pub/target/site/jacoco/**/*
+                    path: modules/koki-portal-public/target/site/jacoco/**/*
 
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
@@ -89,7 +89,7 @@ jobs:
 
             -   name: Heroku-Deploy-Test
                 env:
-                    HEROKU_APP: koki-portal-pub-test
+                    HEROKU_APP: koki-portal-public-test
                     APP_URL: ${{secrets.KOKI_ROOM_WEB_URL_TEST}}
                     HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
                     AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_TEST}}
@@ -111,7 +111,7 @@ jobs:
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
                     cp modules/koki-portal-public/system.properties .
                     cp modules/koki-portal-public/Procfile .
-                    heroku deploy:jar koki-portal-pub.jar --app ${HEROKU_APP}
+                    heroku deploy:jar koki-portal-public.jar --app ${HEROKU_APP}
 
             -   name: S3-Deploy-Test
                 env:
