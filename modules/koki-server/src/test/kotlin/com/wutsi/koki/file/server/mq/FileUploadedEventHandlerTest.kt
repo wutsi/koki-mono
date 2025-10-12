@@ -2,6 +2,7 @@ package com.wutsi.koki.file.server.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
+import java.io.IOException
 
 class FileUploadedEventHandlerTest {
     private val storage = mock<StorageService>()
@@ -78,6 +80,16 @@ class FileUploadedEventHandlerTest {
     @Test
     fun fileUploadedButNoExtraction() {
         doReturn(null).whenever(extractorProvider).get(any())
+
+        val event = FileUploadedEvent(fileId = file.id!!, tenantId = file.tenantId)
+        handler.handle(event)
+
+        verify(fileService, never()).save(any())
+    }
+
+    @Test
+    fun fileExtractionError() {
+        doThrow(IOException::class).whenever(extractor).extract(any())
 
         val event = FileUploadedEvent(fileId = file.id!!, tenantId = file.tenantId)
         handler.handle(event)

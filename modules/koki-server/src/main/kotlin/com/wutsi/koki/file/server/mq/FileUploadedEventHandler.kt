@@ -6,6 +6,7 @@ import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageProvider
 import com.wutsi.koki.platform.logger.KVLogger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
@@ -26,6 +27,10 @@ class FileUploadedEventHandler(
     private val storageProvider: StorageProvider,
     private val logger: KVLogger,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(FileUploadedEventHandler::class.java)
+    }
+
     fun handle(event: FileUploadedEvent) {
         logger.add("event_file_id", event.fileId)
         logger.add("event_file_type", event.fileType)
@@ -34,7 +39,10 @@ class FileUploadedEventHandler(
         logger.add("event_owner_type", event.owner?.type)
 
         val file = fileService.get(id = event.fileId, tenantId = event.tenantId)
+        logger.add("file_url", file.url)
+
         val f = download(file)
+        logger.add("file_local", f.absolutePath)
         try {
             val infos = extractorProvider.get(file.contentType)?.extract(f)
             if (infos != null) {
@@ -44,6 +52,11 @@ class FileUploadedEventHandler(
                 file.height = infos.height
                 fileService.save(file)
             }
+        } catch (ex: Exception) {
+            logger.add("file_extraction_exception", ex::class.java.name)
+            logger.add("file_extraction_error", ex.message)
+
+            LOGGER.warn("Unable to extract file infos from ${f.absolutePath}", ex)
         } finally {
             f.delete()
         }
