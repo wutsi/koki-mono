@@ -64,7 +64,7 @@ class ListingController(
                 title = listing.title ?: "",
                 description = listing.summary,
                 image = listing.heroImageUrl,
-                url = "$baseUrl${listing.publicUrl}",
+                url = listing.publicUrl,
             )
         )
 

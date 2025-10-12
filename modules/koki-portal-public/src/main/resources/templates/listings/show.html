@@ -4,13 +4,6 @@
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
-    <script th:src="${page.assetUrl} + '/js/koki-intl-tel.js'"></script>
-
-    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/listing.css'"/>
 </head>
 
@@ -41,29 +34,16 @@
         </div>
     </div>
 </div>
-<button class="image-counter" data-bs-target="#listing-images-modal" data-bs-toggle="modal" id="btn-images">
+<button class="image-counter"
+        data-component-id="modal-button"
+        data-modal-body-large="true"
+        id="btn-images"
+        th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
+        th:data-modal-title="#{page.listing.section.photo.title}"
+>
     <i class="fa-solid fa-grip"></i>
     <span th:text="#{page.listing.section.photo.show-all(${listing.images.size()})}">Show all</span>
 </button>
-<div aria-hidden="true" aria-labelledby="listing-images-modal-label" class="modal fade"
-     id="listing-images-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="listing-images-modal-label">Photos</h1>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body padding">
-                <div class="padding text-center" th:each="img : ${listing.images}">
-                    <div>
-                        <img loading="lazy" th:alt="${img.title}" th:src="${img.contentUrl}" th:title="${img.title}"/>
-                    </div>
-                    <div th:if="${img.title}" th:text="${img.title}">TITLE</DIV>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="listing-info">
     <!-- infos -->
@@ -293,11 +273,12 @@
     -->
 </div>
 
+<div th:replace="~{__components/bootstrap :: modal}"></div>
 <script th:inline="javascript">
     document.addEventListener(
         'DOMContentLoaded',
         function () {
-            kokiTracking.track('VIEW', /*[[${listing.id}]]*/'0');
+            koki.w.track.track('VIEW', /*[[${listing.id}]]*/'0');
         },
         false
     );

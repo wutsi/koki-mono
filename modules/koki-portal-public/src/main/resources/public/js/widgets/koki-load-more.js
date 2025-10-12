@@ -44,11 +44,9 @@ class KokiLoadMoreWidget {
     }
 }
 
-const kokiLoadMore = new KokiLoadMoreWidget();
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-        kokiLoadMore.init();
-    },
-    false
+document.addEventListener('DOMContentLoaded', function () {
+        const widget = new LoadMoreWidget();
+        koki.w['loadMore'] = widget;
+        widget.init();
+    }
 );

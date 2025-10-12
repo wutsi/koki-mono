@@ -84,12 +84,9 @@ class KokiMapWidget {
     }
 }
 
-const kokiMap = new KokiMapWidget();
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-        kokiMap.init();
-    },
-    false
+document.addEventListener('DOMContentLoaded', function () {
+        const widget = new KokiMapWidget();
+        koki.w['map'] = widget;
+        widget.init();
+    }
 );
-
