@@ -7,18 +7,9 @@ import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.SalesTax
-import com.wutsi.koki.refdata.dto.Unit
 import kotlin.collections.flatMap
 
 object RefDataFixtures {
-    // Units
-    val units = listOf(
-        Unit(id = 100, name = "Hours"),
-        Unit(id = 110, name = "Days"),
-        Unit(id = 120, name = "Month"),
-        Unit(id = 130, name = "Visit"),
-    )
-
     // Location
     val locations = listOf(
         Location(id = 100, type = LocationType.STATE, name = "Quebec", country = "CA"),
@@ -174,17 +165,38 @@ object RefDataFixtures {
             Amenity(
                 id = amenityIdCounter++,
                 categoryId = category.id,
-                name = "Amenity #$amenityIdCounter",
+                name = "Electricity",
+                top = false,
             ),
             Amenity(
                 id = amenityIdCounter++,
                 categoryId = category.id,
-                name = "Amenity #$amenityIdCounter",
+                name = "Prepaid meter",
+                top = true
             ),
             Amenity(
                 id = amenityIdCounter++,
-                categoryId = category.id,
-                name = "Amenity #$amenityIdCounter",
+                categoryId = categories[1].id,
+                name = "Ocean view",
+                top = false
+            ),
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = categories[1].id,
+                name = "Beach access",
+                top = true
+            ),
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = categories[2].id,
+                name = "Security Guard",
+                top = true
+            ),
+            Amenity(
+                id = amenityIdCounter++,
+                categoryId = categories[2].id,
+                name = "Camera",
+                top = false
             ),
         )
     }

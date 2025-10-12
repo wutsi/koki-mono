@@ -72,23 +72,23 @@
     color: #444;
 }
 
-.room-info {
+.listing-info {
     width: 1200px;
     margin: 1em auto 0 auto;
     display: flex;
     justify-content: space-between;
 }
 
-.room-info-details {
+.listing-info-details {
     width: 800px;
     margin-bottom: 10em;
 }
 
-.room-contact-details {
+.listing-contact-details {
     width: 380px;
 }
 
-.room-contact-details-inner {
+.listing-contact-details-inner {
     background: white;
     box-shadow: 0 4px 25px #00000014;
     border: none;
@@ -101,20 +101,20 @@
     width: 100%;
 }
 
-.room-contact-details-inner button {
+.listing-contact-details-inner button {
     margin-top: 1em;
 }
 
-.room-info #room-map {
+.listing-info #listing-map {
     height: 680px;
 }
 
-#room-images-modal img {
+#listing-images-modal img {
     max-width: 100%;
     max-height: 534px;
 }
 
-#room-amenities-modal h3 {
+#listing-amenities-modal h3 {
     font-size: 1.25em;
 }
 
@@ -125,32 +125,32 @@
 /*                                                                          */
 /* ======================================================================== */
 /* Large Tablet */
-@media only screen and (max-width: 1024px) and (orientation: portrait) {
-    .room-info {
+@media only screen and (max-width: 992px) and (orientation: portrait) {
+    .listing-info {
         width: 100%;
         padding: 0 1em;
     }
 
-    .room-info-details {
+    .listing-info-details {
         width: 70%;
     }
 
-    .room-contact-details {
+    .listing-contact-details {
         width: 25%;
     }
 }
 
 /* Mini Tablet */
-@media only screen and (max-width: 820px) and (orientation: portrait) {
-    .room-info {
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+    .listing-info {
         display: block;
     }
 
-    .room-info-details {
+    .listing-info-details {
         width: 100%;
     }
 
-    .room-contact-details {
+    .listing-contact-details {
         position: fixed;
         top: auto;
         bottom: 0;
@@ -160,11 +160,11 @@
         z-index: 1000;
     }
 
-    .room-contact-details h3 {
+    .listing-contact-details h3 {
         display: none;
     }
 
-    .room-contact-details-inner {
+    .listing-contact-details-inner {
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -172,13 +172,13 @@
         box-shadow: none;
     }
 
-    .room-contact-details-inner button {
+    .listing-contact-details-inner button {
         margin-top: .5em;
     }
 }
 
 /* Mobile phone */
-@media only screen and (max-width: 479px) and (orientation: portrait) {
+@media only screen and (max-width: 576px) {
     .hero-image-container {
         height: 319px;
     }
@@ -195,7 +195,7 @@
         display: none;
     }
 
-    .room-info-details .breadcrumb {
+    .listing-info-details .breadcrumb {
         font-size: smaller;
     }
 }

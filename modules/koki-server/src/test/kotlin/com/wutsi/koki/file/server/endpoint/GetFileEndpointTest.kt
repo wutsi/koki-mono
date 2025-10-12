@@ -28,12 +28,6 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(FileType.IMAGE, file.type)
         assertEquals(FileStatus.REJECTED, file.status)
         assertEquals("Invalid file", file.rejectionReason)
-
-        assertEquals(2, file.labels.size)
-        assertEquals(1L, file.labels[0].id)
-        assertEquals("2023", file.labels[0].displayName)
-        assertEquals(3L, file.labels[1].id)
-        assertEquals("T5", file.labels[1].displayName)
     }
 
     @Test

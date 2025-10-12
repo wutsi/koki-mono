@@ -15,6 +15,7 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.test.Test
@@ -34,6 +35,7 @@ class ListingDescriptorAgentTest {
         furnitureType = FurnitureType.FULLY_FURNISHED,
         cityId = city.id,
         neighbourhoodId = neighbourhood.id,
+        lotArea = 1500,
         amenities = mutableListOf(
             AmenityEntity(name = "Electricity"),
             AmenityEntity(name = "Running Water"),
@@ -44,6 +46,16 @@ class ListingDescriptorAgentTest {
             AmenityEntity(name = "Dishwasher"),
             AmenityEntity(name = "Dinning table"),
         )
+    )
+    private val files = listOf(
+        getFile("/fs/listing/room.jpg"),
+        getFile("/fs/listing/room-1.jpg"),
+        getFile("/fs/listing/room-2.jpg"),
+        getFile("/fs/listing/room-3.jpg"),
+        getFile("/fs/listing/room-4.jpg"),
+        getFile("/fs/listing/room-5.jpg"),
+        getFile("/fs/listing/room-6.jpg"),
+        getFile("/fs/listing/room-7.jpg"),
     )
     private val locationService = mock<LocationService>()
     private val agent = ListingDescriptorAgent(listing, locationService, llm, 5)
@@ -61,25 +73,25 @@ class ListingDescriptorAgentTest {
 
     @Test
     fun run() {
-        val files = listOf(
-            getFile("/fs/listing/room.jpg"),
-            getFile("/fs/listing/room-1.jpg"),
-            getFile("/fs/listing/room-2.jpg"),
-            getFile("/fs/listing/room-3.jpg"),
-            getFile("/fs/listing/room-4.jpg"),
-            getFile("/fs/listing/room-5.jpg"),
-            getFile("/fs/listing/room-6.jpg"),
-            getFile("/fs/listing/room-7.jpg"),
-        )
         val json = agent.run(ListingDescriptorAgent.QUERY, files)
         val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
         assertEquals(true, result.heroImageIndex >= 0)
     }
 
     @Test
+    fun land() {
+        val xagent = ListingDescriptorAgent(
+            listing.copy(propertyType = PropertyType.LAND, listingType = ListingType.SALE),
+            locationService, llm, 5
+        )
+        val json = xagent.run(ListingDescriptorAgent.QUERY, files)
+        val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+//        assertEquals(true, result.heroImageIndex >= 0)
+    }
+
+    @Test
     fun `no image`() {
-        val files = emptyList<File>()
-        val json = agent.run(ListingDescriptorAgent.QUERY, files)
+        val json = agent.run(ListingDescriptorAgent.QUERY, emptyList<File>())
         val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
         assertEquals(true, result.heroImageIndex <= 0)
     }

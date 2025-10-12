@@ -6,4 +6,5 @@ data class AmenityModel(
     val name: String = "",
     val icon: String? = null,
     val active: Boolean = true,
+    val top: Boolean = false,
 )

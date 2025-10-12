@@ -8,6 +8,5 @@ object PageName {
     const val ERROR_UNDER_CONSTRUCTION = "page.error.under-construction"
 
     val HOME: String = "page.home"
-    val ROOM: String = "page.room"
-    val LOCATION: String = "page.location"
+    val LISTING: String = "page.listing"
 }

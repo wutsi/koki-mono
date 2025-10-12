@@ -5,7 +5,6 @@ import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.file.dto.LabelSummary
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
@@ -70,11 +69,6 @@ object FileFixtures {
         url = "https://picsum.photos/800/600",
         type = FileType.IMAGE,
         status = FileStatus.APPROVED,
-        labels = listOf(
-            LabelSummary(displayName = "spa"),
-            LabelSummary(displayName = "relaxation"),
-            LabelSummary(displayName = "massage"),
-        )
     )
 
     val files = listOf(
@@ -142,9 +136,5 @@ object FileFixtures {
         url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         language = "en",
         numberOfPages = 540,
-        labels = listOf(
-            LabelSummary(id = 1, displayName = "2024"),
-            LabelSummary(id = 1, displayName = "T4"),
-        ),
     )
 }

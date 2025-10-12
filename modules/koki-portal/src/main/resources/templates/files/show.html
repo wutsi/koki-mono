@@ -104,15 +104,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr th:if="!${file.labels.isEmpty()}">
-                                <td width="20%"><b>Labels</b></td>
-                                <td>
-                                <span class="badge text-bg-success margin-right-small"
-                                      th:each="label : ${file.labels}"
-                                      th:text="${label.displayName}"
-                                >LABEL</span>
-                                </td>
-                            </tr>
                             <tr>
                                 <td><b>Size</b></td>
                                 <td th:text="${file.contentLengthText}">SIZE</td>

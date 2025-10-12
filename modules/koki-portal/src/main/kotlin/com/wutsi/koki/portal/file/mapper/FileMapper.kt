@@ -2,12 +2,10 @@ package com.wutsi.koki.portal.file.mapper
 
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
-import com.wutsi.koki.file.dto.LabelSummary
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.common.service.NumberUtils
 import com.wutsi.koki.portal.file.model.FileModel
-import com.wutsi.koki.portal.file.model.LabelModel
 import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.user.model.UserModel
 import org.apache.commons.io.FilenameUtils
@@ -82,7 +80,6 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             numberOfPages = entity.numberOfPages,
             language = entity.language,
             languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
-            labels = entity.labels.map { label -> toLabelModel(label) },
             status = entity.status,
             rejectionReason = entity.rejectionReason,
             owner = entity.owner?.let { owner -> ObjectReferenceModel(id = owner.id, type = owner.type) }
@@ -91,12 +88,5 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
 
     private fun toFileSizeText(value: Long): String {
         return NumberUtils.shortText(value, "#.#", "b")
-    }
-
-    private fun toLabelModel(entity: LabelSummary): LabelModel {
-        return LabelModel(
-            id = entity.id,
-            displayName = entity.displayName,
-        )
     }
 }

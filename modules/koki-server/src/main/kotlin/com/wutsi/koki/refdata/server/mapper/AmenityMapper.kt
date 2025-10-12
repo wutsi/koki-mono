@@ -14,6 +14,7 @@ class AmenityMapper {
             name = entity.name,
             nameFr = entity.nameFr,
             icon = entity.icon,
+            top = entity.top,
         )
     }
 }

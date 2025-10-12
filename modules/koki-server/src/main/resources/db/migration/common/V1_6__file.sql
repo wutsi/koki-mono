@@ -37,30 +37,6 @@ CREATE INDEX status ON T_FILE (status);
 CREATE INDEX owner ON T_FILE (owner_fk, owner_type);
 
 
-CREATE TABLE T_LABEL(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk               BIGINT NOT NULL,
-
-  name                    VARCHAR(255) NOT NULL,
-  display_name            VARCHAR(255) NOT NULL,
-  created_at              DATETIME NOT NULL DEFAULT NOW(),
-
-  UNIQUE(tenant_fk, name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-
-CREATE TABLE T_FILE_LABEL(
-  file_fk              BIGINT NOT NULL REFERENCES T_FILE(id),
-  label_fk             BIGINT NOT NULL REFERENCES T_LABEL(id),
-
-  created_at           DATETIME DEFAULT NOW(),
-
-  PRIMARY KEY (file_fk, label_fk)
-) ENGINE = InnoDB;
-
-
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
     VALUES (130, 3, 'file',  'Files',  null, '/files/tab', '/settings/files', '/js/files.js', '/css/files.css'),
            (131, 3, 'image', 'Images', null, '/images/tab', null,             '/js/images.js', '/css/images.css');

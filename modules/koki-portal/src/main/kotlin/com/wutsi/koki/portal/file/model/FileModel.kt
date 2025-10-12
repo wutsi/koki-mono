@@ -26,7 +26,6 @@ data class FileModel(
     val language: String? = null,
     val languageText: String? = null,
     val numberOfPages: Int? = null,
-    val labels: List<LabelModel> = emptyList(),
     val status: FileStatus = FileStatus.UNKNOWN,
     val rejectionReason: String? = null,
     val owner: ObjectReferenceModel? = null

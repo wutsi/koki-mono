@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.pub.file.mapper
 
-import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.common.service.Moment
@@ -20,30 +19,6 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             title = when (language) {
                 "fr" -> entity.titleFr ?: entity.title
                 else -> entity.title
-            },
-            contentUrl = entity.url,
-            contentType = entity.contentType,
-            contentLength = entity.contentLength,
-            language = entity.language,
-            languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
-            status = entity.status,
-        )
-    }
-
-    fun toFileModel(entity: File): FileModel {
-        val language = LocaleContextHolder.getLocale().language
-        createDateTimeFormat()
-        return FileModel(
-            id = entity.id,
-            type = entity.type,
-            name = entity.name,
-            title = when (language) {
-                "fr" -> entity.titleFr ?: entity.title
-                else -> entity.title
-            },
-            description = when (language) {
-                "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
-                else -> entity.description?.ifEmpty { null }
             },
             contentUrl = entity.url,
             contentType = entity.contentType,

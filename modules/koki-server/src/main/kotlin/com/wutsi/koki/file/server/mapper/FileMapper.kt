@@ -3,9 +3,7 @@ package com.wutsi.koki.file.server.mapper
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileSummary
-import com.wutsi.koki.file.dto.LabelSummary
 import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.file.server.domain.LabelEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -27,7 +25,6 @@ class FileMapper {
             modifiedAt = entity.modifiedAt,
             language = entity.language?.ifEmpty { null },
             numberOfPages = entity.numberOfPages,
-            labels = entity.labels.map { label -> toLabelSummary(label) },
             status = entity.status,
             rejectionReason = entity.rejectionReason?.ifEmpty { null },
             owner = toObjectReference(entity),
@@ -54,14 +51,6 @@ class FileMapper {
             numberOfPages = entity.numberOfPages,
             status = entity.status,
             rejectionReason = entity.rejectionReason,
-        )
-    }
-
-    private fun toLabelSummary(entity: LabelEntity): LabelSummary {
-        return LabelSummary(
-            id = entity.id!!,
-            displayName = entity.displayName,
-            createdAt = entity.createdAt,
         )
     }
 

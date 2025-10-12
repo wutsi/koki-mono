@@ -1,31 +1,3 @@
-CREATE TABLE T_UNIT(
-  id                      BIGINT NOT NULL AUTO_INCREMENT,
-
-  name                    VARCHAR(100) NOT NULL,
-  abbreviation            VARCHAR(5),
-
-  UNIQUE(name),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-INSERT INTO T_UNIT(id, name)
-    VALUES (100, 'Each'),
-           (110, 'Hour'),
-           (111, 'Day'),
-           (112, 'Week'),
-           (113, 'Month'),
-           (120, 'Session'),
-           (121, 'Class'),
-           (122, 'Consultation'),
-           (130, 'Project'),
-           (131, 'Website'),
-           (132, 'Design'),
-           (140, 'Visit'),
-           (141, 'Treatment'),
-           (142, 'Lesson')
-;
-
-
 CREATE TABLE T_LOCATION(
   id          BIGINT NOT NULL,
 
@@ -98,6 +70,7 @@ CREATE TABLE T_AMENITY(
   name_fr        TEXT,
   icon           TEXT,
   active         BOOLEAN NOT NULL DEFAULT true,
+  top            BOOLEAN NOT NULL DEFAULT false,
 
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;

@@ -18,4 +18,5 @@ data class AmenityEntity(
     var nameFr: String? = null,
     var icon: String? = null,
     var active: Boolean = false,
+    var top: Boolean = false,
 )

@@ -11,7 +11,7 @@ class CategoryService(
     private val koki: KokiRefData,
     private val mapper: CategoryMapper,
 ) {
-    fun categories(
+    fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),
         parentId: Long? = null,

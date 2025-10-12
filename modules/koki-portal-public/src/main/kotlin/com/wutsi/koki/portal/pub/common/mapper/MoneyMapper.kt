@@ -16,10 +16,12 @@ class MoneyMapper : TenantAwareMapper() {
 
     fun toMoneyModel(amount: Double, currency: String?): MoneyModel {
         val xcurrency = currency ?: currentTenant.get()?.currency
+        val text = xcurrency?.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
         return MoneyModel(
             value = amount,
             currency = xcurrency ?: "",
-            text = xcurrency?.let { getCurrencyFormatter(xcurrency).format(amount) } ?: amount.toString()
+            text = text,
+            displayText = text,
         )
     }
 
