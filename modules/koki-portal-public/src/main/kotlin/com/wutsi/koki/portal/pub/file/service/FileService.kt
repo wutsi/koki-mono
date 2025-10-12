@@ -13,11 +13,6 @@ class FileService(
     private val koki: KokiFiles,
     private val mapper: FileMapper,
 ) {
-    fun get(id: Long): FileModel {
-        val file = koki.file(id).file
-        return mapper.toFileModel(entity = file)
-    }
-
     fun search(
         ids: List<Long> = emptyList(),
         ownerId: Long? = null,
