@@ -19,7 +19,6 @@ data class File(
     val descriptionFr: String? = null,
     val language: String? = null,
     val numberOfPages: Int? = null,
-    val labels: List<LabelSummary> = emptyList(),
     val status: FileStatus = FileStatus.UNKNOWN,
     val rejectionReason: String? = null,
     val owner: ObjectReference? = null,

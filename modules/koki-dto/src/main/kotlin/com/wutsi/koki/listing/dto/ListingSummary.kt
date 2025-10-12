@@ -6,6 +6,10 @@ import java.util.Date
 
 data class ListingSummary(
     val id: Long = -1,
+    val title: String? = null,
+    val summary: String? = null,
+    val titleFr: String? = null,
+    val summaryFr: String? = null,
     val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingNumber: Long = -1,
@@ -29,4 +33,6 @@ data class ListingSummary(
     val transactionPrice: Money? = null,
     val finalSellerAgentCommissionMoney: Money? = null,
     val finalBuyerAgentCommissionMoney: Money? = null,
+    val publicUrl: String? = null,
+    val publicUrlFr: String? = null,
 )

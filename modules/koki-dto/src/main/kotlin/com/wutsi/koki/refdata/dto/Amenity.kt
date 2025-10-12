@@ -7,4 +7,5 @@ data class Amenity(
     val nameFr: String? = null,
     val icon: String? = null,
     val active: Boolean = true,
+    val top: Boolean = false,
 )

@@ -77,4 +77,6 @@ data class Listing(
     val closedAt: Date? = null,
     val finalSellerAgentCommissionMoney: Money? = null,
     val finalBuyerAgentCommissionMoney: Money? = null,
+    val publicUrl: String? = null,
+    val publicUrlFr: String? = null,
 )
