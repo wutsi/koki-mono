@@ -16,10 +16,6 @@ class JuridictionService(
         return dao.findById(id).getOrNull()
     }
 
-    fun getByCountry(country: String): List<JuridictionEntity> {
-        return dao.findByCountry(country)
-    }
-
     @Transactional
     fun save(salesTax: JuridictionEntity): JuridictionEntity {
         return dao.save(salesTax)
@@ -58,18 +54,5 @@ class JuridictionService(
         query.firstResult = offset
         query.maxResults = limit
         return query.resultList
-    }
-
-    fun findJuridiction(stateId: Long?, country: String?, juridictions: List<JuridictionEntity>): JuridictionEntity? {
-        val juridiction = juridictions.find { juridiction ->
-            juridiction.country == country && juridiction.stateId == stateId && juridiction.stateId != null
-        }
-        if (juridiction != null) {
-            return juridiction
-        }
-
-        return juridictions.find { juridiction ->
-            juridiction.country == country && juridiction.stateId == null
-        }
     }
 }

@@ -9,16 +9,6 @@
     <td>
         <div th:replace="~{__components/file :: file-icon(${file})}"></div>
     </td>
-    <td>
-        <a class="btn-view"
-           th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">
-            <span class="badge text-bg-success margin-right-small"
-                  th:each="label : ${file.labels}"
-                  th:text="${label.displayName}"
-            >LABEL</span>
-            <span th:text="${file.name}">NAME</span>
-        </a>
-    </td>
     <td class="d-none d-sm-table-cell">
         <a class="btn-view"
            th:href="'/files/' + ${file.id} + '?read-only=' + ${readOnly} + '&owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}">

@@ -113,10 +113,25 @@ class ListingMapper(
                 )
             },
 
+            title = if (lang == "fr") {
+                entity.titleFr ?: entity.title
+            } else {
+                entity.title
+            },
+            summary = if (lang == "fr") {
+                entity.summaryFr ?: entity.summary
+            } else {
+                entity.summary
+            },
             description = if (lang == "fr") {
                 entity.descriptionFr ?: entity.description
             } else {
                 entity.description
+            },
+            publicUrl = if (lang == "fr") {
+                entity.publicUrlFr ?: entity.publicUrl
+            } else {
+                entity.publicUrl
             },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
@@ -154,6 +169,7 @@ class ListingMapper(
         val price = toPrice(entity.price, entity.listingType)
         val df = createDateFormat()
         val address = toAddress(entity.address, locations)
+        val lang = LocaleContextHolder.getLocale().language
         return ListingModel(
             id = entity.id,
             status = entity.status,
@@ -204,6 +220,22 @@ class ListingMapper(
                 moneyMapper.toMoneyModel(
                     money
                 )
+            },
+
+            title = if (lang == "fr") {
+                entity.titleFr ?: entity.title
+            } else {
+                entity.title
+            },
+            summary = if (lang == "fr") {
+                entity.summaryFr ?: entity.summary
+            } else {
+                entity.summary
+            },
+            publicUrl = if (lang == "fr") {
+                entity.publicUrlFr ?: entity.publicUrl
+            } else {
+                entity.publicUrl
             },
         )
     }

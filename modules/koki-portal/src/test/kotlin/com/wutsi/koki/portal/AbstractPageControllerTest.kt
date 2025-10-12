@@ -67,7 +67,6 @@ import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
-import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.Configuration
@@ -660,18 +659,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchAmenityResponse::class.java)
-            )
-
-        // Units
-        doReturn(
-            ResponseEntity(
-                SearchUnitResponse(RefDataFixtures.units),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchUnitResponse::class.java)
             )
 
         // Location

@@ -31,11 +31,16 @@ class ListingDescriptorAgent(
 
             Instructions:
             - Instructions for crafting the title:
-              - Highlight the Unique Selling Proposition: What makes your property stand out? Is it a stunning view, a unique amenity, a prime location, or a special experience? Lead with that!
-              - Be Specific and Descriptive: Use keywords that potential guests are likely to search for. Include details about the type of property, location, and key features.
-              - Include Location Benefits: Mentioning nearby attractions, neighborhoods, or ease of access can be a big draw.
-              - Use Strong and Evocative Language: Words like "stunning," "charming," "luxury," "private," and "unique" can create a more appealing image.
-              - Keep it Concise and Readable: Aim for a title that is easy to scan and understand quickly. Aim for a maximum of 50 characters
+              - The title should include ONLY the following information:
+                - Type of property
+                - Listing type,
+                - Number of bedrooms (to include if the property is not a land)
+                - Lot area (to include only for land)
+                - City
+                - Neighbourhood in round brackets
+              - Examples:
+                - Apartment for rent, 3 bedrooms, Douala (Bonapriso)
+                - Land for sale, 1200m2, Douala (Bonapriso)
             - Instructions for crafting the description:
               - Start with Compelling Opening: Your first sentence or two should immediately grab attention and reinforce your unique selling proposition from your title.
               - For fully furnished properties, expand on key Features and amenities: Now's the time to elaborate on the highlights mentioned in your title and introduce other enticing features. Be specific and descriptive.
@@ -75,8 +80,10 @@ class ListingDescriptorAgent(
             - Bathrooms: {{bathrooms}}
             - Furnished: {{furnished}}
             - Country code: {{country}}
+            - Street: {{street}}
             - City: {{city}}
             - Neighbourhood: {{neighbourhood}}
+            - Lot area: {{lotArea}}
             - Amenities: {{amenities}}
 
             Observations:
@@ -91,6 +98,8 @@ class ListingDescriptorAgent(
             .replace("{{country}}", city?.country?.uppercase() ?: "Unknown")
             .replace("{{city}}", city?.name ?: "Unknown")
             .replace("{{neighbourhood}}", neighbourhood?.name ?: "Unknown")
+            .replace("{{street}}", listing.street ?: "Unknown")
+            .replace("{{lotArea}}", listing.lotArea?.toString() ?: "Unknown")
             .replace("{{query}}", query)
             .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
     }

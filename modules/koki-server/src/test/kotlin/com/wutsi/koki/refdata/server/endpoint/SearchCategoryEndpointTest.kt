@@ -73,4 +73,15 @@ class SearchCategoryEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(5, categories.size)
         assertEquals(listOf(1110L, 1120L, 1130L, 1131L, 1132L), categories.map { it.id })
     }
+
+    @Test
+    fun `by id`() {
+        val response = rest.getForEntity("/v1/categories?id=1110&id=1120", SearchCategoryResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val categories = response.body!!.categories
+        assertEquals(2, categories.size)
+        assertEquals(listOf(1110L, 1120L), categories.map { it.id })
+    }
 }

@@ -4,7 +4,6 @@ import com.wutsi.koki.file.dto.File
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileSummary
 import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.file.dto.LabelSummary
 import com.wutsi.koki.portal.pub.UserFixtures.users
 import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
@@ -42,8 +41,7 @@ object FileFixtures {
             createdAt = DateUtils.addDays(Date(), -2),
             url = "https://picsum.photos/600/600",
             type = FileType.IMAGE,
-            status = FileStatus.REJECTED,
-            rejectionReason = "Unable to process the file"
+            status = FileStatus.APPROVED,
         ),
         FileSummary(
             id = 104,
@@ -54,7 +52,18 @@ object FileFixtures {
             createdAt = DateUtils.addDays(Date(), -2),
             url = "https://picsum.photos/400/400",
             type = FileType.IMAGE,
-            status = FileStatus.UNDER_REVIEW,
+            status = FileStatus.APPROVED,
+        ),
+        FileSummary(
+            id = 105,
+            name = "T5.png",
+            title = null,
+            contentType = "image/png",
+            contentLength = 800L * 800,
+            createdAt = DateUtils.addDays(Date(), -2),
+            url = "https://picsum.photos/500/500",
+            type = FileType.IMAGE,
+            status = FileStatus.APPROVED,
         ),
     )
 
@@ -70,11 +79,6 @@ object FileFixtures {
         url = "https://picsum.photos/800/600",
         type = FileType.IMAGE,
         status = FileStatus.APPROVED,
-        labels = listOf(
-            LabelSummary(displayName = "spa"),
-            LabelSummary(displayName = "relaxation"),
-            LabelSummary(displayName = "massage"),
-        )
     )
 
     val files = listOf(
@@ -142,9 +146,5 @@ object FileFixtures {
         url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         language = "en",
         numberOfPages = 540,
-        labels = listOf(
-            LabelSummary(id = 1, displayName = "2024"),
-            LabelSummary(id = 1, displayName = "T4"),
-        ),
     )
 }

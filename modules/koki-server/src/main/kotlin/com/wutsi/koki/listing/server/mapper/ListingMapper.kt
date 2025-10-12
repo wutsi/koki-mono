@@ -8,7 +8,9 @@ import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
@@ -38,7 +40,7 @@ class ListingMapper {
             propertyArea = entity.propertyArea,
             year = entity.year,
             distanceFromMainRoad = entity.distanceFromMainRoad,
-            roadPavement = entity.roadPavement,
+            roadPavement = entity.roadPavement?.takeIf { type -> type != RoadPavement.UNKNOWN },
             availableAt = entity.availableAt,
 
             furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
@@ -91,6 +93,9 @@ class ListingMapper {
             modifiedAt = entity.modifiedAt,
             publishedAt = entity.publishedAt,
             closedAt = entity.closedAt,
+
+            publicUrl = StringUtils.toSlug("", entity.title),
+            publicUrlFr = StringUtils.toSlug("", entity.titleFr)
         )
     }
 
@@ -125,6 +130,14 @@ class ListingMapper {
             sellerAgentUserId = entity.sellerAgentUserId,
             finalSellerAgentCommissionMoney = toMoney(entity.finalSellerAgentCommissionAmount, entity.currency),
             finalBuyerAgentCommissionMoney = toMoney(entity.finalBuyerAgentCommissionAmount, entity.currency),
+
+            title = entity.title?.ifEmpty { null },
+            summary = entity.summary?.ifEmpty { null },
+            titleFr = entity.titleFr?.ifEmpty { null },
+            summaryFr = entity.summaryFr?.ifEmpty { null },
+
+            publicUrl = StringUtils.toSlug("", entity.title),
+            publicUrlFr = StringUtils.toSlug("", entity.titleFr)
         )
     }
 

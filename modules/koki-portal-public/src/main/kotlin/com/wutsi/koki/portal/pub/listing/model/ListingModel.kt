@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.refdata.model.AddressModel
 import com.wutsi.koki.portal.pub.refdata.model.AmenityModel
 import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
@@ -44,7 +45,6 @@ data class ListingModel(
     val amenities: List<AmenityModel> = mutableListOf<AmenityModel>(),
     val address: AddressModel? = null,
     val geoLocation: GeoLocationModel? = null,
-    val agentRemarks: String? = null,
     val publicRemarks: String? = null,
     val price: MoneyModel? = null,
     var visitFees: MoneyModel? = null,
@@ -59,10 +59,13 @@ data class ListingModel(
     var transactionDate: Date? = null,
     var transactionDateText: String? = null,
     var transactionPrice: MoneyModel? = null,
+
+    val title: String? = null,
+    val summary: String? = null,
     val description: String? = null,
+    val publicUrl: String? = null,
     val published: Date? = null,
     val daysInMarket: Int? = null,
-    val publicUrl: String? = null,
     val sellerAgentUser: UserModel? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
@@ -75,9 +78,14 @@ data class ListingModel(
     val totalOffers: Int? = null,
     val totalFiles: Int? = null,
     val totalActiveMessages: Int? = null,
+
+    val images: List<FileModel> = emptyList()
 ) {
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
+
+    val publicRemarksHtml: String?
+        get() = publicRemarks?.let { str -> HtmlUtils.toHtml(str) }
 
     val listingTypeRental: Boolean
         get() = listingType == ListingType.RENTAL

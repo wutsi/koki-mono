@@ -11,22 +11,20 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.portal.pub.RefDataFixtures
-import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
-import com.wutsi.koki.portal.pub.UserFixtures
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
-import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -74,6 +72,7 @@ import java.nio.charset.Charset
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -189,6 +188,7 @@ abstract class AbstractPageControllerTest {
         setupRefDataModule()
         setupTenantModule()
         setupUserModule()
+        setupListingModule()
     }
 
     private fun setupRefDataModule() {
@@ -202,18 +202,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchAmenityResponse::class.java)
-            )
-
-        // Units
-        doReturn(
-            ResponseEntity(
-                SearchUnitResponse(RefDataFixtures.units),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchUnitResponse::class.java)
             )
 
         // Location
@@ -379,6 +367,34 @@ abstract class AbstractPageControllerTest {
         doReturn(principal).whenever(jwtDecoder).decode(any())
     }
 
+    fun setupListingModule() {
+        // Listing
+        doReturn(
+            ResponseEntity(
+                SearchListingResponse(
+                    listings = ListingFixtures.listings,
+                    total = ListingFixtures.listings.size.toLong(),
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetListingResponse(ListingFixtures.listing),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetListingResponse::class.java)
+            )
+    }
+
     @AfterEach
     @Throws(Exception::class)
     fun tearDown() {
@@ -454,6 +470,10 @@ abstract class AbstractPageControllerTest {
         } else {
             assertEquals(value, driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
         }
+    }
+
+    protected fun assertElementAttributePresent(selector: String, name: String) {
+        assertNotNull(driver.findElement(By.cssSelector(selector)).getDomAttribute(name))
     }
 
     protected fun waitForPresenceOf(selector: String, timeout: Long = 30, sleep: Long = 1) {

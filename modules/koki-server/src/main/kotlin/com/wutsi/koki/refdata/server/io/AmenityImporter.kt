@@ -26,6 +26,7 @@ class AmenityImporter(
         private const val RECORD_CATEGORY = 1
         private const val RECORD_NAME = 2
         private const val RECORD_NAME_FR = 3
+        private const val RECORD_TOP = 4
     }
 
     fun import(): ImportResponse {
@@ -109,6 +110,7 @@ class AmenityImporter(
                 name = record.get(RECORD_NAME),
                 nameFr = record.get(RECORD_NAME_FR),
                 active = true,
+                top = record.get(RECORD_TOP) == "1",
             )
         )
     }
@@ -137,6 +139,7 @@ class AmenityImporter(
         amenity.name = record.get(RECORD_NAME)
         amenity.nameFr = record.get(RECORD_NAME_FR)
         amenity.active = true
+        amenity.top = record.get(RECORD_TOP) == "1"
         service.save(amenity)
         return true
     }

@@ -9,9 +9,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -55,12 +52,4 @@ data class FileEntity(
     var width: Int? = null,
     var height: Int? = null,
     var imageQuality: ImageQuality? = null,
-
-    @ManyToMany
-    @JoinTable(
-        name = "T_FILE_LABEL",
-        joinColumns = arrayOf(JoinColumn(name = "file_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "label_fk")),
-    )
-    var labels: List<LabelEntity> = emptyList(),
 )

@@ -13,16 +13,6 @@ class UserService(
     private val mapper: UserMapper,
     private val locationService: LocationService,
 ) {
-    fun get(id: Long, fullGraph: Boolean = true): UserModel {
-        val user = koki.user(id).user
-        val city = if (user.cityId == null || !fullGraph) {
-            null
-        } else {
-            locationService.get(user.cityId ?: -1)
-        }
-        return mapper.toUserModel(user, city)
-    }
-
     fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),

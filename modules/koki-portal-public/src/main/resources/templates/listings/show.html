@@ -8,11 +8,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script th:src="${page.assetUrl} + '/js/koki-map.js'"></script>
     <script th:src="${page.assetUrl} + '/js/koki-intl-tel.js'"></script>
-    <script th:src="${page.assetUrl} + '/js/page/room.js'"></script>
 
     <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/room.css'"/>
+    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/listing.css'"/>
 </head>
 
 <body>
@@ -21,41 +20,41 @@
 <!-- images -->
 <div class="hero-image-container">
     <div class="hero-1">
-        <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
-            <img th:src="${room.heroImage.contentUrl}"/>
+        <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
+            <img th:src="${listing.heroImageUrl}"/>
         </a>
     </div>
     <div class="hero-2">
         <div class="hero-21">
             <div th:each="img : ${heroImages21}">
-                <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
         </div>
         <div class="hero-22">
             <div th:each="img : ${heroImages22}">
-                <a data-bs-target="#room-images-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
         </div>
     </div>
 </div>
-<button class="image-counter" data-bs-target="#room-images-modal" data-bs-toggle="modal" id="btn-images">
+<button class="image-counter" data-bs-target="#listing-images-modal" data-bs-toggle="modal" id="btn-images">
     <i class="fa-solid fa-grip"></i>
-    <span th:text="#{page.room.section.photo.show-all(${room.images.size()})}">Show all</span>
+    <span th:text="#{page.listing.section.photo.show-all(${listing.images.size()})}">Show all</span>
 </button>
-<div aria-hidden="true" aria-labelledby="room-images-modal-label" class="modal fade"
-     id="room-images-modal" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="listing-images-modal-label" class="modal fade"
+     id="listing-images-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="room-images-modal-label">Photos</h1>
+                <h1 class="modal-title fs-5" id="listing-images-modal-label">Photos</h1>
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body padding">
-                <div class="padding text-center" th:each="img : ${room.images}">
+                <div class="padding text-center" th:each="img : ${listing.images}">
                     <div>
                         <img loading="lazy" th:alt="${img.title}" th:src="${img.contentUrl}" th:title="${img.title}"/>
                     </div>
@@ -67,9 +66,10 @@
 </div>
 
 <!-- Infos -->
-<div class="room-info">
+<div class="listing-info">
     <!-- infos -->
-    <div class="room-info-details">
+    <div class="listing-info-details">
+        <!--
         <ul class="breadcrumb">
             <li>
                 <a href="/" th:text="#{navigation.home}">Home</a>
@@ -77,83 +77,120 @@
             <li>
                 <span>&#x2022;</span>
                 <a class="lnk-city"
-                   th:href="${room.address.city.url}"
-                   th:if="${room.neighborhood}"
-                   th:text="${room.address.city.name}"
+                   th:href="${listing.address.city.url}"
+                   th:if="${listing.address.neighbourhood}"
+                   th:text="${listing.address.city.name}"
                 >
                     CITY
                 </a>
-                <span th:if="!${room.neighborhood}" th:text="${room.address.city.name}">CITY</span>
+                <span th:if="!${listing.address.neighbourhood}" th:text="${listing.address.city.name}">CITY</span>
             </li>
-            <li th:if="${room.neighborhood}">
+            <li th:if="${listing.address.neighbourhood}">
                 <span>&#x2022;</span>
                 <a class="lnk-neighborhood"
-                   th:href="${room.neighborhood.url}"
-                   th:text="${room.neighborhood.name}"
+                   th:href="${listing.address.neighbourhood.url}"
+                   th:text="${listing.address.neighbourhood.name}"
                 >
                     NEIGHBORHOOD
                 </a>
             </li>
         </ul>
+        -->
 
-        <h1 class="margin-top-small" id="room-title" th:if="${room.title}" th:text="${room.title}">TITLE</h1>
+        <h1>
+            <span class="text-primary" id="listing-price" th:text="${listing.price.displayText}">$$$$</span>
+            <br/>
+            <span class="text-smaller" id="listing-title" th:text="${listing.title}">TITLE</span>
+        </h1>
+        <div class="margin-bottom-small text-larger">
+            <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
+            <span>-</span>
+            <span th:text="#{'listing-type.' + ${listing.listingType}}">LISTING_TYPE</span>
+        </div>
         <ul class="breadcrumb">
-            <li>
-                <span th:text="${room.numberOfRooms}">00</span>
-                <span th:if="${room.numberOfRooms == 1}" th:text="#{room.bedroom}">Bedroom</span>
-                <span th:if="${room.numberOfRooms > 1}" th:text="#{room.bedrooms}">Bedroom</span>
+            <li th:if="${listing.bedrooms}">
+                <span th:text="${listing.bedrooms}">00</span>
+                <span th:if="${listing.bedrooms == 1}" th:text="#{page.listing.bedroom}">BEDROOM</span>
+                <span th:if="${listing.bedrooms > 1}" th:text="#{page.listing.bedrooms}">BEDROOMS</span>
             </li>
-            <li>
+            <li th:if="${listing.bathrooms}">
                 <span>&#x2022;</span>
-                <span th:text="${room.numberOfBathrooms}">00</span>
-                <span th:if="${room.numberOfBathrooms == 1}" th:text="#{room.bathroom}">Bathroom</span>
-                <span th:if="${room.numberOfBathrooms > 1}" th:text="#{room.bathrooms}">Bathrooms</span>
+                <span th:text="${listing.bathrooms}">00</span>
+                <span th:if="${listing.bathrooms == 1}" th:text="#{page.listing.bedroom}">BATHROOM</span>
+                <span th:if="${listing.bathrooms > 1}" th:text="#{page.listing.bedrooms}">BATHROOMS</span>
             </li>
-            <li th:if="${room.numberOfBeds > 0}">
+            <li th:if="${listing.lotArea} OR ${listing.propertyArea}">
                 <span>&#x2022;</span>
-                <span th:if="${room.numberOfBeds == 1}" th:text="#{room.bed}">Bathroom</span>
-                <span th:if="${room.numberOfBeds > 1}" th:text="#{room.bed}">Bathrooms</span>
-            </li>
-            <li th:if="${room.area > 0}">
-                <span>&#x2022;</span>
-                <span th:text="${room.area}">00</span> m<sup>2</sup>
+                <span th:if="${listing.lotArea}" th:text="${listing.lotArea}">00</span>
+                <span th:if="!${listing.lotArea}" th:text="${listing.propertyArea}">00</span>
+                <span>m<sup>2</sup></span>
             </li>
         </ul>
 
         <!-- Description -->
-        <div class="margin-top border-top padding-top description-container" th:if="${room.description}">
-            <div id="room-summary" th:utext="${room.summary}">SUMMARY</div>
-            <button class="btn btn-secondary margin-top" data-bs-target="#room-description-modal" data-bs-toggle="modal"
-                    id="btn-description"
-                    th:text="#{button.show_more}">
-                Show More
-            </button>
-
-            <div aria-hidden="true" aria-labelledby="room-description-modal-label" class="modal fade"
-                 id="room-description-modal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="room-description-modal-label"
-                                th:text="#{page.room.section.description.modal-title}">About this space</h1>
-                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-                        </div>
-                        <div class="modal-body padding-2x" th:utext="${room.descriptionHtml}">DESCRIPTION</div>
-                    </div>
+        <div class="margin-top border-top padding-top description-container">
+            <div id="listing-description" th:utext="${listing.descriptionHtml}">DESCRIPTION</div>
+            <div class="row margin-top">
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.halfBathrooms}">
+                    <b th:text="#{page.listing.half-bathrooms}">Toilettes</b>
+                    <span th:text="${listing.halfBathrooms}">$$$</span>
                 </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.floors}">
+                    <b th:text="#{page.listing.floors}">Etages</b>
+                    <span th:text="${listing.floors}">00</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.basementType}">
+                    <b th:text="#{page.listing.basement}">Sous-Sol</b>
+                    <span th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.lotArea}">
+                    <b th:text="#{page.listing.lot-area}">Superficie du terrain</b>
+                    <span th:text="${listing.lotArea}">000</span>
+                    <span>m<sup>2</sup></span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.propertyArea}">
+                    <b th:text="#{page.listing.property-area}">Superficie habitable</b>
+                    <span th:text="${listing.propertyArea}">000</span>
+                    <span>m<sup>2</sup></span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.parkingType}">
+                    <b th:text="#{page.listing.parking-type}">Type de parking</b>
+                    <span th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.parkings}">
+                    <b th:text="#{page.listing.parkings}">Places de parking</b>
+                    <span th:text="${listing.parkings}">yyyy</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.fenceType}">
+                    <b th:text="#{page.listing.fence}">Clôture</b>
+                    <span th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.distanceFromMainRoad}">
+                    <b th:text="#{page.listing.distance-from-main-road}">Distance de la route principale</b>
+                    <span th:text="${listing.distanceFromMainRoad}">00</span>
+                    <span>m</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.roadPavement}">
+                    <b th:text="#{page.listing.road-pavement}">Route</b>
+                    <span th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</span>
+                </div>
+            </div>
+            <div class="margin-top" id="remarks" th:if="${listing.publicRemarks}">
+                <b th:text="#{page.listing.public-remarks}">Remarques Additionnelles</b>
+                <div th:utext="${listing.publicRemarksHtml}">REMARKS</div>
             </div>
         </div>
 
         <!-- Amenities -->
         <div class="margin-top border-top padding-top amenity-container">
-            <h2 th:text="#{page.room.section.amenity.title}">Features &amp; Amenities</h2>
+            <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-6" th:if="${room.furnishedType.name() == 'FULLY_FURNISHED'}">
+                    <div class="col-6" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
                         <i class="fa-solid fa-couch"></i>
                         <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
                     </div>
-                    <div class="col-6" th:if="${room.furnishedType.name() == 'SEMI_FURNISHED'}">
+                    <div class="col-6" th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
                         <i class="fa-solid fa-chair"></i>
                         <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
                     </div>
@@ -164,19 +201,20 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-secondary margin-top" data-bs-target="#room-amenities-modal" data-bs-toggle="modal"
+            <button class="btn btn-secondary margin-top" data-bs-target="#listing-amenities-modal"
+                    data-bs-toggle="modal"
                     id="btn-amenities"
-                    th:if="!${room.amenities.isEmpty()} AND ${topAmenities.size() < room.amenities.size()}">
-                <span th:text="#{page.room.section.amenity.show-all(${room.amenities.size()})}">Show All</span>
+                    th:if="!${listing.amenities.isEmpty()} AND ${topAmenities?.size() < listing.amenities.size()}">
+                <span th:text="#{page.listing.section.amenity.show-all(${listing.amenities.size()})}">Show All</span>
             </button>
 
-            <div aria-hidden="true" aria-labelledby="room-amenities-modal-label" class="modal fade"
-                 id="room-amenities-modal" tabindex="-1">
+            <div aria-hidden="true" aria-labelledby="listing-amenities-modal-label" class="modal fade"
+                 id="listing-amenities-modal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="room-amenities-modal-label"
-                                th:text="#{page.room.section.amenity.modal-title}">What this place offers</h1>
+                            <h1 class="modal-title fs-5" id="listing-amenities-modal-label"
+                                th:text="#{page.listing.section.amenity.modal-title}">What this place offers</h1>
                             <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
                         </div>
                         <div class="modal-body padding-2x">
@@ -185,7 +223,7 @@
                                     <h3 th:text="${category.name}">CATEGORY</h3>
                                     <ul>
                                         <li class="amenity"
-                                            th:each="amenity:${room.amenitiesByCategoryId(category.id)}"
+                                            th:each="amenity:${listing.amenitiesByCategoryId(category.id)}"
                                             th:id="'amenity-' + ${amenity.id}"
                                             th:text="${amenity.name}">
                                             AMENITY
@@ -199,151 +237,83 @@
             </div>
         </div>
 
+        <!-- Terms & Conditions -->
+        <div class="margin-top border-top padding-small terms-container">
+            <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
+            <div class="row">
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">
+                    <b th:text="#{page.listing.security-deposit}">Security Deposit:</b>
+                    <span th:text="${listing.securityDeposit.displayText}">$$$</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.visitFees}">
+                    <b th:text="#{page.listing.visit-fees}">Visit Fees:</b>
+                    <span th:text="${listing.visitFees}">$$</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.leaseTerm}">
+                    <b th:text="#{page.listing.lease-terms}">Lease Term:</b>
+                    <span th:text="${listing.leaseTerm}">00</span>
+                    <span th:text="#{label.months}">MONTH</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.advanceRent}">
+                    <b th:text="#{page.listing.advance-rent}">Advance Rent:</b>
+                    <span th:text="${listing.advanceRent}">00</span>
+                    <span th:if="${listing.advanceRent == 1}" th:text="#{label.month}">month</span>
+                    <span th:if="${listing.advanceRent > 1}" th:text="#{label.months}">months</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.availableAt}">
+                    <b th:text="#{page.listing.available-at}">Availability Date:</b>
+                    <span th:text="${listing.availableAtText}">yyyy-mm-dd</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.year}">
+                    <b th:text="#{page.listing.year}">Construction Year:</b>
+                    <span th:text="${listing.year}">yyyy</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Neighborhood -->
         <div class="margin-top border-top padding-top map-container">
-            <h2 th:text="#{page.room.section.map.title}">Map &amp; Neighborhood</h2>
+            <h2 th:text="#{page.listing.section.map.title}">Map &amp; Neighborhood</h2>
             <ul class="breadcrumb">
                 <li>
-                    <a href="/" th:text="#{navigation.home}">Home</a>
+                    <span th:text="${listing.address.city.name}">CITY</span>
                 </li>
-                <li>
-                    <span th:if="${room.neighborhood}">&#x2022;</span>
-                    <a class="lnk-city"
-                       th:href="${room.address.city.url}"
-                       th:text="${room.address.city.name}"
-                    >
-                        CITY
-                    </a>
-                </li>
-                <li>
+                <li th:if="${listing.address.neighbourhood}">
                     <span>&#x2022;</span>
-                    <a class="lnk-neighborhood"
-                       th:href="${room.neighborhood.url}"
-                       th:if="${room.neighborhood}"
-                       th:text="${room.neighborhood.name}"
-                    >
-                        NEIGHBORHOOD
-                    </a>
+                    <span th:text="${listing.address.neighbourhood.name}">NEIGHBORHOOD</span>
+                </li>
+                <li th:if="${listing.address.street}">
+                    <span>&#x2022;</span>
+                    <span th:text="${listing.address.street}">NEIGHBORHOOD</span>
                 </li>
             </ul>
             <div class="margin-top"
                  data-component-id="map"
                  data-disable-scroll-wheel-zoom="true"
                  data-disable-touch-zoom="true"
-                 id="room-map"
-                 th:data-latitude="${room.latitude}"
-                 th:data-longitude="${room.longitude}"
+                 id="listing-map"
+                 th:data-latitude="${listing.geoLocation.latitude}"
+                 th:data-longitude="${listing.geoLocation.longitude}"
                  th:data-show-marker="true"
                  th:data-zoom="18"
-                 th:if="${room.hasGeoLocation}"
+                 th:if="${listing.geoLocation}"
             >
             </div>
-        </div>
-
-        <!-- Terms & Conditions -->
-        <div class="margin-top border-top padding-small terms-container">
-            <h2 th:text="#{page.room.section.terms.title}">Terms &amp; Condition</h2>
-            <ul>
-                <li th:if="${room.leaseTermDuration} OR ${room.leaseTermNegotiable}">
-                    <b th:text="#{page.room.section.terms.lease-terms}">Lease Term:</b>
-                    <div
-                        th:replace="~{__components/room :: lease-term(${room.leaseTermDuration}, ${room.leaseTerm.name()})}">
-                    </div>
-                </li>
-                <li th:if="${room.advanceRent}">
-                    <b th:text="#{page.room.section.terms.advance-rent}">Advance Rent:</b>
-                    <span th:text="${room.advanceRent}">00</span>
-                    <span th:if="${room.advanceRent == 1}" th:text="#{label.month}">month</span>
-                    <span th:if="${room.advanceRent > 1}" th:text="#{label.months}">months</span>
-                </li>
-                <li th:if="${room.dateOfAvailability}">
-                    <b th:text="#{page.room.section.terms.availability-date}">Availability Date:</b>
-                    <span th:text="${room.dateOfAvailabilityText}">yyyy-mm-dd</span>
-                </li>
-                <li th:if="${room.checkinTime}">
-                    <b th:text="#{page.room.section.terms.checkin-time}">Checkin Time:</b>
-                    <span th:text="${room.checkinTime}">00:00</span>
-                </li>
-                <li th:if="${room.checkoutTime}">
-                    <b th:text="#{page.room.section.terms.checkout-time}">Checkout Time:</b>
-                    <span th:text="${room.checkoutTime}">00:00</span>
-                </li>
-                <li th:if="${room.yearOfConstruction}">
-                    <b th:text="#{page.room.section.terms.year-of-construction}">Construction Year:</b>
-                    <span th:text="${room.yearOfConstruction}">yyyy</span>
-                </li>
-                <li th:if="${room.visitFees}">
-                    <b th:text="#{page.room.section.terms.visit-fees}">Visit Fees:</b>
-                    <span th:text="${room.visitFees}">$$</span>
-                </li>
-            </ul>
         </div>
     </div>
 
     <!-- Contact -->
-    <div class="room-contact-details">
-        <div class="room-contact-details-inner">
-            <div id="room-price">
-                <h3 th:text="${room.account.name}">ACCOUNT</h3>
-                <div th:if="${room.pricePerMonth}">
-                    <div class="text-x-large text-primary" th:text="${room.pricePerMonth}">$$$$</div>
-                    <div class="text-small" th:text="#{price.per-month}">per month</div>
-                </div>
-                <div th:if="!${room.pricePerMonth} AND ${room.pricePerNight}">
-                    <div class="text-x-large text-primary" th:text="${room.pricePerNight}">$$$$</div>
-                    <div class="text-small" th:text="#{price.per-night}">per night</div>
-                </div>
-            </div>
+    <div class="listing-contact-details">
+        <div class="listing-contact-details-inner">
+            <!--
             <div>
-                <button class="btn btn-primary" data-bs-target="#room-message-modal" data-bs-toggle="modal"
+                <button class="btn btn-primary" data-bs-target="#listing-message-modal" data-bs-toggle="modal"
                         id="btn-contact-us"
-                        th:text="#{page.room.section.message.cta}">
+                        th:text="#{page.listing.section.message.cta}">
                     Send a Message
                 </button>
             </div>
-        </div>
-    </div>
-</div>
-
-<div aria-hidden="true" aria-labelledby="room-message-modal-label" class="modal fade"
-     id="room-message-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="room-message-modal-label"
-                    th:text="#{page.room.section.message.modal.title}">Send a Message</h1>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body padding-2x">
-                <form id="frm-send" method="POST" th:action="@{/rooms/send}"
-                      th:object="${form}">
-                    <input th:field="*{roomId}" type="hidden"/>
-                    <div class="form-group">
-                        <input class="form-control" required th:field="*{name}"
-                               th:placeholder="#{page.room.section.message.modal.name}"/>
-                    </div>
-                    <div class="form-group margin-top">
-                        <input class="form-control" required th:field="*{email}"
-                               th:placeholder="#{page.room.section.message.modal.email}" type="email"/>
-                    </div>
-                    <div class="form-group margin-top">
-                        <input class="form-control"
-                               th:data-country="${geoip?.countryCode}"
-                               th:field="*{phone}"
-                               type="tel"/>
-                    </div>
-                    <div class="form-group margin-top">
-                        <textarea class="form-control" placeholder="Message" required rows="3"
-                                  th:data-body="#{page.room.section.message.modal.body}"
-                                  th:field="*{body}">
-                        </textarea>
-                    </div>
-                    <div class="form-group margin-top">
-                        <button class="btn btn-primary" id="btn-send" th:text="#{button.send}" type="submit">Send
-                        </button>
-                    </div>
-                </form>
-            </div>
+            -->
         </div>
     </div>
 </div>
@@ -352,7 +322,7 @@
     document.addEventListener(
         'DOMContentLoaded',
         function () {
-            kokiTracking.track('VIEW', /*[[${room.id}]]*/'0');
+            kokiTracking.track('VIEW', /*[[${listing.id}]]*/'0');
         },
         false
     );
