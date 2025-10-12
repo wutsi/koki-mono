@@ -8,7 +8,6 @@ import com.wutsi.koki.refdata.dto.SearchCategoryResponse
 import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
 import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
-import com.wutsi.koki.refdata.dto.SearchUnitResponse
 import org.springframework.web.client.RestTemplate
 
 class KokiRefData(
@@ -16,17 +15,11 @@ class KokiRefData(
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
-        private const val UNIT_PATH_PREFIX = "/v1/units"
         private const val LOCATION_PATH_PREFIX = "/v1/locations"
         private const val CATEGORY_PATH_PREFIX = "/v1/categories"
         private const val JURIDICTION_PATH_PREFIX = "/v1/juridictions"
         private const val SALES_TAXES_PATH_PREFIX = "/v1/sales-taxes"
         private const val AMENITIES_PATH_PREFIX = "/v1/amenities"
-    }
-
-    fun units(): SearchUnitResponse {
-        val url = urlBuilder.build(UNIT_PATH_PREFIX)
-        return rest.getForEntity(url, SearchUnitResponse::class.java).body
     }
 
     fun location(id: Long): GetLocationResponse {
