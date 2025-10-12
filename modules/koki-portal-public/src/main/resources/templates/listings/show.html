@@ -65,47 +65,22 @@
     </div>
 </div>
 
-<!-- Infos -->
 <div class="listing-info">
     <!-- infos -->
     <div class="listing-info-details">
-        <!--
-        <ul class="breadcrumb">
-            <li>
-                <a href="/" th:text="#{navigation.home}">Home</a>
-            </li>
-            <li>
-                <span>&#x2022;</span>
-                <a class="lnk-city"
-                   th:href="${listing.address.city.url}"
-                   th:if="${listing.address.neighbourhood}"
-                   th:text="${listing.address.city.name}"
-                >
-                    CITY
-                </a>
-                <span th:if="!${listing.address.neighbourhood}" th:text="${listing.address.city.name}">CITY</span>
-            </li>
-            <li th:if="${listing.address.neighbourhood}">
-                <span>&#x2022;</span>
-                <a class="lnk-neighborhood"
-                   th:href="${listing.address.neighbourhood.url}"
-                   th:text="${listing.address.neighbourhood.name}"
-                >
-                    NEIGHBORHOOD
-                </a>
-            </li>
-        </ul>
-        -->
-
         <h1>
             <span class="text-primary" id="listing-price" th:text="${listing.price.displayText}">$$$$</span>
             <br/>
             <span class="text-smaller" id="listing-title" th:text="${listing.title}">TITLE</span>
         </h1>
-        <div class="margin-bottom-small text-larger">
-            <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
-            <span>-</span>
-            <span th:text="#{'listing-type.' + ${listing.listingType}}">LISTING_TYPE</span>
+        <div class="margin-bottom-small flex">
+            <div>
+                <span th:text="#{page.listing.listing-number} + ':'">LISTING_NUMBER</span>
+                <span th:text="${listing.listingNumber}">###</span>
+            </div>
+            <div class="margin-left" th:if="${listing.statusSold}">
+                <div th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></div>
+            </div>
         </div>
         <ul class="breadcrumb">
             <li th:if="${listing.bedrooms}">
@@ -186,16 +161,16 @@
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-6" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
+                    <div class="col-6 col-md-4" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
                         <i class="fa-solid fa-couch"></i>
                         <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
                     </div>
-                    <div class="col-6" th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
+                    <div class="col-6 col-md-4" th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
                         <i class="fa-solid fa-chair"></i>
                         <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
                     </div>
 
-                    <div class="col-6" th:each="amenity:${topAmenities}">
+                    <div class="col-6 col-md-4" th:each="amenity:${topAmenities}">
                         <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
                         <span th:text="${amenity.name}">AMENITY</span>
                     </div>
@@ -303,9 +278,9 @@
     </div>
 
     <!-- Contact -->
+    <!--
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
-            <!--
             <div>
                 <button class="btn btn-primary" data-bs-target="#listing-message-modal" data-bs-toggle="modal"
                         id="btn-contact-us"
@@ -313,9 +288,9 @@
                     Send a Message
                 </button>
             </div>
-            -->
         </div>
     </div>
+    -->
 </div>
 
 <script th:inline="javascript">

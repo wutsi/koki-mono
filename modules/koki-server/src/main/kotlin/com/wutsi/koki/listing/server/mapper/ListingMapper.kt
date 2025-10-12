@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
@@ -14,6 +15,7 @@ import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
+import org.hibernate.query.results.Builders.entity
 import org.springframework.stereotype.Service
 
 @Service
@@ -94,8 +96,8 @@ class ListingMapper {
             publishedAt = entity.publishedAt,
             closedAt = entity.closedAt,
 
-            publicUrl = StringUtils.toSlug("", entity.title),
-            publicUrlFr = StringUtils.toSlug("", entity.titleFr)
+            publicUrl = toPublicUrl(entity.id, entity.title, entity.status),
+            publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
         )
     }
 
@@ -136,8 +138,8 @@ class ListingMapper {
             titleFr = entity.titleFr?.ifEmpty { null },
             summaryFr = entity.summaryFr?.ifEmpty { null },
 
-            publicUrl = StringUtils.toSlug("", entity.title),
-            publicUrlFr = StringUtils.toSlug("", entity.titleFr)
+            publicUrl = toPublicUrl(entity.id, entity.title, entity.status),
+            publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
         )
     }
 
@@ -177,6 +179,21 @@ class ListingMapper {
             null
         } else {
             Money(amount.toDouble(), currency)
+        }
+    }
+
+    private fun toPublicUrl(id: Long?, title: String?, status: ListingStatus): String? {
+        return when (status) {
+            ListingStatus.ACTIVE,
+            ListingStatus.ACTIVE_WITH_CONTINGENCIES,
+            ListingStatus.SOLD,
+            ListingStatus.RENTED,
+            ListingStatus.PENDING -> {
+                val prefix = "/listings/$id"
+                title?.let { StringUtils.toSlug(prefix, title) } ?: prefix
+            }
+
+            else -> null
         }
     }
 }

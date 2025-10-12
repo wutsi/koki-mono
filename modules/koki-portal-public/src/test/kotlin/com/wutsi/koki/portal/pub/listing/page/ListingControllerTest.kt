@@ -7,8 +7,11 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.FileFixtures
+import com.wutsi.koki.portal.pub.ListingFixtures
 import com.wutsi.koki.portal.pub.ListingFixtures.listing
 import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.common.page.PageName
@@ -68,6 +71,34 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun sold() {
+        setupListing(ListingStatus.SOLD)
+        navigateTo("/listings${listing.publicUrl}")
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun expired() {
+        setupListing(ListingStatus.EXPIRED)
+        navigateTo("/listings${listing.publicUrl}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun draft() {
+        setupListing(ListingStatus.DRAFT)
+        navigateTo("/listings${listing.publicUrl}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
+    fun cancelled() {
+        setupListing(ListingStatus.CANCELLED)
+        navigateTo("/listings${listing.publicUrl}")
+        assertCurrentPageIs(PageName.ERROR_404)
+    }
+
+    @Test
     fun `show - english translation`() {
         navigateTo("/listings/${listing.id}?lang=en")
         assertCurrentPageIs(PageName.LISTING)
@@ -122,5 +153,18 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.long)
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
+    }
+
+    private fun setupListing(status: ListingStatus) {
+        doReturn(
+            ResponseEntity(
+                GetListingResponse(ListingFixtures.listing.copy(status = status)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetListingResponse::class.java)
+            )
     }
 }
