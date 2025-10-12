@@ -133,28 +133,28 @@ class ListingControllerTest : AbstractPageControllerTest() {
     @Test
     fun sold() {
         setupListing(ListingStatus.SOLD)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.LISTING)
     }
 
     @Test
     fun expired() {
         setupListing(ListingStatus.EXPIRED)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun draft() {
         setupListing(ListingStatus.DRAFT)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun cancelled() {
         setupListing(ListingStatus.CANCELLED)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
