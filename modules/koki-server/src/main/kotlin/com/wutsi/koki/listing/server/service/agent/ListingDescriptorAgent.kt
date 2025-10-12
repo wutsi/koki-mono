@@ -46,6 +46,7 @@ class ListingDescriptorAgent(
               - For fully furnished properties, expand on key Features and amenities: Now's the time to elaborate on the highlights mentioned in your title and introduce other enticing features. Be specific and descriptive.
               - Highlight the experience: Think about what makes your property special. Is it the peace and quiet, the convenience to attractions, the luxurious amenities (for fully furnished properties), or the thoughtful touches you provide?
               - Aim for around 300-400 words.
+              - For readability, break the description in paragraph of 2–3 sentences.
             - Instructions for crafting the summary:
               - Expand on the Title and Hook
               - Focus on the Benefits for the Sharer's Audience: Why should someone click on this link? What kind of experience awaits the customer?

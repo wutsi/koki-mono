@@ -129,9 +129,9 @@ class ListingMapper(
                 entity.description
             },
             publicUrl = if (lang == "fr") {
-                entity.publicUrlFr ?: entity.publicUrl
+                toPublicUrl(entity.publicUrlFr ?: entity.publicUrl)
             } else {
-                entity.publicUrl
+                toPublicUrl(entity.publicUrl)
             },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
@@ -233,9 +233,9 @@ class ListingMapper(
                 entity.summary
             },
             publicUrl = if (lang == "fr") {
-                entity.publicUrlFr ?: entity.publicUrl
+                toPublicUrl(entity.publicUrlFr ?: entity.publicUrl)
             } else {
-                entity.publicUrl
+                toPublicUrl(entity.publicUrl)
             },
         )
     }
@@ -327,5 +327,11 @@ class ListingMapper(
     private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
         val locale = LocaleContextHolder.getLocale()
         return messages.getMessage(key, args, locale)
+    }
+
+    private fun toPublicUrl(publicUrl: String?): String? {
+        return publicUrl?.let { url ->
+            currentTenant.get()?.let { tenant -> tenant.clientPortalUrl + url }
+        }
     }
 }
