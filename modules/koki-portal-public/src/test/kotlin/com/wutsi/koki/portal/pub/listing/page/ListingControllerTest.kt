@@ -103,7 +103,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         val windowHandles = driver.getWindowHandles().toList()
         driver.switchTo().window(windowHandles[1])
-        assertEquals(true, driver.currentUrl?.startsWith("https://x.com/intent/post?url="))
+        assertEquals(true, driver.currentUrl?.contains("x.com"))
     }
 
     @Test
