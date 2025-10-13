@@ -60,11 +60,11 @@
 <div class="listing-info">
     <!-- infos -->
     <div class="listing-info-details">
-        <h2 class="text-primary" id="listing-price">
+        <h2 class="text-primary margin-none" id="listing-price">
             <span th:if="${listing.statusSold}" th:text="${listing.transactionPrice.displayText}">$$$$</span>
             <span th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$$</span>
         </h2>
-        <h1 id="listing-title" th:text="${listing.title}">TITLE</h1>
+        <h1 class="margin-none" id="listing-title" th:text="${listing.title}">TITLE</h1>
         <div class="margin-bottom-small flex">
             <div>
                 <span th:text="#{page.listing.listing-number} + ':'">LISTING_NUMBER</span>
