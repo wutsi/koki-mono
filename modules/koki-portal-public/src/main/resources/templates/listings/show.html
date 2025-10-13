@@ -13,21 +13,33 @@
 <!-- images -->
 <div class="hero-image-container">
     <div class="hero-1">
-        <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
+        <a data-component-id="modal-button"
+           data-modal-body-large="true"
+           href="#"
+           th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
+           th:data-modal-title="#{page.listing.section.photo.title}">
             <img th:src="${listing.heroImageUrl}"/>
         </a>
     </div>
     <div class="hero-2">
         <div class="hero-21">
             <div th:each="img : ${heroImages21}">
-                <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-component-id="modal-button"
+                   data-modal-body-large="true"
+                   href="#"
+                   th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
+                   th:data-modal-title="#{page.listing.section.photo.title}">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
         </div>
         <div class="hero-22">
             <div th:each="img : ${heroImages22}">
-                <a data-bs-target="#listing-images-modal" data-bs-toggle="modal" href="#" role="button">
+                <a data-component-id="modal-button"
+                   data-modal-body-large="true"
+                   href="#"
+                   th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
+                   th:data-modal-title="#{page.listing.section.photo.title}">
                     <img th:src="${img.contentUrl}"/>
                 </a>
             </div>
@@ -137,7 +149,8 @@
         </div>
 
         <!-- Amenities -->
-        <div class="margin-top border-top padding-top amenity-container">
+        <div class="margin-top border-top padding-top amenity-container"
+             th:if="${listing.furnitureType} OR !${listing.amenities.isEmpty()}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="container-fluid">
                 <div class="row">

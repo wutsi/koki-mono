@@ -190,6 +190,17 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `show images from hero`() {
+        navigateTo("/listings/${listing.id}")
+
+        click(".hero-image-container a")
+
+        assertElementVisible("#koki-modal")
+        assertElementCount("#koki-modal .modal-body img", FileFixtures.images.size)
+        click("#koki-modal .btn-close")
+    }
+
+    @Test
     fun `VIEW tracking on page load`() {
         navigateTo("/listings/${listing.id}")
 

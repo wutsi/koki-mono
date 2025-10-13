@@ -136,7 +136,7 @@
                                        th:text="${contact.phoneFormatted}">PHONE</a>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.preferredCommunicationMethod}">
+                            <tr th:if="${contact.preferredCommunicationMethod.name != 'UNKNOWN'}">
                                 <td><b th:text="#{page.contact.contact_via}">Contact me via</b></td>
                                 <td th:text="#{'preferred-communication-method.' + ${contact.preferredCommunicationMethod}}">
                                     METHOD
