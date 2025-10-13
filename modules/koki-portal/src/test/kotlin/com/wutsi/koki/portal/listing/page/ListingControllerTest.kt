@@ -67,6 +67,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#btn-map")
         assertElementNotPresent("#btn-share")
+        assertElementNotPresent("#btn-open")
         assertElementPresent("#btn-edit")
         assertElementPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -90,7 +91,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING)
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementPresent("#btn-status")
@@ -114,7 +116,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING)
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -142,7 +145,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING)
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -181,7 +185,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING)
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -219,7 +224,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING)
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -236,7 +242,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#listing-seller-section")
 
         assertElementPresent("#btn-map")
-        assertElementNotPresent("#btn-share")
+        assertElementPresent("#btn-share")
+        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-edit")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
@@ -257,6 +264,20 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    @Test
+    fun share() {
+        setupListing(status = ListingStatus.ACTIVE)
+
+        navigateTo("/listings/${listing.id}")
+
+        click("#btn-share")
+        assertElementVisible("#koki-modal")
+
+        assertElementVisible("#btn-share-facebook")
+        assertElementVisible("#btn-share-twitter")
+        assertElementVisible("#btn-share-email")
     }
 
     private fun setupListing(

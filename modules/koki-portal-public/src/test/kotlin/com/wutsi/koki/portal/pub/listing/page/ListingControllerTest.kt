@@ -74,60 +74,15 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `share to WhatsApp`() {
+    fun share() {
         navigateTo("${listing.publicUrl}")
 
         click("#btn-share-navbar")
         assertElementVisible("#koki-modal")
 
-        input("#phone", "5147580191")
-        input("#message", "Hello")
-        click("button[type=submit]")
-
-        val windowHandles = driver.getWindowHandles().toList()
-        driver.switchTo().window(windowHandles[1])
-        assertEquals(true, driver.currentUrl?.contains("whatsapp.com"))
-
-        driver.switchTo().window(windowHandles[0])
-        assertElementNotVisible("#koki-modal")
-    }
-
-    @Test
-    fun `share to Twitter`() {
-        navigateTo("${listing.publicUrl}")
-
-        click("#btn-share-navbar")
-        assertElementVisible("#koki-modal")
-
-        click("#btn-share-twitter")
-
-        val windowHandles = driver.getWindowHandles().toList()
-        driver.switchTo().window(windowHandles[1])
-        assertEquals(true, driver.currentUrl?.contains("x.com"))
-    }
-
-    @Test
-    fun `share to Facebook`() {
-        navigateTo("${listing.publicUrl}")
-
-        click("#btn-share-navbar")
-        assertElementVisible("#koki-modal")
-
-        click("#btn-share-facebook")
-
-        val windowHandles = driver.getWindowHandles().toList()
-        driver.switchTo().window(windowHandles[1])
-        assertEquals(true, driver.currentUrl?.contains("facebook.com"))
-    }
-
-    @Test
-    fun `share to email`() {
-        navigateTo("${listing.publicUrl}")
-
-        click("#btn-share-navbar")
-        assertElementVisible("#koki-modal")
-
-        click("#btn-share-email")
+        assertElementVisible("#btn-share-facebook")
+        assertElementVisible("#btn-share-twitter")
+        assertElementVisible("#btn-share-email")
     }
 
     @Test

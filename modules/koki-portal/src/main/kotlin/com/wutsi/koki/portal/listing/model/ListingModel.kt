@@ -99,7 +99,7 @@ data class ListingModel(
         get() = statusOffMarket
 
     val statusDraft: Boolean
-        get() = status == ListingStatus.DRAFT
+        get() = status == ListingStatus.DRAFT || status == ListingStatus.PUBLISHING
 
     val statusActive: Boolean
         get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES

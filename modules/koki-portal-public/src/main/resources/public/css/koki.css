@@ -526,6 +526,17 @@ ul.breadcrumb li:first-child {
     border: 1px solid gray;
 }
 
+.btn-whatsapp {
+    background: #075E54;
+    color: white;
+    border: 1px solid gray;
+}
+
+.btn-whatsapp:hover {
+    background: #25D366;
+    color: black;
+}
+
 a.btn-back {
     color: black
 }
