@@ -9,7 +9,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.listing.server.service.email.ListingClosedMailet
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.AfterEach

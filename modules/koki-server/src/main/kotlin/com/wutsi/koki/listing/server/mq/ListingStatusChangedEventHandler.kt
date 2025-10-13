@@ -2,7 +2,6 @@ package com.wutsi.koki.listing.server.mq
 
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
-import com.wutsi.koki.listing.server.service.email.ListingClosedMailet
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.stereotype.Service

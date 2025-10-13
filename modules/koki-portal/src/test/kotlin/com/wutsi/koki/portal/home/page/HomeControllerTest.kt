@@ -9,6 +9,9 @@ class HomeControllerTest : AbstractPageControllerTest() {
     fun home() {
         navigateTo("/")
         assertCurrentPageIs(PageName.HOME)
+
+        assertElementPresent("#btn-create-listing")
+        assertElementPresent("#btn-create-contact")
     }
 
     @Test

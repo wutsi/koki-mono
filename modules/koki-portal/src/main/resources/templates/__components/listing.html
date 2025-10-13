@@ -40,8 +40,9 @@
           th:text="#{'listing-status.' + ${listing.status}}">CANCELLED</span>
 </div>
 
-<div th:fragment="listing-type-badge(type)" th:remove="tag">
-    <span class="listing-status badge text-bg-light margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
+<div th:fragment="listing-type-badge(listing)" th:remove="tag">
+    <span class="listing-status badge text-bg-light margin-right"
+          th:text="#{'listing-type.' + ${listing.listingType}}">A LOUER</span>
 </div>
 
 <div th:fragment="listing-table(items, sold, showAgent, moreUrl)" th:if="!${items.isEmpty()}">
@@ -96,7 +97,7 @@
 
             <div class="margin-top-small flex">
                 <div class="margin-right-small" th:if="!${listing.statusSold}">
-                    <div th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></div>
+                    <div th:replace="~{__components/listing :: listing-type-badge(${listing})}"></div>
                 </div>
                 <div>
                     <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
@@ -187,7 +188,7 @@
 <div th:fragment="listing-summary(listing)" th:remove="tag">
     <div class="flex">
         <div th:if="!${listing.statusSold}" th:remove="tag">
-            <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
+            <span th:replace="~{__components/listing :: listing-type-badge(${listing})}"></span>
         </div>
         <span th:replace="~{__components/listing :: listing-status-badge(${listing})}"></span>
     </div>
@@ -244,13 +245,23 @@
 
 <div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
     <a target="_new" th:href="'/listings/' + ${listing.id}">
+        <div class="listing-status-container">
+            <div th:if="!${listing.statusSold}" th:remove="tag">
+                <div th:replace="~{__components/listing :: listing-type-badge(${listing})}"></div>
+            </div>
+            <div th:if="${listing.statusSold}" th:remove="tag">
+                <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
+            </div>
+        </div>
         <div class="hero-image-container flex flex-center">
             <img class="hero-image" th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
         </div>
     </a>
     <div class="listing-details padding-small">
         <a target="_new" th:href="'/listings/' + ${listing.id}">
-            <b class="listing-price" th:text="${listing.price.displayText}">$$$</b>
+            <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
+            <b class="listing-price" th:if="${listing.statusSold}"
+               th:text="${listing.transactionPrice.displayText}">$$$</b>
             <div class="text-small">
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
@@ -264,6 +275,12 @@
                 <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, true)}"></div>
             </div>
         </a>
+    </div>
+</div>
+
+<div class="listing-carousel" th:fragment="listing-carousel(listings)">
+    <div th:each="listing : ${listings}" th:remove="tag">
+        <div th:replace="~{__components/listing :: listing-card(${listing})}"></div>
     </div>
 </div>
 

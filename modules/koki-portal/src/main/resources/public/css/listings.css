@@ -33,6 +33,14 @@ ul.amenities li {
     padding: 0;
 }
 
+.listing-status {
+    text-transform: uppercase;
+}
+
+.listing-type {
+    text-transform: uppercase;
+}
+
 .listing-search-filter-body label {
     font-weight: bold;
 }
@@ -53,12 +61,12 @@ ul.amenities li {
     border: 1px solid lightgray;
 }
 
-.listing-status {
-    text-transform: uppercase;
-}
-
-.listing-type {
-    text-transform: uppercase;
+.listing-card .listing-status-container {
+    position: relative;
+    margin-left: .2em;
+    margin-top: .2em;
+    z-index: 1000;
+    display: inline;
 }
 
 .listing-card .listing-details a {
@@ -73,6 +81,7 @@ ul.amenities li {
     align-items: center;
     justify-content: center;
     background: #f0f0f0;
+    margin-top: -1.5em;
 }
 
 .listing-card img.hero-image {
@@ -85,6 +94,18 @@ ul.amenities li {
     height: 1.25em;
 }
 
+.listing-carousel {
+    display: flex;
+    overflow-y: auto;
+}
+
+.listing-carousel .listing-card {
+    margin-right: .5em;
+}
+
+.listing-carousel .listing-card:last-child {
+    margin-right: 0;
+}
 
 a .listing-filter-container {
     text-decoration: none !important;

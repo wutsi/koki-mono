@@ -19,7 +19,7 @@ class KokiPlatformConfiguration(
 ) {
     companion object {
         const val COOKIE = "__atk"
-        const val TTL = 3600
+        const val TTL = 86400
     }
 
     @Bean

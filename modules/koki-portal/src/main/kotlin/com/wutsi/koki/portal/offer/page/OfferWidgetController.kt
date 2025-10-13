@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/offers/widget")
+@RequestMapping("/offers/widgets")
 @RequiresPermission(["offer"])
 class OfferWidgetController : AbstractOfferController() {
-    @GetMapping
+    @GetMapping("/active")
     fun list(@RequestParam(required = false, name = "test-mode") testMode: Boolean, model: Model): String {
         model.addAttribute("testMode", testMode)
 

@@ -14,7 +14,7 @@ import kotlin.test.Test
 class OfferWidgetControllerTest : AbstractPageControllerTest() {
     @Test
     fun widget() {
-        navigateTo("/offers/widget?test-mode=true")
+        navigateTo("/offers/widgets/active?test-mode=true")
         assertElementCount(".widget .offer", offers.size)
     }
 
@@ -31,7 +31,7 @@ class OfferWidgetControllerTest : AbstractPageControllerTest() {
                 eq(SearchOfferResponse::class.java)
             )
 
-        navigateTo("/offers/widget?test-mode=true")
+        navigateTo("/offers/widgets/active?test-mode=true")
         assertElementNotPresent(".widget")
     }
 }
