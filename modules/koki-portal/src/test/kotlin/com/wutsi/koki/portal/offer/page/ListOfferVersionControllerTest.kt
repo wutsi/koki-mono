@@ -7,7 +7,7 @@ import kotlin.test.Test
 
 class ListOfferVersionControllerTest : AbstractPageControllerTest() {
     @Test
-    fun widget() {
+    fun list() {
         navigateTo("/offer-versions?test-mode=true&offer-id=${offer.id}")
         assertElementCount(".version", offerVersions.size)
 

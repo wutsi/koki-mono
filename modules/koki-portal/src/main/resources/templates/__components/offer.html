@@ -278,7 +278,7 @@
     <td>
         <a data-component-id="modal-button" data-modal-body-large="true" href="#"
            th:data-modal-body-url="'/offer-versions/' + ${version.id}">
-            <span th:replace="~{__components/offer :: offer-status-badge(${versionOfferTabControllerTest})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${version})}"></span>
 
             <table class="margin-top-small text-small d-block d-md-none">
                 <tr>
