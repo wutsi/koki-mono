@@ -18,28 +18,30 @@
     </div>
 </div>
 
-<div th:fragment="listing-status-badge(status)" th:remove="tag">
-    <span class="badge text-bg-secondary"
-          th:if="${status.name() == 'DRAFT'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+<div th:fragment="listing-status-badge(listing)" th:remove="tag">
+    <span class="listing-status badge text-bg-secondary"
+          th:if="${listing.status.name() == 'DRAFT'}"
+          th:text="#{'listing-status.' + ${listing.status}}">DRAFT</span>
 
-    <span class="badge text-bg-warning" th:if="${status.name() == 'PUBLISHING'} OR ${status.name() == 'PENDING'}"
-          th:text="#{'listing-status.' + ${status}}">PUBLISHING</span>
+    <span class="listing-status badge text-bg-warning"
+          th:if="${listing.status.name() == 'PUBLISHING'} OR ${listing.status.name() == 'PENDING'}"
+          th:text="#{'listing-status.' + ${listing.status}}">PUBLISHING</span>
 
-    <span class="badge text-bg-primary"
-          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+    <span class="listing-status badge text-bg-primary"
+          th:if="${listing.status.name() == 'ACTIVE'} OR ${listing.status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
+          th:text="#{'listing-status.' + ${listing.status}}">ACTIVE</span>
 
-    <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+    <span class="listing-status badge text-bg-success"
+          th:if="${listing.status.name() == 'RENTED'} OR ${listing.status.name() == 'SOLD'}"
+          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.transactionDateText}">SOLD</span>
 
-    <span class="badge text-bg-danger"
-          th:if="${status == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'} OR ${status.name() == 'CANCELLED'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+    <span class="listing-status badge text-bg-danger"
+          th:if="${listing.status == 'EXPIRED'} OR ${listing.status.name() == 'WITHDRAWN'} OR ${listing.status.name() == 'CANCELLED'}"
+          th:text="#{'listing-status.' + ${listing.status}}">CANCELLED</span>
 </div>
 
 <div th:fragment="listing-type-badge(type)" th:remove="tag">
-    <span class="badge text-bg-info margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
+    <span class="listing-status badge text-bg-light margin-right" th:text="#{'listing-type.' + ${type}}">A LOUER</span>
 </div>
 
 <div th:fragment="listing-table(items, sold, showAgent, moreUrl)" th:if="!${items.isEmpty()}">
@@ -97,7 +99,7 @@
                     <div th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></div>
                 </div>
                 <div>
-                    <div th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></div>
+                    <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
                 </div>
             </div>
 
@@ -118,7 +120,7 @@
                         <b th:text="${listing.price.displayText}">$$$</b>
                     </td>
                 </tr>
-                <tr>
+                <tr th:if="${listing.price}">
                     <th th:text="#{page.listing.commission}">COMMISSION</th>
                     <td class="padding-left-small">
                         <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
@@ -184,14 +186,15 @@
 
 <div th:fragment="listing-summary(listing)" th:remove="tag">
     <div class="flex">
-        <div th:if="!${listing.statusSold}">
+        <div th:if="!${listing.statusSold}" th:remove="tag">
             <span th:replace="~{__components/listing :: listing-type-badge(${listing.listingType})}"></span>
         </div>
-        <span th:replace="~{__components/listing :: listing-status-badge(${listing.status})}"></span>
+        <span th:replace="~{__components/listing :: listing-status-badge(${listing})}"></span>
     </div>
     <div class="margin-top-small">
         <h1 class="margin-none listing-price" th:if="${listing.price}">
-            <span th:text="${listing.price.displayText}">0000</span>
+            <span th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">0000</span>
+            <span th:if="${listing.statusSold}" th:text="${listing.transactionPrice.displayText}">0000</span>
         </h1>
 
         <div class="margin-top-small">
@@ -211,8 +214,10 @@
         </div>
         <div class="margin-top-small flex flex-space-between">
             <div>
-                <b class="text-small" th:text="#{page.listing.commission}">COMMISSION</b><br/>
-                <span class="listing-price" th:text="${listing.commission(user)}">$$$</span>
+                <div th:if="${listing.price}">
+                    <b class="text-small" th:text="#{page.listing.commission}">COMMISSION</b><br/>
+                    <span class="listing-price" th:text="${listing.commission(user)}">$$$</span>
+                </div>
             </div>
             <div class="flex">
                 <div class="text-center" th:if="${listing.bedrooms}">

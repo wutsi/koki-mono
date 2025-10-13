@@ -22,18 +22,14 @@ abstract class TenantAwareMapper {
 
     protected fun createDateTimeFormat(): DateFormat {
         val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.dateTimeFormat ?: "yyyy-MM-dd HH:mm")
+        tenant?.locale?.let { locale -> Locale(locale) } ?: LocaleContextHolder.getLocale()
+        return DateFormat.getDateInstance(DateFormat.LONG)
     }
 
     protected fun createDateFormat(): DateFormat {
         val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.dateFormat ?: "yyyy-MM-dd")
-    }
-
-    protected fun createMediumDateFormat(): DateFormat {
-        val country = currentTenant.get()?.country
-        val language = LocaleContextHolder.getLocale().language
-        return DateFormat.getDateInstance(DateFormat.LONG, Locale(language, country))
+        tenant?.locale?.let { locale -> Locale(locale) } ?: LocaleContextHolder.getLocale()
+        return DateFormat.getDateInstance(DateFormat.MEDIUM)
     }
 
     protected fun createTimeFormat(): DateFormat {

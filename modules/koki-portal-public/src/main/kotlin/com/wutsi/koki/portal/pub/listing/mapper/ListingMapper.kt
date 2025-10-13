@@ -37,6 +37,7 @@ class ListingMapper(
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
         val df = createDateFormat()
+        val mdf = createMediumDateFormat()
         val address = toAddress(entity.address, locations)
 
         return ListingModel(
@@ -86,7 +87,7 @@ class ListingMapper(
 
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             transactionDate = entity.transactionDate,
-            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
+            transactionDateText = entity.transactionDate?.let { date -> mdf.format(date) },
             transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
 
             title = if (lang == "fr") {

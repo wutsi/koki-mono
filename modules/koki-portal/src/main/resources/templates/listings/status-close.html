@@ -33,7 +33,8 @@
                         </div>
                         <div class="section-item">
                             <label class="title" th:text="#{page.listing.new-status}">Status</label>
-                            <span th:replace="~{__components/listing :: listing-status-badge(${form.status})}"></span>
+                            <span class="listing-status badge text-bg-danger"
+                                  th:text="#{'listing-status.' + ${form.status}}">STATUS</span>
                         </div>
 
                         <div class="section-item">

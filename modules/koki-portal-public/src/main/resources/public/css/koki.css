@@ -541,6 +541,11 @@ a.btn-back {
     color: black
 }
 
+.text-bg-light {
+    color: black;
+    border: 1px solid gray;
+}
+
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0

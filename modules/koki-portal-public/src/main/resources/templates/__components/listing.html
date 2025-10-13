@@ -2,24 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="listing-status-badge(status)" th:remove="tag">
-    <span class="badge text-bg-secondary"
-          th:if="${status.name() == 'DRAFT'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+<div th:fragment="listing-status-badge(listing)" th:remove="tag">
+    <span class="listing-status badge text-bg-primary"
+          th:if="${listing.statusActive}"
+          th:text="#{'listing-status.' + ${listing.status}}"
+    >ACTIVE</span>
 
-    <span class="badge text-bg-warning" th:if="${status.name() == 'PUBLISHING'} OR ${status.name() == 'PENDING'}"
-          th:text="#{'listing-status.' + ${status}}">PUBLISHING</span>
-
-    <span class="badge text-bg-primary"
-          th:if="${status.name() == 'ACTIVE'} OR ${status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
-
-    <span class="badge text-bg-success" th:if="${status.name() == 'RENTED'} OR ${status.name() == 'SOLD'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
-
-    <span class="badge text-bg-danger"
-          th:if="${status == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'} OR ${status.name() == 'CANCELLED'}"
-          th:text="#{'listing-status.' + ${status}}">A LOUER</span>
+    <span class="listing-status badge text-bg-success"
+          th:if="${listing.statusSold}"
+          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.transactionDateText}"
+    >SOLD</span>
 </div>
 
 </body>

@@ -53,6 +53,14 @@ ul.amenities li {
     border: 1px solid lightgray;
 }
 
+.listing-status {
+    text-transform: uppercase;
+}
+
+.listing-type {
+    text-transform: uppercase;
+}
+
 .listing-card .listing-details a {
     text-decoration: none;
     color: #040404;

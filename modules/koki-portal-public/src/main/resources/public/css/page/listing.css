@@ -118,6 +118,14 @@
     font-size: 1.25em;
 }
 
+.listing-status {
+    text-transform: uppercase;
+}
+
+.listing-type {
+    text-transform: uppercase;
+}
+
 
 /* ======================================================================== */
 /*                                                                          */
