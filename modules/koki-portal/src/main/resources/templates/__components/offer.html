@@ -258,7 +258,7 @@
             </span>
         </td>
     </tr>
-    <tr th:if="${offer.expiresAt}">
+    <tr th:if="${offer.version.expiresAt}">
         <th th:text="#{page.offer.expires-at}">EXPIRY</th>
         <td class="padding-left" colspan="2" th:text="${offer.version.expiresAtText}">yyy-MM-dd</td>
     </tr>
@@ -278,7 +278,7 @@
     <td>
         <a data-component-id="modal-button" data-modal-body-large="true" href="#"
            th:data-modal-body-url="'/offer-versions/' + ${version.id}">
-            <span th:replace="~{__components/offer :: offer-status-badge(${version.status})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${versionOfferTabControllerTest})}"></span>
 
             <table class="margin-top-small text-small d-block d-md-none">
                 <tr>
