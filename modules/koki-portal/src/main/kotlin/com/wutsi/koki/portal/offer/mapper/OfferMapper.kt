@@ -106,9 +106,11 @@ class OfferMapper(
             createdAt = entity.createdAt,
             expiresAt = entity.expiresAt,
             closingAt = entity.closingAt,
+            modifiedAt = entity.modifiedAt,
             createdAtText = df.format(entity.createdAt),
             expiresAtText = entity.expiresAt?.let { date -> df.format(date) },
             closingAtText = entity.closingAt?.let { date -> df.format(date) },
+            modifiedAtText = entity.modifiedAt?.let { date -> df.format(date) },
         )
     }
 
@@ -134,9 +136,11 @@ class OfferMapper(
             createdAt = entity.createdAt,
             expiresAt = entity.expiresAt,
             closingAt = entity.closingAt,
+            modifiedAt = entity.modifiedAt,
             createdAtText = df.format(entity.createdAt),
             expiresAtText = entity.expiresAt?.let { date -> df.format(date) },
             closingAtText = entity.closingAt?.let { date -> df.format(date) },
+            modifiedAtText = entity.modifiedAt?.let { date -> df.format(date) },
         )
     }
 }
