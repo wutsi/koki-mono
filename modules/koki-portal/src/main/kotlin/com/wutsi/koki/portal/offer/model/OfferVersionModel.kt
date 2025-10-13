@@ -18,9 +18,11 @@ data class OfferVersionModel(
     val createdAt: Date = Date(),
     val expiresAt: Date? = null,
     val closingAt: Date? = null,
+    val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val expiresAtText: String? = null,
     val closingAtText: String? = null,
+    val modifiedAtText: String? = null,
 ) {
     val contingenciesHtml: String?
         get() = contingencies?.let { HtmlUtils.toHtml(contingencies) }

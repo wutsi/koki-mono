@@ -76,7 +76,7 @@
             <b class="text-small" th:text="#{page.listing.fence}">KEY</b>
             <div th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.availableAt}">
+        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.distanceFromMainRoad}">
             <b class="text-small" th:text="#{page.listing.distance-from-main-road}">KEY</b>
             <div>
                 <span th:text="${listing.distanceFromMainRoad}">000</span>

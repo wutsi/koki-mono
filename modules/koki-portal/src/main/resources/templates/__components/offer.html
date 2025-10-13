@@ -2,19 +2,19 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="offer-status-badge(status)" th:remove="tag">
-    <span class="badge text-bg-primary" th:if="${status.name() == 'SUBMITTED'}"
-          th:text="#{'offer-status.' + ${status}}">SUBMITTED</span>
+<div th:fragment="offer-status-badge(version)" th:remove="tag">
+    <span class="offer-status badge text-bg-primary" th:if="${version.status.name() == 'SUBMITTED'}"
+          th:text="#{'offer-status.' + ${version.status}}">SUBMITTED</span>
 
-    <span class="badge text-bg-danger"
-          th:if="${status.name() == 'REJECTED'} OR ${status.name() == 'EXPIRED'} OR ${status.name() == 'WITHDRAWN'}  OR ${status.name() == 'CANCELLED'}"
-          th:text="#{'offer-status.' + ${status}}">REJECTED</span>
+    <span class="offer-status badge text-bg-danger"
+          th:if="${version.status.name() == 'REJECTED'} OR ${version.status.name() == 'EXPIRED'} OR ${version.status.name() == 'WITHDRAWN'}  OR ${version.status.name() == 'CANCELLED'}"
+          th:text="#{'offer-status.' + ${version.status}}">REJECTED</span>
 
-    <span class="badge text-bg-warning" th:if="${status.name() == 'ACCEPTED'}"
-          th:text="#{'offer-status.' + ${status}}">ACCEPTED</span>
+    <span class="offer-status badge text-bg-warning" th:if="${version.status.name() == 'ACCEPTED'}"
+          th:text="#{'offer-status.' + ${version.status}}">ACCEPTED</span>
 
-    <span class="badge text-bg-success" th:if="${status.name() == 'CLOSED'}"
-          th:text="#{'offer-status.' + ${status}}">CLOSED</span>
+    <span class="offer-status badge text-bg-success" th:if="${version.status.name() == 'CLOSED'}"
+          th:text="#{'offer-status.' + ${version.status}} + ' ' + ${version.modifiedAtText}">CLOSED</span>
 </div>
 
 <div th:fragment="offer-party-badge(party)" th:remove="tag">
@@ -31,7 +31,7 @@
     <div class="flex margin-top">
         <div>
             <b th:text="#{page.offer.status}">STATUS</b><br/>
-            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
         </div>
         <div class="margin-left-2x" th:if="${offer.listing}">
             <b th:text="#{page.listing.listing-number}">LISTING</b><br/>
@@ -85,7 +85,7 @@
             <b th:text="#{page.offer.status}">STATUS</b>
         </td>
         <td>
-            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
         </td>
     </tr>
     <tr>
@@ -208,7 +208,7 @@
     <td th:class="${showOwner} ? 'd-none d-md-table-cell'">
         <a th:href="'/offers/' + ${offer.id}">
             <div class="d-none d-md-table-cell">
-                <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+                <span th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
             </div>
             <div th:replace="~{__components/offer :: offer-small-table(${offer})}"></div>
         </a>
@@ -241,7 +241,7 @@
     <tr>
         <th th:text="#{page.offer.status}">STATUS</th>
         <td class="padding-left" colspan="2">
-            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
         </td>
     </tr>
     <tr>
@@ -258,7 +258,7 @@
             </span>
         </td>
     </tr>
-    <tr>
+    <tr th:if="${offer.version.expiresAt}">
         <th th:text="#{page.offer.expires-at}">EXPIRY</th>
         <td class="padding-left" colspan="2" th:text="${offer.version.expiresAtText}">yyy-MM-dd</td>
     </tr>
@@ -278,7 +278,7 @@
     <td>
         <a data-component-id="modal-button" data-modal-body-large="true" href="#"
            th:data-modal-body-url="'/offer-versions/' + ${version.id}">
-            <span th:replace="~{__components/offer :: offer-status-badge(${version.status})}"></span>
+            <span th:replace="~{__components/offer :: offer-status-badge(${version})}"></span>
 
             <table class="margin-top-small text-small d-block d-md-none">
                 <tr>
@@ -324,6 +324,7 @@
     <td class="d-none d-md-table-cell">
         <a data-component-id="modal-button" data-modal-body-large="true" href="#"
            th:data-modal-body-url="'/offer-versions/' + ${offer.id}"
+           th:if="${version.expiresAt}"
            th:text="${version.expiresAtText}">
             YYYY-MM-DD
         </a>

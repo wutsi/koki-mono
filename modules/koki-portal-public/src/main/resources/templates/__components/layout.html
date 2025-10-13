@@ -62,9 +62,9 @@
         <li class="margin-right-small" th:if="${listing.publicUrl}">
             <button class="btn btn-sm btn-light" data-component-id="share-button"
                     id="btn-share-navbar"
-                    th:data-url="${listing.publicUrl}"
-                    th:data-modal-url="'/share/modal?url=' + ${listing.publicUrl}"
                     th:data-modal-title="#{button.share}"
+                    th:data-modal-url="'/share/modal?url=' + ${listing.publicUrl}"
+                    th:data-url="${listing.publicUrl}"
             >
                 <i class="fa-solid fa-share-nodes"></i>
                 <span th:text="#{button.share}">SHARE</span>

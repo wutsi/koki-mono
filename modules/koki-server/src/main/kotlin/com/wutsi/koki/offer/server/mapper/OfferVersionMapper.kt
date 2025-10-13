@@ -20,6 +20,7 @@ class OfferVersionMapper {
             contingencies = entity.contingencies,
             createdAt = entity.createdAt,
             closingAt = entity.closingAt,
+            modifiedAt = entity.modifiedAt,
         )
     }
 
@@ -34,6 +35,7 @@ class OfferVersionMapper {
             assigneeUserId = entity.assigneeUserId,
             createdAt = entity.createdAt,
             closingAt = entity.closingAt,
+            modifiedAt = entity.modifiedAt,
         )
     }
 }

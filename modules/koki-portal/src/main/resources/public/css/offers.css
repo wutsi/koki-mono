@@ -2,6 +2,10 @@
     color: darkblue;
 }
 
+.offer-status {
+    text-transform: uppercase;
+}
+
 h1.offer-price {
     font-weight: normal;
 }

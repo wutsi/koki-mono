@@ -44,7 +44,7 @@
                                             <th th:text="#{page.offer.status}">STATUS</th>
                                             <td class="padding-left">
                                                 <span
-                                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+                                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -70,7 +70,7 @@
                             </td>
                             <td class="d-none d-md-table-cell">
                                 <span
-                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version.status})}"></span>
+                                    th:replace="~{__components/offer :: offer-status-badge(${offer.version})}"></span>
                             </td>
                             <td class="d-none d-md-table-cell" width="1%">
                                 <span

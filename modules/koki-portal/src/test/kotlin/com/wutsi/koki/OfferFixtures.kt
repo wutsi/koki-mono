@@ -30,7 +30,8 @@ object OfferFixtures {
                 For instance, a home seller may agree to an offer with the contingency that they must find a new home before they sell.
                 If they are unable to find another home within a specified time frame, they may cancel the deal without penalty — so long as this contingency is spelled out in the contract.
                 The same can go for the buyer — they might include a contingency that they must sell their previous house before they can buy, for example.
-            """.trimIndent()
+            """.trimIndent(),
+        modifiedAt = Date(),
     )
 
     val offerVersions = listOf(
@@ -42,6 +43,7 @@ object OfferFixtures {
             expiresAt = DateUtils.addDays(Date(), 3),
             closingAt = DateUtils.addMonths(Date(), 3),
             createdAt = Date(),
+            modifiedAt = Date(),
         ),
         OfferVersionSummary(
             id = 22L,
@@ -51,6 +53,7 @@ object OfferFixtures {
             expiresAt = DateUtils.addDays(Date(), 3),
             closingAt = DateUtils.addMonths(Date(), 3),
             createdAt = Date(),
+            modifiedAt = Date(),
         ),
         OfferVersionSummary(
             id = 33L,
@@ -60,6 +63,7 @@ object OfferFixtures {
             expiresAt = DateUtils.addDays(Date(), 3),
             closingAt = DateUtils.addMonths(Date(), 3),
             createdAt = Date(),
+            modifiedAt = Date(),
         ),
     )
 
@@ -85,6 +89,7 @@ object OfferFixtures {
             closingAt = DateUtils.addMonths(Date(), 3),
             assigneeUserId = USER_ID,
             createdAt = Date(),
+            modifiedAt = Date(),
             contingencies = """
                 One common example is when one or both parties need to wrap up other real estate deals in order for the transaction to close.
                 For instance, a home seller may agree to an offer with the contingency that they must find a new home before they sell.
