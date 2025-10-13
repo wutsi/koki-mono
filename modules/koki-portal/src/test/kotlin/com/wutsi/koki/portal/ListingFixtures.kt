@@ -26,8 +26,9 @@ object ListingFixtures {
         status = ListingStatus.ACTIVE,
         listingType = ListingType.SALE,
         propertyType = PropertyType.APARTMENT,
-        title = "",
-        summary = "",
+        title = "House for sale, 3 bedrooms, Yaounde (Bastos)",
+        summary = "Built in the 19th century, with a 360 degrees view over the sea and surroundings on the top floor",
+        publicUrl = "/listings/1115/house-for-sale-3-bedrooms-yaounde-bastos",
         description = """
             Built in the 19th century, with a 360 degrees view over the sea and surroundings on the top floor.It features a Bedroom, a very well-decorated living room with kitchenette, and a WC.
 
@@ -35,8 +36,9 @@ object ListingFixtures {
 
             Perfect for an unforgettable honeymoon experience.
         """.trimIndent(),
-        titleFr = "",
-        summaryFr = "",
+        titleFr = "Maison a vendre, 3 chambres, Yaounde (Bastos)",
+        publicUrlFr = "/listings/1115/maison-a-louer-3-chambres-yaounde-bastos",
+        summaryFr = "Construit au XIXe siècle, il offre une vue à 360 degrés sur la mer et les environs depuis le dernier étage",
         descriptionFr = """
             Construit au XIXe siècle, il offre une vue à 360 degrés sur la mer et les environs depuis le dernier étage.Il comprend une chambre, un salon très bien décoré avec kitchenette et des toilettes.
 
@@ -116,8 +118,6 @@ object ListingFixtures {
         transactionDate = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
-        publicUrlFr = "https://www.google.ca",
-        publicUrl = "https://www.google.com",
     )
 
     val listings = listOf(

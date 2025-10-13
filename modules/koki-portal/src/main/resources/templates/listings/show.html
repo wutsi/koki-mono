@@ -63,15 +63,18 @@
                 </div>
             </div>
 
-            <div class="widget margin-top-small" th:if="${listing.publicUrl}">
+            <div class="widget margin-top-small" th:if="${listing.publicUrl} AND !${listing.statusDraft}">
                 <div class="widget-body">
-                    <b th:text="#{page.listing.public-url}">Public Address</b><br/>
-                    <div class="background-lightgray border border-rounded padding-small overflow-scroll">
+                    <div class="flex flex-wrap w-100 text-small">
+                        <div class="margin-right-small">
+                            <b th:text="#{page.listing.public-url}">Public Address</b>
+                        </div>
                         <a class="text-small" target="_blank"
                            th:alt="${listing.publicUrl}"
-                           th:href="${listing.publicUrl}"
-                           th:text="${listing.publicUrl}">
-                            ADDRESS
+                           th:href="${listing.publicUrl}">
+                            <div class="background-lightgray padding-left-small padding-right-small"
+                                 th:text="${listing.publicUrl}">
+                            </div>
                         </a>
                     </div>
                     <div class="margin-top-small">
@@ -85,6 +88,12 @@
                             <i class="fa-solid fa-share-nodes"></i>
                             <span th:text="#{button.share}">SHARE</span>
                         </button>
+                        <a class="text-small margin-left btn btn-sm btn-light" id="btn-open" target="_blank"
+                           th:alt="${listing.publicUrl}"
+                           th:href="${listing.publicUrl}"
+                           th:text="#{button.open}">
+                            ADDRESS
+                        </a>
                     </div>
                 </div>
             </div>
