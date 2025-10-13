@@ -20,11 +20,9 @@ import kotlin.test.assertEquals
 class ListingStatusChangedEventHandlerTest {
     private val publisher = mock<Publisher>()
     private val listingPublisher = mock<ListingPublisher>()
-    private val listingClosedMailet = mock<ListingClosedMailet>()
     private val logger = DefaultKVLogger()
     private val handler = ListingStatusChangedEventHandler(
         listingPublisher = listingPublisher,
-        listingClosedMailet = listingClosedMailet,
         logger = logger,
         publisher = publisher,
     )
@@ -58,8 +56,6 @@ class ListingStatusChangedEventHandlerTest {
         assertEquals(ListingStatus.ACTIVE, eventArg.firstValue.status)
         assertEquals(listing.id, eventArg.firstValue.listingId)
         assertEquals(listing.tenantId, eventArg.firstValue.tenantId)
-
-        verify(listingClosedMailet, never()).service(any())
     }
 
     @Test
@@ -71,7 +67,6 @@ class ListingStatusChangedEventHandlerTest {
 
         verify(listingPublisher).publish(event.listingId, event.tenantId)
         verify(publisher, never()).publish(any())
-        verify(listingClosedMailet, never()).service(any())
     }
 
     @Test
@@ -83,27 +78,6 @@ class ListingStatusChangedEventHandlerTest {
 
         verify(listingPublisher, never()).publish(any(), any())
         verify(publisher, never()).publish(any())
-        verify(listingClosedMailet, never()).service(any())
-    }
-
-    @Test
-    fun onRented() {
-        val event = createEvent(ListingStatus.RENTED)
-        handler.handle(event)
-
-        verify(listingPublisher, never()).publish(any(), any())
-        verify(publisher, never()).publish(any())
-        verify(listingClosedMailet).service(event)
-    }
-
-    @Test
-    fun onSold() {
-        val event = createEvent(ListingStatus.SOLD)
-        handler.handle(event)
-
-        verify(listingPublisher, never()).publish(any(), any())
-        verify(publisher, never()).publish(any())
-        verify(listingClosedMailet).service(event)
     }
 
     private fun createEvent(status: ListingStatus): ListingStatusChangedEvent {

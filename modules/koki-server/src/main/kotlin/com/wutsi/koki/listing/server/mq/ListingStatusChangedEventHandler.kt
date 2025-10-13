@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 @Service
 class ListingStatusChangedEventHandler(
     private val listingPublisher: ListingPublisher,
-    private val listingClosedMailet: ListingClosedMailet,
     private val publisher: Publisher,
     private val logger: KVLogger,
 ) {
@@ -30,8 +29,6 @@ class ListingStatusChangedEventHandler(
                     )
                 )
             }
-        } else if (event.status == ListingStatus.SOLD || event.status == ListingStatus.RENTED) {
-            listingClosedMailet.service(event)
         }
     }
 }

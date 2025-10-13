@@ -26,22 +26,26 @@ class ShareButtonWidget {
 
         const elt = event.target.closest('[data-component-id=share-button]');
         const url = elt.getAttribute('data-url');
-        if (!navigator.userAgentData.mobile){
+        if (!navigator.userAgentData.mobile || !navigator.share) {
             const modalUrl = elt.getAttribute('data-modal-url');
             const modalTitle = elt.getAttribute('data-modal-title');
-            if (modalUrl){
+            if (modalUrl) {
                 koki.w.modal.open(modalUrl, modalTitle);
                 return
             }
         }
 
-        if (navigator.share) {
-            const text = elt.getAttribute('data-text');
-
-            navigator.share({
-                text: text,
-                url: url
-            });
+        try {
+            if (navigator.share) {
+                const text = elt.getAttribute('data-text');
+                navigator.share({
+                    text: text,
+                    url: url
+                });
+            }
+        } catch (ex) {
+            console.error(ex.message);
+            alert(ex.message);
         }
     }
 }
