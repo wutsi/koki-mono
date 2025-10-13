@@ -14,4 +14,5 @@ data class OfferVersion(
     val createdAt: Date = Date(),
     val expiresAt: Date? = null,
     val closingAt: Date? = null,
+    val modifiedAt: Date = Date(),
 )
