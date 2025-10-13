@@ -29,14 +29,6 @@
                                 <i class="fa-regular fa-compass"></i>
                                 <span th:text="#{button.view-map}">DIRECTION</span>
                             </a>
-                            <button class="btn btn-light btn-sm" id="btn-share"
-                                    th:data-share-message="#{page.listing.show.share-message}"
-                                    th:data-share-url="${listing.publicUrl}"
-                                    th:if="${listing.publicUrl}"
-                            >
-                                <i class="fa-solid fa-share-nodes"></i>
-                                <span th:text="#{button.share}">SHARE</span>
-                            </button>
                         </div>
                         <div class="margin-left-small" th:if="${listing.canManage(user)}">
                             <a class="btn btn-light btn-sm" id="btn-edit"
@@ -68,6 +60,32 @@
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+
+            <div class="widget margin-top-small" th:if="${listing.publicUrl}">
+                <div class="widget-body">
+                    <b th:text="#{page.listing.public-url}">Public Address</b><br/>
+                    <div class="background-lightgray border border-rounded padding-small overflow-scroll">
+                        <a class="text-small" target="_blank"
+                           th:alt="${listing.publicUrl}"
+                           th:href="${listing.publicUrl}"
+                           th:text="${listing.publicUrl}">
+                            ADDRESS
+                        </a>
+                    </div>
+                    <div class="margin-top-small">
+                        <button class="btn btn-light btn-sm" data-component-id="share-button"
+                                id="btn-share"
+                                th:data-modal-title="#{button.share}"
+                                th:data-modal-url="'/share/modal?url=' + ${listing.publicUrl}"
+                                th:data-url="${listing.publicUrl}"
+                                th:if="${listing.publicUrl}"
+                        >
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <span th:text="#{button.share}">SHARE</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -183,20 +201,5 @@
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>
 
-<script>
-    const btnShare = document.getElementById('btn-share');
-    if (btnShare) {
-        btnShare.addEventListener('click', share_listing);
-    }
-
-    function share_listing() {
-        if (navigator.share) {
-            navigator.share({
-                text: btnShare.getAttribute('data-share-message'),
-                url: btnShare.getAttribute('data-share-url')
-            });
-        }
-    }
-</script>
 </body>
 </html>

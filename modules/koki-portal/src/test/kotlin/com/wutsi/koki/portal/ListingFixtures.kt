@@ -116,6 +116,8 @@ object ListingFixtures {
         transactionDate = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
+        publicUrlFr = "https://www.google.ca",
+        publicUrl = "https://www.google.com",
     )
 
     val listings = listOf(

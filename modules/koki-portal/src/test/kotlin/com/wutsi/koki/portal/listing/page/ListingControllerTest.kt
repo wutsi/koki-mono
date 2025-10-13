@@ -259,6 +259,20 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.ERROR_403)
     }
 
+    @Test
+    fun share() {
+        setupListing(status = ListingStatus.ACTIVE)
+
+        navigateTo("/listings/${listing.id}")
+
+        click("#btn-share")
+        assertElementVisible("#koki-modal")
+
+        assertElementVisible("#btn-share-facebook")
+        assertElementVisible("#btn-share-twitter")
+        assertElementVisible("#btn-share-email")
+    }
+
     private fun setupListing(
         status: ListingStatus = ListingStatus.ACTIVE,
         sellerAgentUserId: Long = USER_ID,
