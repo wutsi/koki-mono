@@ -12,7 +12,6 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
 import java.util.Locale
-import kotlin.jvm.java
 
 abstract class AbstractPageController {
     @Autowired

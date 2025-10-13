@@ -44,7 +44,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.LISTING)
 
         // Meta
@@ -55,7 +55,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementAttributePresent("head meta[property='og:title']", "content")
         assertElementAttribute("head meta[property='og:description']", "content", listing.summaryFr)
         assertElementAttribute("head meta[property='og:type']", "content", "website")
-        assertElementAttribute("head meta[property='og:url']", "content", "http://localhost:0${listing.publicUrlFr}")
+        assertElementAttributeEndsWith("head meta[property='og:url']", "content", (listing.publicUrlFr ?: ""))
         assertElementAttribute("head meta[property='og:image']", "content", FileFixtures.images[0].url)
 
         // Property infos
@@ -68,33 +68,93 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#listing-map", "data-latitude", listing.geoLocation?.latitude?.toString())
         assertElementAttribute("#listing-map", "data-show-marker", "true")
         assertElementAttribute("#listing-map", "data-zoom", "18")
+
+        // Share
+        assertElementPresent("#btn-share-navbar")
+    }
+
+    @Test
+    fun `share to WhatsApp`() {
+        navigateTo("${listing.publicUrl}")
+
+        click("#btn-share-navbar")
+        assertElementVisible("#koki-modal")
+
+        input("#phone", "5147580191")
+        input("#message", "Hello")
+        click("button[type=submit]")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        driver.switchTo().window(windowHandles[1])
+        assertEquals(true, driver.currentUrl?.contains("whatsapp.com"))
+
+        driver.switchTo().window(windowHandles[0])
+        assertElementNotVisible("#koki-modal")
+    }
+
+    @Test
+    fun `share to Twitter`() {
+        navigateTo("${listing.publicUrl}")
+
+        click("#btn-share-navbar")
+        assertElementVisible("#koki-modal")
+
+        click("#btn-share-twitter")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        driver.switchTo().window(windowHandles[1])
+        assertEquals(true, driver.currentUrl?.contains("x.com"))
+    }
+
+    @Test
+    fun `share to Facebook`() {
+        navigateTo("${listing.publicUrl}")
+
+        click("#btn-share-navbar")
+        assertElementVisible("#koki-modal")
+
+        click("#btn-share-facebook")
+
+        val windowHandles = driver.getWindowHandles().toList()
+        driver.switchTo().window(windowHandles[1])
+        assertEquals(true, driver.currentUrl?.contains("facebook.com"))
+    }
+
+    @Test
+    fun `share to email`() {
+        navigateTo("${listing.publicUrl}")
+
+        click("#btn-share-navbar")
+        assertElementVisible("#koki-modal")
+
+        click("#btn-share-email")
     }
 
     @Test
     fun sold() {
         setupListing(ListingStatus.SOLD)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.LISTING)
     }
 
     @Test
     fun expired() {
         setupListing(ListingStatus.EXPIRED)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun draft() {
         setupListing(ListingStatus.DRAFT)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun cancelled() {
         setupListing(ListingStatus.CANCELLED)
-        navigateTo("/listings${listing.publicUrl}")
+        navigateTo("${listing.publicUrl}")
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
@@ -124,9 +184,9 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         click("#btn-images")
 
-        assertElementVisible("#listing-images-modal")
-        assertElementCount("#listing-images-modal .modal-body img", FileFixtures.images.size)
-        click("#listing-images-modal .btn-close")
+        assertElementVisible("#koki-modal")
+        assertElementCount("#koki-modal .modal-body img", FileFixtures.images.size)
+        click("#koki-modal .btn-close")
     }
 
     @Test

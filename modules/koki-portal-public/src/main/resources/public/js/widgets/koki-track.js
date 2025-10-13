@@ -1,4 +1,4 @@
-class KokiTracking {
+class KokiTrackWidget {
     init() {
         const elts = document.querySelectorAll('[koki-track]');
         console.log(elts.length + ' element(s) tracked');
@@ -61,12 +61,9 @@ class KokiTracking {
     }
 }
 
-const kokiTracking = new KokiTracking();
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-        kokiTracking.init();
-    },
-    false
+document.addEventListener('DOMContentLoaded', function () {
+        const widget = new KokiTrackWidget();
+        koki.w['track'] = widget;
+        widget.init();
+    }
 );
-

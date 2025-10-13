@@ -32,12 +32,9 @@ class KokiIntlTelWidget {
     }
 }
 
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
+document.addEventListener('DOMContentLoaded', function () {
         const widget = new KokiIntlTelWidget();
+        koki.w['intlTel'] = widget;
         widget.init();
-    },
-    false
+    }
 );
-
