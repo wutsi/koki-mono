@@ -30,7 +30,7 @@ class ShareButtonWidget {
             const url = elt.getAttribute('data-url');
             const text = elt.getAttribute('data-text');
             navigator.share({
-                text: text,
+                text: text ? text : '',
                 url: url
             });
         } else {
