@@ -61,7 +61,7 @@ class ListingController(
             "page",
             createPageModel(
                 name = PageName.LISTING,
-                title = listOf(listing.title , listing.price?.displayText)
+                title = listOf(listing.title, listing.price?.displayText)
                     .filterNotNull()
                     .joinToString(" - "),
                 description = listing.summary,
