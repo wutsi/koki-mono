@@ -26,7 +26,7 @@ class ShareButtonWidget {
 
         const elt = event.target.closest('[data-component-id=share-button]');
         const url = elt.getAttribute('data-url');
-        if (!navigator.userAgentData.mobile || !navigator.share) {
+        if (!this._is_mobile_ua() || !navigator.share) {
             const modalUrl = elt.getAttribute('data-modal-url');
             const modalTitle = elt.getAttribute('data-modal-title');
             if (modalUrl) {
@@ -47,6 +47,10 @@ class ShareButtonWidget {
             console.error(ex.message);
             alert(ex.message);
         }
+    }
+
+    _is_mobile_ua() {
+        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
     }
 }
 
