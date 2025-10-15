@@ -17,7 +17,8 @@
     <meta property="og:url" th:content="${page.url}"/>
     <meta property="og:title" th:content="${page.title}"/>
     <meta property="og:description" th:content="${page.description}"/>
-    <meta property="og:image" th:content="${page.image}" th:if="${page.image}"/>
+    <meta itemprop="image" property="og:image" th:content="${page.image}" th:if="${page.image}"/>
+    <meta property="og:updated_time" th:content="${page.updatedTime}" th:if="${page.updatedTime}"/>
 
     <script>
         if ('serviceWorker' in navigator) {

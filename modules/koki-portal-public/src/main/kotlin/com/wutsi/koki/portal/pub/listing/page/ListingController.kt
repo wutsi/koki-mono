@@ -67,6 +67,7 @@ class ListingController(
                 description = listing.summary,
                 image = listing.heroImageUrl,
                 url = listing.publicUrl,
+                updatedTime = listing.publishedAt?.time ?: listing.createdAt.time
             )
         )
 

@@ -40,6 +40,7 @@ abstract class AbstractPageController {
         description: String? = null,
         image: String? = null,
         url: String? = null,
+        updatedTime: Long? = null,
     ): PageModel {
         return PageModel(
             name = name,
@@ -48,7 +49,8 @@ abstract class AbstractPageController {
             image = image,
             url = url,
             assetUrl = assetUrl,
-            language = LocaleContextHolder.getLocale().language
+            language = LocaleContextHolder.getLocale().language,
+            updatedTime = updatedTime,
         )
     }
 

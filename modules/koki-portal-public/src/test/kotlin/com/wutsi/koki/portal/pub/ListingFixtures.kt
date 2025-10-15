@@ -118,6 +118,7 @@ object ListingFixtures {
         transactionDate = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
+        publishedAt = DateUtils.addDays(Date(), -10)
     )
 
     val listings = listOf(
