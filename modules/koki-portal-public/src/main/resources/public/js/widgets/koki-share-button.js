@@ -25,32 +25,23 @@ class ShareButtonWidget {
         // console.log('_on_click', event.target);
 
         const elt = event.target.closest('[data-component-id=share-button]');
-        const url = elt.getAttribute('data-url');
-        if (!this._is_mobile_ua() || !navigator.share) {
+        const mobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        if (mobile && navigator.share) {
+            const url = elt.getAttribute('data-url');
+            const text = elt.getAttribute('data-text');
+            navigator.share({
+                text: text,
+                url: url
+            });
+        } else {
             const modalUrl = elt.getAttribute('data-modal-url');
             const modalTitle = elt.getAttribute('data-modal-title');
             if (modalUrl) {
                 koki.w.modal.open(modalUrl, modalTitle);
-                return
+            } else {
+                console.log("No data-modal-url attribute set")
             }
         }
-
-        try {
-            if (navigator.share) {
-                const text = elt.getAttribute('data-text');
-                navigator.share({
-                    text: text,
-                    url: url
-                });
-            }
-        } catch (ex) {
-            console.error(ex.message);
-            alert(ex.message);
-        }
-    }
-
-    _is_mobile_ua() {
-        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
     }
 }
 
