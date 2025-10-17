@@ -14,7 +14,8 @@ object PageName {
     const val ACCOUNT_SETTINGS_TYPE_LIST = "page.settings.account.type.list"
 
     const val AGENT = "page.agent"
-    const val AGENT_CREATE = "page.agent.create"
+    const val AGENT_INVITE = "page.agent.invite"
+    const val AGENT_INVITE_DONE = "page.agent.invite.done"
     const val AGENT_LIST = "page.agent.list"
 
     const val AI_SETTINGS = "page.settings.ai"

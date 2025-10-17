@@ -18,7 +18,7 @@ class InviteAgentController : AbstractAgentController() {
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.AGENT_CREATE,
+                name = PageName.AGENT_INVITE,
                 title = "Invite Agent",
             )
         )
@@ -27,6 +27,6 @@ class InviteAgentController : AbstractAgentController() {
 
     @PostMapping
     fun submit(@ModelAttribute form: AgentForm, model: Model): String {
-        return "agents/create-done"
+        return "redirect:/agents/invite/done?id=1111-32093420-111"
     }
 }
