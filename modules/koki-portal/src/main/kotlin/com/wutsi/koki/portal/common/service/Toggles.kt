@@ -18,7 +18,7 @@ class Toggles {
             "listing" -> modules.listing
             "message" -> modules.message
             "offer" -> modules.offer
-            else -> false
+            else -> true
         }
     }
 }
