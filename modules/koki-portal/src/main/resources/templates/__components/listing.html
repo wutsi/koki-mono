@@ -48,7 +48,7 @@
 <div th:fragment="listing-table(items, sold, showAgent, showCommission, moreUrl)" th:if="!${items.isEmpty()}">
     <table class="table">
         <tr class="d-none d-md-table-row">
-            <th colspan="2" width="30%"></th>
+            <th colspan="2"></th>
             <th th:if="${sold}" width="1%"></th>
             <th th:text="#{page.listing.status}">STATUS</th>
             <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
@@ -206,10 +206,12 @@
 
 <div th:fragment="listing-summary(listing)" th:remove="tag">
     <div class="flex">
-        <div th:if="!${listing.statusSold}" th:remove="tag">
+        <div class="margin-right-small" th:if="!${listing.statusSold}">
             <span th:replace="~{__components/listing :: listing-type-badge(${listing})}"></span>
         </div>
-        <span th:replace="~{__components/listing :: listing-status-badge(${listing})}"></span>
+        <div>
+            <span th:replace="~{__components/listing :: listing-status-badge(${listing})}"></span>
+        </div>
     </div>
     <div class="margin-top-small">
         <h1 class="margin-none listing-price" th:if="${listing.price}">
