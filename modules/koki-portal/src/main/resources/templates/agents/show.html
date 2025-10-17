@@ -105,14 +105,24 @@
                             <a th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">WEBSITE</a>
                         </div>
                     </div>
-                    <div class="margin-top flex flex-space-between">
-                        <a target="_blank" th:href="${agent.user.facebookUrl}" th:if="${agent.user.facebookUrl}">
+                    <div class="margin-top flex">
+                        <a class="margin-right" target="_blank"
+                           th:href="${agent.user.facebookUrl}"
+                           th:if="${agent.user.facebookUrl}">
                             <img height="48" th:src="${page.assetUrl} + '/image/social/facebook.png'" width="48"/></a>
-                        <a target="_blank" th:href="${agent.user.instagramUrl}" th:if="${agent.user.instagramUrl}">
+
+                        <a class="margin-right" target="_blank"
+                           th:href="${agent.user.instagramUrl}"
+                           th:if="${agent.user.instagramUrl}">
                             <img height="48" th:src="${page.assetUrl} + '/image/social/instagram.png'" width="48"/></a>
-                        <a target="_blank" th:href="${agent.user.twitterUrl}" th:if="${agent.user.twitterUrl}">
+
+                        <a class="margin-right" target="_blank"
+                           th:href="${agent.user.twitterUrl}"
+                           th:if="${agent.user.twitterUrl}">
                             <img height="48" th:src="${page.assetUrl} + '/image/social/twitter.png'" width="48"/></a>
-                        <a target="_blank" th:href="${agent.user.tiktokUrl}" th:if="${agent.user.tiktokUrl}">
+
+                        <a target="_blank" th:href="${agent.user.tiktokUrl}"
+                           th:if="${agent.user.tiktokUrl}">
                             <img height="48" th:src="${page.assetUrl} + '/image/social/tiktok.png'" width="48"/></a>
                     </div>
                 </div>
