@@ -37,4 +37,5 @@ enum class ObjectType {
     MESSAGE,
     LISTING,
     OFFER,
+    AGENT,
 }

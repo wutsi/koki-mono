@@ -16,6 +16,12 @@ data class User(
     val country: String? = null,
     val photoUrl: String? = null,
     val roleIds: List<Long> = emptyList(),
+    var biography: String? = null,
+    var websiteUrl: String? = null,
+    var facebookUrl: String? = null,
+    var instagramUrl: String? = null,
+    var twitterUrl: String? = null,
+    var youtubeUrl: String? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )
