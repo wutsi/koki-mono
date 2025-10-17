@@ -127,6 +127,16 @@ object ModuleFixtures {
             cssUrl = "/css/listings.css",
         ),
         Module(
+            id = 271,
+            name = "agent",
+            title = "Agents",
+            homeUrl = "/agents",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = null,
+            cssUrl = null,
+        ),
+        Module(
             id = 280,
             name = "offer",
             title = "offer",
@@ -179,6 +189,8 @@ object ModuleFixtures {
         Permission(id = 2700, moduleId = 270, name = "listing", description = "View Listings"),
         Permission(id = 2701, moduleId = 270, name = "listing:manage", description = "Manage Listings"),
         Permission(id = 2702, moduleId = 270, name = "listing:full_access", description = "Full access Listings"),
+
+        Permission(id = 2700, moduleId = 271, name = "agent", description = "View Agents"),
 
         Permission(id = 2800, moduleId = 280, name = "offer", description = "View Offers"),
         Permission(id = 2801, moduleId = 280, name = "offer:manage", description = "Manage Offers"),

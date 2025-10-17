@@ -1,6 +1,7 @@
 koki:
     toggles:
         modules:
+            agent: true
             account: true
             contact: true
             image: true
@@ -8,6 +9,3 @@ koki:
             listing: true
             message: true
             offer: true
-            product: true
-            invoice: true
-            payment: true

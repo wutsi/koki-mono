@@ -1,6 +1,6 @@
 <div th:if="${listings}" th:remove="tag">
     <tr class="listing" th:each="listing : ${listings.items}">
-        <div th:replace="~{__components/listing :: listing-row(${listing}, ${sold}, ${showAgent})}">
+        <div th:replace="~{__components/listing :: listing-row(${listing}, ${sold}, ${showCommission}, ${showAgent})}">
         </div>
     </tr>
     <tr id="listing-load-more" th:if="${moreUrl}">

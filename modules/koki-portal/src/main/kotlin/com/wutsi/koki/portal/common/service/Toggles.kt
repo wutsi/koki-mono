@@ -10,30 +10,26 @@ class Toggles {
 
     fun isModuleEnabled(name: String): Boolean {
         return when (name) {
+            "agent" -> modules.agent
             "account" -> modules.account
             "contact" -> modules.contact
             "file" -> modules.file
             "image" -> modules.image
-            "invoice" -> modules.invoice
             "listing" -> modules.listing
             "message" -> modules.message
             "offer" -> modules.offer
-            "product" -> modules.product
-            "payment" -> modules.payment
-            else -> true
+            else -> false
         }
     }
 }
 
 class ModuleToggles {
+    var agent: Boolean = false
     var account: Boolean = false
     var contact: Boolean = false
     var file: Boolean = false
     var image: Boolean = false
-    var invoice: Boolean = false
     var listing: Boolean = false
     var message: Boolean = false
     var offer: Boolean = false
-    var product: Boolean = false
-    var payment: Boolean = false
 }

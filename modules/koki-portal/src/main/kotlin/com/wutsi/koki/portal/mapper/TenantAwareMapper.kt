@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.mapper
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.wutsi.koki.portal.tenant.service.CurrentTenantHolder
+import com.wutsi.koki.portal.user.service.CurrentUserHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -16,6 +17,9 @@ import java.util.Locale
 abstract class TenantAwareMapper {
     @Autowired
     protected lateinit var currentTenant: CurrentTenantHolder
+
+    @Autowired
+    protected lateinit var currentUser: CurrentUserHolder
 
     @Autowired
     private lateinit var messages: MessageSource

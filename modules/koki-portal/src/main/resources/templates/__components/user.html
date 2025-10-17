@@ -54,7 +54,7 @@
         <div th:text="${me.employer}">EMPLOYER</div>
         <div class="flex margin-top-small" th:if="${sendMessage} AND (${user?.id} != ${me.id})">
             <div class="margin-right" th:if="${me.whatsappUrl}">
-                <a class="btn btn-whatsapp btn-sm" th:href="${me.whatsappUrl}">
+                <a class="btn btn-whatsapp btn-sm" target="_blank" th:href="${me.whatsappUrl}">
                     <i class="fa-brands fa-whatsapp"></i>
                     <span th:text="#{button.whatsapp}">Whatsapp</span>
                 </a>

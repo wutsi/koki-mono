@@ -66,7 +66,7 @@
                                   th:text="#{page.listing.list.n_listing(${listings.total})}">n</span>
                         </div>
                         <div
-                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 1}, ${filter == 1}, ${moreUrl})}"></div>
+                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 1}, ${filter == 1}, true, ${moreUrl})}"></div>
                     </div>
                 </div>
             </div>

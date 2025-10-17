@@ -52,6 +52,7 @@ class ListListingController : AbstractListingController() {
         }
         model.addAttribute("sold", filter == 1)
         model.addAttribute("showAgent", false)
+        model.addAttribute("showCommission", true)
         return "listings/more"
     }
 

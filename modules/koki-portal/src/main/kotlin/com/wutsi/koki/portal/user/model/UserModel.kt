@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.user.model
 
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.module.model.ModuleModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -28,6 +29,12 @@ data class UserModel(
     val city: LocationModel? = null,
     val country: String? = null,
     val whatsappUrl: String? = null,
+    val biography: String? = null,
+    val websiteUrl: String? = null,
+    val facebookUrl: String? = null,
+    val instagramUrl: String? = null,
+    val twitterUrl: String? = null,
+    val tiktokUrl: String? = null,
 ) {
     fun hasRole(roleId: Long): Boolean {
         return roles.find { role -> role.id == roleId } != null
@@ -61,6 +68,13 @@ data class UserModel(
         return hasPermission("${module.name}:admin")
     }
 
+    fun canAdmin(): Boolean {
+        return permissionNames.find { permission -> permission.endsWith(":admin") } != null
+    }
+
     val mobileUrl: String?
         get() = mobile?.let { "tel:" + mobile }
+
+    val biographyHtml: String?
+        get() = biography?.let { bio -> HtmlUtils.toHtml(bio) }
 }
