@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-address.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-ajax-fragment.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-ajax-loader.js'"></script>
@@ -24,6 +25,7 @@
     <script th:src="${page.assetUrl} + '/js/widgets/koki-lazy-bootstrap-tabs.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-list-item.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-load-more.js'"></script>
+    <script th:src="${page.assetUrl} + '/js/widgets/koki-map.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-modal.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-modal-button.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-select2.js'"></script>
@@ -43,10 +45,8 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
     <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/koki.css'"/>
-    <!--
-    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/forms.css'"/>
-    -->
     <link rel="stylesheet"
           th:each="modulz : ${tenant.modules}"
           th:href="${page.assetUrl} + ${modulz.cssUrl}"
@@ -77,19 +77,20 @@
             <ul class="dropdown-menu">
                 <li>
                     <div class="dropdown-item">
-                        <div class="user-hi">
-                            Hi <span th:text="${user.displayName}">USER</span>
-                        </div>
+                        <div class="user-hi" th:text="${user.displayName}">USER</div>
                         <div th:text="${user.email}">EMAIL</div>
                     </div>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="/settings">Settings</a>
+                    <a class="dropdown-item" href="/users/profile" th:text="#{navbar.menu.profile}">Profile</a>
+                </li>
+                <li th:if="${user?.canAdmin()}">
+                    <a class="dropdown-item" href="/settings" th:text="#{navbar.menu.settings}">Settings</a>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="/logout">Logout</a>
+                    <a class="dropdown-item" href="/logout" th:text="#{navbar.menu.logout}">Logout</a>
                 </li>
             </ul>
         </li>

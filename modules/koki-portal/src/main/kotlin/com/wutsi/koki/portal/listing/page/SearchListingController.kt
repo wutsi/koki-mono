@@ -4,8 +4,10 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.portal.common.model.ResultSetModel
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingFilterForm
+import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.stereotype.Controller
@@ -13,6 +15,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/listings/search")
@@ -20,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 class SearchListingController : AbstractListingController() {
     @GetMapping
     fun search(@ModelAttribute form: ListingFilterForm, model: Model): String {
-        loadListings(form, model)
-
         model.addAttribute(
             "page",
             createPageModel(
@@ -29,6 +30,21 @@ class SearchListingController : AbstractListingController() {
                 title = getMessage("page.listing.list.meta.title"),
             )
         )
+
+        more(form, 20, 0, model)
+        return "listings/search"
+    }
+
+    @GetMapping("/more")
+    fun more(
+        @ModelAttribute form: ListingFilterForm,
+        @RequestParam(required = false) limit: Int = 20,
+        @RequestParam(required = false) offset: Int = 0,
+        model: Model,
+    ): String {
+        val listings = findListings(form, limit, offset, model)
+        model.addAttribute("listings", listings)
+        model.addAttribute("form", form)
 
         val urlBuilder = URLBuilder("")
         val params = mapOf(
@@ -48,6 +64,12 @@ class SearchListingController : AbstractListingController() {
         )
         model.addAttribute("filterUrl", urlBuilder.build("/listings/search/filter", params))
 
+        if (listings.items.size >= limit) {
+            val more = params.toMutableMap()
+            more["limit"] = limit
+            more["offset"] = limit + offset
+            model.addAttribute("moreUrl", urlBuilder.build("/listings/search/more", more))
+        }
         return "listings/search"
     }
 
@@ -71,7 +93,12 @@ class SearchListingController : AbstractListingController() {
         return "listings/filter"
     }
 
-    private fun loadListings(form: ListingFilterForm, model: Model) {
+    private fun findListings(
+        form: ListingFilterForm,
+        limit: Int,
+        offset: Int,
+        model: Model
+    ): ResultSetModel<ListingModel> {
         val listings = listingService.search(
             sortBy = when (form.listingType) {
                 ListingStatus.SOLD.name -> ListingSort.TRANSACTION_DATE
@@ -95,6 +122,8 @@ class SearchListingController : AbstractListingController() {
             maxLotArea = form.maxLotArea,
             minPropertyArea = form.minPropertyArea,
             maxPropertyArea = form.maxPropertyArea,
+            limit = limit,
+            offset = offset,
         )
 
         if (form.locationIds.isNotEmpty()) {
@@ -106,8 +135,6 @@ class SearchListingController : AbstractListingController() {
                 model.addAttribute("locations", locations)
             }
         }
-
-        model.addAttribute("listings", listings)
-        model.addAttribute("form", form)
+        return listings
     }
 }

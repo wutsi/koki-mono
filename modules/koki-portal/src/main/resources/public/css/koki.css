@@ -14,6 +14,10 @@ body {
     display: flex;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
 .flex-wrap {
     flex-wrap: wrap;
 }
@@ -605,7 +609,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .border-rounded {
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 0.5em;
 }
 
 .border-right {

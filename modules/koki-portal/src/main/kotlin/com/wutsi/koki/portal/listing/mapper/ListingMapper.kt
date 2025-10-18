@@ -1,9 +1,11 @@
 package com.wutsi.koki.portal.listing.mapper
 
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.common.service.Moment
@@ -157,6 +159,7 @@ class ListingMapper(
             publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
             closedAt = entity.closedAt,
             closedAtMoment = entity.closedAt?.let { date -> moment.format(date) },
+            transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
         )
     }
 
@@ -237,6 +240,7 @@ class ListingMapper(
             } else {
                 toPublicUrl(entity.publicUrl)
             },
+            transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
         )
     }
 
@@ -332,6 +336,19 @@ class ListingMapper(
     private fun toPublicUrl(publicUrl: String?): String? {
         return publicUrl?.let { url ->
             currentTenant.get()?.let { tenant -> tenant.clientPortalUrl + url }
+        }
+    }
+
+    private fun toTransactionParty(status: ListingStatus, sellerAgentUserId: Long?, buyerContactId: Long?): OfferParty? {
+        val user = currentUser.get() ?: return null
+        return if (status != ListingStatus.SOLD && status != ListingStatus.RENTED) {
+            null
+        } else if (user.id == sellerAgentUserId) {
+            OfferParty.SELLER
+        } else if (user.id == buyerContactId) {
+            OfferParty.BUYER
+        } else {
+            null
         }
     }
 }

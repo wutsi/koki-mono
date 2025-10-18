@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
+import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.contact.model.ContactModel
@@ -85,6 +86,7 @@ data class ListingModel(
     val totalOffers: Int? = null,
     val totalFiles: Int? = null,
     val totalActiveMessages: Int? = null,
+    val transactionParty: OfferParty? = null,
 ) {
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="widget" th:fragment="agent-breadcrumb(agent)">
+    <div class="widget-body">
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" th:if="${agent}"><a href="/agents" th:text="#{module.agent}">AGENTS</a></li>
+                <li class="breadcrumb-item active" th:if="${agent}">
+                    <span th:text="${agent.user.displayName}">AGENT</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${agent}" th:text="#{module.agent}">AGENTS</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="flex border padding border-rounded margin-bottom background-white" th:fragment="agent-card(agent)">
+    <img class="user-photo"
+         th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"/>
+
+    <div class="margin-left">
+        <b class="text-larger" th:text="${agent.user.displayName}">NAME</b><br/>
+        <div class="flex">
+            <div th:text="${agent.user.employer}">EMPLOYER</div>
+            <div class="margin-left-small margin-right-small"
+                 th:if="${agent.user.employer} AND ${agent.user.city}">-
+            </div>
+            <div class="gray" th:if="${agent.user.city}" th:text="${agent.user.city.name}">
+                LOCATION
+            </div>
+        </div>
+
+        <div class="margin-top" th:if="${agent.metrics.sales.total > 0}">
+            <div>
+                <b th:text="${agent.pyMetrics.sales.total}">000</b>
+                <span class="text-lower" th:text="#{page.agent.sales_py}">SALES</span>
+            </div>
+            <div th:if="${agent.metrics.sales.total > 1}">
+                <b>
+                    <span th:text="${agent.metrics.sales.minPrice.shortText}">$$$</span>
+                    -
+                    <span th:text="${agent.metrics.sales.maxPrice.shortText}">$$$</span>
+                </b>
+                <span class="text-lower" th:text="#{page.agent.price_range}">PRICE_RANGE</span>
+            </div>
+        </div>
+
+        <div class="margin-top" th:if="${agent.metrics.rentals.total > 0}">
+            <div>
+                <b th:text="${agent.pyMetrics.rentals.total}">000</b>
+                <span class="text-lower" th:text="#{page.agent.sales_py}">SALES</span>
+            </div>
+            <div th:if="${agent.metrics.rentals.total > 1}">
+                <b>
+                    <span th:text="${agent.metrics.rentals.minPrice.shortText}">$$$</span>
+                    -
+                    <span th:text="${agent.metrics.rentals.maxPrice.shortText}">$$$</span>
+                </b>
+                <span class="text-lower" th:text="#{page.agent.price_range}">PRICE_RANGE</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('agent')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/agents/invite}" th:object="${form}">
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h1 th:text="#{page.agent.invite.title}">TITLE</h1>
+                                <div th:text="#{page.agent.invite.description}">DESCRIPTION</div>
+                            </div>
+                            <div class="section-item" th:if="${error}">
+                                <div th:replace="~{__components/layout :: error-message(${error})}"></div>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.agent.displayName}">DISPLAY_NAME</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input maxlength="100" required th:field="*{displayName}"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title">
+                                    <span th:text="#{page.agent.email}">EMAIL</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input maxlength="100" th:field="*{email}" type="email"/>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.agent.message}">MESSAGE</label>
+                                <div class="text-small" th:text="#{page.agent.message.help}">HELP</div>
+                                <textarea rows="3" th:field="*{message}"></textarea>
+                            </div>
+                            <div class="section-item flex flex-space-between">
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
+                                    Submit
+                                </button>
+                                <a class="btn-cancel btn btn-light w-49-mobile" href="/agents"
+                                   th:text="#{button.cancel}">
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('#language').select2();
+</script>
+</body>
+</html>

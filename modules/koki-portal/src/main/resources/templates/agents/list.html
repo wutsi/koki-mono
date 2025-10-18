@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('agent')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/agent :: agent-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between">
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/agents/invite">
+                                <i class="fa-solid fa-plus"></i>
+                                <span th:text="#{button.invite}">INVITE</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row margin-top">
+        <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
+            <a th:href="'/agents/' + ${agent.id}">
+                <div th:replace="~{__components/agent :: agent-card(${agent})}"></div>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

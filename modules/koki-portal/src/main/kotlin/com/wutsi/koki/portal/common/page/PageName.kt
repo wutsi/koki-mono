@@ -13,6 +13,11 @@ object PageName {
     const val ACCOUNT_SETTINGS_TYPE_IMPORT = "page.settings.account.type.import"
     const val ACCOUNT_SETTINGS_TYPE_LIST = "page.settings.account.type.list"
 
+    const val AGENT = "page.agent"
+    const val AGENT_INVITE = "page.agent.invite"
+    const val AGENT_INVITE_DONE = "page.agent.invite.done"
+    const val AGENT_LIST = "page.agent.list"
+
     const val AI_SETTINGS = "page.settings.ai"
     const val AI_SETTINGS_EDIT = "page.settings.ai.edit"
 
@@ -24,9 +29,6 @@ object PageName {
     const val OFFER_COUNTER_DONE = "page.offer.counter.done"
     const val OFFER_STATUS = "page.offer.status"
     const val OFFER_STATUS_DONE = "page.offer.status.done"
-
-    const val PAYNOW = "page.paynow"
-    const val PAYNOW_CONFIRMATION = "page.paynow.confirmation"
 
     const val CONTACT = "page.contact"
     const val CONTACT_LIST = "page.contact.list"
@@ -63,12 +65,6 @@ object PageName {
 
     const val IMAGE = "page.image"
 
-    const val INVOICE = "page.invoice"
-    const val INVOICE_LIST = "page.invoice.list"
-    const val INVOICE_SETTINGS = "page.settings.invoice"
-    const val INVOICE_SETTINGS_EDIT = "page.settings.invoice.edit"
-    const val INVOICE_SETTINGS_NOTIFICATION = "page.settings.invoice.notification"
-
     const val LISTING = "page.listing"
     const val LISTING_CREATE = "page.listing.create"
     const val LISTING_EDIT = "page.listing.edit"
@@ -97,32 +93,6 @@ object PageName {
     const val MESSAGE_TAB = "page.message.tab"
     const val MESSAGE_WIDGET = "page.message.widget"
 
-    const val PAYMENT = "page.payment"
-    const val PAYMENT_CREATE = "page.payment.create"
-    const val PAYMENT_LIST = "page.payment.list"
-    const val PAYMENT_SETTINGS = "page.settings.payment"
-    const val PAYMENT_SETTINGS_BANK = "page.settings.payment.bank"
-    const val PAYMENT_SETTINGS_CASH = "page.settings.payment.cash"
-    const val PAYMENT_SETTINGS_CHECK = "page.settings.payment.check"
-    const val PAYMENT_SETTINGS_INTERAC = "page.settings.payment.interac"
-    const val PAYMENT_SETTINGS_CREDIT_CARD = "page.settings.payment.credit_card"
-    const val PAYMENT_SETTINGS_MOBILE = "page.settings.payment.mobile"
-    const val PAYMENT_SETTINGS_PAYPAL = "page.settings.payment.paypal"
-    const val PAYMENT_SETTINGS_NOTIFICATION = "page.settings.payment.notification"
-
-    const val PRODUCT = "page.product"
-    const val PRODUCT_CREATE = "page.product.create"
-    const val PRODUCT_EDIT = "page.product.edit"
-    const val PRODUCT_LIST = "page.product.list"
-
-    const val ROOM = "page.room"
-    const val ROOM_CREATE = "page.room.create"
-    const val ROOM_EDIT = "page.room.edit"
-    const val ROOM_LIST = "page.room.list"
-    const val ROOM_MAP = "page.room.map"
-    const val ROOM_HERO_IMAGE = "page.room.hero-image"
-    const val ROOM_TAB = "page.room.tab"
-
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
     const val TENANT_SETTINGS_BUSINESS = "page.settings.tenant.business"
@@ -149,4 +119,6 @@ object PageName {
 
     const val TRANSLATION_SETTINGS = "settings.translation"
     const val TRANSLATION_SETTINGS_EDIT = "settings.translation.edit"
+
+    const val USER_PROFILE = "page.user.profile"
 }
