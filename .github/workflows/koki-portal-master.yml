@@ -41,7 +41,7 @@ jobs:
                     mvn -s ../../settings.xml install -Dheadless=true
 
             -   name: Upload app bundle
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v5
                 with:
                     name: appbundle
                     path: modules/koki-portal/target/*.jar
@@ -70,7 +70,7 @@ jobs:
                     heroku plugins:install @heroku-cli/plugin-java
 
             -   name: Get artifact
-                uses: actions/download-artifact@v5
+                uses: actions/download-artifact@v6
                 with:
                     name: appbundle
 
