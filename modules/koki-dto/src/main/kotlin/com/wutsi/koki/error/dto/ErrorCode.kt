@@ -32,14 +32,7 @@ object ErrorCode {
 
     val CONTACT_NOT_FOUND: String = "$PREFIX:contact:not-found"
 
-    val EMAIL_NOT_FOUND: String = "$PREFIX:email:not-found"
-    val EMAIL_DELIVERY_FAILED: String = "$PREFIX:email:delivery-failed"
-    val EMAIL_RECIPIENT_EMAIL_MISSING: String = "$PREFIX:email:recipient-email-missing"
-    val EMAIL_SMTP_NOT_CONFIGURED: String = "$PREFIX:email:smtp-not-configured"
     val EMAIL_INVALID_SMTP_CONFIGURATION: String = "$PREFIX:email:invalid-smtp-configuration"
-
-    val EMPLOYEE_ALREADY_EXIST: String = "$PREFIX:employee:already-exist"
-    val EMPLOYEE_NOT_FOUND: String = "$PREFIX:employee:not-found"
 
     val FILE_NOT_FOUND: String = "$PREFIX:file:not-found"
     val FILE_NOT_IMAGE: String = "$PREFIX:file:not-image"
@@ -58,12 +51,9 @@ object ErrorCode {
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
     val INVITATION_NOT_FOUND: String = "$PREFIX:invitation:not-found"
-    val INVITATION_PASSWORD_MISMATCH: String = "$PREFIX:invitation:password-mismatch"
-    val INVITATION_INVALID_EMAIL: String = "$PREFIX:invitation:invalid_email"
-
-    val INVOICE_NOT_FOUND: String = "$PREFIX:invoice:not-found"
-    val INVOICE_BAD_STATUS: String = "$PREFIX:invoice:bad-status"
-    val INVOICE_NO_PRODUCT: String = "$PREFIX:invoice:no-product"
+    val INVITATION_EXPIRED: String = "$PREFIX:invitation:expired"
+    val INVITATION_ALREADY_ACCEPTED: String = "$PREFIX:invitation:already-accepted"
+    val INVITATION_BAD_STATUS: String = "$PREFIX:invitation:bad-status"
 
     val JURIDICTION_NOT_FOUND: String = "$PREFIX:juridiction:not-found"
     val JURIDICTION_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:juridiction:country-not-supported"
@@ -99,47 +89,16 @@ object ErrorCode {
     val PASSWORD_RESET_TOKEN_NOT_FOUND = "$PREFIX:password-reset-token:not-found"
     val PASSWORD_RESET_TOKEN_EXPIRED = "$PREFIX:password-reset-token:expired"
 
-    val PRICE_NOT_FOUND: String = "$PREFIX:price:not-found"
-    val PRICE_IN_USE: String = "$PREFIX:price:in-use"
-    val PRICE_CURRENCY_NOT_VALID: String = "$PREFIX:price:currency-not-valid"
-    val PRICE_CURRENCY_MISSING: String = "$PREFIX:price:currency-missing"
-
-    val PRODUCT_NOT_FOUND: String = "$PREFIX:product:not-found"
-    val PRODUCT_IN_USE: String = "$PREFIX:product:in-use"
-
     val ROLE_DUPLICATE_NAME: String = "$PREFIX:role:duplicate-name"
     val ROLE_NOT_FOUND: String = "$PREFIX:role:not-found"
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
     val ROLE_IN_USE: String = "$PREFIX:role:in-use"
 
-    val ROOM_NOT_FOUND: String = "$PREFIX:room:not-found"
-    val ROOM_INVALID_STATUS: String = "$PREFIX:room:invalid-status"
-    val ROOM_IMAGE_MISSING: String = "$PREFIX:room:image-missing"
-    val ROOM_IMAGE_NOT_VALID: String = "$PREFIX:room:image-not-valid"
-    val ROOM_IMAGE_NOT_OWNED: String = "$PREFIX:room:image-not-owned"
-    val ROOM_IMAGE_UNDER_REVIEW: String = "$PREFIX:room:image-under-review"
-    val ROOM_IMAGE_THRESHOLD: String = "$PREFIX:room:image-threshold"
-    val ROOM_GEOLOCATION_MISSING: String = "$PREFIX:room:geolocation-missing"
-    val ROOM_PRICE_MISSING: String = "$PREFIX:room:price-missing"
-    val ROOM_UNIT_MISSING: String = "$PREFIX:room:unit-missing"
-    val ROOM_UNIT_NOT_FOUND: String = "$PREFIX:room-unit:not-found"
-    val ROOM_UNIT_DUPLICATE_NUMBER: String = "$PREFIX:room-unit:duplicate-number"
-
     val SALES_TAX_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:sales-tax:country-not-supported"
     val SALES_TAX_STATE_NOT_FOUND: String = "$PREFIX:sales-tax:state-not-found"
 
-    val TAX_NOT_FOUND: String = "$PREFIX:tax:not-found"
-    val TAX_FILE_NOT_FOUND: String = "$PREFIX:tax-file:not-found"
-    val TAX_PRODUCT_NOT_FOUND: String = "$PREFIX:tax-product:not-found"
-
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
-
-    val TRANSACTION_NOT_FOUND: String = "$PREFIX:transaction:not-found"
-    val TRANSACTION_PAYMENT_METHOD_NOT_FOUND: String = "$PREFIX:transaction:payment-method-not-found"
-    val TRANSACTION_PAYMENT_METHOD_NOT_SUPPORTED: String = "$PREFIX:transaction:payment-method-not-supported"
-    val TRANSACTION_PAYMENT_FAILED: String = "$PREFIX:transaction:failed"
-    val TRANSACTION_PAYMENT_INVALID_STRIPE_CONFIGURATION: String = "$PREFIX:transaction:invalid-stripe-configuration"
 
     val TYPE_NOT_FOUND: String = "$PREFIX:type:not-found"
     val TYPE_NAME_MISSING: String = "$PREFIX:type:name-missing"
@@ -147,7 +106,4 @@ object ErrorCode {
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
     val USER_DUPLICATE_USERNAME: String = "$PREFIX:user:duplicate-username"
-    val USER_ALREADY_ASSIGNED: String = "$PREFIX:user:already-assigned"
-    val USER_ACCOUNT_ID_MISSING: String = "$PREFIX:user:account-id-missing"
-    val USER_ACCOUNT_ID_SHOULD_BE_NULL: String = "$PREFIX:user:account-id-should-be-null"
 }

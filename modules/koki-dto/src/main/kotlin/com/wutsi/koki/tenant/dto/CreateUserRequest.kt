@@ -17,4 +17,5 @@ data class CreateUserRequest(
     val cityId: Long? = null,
     val categoryId: Long? = null,
     val roleIds: List<Long> = emptyList(),
+    val invitationId: String? = null,
 )

@@ -11,6 +11,7 @@ data class User(
     val language: String? = null,
     val employer: String? = null,
     val mobile: String? = null,
+    val invitationId: String? = null,
     val categoryId: Long? = null,
     val cityId: Long? = null,
     val country: String? = null,
