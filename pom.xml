@@ -77,7 +77,7 @@
         <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
 
         <amqp-client.version>5.27.0</amqp-client.version>
-        <aws.version>1.12.792</aws.version>
+        <aws.version>1.12.793</aws.version>
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
         <commons-csv.version>1.14.1</commons-csv.version>
