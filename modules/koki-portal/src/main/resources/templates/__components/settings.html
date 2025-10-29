@@ -43,6 +43,22 @@
     </li>
 </ul>
 
+<ul th:fragment="settings-title-with-icon(title, backUrl, iconClass)">
+    <li class="menu-item">
+        <h3 class="flex">
+            <span>
+                <a class="btn-back" th:href="${backUrl}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </span>
+            <div class="margin-left">
+                <i th:class="${iconClass}"></i>
+                <span th:text="${title}">TITLE</span>
+            </div>
+        </h3>
+    </li>
+</ul>
+
 
 <div th:fragment="enabled-badge(enabled)" th:remove="tag">
     <span class="badge text-bg-success" th:if="${enabled}">Enabled</span>

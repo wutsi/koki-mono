@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.service.RoleService
-import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,27 +31,8 @@ class SettingsRoleController(
     ): String {
         val role = roleService.role(id)
 
-        val configs = configurationService.configurations(listOf(ConfigurationName.PORTAL_SIGNUP_ROLE_ID))
-        val portalSignupRoleId = configs[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]
-        model.addAttribute("portalSignupRoleId", portalSignupRoleId)
-
-        if (portalSignupRoleId != id.toString()) {
-            model.addAttribute("portalSignupRoleUrl", "/settings/roles/$id/portal-signup-role")
-        }
-
         loadToast(id, referer, toast, timestamp, model)
         return show(role, model)
-    }
-
-    @GetMapping("/{id}/portal-signup-role")
-    fun portalSignupRole(@PathVariable id: Long): String {
-        val role = roleService.role(id)
-        configurationService.save(
-            mapOf(
-                ConfigurationName.PORTAL_SIGNUP_ROLE_ID to role.id.toString(),
-            )
-        )
-        return "redirect:/settings/roles/$id"
     }
 
     private fun show(role: RoleModel, model: Model): String {

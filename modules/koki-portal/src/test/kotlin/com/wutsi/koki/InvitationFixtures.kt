@@ -1,75 +1,47 @@
 package com.wutsi.koki
 
-import com.wutsi.koki.RoleFixtures.roles
-import com.wutsi.koki.tenant.dto.User
-import com.wutsi.koki.tenant.dto.UserStatus
-import com.wutsi.koki.tenant.dto.UserSummary
+import com.wutsi.koki.UserFixtures.USER_ID
+import com.wutsi.koki.tenant.dto.Invitation
+import com.wutsi.koki.tenant.dto.InvitationStatus
+import com.wutsi.koki.tenant.dto.InvitationSummary
+import com.wutsi.koki.tenant.dto.InvitationType
 
-object UserFixtures {
-    val USER_ID = 11L
+object InvitationFixtures {
+    val INVITATION_ID = "1093209-43490f-4449"
 
-    val user = User(
-        id = USER_ID,
-        username = "ray.sponsible",
+    val invitation = Invitation(
+        id = INVITATION_ID,
         email = "ray.sponsible@gmail.com",
         displayName = "Ray Sponsible",
-        roleIds = listOf(roles[0].id, roles[1].id),
-        language = "fr",
-        employer = "REIMAX",
-        country = "ca",
-        categoryId = RefDataFixtures.categories[0].id,
-        cityId = RefDataFixtures.cities[0].id,
-        mobile = "+15147580000",
-        status = UserStatus.ACTIVE,
-        photoUrl = "https://picsum.photos/800/600",
+        createdById = USER_ID,
+        status = InvitationStatus.PENDING,
+        type = InvitationType.AGENT,
     )
 
-    val users = listOf(
-        UserSummary(
-            id = USER_ID,
-            displayName = "Ray Sponsible",
-            username = "ray.sponsible",
+    val invitations = listOf(
+        InvitationSummary(
+            id = INVITATION_ID,
             email = "ray.sponsible@gmail.com",
-            employer = "REIMAX",
-            photoUrl = "https://picsum.photos/800/600",
-            mobile = "+15147580000",
+            displayName = "Ray Sponsible",
+            createdById = USER_ID,
+            status = InvitationStatus.PENDING,
+            type = InvitationType.AGENT,
         ),
-        UserSummary(
-            id = 12L,
-            displayName = "Roger Milla",
-            username = "roger.milla",
-            email = "roger.milla@gmail.com",
-            status = UserStatus.ACTIVE,
-            employer = "REALTOR",
-            photoUrl = "https://picsum.photos/800/600",
-            mobile = "+15147580011",
+        InvitationSummary(
+            id = "xxx",
+            email = "joe.smith@gmail.com",
+            displayName = "Joe Smith",
+            createdById = USER_ID,
+            status = InvitationStatus.PENDING,
+            type = InvitationType.AGENT,
         ),
-        UserSummary(
-            id = 13L,
-            displayName = "Omam Mbiyick",
-            username = "ombiyick",
-            email = "ombiyick@gmail.com",
-            status = UserStatus.ACTIVE,
-            employer = "IMMO",
-            photoUrl = "https://picsum.photos/800/600",
-            mobile = "+15147580022",
-        ),
-        UserSummary(
-            id = 14L,
-            displayName = "Roger Milla",
-            username = "roger.mila",
-            email = "roger.milla@gmail.com",
-            status = UserStatus.SUSPENDED,
-            employer = null,
-            photoUrl = "https://picsum.photos/800/600",
-            mobile = null,
-        ),
-        UserSummary(
-            id = 15L,
-            displayName = "Thomas Nkono",
-            username = "tnkono",
-            email = "tnkono@gmail.com",
-            status = UserStatus.SUSPENDED,
+        InvitationSummary(
+            id = "yyy",
+            email = "john.doe@gmail.com",
+            displayName = "John Doe",
+            createdById = USER_ID,
+            status = InvitationStatus.PENDING,
+            type = InvitationType.AGENT,
         ),
     )
 }

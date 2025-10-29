@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.agent.page
 
-import com.wutsi.koki.portal.agent.form.AgentForm
 import com.wutsi.koki.portal.agent.model.InvitationModel
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.stereotype.Controller

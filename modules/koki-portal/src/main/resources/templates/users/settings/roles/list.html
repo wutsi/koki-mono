@@ -30,13 +30,7 @@
                 </thead>
                 <tbody>
                 <tr class="role" th:each="role : ${roles}">
-                    <td>
-                        <span th:text="${role.name}">NAME</span>
-                        <span class="badge rounded-pill text-bg-info margin-left-small"
-                              th:if="${portalSignupRoleId} == ${role.id}">
-                            Portal Signup Role
-                        </span>
-                    </td>
+                    <td th:text="${role.name}">NAME</td>
                     <td th:text="${role.title}">TITLE</td>
                     <td>
                         <span th:if="${role.active}">Yes</span>

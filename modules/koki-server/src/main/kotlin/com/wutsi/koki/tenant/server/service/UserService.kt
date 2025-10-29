@@ -7,12 +7,14 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.command.SendUsernameCommand
 import com.wutsi.koki.tenant.server.dao.UserRepository
+import com.wutsi.koki.tenant.server.domain.InvitationEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
@@ -26,6 +28,7 @@ class UserService(
     private val passwordEncryptor: PasswordEncryptor,
     private val roleService: RoleService,
     private val securityService: SecurityService,
+    private val invitationService: InvitationService,
     private val em: EntityManager,
     private val publisher: Publisher,
 ) {
@@ -49,6 +52,7 @@ class UserService(
         checkDuplicateUsername(null, request.username, tenantId)
         checkDuplicateEmail(null, request.email, tenantId)
 
+        /* Create user */
         val salt = UUID.randomUUID().toString()
         val currentUserId = securityService.getCurrentUserIdOrNull()
         val now = Date()
@@ -69,13 +73,45 @@ class UserService(
                 country = request.country?.lowercase()?.ifEmpty { null },
                 cityId = request.cityId,
                 mobile = request.mobile,
+                invitationId = request.invitationId,
                 createdAt = now,
                 modifiedAt = now,
             )
         )
 
-        setRoles(user, request.roleIds.distinct())
+        /* Assign roles */
+        val invitation = request.invitationId?.let { invitationId -> getPendingInvitation(invitationId, tenantId) }
+        val invitationRoleId = invitation?.let { invitationService.getRoleId(invitation) }
+        val roleIds = request.roleIds.toMutableList()
+        if (invitationRoleId != null) {
+            roleIds.add(invitationRoleId)
+        }
+        setRoles(user, roleIds.distinct())
+
+        /* Update the invitation status */
+        if (invitation != null) {
+            invitationService.status(invitation, InvitationStatus.ACCEPTED)
+        }
         return user
+    }
+
+    private fun getPendingInvitation(invitationId: String, tenantId: Long): InvitationEntity {
+        val invitation = invitationService.get(invitationId, tenantId)
+        if (invitation.status == InvitationStatus.PENDING) {
+            return invitation
+        } else if (invitation.status == InvitationStatus.EXPIRED) {
+            throw ConflictException(
+                error = Error(ErrorCode.INVITATION_EXPIRED)
+            )
+        } else if (invitation.status == InvitationStatus.ACCEPTED) {
+            throw ConflictException(
+                error = Error(ErrorCode.INVITATION_ALREADY_ACCEPTED)
+            )
+        } else {
+            throw ConflictException(
+                error = Error(ErrorCode.INVITATION_BAD_STATUS)
+            )
+        }
     }
 
     @Transactional
@@ -94,9 +130,10 @@ class UserService(
         user.cityId = request.cityId
         user.mobile = request.mobile
         user.modifiedAt = Date()
-        setRoles(user, request.roleIds.distinct())
+        request.roleIds?.let { roleIds -> setRoles(user, roleIds.distinct()) }
     }
 
+    @Transactional
     fun updatePassword(user: UserEntity, password: String) {
         user.salt = UUID.randomUUID().toString()
         user.password = passwordEncryptor.hash(password, user.salt)

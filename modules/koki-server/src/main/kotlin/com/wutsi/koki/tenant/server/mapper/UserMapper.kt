@@ -23,6 +23,7 @@ class UserMapper {
         roleIds = entity.roles.mapNotNull { role -> role.id },
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
+        invitationId = entity.invitationId,
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(

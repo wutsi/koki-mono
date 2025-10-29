@@ -13,4 +13,6 @@ data class SignupForm(
     val categoryId: Long? = null,
     val employer: String? = null,
     val photoUrl: String? = null,
+    val invitationId: String? = null,
+    val language: String? = null,
 )

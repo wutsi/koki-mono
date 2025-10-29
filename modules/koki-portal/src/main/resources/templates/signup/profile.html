@@ -21,6 +21,8 @@
         <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
             <form class="form padding-bottom-8x" method="post" th:action="@{/signup/profile}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
+                <input th:field="*{language}" type="hidden"/>
+
                 <div class="form-body">
                     <div class="section">
                         <div class="section-body">

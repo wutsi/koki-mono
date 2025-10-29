@@ -18,8 +18,6 @@ object TenantFixtures {
         ConfigurationName.AI_PROVIDER_GEMINI_MODEL to "gemini-2.0-flash",
         ConfigurationName.AI_PROVIDER_GEMINI_API_KEY to "kk-1203923-4390r-erf00943",
 
-        ConfigurationName.PORTAL_SIGNUP_ROLE_ID to RoleFixtures.roles[1].id.toString(),
-
         ConfigurationName.SMTP_PORT to "25",
         ConfigurationName.SMTP_HOST to "smtp.gmail.com",
         ConfigurationName.SMTP_USERNAME to "ray.sponsible",

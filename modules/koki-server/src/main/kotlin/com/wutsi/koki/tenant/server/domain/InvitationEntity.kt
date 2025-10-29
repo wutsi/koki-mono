@@ -1,23 +1,18 @@
 package com.wutsi.koki.tenant.server.domain
 
-import com.wutsi.koki.refdata.server.domain.JuridictionEntity
+import com.wutsi.koki.tenant.dto.InvitationStatus
+import com.wutsi.koki.tenant.dto.InvitationType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import java.util.Date
 
 @Entity
-@Table(name = "T_BUSINESS")
-data class BusinessEntity(
+@Table(name = "T_INVITATION")
+data class InvitationEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1,
+    val id: String? = null,
 
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
@@ -25,37 +20,18 @@ data class BusinessEntity(
     @Column(name = "created_by_fk")
     var createdById: Long? = null,
 
-    @Column(name = "modified_by_fk")
-    var modifiedById: Long? = null,
+    @Column(name = "deleted_by_fk")
+    var deletedById: Long? = null,
 
-    var companyName: String = "",
-    var phone: String? = null,
-    var fax: String? = null,
-    var email: String? = null,
-    var website: String? = null,
-
-    @Column("address_city_fk") var addressCityId: Long? = null,
-    @Column("address_state_fk") var addressStateId: Long? = null,
-    var addressStreet: String? = null,
-    var addressPostalCode: String? = null,
-    var addressCountry: String? = null,
+    val displayName: String = "",
+    val email: String = "",
+    var status: InvitationStatus = InvitationStatus.UNKNOWN,
+    val type: InvitationType = InvitationType.UNKNOWN,
+    val language: String? = null,
+    var deleted: Boolean = false,
 
     val createdAt: Date = Date(),
-    var modifiedAt: Date = Date(),
-
-    @ManyToMany
-    @JoinTable(
-        name = "T_BUSINESS_JURIDICTION",
-        joinColumns = arrayOf(JoinColumn(name = "business_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "juridiction_fk")),
-    )
-    var juridictions: MutableList<JuridictionEntity> = mutableListOf(),
-) {
-    fun hasAddress(): Boolean {
-        return addressCityId != null ||
-            addressStateId != null ||
-            !addressPostalCode.isNullOrEmpty() ||
-            !addressStreet.isNullOrEmpty() ||
-            !addressCountry.isNullOrEmpty()
-    }
-}
+    var expiresAt: Date = Date(),
+    var deletedAt: Date? = null,
+    var acceptedAt: Date? = null,
+)

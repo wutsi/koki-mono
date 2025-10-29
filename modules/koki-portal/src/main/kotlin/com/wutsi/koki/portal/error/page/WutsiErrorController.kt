@@ -93,6 +93,17 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
                 return "error/404"
             }
 
+            410 -> {
+                model.addAttribute(
+                    "page",
+                    PageModel(
+                        name = PageName.ERROR_410,
+                        title = "Not Found"
+                    )
+                )
+                return "error/410"
+            }
+
             else -> {
                 model.addAttribute(
                     "page",
