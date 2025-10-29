@@ -38,10 +38,6 @@ object ErrorCode {
     val FILE_NOT_IMAGE: String = "$PREFIX:file:not-image"
     val FILE_INVALID_S3_CONFIGURATION: String = "$PREFIX:file:invalid-s3-configuration"
 
-    val FORM_NOT_FOUND: String = "$PREFIX:form:not-found"
-    val FORM_IN_USE: String = "$PREFIX:form:in-use"
-    val FORM_DUPLICATE_CODE: String = "$PREFIX:form:duplicate-code"
-
     val HTTP_MISSING_PARAMETER = "$PREFIX:http:missing-parameter"
     val HTTP_INVALID_PARAMETER = "$PREFIX:http:invalid-parameter"
     val HTTP_INTERNAL = "$PREFIX:http:unexpected-error"
@@ -50,9 +46,11 @@ object ErrorCode {
     val HTTP_AUTHENTICATION_FAILED = "$PREFIX:http:authetication-failed"
     val HTTP_DOWNSTREAM_ERROR = "$PREFIX:http:downstream-error"
 
+    val INVITATION_ALREADY_ACCEPTED: String = "$PREFIX:invitation:already-accepted"
+    val INVITATION_ALREADY_INVITED: String = "$PREFIX:invitation:already-invited"
+    val INVITATION_ALREADY_USER: String = "$PREFIX:invitation:already-user"
     val INVITATION_NOT_FOUND: String = "$PREFIX:invitation:not-found"
     val INVITATION_EXPIRED: String = "$PREFIX:invitation:expired"
-    val INVITATION_ALREADY_ACCEPTED: String = "$PREFIX:invitation:already-accepted"
     val INVITATION_BAD_STATUS: String = "$PREFIX:invitation:bad-status"
 
     val JURIDICTION_NOT_FOUND: String = "$PREFIX:juridiction:not-found"

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="settings-container">
+    <div class="settings-sidebar">
+        <div th:replace="~{__components/settings :: settings-menu('security')}"></div>
+    </div>
+    <div class="settings-content">
+        <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security')}"></div>
+
+        <div class="padding text-right">
+            <a class="btn btn-sm btn-primary btn-create" href="/settings/roles/create">Create Role</a>
+        </div>
+
+        <div class="padding-top border-top" th:if="${roles}">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="role" th:each="role : ${roles}">
+                    <td>
+                        <span th:text="${role.name}">NAME</span>
+                        <span class="badge rounded-pill text-bg-info margin-left-small"
+                              th:if="${portalSignupRoleId} == ${role.id}">
+                            Portal Signup Role
+                        </span>
+                    </td>
+                    <td th:text="${role.title}">TITLE</td>
+                    <td>
+                        <span th:if="${role.active}">Yes</span>
+                        <span th:if="!${role.active}">No</span>
+                    </td>
+                    <td class="text-right">
+                        <a class="btn-view btn btn-sm btn-light" th:href="'/settings/roles/' + ${role.id}">View</a>
+                        <a class="btn-edit btn btn-sm btn-light" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
+                    </td>
+                </tr>
+                <tr id="role-load-more" th:if="${moreUrl}">
+                    <td class="text-center" colspan="4">
+                        <a href="javascript: koki_load_more('role-load-more')" th:data-url="${moreUrl}">Load More...</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+</body>
+</html>

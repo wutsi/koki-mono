@@ -19,8 +19,6 @@ object ConfigurationName {
     const val LISTING_START_NUMBER = "listing.start.number"
 
     // ROLE
-    @Deprecated("")
-    const val PORTAL_SIGNUP_ROLE_ID = "portal.signup.role_id" // Default Role to assign to all new users
     const val ROLE_ID_AGENT = "role.agent_id" // ID of the agent role
 
     // SMTP CONFIGURATION

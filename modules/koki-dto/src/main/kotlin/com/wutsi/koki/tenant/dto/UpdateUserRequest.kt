@@ -12,5 +12,5 @@ data class UpdateUserRequest(
     @get:Size(max = 2) val country: String? = null,
     val cityId: Long? = null,
     val categoryId: Long? = null,
-    val roleIds: List<Long> = emptyList(),
+    val roleIds: List<Long>? = null,
 )

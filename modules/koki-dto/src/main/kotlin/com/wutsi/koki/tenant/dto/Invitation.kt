@@ -11,5 +11,5 @@ data class Invitation(
     val language: String? = null,
     val displayName: String = "",
     val createdAt: Date = Date(),
-    val expiresAt: Date? = null,
+    val expiresAt: Date = Date(),
 )

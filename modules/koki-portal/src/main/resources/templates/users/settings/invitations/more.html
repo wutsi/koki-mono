@@ -1,0 +1,20 @@
+<tr class="role" th:each="role : ${roles}">
+    <td>
+        <span th:text="${role.name}">NAME</span>
+        <span class="badge badge-pill badge-info"
+              th:if="!${portalSignupRoleId} == ${role.id}">Portal Signup Role</span>
+    </td>
+    <td th:text="${role.title}">TITLE</td>
+    <td>
+        <span th:if="${role.active}">Yes</span>
+    </td>
+    <td class="toolbar">
+        <a class="btn-view" th:href="'/settings/roles/' + ${role.id}">View</a>
+        <a class="btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
+    </td>
+</tr>
+<tr id="role-load-more" th:if="${moreUrl}">
+    <td class="text-center" colspan="4">
+        <a href="javascript: koki_load_more('role-load-more')" th:data-url="${moreUrl}">Load More...</a>
+    </td>
+</tr>
