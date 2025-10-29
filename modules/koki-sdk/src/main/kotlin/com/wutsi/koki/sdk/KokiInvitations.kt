@@ -1,48 +1,51 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.tenant.dto.CreateRoleRequest
-import com.wutsi.koki.tenant.dto.CreateRoleResponse
-import com.wutsi.koki.tenant.dto.SearchRoleResponse
-import com.wutsi.koki.tenant.dto.UpdateRoleRequest
+import com.wutsi.koki.tenant.dto.CreateInvitationRequest
+import com.wutsi.koki.tenant.dto.CreateInvitationResponse
+import com.wutsi.koki.tenant.dto.GetInvitationResponse
+import com.wutsi.koki.tenant.dto.InvitationStatus
+import com.wutsi.koki.tenant.dto.SearchInvitationResponse
+import org.springframework.boot.context.properties.bind.Bindable.mapOf
 import org.springframework.web.client.RestTemplate
+import java.util.Collections.emptyList
 
-class KokiRoles(
+class KokiInvitations(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {
     companion object {
-        private const val PATH_PREFIX = "/v1/roles"
+        private const val PATH_PREFIX = "/v1/invitations"
     }
 
-    fun roles(
-        ids: List<Long> = emptyList(),
-        active: Boolean?,
+    fun search(
+        ids: List<String> = emptyList(),
+        statuses: List<InvitationStatus> = emptyList(),
         limit: Int = 20,
         offset: Int = 0
-    ): SearchRoleResponse {
+    ): SearchInvitationResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
-                "active" to active,
+                "status" to statuses,
                 "limit" to limit,
                 "offset" to offset
             )
         )
-        return rest.getForEntity(url, SearchRoleResponse::class.java).body!!
+        return rest.getForEntity(url, SearchInvitationResponse::class.java).body!!
     }
 
-    fun create(request: CreateRoleRequest): CreateRoleResponse {
+    fun create(request: CreateInvitationRequest): CreateInvitationResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateRoleResponse::class.java).body
+        return rest.postForEntity(url, request, CreateInvitationResponse::class.java).body
     }
 
-    fun update(id: Long, request: UpdateRoleRequest) {
+    fun get(id: String): GetInvitationResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        rest.postForEntity(url, request, Any::class.java)
+        return rest.getForEntity(url, GetInvitationResponse::class.java).body
     }
 
-    fun delete(id: Long) {
+    fun delete(id: String) {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         rest.delete(url)
     }
