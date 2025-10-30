@@ -9,7 +9,8 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.command.SendUsernameCommand
@@ -134,6 +135,31 @@ class UserService(
     }
 
     @Transactional
+    fun updateProfile(id: Long, request: UpdateUserProfileRequest, tenantId: Long) {
+        checkDuplicateEmail(id, request.email, tenantId)
+
+        val user = get(id, tenantId)
+        user.email = request.email?.lowercase()?.ifEmpty { null }
+        user.displayName = request.displayName?.ifEmpty { null }
+        user.language = request.language?.lowercase()?.ifEmpty { null }
+        user.mobile = request.mobile?.ifEmpty { null }
+        user.categoryId = request.categoryId
+        user.employer = request.employer?.uppercase()?.ifEmpty { null }
+        user.modifiedById = securityService.getCurrentUserIdOrNull()
+        user.country = request.country?.lowercase()?.ifEmpty { null }
+        user.cityId = request.cityId
+        user.mobile = request.mobile
+        user.biography = request.biography
+        user.websiteUrl = request.websiteUrl
+        user.facebookUrl = request.facebookUrl
+        user.instagramUrl = request.instagramUrl
+        user.youtubeUrl = request.youtubeUrl
+        user.tiktokUrl = request.tiktokUrl
+        user.twitterUrl = request.twitterUrl
+        user.modifiedAt = Date()
+    }
+
+    @Transactional
     fun updatePassword(user: UserEntity, password: String) {
         user.salt = UUID.randomUUID().toString()
         user.password = passwordEncryptor.hash(password, user.salt)
@@ -141,7 +167,7 @@ class UserService(
     }
 
     @Transactional
-    fun setPhoto(id: Long, request: SetUserPhotoRequest, tenantId: Long) {
+    fun updatePhoto(id: Long, request: UpdateUserPhotoRequest, tenantId: Long) {
         val user = get(id, tenantId)
         user.photoUrl = request.photoUrl?.ifEmpty { null }
         dao.save(user)

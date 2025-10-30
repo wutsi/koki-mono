@@ -1,7 +1,7 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.TenantAwareEndpointTest
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,14 +11,14 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SetUserPhotoEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/UpdateUserPhotoEndpoint.sql"])
 class UpdateUserPhotoEndpointTest : TenantAwareEndpointTest() {
     @Autowired
     private lateinit var dao: UserRepository
 
     @Test
     fun set() {
-        val request = SetUserPhotoRequest(
+        val request = UpdateUserPhotoRequest(
             photoUrl = "https://random.img/111.png"
         )
 
@@ -33,7 +33,7 @@ class UpdateUserPhotoEndpointTest : TenantAwareEndpointTest() {
 
     @Test
     fun reset() {
-        val request = SetUserPhotoRequest(
+        val request = UpdateUserPhotoRequest(
             photoUrl = null
         )
 

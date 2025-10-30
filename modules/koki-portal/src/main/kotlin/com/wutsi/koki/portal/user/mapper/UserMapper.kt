@@ -40,10 +40,18 @@ class UserMapper : TenantAwareMapper() {
             whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) },
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             category = category,
+            country = entity.country,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
                 .distinctBy { permission -> permission.id }
                 .map { permission -> permission.name },
+            biography = entity.biography,
+            websiteUrl = entity.websiteUrl,
+            facebookUrl = entity.facebookUrl,
+            instagramUrl = entity.instagramUrl,
+            tiktokUrl = entity.tiktokUrl,
+            youtubeUrl = entity.youtubeUrl,
+            twitterUrl = entity.twitterUrl,
         )
     }
 

@@ -49,6 +49,13 @@ data class UserEntity(
     var country: String? = null,
     var photoUrl: String? = null,
     val invitationId: String? = null,
+    var biography: String? = null,
+    var websiteUrl: String? = null,
+    var facebookUrl: String? = null,
+    var instagramUrl: String? = null,
+    var twitterUrl: String? = null,
+    var tiktokUrl: String? = null,
+    var youtubeUrl: String? = null,
 
     @ManyToMany
     @JoinTable(

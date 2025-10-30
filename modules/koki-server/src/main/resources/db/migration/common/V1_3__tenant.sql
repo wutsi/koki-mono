@@ -71,6 +71,13 @@ CREATE TABLE T_USER(
   status                  INT NOT NULL DEFAULT 0,
   photo_url               TEXT,
   invitation_id           VARCHAR(36) NULL,
+  biography               TEXT,
+  website_url             TEXT,
+  youtube_url             TEXT,
+  facebook_url            TEXT,
+  instagram_url           TEXT,
+  tiktok_url              TEXT,
+  twitter_url             TEXT,
   created_at              DATETIME DEFAULT NOW(),
   modified_at             DATETIME NOT NULL DEFAULT now(),
 

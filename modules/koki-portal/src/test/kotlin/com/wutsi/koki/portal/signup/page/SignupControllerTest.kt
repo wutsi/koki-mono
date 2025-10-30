@@ -20,7 +20,7 @@ import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetInvitationResponse
 import com.wutsi.koki.tenant.dto.InvitationStatus
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.BeforeEach
@@ -118,7 +118,7 @@ class SignupControllerTest : AbstractPageControllerTest() {
         Thread.sleep(5000)
         click("button[type=submit]")
 
-        val request3 = argumentCaptor<SetUserPhotoRequest>()
+        val request3 = argumentCaptor<UpdateUserPhotoRequest>()
         verify(rest).postForEntity(
             eq("$sdkBaseUrl/v1/users/${user.id}/photo"),
             request3.capture(),
