@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.refdata.mapper
 
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel

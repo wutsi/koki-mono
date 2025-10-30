@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.user.mapper
 
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.module.model.PermissionModel
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.tenant.dto.Role

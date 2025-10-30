@@ -7,7 +7,7 @@ import com.wutsi.koki.account.dto.AttributeSummary
 import com.wutsi.koki.portal.account.model.AccountAttributeModel
 import com.wutsi.koki.portal.account.model.AccountModel
 import com.wutsi.koki.portal.account.model.AttributeModel
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.mapper.RefDataMapper
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.tenant.model.TypeModel

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.mapper
+package com.wutsi.koki.portal.common.mapper
 
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
