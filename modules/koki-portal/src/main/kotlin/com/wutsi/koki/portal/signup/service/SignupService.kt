@@ -3,7 +3,7 @@ package com.wutsi.koki.portal.signup.service
 import com.wutsi.koki.portal.signup.form.SignupForm
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
@@ -45,7 +45,7 @@ class SignupService(
     fun updatePhoto(form: SignupForm) {
         koki.photo(
             form.id,
-            SetUserPhotoRequest(photoUrl = form.photoUrl),
+            UpdateUserPhotoRequest(photoUrl = form.photoUrl),
         )
     }
 }

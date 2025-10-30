@@ -1,5 +1,5 @@
 package com.wutsi.koki.tenant.dto
 
-data class SetUserPhotoRequest(
+data class UpdateUserPhotoRequest(
     val photoUrl: String? = null
 )

@@ -3,13 +3,17 @@ package com.wutsi.koki.portal.user.service
 import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.portal.user.mapper.UserMapper
+import com.wutsi.koki.portal.user.model.ProfileForm
 import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import org.springframework.stereotype.Service
+import java.util.Collections.emptyList
+import java.util.Collections.emptyMap
 
 @Service
 class UserService(
@@ -100,6 +104,29 @@ class UserService(
                 employer = user.employer,
                 cityId = user.cityId,
                 country = user.country,
+            )
+        )
+    }
+
+    fun updateProfile(id: Long, form: ProfileForm) {
+        koki.profile(
+            id,
+            UpdateUserProfileRequest(
+                displayName = form.displayName,
+                email = form.email,
+                language = form.language,
+                mobile = form.mobileFull,
+                categoryId = form.categoryId,
+                employer = form.employer,
+                cityId = form.cityId,
+                country = form.country,
+                biography = form.biography,
+                websiteUrl = form.websiteUrl,
+                facebookUrl = form.facebookUrl,
+                instagramUrl = form.instagramUrl,
+                twitterUrl = form.twitterUrl,
+                youtubeUrl = form.youtubeUrl,
+                tiktokUrl = form.tiktokUrl,
             )
         )
     }

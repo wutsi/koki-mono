@@ -8,7 +8,8 @@ import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.SendPasswordRequest
 import com.wutsi.koki.tenant.dto.SendPasswordResponse
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import com.wutsi.koki.tenant.server.mapper.UserMapper
@@ -91,13 +92,22 @@ class UserEndpoints(
         service.update(id, request, tenantId)
     }
 
+    @PostMapping("/{id}/profile")
+    fun update(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @RequestBody @Valid request: UpdateUserProfileRequest
+    ) {
+        service.updateProfile(id, request, tenantId)
+    }
+
     @PostMapping("/{id}/photo")
     fun photo(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @RequestBody @Valid request: SetUserPhotoRequest
+        @RequestBody @Valid request: UpdateUserPhotoRequest
     ) {
-        service.setPhoto(id, request, tenantId)
+        service.updatePhoto(id, request, tenantId)
     }
 
     @PostMapping("/username/send")

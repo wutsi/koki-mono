@@ -15,23 +15,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <div>
-                            <a class="btn-create btn btn-primary btn-sm" href="/agents/invite">
-                                <i class="fa-solid fa-plus"></i>
-                                <span th:text="#{button.invite}">INVITE</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row margin-top">
         <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
             <a th:href="'/agents/' + ${agent.id}">

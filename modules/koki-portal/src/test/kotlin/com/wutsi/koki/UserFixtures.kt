@@ -22,6 +22,13 @@ object UserFixtures {
         mobile = "+15147580000",
         status = UserStatus.ACTIVE,
         photoUrl = "https://picsum.photos/800/600",
+        biography = "Hello world",
+        websiteUrl = "https://www.linktree.com/ray",
+        facebookUrl = "https://www.facebook.com/ray",
+        instagramUrl = "https://www.instagram.com/ray",
+        youtubeUrl = "https://www.youtube.com/ray",
+        tiktokUrl = "https://www.tiktok.com/ray",
+        twitterUrl = "https://www.twitter.com/ray",
     )
 
     val users = listOf(

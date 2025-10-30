@@ -17,5 +17,6 @@ data class ProfileForm(
     val instagramUrl: String? = null,
     val twitterUrl: String? = null,
     val tiktokUrl: String? = null,
+    val youtubeUrl: String? = null,
     val backUrl: String = "",
 )

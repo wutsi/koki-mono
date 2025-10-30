@@ -6,7 +6,6 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('offer')}"></div>
 
 <div class="container padding-bottom-8x">
     <div class="row">
@@ -69,7 +68,10 @@
                              data-component-id="address"
                              data-country-id="country"
                         >
-                            <label class="title" th:text="#{page.profile.location}">LOCATION</label>
+                            <label class="title">
+                                <span th:text="#{page.profile.location}">LOCATION</span>
+                                <span class="required">*</span>
+                            </label>
                             <select required th:field="*{country}">
                                 <option value=""></option>
                                 <option th:each="country : ${countries}"
@@ -133,6 +135,17 @@
                         <div class="section-item">
                             <label class="title">
                                 <img height="24" style="padding-bottom: 2px"
+                                     th:src="${page.assetUrl} + '/image/social/youtube.png'"
+                                     width="24"/>
+                                <span th:text="#{page.profile.youtube-url}">YOUTUBE</span>
+                            </label>
+                            <input class="form-control" placeholder="https://www.youtube.com/..."
+                                   th:field="*{youtubeUrl}"
+                                   type="url"/>
+                        </div>
+                        <div class="section-item">
+                            <label class="title">
+                                <img height="24" style="padding-bottom: 2px"
                                      th:src="${page.assetUrl} + '/image/social/tiktok.png'"
                                      width="24"/>
                                 <span th:text="#{page.profile.tiktok-url}">TIKTOK</span>
@@ -147,7 +160,7 @@
                                      width="24"/>
                                 <span th:text="#{page.profile.twitter-url}">TWITTER</span>
                             </label>
-                            <input class="form-control" placeholder="https://www.x.com/..." th:field="*{instagramUrl}"
+                            <input class="form-control" placeholder="https://www.x.com/..." th:field="*{twitterUrl}"
                                    type="url"/>
                         </div>
 

@@ -24,6 +24,13 @@ class UserMapper {
         createdAt = entity.createdAt,
         modifiedAt = entity.modifiedAt,
         invitationId = entity.invitationId,
+        websiteUrl = entity.websiteUrl,
+        twitterUrl = entity.twitterUrl,
+        facebookUrl = entity.facebookUrl,
+        instagramUrl = entity.instagramUrl,
+        biography = entity.biography,
+        youtubeUrl = entity.youtubeUrl,
+        tiktokUrl = entity.tiktokUrl,
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(
