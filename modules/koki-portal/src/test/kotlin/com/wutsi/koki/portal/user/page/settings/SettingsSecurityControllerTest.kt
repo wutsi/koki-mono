@@ -26,6 +26,13 @@ class SettingsSecurityControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun invitations() {
+        navigateTo("/settings/security")
+        click(".btn-invitation")
+        assertCurrentPageIs(PageName.SECURITY_SETTINGS_INVITATION_LIST)
+    }
+
+    @Test
     fun `show - without permission security-admin`() {
         setupUserWithoutPermissions(listOf("security:admin"))
 

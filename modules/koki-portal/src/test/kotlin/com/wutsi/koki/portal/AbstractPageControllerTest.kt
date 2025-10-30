@@ -11,6 +11,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AccountFixtures
 import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
+import com.wutsi.koki.InvitationFixtures
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
@@ -70,15 +71,19 @@ import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.Configuration
+import com.wutsi.koki.tenant.dto.CreateInvitationRequest
+import com.wutsi.koki.tenant.dto.CreateInvitationResponse
 import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetBusinessResponse
+import com.wutsi.koki.tenant.dto.GetInvitationResponse
 import com.wutsi.koki.tenant.dto.GetTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.SaveConfigurationRequest
 import com.wutsi.koki.tenant.dto.SearchConfigurationResponse
+import com.wutsi.koki.tenant.dto.SearchInvitationResponse
 import com.wutsi.koki.tenant.dto.SearchRoleResponse
 import com.wutsi.koki.tenant.dto.SearchTenantResponse
 import com.wutsi.koki.tenant.dto.SearchTypeResponse
@@ -217,6 +222,7 @@ abstract class AbstractPageControllerTest {
         setupRefDataModule()
         setupModuleModule()
         setupTenantModule()
+        setupInvitationModule()
         setupFileModule()
         setupFileUploads()
         setupMessageModule()
@@ -424,6 +430,42 @@ abstract class AbstractPageControllerTest {
 
         // Access Token
         setUpAccessToken(USER_ID)
+    }
+
+    protected fun setupInvitationModule() {
+        doReturn(
+            ResponseEntity(
+                SearchInvitationResponse(InvitationFixtures.invitations),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchInvitationResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetInvitationResponse(InvitationFixtures.invitation),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvitationResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateInvitationResponse(InvitationFixtures.INVITATION_ID),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateInvitationRequest>(),
+                eq(CreateInvitationResponse::class.java)
+            )
     }
 
     protected fun setUpAccessToken(userId: Long) {
@@ -723,7 +765,6 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupContactModule() {
-        // Contacts
         doReturn(
             ResponseEntity(
                 SearchContactResponse(ContactFixtures.contacts),

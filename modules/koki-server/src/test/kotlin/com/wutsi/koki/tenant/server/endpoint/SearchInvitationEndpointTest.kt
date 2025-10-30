@@ -1,10 +1,7 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.tenant.dto.GetInvitationResponse
-import com.wutsi.koki.tenant.dto.InvitationStatus
+import com.wutsi.koki.tenant.dto.SearchInvitationResponse
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -12,34 +9,38 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/GetInvitationEndpoint.sql"])
-class GetInvitationEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/SearchInvitationEndpoint.sql"])
+class SearchInvitationEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val result = rest.getForEntity("/v1/invitations/100", GetInvitationResponse::class.java)
+    fun all() {
+        val result = rest.getForEntity("/v1/invitations", SearchInvitationResponse::class.java)
 
         assertEquals(HttpStatus.OK, result.statusCode)
 
-        val invitation = result.body!!.invitation
-        assertEquals("Ray Sponsible", invitation.displayName)
-        assertEquals("ray.sponsible@gmail.com", invitation.email)
-        assertEquals(InvitationStatus.PENDING, invitation.status)
-        assertEquals(1111L, invitation.roleId)
+        val invitations = result.body!!.invitations
+        assertEquals(4, invitations.size)
     }
 
     @Test
-    fun deleted() {
-        val result = rest.getForEntity("/v1/invitations/999", ErrorResponse::class.java)
+    fun `by ids`() {
+        val result = rest.getForEntity("/v1/invitations?id=100&id=101&id=200", SearchInvitationResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.INVITATION_NOT_FOUND, result.body?.error?.code)
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val invitations = result.body!!.invitations
+        assertEquals(2, invitations.size)
+        assertEquals(true, invitations.map { inv -> inv.id }.containsAll(listOf("100", "101")))
     }
 
     @Test
-    fun `not found`() {
-        val result = rest.getForEntity("/v1/invitations/not-found", ErrorResponse::class.java)
+    fun `by status`() {
+        val result = rest.getForEntity(
+            "/v1/invitations?status=PENDING&status=ACCEPTED",
+            SearchInvitationResponse::class.java
+        )
 
-        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
-        assertEquals(ErrorCode.INVITATION_NOT_FOUND, result.body?.error?.code)
+        val invitations = result.body!!.invitations
+        assertEquals(3, invitations.size)
+        assertEquals(true, invitations.map { inv -> inv.id }.containsAll(listOf("100", "101", "102")))
     }
 }

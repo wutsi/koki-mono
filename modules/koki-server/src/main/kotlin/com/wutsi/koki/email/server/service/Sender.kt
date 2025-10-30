@@ -1,5 +1,6 @@
 package com.wutsi.koki.email.server.service
 
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.Party
@@ -20,6 +21,7 @@ class Sender(
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
     private val languageDetector: LanguageDetector,
+    private val logger: KVLogger,
 ) {
     fun send(
         recipient: UserEntity,
@@ -47,9 +49,15 @@ class Sender(
         attachments: List<File>,
         tenantId: Long,
     ): Boolean {
+        logger.add("recipient_email", recipient.email)
+        logger.add("recipient_display_name", recipient.displayName)
+
         if (recipient.email.isEmpty()) {
             return false
         }
+
+        val language = detectLanguage(subject, body)
+        logger.add("recipient_language", language)
 
         val config = configurationService.search(
             names = SMTPMessagingServiceBuilder.CONFIG_NAMES,
@@ -57,8 +65,7 @@ class Sender(
         ).map { cfg -> cfg.name to cfg.value }.toMap()
 
         val business = businessService.getOrNull(tenantId)
-
-        val message = createMessage(recipient, subject, body, attachments, config, business, tenantId)
+        val message = createMessage(recipient, subject, body, attachments, config, business, language, tenantId)
         messagingServiceBuilder.build(config).send(message)
         return true
     }
@@ -70,6 +77,7 @@ class Sender(
         attachments: List<File>,
         config: Map<String, String>,
         business: BusinessEntity?,
+        language: String,
         tenantId: Long
     ): Message {
         val body = filterSet.filter(body, tenantId)
@@ -77,7 +85,7 @@ class Sender(
             subject = subject,
             body = body,
             mimeType = "text/html",
-            language = detectLanguage(subject, body),
+            language = language,
             recipient = recipient,
             sender = Party(
                 email = config[ConfigurationName.SMTP_FROM_ADDRESS]?.ifEmpty { null } ?: "",

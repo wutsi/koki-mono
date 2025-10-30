@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.ConfigurationService
 import com.wutsi.koki.portal.user.service.RoleService
-import com.wutsi.koki.tenant.dto.ConfigurationName
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -54,10 +53,6 @@ class SettingsListRoleController(
         @RequestParam(required = false) offset: Int = 0,
         model: Model
     ): String {
-        val configs = configurationService.configurations(listOf(ConfigurationName.PORTAL_SIGNUP_ROLE_ID))
-        val portalSignupRoleId = configs[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]
-        model.addAttribute("portalSignupRoleId", portalSignupRoleId)
-
         val roles = roleService.roles(
             limit = limit,
             offset = offset

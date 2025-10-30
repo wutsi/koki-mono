@@ -10,5 +10,16 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
     VALUES (10, 1, 'admin'),
            (11, 1, 'writer'),
            (12, 1, 'reader'),
+           (15, 1, 'agent'),
            (20, 2, 'accountant'),
            (21, 2, 'technician');
+
+INSERT INTO T_INVITATION(id, tenant_fk, type, status, display_name, email)
+    VALUES ('100', 1, 1, 1, 'Ray Sponsible', 'ray.sponsible@gmail.com'),
+           ('101', 1, 1, 2, 'Accepted', 'ray.sponsible@gmail.com'),
+           ('102', 1, 1, 3, 'Expired', 'ray.sponsible@gmail.com'),
+           ('103', 1, 0, 1, 'Unknown', 'ray.sponsible@gmail.com')
+;
+
+INSERT INTO T_CONFIGURATION(tenant_fk, name, value)
+    VALUES(1, 'role.agent_id', '15')

@@ -66,7 +66,7 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.mobile, user.mobile)
         assertEquals(request.country?.lowercase(), user.country)
         assertEquals(request.cityId, user.cityId)
-        assertEquals(request.roleIds.size, roleCount(userId))
+        assertEquals(request.roleIds?.size, roleCount(userId))
     }
 
     @Test

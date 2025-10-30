@@ -9,11 +9,14 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
+import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.server.dao.InvitationRepository
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordEncryptor
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -31,6 +34,9 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
 
     @Autowired
     private lateinit var dao: UserRepository
+
+    @Autowired
+    private lateinit var invitationDao: InvitationRepository
 
     @MockitoBean
     private lateinit var passwordEncryptor: PasswordEncryptor
@@ -58,6 +64,23 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
             }
         }
         return -1
+    }
+
+    private fun roleIds(userId: Long): List<Long> {
+        val cnn = ds.connection
+        val result = mutableListOf<Long>()
+        cnn.use {
+            val stmt = cnn.createStatement()
+            stmt.use {
+                val rs = stmt.executeQuery("SELECT role_fk FROM T_USER_ROLE where user_fk=$userId")
+                rs.use {
+                    if (rs.next()) {
+                        result.add(rs.getLong(1))
+                    }
+                }
+            }
+        }
+        return result
     }
 
     @Test
@@ -96,6 +119,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.roleIds.size, roleCount(userId))
         assertEquals(request.country?.lowercase(), user.country)
         assertEquals(request.cityId, user.cityId)
+        assertEquals(null, user.invitationId)
 
         verify(passwordEncryptor).hash(request.password, user.salt)
     }
@@ -152,5 +176,60 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.language, user.language)
 
         verify(passwordEncryptor).hash(request.password, user.salt)
+    }
+
+    @Test
+    fun `invite agent`() {
+        val request = CreateUserRequest(
+            username = "invited.nkono",
+            email = "invited.nkono@hotmail.com",
+            displayName = "Thomas Nkono",
+            password = "secret",
+            invitationId = "100"
+        )
+
+        val result = rest.postForEntity("/v1/users", request, CreateUserResponse::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val userId = result.body!!.userId
+        val user = dao.findById(userId).get()
+        assertEquals(request.invitationId, user.invitationId)
+        assertEquals(listOf(15L), roleIds(userId))
+        assertNotNull(user.invitationId)
+
+        val invitation = invitationDao.findById(user.invitationId).get()
+        assertEquals(InvitationStatus.ACCEPTED, invitation.status)
+        assertNotNull(invitation.acceptedAt)
+    }
+
+    @Test
+    fun `invite with invitation already accepted`() {
+        val request = CreateUserRequest(
+            username = "invited.nkono",
+            email = "accepted.invitation.nkono@hotmail.com",
+            displayName = "Thomas Nkono",
+            password = "secret",
+            invitationId = "101"
+        )
+
+        val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.INVITATION_ALREADY_ACCEPTED, result.body!!.error.code)
+    }
+
+    @Test
+    fun `invite with expired invitation`() {
+        val request = CreateUserRequest(
+            username = "invited.nkono",
+            email = "expired.invitation.nkono@hotmail.com",
+            displayName = "Thomas Nkono",
+            password = "secret",
+            invitationId = "102"
+        )
+
+        val result = rest.postForEntity("/v1/users", request, ErrorResponse::class.java)
+        assertEquals(HttpStatus.CONFLICT, result.statusCode)
+        assertEquals(ErrorCode.INVITATION_EXPIRED, result.body!!.error.code)
     }
 }

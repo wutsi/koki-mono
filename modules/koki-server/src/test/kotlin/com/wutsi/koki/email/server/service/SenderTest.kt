@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
@@ -29,12 +30,14 @@ class SenderTest {
     private val configurationService = mock<ConfigurationService>()
     private val messagingServiceBuilder = mock<MessagingServiceBuilder>()
     private val languageDetector = mock<LanguageDetector>()
+    private val logger = DefaultKVLogger()
     private val sender = Sender(
         businessService,
         filterSet,
         configurationService,
         messagingServiceBuilder,
         languageDetector,
+        logger,
     )
 
     private val recipient = UserEntity(id = 11L, tenantId = 1L, email = "ray.sponsible@gmail.com", username = "ray")

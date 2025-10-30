@@ -48,6 +48,7 @@ data class UserEntity(
     var modifiedAt: Date = Date(),
     var country: String? = null,
     var photoUrl: String? = null,
+    val invitationId: String? = null,
 
     @ManyToMany
     @JoinTable(

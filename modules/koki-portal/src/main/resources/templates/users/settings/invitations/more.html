@@ -1,20 +1,23 @@
-<tr class="role" th:each="role : ${roles}">
-    <td>
-        <span th:text="${role.name}">NAME</span>
-        <span class="badge badge-pill badge-info"
-              th:if="!${portalSignupRoleId} == ${role.id}">Portal Signup Role</span>
-    </td>
-    <td th:text="${role.title}">TITLE</td>
-    <td>
-        <span th:if="${role.active}">Yes</span>
-    </td>
-    <td class="toolbar">
-        <a class="btn-view" th:href="'/settings/roles/' + ${role.id}">View</a>
-        <a class="btn-edit" th:href="'/settings/roles/' + ${role.id} + '/edit'">Edit</a>
+<tr class="invitation" th:each="invitation : ${invitations}">
+    <td th:text="${invitation.displayName}">DISPLAY_NAME</td>
+    <td th:text="${invitation.email}">EMAIL</td>
+    <td th:text="${invitation.createdAtText}">YYYY-MM-DD</td>
+    <td th:text="${invitation.expiresAtText}">YYYY-MM-DD</td>
+    <td class="text-right">
+        <a class="btn-view btn btn-sm btn-danger"
+           th:href="'/settings/invitations/delete?id=' + ${invitation.id}">Delete</a>
     </td>
 </tr>
-<tr id="role-load-more" th:if="${moreUrl}">
-    <td class="text-center" colspan="4">
-        <a href="javascript: koki_load_more('role-load-more')" th:data-url="${moreUrl}">Load More...</a>
+<tr id="invitation-load-more" th:if="${moreUrl}">
+    <td class="text-center" colspan="5">
+        <button
+            class="btn btn-sm btn-light w-100-mobile"
+            data-component-id="load-more"
+            data-container-id="invitation-load-more"
+            th:data-url="${moreUrl}"
+            th:text="#{button.load_more}"
+        >
+            Load more...
+        </button>
     </td>
 </tr>

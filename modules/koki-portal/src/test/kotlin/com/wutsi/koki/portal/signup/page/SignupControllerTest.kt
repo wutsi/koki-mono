@@ -8,17 +8,18 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.FileFixtures.image
+import com.wutsi.koki.InvitationFixtures.invitation
 import com.wutsi.koki.RefDataFixtures.categories
 import com.wutsi.koki.RefDataFixtures.locations
-import com.wutsi.koki.TenantFixtures.config
 import com.wutsi.koki.UserFixtures.user
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
+import com.wutsi.koki.tenant.dto.GetInvitationResponse
+import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import org.apache.commons.io.IOUtils
@@ -51,10 +52,12 @@ class SignupControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun create() {
-        navigateTo("/signup")
+        navigateTo("/signup?inv=${invitation.id}")
 
         // Index
         assertCurrentPageIs(PageName.SIGNUP)
+        assertElementAttribute("#name", "value", invitation.displayName)
+
         assertElementNotPresent(".alert-danger")
         input("#name", "Yo Man")
         input("#username", "yoman")
@@ -71,14 +74,15 @@ class SignupControllerTest : AbstractPageControllerTest() {
         assertEquals("Yo Man", request.firstValue.displayName)
         assertEquals("yoman", request.firstValue.username)
         assertEquals("seCret123", request.firstValue.password)
-        assertEquals(null, request.firstValue.language)
-        assertEquals(
-            listOf(config[ConfigurationName.PORTAL_SIGNUP_ROLE_ID]?.toLong()),
-            request.firstValue.roleIds
-        )
+        assertEquals(invitation.id, request.firstValue.invitationId)
+        assertEquals(invitation.email, request.firstValue.email)
+        assertEquals("fr", request.firstValue.language)
+        assertEquals(emptyList(), request.firstValue.roleIds)
 
         // Profile
         assertCurrentPageIs(PageName.SIGNUP_PROFILE)
+        assertElementAttribute("#email", "value", invitation.email)
+
         assertElementNotPresent(".alert-danger")
         input("#name", "Roger Milla")
         input("#email", "roger.milla@gmail.com")
@@ -102,10 +106,11 @@ class SignupControllerTest : AbstractPageControllerTest() {
         assertEquals("REIMAX 1", request2.firstValue.employer)
         assertEquals("+15147580000", request2.firstValue.mobile)
         assertEquals("CA", request2.firstValue.country)
+        assertEquals("fr", request2.firstValue.language)
         assertEquals(locations[3].id, request2.firstValue.cityId)
 
         assertEquals(user.language, request2.firstValue.language)
-        assertEquals(user.roleIds, request2.firstValue.roleIds)
+        assertEquals(null, request2.firstValue.roleIds)
 
         // Photo
         assertCurrentPageIs(PageName.SIGNUP_PHOTO)
@@ -137,7 +142,7 @@ class SignupControllerTest : AbstractPageControllerTest() {
             eq(CreateUserResponse::class.java),
         )
 
-        navigateTo("/signup")
+        navigateTo("/signup?inv=${invitation.id}")
 
         // Index
         input("#name", "Yo Man")
@@ -159,7 +164,7 @@ class SignupControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
 
-        navigateTo("/signup")
+        navigateTo("/signup?inv=${invitation.id}")
 
         // Index
         input("#name", "Yo Man")
@@ -182,6 +187,40 @@ class SignupControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.SIGNUP_PROFILE)
         assertElementPresent(".alert-danger")
+    }
+
+    @Test
+    fun `invitation expired`() {
+        doReturn(
+            ResponseEntity(
+                GetInvitationResponse(invitation.copy(status = InvitationStatus.EXPIRED)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvitationResponse::class.java)
+            )
+
+        navigateTo("/signup?inv=${invitation.id}")
+        assertCurrentPageIs(PageName.ERROR_410)
+    }
+
+    @Test
+    fun `invitation accepted`() {
+        doReturn(
+            ResponseEntity(
+                GetInvitationResponse(invitation.copy(status = InvitationStatus.ACCEPTED)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetInvitationResponse::class.java)
+            )
+
+        navigateTo("/signup?inv=${invitation.id}")
+        assertCurrentPageIs(PageName.ERROR_410)
     }
 
     private fun getImageFile(): File {

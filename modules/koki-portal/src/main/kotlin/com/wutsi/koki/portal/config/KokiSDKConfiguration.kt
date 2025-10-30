@@ -11,6 +11,7 @@ import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiFiles
+import com.wutsi.koki.sdk.KokiInvitations
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
@@ -76,6 +77,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiFiles(): KokiFiles {
         return KokiFiles(urlBuilder(), rest(), tenantProvider, accessTokenHolder)
+    }
+
+    @Bean
+    fun kokiInvitations(): KokiInvitations {
+        return KokiInvitations(urlBuilder(), rest())
     }
 
     @Bean

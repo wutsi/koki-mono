@@ -28,9 +28,10 @@ class ProfileController(
             id = user.id,
             name = user.displayName,
             email = user.email,
+            language = user.language,
             country = city?.country
                 ?: tenantHolder.get()?.locale?.let { locale -> Locale.forLanguageTag(locale) }?.country,
-            cityId = city?.id
+            cityId = city?.id,
         )
         return index(form, model, city)
     }

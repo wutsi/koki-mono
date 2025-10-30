@@ -112,7 +112,7 @@ springdoc:
 
         -   group: user
             display-name: User API
-            paths-to-match: /v1/users, /v1/users/**, /v1/roles, /v1/roles/**
+            paths-to-match: /v1/users, /v1/users/**, /v1/roles, /v1/roles/**, /v1/invitations, /v1/invitations/**
 
 management:
     endpoint:
@@ -184,6 +184,11 @@ koki:
                 dlq: koki-email-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        invitation:
+            ttl-days: 7                   # 7 days
+            cron:
+                expire: "0 0 2 * * *"     # Every date at 1AM
+
         file:
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
@@ -206,9 +211,6 @@ koki:
             access-token:
                 ttl: 86400 # 1 day
 
-        transaction:
-            pending:
-                cron: "0 */30 * * * *"     # Update PENDING transactions every 30 mins
 wutsi:
     platform:
         ai:

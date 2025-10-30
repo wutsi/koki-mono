@@ -44,6 +44,7 @@ object PageName {
     const val ERROR = "page.error"
     const val ERROR_403 = "page.error.403"
     const val ERROR_404 = "page.error.404"
+    const val ERROR_410 = "page.error.410"
     const val ERROR_500 = "page.error.500"
     const val ERROR_UNDER_CONSTRUCTION = "page.error.under-construction"
     const val ERROR_SUSPENDED = "page.error.suspended"
@@ -101,6 +102,8 @@ object PageName {
     const val TENANT_SETTINGS_TYPE_LIST = "page.settings.tenant.type.list"
 
     const val SECURITY_SETTINGS = "page.settings.security"
+    const val SECURITY_SETTINGS_INVITATION_LIST = "page.settings.security.invitation.list"
+    const val SECURITY_SETTINGS_INVITATION_CREATE = "page.settings.security.INVITATION.create"
     const val SECURITY_SETTINGS_ROLE = "page.settings.security.role"
     const val SECURITY_SETTINGS_ROLE_CREATE = "page.settings.security.role.create"
     const val SECURITY_SETTINGS_ROLE_EDIT = "page.settings.security.role.edit"

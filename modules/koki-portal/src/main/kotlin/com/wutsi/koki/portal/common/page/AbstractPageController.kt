@@ -172,6 +172,9 @@ abstract class AbstractPageController {
             ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE -> getMessage("error.account-not-active")
             ErrorCode.AUTHENTICATION_FAILED -> getMessage("error.authentication-failed")
 
+            ErrorCode.INVITATION_ALREADY_INVITED -> getMessage("error.invitation-already-invited")
+            ErrorCode.INVITATION_ALREADY_USER -> getMessage("error.invitation-already-user")
+
             ErrorCode.LISTING_MISSING_ADDRESS -> getMessage("error.listing-missing-address")
             ErrorCode.LISTING_MISSING_APPROVED_IMAGE -> getMessage("error.listing-missing-approved-image")
             ErrorCode.LISTING_MISSING_GEOLOCATION -> getMessage("error.listing-missing-geolocation")
