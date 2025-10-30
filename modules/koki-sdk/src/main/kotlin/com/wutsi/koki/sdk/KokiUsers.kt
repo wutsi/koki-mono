@@ -8,7 +8,8 @@ import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.SendPasswordRequest
 import com.wutsi.koki.tenant.dto.SendPasswordResponse
 import com.wutsi.koki.tenant.dto.SendUsernameRequest
-import com.wutsi.koki.tenant.dto.SetUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
+import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
 import org.springframework.web.client.RestTemplate
@@ -64,8 +65,13 @@ class KokiUsers(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun photo(id: Long, request: SetUserPhotoRequest) {
+    fun photo(id: Long, request: UpdateUserPhotoRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/photo")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun profile(id: Long, request: UpdateUserProfileRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/profile")
         rest.postForEntity(url, request, Any::class.java)
     }
 
