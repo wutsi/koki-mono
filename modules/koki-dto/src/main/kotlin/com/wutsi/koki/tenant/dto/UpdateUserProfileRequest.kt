@@ -17,6 +17,6 @@ data class UpdateUserProfileRequest(
     val facebookUrl: String? = null,
     val instagramUrl: String? = null,
     val twitterUrl: String? = null,
-    val tiktokUrl: String? = null,
     val youtubeUrl: String? = null,
+    val tiktokUrl: String? = null,
 )
