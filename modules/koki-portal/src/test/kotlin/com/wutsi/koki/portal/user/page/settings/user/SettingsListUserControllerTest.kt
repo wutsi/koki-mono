@@ -18,7 +18,7 @@ class SettingsListUserControllerTest : AbstractPageControllerTest() {
     fun list() {
         navigateTo("/settings/users")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS_USER_LIST)
-        assertElementCount("tr.user", 0)
+        assertElementCount("tr.user", users.size)
     }
 
     @Test

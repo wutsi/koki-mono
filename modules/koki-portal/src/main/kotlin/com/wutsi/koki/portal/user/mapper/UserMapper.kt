@@ -1,14 +1,13 @@
 package com.wutsi.koki.portal.user.mapper
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Service
 import java.util.Locale
 import kotlin.collections.flatMap

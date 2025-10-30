@@ -19,7 +19,7 @@ class NeighbourhoodImporter(
     private val locationService: LocationService,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(JuridictionImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(NeighbourhoodImporter::class.java)
 
         private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
         private const val RECORD_ID = 0
@@ -36,7 +36,7 @@ class NeighbourhoodImporter(
 
         /* import */
         val filename = "/refdata/neighbourhood/$country.csv"
-        val input = JuridictionImporter::class.java.getResourceAsStream(filename)
+        val input = NeighbourhoodImporter::class.java.getResourceAsStream(filename)
         if (input == null) {
             errors.add(ImportMessage("", "No neighbourhood feed found for $country"))
             return ImportResponse(

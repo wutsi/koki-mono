@@ -2,9 +2,9 @@ package com.wutsi.koki.portal.message.mapper
 
 import com.wutsi.koki.message.dto.Message
 import com.wutsi.koki.message.dto.MessageSummary
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.common.service.Moment
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.message.model.MessageModel
 import org.springframework.stereotype.Service
 

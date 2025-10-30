@@ -5,7 +5,6 @@ import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.form.SearchUserForm
-import com.wutsi.koki.portal.user.service.RoleService
 import com.wutsi.koki.portal.user.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -21,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequiresPermission(["security:admin"])
 class SettingsListUserController(
     private val service: UserService,
-    private val roleService: RoleService,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListAccountController::class.java)
     }
 
     @GetMapping
-    fun show(
+    fun list(
         @ModelAttribute form: SearchUserForm,
         @RequestHeader(required = false, name = "Referer") referer: String? = null,
         @RequestParam(required = false, name = "_toast") toast: Long? = null,
@@ -57,23 +55,21 @@ class SettingsListUserController(
         model: Model
     ): String {
         model.addAttribute("form", form)
+        val users = service.search(
+            keyword = form.keyword,
+            limit = limit,
+            offset = offset
+        )
 
-        if (!form.keyword.isNullOrEmpty()) {
-            val users = service.search(
-                keyword = form.keyword,
-                limit = limit,
-                offset = offset
-            )
-            if (!users.isEmpty()) {
-                model.addAttribute("users", users)
-            }
-
+        if (users.isNotEmpty()) {
+            model.addAttribute("users", users)
             if (users.size >= limit) {
                 val nextOffset = offset + limit
                 var moreUrl = "/settings/users/more?limit=$limit&offset=$nextOffset&keyword=${form.keyword}"
                 model.addAttribute("moreUrl", moreUrl)
             }
         }
+
         return "users/settings/users/more"
     }
 

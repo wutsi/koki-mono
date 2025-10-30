@@ -14,8 +14,11 @@
     <div class="settings-content">
         <div th:replace="~{__components/settings :: settings-title('Roles', '/settings/security')}"></div>
 
-        <div class="padding text-right">
-            <a class="btn btn-sm btn-primary btn-create" href="/settings/roles/create">Create Role</a>
+        <div class="padding">
+            <a class="btn btn-sm btn-primary btn-create" href="/settings/roles/create">
+                <i class="fa-solid fa-plus"></i>
+                <span>Role</span>
+            </a>
         </div>
 
         <div class="padding-top border-top" th:if="${roles}">

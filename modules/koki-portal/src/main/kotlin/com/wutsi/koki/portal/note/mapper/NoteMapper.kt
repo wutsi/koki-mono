@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.note.mapper
 
 import com.wutsi.koki.note.dto.Note
 import com.wutsi.koki.note.dto.NoteSummary
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.note.model.NoteModel
 import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.stereotype.Service

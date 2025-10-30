@@ -18,31 +18,6 @@ CREATE INDEX T_LOCATION_parent ON T_LOCATION(parent_fk);
 CREATE INDEX I_LOCATION_country ON T_LOCATION(country);
 CREATE INDEX I_LOCATION_type ON T_LOCATION(type);
 
-CREATE TABLE T_JURIDICTION(
-  id             BIGINT NOT NULL,
-
-  state_fk       BIGINT REFERENCES T_LOCATION(id),
-  country        VARCHAR(2) NOT NULL,
-
-  UNIQUE(country, state_fk),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-
-CREATE TABLE T_SALES_TAX(
-  id             BIGINT NOT NULL AUTO_INCREMENT,
-
-  juridiction_fk BIGINT REFERENCES T_JURIDICTION(id),
-
-  name           VARCHAR(30),
-  rate           DECIMAL(10, 4) NOT NULL,
-  active         BOOLEAN NOT NULL DEFAULT true,
-  priority       INT NOT NULL DEFAULT 0,
-
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-
 CREATE TABLE T_CATEGORY(
   id             BIGINT NOT NULL,
 

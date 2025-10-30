@@ -97,7 +97,7 @@ abstract class AbstractPageController {
         return false
     }
 
-    protected fun loadLanguages(model: Model, name: String? = "languages") {
+    protected fun loadLanguages(model: Model, name: String = "languages") {
         val languages = Locale.getISOLanguages()
             .map { lang -> Locale(lang) }
             .toSet()
@@ -105,7 +105,7 @@ abstract class AbstractPageController {
         model.addAttribute(name, languages)
     }
 
-    protected fun loadCountries(model: Model, name: String? = "countries") {
+    protected fun loadCountries(model: Model, name: String = "countries") {
         val countries = Locale.getISOCountries()
             .map { country -> Locale(LocaleContextHolder.getLocale().language, country) }
             .sortedBy { country -> country.getDisplayCountry() }

@@ -6,18 +6,18 @@ import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.platform.messaging.Party
 import com.wutsi.koki.platform.messaging.smtp.SMTPMessagingServiceBuilder
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.domain.BusinessEntity
+import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 class Sender(
-    private val businessService: BusinessService,
     private val filterSet: EmailFilterSet,
+    private val tenantService: TenantService,
     private val configurationService: ConfigurationService,
     private val messagingServiceBuilder: MessagingServiceBuilder,
     private val languageDetector: LanguageDetector,
@@ -64,8 +64,8 @@ class Sender(
             tenantId = tenantId,
         ).map { cfg -> cfg.name to cfg.value }.toMap()
 
-        val business = businessService.getOrNull(tenantId)
-        val message = createMessage(recipient, subject, body, attachments, config, business, language, tenantId)
+        val tenant = tenantService.get(tenantId)
+        val message = createMessage(recipient, subject, body, attachments, config, language, tenant)
         messagingServiceBuilder.build(config).send(message)
         return true
     }
@@ -76,11 +76,10 @@ class Sender(
         body: String,
         attachments: List<File>,
         config: Map<String, String>,
-        business: BusinessEntity?,
         language: String,
-        tenantId: Long
+        tenant: TenantEntity
     ): Message {
-        val body = filterSet.filter(body, tenantId)
+        val body = filterSet.filter(body, tenant.id ?: -1)
         return Message(
             subject = subject,
             body = body,
@@ -89,7 +88,7 @@ class Sender(
             recipient = recipient,
             sender = Party(
                 email = config[ConfigurationName.SMTP_FROM_ADDRESS]?.ifEmpty { null } ?: "",
-                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: business?.companyName
+                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: tenant?.name
             ),
             attachments = attachments
         )

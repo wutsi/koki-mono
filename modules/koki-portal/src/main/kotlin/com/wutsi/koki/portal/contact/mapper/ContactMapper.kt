@@ -3,8 +3,8 @@ package com.wutsi.koki.portal.contact.mapper
 import com.wutsi.koki.contact.dto.Contact
 import com.wutsi.koki.contact.dto.ContactSummary
 import com.wutsi.koki.portal.account.model.AccountModel
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.contact.model.ContactModel
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.tenant.model.TypeModel

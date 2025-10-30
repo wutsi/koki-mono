@@ -1,13 +1,12 @@
 package com.wutsi.koki.portal.message.service
 
-import com.sun.org.apache.xalan.internal.lib.ExsltCommon.objectType
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.message.dto.MessageStatus
 import com.wutsi.koki.message.dto.UpdateMessageStatusRequest
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
+import com.wutsi.koki.portal.common.service.ObjectReferenceService
 import com.wutsi.koki.portal.message.mapper.MessageMapper
 import com.wutsi.koki.portal.message.model.MessageModel
-import com.wutsi.koki.portal.reference.service.ObjectReferenceService
 import com.wutsi.koki.sdk.KokiMessages
 import org.springframework.stereotype.Service
 

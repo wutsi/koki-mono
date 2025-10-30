@@ -1,6 +1,6 @@
 package com.wutsi.koki.portal.user.mapper
 
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.user.model.InvitationModel
 import com.wutsi.koki.tenant.dto.Invitation
 import com.wutsi.koki.tenant.dto.InvitationSummary

@@ -6,10 +6,10 @@ import com.wutsi.koki.offer.dto.OfferSummary
 import com.wutsi.koki.offer.dto.OfferVersion
 import com.wutsi.koki.offer.dto.OfferVersionSummary
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.listing.model.ListingModel
-import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.offer.model.OfferVersionModel
 import com.wutsi.koki.portal.user.model.UserModel

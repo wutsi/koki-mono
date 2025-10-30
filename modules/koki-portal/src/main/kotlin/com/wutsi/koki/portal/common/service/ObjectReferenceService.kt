@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.reference.service
+package com.wutsi.koki.portal.common.service
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel

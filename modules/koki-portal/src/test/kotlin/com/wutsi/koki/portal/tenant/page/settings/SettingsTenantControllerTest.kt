@@ -26,13 +26,6 @@ class SettingsTenantControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun business() {
-        navigateTo("/settings/tenant")
-        click(".btn-business")
-        assertCurrentPageIs(PageName.TENANT_SETTINGS_BUSINESS)
-    }
-
-    @Test
     fun `login required`() {
         setUpAnonymousUser()
 

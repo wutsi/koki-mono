@@ -20,7 +20,7 @@ class CategoryImporter(
     private val service: CategoryService
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(SalesTaxImporter::class.java)
+        private val LOGGER = LoggerFactory.getLogger(CategoryImporter::class.java)
 
         private const val RECORD_ID = 0
         private const val RECORD_LONG_NAME = 1
@@ -34,7 +34,7 @@ class CategoryImporter(
 
         /* import */
         val filename = "/refdata/category/${type.name.lowercase()}.csv"
-        val input = SalesTaxImporter::class.java.getResourceAsStream(filename)
+        val input = CategoryImporter::class.java.getResourceAsStream(filename)
             ?: throw ConflictException(
                 error = Error(
                     code = ErrorCode.CATEGORY_TYPE_NOT_SUPPORTED,
