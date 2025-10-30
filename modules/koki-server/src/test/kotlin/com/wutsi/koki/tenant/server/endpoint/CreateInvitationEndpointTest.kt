@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/test/clean.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/tenant/CreateInvitationEndpoint.sql"])
 class CreateInvitationEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: InvitationRepository
