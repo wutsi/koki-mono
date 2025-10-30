@@ -59,7 +59,7 @@ class InvitationService(
                 id = UUID.randomUUID().toString(),
                 tenantId = tenantId,
                 email = email,
-                displayName = request.displayName.uppercase(),
+                displayName = request.displayName,
                 createdById = securityService.getCurrentUserIdOrNull(),
                 createdAt = now,
                 expiresAt = DateUtils.addDays(now, ttlDays),
