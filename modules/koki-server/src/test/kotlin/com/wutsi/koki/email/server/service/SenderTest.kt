@@ -11,11 +11,11 @@ import com.wutsi.koki.platform.messaging.Message
 import com.wutsi.koki.platform.messaging.MessagingService
 import com.wutsi.koki.platform.messaging.MessagingServiceBuilder
 import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.domain.BusinessEntity
 import com.wutsi.koki.tenant.server.domain.ConfigurationEntity
+import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.koki.tenant.server.service.BusinessService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.tenant.server.service.TenantService
 import org.apache.tika.language.detect.LanguageDetector
 import org.apache.tika.language.detect.LanguageResult
 import org.junit.jupiter.api.BeforeEach
@@ -25,23 +25,24 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SenderTest {
-    private val businessService = mock<BusinessService>()
+    private val tenantService = mock<TenantService>()
     private val filterSet = mock<EmailFilterSet>()
     private val configurationService = mock<ConfigurationService>()
     private val messagingServiceBuilder = mock<MessagingServiceBuilder>()
     private val languageDetector = mock<LanguageDetector>()
     private val logger = DefaultKVLogger()
     private val sender = Sender(
-        businessService,
         filterSet,
+        tenantService,
         configurationService,
         messagingServiceBuilder,
         languageDetector,
         logger,
     )
 
-    private val recipient = UserEntity(id = 11L, tenantId = 1L, email = "ray.sponsible@gmail.com", username = "ray")
-    private val business = BusinessEntity(companyName = "Koki")
+    private val tenantId = 1L
+    private val recipient = UserEntity(id = 11L, tenantId = tenantId, email = "ray.sponsible@gmail.com")
+    private val tenant = TenantEntity(id = tenantId, name = "BlueKoki")
     private val configurations = listOf(
         ConfigurationEntity(
             name = ConfigurationName.SMTP_FROM_PERSONAL,
@@ -60,7 +61,7 @@ class SenderTest {
 
     @BeforeEach
     fun setUp() {
-        doReturn(business).whenever(businessService).getOrNull(any())
+        doReturn(tenant).whenever(tenantService).get(any())
         doReturn(messageService).whenever(messagingServiceBuilder).build(any())
         doReturn(configurations).whenever(configurationService).search(
             anyOrNull(),
@@ -124,7 +125,7 @@ class SenderTest {
         assertEquals(recipient.displayName, msg.firstValue.recipient.displayName)
         assertEquals("fr", msg.firstValue.language)
         assertEquals("text/html", msg.firstValue.mimeType)
-        assertEquals(business.companyName, msg.firstValue.sender?.displayName)
+        assertEquals(tenant.name, msg.firstValue.sender?.displayName)
         assertEquals("", msg.firstValue.sender?.email)
     }
 }

@@ -104,11 +104,11 @@ springdoc:
 
         -   group: refdata
             display-name: RefData API
-            paths-to-match: /v1/amenities, /v1/amenities/**, /v1/categories, /v1/categories/**, /v1/juridictions, /v1/juridictions/**, /v1/locations, /v1/locations/*, /v1/refdata/**, /v1/sales-taxes, /v1/sales-taxes/**, /v1/units
+            paths-to-match: /v1/amenities, /v1/amenities/**, /v1/categories, /v1/categories/**, /v1/locations, /v1/locations/*, /v1/refdata/**
 
         -   group: tenant
             display-name: Tenant API
-            paths-to-match: /v1/businesses, /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
+            paths-to-match: /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
 
         -   group: user
             display-name: User API

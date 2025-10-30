@@ -4,15 +4,11 @@ import com.wutsi.koki.portal.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
-import com.wutsi.koki.portal.refdata.model.JuridictionModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
-import com.wutsi.koki.portal.refdata.model.SalesTaxModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Amenity
 import com.wutsi.koki.refdata.dto.Category
-import com.wutsi.koki.refdata.dto.Juridiction
 import com.wutsi.koki.refdata.dto.Location
-import com.wutsi.koki.refdata.dto.SalesTax
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
@@ -50,17 +46,6 @@ class RefDataMapper : TenantAwareMapper() {
         )
     }
 
-    fun toJuridictionModel(entity: Juridiction, locations: Map<Long, LocationModel>): JuridictionModel {
-        val state = entity.stateId?.let { id -> locations[id] }
-        val displayCountry = Locale("en", entity.country).displayCountry
-        return JuridictionModel(
-            id = entity.id,
-            state = state,
-            country = entity.country,
-            name = if (state == null) displayCountry else "${state.name}, $displayCountry",
-        )
-    }
-
     fun toAddressModel(entity: Address, locations: Map<Long, LocationModel>): AddressModel {
         val city = entity.cityId?.let { id -> locations[id] }
         return AddressModel(
@@ -72,17 +57,6 @@ class RefDataMapper : TenantAwareMapper() {
             countryName = entity.country?.let { country ->
                 Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
             }
-        )
-    }
-
-    fun toSalesTaxModel(entity: SalesTax): SalesTaxModel {
-        return SalesTaxModel(
-            id = entity.id,
-            rate = entity.rate,
-            priority = entity.priority,
-            name = entity.name,
-            juridictionId = entity.juridictionId,
-            active = entity.active,
         )
     }
 

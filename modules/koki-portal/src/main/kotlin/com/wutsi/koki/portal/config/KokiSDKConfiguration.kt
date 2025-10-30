@@ -7,7 +7,6 @@ import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAuthentication
-import com.wutsi.koki.sdk.KokiBusinesses
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiFiles
@@ -57,11 +56,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiAuthentication(): KokiAuthentication {
         return KokiAuthentication(urlBuilder(), restForAuthentication())
-    }
-
-    @Bean
-    fun kokiBusiness(): KokiBusinesses {
-        return KokiBusinesses(urlBuilder(), rest())
     }
 
     @Bean

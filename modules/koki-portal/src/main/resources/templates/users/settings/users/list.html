@@ -15,15 +15,18 @@
         <form action="/settings/users" method="get" th:object="${form}">
             <div th:replace="~{__components/settings :: settings-title('Users', '/settings/security')}"></div>
             <div class="flex flex-space-between padding">
+                <div>
+                    <a class="btn btn-sm btn-primary" href="/settings/users/create" id="btn-create">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>User</span>
+                    </a>
+                </div>
                 <div class="input-group" style="width:auto">
                     <input class="form-control" name="keyword" placeholder="Enter your keyword" th:field="*{keyword}"/>
                     <button class="btn btn-light btn-sm" id="btn-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <span>Search</span>
                     </button>
-                </div>
-                <div>
-                    <a class="btn btn-sm btn-primary" href="/settings/users/create" id="btn-create">Create User</a>
                 </div>
             </div>
 

@@ -65,9 +65,7 @@ import com.wutsi.koki.portal.file.service.FileUploadUrlProvider
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
-import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
-import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
 import com.wutsi.koki.tenant.dto.Configuration
@@ -77,7 +75,6 @@ import com.wutsi.koki.tenant.dto.CreateRoleRequest
 import com.wutsi.koki.tenant.dto.CreateRoleResponse
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
-import com.wutsi.koki.tenant.dto.GetBusinessResponse
 import com.wutsi.koki.tenant.dto.GetInvitationResponse
 import com.wutsi.koki.tenant.dto.GetTypeResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
@@ -403,18 +400,6 @@ abstract class AbstractPageControllerTest {
                 eq(CreateUserResponse::class.java)
             )
 
-        // Business
-        doReturn(
-            ResponseEntity(
-                GetBusinessResponse(TenantFixtures.business),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetBusinessResponse::class.java)
-            )
-
         // Password Request
         doReturn(
             ResponseEntity(
@@ -737,30 +722,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchCategoryResponse::class.java)
-            )
-
-        // Juridiction
-        doReturn(
-            ResponseEntity(
-                SearchJuridictionResponse(RefDataFixtures.juridictions),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchJuridictionResponse::class.java)
-            )
-
-        // Sales Tax
-        doReturn(
-            ResponseEntity(
-                SearchSalesTaxResponse(RefDataFixtures.salesTaxes),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchSalesTaxResponse::class.java)
             )
     }
 

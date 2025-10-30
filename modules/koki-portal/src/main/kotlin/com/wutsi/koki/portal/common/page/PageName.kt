@@ -96,8 +96,6 @@ object PageName {
 
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
-    const val TENANT_SETTINGS_BUSINESS = "page.settings.tenant.business"
-    const val TENANT_SETTINGS_BUSINESS_EDIT = "page.settings.tenant.business.edit"
     const val TENANT_SETTINGS_TYPE_IMPORT = "page.settings.tenant.type.import"
     const val TENANT_SETTINGS_TYPE_LIST = "page.settings.tenant.type.list"
 

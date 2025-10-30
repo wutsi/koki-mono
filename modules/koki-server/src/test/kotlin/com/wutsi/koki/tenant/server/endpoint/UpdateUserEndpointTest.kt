@@ -70,6 +70,28 @@ class UpdateUserEndpointTest : TenantAwareEndpointTest() {
     }
 
     @Test
+    fun `update with rolidId=null`() {
+        val request = UpdateUserRequest(
+            email = "thomas.nkono@hotmail.com",
+            displayName = "Thomas Nkono",
+            roleIds = null,
+            language = "fR",
+            employer = "Koki",
+            categoryId = 111L,
+            mobile = "+15147581111",
+            country = "CA",
+            cityId = 3333L
+        )
+
+        val result = rest.postForEntity("/v1/users/13", request, Any::class.java)
+
+        assertEquals(HttpStatus.OK, result.statusCode)
+
+        val userId = 13L
+        assertEquals(2, roleCount(userId))
+    }
+
+    @Test
     fun `not found`() {
         val request = UpdateUserRequest(
             email = "foo.bar@gmail.com",
