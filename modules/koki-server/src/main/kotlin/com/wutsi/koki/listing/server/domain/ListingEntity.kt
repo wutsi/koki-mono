@@ -101,8 +101,8 @@ data class ListingEntity(
     @Column("closed_offer_fk") var closedOfferId: Long? = null,
     @Column("buyer_contact_fk") var buyerContactId: Long? = null,
     @Column("buyer_agent_user_fk") var buyerAgentUserId: Long? = null,
-    var transactionDate: Date? = null,
-    var transactionPrice: Long? = null,
+    var soldAt: Date? = null,
+    var salePrice: Long? = null,
     var finalSellerAgentCommissionAmount: Long? = null,
     var finalBuyerAgentCommissionAmount: Long? = null,
 

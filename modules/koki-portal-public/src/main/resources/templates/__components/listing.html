@@ -10,7 +10,7 @@
 
     <span class="listing-status badge text-bg-success"
           th:if="${listing.statusSold}"
-          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.transactionDateText}"
+          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}"
     >SOLD</span>
 </div>
 

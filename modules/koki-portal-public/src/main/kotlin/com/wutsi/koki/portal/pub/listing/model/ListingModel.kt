@@ -56,9 +56,9 @@ data class ListingModel(
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
     val buyerAgentUser: UserModel? = null,
-    var transactionDate: Date? = null,
-    var transactionDateText: String? = null,
-    var transactionPrice: MoneyModel? = null,
+    var soldAt: Date? = null,
+    var soldAtText: String? = null,
+    var salePrice: MoneyModel? = null,
 
     val title: String? = null,
     val summary: String? = null,

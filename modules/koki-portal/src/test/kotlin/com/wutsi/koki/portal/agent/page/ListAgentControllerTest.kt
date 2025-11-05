@@ -5,12 +5,28 @@ import com.wutsi.koki.portal.AgentFixtures.agents
 import com.wutsi.koki.portal.common.page.PageName
 import kotlin.test.Test
 
-class ListAgentController : AbstractPageControllerTest() {
+class ListAgentControllerTest : AbstractPageControllerTest() {
     @Test
     fun list() {
         navigateTo("/agents")
 
         assertCurrentPageIs(PageName.AGENT_LIST)
         assertElementCount("div.agent", agents.size)
+    }
+
+    @Test
+    fun `login required`() {
+        setUpAnonymousUser()
+
+        navigateTo("/agents")
+        assertCurrentPageIs(PageName.LOGIN)
+    }
+
+    @Test
+    fun `list - without permission agent`() {
+        setupUserWithoutPermissions(listOf("agent"))
+
+        navigateTo("/agents")
+        assertCurrentPageIs(PageName.ERROR_403)
     }
 }

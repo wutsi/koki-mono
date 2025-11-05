@@ -33,33 +33,27 @@
             </div>
         </div>
 
-        <div class="margin-top" th:if="${agent.metrics.sales.total > 0}">
-            <div>
-                <b th:text="${agent.pyMetrics.sales.total}">000</b>
-                <span class="text-lower" th:text="#{page.agent.sales_py}">SALES</span>
+        <div class="margin-top flex text-small" th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
+            <div class="flex margin-right" th:if="${agent.totalSales > 0}">
+                <div th:if="${agent.past12mSales > 0}">
+                    <b th:text="${agent.past12mSales}">000</b>
+                    <span class="text-lower" th:text="#{page.agent.sales_py}">SALES</span>
+                </div>
+                <div th:if="${agent.past12mSales == 0}">
+                    <b th:text="${agent.totalSales}">000</b>
+                    <span class="text-lower" th:text="#{page.agent.sales}">SALES</span>
+                </div>
             </div>
-            <div th:if="${agent.metrics.sales.total > 1}">
-                <b>
-                    <span th:text="${agent.metrics.sales.minPrice.shortText}">$$$</span>
-                    -
-                    <span th:text="${agent.metrics.sales.maxPrice.shortText}">$$$</span>
-                </b>
-                <span class="text-lower" th:text="#{page.agent.price_range}">PRICE_RANGE</span>
-            </div>
-        </div>
 
-        <div class="margin-top" th:if="${agent.metrics.rentals.total > 0}">
-            <div>
-                <b th:text="${agent.pyMetrics.rentals.total}">000</b>
-                <span class="text-lower" th:text="#{page.agent.sales_py}">SALES</span>
-            </div>
-            <div th:if="${agent.metrics.rentals.total > 1}">
-                <b>
-                    <span th:text="${agent.metrics.rentals.minPrice.shortText}">$$$</span>
-                    -
-                    <span th:text="${agent.metrics.rentals.maxPrice.shortText}">$$$</span>
-                </b>
-                <span class="text-lower" th:text="#{page.agent.price_range}">PRICE_RANGE</span>
+            <div th:if="${agent.totalRentals > 0}">
+                <div th:if="${agent.past12mRentals > 0}">
+                    <b th:text="${agent.past12mRentals}">000</b>
+                    <span class="text-lower" th:text="#{page.agent.rentals_py}">SALES</span>
+                </div>
+                <div th:if="${agent.past12mRentals == 0}">
+                    <b th:text="${agent.totalRentals}">000</b>
+                    <span class="text-lower" th:text="#{page.agent.rentals}">SALES</span>
+                </div>
             </div>
         </div>
     </div>

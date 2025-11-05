@@ -9,6 +9,7 @@ import java.util.Date
 
 data class UserModel(
     val id: Long = -1,
+    val agentId: Long? = null,
     val username: String = "",
     val email: String? = null,
     val displayName: String? = null,

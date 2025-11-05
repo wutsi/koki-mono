@@ -49,6 +49,30 @@ CREATE TABLE T_TYPE(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE T_INVITATION(
+    id                      VARCHAR(36) NOT NULL,
+
+    tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
+    created_by_fk           BIGINT DEFAULT NULL,
+    deleted_by_fk           BIGINT DEFAULT NULL,
+
+    display_name            VARCHAR(50) NOT NULL,
+    email                   VARCHAR(255) NOT NULL,
+    status                  INT NOT NULL DEFAULT 0,
+    type                    INT NOT NULL DEFAULT 0,
+    language                VARCHAR(2),
+    deleted                 BOOLEAN NOT NULL DEFAULT false,
+    created_at              DATETIME NOT NULL DEFAULT NOW(),
+    expires_at              DATETIME NOT NULL DEFAULT NOW(),
+    deleted_at              DATETIME DEFAULT NULL,
+    accepted_at             DATETIME DEFAULT NULL,
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE INDEX tenant ON T_INVITATION(tenant_fk);
+CREATE INDEX status ON T_INVITATION(status);
+
 
 CREATE TABLE T_USER(
   id                      BIGINT NOT NULL AUTO_INCREMENT,
@@ -58,6 +82,7 @@ CREATE TABLE T_USER(
   created_by_fk           BIGINT,
   modified_by_fk          BIGINT,
   city_fk                 BIGINT,
+  invitation_fk           VARCHAR(36) REFERENCES T_INVITATION(id),
 
   username                VARCHAR(50) NOT NULL,
   password                VARCHAR(32) NOT NULL,
@@ -70,7 +95,6 @@ CREATE TABLE T_USER(
   employer                VARCHAR(50),
   status                  INT NOT NULL DEFAULT 0,
   photo_url               TEXT,
-  invitation_id           VARCHAR(36) NULL,
   biography               TEXT,
   website_url             TEXT,
   youtube_url             TEXT,
@@ -155,30 +179,6 @@ CREATE TABLE T_ROLE_PERMISSION(
 
   PRIMARY KEY(role_fk, permission_fk)
 ) ENGINE = InnoDB;
-
-CREATE TABLE T_INVITATION(
-    id                      VARCHAR(36) NOT NULL,
-
-    tenant_fk               BIGINT NOT NULL REFERENCES T_TENANT(id),
-    created_by_fk           BIGINT DEFAULT NULL,
-    deleted_by_fk           BIGINT DEFAULT NULL,
-
-    display_name            VARCHAR(50) NOT NULL,
-    email                   VARCHAR(255) NOT NULL,
-    status                  INT NOT NULL DEFAULT 0,
-    type                    INT NOT NULL DEFAULT 0,
-    language                VARCHAR(2),
-    deleted                 BOOLEAN NOT NULL DEFAULT false,
-    created_at              DATETIME NOT NULL DEFAULT NOW(),
-    expires_at              DATETIME NOT NULL DEFAULT NOW(),
-    deleted_at              DATETIME DEFAULT NULL,
-    accepted_at             DATETIME DEFAULT NULL,
-
-    PRIMARY KEY (id)
-) ENGINE = InnoDB;
-
-CREATE INDEX tenant ON T_INVITATION(tenant_fk);
-CREATE INDEX status ON T_INVITATION(status);
 
 
 INSERT INTO T_MODULE(id, name, title, home_url, tab_url, settings_url)

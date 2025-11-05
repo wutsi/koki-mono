@@ -69,8 +69,8 @@ CREATE TABLE T_LISTING(
 
   closed_offer_fk           BIGINT,
   buyer_contact_fk          BIGINT,
-  transaction_date          DATE,
-  transaction_price         BIGINT,
+  sold_at                   DATE,
+  sale_price                BIGINT,
   final_seller_agent_commission_amount   BIGINT,
   final_buyer_agent_commission_amount    BIGINT,
 
@@ -109,7 +109,7 @@ CREATE INDEX price ON T_LISTING(price);
 CREATE INDEX lot_area ON T_LISTING(lot_area);
 CREATE INDEX property_area ON T_LISTING(property_area);
 CREATE INDEX published_at ON T_LISTING(published_at);
-CREATE INDEX transaction_date ON T_LISTING(transaction_date);
+CREATE INDEX sold_at ON T_LISTING(sold_at);
 CREATE INDEX seller_agent_user ON T_LISTING(seller_agent_user_fk);
 CREATE INDEX buyer_agent_user ON T_LISTING(buyer_agent_user_fk);
 

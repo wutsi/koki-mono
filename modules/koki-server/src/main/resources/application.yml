@@ -72,7 +72,11 @@ springdoc:
 
         -   group: accounts
             display-name: Account API
-            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**, /v1/account-users, /v1/account-users/**, /v1/invitations, /v1/invitations/**
+            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**
+
+        -   group: agent
+            display-name: Agent API
+            paths-to-match: /v1/agents, /v1/agents/**
 
         -   group: contacts
             display-name: Contact API
@@ -147,10 +151,6 @@ koki:
         client-id: koki-server
         server-url: http://localhost:${server.port}
 
-    kpi:
-        daily-cron: "0 */15 * * * *"  # Flush every 15 mins
-        monthly-cron: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
-
     translation:
         type: ai  # AI | AWS
         aws:
@@ -165,18 +165,20 @@ koki:
         password: secret
         from: no-reply@wutsi.com
 
-    payment-gateway:
-        stripe:
-            session:
-                timeout-minutes: 30
-
     module:
         consumer-delay-seconds: 1
 
-        ref-data:
-            geonames:
-                connect-timeout: 30000
-                read-timeout: 60000
+        agent:
+            metrics:
+                jobs:
+                    daily: "0 0 1 * * *"     # Every day at 1:00AM
+                    monthly: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-agent-queue
+                dlq: koki-agent-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         email:
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
@@ -187,7 +189,7 @@ koki:
         invitation:
             ttl-days: 7                   # 7 days
             cron:
-                expire: "0 0 2 * * *"     # Every date at 1AM
+                expire: "0 0 1 * * *"     # Every date at 1AM
 
         file:
             mq:
@@ -207,6 +209,11 @@ koki:
             cron:
                 expire: "0 0 1 * * *"     # Every date at 1AM
 
+        ref-data:
+            geonames:
+                connect-timeout: 30000
+                read-timeout: 60000
+
         security:
             access-token:
                 ttl: 86400 # 1 day
@@ -217,7 +224,7 @@ wutsi:
             enabled: true
             rest:
                 read-timeout: 60000 # 1 minute
-                connect-timeout: 60000 # 1 miniute
+                connect-timeout: 60000 # 1 minute
             model:
                 type: gemini
                 deepseek:

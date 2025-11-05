@@ -11,11 +11,11 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/agent/GetAgentEndpoint.sql"])
-class GetAgentEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/agent/GetUserAgentEndpoint.sql"])
+class GetUserAgentEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun get() {
-        val response = rest.getForEntity("/v1/agents/100", GetAgentResponse::class.java)
+        val response = rest.getForEntity("/v1/users/11/agent", GetAgentResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
@@ -48,7 +48,7 @@ class GetAgentEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun notFound() {
-        val response = rest.getForEntity("/v1/agents/999", ErrorResponse::class.java)
+        val response = rest.getForEntity("/v1/users/33/agent", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.AGENT_NOT_FOUND, response.body?.error?.code)
@@ -56,7 +56,7 @@ class GetAgentEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun otherTenant() {
-        val response = rest.getForEntity("/v1/agents/200", ErrorResponse::class.java)
+        val response = rest.getForEntity("/v1/agents/22", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.AGENT_NOT_FOUND, response.body?.error?.code)

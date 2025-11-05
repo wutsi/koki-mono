@@ -114,8 +114,8 @@ object ListingFixtures {
 
         buyerAgentUserId = users[2].id,
         buyerContactId = contacts[1].id,
-        transactionPrice = Money(195000.0, "CAD"),
-        transactionDate = DateUtils.addDays(Date(), -10),
+        salePrice = Money(195000.0, "CAD"),
+        soldAt = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
         publishedAt = DateUtils.addDays(Date(), -10)
@@ -141,6 +141,10 @@ object ListingFixtures {
                 neighborhoodId = RefDataFixtures.neighborhoods[0].id,
                 street = "3030 Linton",
                 postalCode = "H1X 1X1",
+            ),
+            geoLocation = GeoLocation(
+                latitude = 45.50654997823367,
+                longitude = -73.62629065845323,
             ),
 
             price = Money(175000.0, "CAD"),
@@ -173,6 +177,10 @@ object ListingFixtures {
                 street = "340 Pascal",
                 postalCode = null,
             ),
+            geoLocation = GeoLocation(
+                latitude = 44.50654997823367,
+                longitude = -73.62629065845323,
+            ),
 
             price = Money(375000.0, "CAD"),
             buyerAgentCommission = 3.0,
@@ -204,6 +212,10 @@ object ListingFixtures {
                 street = "1111 Nicolet",
                 postalCode = null,
             ),
+            geoLocation = GeoLocation(
+                latitude = 45.70654997823367,
+                longitude = -73.72629065845323,
+            ),
 
             price = Money(1000.0, "CAD"),
             buyerAgentCommission = 3.0,
@@ -229,6 +241,10 @@ object ListingFixtures {
                 neighborhoodId = RefDataFixtures.neighborhoods[1].id,
                 street = "1111 Nicolet",
                 postalCode = null,
+            ),
+            geoLocation = GeoLocation(
+                latitude = 45.10654997823367,
+                longitude = -73.22629065845323,
             ),
 
             price = Money(1000.0, "CAD"),

@@ -188,8 +188,8 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.id, argListing.firstValue.closedOfferId)
         assertEquals(offer.buyerAgentUserId, argListing.firstValue.buyerAgentUserId)
         assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(offer.closedAt, argListing.firstValue.transactionDate)
-        assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
+        assertEquals(offer.closedAt, argListing.firstValue.soldAt)
+        assertEquals(offer.version?.price, argListing.firstValue.salePrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(2500, argListing.firstValue.finalBuyerAgentCommissionAmount)
 
@@ -222,8 +222,8 @@ class OfferStatusChangedEventHandlerTest {
         assertEquals(offer.id, argListing.firstValue.closedOfferId)
         assertEquals(listing.sellerAgentUserId, argListing.firstValue.buyerAgentUserId)
         assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(offer.closedAt, argListing.firstValue.transactionDate)
-        assertEquals(offer.version?.price, argListing.firstValue.transactionPrice)
+        assertEquals(offer.closedAt, argListing.firstValue.soldAt)
+        assertEquals(offer.version?.price, argListing.firstValue.salePrice)
         assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
         assertEquals(null, argListing.firstValue.finalBuyerAgentCommissionAmount)
 

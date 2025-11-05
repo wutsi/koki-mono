@@ -114,8 +114,8 @@ object ListingFixtures {
 
         buyerAgentUserId = users[2].id,
         buyerContactId = contacts[1].id,
-        transactionPrice = Money(195000.0, "CAD"),
-        transactionDate = DateUtils.addDays(Date(), -10),
+        salePrice = Money(195000.0, "CAD"),
+        soldAt = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
     )

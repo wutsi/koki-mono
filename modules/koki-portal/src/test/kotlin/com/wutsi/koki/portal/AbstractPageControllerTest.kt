@@ -27,6 +27,8 @@ import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.agent.dto.GetAgentResponse
+import com.wutsi.koki.agent.dto.SearchAgentResponse
 import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
@@ -224,6 +226,7 @@ abstract class AbstractPageControllerTest {
         setupFileUploads()
         setupMessageModule()
         setupNoteModule()
+        setupAgentModule()
         setupContactModule()
         setupListingModule()
         setupOfferModule()
@@ -722,6 +725,30 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchCategoryResponse::class.java)
+            )
+    }
+
+    private fun setupAgentModule() {
+        doReturn(
+            ResponseEntity(
+                SearchAgentResponse(AgentFixtures.agents),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAgentResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAgentResponse(AgentFixtures.agent),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAgentResponse::class.java)
             )
     }
 

@@ -33,40 +33,51 @@
                         </div>
                         <div class="flex-grow">
                             <table class="w-100">
-                                <tr th:if="${agent.metrics.sales.total > 0}">
+                                <tr th:if="${agent.totalSalesMetric}">
                                     <td class="text-center padding-bottom">
-                                        <div class="text-larger" th:text="${agent.pyMetrics.sales.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.sales_py}">SALES_12</div>
                                     </td>
                                     <td class="text-center padding-bottom">
-                                        <div class="text-larger" th:text="${agent.metrics.sales.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.totalSalesMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
                                     </td>
                                     <td class="text-center padding-bottom">
-                                        <div class="text-larger">
-                                            <span th:text="${agent.metrics.sales.minPrice.shortText}">$$</span>
+                                        <div class="text-larger"
+                                             th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
+                                            <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
                                             -
-                                            <span th:text="${agent.metrics.sales.maxPrice.shortText}">$$</span>
+                                            <span th:text="${agent.totalSalesMetric.maxPrice.shortText}">$$</span>
                                         </div>
-                                        <div class="text-small" th:text="#{page.agent.price_range}">PRICE</div>
+                                        <div class="text-larger"
+                                             th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
+                                            <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
+                                        </div>
+                                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
                                     </td>
                                 </tr>
-                                <tr th:if="${agent.pyMetrics.rentals.total > 0}">
+                                <tr th:if="${agent.totalRentalsMetric}">
                                     <td class="text-center">
-                                        <div class="text-larger" th:text="${agent.pyMetrics.rentals.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000
+                                        </div>
                                         <div class="text-small" th:text="#{page.agent.rentals_py}">RENTALS_12</div>
                                     </td>
                                     <td class="text-center">
-                                        <div class="text-larger" th:text="${agent.metrics.rentals.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
                                     </td>
                                     <td class="text-center">
-                                        <div class="text-larger">
-                                            <span th:text="${agent.metrics.rentals.minPrice.shortText}">$$</span>
+                                        <div class="text-larger"
+                                             th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
+                                            <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
                                             -
-                                            <span th:text="${agent.metrics.rentals.maxPrice.shortText}">$$</span>
+                                            <span th:text="${agent.totalRentalsMetric.maxPrice.shortText}">$$</span>
                                         </div>
-                                        <div class="text-small" th:text="#{page.agent.price_range}">PRICE</div>
+                                        <div class="text-larger"
+                                             th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
+                                            <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
+                                        </div>
+                                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
                                     </td>
                                 </tr>
                             </table>
@@ -81,6 +92,7 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
+                    <h2 th:text="#{page.agent.show.about}">ABOUT</h2>
                     <div th:utext="${agent.user.biographyHtml}">BIO</div>
                     <div class="margin-top">
                         <div class="margin-top-small" th:if="${agent.user.mobile}">
@@ -100,7 +112,7 @@
                             <i class="fa-solid fa-envelope"></i>
                             <a th:href="'mailto:' + ${agent.user.email}" th:text="${agent.user.email}">EMAIL</a>
                         </div>
-                        <div class="margin-top-small" th:if="${agent.user.websiteUrl}">
+                        <div class="margin-top-small" target="_blank" th:if="${agent.user.websiteUrl}">
                             <i class="fa-solid fa-link"></i>
                             <a th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">WEBSITE</a>
                         </div>
@@ -134,21 +146,30 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <h2 th:text="#{page.agent.show.title}">TITLE</h2>
-                    <div class="margin-bottom" id="map-container">
+                    <h2 th:text="#{page.agent.show.listings}">LISTINGS</h2>
+                    <div id="map-container">
                         <div data-component-id="map"
                              data-show-marker="false"
                              id="map"
-                             th:data-city-id="${mapCity.id}"
-                             th:data-latitude="${mapCity.latitude}"
-                             th:data-longitude="${mapCity.longitude}"
+                             th:data-city-id="${mapCenterPoint.id}"
+                             th:data-latitude="${mapCenterPoint.latitude}"
+                             th:data-longitude="${mapCenterPoint.longitude}"
                              th:data-on-ready="on_map_ready"
-                             th:data-zoom="12"
+                             th:data-zoom="14"
                         >
                         </div>
                     </div>
-                    <div
-                        th:replace="~{__components/listing :: listing-table(${listings}, true, false, false, null)}"></div>
+                    <div class="margin-top-2x" th:if="!${activeListings.isEmpty()}">
+                        <h3 class="margin-none" th:text="#{page.agent.show.listings.active}">TITLE</h3>
+                        <div
+                            th:replace="~{__components/listing :: listing-table(${activeListings}, false, false, false, null)}"></div>
+                    </div>
+
+                    <div class="margin-top-2x" th:if="!${soldListings.isEmpty()}">
+                        <h3 class="margin-none" th:text="#{page.agent.show.listings.recent-transactions}">TITLE</h3>
+                        <div
+                            th:replace="~{__components/listing :: listing-table(${soldListings}, true, false, false, null)}"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,6 +206,8 @@
                                    <div>${item.bedrooms}</div>
                                    <div class="margin-left-small">${item.area}</div>
                                 </div>
+                                <div class="gray">${item.location}</div>
+                                <div class="text-danger"><b>${item.status}</b></div>
                             </div>
                         </div>
                     </a>

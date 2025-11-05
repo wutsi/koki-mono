@@ -1,16 +1,19 @@
 package com.wutsi.koki.tenant.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
 import com.wutsi.koki.tenant.server.dao.InvitationRepository
 import com.wutsi.koki.tenant.server.dao.UserRepository
 import com.wutsi.koki.tenant.server.service.PasswordEncryptor
@@ -42,7 +45,10 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
     private lateinit var passwordEncryptor: PasswordEncryptor
 
     @Autowired
-    protected lateinit var ds: DataSource
+    private lateinit var ds: DataSource
+
+    @MockitoBean
+    private lateinit var publisher: Publisher
 
     @BeforeEach
     override fun setUp() {
@@ -122,6 +128,12 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(null, user.invitationId)
 
         verify(passwordEncryptor).hash(request.password, user.salt)
+
+        val event = argumentCaptor<UserCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(userId, event.firstValue.userId)
+        assertEquals(null, event.firstValue.invitationId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 
     @Test
@@ -201,6 +213,12 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         val invitation = invitationDao.findById(user.invitationId).get()
         assertEquals(InvitationStatus.ACCEPTED, invitation.status)
         assertNotNull(invitation.acceptedAt)
+
+        val event = argumentCaptor<UserCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(userId, event.firstValue.userId)
+        assertEquals(user.invitationId, event.firstValue.invitationId)
+        assertEquals(TENANT_ID, event.firstValue.tenantId)
     }
 
     @Test

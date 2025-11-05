@@ -73,8 +73,8 @@ class UserService(
                 categoryId = request.categoryId,
                 country = request.country?.lowercase()?.ifEmpty { null },
                 cityId = request.cityId,
-                mobile = request.mobile,
-                invitationId = request.invitationId,
+                mobile = request.mobile?.ifEmpty { null },
+                invitationId = request.invitationId?.ifEmpty { null },
                 createdAt = now,
                 modifiedAt = now,
             )
@@ -148,14 +148,14 @@ class UserService(
         user.modifiedById = securityService.getCurrentUserIdOrNull()
         user.country = request.country?.lowercase()?.ifEmpty { null }
         user.cityId = request.cityId
-        user.mobile = request.mobile
-        user.biography = request.biography
-        user.websiteUrl = request.websiteUrl
-        user.facebookUrl = request.facebookUrl
-        user.instagramUrl = request.instagramUrl
-        user.youtubeUrl = request.youtubeUrl
-        user.tiktokUrl = request.tiktokUrl
-        user.twitterUrl = request.twitterUrl
+        user.mobile = request.mobile?.ifEmpty { null }
+        user.biography = request.biography?.ifEmpty { null }
+        user.websiteUrl = request.websiteUrl?.ifEmpty { null }
+        user.facebookUrl = request.facebookUrl?.ifEmpty { null }
+        user.instagramUrl = request.instagramUrl?.ifEmpty { null }
+        user.youtubeUrl = request.youtubeUrl?.ifEmpty { null }
+        user.tiktokUrl = request.tiktokUrl?.ifEmpty { null }
+        user.twitterUrl = request.twitterUrl?.ifEmpty { null }
         user.modifiedAt = Date()
     }
 

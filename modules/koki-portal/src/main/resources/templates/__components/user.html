@@ -47,10 +47,18 @@
     });
 </script>
 
-<div class="text-small flex" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
+<div class="text-small flex user-card-small" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
     <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
+        <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    </a>
+
     <div class="margin-left-small">
-        <b th:text="${me.displayName}">NAME</b><br/>
+        <b th:if="!${me.agentId}" th:text="${me.displayName}">NAME</b><br/>
+        <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
+            <b th:text="${me.displayName}">NAME</b><br/>
+        </a>
+
         <div th:text="${me.employer}">EMPLOYER</div>
         <div class="flex margin-top-small" th:if="${sendMessage} AND (${user?.id} != ${me.id})">
             <div class="margin-right" th:if="${me.whatsappUrl}">
@@ -69,10 +77,18 @@
     </div>
 </div>
 
-<div class="flex" th:fragment="user-card(me, sendMessage)" th:if="${me}">
-    <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+<div class="flex user-card" th:fragment="user-card(me, sendMessage)" th:if="${me}">
+    <img class="user-photo" th:if="!${me.agentId}" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
+        <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    </a>
+
     <div class="margin-left-small w-100">
-        <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
+        <h5 class="margin-none" th:if="!${me.agentId}" th:text="${me.displayName}">NAME</h5>
+        <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
+            <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
+        </a>
+
         <div th:text="${me.employer}">EMPLOYER</div>
         <div th:if="${sendMessage} AND (${user?.id} != ${me.id})">
             <div class="margin-top-small" th:if="${me.whatsappUrl}">

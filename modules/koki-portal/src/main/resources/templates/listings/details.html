@@ -312,14 +312,14 @@
         <div th:replace="~{__components/contact :: contact-card(${listing.buyerContact})}"></div>
     </div>
     <div class="flex flex-wrap margin-bottom-small">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionDate}">
-            <b class="text-small" th:text="#{page.listing.transaction-date}">DATE</b>
-            <div th:text="${listing.transactionDateText}">YYYY-MM-DD</div>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.soldAt}">
+            <b class="text-small" th:text="#{page.listing.sold-at}">DATE</b>
+            <div th:text="${listing.soldAtText}">YYYY-MM-DD</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.transactionPrice}">
-            <b class="text-small" th:text="#{page.listing.transaction-price}">KEY</b>
+        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.salePrice}">
+            <b class="text-small" th:text="#{page.listing.sale-price}">KEY</b>
             <div class="listing-price">
-                <span th:text="${listing.transactionPrice.displayText}">$$</span>
+                <span th:text="${listing.salePrice.displayText}">$$</span>
             </div>
         </div>
         <div class="col-6 col-md-4" id="final-seller-agent-commission"

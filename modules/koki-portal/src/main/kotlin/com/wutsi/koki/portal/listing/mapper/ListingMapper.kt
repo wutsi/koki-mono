@@ -6,6 +6,7 @@ import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.offer.dto.OfferParty
+import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.common.model.MoneyModel
@@ -40,6 +41,7 @@ class ListingMapper(
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>,
         contacts: Map<Long, ContactModel>,
+        agents: Map<Long, AgentModel>,
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
@@ -99,11 +101,14 @@ class ListingMapper(
             agentRemarks = entity.agentRemarks,
             publicRemarks = entity.publicRemarks,
 
-            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            buyerAgentUser = entity.buyerAgentUserId
+                ?.let { id ->
+                    users[id]?.copy(agentId = toAgentId(id, agents))
+                },
             buyerContact = entity.buyerContactId?.let { id -> contacts[id] },
-            transactionDate = entity.transactionDate,
-            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
-            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+            soldAt = entity.soldAt,
+            soldAtText = entity.soldAt?.let { date -> df.format(date) },
+            salePrice = toPrice(entity.salePrice, entity.listingType),
             finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
                 moneyMapper.toMoneyModel(
                     money
@@ -139,19 +144,21 @@ class ListingMapper(
             totalImages = entity.totalImages,
             totalOffers = entity.totalOffers,
 
-            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
-                users[id]?.copy(
-                    whatsappUrl = whatsappUrl(
-                        listingNumber = entity.listingNumber.toString(),
-                        propertyType = entity.propertyType,
-                        address = address,
-                        bathrooms = entity.bathrooms,
-                        bedrooms = entity.bedrooms,
-                        area = entity.propertyArea ?: entity.lotArea,
-                        mobile = users[id]?.mobile,
+            sellerAgentUser = entity.sellerAgentUserId
+                ?.let { id ->
+                    users[id]?.copy(
+                        whatsappUrl = whatsappUrl(
+                            listingNumber = entity.listingNumber.toString(),
+                            propertyType = entity.propertyType,
+                            address = address,
+                            bathrooms = entity.bathrooms,
+                            bedrooms = entity.bedrooms,
+                            area = entity.propertyArea ?: entity.lotArea,
+                            mobile = users[id]?.mobile,
+                        ),
+                        agentId = toAgentId(id, agents)
                     )
-                )
-            },
+                },
             createdBy = entity.createdById?.let { id -> users[id] },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -186,7 +193,11 @@ class ListingMapper(
             propertyArea = entity.propertyArea,
             heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
             furnitureType = entity.furnitureType,
+
             address = address,
+
+            geoLocation = toGeoLocation(entity.geoLocation),
+
             price = price,
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             sellerAgentCommission = entity.sellerAgentCommission,
@@ -211,9 +222,9 @@ class ListingMapper(
 
                 )
             },
-            transactionDate = entity.transactionDate,
-            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
-            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+            soldAt = entity.transactionDate,
+            soldAtText = entity.transactionDate?.let { date -> df.format(date) },
+            salePrice = toPrice(entity.transactionPrice, entity.listingType),
             finalSellerAgentCommissionMoney = entity.finalSellerAgentCommissionMoney?.let { money ->
                 moneyMapper.toMoneyModel(
                     money
@@ -339,7 +350,11 @@ class ListingMapper(
         }
     }
 
-    private fun toTransactionParty(status: ListingStatus, sellerAgentUserId: Long?, buyerContactId: Long?): OfferParty? {
+    private fun toTransactionParty(
+        status: ListingStatus,
+        sellerAgentUserId: Long?,
+        buyerContactId: Long?
+    ): OfferParty? {
         val user = currentUser.get() ?: return null
         return if (status != ListingStatus.SOLD && status != ListingStatus.RENTED) {
             null
@@ -350,5 +365,9 @@ class ListingMapper(
         } else {
             null
         }
+    }
+
+    private fun toAgentId(userId: Long, agents: Map<Long, AgentModel>): Long? {
+        return agents.values.find { agent -> agent.user.id == userId }?.id
     }
 }

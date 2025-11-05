@@ -86,9 +86,9 @@ class ListingMapper(
             publicRemarks = entity.publicRemarks,
 
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
-            transactionDate = entity.transactionDate,
-            transactionDateText = entity.transactionDate?.let { date -> mdf.format(date) },
-            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
+            soldAt = entity.soldAt,
+            soldAtText = entity.soldAt?.let { date -> mdf.format(date) },
+            salePrice = toPrice(entity.salePrice, entity.listingType),
 
             title = if (lang == "fr") {
                 entity.titleFr ?: entity.title

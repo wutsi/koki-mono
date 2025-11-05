@@ -1,12 +1,12 @@
 package com.wutsi.koki.message.server.service
 
 import com.wutsi.koki.account.dto.CreateAccountRequest
+import com.wutsi.koki.account.server.domain.AccountEntity
 import com.wutsi.koki.account.server.service.AccountService
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.message.dto.MessageStatus
 import com.wutsi.koki.message.dto.SendMessageRequest
 import com.wutsi.koki.message.dto.UpdateMessageStatusRequest
