@@ -40,7 +40,7 @@ jobs:
                     mvn -q -B -X release:prepare release:perform
 
             -   name: Upload JaCoCo Report
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v5
                 with:
                     name: jacoco-report
                     path: modules/koki-platform/target/site/jacoco/**/*
