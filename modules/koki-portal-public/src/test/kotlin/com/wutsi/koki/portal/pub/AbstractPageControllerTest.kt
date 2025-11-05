@@ -22,9 +22,7 @@ import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
 import com.wutsi.koki.refdata.dto.SearchCategoryResponse
-import com.wutsi.koki.refdata.dto.SearchJuridictionResponse
 import com.wutsi.koki.refdata.dto.SearchLocationResponse
-import com.wutsi.koki.refdata.dto.SearchSalesTaxResponse
 import com.wutsi.koki.security.dto.ApplicationName
 import com.wutsi.koki.security.dto.JWTDecoder
 import com.wutsi.koki.security.dto.JWTPrincipal
@@ -237,30 +235,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchCategoryResponse::class.java)
-            )
-
-        // Juridiction
-        doReturn(
-            ResponseEntity(
-                SearchJuridictionResponse(RefDataFixtures.juridictions),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchJuridictionResponse::class.java)
-            )
-
-        // Sales Tax
-        doReturn(
-            ResponseEntity(
-                SearchSalesTaxResponse(RefDataFixtures.salesTaxes),
-                HttpStatus.OK,
-            )
-        ).whenever(restWithoutTenantHeader)
-            .getForEntity(
-                any<String>(),
-                eq(SearchSalesTaxResponse::class.java)
             )
     }
 

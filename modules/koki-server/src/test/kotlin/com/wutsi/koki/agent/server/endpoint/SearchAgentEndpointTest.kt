@@ -16,7 +16,7 @@ class SearchAgentEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val agentIds = response.body!!.agents.map { agent -> agent.id }
+        val agentIds = response.body!!.agents.map { agent -> agent.id }.sorted()
         assertEquals(listOf(100L, 101L), agentIds)
     }
 
