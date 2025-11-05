@@ -56,8 +56,8 @@ data class Listing(
     val buyerAgentUserId: Long? = null,
     val buyerContactId: Long? = null,
     val closedOfferId: Long? = null,
-    var transactionDate: Date? = null,
-    var transactionPrice: Money? = null,
+    var soldAt: Date? = null,
+    var salePrice: Money? = null,
 
     var title: String? = null,
     var summary: String? = null,

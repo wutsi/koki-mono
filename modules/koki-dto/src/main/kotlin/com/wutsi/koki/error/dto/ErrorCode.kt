@@ -9,6 +9,8 @@ object ErrorCode {
     val ACCOUNT_IN_USE: String = "$PREFIX:account:in-use"
     val ACCOUNT_DUPLICATE_EMAIL: String = "$PREFIX:account:duplicate-email"
 
+    val AGENT_NOT_FOUND: String = "$PREFIX:agent:not-found"
+
     val AMENITY_NOT_FOUND: String = "$PREFIX:ameniry:amenity-not-found"
 
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"

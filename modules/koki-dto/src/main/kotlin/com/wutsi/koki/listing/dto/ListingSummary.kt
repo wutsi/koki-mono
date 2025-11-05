@@ -1,6 +1,7 @@
 package com.wutsi.koki.listing.dto
 
 import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
 import java.util.Date
 
@@ -22,6 +23,7 @@ data class ListingSummary(
     val propertyArea: Int? = null,
     val furnitureType: FurnitureType? = null,
     val address: Address? = null,
+    val geoLocation: GeoLocation? = null,
     val price: Money? = null,
     val sellerAgentCommission: Double? = null,
     val buyerAgentCommission: Double? = null,
