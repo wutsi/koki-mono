@@ -56,9 +56,9 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-dto.version>0.0.272</wutsi-dto.version>
+        <wutsi-dto.version>0.0.273</wutsi-dto.version>
         <wutsi-platform.version>0.0.44</wutsi-platform.version>
-        <wutsi-sdk.version>0.0.45</wutsi-sdk.version>
+        <wutsi-sdk.version>0.0.465</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -135,7 +135,7 @@
         <selenium.version>4.38.0</selenium.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.version>6.2.12</spring.version>
-        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-boot.version>3.5.7</spring-boot.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <spring-security.version>6.5.6</spring-security.version>
         <spring-tx.version>2.4.5</spring-tx.version>
