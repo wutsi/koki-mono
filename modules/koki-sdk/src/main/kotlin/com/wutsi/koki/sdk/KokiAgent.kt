@@ -1,63 +1,43 @@
 package com.wutsi.koki.sdk
 
-import com.wutsi.koki.contact.dto.CreateContactRequest
-import com.wutsi.koki.contact.dto.CreateContactResponse
-import com.wutsi.koki.contact.dto.GetContactResponse
-import com.wutsi.koki.contact.dto.SearchContactResponse
-import com.wutsi.koki.contact.dto.UpdateContactRequest
+import com.wutsi.koki.agent.dto.GetAgentResponse
+import com.wutsi.koki.agent.dto.SearchAgentResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiContacts(
+class KokiAgent(
     private val urlBuilder: URLBuilder,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
     companion object {
-        private const val CONTACT_PATH_PREFIX = "/v1/contacts"
+        private const val PATH_PREFIX = "/v1/agents"
+        private const val USER_PATH_PREFIX = "/v1/users"
     }
 
-    fun create(request: CreateContactRequest): CreateContactResponse {
-        val url = urlBuilder.build(CONTACT_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateContactResponse::class.java).body
+    fun get(id: Long): GetAgentResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        return rest.getForEntity(url, GetAgentResponse::class.java).body
     }
 
-    fun update(id: Long, request: UpdateContactRequest) {
-        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
-        rest.postForEntity(url, request, Any::class.java)
+    fun getByUser(userId: Long): GetAgentResponse {
+        val url = urlBuilder.build("$USER_PATH_PREFIX/$userId/agent")
+        return rest.getForEntity(url, GetAgentResponse::class.java).body
     }
 
-    fun delete(id: Long) {
-        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
-        rest.delete(url)
-    }
-
-    fun contact(id: Long): GetContactResponse {
-        val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetContactResponse::class.java).body
-    }
-
-    fun contacts(
-        keyword: String?,
-        ids: List<Long>,
-        contactTypeIds: List<Long>,
-        accountIds: List<Long>,
-        createdByIds: List<Long>,
-        accountManagerIds: List<Long>,
-        limit: Int,
-        offset: Int,
-    ): SearchContactResponse {
+    fun search(
+        ids: List<Long> = emptyList(),
+        userIds: List<Long> = emptyList(),
+        limit: Int = 20,
+        offset: Int = 0,
+    ): SearchAgentResponse {
         val url = urlBuilder.build(
-            CONTACT_PATH_PREFIX,
+            PATH_PREFIX,
             mapOf(
-                "q" to keyword,
                 "id" to ids,
-                "contact-type-id" to contactTypeIds,
-                "account-id" to accountIds,
-                "created-by-id" to createdByIds,
-                "account-manager-id" to accountManagerIds,
+                "user-id" to userIds,
                 "limit" to limit,
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchContactResponse::class.java).body
+        return rest.getForEntity(url, SearchAgentResponse::class.java).body
     }
 }
