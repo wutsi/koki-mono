@@ -74,7 +74,7 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
             403 -> {
                 model.addAttribute(
                     "page",
-                    PageModel(
+                    createPageModel(
                         name = PageName.ERROR_403,
                         title = "Access Denied"
                     )
@@ -85,7 +85,7 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
             400, 404 -> {
                 model.addAttribute(
                     "page",
-                    PageModel(
+                    createPageModel(
                         name = PageName.ERROR_404,
                         title = "Not Found"
                     )
@@ -96,7 +96,7 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
             410 -> {
                 model.addAttribute(
                     "page",
-                    PageModel(
+                    createPageModel(
                         name = PageName.ERROR_410,
                         title = "Not Found"
                     )
@@ -107,7 +107,7 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
             else -> {
                 model.addAttribute(
                     "page",
-                    PageModel(
+                    createPageModel(
                         name = PageName.ERROR_500,
                         title = "Error"
                     )
