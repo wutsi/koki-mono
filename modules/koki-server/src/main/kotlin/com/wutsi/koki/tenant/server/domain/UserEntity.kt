@@ -35,6 +35,9 @@ data class UserEntity(
     @Column(name = "category_fk")
     var categoryId: Long? = null,
 
+    @Column(name = "invitation_fk")
+    val invitationId: String? = null,
+
     var username: String = "",
     var password: String = "",
     var salt: String = "",
@@ -48,7 +51,6 @@ data class UserEntity(
     var modifiedAt: Date = Date(),
     var country: String? = null,
     var photoUrl: String? = null,
-    val invitationId: String? = null,
     var biography: String? = null,
     var websiteUrl: String? = null,
     var facebookUrl: String? = null,

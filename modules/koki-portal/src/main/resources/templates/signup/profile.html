@@ -96,6 +96,7 @@
                                 <select required th:field="*{country}">
                                     <option value=""></option>
                                     <option th:each="country : ${countries}"
+                                            th:selected="${country.country} == ${form.country}"
                                             th:text="${country.displayCountry}"
                                             th:value="${country.country}"
                                     >COUNTRY

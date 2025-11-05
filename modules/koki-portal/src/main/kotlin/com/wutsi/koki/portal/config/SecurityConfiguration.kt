@@ -26,6 +26,8 @@ class SecurityConfiguration(
                     .requestMatchers("/").authenticated()
                     .requestMatchers("/accounts").authenticated()
                     .requestMatchers("/accounts/**/*").authenticated()
+                    .requestMatchers("/agents").authenticated()
+                    .requestMatchers("/agents/**/*").authenticated()
                     .requestMatchers("/contacts").authenticated()
                     .requestMatchers("/contacts/**/*").authenticated()
                     .requestMatchers("/images").authenticated()

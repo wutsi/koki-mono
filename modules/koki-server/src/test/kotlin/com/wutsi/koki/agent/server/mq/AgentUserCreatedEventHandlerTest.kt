@@ -19,12 +19,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 
-class UserCreatedEventHandlerTest {
+class AgentUserCreatedEventHandlerTest {
     private val userService = mock<UserService>()
     private val invitationService = mock<InvitationService>()
     private val agentService = mock<AgentService>()
     private val logger = DefaultKVLogger()
-    private val handler = UserCreatedEventHandler(
+    private val handler = AgentUserCreatedEventHandler(
         userService = userService,
         invitationService = invitationService,
         agentService = agentService,

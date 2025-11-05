@@ -68,6 +68,10 @@ body {
     font-size: small;
 }
 
+.text-smaller {
+    font-size: smaller;
+}
+
 .text-larger {
     font-size: larger;
 }
@@ -78,6 +82,10 @@ body {
 
 .text-lower {
     text-transform: lowercase;
+}
+
+.text-upper {
+    text-transform: uppercase;
 }
 
 .padding {
@@ -634,7 +642,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .btn-whatsapp {
     background: #075E54;
-    color: white;
+    color: white !important;
     border: 1px solid gray;
 }
 
@@ -805,6 +813,14 @@ a.phone {
     border: 1px solid lightgray;
 }
 
+.user-card a {
+    color: black;
+    text-decoration: none;
+}
+
+.user-card a:hover {
+    text-decoration: underline;
+}
 
 /* ============================= */
 /* highlightjs line-number       */

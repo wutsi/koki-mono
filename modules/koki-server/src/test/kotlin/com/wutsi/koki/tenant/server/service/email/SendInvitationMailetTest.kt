@@ -106,7 +106,7 @@ class SendInvitationMailetTest {
                     <li>Accès gratuit sur la plateforme.</li>
                     <li>Visibilité accrue pour vos annonces.</li>
                     <li>Un réseau d'agents fiables pour développer vos affaires.</li>
-                    <li>Rejoignez-nous en cliquant ici : https://koki-portal.herokuapp.com/signup?inv&#61;1111</li>
+                    <li>Rejoignez-nous en cliquant ici : <a class="text-larger" href="https://koki-portal.herokuapp.com/signup?inv&#61;1111">https://koki-portal.herokuapp.com/signup?inv&#61;1111</a></li>
                 </ul>
 
                 <center>

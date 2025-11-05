@@ -4,12 +4,12 @@ import com.wutsi.koki.account.dto.CreateAccountRequest
 import com.wutsi.koki.account.dto.UpdateAccountRequest
 import com.wutsi.koki.account.server.dao.AccountAttributeRepository
 import com.wutsi.koki.account.server.dao.AccountRepository
+import com.wutsi.koki.account.server.domain.AccountAttributeEntity
+import com.wutsi.koki.account.server.domain.AccountEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.form.server.domain.AccountAttributeEntity
-import com.wutsi.koki.form.server.domain.AccountEntity
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService

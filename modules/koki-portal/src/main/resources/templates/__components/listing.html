@@ -33,7 +33,7 @@
 
     <span class="listing-status badge text-bg-success"
           th:if="${listing.status.name() == 'RENTED'} OR ${listing.status.name() == 'SOLD'}"
-          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.transactionDateText}">SOLD</span>
+          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}">SOLD</span>
 
     <span class="listing-status badge text-bg-danger"
           th:if="${listing.status == 'EXPIRED'} OR ${listing.status.name() == 'WITHDRAWN'} OR ${listing.status.name() == 'CANCELLED'}"
@@ -52,8 +52,7 @@
             <th th:if="${sold}" width="1%"></th>
             <th th:text="#{page.listing.status}">STATUS</th>
             <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
-            <th th:if="${sold}" th:text="#{page.listing.transaction-date}">DATE</th>
-            <th class="text-right" th:if="${sold}" th:text="#{page.listing.transaction-price}">PRICE</th>
+            <th class="text-right" th:if="${sold}" th:text="#{page.listing.sale-price}">PRICE</th>
             <th class="text-right" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
             <th class="text-right" th:if="${showCommission}" th:text="#{page.listing.commission}">COMMISSION</th>
         </tr>
@@ -114,14 +113,14 @@
             </div>
 
             <table border="0" class="d-block d-md-none text-small margin-top-small">
-                <tr th:if="${sold} AND ${listing.transactionDate}">
-                    <th th:text="#{page.listing.transaction-date}">TRANSACTION_DATE</th>
-                    <td class="padding-left-small" th:text="${listing.transactionDateText}">DATE</td>
+                <tr th:if="${sold} AND ${listing.soldAt}">
+                    <th th:text="#{page.listing.sold-at}">TRANSACTION_DATE</th>
+                    <td class="padding-left-small" th:text="${listing.soldAtText}">DATE</td>
                 </tr>
-                <tr th:if="${sold} AND ${listing.transactionPrice}">
-                    <th th:text="#{page.listing.transaction-price}">TRANSACTION_PRICE</th>
+                <tr th:if="${sold} AND ${listing.salePrice}">
+                    <th th:text="#{page.listing.sale-price}">TRANSACTION_PRICE</th>
                     <td class="listing-price padding-left-small">
-                        <b th:text="${listing.transactionPrice.displayText}">$$$</b>
+                        <b th:text="${listing.salePrice.displayText}">$$$</b>
                     </td>
                 </tr>
                 <tr th:if="!${sold} AND ${listing.price}">
@@ -130,7 +129,7 @@
                         <b th:text="${listing.price.displayText}">$$$</b>
                     </td>
                 </tr>
-                <tr th:if="${showCommission} AND ${listing.transactionPrice}">
+                <tr th:if="${showCommission} AND ${listing.salePrice}">
                     <th th:text="#{page.listing.commission}">COMMISSION</th>
                     <td class="padding-left-small">
                         <span class="listing-price" th:text="${listing.commission(user)?.displayText}">$$$</span>
@@ -160,15 +159,11 @@
             <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
         </a>
     </td>
-    <td class="d-none d-md-table-cell" th:if="${sold}">
-        <a target="_blank" th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionDate}"
-           th:text="${listing.transactionDateText}">YYYY-MM-DD</a>
-    </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
         <a class="text-nowrap listing-price" target="_blank"
            th:href="'/listings/' + ${listing.id}"
-           th:if="${listing.transactionPrice}">
-            <b class="listing-price" th:text="${listing.transactionPrice.displayText}">$$</b>
+           th:if="${listing.salePrice}">
+            <b class="listing-price" th:text="${listing.salePrice.displayText}">$$</b>
         </a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
@@ -216,7 +211,7 @@
     <div class="margin-top-small">
         <h1 class="margin-none listing-price" th:if="${listing.price}">
             <span th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">0000</span>
-            <span th:if="${listing.statusSold}" th:text="${listing.transactionPrice.displayText}">0000</span>
+            <span th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">0000</span>
         </h1>
 
         <div class="margin-top-small">
@@ -282,7 +277,7 @@
         <a target="_new" th:href="'/listings/' + ${listing.id}">
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
             <b class="listing-price" th:if="${listing.statusSold}"
-               th:text="${listing.transactionPrice.displayText}">$$$</b>
+               th:text="${listing.salePrice.displayText}">$$$</b>
             <div class="text-small">
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>

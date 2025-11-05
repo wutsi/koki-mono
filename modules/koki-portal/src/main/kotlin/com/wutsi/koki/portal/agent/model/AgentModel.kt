@@ -5,6 +5,19 @@ import com.wutsi.koki.portal.user.model.UserModel
 data class AgentModel(
     val id: Long = -1,
     val user: UserModel = UserModel(),
+    val totalSales: Long? = null,
+    val totalRentals: Long? = null,
+    val past12mSales: Long? = null,
+    val past12mRentals: Long? = null,
+
+    @Deprecated("")
     val metrics: AgentMetricSetModel = AgentMetricSetModel(),
+
+    @Deprecated("")
     val pyMetrics: AgentMetricSetModel = AgentMetricSetModel(),
+
+    val totalSalesMetric: AgentMetricModel? = null,
+    val past12mSalesMetric: AgentMetricModel? = null,
+    val totalRentalsMetric: AgentMetricModel? = null,
+    val past12mRentalsMetric: AgentMetricModel? = null,
 )

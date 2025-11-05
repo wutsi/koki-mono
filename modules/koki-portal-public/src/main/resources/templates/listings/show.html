@@ -61,7 +61,7 @@
     <!-- infos -->
     <div class="listing-info-details">
         <h2 class="text-primary margin-none" id="listing-price">
-            <span th:if="${listing.statusSold}" th:text="${listing.transactionPrice.displayText}">$$$$</span>
+            <span th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$$</span>
             <span th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$$</span>
         </h2>
         <h1 class="margin-none" id="listing-title" th:text="${listing.title}">TITLE</h1>

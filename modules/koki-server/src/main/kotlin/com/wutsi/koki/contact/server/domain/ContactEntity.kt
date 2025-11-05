@@ -1,8 +1,8 @@
 package com.wutsi.koki.contact.server.domain
 
+import com.wutsi.koki.account.server.domain.AccountEntity
 import com.wutsi.koki.contact.dto.Gender
 import com.wutsi.koki.contact.dto.PreferredCommunicationMethod
-import com.wutsi.koki.form.server.domain.AccountEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

@@ -15,7 +15,6 @@ import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.refdata.dto.Money
-import org.hibernate.query.results.Builders.entity
 import org.springframework.stereotype.Service
 
 @Service
@@ -69,8 +68,8 @@ class ListingMapper {
             agentRemarks = entity.agentRemarks?.ifEmpty { null },
             publicRemarks = entity.publicRemarks?.ifEmpty { null },
 
-            transactionDate = entity.transactionDate,
-            transactionPrice = toMoney(entity.transactionPrice, entity.currency),
+            soldAt = entity.soldAt,
+            salePrice = toMoney(entity.salePrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
             buyerContactId = entity.buyerContactId,
             closedOfferId = entity.closedOfferId,
@@ -119,14 +118,16 @@ class ListingMapper {
 
             address = toAddress(entity),
 
+            geoLocation = toGeoLocation(entity),
+
             price = toMoney(entity.price, entity.currency),
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
             buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
 
-            transactionDate = entity.transactionDate,
-            transactionPrice = toMoney(entity.transactionPrice, entity.currency),
+            transactionDate = entity.soldAt,
+            transactionPrice = toMoney(entity.salePrice, entity.currency),
             buyerAgentUserId = entity.buyerAgentUserId,
 
             sellerAgentUserId = entity.sellerAgentUserId,

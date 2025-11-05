@@ -1,5 +1,6 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.dto.CreateUserResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
@@ -12,6 +13,7 @@ import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
+import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
 import com.wutsi.koki.tenant.server.mapper.UserMapper
 import com.wutsi.koki.tenant.server.service.PasswordResetTokenService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -32,6 +34,7 @@ class UserEndpoints(
     private val service: UserService,
     private val passwordResetTokenService: PasswordResetTokenService,
     private val mapper: UserMapper,
+    private val publisher: Publisher,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -78,9 +81,16 @@ class UserEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestBody @Valid request: CreateUserRequest
     ): CreateUserResponse {
-        return CreateUserResponse(
-            userId = service.create(request, tenantId).id ?: -1
+        val userId = service.create(request, tenantId).id ?: -1
+
+        publisher.publish(
+            UserCreatedEvent(
+                userId = userId,
+                invitationId = request.invitationId,
+                tenantId = tenantId,
+            )
         )
+        return CreateUserResponse(userId = userId)
     }
 
     @PostMapping("/{id}")

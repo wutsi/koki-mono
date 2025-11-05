@@ -62,7 +62,7 @@ class UserProfileController(
             email = user.email,
             photoUrl = user.photoUrl,
             language = user.language ?: LocaleContextHolder.getLocale().language,
-            country = user.country ?: city?.country,
+            country = (user.country ?: city?.country)?.uppercase(),
             cityId = user.city?.id ?: city?.id,
             categoryId = user.category?.id,
             employer = user.employer,

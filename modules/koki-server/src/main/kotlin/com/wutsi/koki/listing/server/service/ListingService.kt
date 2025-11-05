@@ -159,7 +159,7 @@ class ListingService(
             ListingSort.OLDEST -> "ORDER BY L.publishedAt ASC, L.createdAt ASC"
             ListingSort.PRICE_HIGH_LOW -> "ORDER BY L.price DESC"
             ListingSort.PRICE_LOW_HIGH -> "ORDER BY L.price ASC"
-            ListingSort.TRANSACTION_DATE -> "ORDER BY L.transactionDate DESC"
+            ListingSort.TRANSACTION_DATE -> "ORDER BY L.soldAt DESC, L.publishedAt DESC"
             ListingSort.MODIFIED_DATE -> "ORDER BY L.modifiedAt DESC"
             else -> "ORDER BY L.price ASC"
         }
