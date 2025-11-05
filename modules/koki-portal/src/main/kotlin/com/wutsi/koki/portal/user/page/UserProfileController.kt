@@ -45,7 +45,7 @@ class UserProfileController(
                 title = userHolder.get()?.displayName ?: ""
             )
         )
-        return "/users/profile"
+        return "users/profile"
     }
 
     @PostMapping
