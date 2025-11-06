@@ -1,6 +1,7 @@
 package com.wutsi.koki.listing.server.mq
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
@@ -84,27 +85,33 @@ class OfferStatusChangedEventHandler(
     }
 
     private fun offerClosed(event: OfferStatusChangedEvent, offer: OfferEntity) {
-        val listing = listingService.get(event.owner!!.id, event.tenantId)
+        val listing = listingService.get(event.owner?.id ?: -1, event.tenantId)
         logger.add("listing_status", listing.status)
 
         if (listing.status == ListingStatus.PENDING) {
             // Update the listing
             val finalPrice = offer.version!!.price
-            listing.status = if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD
-            listing.closedOfferId = offer.id
-            listing.buyerAgentUserId = offer.buyerAgentUserId
-            listing.buyerContactId = offer.buyerContactId
-            listing.soldAt = offer.closedAt ?: Date(event.timestamp)
-            listing.salePrice = finalPrice
-            listing.finalSellerAgentCommissionAmount = computeCommission(finalPrice, listing.sellerAgentCommission)
-            listing.finalBuyerAgentCommissionAmount = if (offer.buyerAgentUserId != listing.sellerAgentUserId) {
-                computeCommission(finalPrice, listing.buyerAgentCommission)
-            } else {
-                null
-            }
+            val xlisting = listingService.close(
+                id = event.owner!!.id,
+                tenantId = event.tenantId,
+                request = CloseListingRequest(
+                    status = if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD,
+                    closedOfferId = offer.id,
+                    buyerAgentUserId = offer.buyerAgentUserId,
+                    buyerContactId = offer.buyerContactId,
+                    soldAt = offer.closedAt ?: Date(event.timestamp),
+                    salePrice = finalPrice,
+                )
+            )
 
-            logger.add("listing_new_status", listing.status)
-            save(listing)
+            logger.add("listing_new_status", xlisting.status)
+            publisher.publish(
+                ListingStatusChangedEvent(
+                    status = xlisting.status,
+                    listingId = event.owner?.id ?: -1,
+                    tenantId = event.tenantId,
+                )
+            )
         } else {
             logger.add("ignored", true)
         }
@@ -123,10 +130,6 @@ class OfferStatusChangedEventHandler(
 
     private fun accept(event: OfferStatusChangedEvent): Boolean {
         return event.owner?.type == ObjectType.LISTING
-    }
-
-    private fun computeCommission(price: Long?, percent: Double?): Long {
-        return ((price ?: 0) * (percent ?: 0.0) / 100.0).toLong()
     }
 
     private fun hasOffersOfStatus(status: OfferStatus, tenantId: Long): Boolean {

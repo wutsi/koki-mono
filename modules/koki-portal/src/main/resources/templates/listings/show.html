@@ -104,7 +104,7 @@
                     <div
                         th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${toggles.modules.message} AND ${listing.canSendMessage(user)})}"></div>
 
-                    <div class="flex margin-top-small" th:if="!${listing.statusDraft}">
+                    <div class="flex margin-top-small" th:if="!${listing.statusDraft} AND ${toggles.modules.offer}">
                         <div>
                             <img class="user-photo-empty" th:src="${page.assetUrl} + '/image/empty.png'"/>
                         </div>

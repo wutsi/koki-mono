@@ -74,8 +74,8 @@ abstract class AbstractListingController : AbstractModulePageController() {
 
             sellerContactId = listing.sellerContact?.id,
 
-            transactionDate = listing.soldAt?.let { date -> df.format(date) },
-            transactionPrice = (listing.salePrice ?: listing.price)?.amount?.toLong(),
+            soldAt = listing.soldAt?.let { date -> df.format(date) },
+            salePrice = (listing.salePrice ?: listing.price)?.amount?.toLong(),
         )
     }
 }

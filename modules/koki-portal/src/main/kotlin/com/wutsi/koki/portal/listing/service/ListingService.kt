@@ -351,11 +351,15 @@ class ListingService(
     }
 
     fun close(form: ListingForm) {
+        val df = SimpleDateFormat("yyyy-MM-dd")
         koki.close(
             form.id,
             CloseListingRequest(
                 status = form.status,
                 comment = form.comment,
+                soldAt = form.soldAt?.let { date -> df.parse(date) },
+                salePrice = form.salePrice,
+                buyerAgentUserId = form.buyerAgentUserId,
             )
         )
     }
