@@ -27,6 +27,7 @@ class ChangeListingStatusCloseController : AbstractEditListingController() {
 
     private fun close(form: ListingForm, model: Model, listing: ListingModel?): String {
         model.addAttribute("listing", listing ?: findListing(form.id))
+        model.addAttribute("closing", form.status == ListingStatus.SOLD || form.status == ListingStatus.RENTED)
         model.addAttribute("form", form)
 
         model.addAttribute(

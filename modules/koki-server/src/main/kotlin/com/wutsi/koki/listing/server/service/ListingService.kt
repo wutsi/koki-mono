@@ -36,6 +36,7 @@ import jakarta.transaction.Transactional
 import jakarta.validation.ValidationException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.Collections.emptyList
 import java.util.Date
 
 @Service
@@ -582,6 +583,8 @@ class ListingService(
     fun close(id: Long, request: CloseListingRequest, tenantId: Long): ListingEntity {
         val listing = get(id, tenantId)
         when (request.status) {
+            ListingStatus.SOLD,
+            ListingStatus.RENTED,
             ListingStatus.WITHDRAWN,
             ListingStatus.EXPIRED,
             ListingStatus.CANCELLED -> {
@@ -597,6 +600,24 @@ class ListingService(
         val now = Date()
         listing.status = request.status
         listing.closedAt = now
+        if (listing.status == ListingStatus.RENTED || listing.status == ListingStatus.SOLD) {
+            listing.salePrice = request.salePrice
+            listing.soldAt = request.soldAt
+            listing.closedOfferId = request.closedOfferId
+            listing.buyerAgentUserId = request.buyerAgentUserId
+            listing.buyerContactId = request.buyerContactId
+            listing.closedOfferId = request.closedOfferId
+            listing.finalSellerAgentCommissionAmount = computeCommission(
+                request.salePrice,
+                listing.sellerAgentCommission,
+            )
+            if (request.buyerAgentUserId != null && listing.sellerAgentUserId != request.buyerAgentUserId) {
+                listing.finalBuyerAgentCommissionAmount = computeCommission(
+                    request.salePrice,
+                    listing.buyerAgentCommission,
+                )
+            }
+        }
         save(listing)
 
         // Record the status

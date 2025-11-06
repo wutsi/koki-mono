@@ -77,7 +77,7 @@ koki:
             file: false
             listing: true
             message: true
-            offer: true
+            offer: false
 
 wutsi:
     platform:

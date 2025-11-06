@@ -88,6 +88,12 @@ data class ListingModel(
     val totalActiveMessages: Int? = null,
     val transactionParty: OfferParty? = null,
 ) {
+    val publicRemarksHtml: String?
+        get() = publicRemarks?.let { str -> HtmlUtils.toHtml(str) }
+
+    val agentRemarksHtml: String?
+        get() = agentRemarks?.let { str -> HtmlUtils.toHtml(str) }
+
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
 

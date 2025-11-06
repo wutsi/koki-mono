@@ -56,7 +56,7 @@ data class ListingForm(
     val contractEndDate: LocalDate? = null,
     val contractRemarks: String? = null,
     val buyerAgentUserId: Long? = null,
-    val transactionDate: String? = null,
-    val transactionPrice: Long? = null,
+    val soldAt: String? = null,
+    val salePrice: Long? = null,
     val comment: String? = null,
 )

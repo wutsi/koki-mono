@@ -4,11 +4,13 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
@@ -171,6 +173,9 @@ class OfferStatusChangedEventHandlerTest {
         doReturn(listing.copy(listingType = ListingType.RENTAL, status = ListingStatus.PENDING))
             .whenever(listingService).get(any(), any())
 
+        doReturn(listing.copy(status = ListingStatus.RENTED))
+            .whenever(listingService).close(any(), any(), any())
+
         doReturn(offer.copy(status = OfferStatus.CLOSED))
             .whenever(offerService).get(any(), any())
 
@@ -182,21 +187,19 @@ class OfferStatusChangedEventHandlerTest {
         )
         handler.handle(event)
 
-        var argListing = argumentCaptor<ListingEntity>()
-        verify(listingService).save(argListing.capture(), anyOrNull())
-        assertEquals(ListingStatus.RENTED, argListing.firstValue.status)
-        assertEquals(offer.id, argListing.firstValue.closedOfferId)
-        assertEquals(offer.buyerAgentUserId, argListing.firstValue.buyerAgentUserId)
-        assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(offer.closedAt, argListing.firstValue.soldAt)
-        assertEquals(offer.version?.price, argListing.firstValue.salePrice)
-        assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
-        assertEquals(2500, argListing.firstValue.finalBuyerAgentCommissionAmount)
+        var req = argumentCaptor<CloseListingRequest>()
+        verify(listingService).close(eq(event.owner!!.id), req.capture(), eq(event.tenantId))
+        assertEquals(ListingStatus.RENTED, req.firstValue.status)
+        assertEquals(offer.id, req.firstValue.closedOfferId)
+        assertEquals(offer.buyerAgentUserId, req.firstValue.buyerAgentUserId)
+        assertEquals(offer.buyerContactId, req.firstValue.buyerContactId)
+        assertEquals(offer.closedAt, req.firstValue.soldAt)
+        assertEquals(offer.version?.price, req.firstValue.salePrice)
 
         val argEvent = argumentCaptor<ListingStatusChangedEvent>()
         verify(publisher).publish(argEvent.capture())
-        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
-        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(req.firstValue.status, argEvent.firstValue.status)
+        assertEquals(listing.id, argEvent.firstValue.listingId)
         assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 
@@ -205,7 +208,10 @@ class OfferStatusChangedEventHandlerTest {
         doReturn(listing.copy(listingType = ListingType.SALE, status = ListingStatus.PENDING))
             .whenever(listingService).get(any(), any())
 
-        doReturn(offer.copy(status = OfferStatus.CLOSED, buyerAgentUserId = listing.sellerAgentUserId!!))
+        doReturn(listing.copy(status = ListingStatus.SOLD))
+            .whenever(listingService).close(any(), any(), any())
+
+        doReturn(offer.copy(status = OfferStatus.CLOSED))
             .whenever(offerService).get(any(), any())
 
         val event = OfferStatusChangedEvent(
@@ -216,21 +222,19 @@ class OfferStatusChangedEventHandlerTest {
         )
         handler.handle(event)
 
-        var argListing = argumentCaptor<ListingEntity>()
-        verify(listingService).save(argListing.capture(), anyOrNull())
-        assertEquals(ListingStatus.SOLD, argListing.firstValue.status)
-        assertEquals(offer.id, argListing.firstValue.closedOfferId)
-        assertEquals(listing.sellerAgentUserId, argListing.firstValue.buyerAgentUserId)
-        assertEquals(offer.buyerContactId, argListing.firstValue.buyerContactId)
-        assertEquals(offer.closedAt, argListing.firstValue.soldAt)
-        assertEquals(offer.version?.price, argListing.firstValue.salePrice)
-        assertEquals(5000, argListing.firstValue.finalSellerAgentCommissionAmount)
-        assertEquals(null, argListing.firstValue.finalBuyerAgentCommissionAmount)
+        var req = argumentCaptor<CloseListingRequest>()
+        verify(listingService).close(eq(event.owner!!.id), req.capture(), eq(event.tenantId))
+        assertEquals(ListingStatus.SOLD, req.firstValue.status)
+        assertEquals(offer.id, req.firstValue.closedOfferId)
+        assertEquals(offer.buyerAgentUserId, req.firstValue.buyerAgentUserId)
+        assertEquals(offer.buyerContactId, req.firstValue.buyerContactId)
+        assertEquals(offer.closedAt, req.firstValue.soldAt)
+        assertEquals(offer.version?.price, req.firstValue.salePrice)
 
         val argEvent = argumentCaptor<ListingStatusChangedEvent>()
         verify(publisher).publish(argEvent.capture())
-        assertEquals(argListing.firstValue.status, argEvent.firstValue.status)
-        assertEquals(argListing.firstValue.id, argEvent.firstValue.listingId)
+        assertEquals(req.firstValue.status, argEvent.firstValue.status)
+        assertEquals(listing.id, argEvent.firstValue.listingId)
         assertEquals(tenantId, argEvent.firstValue.tenantId)
     }
 

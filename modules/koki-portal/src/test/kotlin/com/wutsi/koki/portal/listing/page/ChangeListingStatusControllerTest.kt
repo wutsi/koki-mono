@@ -15,12 +15,88 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
+    @Test
+    fun sold() {
+        setupListing(listingType = ListingType.SALE)
+
+        navigateTo("/listings/status?id=${listing.id}")
+        assertCurrentPageIs(PageName.LISTING_STATUS)
+        assertElementHasAttribute("#btn-next", "disabled")
+        click("#chk-status-SOLD")
+        click("#btn-next")
+
+        setupListing(listingType = ListingType.SALE, status = ListingStatus.SOLD)
+        assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
+        assertElementNotPresent(".alert-danger")
+        assertElementHasAttribute("#btn-next", "disabled")
+        input("#salePrice", "100000")
+        input("#soldAt", "2025\t0101")
+        input("#comment", "Im done with this shit")
+        scrollToBottom()
+        click("#chk-confirm")
+        click("#btn-next")
+        val req = argumentCaptor<CloseListingRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/listings/${listing.id}/close"),
+            req.capture(),
+            eq(Any::class.java),
+        )
+        assertEquals(ListingStatus.SOLD, req.firstValue.status)
+        assertEquals(100000L, req.firstValue.salePrice)
+        assertNotNull(req.firstValue.soldAt)
+        assertEquals("Im done with this shit", req.firstValue.comment)
+
+        assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
+        assertElementPresent("#script-confetti")
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LISTING_LIST)
+    }
+
+    @Test
+    fun rent() {
+        setupListing(listingType = ListingType.RENTAL)
+
+        navigateTo("/listings/status?id=${listing.id}")
+        assertCurrentPageIs(PageName.LISTING_STATUS)
+        assertElementHasAttribute("#btn-next", "disabled")
+        click("#chk-status-RENTED")
+        click("#btn-next")
+
+        setupListing(listingType = ListingType.RENTAL, status = ListingStatus.RENTED)
+        assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
+        assertElementNotPresent(".alert-danger")
+        assertElementHasAttribute("#btn-next", "disabled")
+        input("#salePrice", "100000")
+        input("#soldAt", "2025\t0101")
+        input("#comment", "Im done with this shit")
+        scrollToBottom()
+        click("#chk-confirm")
+        click("#btn-next")
+        val req = argumentCaptor<CloseListingRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/listings/${listing.id}/close"),
+            req.capture(),
+            eq(Any::class.java),
+        )
+        assertEquals(ListingStatus.RENTED, req.firstValue.status)
+        assertEquals(100000L, req.firstValue.salePrice)
+        assertNotNull(req.firstValue.soldAt)
+        assertEquals("Im done with this shit", req.firstValue.comment)
+
+        assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
+        assertElementPresent("#script-confetti")
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LISTING_LIST)
+    }
+
     @Test
     fun cancel() {
         navigateTo("/listings/status?id=${listing.id}")
@@ -43,6 +119,8 @@ class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(ListingStatus.CANCELLED, req.firstValue.status)
+        assertEquals(null, req.firstValue.salePrice)
+        assertEquals(null, req.firstValue.soldAt)
         assertEquals("Im done with this shit", req.firstValue.comment)
 
         assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
@@ -65,9 +143,9 @@ class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING_STATUS)
         assertElementHasAttribute("#btn-next", "disabled")
         click("#chk-status-CANCELLED")
+        setupListing(ListingStatus.WITHDRAWN)
         click("#btn-next")
 
-        setupListing(ListingStatus.WITHDRAWN)
         assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
         assertElementHasAttribute("#btn-next", "disabled")
         input("#comment", "Im done with this shit")

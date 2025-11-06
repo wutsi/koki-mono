@@ -11,6 +11,7 @@ import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.platform.mq.Publisher
+import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -44,12 +46,82 @@ class CloseListingEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun sold() {
-        invalidStatus(100, ListingStatus.SOLD)
+        val request = CloseListingRequest(
+            status = ListingStatus.SOLD,
+            comment = "Yeeesss!!",
+            soldAt = DateUtils.addDays(Date(), -10),
+            salePrice = 2000000,
+            buyerContactId = 111L,
+            buyerAgentUserId = 222L,
+            closedOfferId = 333L,
+        )
+
+        val response = rest.postForEntity("/v1/listings/100/close", request, Any::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val listing = dao.findById(100).get()
+        assertNotNull(listing.closedAt)
+        assertEquals(request.status, listing.status)
+        assertEquals(df.format(request.soldAt), df.format(listing.soldAt))
+        assertEquals(request.salePrice, listing.salePrice)
+        assertEquals(request.buyerAgentUserId, listing.buyerAgentUserId)
+        assertEquals(request.buyerContactId, listing.buyerContactId)
+        assertEquals(request.closedOfferId, listing.closedOfferId)
+        assertEquals(100000L, listing.finalSellerAgentCommissionAmount)
+        assertEquals(40000L, listing.finalBuyerAgentCommissionAmount)
+
+        val statuses = statusDao.findByListing(listing)
+        assertEquals(1, statuses.size)
+        assertEquals(listing.status, statuses[0].status)
+        assertEquals(request.comment, statuses[0].comment)
+        assertEquals(USER_ID, statuses[0].createdById)
+
+        val event = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(listing.id!!, event.firstValue.listingId)
+        assertEquals(listing.tenantId, event.firstValue.tenantId)
+        assertEquals(request.status, event.firstValue.status)
     }
 
     @Test
     fun rented() {
-        invalidStatus(101, ListingStatus.RENTED)
+        val request = CloseListingRequest(
+            status = ListingStatus.RENTED,
+            comment = "Yeeesss!!",
+            soldAt = DateUtils.addDays(Date(), -10),
+            salePrice = 2000000,
+            buyerContactId = null,
+            buyerAgentUserId = null,
+            closedOfferId = null,
+        )
+
+        val response = rest.postForEntity("/v1/listings/101/close", request, Any::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val listing = dao.findById(101).get()
+        assertNotNull(listing.closedAt)
+        assertEquals(request.status, listing.status)
+        assertEquals(df.format(request.soldAt), df.format(listing.soldAt))
+        assertEquals(request.salePrice, listing.salePrice)
+        assertEquals(request.buyerAgentUserId, listing.buyerAgentUserId)
+        assertEquals(request.buyerContactId, listing.buyerContactId)
+        assertEquals(request.closedOfferId, listing.closedOfferId)
+        assertEquals(100000L, listing.finalSellerAgentCommissionAmount)
+        assertEquals(null, listing.finalBuyerAgentCommissionAmount)
+
+        val statuses = statusDao.findByListing(listing)
+        assertEquals(1, statuses.size)
+        assertEquals(listing.status, statuses[0].status)
+        assertEquals(request.comment, statuses[0].comment)
+        assertEquals(USER_ID, statuses[0].createdById)
+
+        val event = argumentCaptor<ListingStatusChangedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(listing.id!!, event.firstValue.listingId)
+        assertEquals(listing.tenantId, event.firstValue.tenantId)
+        assertEquals(request.status, event.firstValue.status)
     }
 
     @Test
