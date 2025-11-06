@@ -190,14 +190,14 @@
         <div class="margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.public-remarks}">KEY</b>
             <div>
-                <span th:if="${listing.publicRemarks}" th:text="${listing.publicRemarks}">VALE</span>
+                <span th:if="${listing.publicRemarks}" th:utext="${listing.publicRemarksHtml}">VALE</span>
                 <i th:if="!${listing.publicRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
             </div>
         </div>
         <div class="margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.agent-remarks}">KEY</b>
             <div>
-                <span th:if="${listing.agentRemarks}" th:text="${listing.agentRemarks}">VALE</span>
+                <span th:if="${listing.agentRemarks}" th:utext="${listing.agentRemarksHtml}">VALE</span>
                 <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
             </div>
         </div>
@@ -305,7 +305,8 @@
 <div id="listing-sale-section" th:if="${listing.statusSold}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 
-    <div class="margin-bottom-small" id="buyer-contact-info" th:if="${listing.canManage(user)}">
+    <div class="margin-bottom-small" id="buyer-contact-info"
+         th:if="${listing.buyerContact} AND ${listing.canManage(user)}">
         <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.buyer}">KEY</b>
         <b class="text-small" th:if="${listing.listingTypeRental}" th:text="#{page.listing.tenant}">KEY</b>
 
