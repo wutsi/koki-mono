@@ -9,7 +9,6 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
     <artifactId>koki-platform</artifactId>
     <version>0.0.45-SNAPSHOT</version>
     <packaging>jar</packaging>
