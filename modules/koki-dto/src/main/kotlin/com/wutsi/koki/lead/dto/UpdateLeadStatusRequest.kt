@@ -1,6 +1,9 @@
 package com.wutsi.koki.lead.dto
 
-data class UpdateLeadStatusResponse(
+import java.util.Date
+
+data class UpdateLeadStatusRequest(
     val status: LeadStatus = LeadStatus.UNKNOWN,
-    val comment: String? = null,
+    val nextContactAt: Date? = null,
+    val nextVisitAt: Date? = null,
 )

@@ -1,5 +1,5 @@
 package com.wutsi.koki.lead.dto
 
-data class GetLeadResponse(
-    val lead: Lead = Lead()
+data class SearchLeadResponse(
+    val leads: List<LeadSummary> = emptyList()
 )
