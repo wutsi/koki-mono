@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('contact')}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/contact :: contact-breadcrumb(null)}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <div class="flex flex-space-between">
+                        <div>
+                            <a class="btn-create btn btn-primary btn-sm" href="/contacts/create"
+                               th:if="${user?.hasPermission('contact:manage')} OR ${user.hasFullAccess('contact')}"
+                            >
+                                <i class="fa-solid fa-plus"></i>
+                                <span th:text="#{button.contact}">Contact</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <table class="table table-striped" th:if="${contacts} OR ${keyword}">
+                        <thead>
+                        <tr>
+                            <th colspan="6">
+                                <form action="/contacts">
+                                    <div class="input-group" style="width:auto">
+                                        <input class="form-control" id="keyword" name="q" th:value="${keyword}"/>
+                                        <button class="btn btn-light btn-sm" id="btn-search" type="submit">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <span th:text="#{button.search}">Search</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </th>
+                        </tr>
+                        <tr class="d-none d-md-table-row">
+                            <th th:text="#{page.contact.name}">Name</th>
+                            <th class="d-none d-lg-table-cell" th:if="!${types.isEmpty()}"
+                                th:text="#{page.contact.contact_type}">Type
+                            </th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.email}">Email</th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.mobile}">Mobile</th>
+                            <th class="d-none d-md-table-cell" th:text="#{page.contact.phone}">Phone</th>
+                            <th class="d-none d-md-table-cell" th:if="${showAccount}" th:text="#{page.contact.account}">
+                                Account
+                            </th>
+                            <th class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}"
+                                th:text="#{page.contact.owner}">
+                                Owner
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="contact entity" th:each="contact : ${contacts}">
+                            <div
+                                th:replace="~{__components/contact :: columns(${contact}, ${showAccount}, !${types.isEmpty()})}"></div>
+                        </tr>
+                        <tr id="contact-load-more" th:if="${moreUrl}">
+                            <td class="text-center" colspan="7">
+                                <button
+                                    class="btn btn-sm btn-light w-100-mobile"
+                                    data-component-id="load-more"
+                                    data-container-id="contact-load-more"
+                                    th:data-url="${moreUrl}"
+                                    th:text="#{button.load_more}"
+                                >
+                                    Load more...
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: toast(${toast})}"></div>
+
+</body>
+</html>

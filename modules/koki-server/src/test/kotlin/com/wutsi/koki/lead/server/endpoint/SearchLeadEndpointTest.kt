@@ -1,0 +1,62 @@
+package com.wutsi.koki.lead.server.endpoint
+
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.lead.dto.CreateLeadRequest
+import com.wutsi.koki.lead.dto.CreateLeadResponse
+import com.wutsi.koki.lead.dto.GetLeadResponse
+import com.wutsi.koki.lead.dto.LeadStatus
+import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
+import com.wutsi.koki.lead.server.dao.LeadRepository
+import com.wutsi.koki.platform.mq.Publisher
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.test.context.jdbc.Sql
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+@Sql(value = ["/db/test/clean.sql", "/db/test/lead/GetLeadEndpoint.sql"])
+class GetLeadEndpointTest : AuthorizationAwareEndpointTest() {
+    @Test
+    fun get() {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        df.timeZone = TimeZone.getTimeZone("UTC")
+
+        val response = rest.getForEntity("/v1/leads/100", GetLeadResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val lead = response.body!!.lead
+        assertEquals(111L, lead.listingId)
+        assertEquals("Hello world", lead.message)
+        assertEquals("Yo", lead.firstName)
+        assertEquals("Man", lead.lastName)
+        assertEquals("2026-12-30", df.format(lead.visitRequestedAt))
+        assertEquals("+15477580000", lead.phoneNumber)
+        assertEquals("yo.man@gmail.com", lead.email)
+        assertEquals(LeadStatus.CONTACTED, lead.status)
+    }
+
+    @Test
+    fun `not found`() {
+        val response = rest.getForEntity("/v1/leads/999", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.LEAD_NOT_FOUND, response.body?.error?.code)
+    }
+
+    @Test
+    fun `bad tenant`() {
+        val response = rest.getForEntity("/v1/leads/200", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.LEAD_NOT_FOUND, response.body?.error?.code)
+    }
+}
