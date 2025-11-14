@@ -12,4 +12,5 @@ data class CreateLeadRequest(
     @get:NotEmpty @get:Size(max = 30) val phoneNumber: String = "",
     val message: String? = null,
     val visitRequestedAt: Date? = null,
+    val source: LeadSource = LeadSource.UNKNOWN,
 )

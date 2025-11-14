@@ -1,6 +1,6 @@
 # koki-dto
 
-A Kotlin library providing shared Data Transfer Objects (DTOs), enums, and validation contracts reused across the Koki
+A Kotlin library providing shared Data Transfer Objects (DTOs), enumerations, and validation contracts for the Koki
 platform APIs.
 
 [![koki-dto CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml)
@@ -13,23 +13,29 @@ platform APIs.
 
 ## About the Project
 
-`koki-dto` centralizes all API request/response models, domain enumerations, and standardized error payloads used by
-Koki services and clients. It prevents duplication and schema drift by acting as the single source of truth for public
-data contracts consumed by backend services, SDKs, and user interfaces.
+The **koki-dto** module serves as the single source of truth for all API contracts across the Koki platform. It
+centralizes request/response models, domain enumerations, validation rules, and event payloads to ensure type safety,
+prevent schema drift, and maintain consistency across backend services, SDKs, and frontend applications. By providing a
+pure library artifact with no business logic or runtime dependencies, it enables independent versioning and reduces
+coupling between services.
 
 ### Features
 
-- **Unified Contracts** – One versioned set of DTOs shared across all Koki modules and clients.
-- **Embedded Validation** – Jakarta Validation annotations (`@NotEmpty`, `@Email`, `@Size`, etc.) directly on request
-  objects for automatic input checks.
-- **Typed Enumerations** – Strongly-typed enums for statuses, categories, types, permissions – eliminating magic
-  strings.
-- **JWT Helper** – Lightweight decoder to extract principals from JWT tokens in client contexts.
+- **Unified Contracts**: One versioned set of DTOs shared across all Koki modules and clients, preventing duplication
+  and schema drift
+- **Embedded Validation**: Jakarta Validation annotations (`@NotEmpty`, `@Email`, `@Size`, `@Valid`) directly on request
+  objects for automatic server-side input validation
+- **Strongly-Typed Enumerations**: Kotlin enums for statuses, types, and categories eliminating magic strings and
+  enabling compile-time validation
+- **Event-Driven Support**: Domain event payloads for asynchronous messaging, event sourcing, and microservices
+  integration
+- **JWT Utilities**: Lightweight token decoder for extracting authentication principals from JWT tokens in client
+  contexts
 
 ## Getting Started
 
-Add `koki-dto` as a dependency. No database, server runtime, or Spring configuration is required – this is a pure model
-library.
+Add **koki-dto** as a dependency to your project. No database, server runtime, or Spring configuration is required—this
+is a pure data contract library.
 
 ### Prerequisites
 
@@ -37,9 +43,9 @@ library.
 - **Maven 3.6+** or **Gradle 7+**
 - **Kotlin 2.1.0+** (if using Kotlin)
 
-### 1. Maven Dependency
+### 1. Add Maven Dependency
 
-Use `VERSION_NUMBER` as a placeholder:
+Add the following dependency to your **pom.xml**:
 
 ```xml
 
@@ -50,7 +56,9 @@ Use `VERSION_NUMBER` as a placeholder:
 </dependency>
 ```
 
-### 2. Gradle (Kotlin DSL)
+### 2. Add Gradle Dependency (Kotlin DSL)
+
+Add the following to your **build.gradle.kts**:
 
 ```kotlin
 dependencies {
@@ -58,9 +66,11 @@ dependencies {
 }
 ```
 
-### 3. GitHub Packages Repository
+### 3. Configure GitHub Packages Repository
 
-Maven:
+The **koki-dto** artifact is published to GitHub Packages. Configure your build tool to access it.
+
+**Maven** - Add to **pom.xml**:
 
 ```xml
 
@@ -72,7 +82,7 @@ Maven:
 </repositories>
 ```
 
-Gradle:
+**Gradle** - Add to **build.gradle.kts**:
 
 ```kotlin
 repositories {
@@ -80,7 +90,7 @@ repositories {
         url = uri("https://maven.pkg.github.com/wutsi/koki-mono")
         credentials {
             username = System.getenv("GITHUB_USER")
-            password = System.getenv("GITHUB_PASSWORD")
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
 }
@@ -88,14 +98,16 @@ repositories {
 
 ### 4. Authenticate to GitHub Packages
 
-Create a Personal Access Token with `read:packages` scope and export environment variables:
+Create a Personal Access Token with **read:packages** scope from your GitHub account settings.
+
+Export environment variables:
 
 ```bash
 export GITHUB_USER=your-github-username
-export GITHUB_PASSWORD=your-personal-access-token
+export GITHUB_TOKEN=your-personal-access-token
 ```
 
-Maven `~/.m2/settings.xml` snippet:
+For Maven, add credentials to **~/.m2/settings.xml**:
 
 ```xml
 
@@ -104,93 +116,127 @@ Maven `~/.m2/settings.xml` snippet:
         <server>
             <id>github</id>
             <username>${env.GITHUB_USER}</username>
-            <password>${env.GITHUB_PASSWORD}</password>
+            <password>${env.GITHUB_TOKEN}</password>
         </server>
     </servers>
 </settings>
 ```
 
-### 5. Example Usage
+### 5. Using DTOs in Your Code
 
-Create and validate a DTO:
+**Request DTOs with Validation**:
 
 ```kotlin
 import com.wutsi.koki.account.dto.CreateAccountRequest
-import jakarta.validation.Validation
+import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.*
 
-val validator = Validation.buildDefaultValidatorFactory().validator
-val dto = CreateAccountRequest(
-    accountTypeId = 1L,
-    name = "ACME Corp",
-    email = "info@acme.com"
-)
-validator.validate(dto).forEach { v -> println("${v.propertyPath}: ${v.message}") }
+@RestController
+@RequestMapping("/api/v1/accounts")
+class AccountController {
+
+    @PostMapping
+    fun createAccount(@Valid @RequestBody request: CreateAccountRequest): CreateAccountResponse {
+        // Validation is automatically triggered by @Valid annotation
+        // All constraints on CreateAccountRequest are checked before reaching this code
+        return accountService.createAccount(request)
+    }
+}
 ```
 
-Use enums:
+**Response DTOs**:
 
 ```kotlin
-import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.account.dto.GetAccountResponse
+import com.wutsi.koki.account.dto.Account
 
-val status = ListingStatus.PUBLISHED
+@GetMapping("/{id}")
+fun getAccount(@PathVariable id: Long): GetAccountResponse {
+    val account = accountService.findById(id)
+    return GetAccountResponse(account = account)
+}
 ```
 
-Decode a JWT:
+**Enumerations**:
+
+```kotlin
+import com.wutsi.koki.lead.dto.LeadStatus
+import com.wutsi.koki.listing.dto.PropertyType
+
+val lead = Lead(
+    status = LeadStatus.QUALIFIED,
+    // ...
+)
+
+val listing = Listing(
+    propertyType = PropertyType.APARTMENT,
+    // ...
+)
+```
+
+**Event Publishing**:
+
+```kotlin
+import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
+
+fun publishUserCreatedEvent(userId: Long, tenantId: Long) {
+    val event = UserCreatedEvent(
+        userId = userId,
+        tenantId = tenantId,
+        timestamp = System.currentTimeMillis()
+    )
+    eventPublisher.publish(event)
+}
+```
+
+**JWT Token Decoding**:
 
 ```kotlin
 import com.wutsi.koki.security.dto.JWTDecoder
 
-val principal = JWTDecoder().decode("your.jwt.token")
-println(principal.userId)
+val decoder = JWTDecoder()
+val principal = decoder.decode(accessToken)
+println("User ID: ${principal.userId}")
+println("Tenant ID: ${principal.tenantId}")
 ```
 
-## Package Overview
+### 6. Build the Module
 
-| Package                       | Purpose                                    |
-|-------------------------------|--------------------------------------------|
-| `com.wutsi.koki.account.dto`  | Accounts, attributes, summaries            |
-| `com.wutsi.koki.agent.dto`    | Agent profiles & metrics                   |
-| `com.wutsi.koki.contact.dto`  | Contacts & communication preferences       |
-| `com.wutsi.koki.listing.dto`  | Property listings & update payloads        |
-| `com.wutsi.koki.lead.dto`     | Lead creation & progression                |
-| `com.wutsi.koki.offer.dto`    | Offers, versions, status transitions       |
-| `com.wutsi.koki.file.dto`     | File metadata & search filters             |
-| `com.wutsi.koki.message.dto`  | Internal messaging payloads                |
-| `com.wutsi.koki.note.dto`     | Notes attached to entities                 |
-| `com.wutsi.koki.security.dto` | Auth/JWT principal structures              |
-| `com.wutsi.koki.tenant.dto`   | Tenant configuration & invitations         |
-| `com.wutsi.koki.refdata.dto`  | Locations, categories, amenities           |
-| `com.wutsi.koki.error.dto`    | Error codes & standardized error responses |
-| `com.wutsi.koki.common.dto`   | Shared primitives & cross-cutting types    |
-| `com.wutsi.koki.module.dto`   | Module and permission definitions          |
-| `com.wutsi.koki.track.dto`    | Tracking & analytics events                |
+Clone the repository and build the module:
 
-## Common Patterns
-
-Request DTO:
-
-```kotlin
-data class CreateAccountRequest(
-    val accountTypeId: Long? = null,
-    @get:NotEmpty @get:Size(max = 100) val name: String = "",
-    @get:Email @get:Size(max = 255) val email: String = ""
-)
+```bash
+git clone https://github.com/wutsi/koki-mono.git
+cd koki-mono/modules/koki-dto
+mvn clean install
 ```
 
-Response DTO:
+### 7. Run Tests
 
-```kotlin
-data class GetAccountResponse(val account: Account)
+Execute unit tests:
+
+```bash
+mvn test
 ```
 
-Search Response:
+Generate code coverage report:
 
-```kotlin
-data class SearchAccountResponse(val accounts: List<AccountSummary> = emptyList())
+```bash
+mvn clean test jacoco:report
 ```
 
-ID Wrapper:
+The coverage report will be available at **target/site/jacoco/index.html**.
 
-```kotlin
-data class CreateAccountResponse(val id: Long)
+### 8. Code Style
+
+The project uses **ktlint** for Kotlin code style enforcement. Run the linter:
+
+```bash
+mvn antrun:run@ktlint
 ```
+
+Auto-format code:
+
+```bash
+mvn antrun:run@ktlint-format
+```
+
