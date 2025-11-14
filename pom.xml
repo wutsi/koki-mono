@@ -81,7 +81,7 @@
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
         <commons-csv.version>1.14.1</commons-csv.version>
-        <commons-io.version>2.20.0</commons-io.version>
+        <commons-io.version>2.21.0</commons-io.version>
         <commons-lang3.version>3.19.0</commons-lang3.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <common-net.version>3.12.0</common-net.version>
@@ -125,7 +125,7 @@
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>
         <mysql.version>9.5.0</mysql.version>
-        <paypal.version>1.1.0</paypal.version>
+        <paypal.version>2.0.0</paypal.version>
         <pdfbox.vesion>3.0.6</pdfbox.vesion>
         <plexus-utils.version>4.0.2</plexus-utils.version>
         <poi.version>5.4.1</poi.version>
