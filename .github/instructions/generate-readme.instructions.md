@@ -14,7 +14,7 @@ The generated README.md should have the following sections:
     - Github Action workflow badges.
         - For top-level module, use the workflow file are `_master.yml` and `_pr.yml`
         - The non top-level module, use the workflow file are  `MODULE_NAME-*.yml`
-    - The code coverage (if available). The badge image is `.github/badges/<MODULE>-jacoco.svg`
+    - The code coverage. The badge image is `.github/badges/MODULE_NAME-jacoco.svg`
     - The java SDK version
     - The programming language
     - The springboot version (if applicable)
@@ -23,15 +23,11 @@ The generated README.md should have the following sections:
 - **About the Project**: Contains a more detailed description of what the project does, its core value proposition, and
   the problem it solves.
 
-- **Getting Started**: Instructions for guiding developers in a step by step manner on how to:
-    - setup the project
-    - build the project using command line
-    - run the project using command line.
-    - You should respect the following contraints
-        - For database setup, use password-less database connection if possible.
-        - For Github authentication, use then env variables to store username and token: `GITHUB_USER`
-          and `GITHUB_TOKEN`
-        - Do not includes exemple of usages
+- **Contributing**: Guideline for contributing to the project. Just add the link to the detailed
+  guide `CONTRIBUTING.md`. Include the following subsections:
+    - **Local Development**: Instruction for setting up the project locally. Just add the link to the detailed
+      guide `DEVELOP.md`.
+    - **Testing**: Instructions for testing the project locally Just add the link to the detailed guide `TESTING.md`.
 
 - **Modules**: (For multi-modules projects only) List of modules in a tabular format with the following columns:
     - Name: The name of the module. It must be a link to the corresponding module folder.

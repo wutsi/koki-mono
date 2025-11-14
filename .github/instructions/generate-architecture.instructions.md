@@ -12,18 +12,14 @@ The generated ARCHITECTURE.md should have the following sections:
 
 - **Overview**: A concise summary of what this document covers and why the architecture was chosen
 
-- **Project Structure**: This section provides a high-level overview of the project's directory and file structure,
-  categorised by architectural
-  layer or major functional area. It is essential for quickly navigating the codebase, locating relevant files, and
-  understanding the overall organization
-  and separation of concerns.
-    - Do not include files in the tree structure, include only directories
-    - Ue a compact tree format.
+- **Project Structure**: This section provides a high-level overview of the project's directory structure, categorised
+  by architectural layer or major functional area. It is essential for quickly
+  navigating the codebase, locating relevant files, and understanding the overall organization and separation of
+  concerns.
 
 - **High-Level System Diagram**: Provide a simple block diagram (e.g., a C4 Model Level 1: System Context diagram, or a
-  basic component diagram) or a
-  clear text-based description of the major components and their interactions. Focus on how data flows, services
-  communicate, and key architectural boundaries.
+  basic component diagram) or a clear text-based description of the major components and their interactions. Focus on
+  how data flows, services communicate, and key architectural boundaries.
 
 - **Core Components**: List and describe the main components of the system. For each, include its primary
   responsibility.
