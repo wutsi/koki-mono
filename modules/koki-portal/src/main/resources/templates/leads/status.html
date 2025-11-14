@@ -6,46 +6,75 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+<div th:replace="~{__components/layout :: menubar('lead')}"></div>
 
 <div class="container-fluid padding-bottom-8x">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+            <div th:replace="~{__components/lead :: lead-breadcrumb(${lead})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <form class="form" method="post" th:action="@{/listings/status}" th:object="${form}">
+            <form class="form" method="post" th:action="@{/leads/status}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
 
                 <div class="section">
                     <div class="section-body">
                         <div class="section-item">
-                            <h1 th:text="#{page.listing.status.title}">TITLE</h1>
-                            <div th:utext="#{page.listing.status.description}">DESCRIPTION</div>
+                            <h1 th:text="#{page.lead.status.title}">TITLE</h1>
+                            <div th:utext="#{page.lead.status.description}">DESCRIPTION</div>
+                        </div>
+                        <div class="section-item">
+                            <label class="title" th:text="#{page.lead.display-name}">NAME</label>
+                            <div th:text="${lead.displayName}">DISPLAY NAME</div>
                         </div>
                         <div class="section-item">
                             <div class="form-check margin-top"
                                  th:each="status : ${statuses}"
-                                 th:if="${status} != ${form.status}"
                             >
                                 <input class="form-check-input" required
                                        th:field="*{status}"
                                        th:id="'chk-status-' + ${status}"
+                                       th:selected="${status} == ${form.status}"
                                        th:value="${status}"
                                        type="radio"
                                 />
-                                <label class="form-check-label" th:for="'chk-status-' + ${status}">
-                                    <b th:text="#{'listing-status.' + ${status}}">CONFIRMATION</b>
+                                <label class="form-check-label"
+                                       th:data-status="${status}"
+                                       th:for="'chk-status-' + ${status}">
+                                    <span th:text="#{'lead-status.' + ${status}}">CONFIRMATION</span>
                                 </label>
-                                <div class="text-small" th:text="#{'listing-status.' + ${status} + '.help'}">HELP</div>
                             </div>
                         </div>
+                        <div class="section-item" id="lead-next-visit-container"
+                             th:classappend="*{status.name()} != 'VISIT_SET' ? 'hidden'">
+                            <label class="title">
+                                <span th:text="#{page.lead.next-visit-at}">NEXT_VISIT</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input th:field="*{nextVisitAt}" th:required="*{status.name()} == 'VISIT_SET'"
+                                   type="datetime-local"
+                            />
+                        </div>
+                        <div class="section-item" id="lead-next-contact-container"
+                             th:classappend="*{status.name()} != 'CONTACT_LATER' ? 'hidden'">
+                            <label class="title">
+                                <span th:text="#{page.lead.next-contact-at}">NEXT_VISIT</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input th:field="*{nextContactAt}" th:required="*{status.name()} == 'CONTACT_LATER'"
+                                   type="datetime-local"
+                            />
+                        </div>
 
-                        <div class="section-item text-right">
-                            <button class="btn btn-primary w-100-mobile" disabled id="btn-next" th:text="#{button.next}"
+                        <div class="section-item flex flex-space-between">
+                            <a class="btn btn-light w-49-mobile" id="btn-cancel" th:href="'/leads/' + ${lead.id}"
+                               th:text="#{button.cancel}">
+                                CANCEL
+                            </a>
+                            <button class="btn btn-primary w-49-mobile" id="btn-next" th:text="#{button.next}"
                                     type="submit">
                                 NEXT
                             </button>
@@ -58,9 +87,6 @@
 </div>
 
 <script>
-    let listingType = 0;
-    let propertyType = 0;
-
     document.querySelectorAll(".form-check-input")
         .forEach((item) => {
             item.addEventListener("change", on_change);
@@ -70,8 +96,32 @@
         console.log('on_change()');
 
         const elt = event.target;
-        const btn = document.getElementById('btn-next');
-        btn.disabled = !elt.checked;
+        const status = elt.getAttribute('value');
+        // console.log('>>> elt=', elt, status);
+
+        const eltContact = document.getElementById('lead-next-contact-container');
+        const eltVisit = document.getElementById('lead-next-visit-container');
+        const eltNextContactAt = document.getElementById('nextContactAt');
+        const eltNextVisitAt = document.getElementById('nextVisitAt');
+        if (status === 'VISIT_SET') {
+            eltContact.classList.add('hidden');
+            eltVisit.classList.remove('hidden');
+
+            eltNextContactAt.classList.remove('required');
+            eltNextVisitAt.classList.add('required');
+        } else if (status === 'CONTACT_LATER') {
+            eltContact.classList.remove('hidden');
+            eltVisit.classList.add('hidden');
+
+            eltNextContactAt.classList.add('required');
+            eltNextVisitAt.classList.remove('required');
+        } else {
+            eltContact.classList.add('hidden');
+            eltVisit.classList.add('hidden');
+
+            eltNextContactAt.classList.remove('required');
+            eltNextVisitAt.classList.remove('required');
+        }
     }
 </script>
 </body>

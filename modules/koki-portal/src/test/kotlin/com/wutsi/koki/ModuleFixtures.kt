@@ -146,6 +146,16 @@ object ModuleFixtures {
             jsUrl = null,
             cssUrl = null,
         ),
+        Module(
+            id = 300,
+            name = "lead",
+            title = "Leads",
+            homeUrl = "/leads",
+            tabUrl = null,
+            settingsUrl = null,
+            jsUrl = null,
+            cssUrl = "/css/leads.css",
+        ),
     )
 
     val permissions = listOf(
@@ -195,5 +205,7 @@ object ModuleFixtures {
         Permission(id = 2802, moduleId = 280, name = "offer:full_access", description = "Full access Offers"),
 
         Permission(id = 2900, moduleId = 290, name = "agent", description = "View Agents"),
+
+        Permission(id = 3000, moduleId = 300, name = "lead", description = "View Leads"),
     )
 }

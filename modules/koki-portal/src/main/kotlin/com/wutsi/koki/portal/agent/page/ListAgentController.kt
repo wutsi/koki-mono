@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/agents")
-@RequiresPermission(["agent"])
+@RequiresPermission(["agent", "agent:full_access"])
 class ListAgentController : AbstractAgentController() {
     @GetMapping
     fun list(model: Model): String {

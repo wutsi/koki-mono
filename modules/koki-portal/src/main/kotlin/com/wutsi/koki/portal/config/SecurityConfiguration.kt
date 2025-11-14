@@ -32,6 +32,8 @@ class SecurityConfiguration(
                     .requestMatchers("/contacts/**/*").authenticated()
                     .requestMatchers("/images").authenticated()
                     .requestMatchers("/images/**/*").authenticated()
+                    .requestMatchers("/leads").authenticated()
+                    .requestMatchers("/leads/**/*").authenticated()
                     .requestMatchers("/listings").authenticated()
                     .requestMatchers("/listings/**/*").authenticated()
                     .requestMatchers("/offers").authenticated()

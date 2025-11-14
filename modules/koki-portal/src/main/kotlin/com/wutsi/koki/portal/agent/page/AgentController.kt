@@ -19,7 +19,7 @@ import kotlin.collections.flatMap
 
 @Controller
 @RequestMapping("/agents")
-@RequiresPermission(["agent"])
+@RequiresPermission(["agent", "agent:full_access"])
 class AgentController(
     private val listingService: ListingService
 ) : AbstractAgentController() {
@@ -58,7 +58,7 @@ class AgentController(
                 ListingStatus.ACTIVE,
                 ListingStatus.ACTIVE_WITH_CONTINGENCIES,
             ),
-            sortBy = ListingSort.TRANSACTION_DATE,
+            sortBy = ListingSort.NEWEST,
             limit = 20,
         ).items
     }

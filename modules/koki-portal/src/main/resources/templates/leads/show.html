@@ -6,69 +6,42 @@
 
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
-<div th:replace="~{__components/layout :: menubar('contact')}"></div>
+<div th:replace="~{__components/layout :: menubar('lead')}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div th:replace="~{__components/contact :: contact-breadcrumb(${contact})}"></div>
+            <div th:replace="~{__components/lead :: lead-breadcrumb(${lead})}"></div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <div class="widget contact-summary">
+            <div class="widget lead-summary">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <h1 class="entity-title">
-                            <span class="d-none d-md-inline" th:text="${contact.name}">NAME</span>
-                        </h1>
-                        <div>
-                            <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/contacts/' + ${contact.id} + '/edit'"
-                               th:if="${contact.canManage(user)}"
-                               th:text="#{button.edit}"
-                            >Edit</a>
-
-                            <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete the contact?')"
-                               th:href="'/contacts/' + ${contact.id} + '/delete'"
-                               th:if="${contact.canDelete(user)}"
-                               th:text="#{button.delete}"
-                            >Delete</a>
-                        </div>
+                    <div class="text-right">
+                        <a class="btn-call btn btn-light btn-sm" th:href="${lead.phoneNumberUrl}">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <span th:text="#{button.call}">CALL</span>
+                        </a>
+                        <a class="btn btn-sm btn-whatsapp" target="_blank" th:href="${lead.whatsappUrl}">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span th:text="#{button.whatsapp}">Whatsapp</span>
+                        </a>
                     </div>
+                    <h1 class="entity-title">
+                        <span th:text="${lead.displayName}">NAME</span>
+                    </h1>
                     <div class="flex margin-top">
-                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.contactType}">
-                            <b th:text="#{page.contact.contact_type}">Contact Type</b><br/>
-                            <span th:text="${contact.contactType?.title}">CONTACT TYPE</span>
+                        <div>
+                            <b th:text="#{page.lead.status}">Status</b><br/>
+                            <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
+                            <br/>
+                            <a th:href="'/leads/status?id=' + ${lead.id}" th:text="#{button.modify}">MODIFY</a>
                         </div>
-                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.email}">
-                            <b th:text="#{page.contact.email}">Email</b><br/>
-                            <a th:href="${contact.emailUrl}" th:text="${contact.email}">EMAIL</a>
-                        </div>
-                        <div class="margin-right-2x" th:if="${contact.mobile}">
-                            <b th:text="#{page.contact.mobile}">Mobile</b><br/>
-                            <a target="_blank" th:href="${contact.mobileUrl}" th:text="${contact.mobileFormatted}">
-                                MOBILE
-                            </a>
-                        </div>
-                        <div class="margin-right-2x" th:if="${contact.phone}">
-                            <b th:text="#{page.contact.phone}">Phone</b><br/>
-                            <a th:href="${contact.phoneUrl}" th:text="${contact.phoneFormatted}">PHONE</a>
-                        </div>
-                        <div class="margin-right-2x d-none d-md-block" th:if="${contact.account}">
-                            <b th:text="#{page.contact.account}">Account</b><br/>
-                            <a class="entity-title"
-                               th:href="'/accounts/' + ${contact.account.id}"
-                               th:if="${contact.account.viewedBy(user)}"
-                            >
-                                <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                <span th:text="${contact.account.name}">ACCOUNT</span>
-                            </a>
-                            <span th:if="!${contact.account.viewedBy(user)}"
-                                  th:text="${contact.account.name}"
-                            >ACCOUNT</span>
+                        <div class="margin-left-2x d-none d-md-block" th:if="${lead.email}">
+                            <b th:text="#{page.lead.email}">EMAIL</b><br/>
+                            <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -82,77 +55,73 @@
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/module :: tabs('main', true)}"></div>
-                    <div th:replace="~{__components/module :: tabs-content('main', true, ${contact}, ${module})}"></div>
+                    <div th:replace="~{__components/module :: tabs-content('main', true, ${lead}, ${module})}"></div>
                     <div class="hidden" id="tab-details-content">
                         <table class="table">
-                            <tr th:if="${contact.account}">
-                                <td><b th:text="#{page.contact.account}">Account</b></td>
+                            <tr th:if="${lead.listing}">
+                                <td width="20%"><b th:text="#{page.lead.listing}">Listing</b></td>
                                 <td>
-                                    <a class="entity-title"
-                                       th:href="'/accounts/' + ${contact.account.id}"
-                                       th:if="${contact.account.viewedBy(user)}">
-                                        <img align="absmiddle" height="24" src="/image/account.png" width="24"/>
-                                        <span th:text="${contact.account.name}">ACCOUNT</span>
+                                    <a class="listing-item" th:href="'/listings/' + ${lead.listing.id}">
+                                        <div th:replace="~{__components/listing :: listing-item(${lead.listing})}">
+                                        </div>
                                     </a>
-                                    <span th:if="!${contact.account.viewedBy(user)}"
-                                          th:text="${contact.account.name}">ACCOUNT</span>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.contactType}">
-                                <td><b th:text="#{page.contact.contact_type}">Contact Type</b></td>
-                                <td th:text="${contact.contactType?.title}">TYPE</td>
+                            <tr th:if="${lead.message}">
+                                <td><b th:text="#{page.lead.message}">Message</b></td>
+                                <td th:utext="${lead.messageHtml}">HTML</td>
                             </tr>
                             <tr>
-                                <td width="20%"><b th:text="#{page.contact.first_name}">First Name</b></td>
-                                <td th:text="${contact.firstName}">TYPE</td>
-                            </tr>
-                            <tr>
-                                <td width="20%"><b th:text="#{page.contact.last_name}">Last Name</b></td>
-                                <td th:text="${contact.lastName}">TYPE</td>
-                            </tr>
-                            <tr th:if="${contact.email}">
-                                <td><b th:text="#{page.contact.email}">Email</b></td>
+                                <td><b th:text="#{page.lead.status}">Status</b></td>
                                 <td>
-                                    <a th:href="${contact.emailUrl}"
-                                       th:text="${contact.email}">EMAIL</a>
+                                    <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.mobile}">
-                                <td><b th:text="#{page.contact.mobile}">Mobile</b></td>
+                            <tr>
+                                <td width="20%"><b th:text="#{page.lead.display-name}">First Name</b></td>
+                                <td th:text="${lead.displayName}">TYPE</td>
+                            </tr>
+                            <tr>
+                                <td><b th:text="#{page.lead.phone-number}">Phone Number</b></td>
                                 <td>
-                                    <a th:href="${contact.mobileUrl}"
-                                       th:text="${contact.mobileFormatted}">MOBILE</a>
+                                    <a th:href="${lead.phoneNumberUrl}"
+                                       th:text="${lead.phoneNumberFormatted}">MOBILE</a>
 
-                                    <a class="btn btn-sm btn-whatsapp margin-left" th:href="${contact.whatsappUrl}">
+                                    <a class="btn btn-sm btn-whatsapp margin-left" target="_blank"
+                                       th:href="${lead.whatsappUrl}">
                                         <i class="fa-brands fa-whatsapp"></i>
                                         <span th:text="#{button.whatsapp}">Whatsapp</span>
                                     </a>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.phone}">
-                                <td><b th:text="#{page.contact.phone}">Phone</b></td>
+                            <tr th:if="${lead.email}">
+                                <td><b th:text="#{page.lead.email}">Email</b></td>
                                 <td>
-                                    <a th:href="${contact.phoneUrl}"
-                                       th:text="${contact.phoneFormatted}">PHONE</a>
+                                    <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.preferredCommunicationMethod.name != 'UNKNOWN'}">
-                                <td><b th:text="#{page.contact.contact_via}">Contact me via</b></td>
-                                <td th:text="#{'preferred-communication-method.' + ${contact.preferredCommunicationMethod}}">
-                                    METHOD
+                            <tr th:if="${lead.nextVisitAtText}">
+                                <td><b th:text="#{page.lead.next-visit-at}">Next Visit</b></td>
+                                <td>
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <span th:text="${lead.nextVisitAtText}">YYY-MM-DD</span>
                                 </td>
                             </tr>
-                            <tr th:if="${contact.language}">
-                                <td><b th:text="#{page.contact.language}">Language</b></td>
-                                <td th:text="${contact.languageText}">LANGUAGE</td>
+                            <tr th:if="${lead.nextContactAtText}">
+                                <td><b th:text="#{page.lead.next-contact-at}">Next Communication</b></td>
+                                <td>
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                    <span th:text="${lead.nextContactAtText}">YYY-MM-DD</span>
+                                </td>
                             </tr>
-                            <tr th:if="${contact.address}">
-                                <td><b th:text="#{page.contact.address}">Address</b></td>
-                                <td th:utext="${contact.address.toHtml()}">HTML</td>
+
+                            <tr th:if="${lead.visitRequestedAt}">
+                                <td><b th:text="#{page.lead.visit-request-at}">Request a Visit</b></td>
+                                <td th:text="${lead.visitRequestedAtText}">HTML</td>
                             </tr>
-                            <tr th:if="${user?.hasFullAccess('contact')}">
-                                <td><b th:text="#{page.contact.owner}">Address</b></td>
-                                <td th:text="${contact.createdBy.displayName}">OWNER</td>
+                            <tr>
+                                <td><b th:text="#{page.lead.created-at}">Created At</b></td>
+                                <td th:text="${lead.createdAtText}">HTML</td>
                             </tr>
                         </table>
                     </div>

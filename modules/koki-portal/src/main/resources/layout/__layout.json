@@ -1,8 +1,9 @@
 {
   "tabs": [
-    "contact",
     "listing",
-    "agent",
-    "offer"
+    "lead",
+    "offer",
+    "contact",
+    "agent"
   ]
 }

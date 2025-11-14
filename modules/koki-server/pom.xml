@@ -43,16 +43,6 @@
             <version>${java-jwt.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stripe</groupId>
-            <artifactId>stripe-java</artifactId>
-            <version>${stripe.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.paypal.sdk</groupId>
-            <artifactId>paypal-server-sdk</artifactId>
-            <version>${paypal.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari-cp.version}</version>

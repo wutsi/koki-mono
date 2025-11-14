@@ -19,25 +19,23 @@
         <div class="col-12">
             <div class="widget contact-summary">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <h1 class="entity-title">
-                            <span class="d-none d-md-inline" th:text="${contact.name}">NAME</span>
-                        </h1>
-                        <div>
-                            <a class="btn-edit btn btn-light btn-sm"
-                               th:href="'/contacts/' + ${contact.id} + '/edit'"
-                               th:if="${contact.canManage(user)}"
-                               th:text="#{button.edit}"
-                            >Edit</a>
+                    <div class="text-right">
+                        <a class="btn-edit btn btn-light btn-sm"
+                           th:href="'/contacts/' + ${contact.id} + '/edit'"
+                           th:if="${contact.canManage(user)}"
+                           th:text="#{button.edit}"
+                        >Edit</a>
 
-                            <a class="btn-delete btn btn-danger btn-sm"
-                               onclick="return confirm('Are you sure you want to delete the contact?')"
-                               th:href="'/contacts/' + ${contact.id} + '/delete'"
-                               th:if="${contact.canDelete(user)}"
-                               th:text="#{button.delete}"
-                            >Delete</a>
-                        </div>
+                        <a class="btn-delete btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete the contact?')"
+                           th:href="'/contacts/' + ${contact.id} + '/delete'"
+                           th:if="${contact.canDelete(user)}"
+                           th:text="#{button.delete}"
+                        >Delete</a>
                     </div>
+                    <h1 class="entity-title">
+                        <span th:text="${contact.name}">NAME</span>
+                    </h1>
                     <div class="flex margin-top">
                         <div class="margin-right-2x d-none d-md-block" th:if="${contact.contactType}">
                             <b th:text="#{page.contact.contact_type}">Contact Type</b><br/>

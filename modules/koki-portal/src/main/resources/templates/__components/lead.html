@@ -2,95 +2,82 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="widget" th:fragment="contact-breadcrumb(contact)">
+<div class="widget" th:fragment="lead-breadcrumb(lead)">
     <div class="widget-body">
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
-                <li class="breadcrumb-item active" th:if="${contact}">
-                    <span th:text="${contact.name}">CONTACT</span>
+                <li class="breadcrumb-item">
+                    <a href="/" th:text="#{module.home}">Home</a>
                 </li>
-                <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
+                <li class="breadcrumb-item" th:if="${lead}">
+                    <a href="/leads" th:text="#{module.lead}">MODULE</a>
+                </li>
+                <li class="breadcrumb-item active" th:if="${lead}">
+                    <span th:text="${lead.displayName}">NAME</span>
+                </li>
+                <li class="breadcrumb-item active" th:if="!${lead}" th:text="#{module.lead}">MODULE</li>
             </ol>
         </nav>
     </div>
 </div>
 
-<tr th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
-    <td>
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}">
-            <div th:text="${contact.name}">NAME</div>
+<div th:fragment="lead-status-badge(lead)" th:remove="tag">
+    <span class="lead-status badge text-bg-danger"
+          th:if="${lead.status.name() == 'NEW'}"
+          th:text="#{'lead-status.' + ${lead.status}}">NEW</span>
 
-            <table border="0" class="d-block d-md-none text-small">
-                <tr th:if="${contact.email}">
-                    <th>
-                        <i class="fa-regular fa-envelope"></i>
-                    </th>
-                    <td class="padding-left" th:text="${contact.email}">EMAIL</td>
+    <span class="lead-status badge text-bg-primary"
+          th:if="${lead.status.name() == 'CONTACTED'}"
+          th:text="#{'lead-status.' + ${lead.status}}">ACTIVE</span>
+
+    <span class="lead-status badge text-bg-primary"
+          th:if="${lead.status.name() == 'CONTACT_LATER'}"
+          th:text="#{'lead-status.' + ${lead.status}} + ' - ' + ${lead.nextContactAtText}">ACTIVE</span>
+
+    <span class="lead-status badge text-bg-primary"
+          th:if="${lead.status.name() == 'VISIT_SET'}"
+          th:text="#{'lead-status.' + ${lead.status}} + ' - ' + ${lead.nextVisitAtText}">ACTIVE</span>
+
+    <span class="lead-status badge text-bg-success"
+          th:if="${lead.status.name() == 'CLIENT'}"
+          th:text="#{'lead-status.' + ${lead.status}}">SOLD</span>
+
+    <span class="lead-status badge text-bg-secondary"
+          th:if="${lead.status == 'UNQUALIFIED'} OR ${lead.status == 'UNRESPONSIVE'}"
+          th:text="#{'lead-status.' + ${lead.status}}">UNQUALIFIED</span>
+</div>
+
+<tr th:fragment="lead-row(lead)" th:remove="tag">
+    <td class="text-small" width="1%">
+        <a th:href="'/leads/' + ${lead.id}">
+            <i class="fa-solid fa-circle lead-status-new margin-top-small"
+               th:if="${lead.statusNew}"></i>
+        </a>
+    </td>
+    <td>
+        <a th:href="'/leads/' + ${lead.id}">
+            <span th:text="${lead.displayName}">NAME</span>
+            <table class="text-small d-block d-md-none"
+                   th:if="${lead.nextContactAtText} OR ${lead.nextVisitAtText}">
+                <tr th:if="${lead.nextContactAtText}">
+                    <td><i class="fa-solid fa-mobile-screen-button"></i></td>
+                    <td class="margin-left" th:text="${lead.nextContactAtText}">yyyy-MM-dd</td>
                 </tr>
-                <tr th:if="${contact.mobile}">
-                    <th>
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                    </th>
-                    <td class="padding-left" th:text="${contact.mobileFormatted}">EMAIL</td>
-                </tr>
-                <tr th:if="${contact.phone}">
-                    <th>
-                        <i class="fa-solid fa-phone"></i>
-                    </th>
-                    <td class="padding-left" th:text="${contact.phoneFormatted}">EMAIL</td>
+                <tr th:if="${lead.nextVisitAtText}">
+                    <td><i class="fa-solid fa-calendar-days"></i></td>
+                    <td class="margin-left" th:text="${lead.nextVisitAtText}">yyyy-MM-dd</td>
                 </tr>
             </table>
         </a>
     </td>
-    <td class="d-none d-lg-table-cell" th:if="${showType}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
-            TYPE
-        </a>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.nextContactAtText}">YYYY-MM-DD</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.nextVisitAtText}">YYYY-MM-DD</a>
     </td>
-    <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
-    </td>
-    <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
-    </td>
-    <td class="d-none d-md-table-cell" th:if="${showAccount}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
-    </td>
-    <td class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.createdBy?.displayName}">OWNER</a>
+    <td class="text-right">
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>
     </td>
 </tr>
-
-
-<div th:fragment="contact-card(contact)">
-    <div>
-        <b th:text="${contact.name}">NAME</b>
-    </div>
-    <div th:if="${contact.email}" th:text="${contact.email}">EMAIL</div>
-    <div class="flex margin-top-small">
-        <div class="margin-right" th:if="${contact.whatsappUrl}">
-            <a class="btn btn-whatsapp btn-sm" th:href="${contact.whatsappUrl}">
-                <i class="fa-brands fa-whatsapp"></i>
-                <span th:text="#{button.whatsapp}">Whatsapp</span>
-            </a>
-        </div>
-        <div class="margin-right" th:if="${contact.mobile}">
-            <a class="btn btn-light btn-sm" th:href="${contact.mobileUrl}">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <span th:text="#{button.call}">XXXX</span>
-            </a>
-        </div>
-        <div th:if="${contact.phone} AND !${contact.mobile}">
-            <a class="btn btn-light btn-sm" th:href="${contact.mobileUrl}" th:if="${contact.mobile}">
-                <i class="fa-solid fa-phone"></i>
-                <span th:text="#{button.call}">XXXX</span>
-            </a>
-        </div>
-    </div>
-</div>
 </body>

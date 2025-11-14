@@ -640,7 +640,8 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border: 1px solid gray;
 }
 
-.btn-whatsapp {
+.btn-whatsapp,
+.btn-whatsapp:active {
     background: #075E54;
     color: white !important;
     border: 1px solid gray;

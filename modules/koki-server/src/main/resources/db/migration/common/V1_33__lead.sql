@@ -1,49 +1,35 @@
-CREATE TABLE T_AGENT(
+CREATE TABLE T_LEAD(
   id                        BIGINT NOT NULL AUTO_INCREMENT,
 
   tenant_fk                 BIGINT NOT NULL,
-  user_fk                   BIGINT,
+  listing_fk                BIGINT,
 
-  total_sales               BIGINT,
-  total_rentals             BIGINT,
-  total_transactions        BIGINT,
-  past_12m_sales            BIGINT,
-  past_12m_rentals          BIGINT,
-  past_12m_transactions     BIGINT,
-  created_at                DATETIME NOT NULL DEFAULT NOW(),
-  modified_at               DATETIME NOT NULL DEFAULT NOW(),
-  last_sold_at              DATE,
+  status                    INT NOT NULL DEFAULT 0,
+  first_name                VARCHAR(50) NOT NULL,
+  last_name                 VARCHAR(50) NOT NULL,
+  email                     VARCHAR(255),
+  phone_number              VARCHAR(30) NOT NULL,
+  message                   TEXT,
+  visit_requested_at        DATETIME,
+  next_contact_at           DATETIME,
+  next_visit_at           DATETIME,
 
-  UNIQUE(user_fk),
-  PRIMARY KEY(id)
-) ENGINE = InnoDB;
-
-CREATE INDEX last_sold_at ON T_AGENT(last_sold_at);
-CREATE INDEX past_12m_transactions ON T_AGENT(past_12m_transactions);
-
-CREATE TABLE T_AGENT_METRIC(
-  id                        BIGINT NOT NULL AUTO_INCREMENT,
-
-  tenant_fk                 BIGINT NOT NULL,
-  agent_fk                  BIGINT NOT NULL REFERENCES T_AGENT(id),
-
-  listing_type              INT NOT NULL DEFAULT 0,
-  `period`                  INT NOT NULL DEFAULT 0,
-  total                     BIGINT NOT NULL DEFAULT 0,
-  min_price                 BIGINT NOT NULL DEFAULT 0,
-  max_price                 BIGINT NOT NULL DEFAULT 0,
-  average_price             BIGINT NOT NULL DEFAULT 0,
-  total_price               BIGINT NOT NULL DEFAULT 0,
-  currency                  VARCHAR(3),
   created_at                DATETIME NOT NULL DEFAULT NOW(),
   modified_at               DATETIME NOT NULL DEFAULT NOW(),
 
-  UNIQUE(agent_fk, listing_type, period),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+CREATE INDEX tenant ON T_LEAD(tenant_fk);
+CREATE INDEX listing ON T_LEAD(listing_fk);
+CREATE INDEX next_contact_at ON T_LEAD(next_contact_at);
+CREATE INDEX next_visit_at ON T_LEAD(next_visit_at);
+CREATE INDEX status ON T_LEAD(status);
+
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
-    VALUES (290, 17, 'agent', 'Agents', '/agents', null, null, null, '/css/agents.css');
+    VALUES (300, 18, 'lead', 'Leads', '/leads', null, null, null, '/css/leads.css');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (2900, 290, 'agent',             'View Agents');
+    VALUES (3000, 300, 'lead',             'View Leads'),
+           (3001, 300, 'lead:full_access', 'Full access on Leads');

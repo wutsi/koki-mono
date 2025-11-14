@@ -271,19 +271,19 @@
     </div>
 
     <!-- Contact -->
-    <!--
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
             <div>
+                <img class="listing-agent" height="48" th:src="${listing.sellerAgentUser.photoUrl}" width="48"/>
+
                 <button class="btn btn-primary" data-bs-target="#listing-message-modal" data-bs-toggle="modal"
                         id="btn-contact-us"
-                        th:text="#{page.listing.section.message.cta}">
+                        th:text="#{button.send_message}">
                     Send a Message
                 </button>
             </div>
         </div>
     </div>
-    -->
 </div>
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>

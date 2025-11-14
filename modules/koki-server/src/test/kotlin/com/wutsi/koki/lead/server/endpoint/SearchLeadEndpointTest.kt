@@ -1,62 +1,52 @@
 package com.wutsi.koki.lead.server.endpoint
 
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.lead.dto.CreateLeadRequest
-import com.wutsi.koki.lead.dto.CreateLeadResponse
-import com.wutsi.koki.lead.dto.GetLeadResponse
-import com.wutsi.koki.lead.dto.LeadStatus
-import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
-import com.wutsi.koki.lead.server.dao.LeadRepository
-import com.wutsi.koki.platform.mq.Publisher
-import org.springframework.beans.factory.annotation.Autowired
+import com.wutsi.koki.lead.dto.SearchLeadResponse
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/lead/GetLeadEndpoint.sql"])
-class GetLeadEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/lead/SearchLeadEndpoint.sql"])
+class SearchLeadEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
-    fun get() {
-        val df = SimpleDateFormat("yyyy-MM-dd")
-        df.timeZone = TimeZone.getTimeZone("UTC")
-
-        val response = rest.getForEntity("/v1/leads/100", GetLeadResponse::class.java)
+    fun `by id`() {
+        val response = rest.getForEntity("/v1/leads?id=101&id=100", SearchLeadResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val lead = response.body!!.lead
-        assertEquals(111L, lead.listingId)
-        assertEquals("Hello world", lead.message)
-        assertEquals("Yo", lead.firstName)
-        assertEquals("Man", lead.lastName)
-        assertEquals("2026-12-30", df.format(lead.visitRequestedAt))
-        assertEquals("+15477580000", lead.phoneNumber)
-        assertEquals("yo.man@gmail.com", lead.email)
-        assertEquals(LeadStatus.CONTACTED, lead.status)
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(100L, 101L), ids)
     }
 
     @Test
-    fun `not found`() {
-        val response = rest.getForEntity("/v1/leads/999", ErrorResponse::class.java)
+    fun `by listing`() {
+        val response = rest.getForEntity("/v1/leads?listing-id=222", SearchLeadResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.LEAD_NOT_FOUND, response.body?.error?.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(200L, 201L), ids)
     }
 
     @Test
-    fun `bad tenant`() {
-        val response = rest.getForEntity("/v1/leads/200", ErrorResponse::class.java)
+    fun `by agent`() {
+        val response = rest.getForEntity("/v1/leads?agent-user-id=3", SearchLeadResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.LEAD_NOT_FOUND, response.body?.error?.code)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(300L), ids)
+    }
+
+    @Test
+    fun `by status`() {
+        val response =
+            rest.getForEntity("/v1/leads?status=CONTACTED&status=VISIT_SET", SearchLeadResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(400L, 401L, 402L), ids)
     }
 }

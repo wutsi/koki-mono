@@ -69,7 +69,7 @@ CREATE TABLE T_OFFER_STATUS(
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
-    VALUES (280, 16, 'offer', 'Offers', '/offers', '/offers/tab', null, '/js/offers.js', '/css/offers.css');
+    VALUES (280, 16, 'offer', 'Offers', '/offers', '/offers/tab', null, null, '/css/offers.css');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (2800, 280, 'offer',             'View Offers'),

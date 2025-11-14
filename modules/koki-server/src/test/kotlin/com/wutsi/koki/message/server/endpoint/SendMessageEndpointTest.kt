@@ -96,7 +96,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.cityId, message.cityId)
         assertEquals("CM", message.country)
 
-        val account = accountDao.findById(message.senderAccountId).get()
+        val account = accountDao.findById(message.senderAccountId ?: -1).get()
         assertEquals(request.cityId, account.shippingCityId)
         assertEquals("CM", account.shippingCountry)
     }
@@ -130,7 +130,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.language, message.language)
         assertEquals(100L, message.senderAccountId)
 
-        val account = accountDao.findById(message.senderAccountId).get()
+        val account = accountDao.findById(message.senderAccountId ?: -1).get()
         assertEquals("Inc", account.name)
         assertEquals(request.senderEmail.lowercase(), account.email)
         assertEquals(request.senderPhone, account.mobile)
@@ -164,7 +164,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.cityId, message.cityId)
         assertEquals("CM", message.country)
 
-        val account = accountDao.findById(message.senderAccountId).get()
+        val account = accountDao.findById(message.senderAccountId ?: -1).get()
         assertEquals(request.cityId, account.shippingCityId)
         assertEquals("CM", account.shippingCountry)
     }
@@ -189,7 +189,7 @@ class SendMessageEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.cityId, message.cityId)
         assertEquals("CM", message.country)
 
-        val account = accountDao.findById(message.senderAccountId).get()
+        val account = accountDao.findById(message.senderAccountId ?: -1).get()
         assertEquals("YoMan", account.name)
         assertEquals(request.senderEmail.lowercase(), account.email)
         assertEquals("+18001111111", account.mobile)

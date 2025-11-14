@@ -30,7 +30,7 @@
                         </div>
                     </div>
 
-                    <hr/>
+                    <hr th:if="${contacts}"/>
 
                     <table class="table table-striped" th:if="${contacts} OR ${keyword}">
                         <thead>

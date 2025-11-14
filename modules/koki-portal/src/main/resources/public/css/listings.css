@@ -94,6 +94,21 @@ ul.amenities li {
     height: 1.25em;
 }
 
+a.listing-item {
+    text-decoration: none;
+}
+
+.listing-item .hero-image {
+    max-width: 96px;
+    max-height: 96px;
+}
+
+.listing-item .hero-image img {
+    max-width: 92px;
+    max-height: 92px;
+}
+
+
 .listing-carousel {
     display: flex;
     overflow-y: auto;
@@ -164,6 +179,16 @@ a .listing-filter-container {
     }
 
     table tr.listing td .hero-image img {
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .listing-item .hero-image {
+        max-width: 64px;
+        max-height: 64px;
+    }
+
+    .listing-item .hero-image img {
         max-width: 60px;
         max-height: 60px;
     }

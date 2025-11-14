@@ -18,6 +18,7 @@ CREATE TABLE T_AGENT(
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 
+CREATE INDEX tenant ON T_AGENT(tenant_fk);
 CREATE INDEX last_sold_at ON T_AGENT(last_sold_at);
 CREATE INDEX past_12m_transactions ON T_AGENT(past_12m_transactions);
 
@@ -46,4 +47,5 @@ INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_u
     VALUES (290, 17, 'agent', 'Agents', '/agents', null, null, null, '/css/agents.css');
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
-    VALUES (2900, 290, 'agent',             'View Agents');
+    VALUES (2900, 290, 'agent',             'View Agents'),
+           (2901, 290, 'agent:full_access', 'Full access on all Agents');

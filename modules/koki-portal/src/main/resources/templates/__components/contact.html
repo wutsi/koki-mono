@@ -6,12 +6,16 @@
     <div class="widget-body">
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item" th:if="${contact}"><a href="/contacts">Contacts</a></li>
+                <li class="breadcrumb-item">
+                    <a th:text="#{module.home}" href="/">Home</a>
+                </li>
+                <li class="breadcrumb-item" th:if="${contact}">
+                    <a href="/contacts" th:text="#{module.contact}">MODULE</a>
+                </li>
                 <li class="breadcrumb-item active" th:if="${contact}">
                     <span th:text="${contact.name}">CONTACT</span>
                 </li>
-                <li class="breadcrumb-item active" th:if="!${contact}">Contacts</li>
+                <li class="breadcrumb-item active" th:if="!${contact}" th:text="#{module.contact}">MODULE</li>
             </ol>
         </nav>
     </div>
