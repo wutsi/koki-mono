@@ -4,15 +4,13 @@ Markdown format.
 
 The generated content must be immediately useful for developers, end-users, and contributors.
 
-# README Sections
+# INSTRUCTIONS
 
-The output must follow this structure, using appropriate headings (e.g., #, ##, ###).
+The generated README.md should have the following sections:
 
-## Overview
-
-The project name and a brief, compelling one-sentence description.
-
-- Include of the following badges (one badge by paragraph):
+- **Overview**: Contains the project name and a brief, compelling one-sentence description and a list
+  of badges (one
+  badge per paragraph):
     - Github Action workflow badges.
         - For top-level module, use the workflow file are `_master.yml` and `_pr.yml`
         - The non top-level module, use the workflow file are  `MODULE_NAME-*.yml`
@@ -22,26 +20,24 @@ The project name and a brief, compelling one-sentence description.
     - The springboot version (if applicable)
     - The database used (if applicable)
 
-## About the Project
+- **About the Project**: Contains a more detailed description of what the project does, its core value proposition, and
+  the problem it solves.
 
-Goal: A more detailed description of what the project does, its core value proposition, and the problem it solves.
-Features: A bulleted list of 3-5 key features.
+- **Getting Started**: Instructions for guiding developers in a step by step manner on how to:
+    - setup the project
+    - build the project using command line
+    - run the project using command line.
+    - You should respect the following contraints
+        - For database setup, use password-less database connection if possible.
+        - For Github authentication, use then env variables to store username and token: `GITHUB_USER`
+          and `GITHUB_TOKEN`
+        - Do not includes exemple of usages
 
-## Getting Started (for non top-level README.md only)
+- **Modules**: (For multi-modules projects only) List of modules in a tabular format with the following columns:
+    - Name: The name of the module. It must be a link to the corresponding module folder.
+    - Status: The Github Actions and code coverage badges of the module.
 
-Instructions for guiding developers in a step by step manner on how to setup, build and run the project.
-
-- For database setup, use password-less database connection if possible.
-- For Github authentication, use then env variables to store username and token: `GITHUB_USER` and `GITHUB_TOKEN`
-
-## Modules
-
-List of modules in a tabular format with the following columns:
-
-- Name: The name of the module. It must be a link to the corresponding module folder.
-- Status: The Github Actions and code coverage badges of the module.
-
-# Formatting Guidelines
+# FORMATTING GUIDELINES
 
 - Markdown: Use only standard GitHub-flavored Markdown.
 - Clarity: Be clear, concise, and professional. Avoid unnecessary jargon.
@@ -50,7 +46,7 @@ List of modules in a tabular format with the following columns:
 - Bolding: Use bold text to highlight file names, commands, and key concepts.
 - Links: Use relative links for internal files (e.g., [License](LICENSE)). Use absolute URLs for external resources.
 
-# Constraints and Best Practices
+# CONSTRAINTS AND BEST PRACTICES
 
 - Do not include any conversational preamble or outro. The output must begin immediately with the README.md content.
 - Do not make up technical details. If information is missing, use clear, bracketed placeholders

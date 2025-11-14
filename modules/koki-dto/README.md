@@ -1,51 +1,130 @@
 # koki-dto
 
-A Kotlin library providing shared Data Transfer Objects (DTOs), enumerations, and validation contracts for the Koki
-platform APIs.
+## Overview
 
-[![koki-dto CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml)
+A strongly-typed, immutable Kotlin DTO library providing the shared request, response, event, error, security, and
+reference data contracts for the Koki platform.
+**koki-dto** is a strongly-typed, immutable Kotlin DTO library centralizing all request, response, event, error,
+security, and reference data contracts for the Koki platform.
 
-[![koki-dto CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml)
+[![CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-master.yml)
+
+[![CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-dto-pr.yml)
 
 ![Java 17](https://img.shields.io/badge/Java-17-red.svg)
 
-![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)
+The **koki-dto** module acts as the single source of truth for all data contracts across the Koki multi-tenant real
+estate platform. It centralizes immutable Kotlin data classes for REST payloads (requests/responses), standardized error
+envelopes, security models (JWT decoding/principal), domain events for asynchronous messaging, and reference data
 
 ## About the Project
 
-The **koki-dto** module serves as the single source of truth for all API contracts across the Koki platform. It
-centralizes request/response models, domain enumerations, validation rules, and event payloads to ensure type safety,
-prevent schema drift, and maintain consistency across backend services, SDKs, and frontend applications. By providing a
-pure library artifact with no business logic or runtime dependencies, it enables independent versioning and reduces
-coupling between services.
+The **koki-dto** module acts as the single source of truth for all data contracts across the Koki multi-tenant real
+estate platform. It centralizes immutable Kotlin data classes for REST payloads (requests/responses), standardized error
+envelopes, security models (JWT decoding/principal), domain events for asynchronous messaging, and reference data
 
-### Features
+Follow these steps to build and consume the library locally.
 
-- **Unified Contracts**: One versioned set of DTOs shared across all Koki modules and clients, preventing duplication
-  and schema drift
-- **Embedded Validation**: Jakarta Validation annotations (`@NotEmpty`, `@Email`, `@Size`, `@Valid`) directly on request
-  objects for automatic server-side input validation
-- **Strongly-Typed Enumerations**: Kotlin enums for statuses, types, and categories eliminating magic strings and
-  enabling compile-time validation
-- **Event-Driven Support**: Domain event payloads for asynchronous messaging, event sourcing, and microservices
-  integration
-- **JWT Utilities**: Lightweight token decoder for extracting authentication principals from JWT tokens in client
-  contexts
+## About the Project
+
+- **Java 17** installed and available on your PATH.
+
+### 3. Clone the Monorepo
+
+- A GitHub Personal Access Token (classic, with `read:packages`) if you plan to pull released versions from GitHub
+
+```bash
+git clone https://github.com/wutsi/koki-mono.git
+cd koki-mono/modules/koki-dto
+### 2. (Optional) Authenticate to GitHub Packages
+Resulting artifact coordinates:
+
+If you need to download dependencies or publish snapshots:
+Add credentials to your `~/.m2/settings.xml` (or environment) using environment variables:
+    <groupId>com.wutsi.koki</groupId>
+    <artifactId>koki-dto</artifactId>
+    <version>VERSION_NUMBER</version>
+
+This module is a library (no standalone runtime). There is **no application server to start**. Downstream services
+include it as a dependency; no run command is required here.
+Compiles sources, runs tests (if present), and installs the artifact to your local Maven repository.
+
+
+### 6. Adding as a Dependency (in another module POM)
+
+
+Use a placeholder version if referencing unreleased changes:
+
+
+- **[CONTRIBUTING.md](../../CONTRIBUTING.md)** – Development workflow, coding standards, and pull request process.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** – Detailed structure, design rationale, and security considerations.
+consumed by other modules such as **koki-server**, **koki-platform**, **koki-portal**, and **koki-sdk**.
+    <id>github</id>
+    <username>${env.GITHUB_USER}</username>
+    <password>${env.GITHUB_TOKEN}</password>
+- Schema drift and duplication are eliminated across independently deployed components.
+
+    <id>github</id>
+    <username>${env.GITHUB_USER}</username>
+(No secrets committed; use password-less local DBs elsewhere if needed.)
+
+    <password>${env.GITHUB_TOKEN}</password>
+
+- Jakarta Validation annotations on request DTOs ensure early, consistent input validation at service boundaries.
+- Event DTOs enable strongly-typed message publishing/consumption in downstream services without runtime coupling.
+
+Domain coverage includes: Accounts, Listings, Offers, Leads, Contacts, Messages, Notes, Files, Tenants, Security, Tracking, Reference Data, and Common cross-domain primitives.
+
+This module contains no business logic, persistence code, or external network calls. It is purely a compile-time library
+consumed by other modules such as **koki-server**, **koki-platform**, **koki-portal**, and **koki-sdk**.
 
 ## Getting Started
 
-Add **koki-dto** as a dependency to your project. No database, server runtime, or Spring configuration is required—this
-is a pure data contract library.
+Follow these steps to set up, build, and integrate the library locally.
 
-### Prerequisites
+### 1. Prerequisites
 
-- **Java 17+**
-- **Maven 3.6+** or **Gradle 7+**
-- **Kotlin 2.1.0+** (if using Kotlin)
+- **Java 17** installed and on PATH
+    <groupId>com.wutsi.koki</groupId>
+    <artifactId>koki-dto</artifactId>
+    <version>VERSION_NUMBER</version>
 
-### 1. Add Maven Dependency
+### 2. Clone the Repository
 
-Add the following dependency to your **pom.xml**:
+```bash
+git clone https://github.com/wutsi/koki-mono.git
+cd koki-mono/modules/koki-dto
+```
+
+### 3. (Optional) Configure GitHub Packages Auth
+
+See **[DEVELOP.md](../../DEVELOP.md)** for environment setup, cloning, and build workflow details.
+
+```xml
+See **[TESTING.md](../../TESTING.md)** for running unit tests, integration tests, and coverage guidance.
+<id>github</id>
+<username>${env.GITHUB_USER}</username>
+<password>${env.GITHUB_TOKEN}</password>
+    </server>
+```
+
+### 4. Build the Module
+
+```bash
+mvn clean install
+```
+
+Installs artifact to local Maven repo:
+
+```
+com.wutsi.koki:koki-dto:VERSION_NUMBER
+```
+
+### 5. Run (Not Applicable)
+
+This module is a library only; there is **no standalone runtime process** to execute.
+
+### 6. Add Dependency in Another Module
 
 ```xml
 
@@ -56,187 +135,18 @@ Add the following dependency to your **pom.xml**:
 </dependency>
 ```
 
-### 2. Add Gradle Dependency (Kotlin DSL)
+## Contributing
 
-Add the following to your **build.gradle.kts**:
+General contribution guidelines are documented in **[CONTRIBUTING.md](../../CONTRIBUTING.md)**.
 
-```kotlin
-dependencies {
-    implementation("com.wutsi.koki:koki-dto:VERSION_NUMBER")
-}
-```
+### Local Development
 
-### 3. Configure GitHub Packages Repository
+See **[DEVELOP.md](DEVELOP.md)** for module-specific build steps. For broader practices, see root **DEVELOP.md**.
 
-The **koki-dto** artifact is published to GitHub Packages. Configure your build tool to access it.
+### Testing
 
-**Maven** - Add to **pom.xml**:
+See **[TESTING.md](TESTING.md)** for module-specific notes. For broader standards, see root **TESTING.md**.
 
-```xml
+## License
 
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/wutsi/koki-mono</url>
-    </repository>
-</repositories>
-```
-
-**Gradle** - Add to **build.gradle.kts**:
-
-```kotlin
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/wutsi/koki-mono")
-        credentials {
-            username = System.getenv("GITHUB_USER")
-            password = System.getenv("GITHUB_TOKEN")
-        }
-    }
-}
-```
-
-### 4. Authenticate to GitHub Packages
-
-Create a Personal Access Token with **read:packages** scope from your GitHub account settings.
-
-Export environment variables:
-
-```bash
-export GITHUB_USER=your-github-username
-export GITHUB_TOKEN=your-personal-access-token
-```
-
-For Maven, add credentials to **~/.m2/settings.xml**:
-
-```xml
-
-<settings>
-    <servers>
-        <server>
-            <id>github</id>
-            <username>${env.GITHUB_USER}</username>
-            <password>${env.GITHUB_TOKEN}</password>
-        </server>
-    </servers>
-</settings>
-```
-
-### 5. Using DTOs in Your Code
-
-**Request DTOs with Validation**:
-
-```kotlin
-import com.wutsi.koki.account.dto.CreateAccountRequest
-import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.*
-
-@RestController
-@RequestMapping("/api/v1/accounts")
-class AccountController {
-
-    @PostMapping
-    fun createAccount(@Valid @RequestBody request: CreateAccountRequest): CreateAccountResponse {
-        // Validation is automatically triggered by @Valid annotation
-        // All constraints on CreateAccountRequest are checked before reaching this code
-        return accountService.createAccount(request)
-    }
-}
-```
-
-**Response DTOs**:
-
-```kotlin
-import com.wutsi.koki.account.dto.GetAccountResponse
-import com.wutsi.koki.account.dto.Account
-
-@GetMapping("/{id}")
-fun getAccount(@PathVariable id: Long): GetAccountResponse {
-    val account = accountService.findById(id)
-    return GetAccountResponse(account = account)
-}
-```
-
-**Enumerations**:
-
-```kotlin
-import com.wutsi.koki.lead.dto.LeadStatus
-import com.wutsi.koki.listing.dto.PropertyType
-
-val lead = Lead(
-    status = LeadStatus.QUALIFIED,
-    // ...
-)
-
-val listing = Listing(
-    propertyType = PropertyType.APARTMENT,
-    // ...
-)
-```
-
-**Event Publishing**:
-
-```kotlin
-import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
-
-fun publishUserCreatedEvent(userId: Long, tenantId: Long) {
-    val event = UserCreatedEvent(
-        userId = userId,
-        tenantId = tenantId,
-        timestamp = System.currentTimeMillis()
-    )
-    eventPublisher.publish(event)
-}
-```
-
-**JWT Token Decoding**:
-
-```kotlin
-import com.wutsi.koki.security.dto.JWTDecoder
-
-val decoder = JWTDecoder()
-val principal = decoder.decode(accessToken)
-println("User ID: ${principal.userId}")
-println("Tenant ID: ${principal.tenantId}")
-```
-
-### 6. Build the Module
-
-Clone the repository and build the module:
-
-```bash
-git clone https://github.com/wutsi/koki-mono.git
-cd koki-mono/modules/koki-dto
-mvn clean install
-```
-
-### 7. Run Tests
-
-Execute unit tests:
-
-```bash
-mvn test
-```
-
-Generate code coverage report:
-
-```bash
-mvn clean test jacoco:report
-```
-
-The coverage report will be available at **target/site/jacoco/index.html**.
-
-### 8. Code Style
-
-The project uses **ktlint** for Kotlin code style enforcement. Run the linter:
-
-```bash
-mvn antrun:run@ktlint
-```
-
-Auto-format code:
-
-```bash
-mvn antrun:run@ktlint-format
-```
-
+Licensed under the MIT License. See **[LICENSE.md](../../LICENSE.md)** for details.
