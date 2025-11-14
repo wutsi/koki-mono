@@ -1,6 +1,6 @@
 package com.wutsi.koki.tracking.server.domain
 
-data class KpiRoomEntity(
+data class KpiListingEntity(
     val tenantId: Long? = null,
     val productId: String? = null,
     val totalImpressions: Long = 0L,

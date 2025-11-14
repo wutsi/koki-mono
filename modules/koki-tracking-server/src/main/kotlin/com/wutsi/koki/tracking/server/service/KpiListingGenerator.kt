@@ -5,9 +5,9 @@ import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.StorageVisitor
 import com.wutsi.koki.track.dto.TrackEvent
-import com.wutsi.koki.tracking.server.dao.KpiRoomRepository
+import com.wutsi.koki.tracking.server.dao.KpiListingRepository
 import com.wutsi.koki.tracking.server.dao.TrackRepository
-import com.wutsi.koki.tracking.server.domain.KpiRoomEntity
+import com.wutsi.koki.tracking.server.domain.KpiListingEntity
 import com.wutsi.koki.tracking.server.domain.TrackEntity
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -19,14 +19,14 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Service
-class KpiRoomGenerator(
+class KpiListingGenerator(
     private val trackDao: TrackRepository,
-    private val kpiDao: KpiRoomRepository,
+    private val kpiDao: KpiListingRepository,
     private val storageServiceBuilder: StorageServiceBuilder,
     private val logger: KVLogger,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(KpiRoomGenerator::class.java)
+        private val LOGGER = LoggerFactory.getLogger(KpiListingGenerator::class.java)
         private val EVENTS = listOf(
             TrackEvent.IMPRESSION,
             TrackEvent.VIEW,
@@ -88,8 +88,8 @@ class KpiRoomGenerator(
         }
     }
 
-    private fun toKpiRoomEntity(tracks: List<TrackEntity>): KpiRoomEntity {
-        return KpiRoomEntity(
+    private fun toKpiRoomEntity(tracks: List<TrackEntity>): KpiListingEntity {
+        return KpiListingEntity(
             tenantId = tracks.first().tenantId,
             productId = tracks.first().productId,
             totalImpressions = tracks.filter { track -> track.event == TrackEvent.IMPRESSION }.size.toLong(),

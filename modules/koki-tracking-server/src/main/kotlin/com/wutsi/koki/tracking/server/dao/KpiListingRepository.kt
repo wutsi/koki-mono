@@ -1,7 +1,7 @@
 package com.wutsi.koki.tracking.server.dao
 
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
-import com.wutsi.koki.tracking.server.domain.KpiRoomEntity
+import com.wutsi.koki.tracking.server.domain.KpiListingEntity
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.springframework.stereotype.Service
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Service
-class KpiRoomRepository(private val storageServiceBuilder: StorageServiceBuilder) {
+class KpiListingRepository(private val storageServiceBuilder: StorageServiceBuilder) {
     companion object {
         private val HEADERS = arrayOf(
             "tenant_id",
@@ -31,7 +31,7 @@ class KpiRoomRepository(private val storageServiceBuilder: StorageServiceBuilder
         )
     }
 
-    fun save(date: LocalDate, items: List<KpiRoomEntity>): URL {
+    fun save(date: LocalDate, items: List<KpiListingEntity>): URL {
         val file = File.createTempFile(UUID.randomUUID().toString(), "csv")
         try {
             // Store to file
@@ -43,14 +43,14 @@ class KpiRoomRepository(private val storageServiceBuilder: StorageServiceBuilder
             // Store to cloud
             val input = FileInputStream(file)
             input.use {
-                return storeToCloud(input, date, "rooms.csv", file.length())
+                return storeToCloud(input, date, "listings.csv", file.length())
             }
         } finally {
             file.delete()
         }
     }
 
-    private fun storeLocally(items: List<KpiRoomEntity>, out: OutputStream) {
+    private fun storeLocally(items: List<KpiListingEntity>, out: OutputStream) {
         val writer = BufferedWriter(OutputStreamWriter(out))
         writer.use {
             val printer = CSVPrinter(

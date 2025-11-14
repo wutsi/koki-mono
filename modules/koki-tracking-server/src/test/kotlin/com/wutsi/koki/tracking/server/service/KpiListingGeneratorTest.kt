@@ -22,7 +22,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class KpiRoomGeneratorTest {
+class KpiListingGeneratorTest {
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
 
@@ -36,7 +36,7 @@ class KpiRoomGeneratorTest {
     private lateinit var consumer: TrackingConsumer
 
     @Autowired
-    private lateinit var generator: KpiRoomGenerator
+    private lateinit var generator: KpiListingGenerator
 
     @BeforeEach
     fun setUp() {
@@ -70,7 +70,7 @@ class KpiRoomGeneratorTest {
 
         // THEN
         val date = LocalDate.now(ZoneId.of("UTC"))
-        val path = "kpi/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM")) + "/rooms.csv"
+        val path = "kpi/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM")) + "/listings.csv"
         val file = File("$directory/$path")
         assertEquals(
             """

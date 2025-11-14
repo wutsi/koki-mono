@@ -5,8 +5,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.local.LocalStorageService
-import com.wutsi.koki.tracking.server.dao.KpiRoomRepository
-import com.wutsi.koki.tracking.server.domain.KpiRoomEntity
+import com.wutsi.koki.tracking.server.dao.KpiListingRepository
+import com.wutsi.koki.tracking.server.domain.KpiListingEntity
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -19,9 +19,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class KpiRoomRepositoryTest {
+class KpiListingRepositoryTest {
     @Autowired
-    private lateinit var dao: KpiRoomRepository
+    private lateinit var dao: KpiListingRepository
 
     @MockitoBean
     private lateinit var storageServiceBuilder: StorageServiceBuilder
@@ -56,7 +56,7 @@ class KpiRoomRepositoryTest {
         )
     }
 
-    private fun createKpi() = KpiRoomEntity(
+    private fun createKpi() = KpiListingEntity(
         productId = "1234",
         tenantId = 1L,
         totalVisitors = 10,

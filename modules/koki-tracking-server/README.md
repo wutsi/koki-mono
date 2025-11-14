@@ -1,157 +1,124 @@
 # koki-tracking-server
 
-A Spring Boot Kotlin service that ingests, processes, and persists tracking events (page views, impressions,
-interactions) for analytics and KPI generation across the Koki platform.
+A Kotlin Spring Boot service that ingests, enriches, and persists tracking events produced across the Koki platform.
 
-[![koki-tracking-server CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-master.yml)
+![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-master.yml/badge.svg)
 
-[![koki-tracking-server CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-pr.yml)
+![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-tracking-server-pr.yml/badge.svg)
 
-![Coverage](../../.github/badges/koki-tracking-server-jococo.svg)
+![JaCoCo](../../.github/badges/koki-tracking-server-jacoco.svg)
 
-![Java 17](https://img.shields.io/badge/Java-17-red.svg)
+![Java](https://img.shields.io/badge/Java-17-blue)
 
-![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)
 
-![Spring Boot 3.5.7](https://img.shields.io/badge/SpringBoot-3.5.7-green.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)
 
-![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4.0-orange)
+
+![Redis](https://img.shields.io/badge/Redis-7.0-red)
+
+## Table of Contents
+
+- [About the Project](#about-the-project)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Running the Project](#running-the-project)
+    - [Running Tests](#running-tests)
+- [License](#license)
 
 ## About the Project
 
-`koki-tracking-server` collects user and system interaction events emitted by other Koki services or clients. Events
-enter a processing pipeline that normalizes, expands (splitting multi-product impressions), enriches with device/user
-metadata, and persists them for downstream KPI room generation, reporting, and analytics. High test coverage ensures
-reliability of the pipeline and transformation logic.
-
-### Features
-
-- **Event Ingestion Pipeline** – Consumer based processing with filtering stages for validation, expansion, and
-  persistence.
-- **Multi-Product Impression Handling** – Automatic splitting of impression events with ranked product identifiers.
-- **Scheduling & KPI Generation** – Cron-driven jobs produce daily and monthly KPI rollups (configurable frequency).
-- **Message Queue Integration** – RabbitMQ exchange with primary queue + dead letter queue retry strategy.
-- **High Coverage & Observability** – Actuator endpoints, structured logging (KVLogger), and high Jacoco targets.
+The **koki-tracking-server** collects tracking events (page views, impressions, interactions) emitted by other Koki
+components (servers, portals, chatbots, SDKs). It applies a modular enrichment pipeline (bot filtering, source
+attribution, device type and geo classification) and produces enriched event data plus aggregated KPI metrics for
+downstream analytics and reporting. This enables a unified, scalable approach to understanding user engagement across
+multiple channels without requiring a full streaming analytics stack.
 
 ## Getting Started
 
-Run the tracking server locally to begin consuming tracking events.
-
 ### Prerequisites
 
-- **Java 17+**
-- **Maven 3.6+**
-- **MySQL 8+** (password-less root recommended for local)
-- **RabbitMQ** (local broker on `amqp://localhost`)
-- **Redis** (optional cache if enabled by platform config)
+Before running the project, ensure you have the following installed:
 
-### 1. Clone
+- **Java 17** or higher
+- **Maven 3.8+**
+- **RabbitMQ 4.0+**
+- **Redis 7.0+**
+- **AWS S3** (for production storage) or local filesystem
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/wutsi/koki-mono.git
 cd koki-mono/modules/koki-tracking-server
 ```
 
-### 2. Create Database
+2. Build the project:
 
 ```bash
-mysql -u root <<'SQL'
-CREATE DATABASE IF NOT EXISTS koki CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-SQL
+mvn clean install
 ```
 
-### 3. Configure (Optional Local Override)
-
-Create `application-local.yml` for custom overrides:
+3. Configure the application by creating or editing **application-local.yml**:
 
 ```yaml
-server:
-    port: 8083
-spring:
-    datasource:
-        url: jdbc:mysql://localhost:3306/koki?serverTimezone=UTC
-        username: root
-        password: ""
 wutsi:
     platform:
         mq:
             rabbitmq:
                 url: amqp://localhost
         cache:
-            type: redis
             redis:
-                url: redis://:test@localhost:6379
+                url: redis://localhost:6379
+        storage:
+            type: local
+            local:
+                directory: ${user.home}/__wutsi
 ```
 
-Run with profile:
+### Running the Project
+
+Run the application locally:
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=local"
+mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-### 4. Build
+The server will start on port **8083** by default.
 
-```bash
-mvn clean install
-```
-
-### 5. Run
-
-```bash
-mvn spring-boot:run
-```
-
-Or:
-
-```bash
-java -jar target/koki-tracking-server-VERSION_NUMBER.jar
-```
-
-Service default URL: `http://localhost:8083`
-
-### 6. Health & Info
+Verify the service is running:
 
 ```bash
 curl http://localhost:8083/actuator/health
-curl http://localhost:8083/actuator/info
 ```
 
-### 7. Submitting a Tracking Event (Example)
+### Running Tests
 
-Events are published to the queue by other services; to simulate you can send an HTTP POST if an ingestion endpoint
-exists or publish directly via RabbitMQ CLI (replace payload accordingly). If no HTTP endpoint is exposed, use the
-queue:
+Execute unit tests:
 
 ```bash
-# Pseudo example using rabbitmqadmin (adjust if installed)
-rabbitmqadmin publish exchange=koki-tracking routing_key=koki-tracking-queue payload='{"event":"IMPRESSION","tenantId":1,"productId":"123|456","time":"2025-01-01T10:00:00Z"}'
+mvn test
 ```
 
-### 8. Logs
+Run all tests including integration tests:
 
-Structured key-value logs include fields such as `track_event`, `track_product_id`, `track_correlation_id`, enabling
-downstream log aggregation.
+```bash
+mvn verify
+```
 
-### 9. Cron Configuration
+Generate test coverage report:
 
-Default cron expressions (see `application.yml`):
+```bash
+mvn clean test jacoco:report
+```
 
-- Daily room KPI flush: `0 */15 * * * *`
-- Monthly KPI generation: `0 30 5 2 * *`
-- Persister flush: `0 */15 * * * *`
-- DLQ processing: `0 */15 * * * *`
-  Adjust by overriding properties under `koki.kpi.room` and `koki.persister`.
-
-### 10. Troubleshooting
-
-| Issue               | Possible Cause                                  | Resolution                                                    |
-|---------------------|-------------------------------------------------|---------------------------------------------------------------|
-| No events processed | Queue empty / broker down                       | Verify RabbitMQ running and exchange/queue names match config |
-| High DLQ size       | Malformed events or transient failures          | Inspect DLQ messages; increase retries or fix producer schema |
-| Slow persistence    | DB saturation or large batch size               | Tune `koki.persister.buffer-size` and DB connection pool      |
-| Missing rankings    | IMPRESSION events not using product pipe format | Ensure producers send `productId` as `id1                     |id2|...` |
+The coverage report will be available at **target/site/jacoco/index.html**.
 
 ## License
 
-See the root [License](../../LICENSE.md).
+This project is licensed under the MIT License. See [LICENSE.md](../../LICENSE.md) for details.
 
