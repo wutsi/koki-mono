@@ -7,7 +7,7 @@ security, templating, and tracing.
 
 [![koki-platform CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-platform-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-platform-pr.yml)
 
-![Coverage](../../.github/badges/koki-platform-jococo.svg)
+![Coverage](../../.github/badges/koki-platform-jacoco.svg)
 
 ![Java 17](https://img.shields.io/badge/Java-17-red.svg)
 
@@ -17,21 +17,32 @@ security, templating, and tracing.
 
 ## About the Project
 
-`koki-platform` is a foundational library that abstracts common infrastructure concerns for Koki applications. It
+**koki-platform** is a foundational library that abstracts common infrastructure concerns for Koki applications. It
 provides pluggable implementations for storage (local/S3), messaging (RabbitMQ), caching (Redis), translation (AWS
 Translate), templating (Mustache), and observability (structured logging, tracing). By centralizing these cross-cutting
-concerns, it ensures consistency, reduces duplication, and simplifies service development.
+concerns, it ensures consistency, reduces duplication, and simplifies service development across the entire Koki
+ecosystem.
 
-### Features
+The library solves the problem of duplicated infrastructure code across multiple microservices by providing
+battle-tested, production-ready abstractions that can be easily integrated with minimal configuration. This allows
+development teams to focus on business logic while maintaining consistency in how services interact with external
+systems, handle multi-tenancy, manage security contexts, and produce structured observability data.
+
+### Key Features
 
 - **Pluggable Storage** – Unified interface for local filesystem and AWS S3 storage with transparent switching via
-  configuration.
+  configuration
 - **Message Queue Abstraction** – RabbitMQ-based async messaging with consumer patterns, retry logic, and dead-letter
-  queues.
-- **Caching Layer** – Redis integration with Spring Cache abstraction for distributed caching across service instances.
+  queues
+- **Caching Layer** – Redis integration with Spring Cache abstraction for distributed caching across service instances
 - **AI Provider Framework** – Extensible interface for LLM integrations (OpenAI, Anthropic) with tenant-specific
-  configuration.
-- **Security Utilities** – JWT decoding, tenant context providers, access token holders for multi-tenant authentication.
+  configuration
+- **Security Utilities** – JWT decoding, tenant context providers, access token holders for multi-tenant authentication
+- **Translation Services** – AWS Translate integration for multilingual content support
+- **Templating Engine** – Mustache-based template rendering for emails, notifications, and dynamic content
+- **Structured Logging** – Key-value logger with automatic tenant and trace context propagation
+- **Geo-IP Resolution** – Location-based services and geolocation lookup utilities
+- **Execution Framework** – Asynchronous task execution helpers and thread pool management
 
 ## Getting Started
 
@@ -43,7 +54,9 @@ Integrate the platform library into your Koki service to leverage shared infrast
 - **Maven 3.6+**
 - **Kotlin 2.1.0+**
 
-### Add Dependency
+### Installation
+
+Add the following dependency to your project:
 
 **Maven:**
 
@@ -66,7 +79,7 @@ dependencies {
 
 ### Configure GitHub Packages
 
-**Maven:**
+**Maven** (`pom.xml`):
 
 ```xml
 
@@ -78,7 +91,7 @@ dependencies {
 </repositories>
 ```
 
-**Gradle:**
+**Gradle** (`build.gradle.kts`):
 
 ```kotlin
 repositories {
@@ -92,9 +105,9 @@ repositories {
 }
 ```
 
-### Authenticate to GitHub Packages
+### Authentication
 
-Set environment variables:
+Configure GitHub Packages authentication. Set environment variables:
 
 ```bash
 export GITHUB_USER=your-github-username
@@ -116,9 +129,11 @@ Update **~/.m2/settings.xml**:
 </settings>
 ```
 
-### Storage Service Usage
+## Usage
 
-Configure storage backend:
+### Storage Service
+
+Configure storage backend in your **application.yml**:
 
 ```yaml
 wutsi:
@@ -133,7 +148,7 @@ wutsi:
                 region: us-east-1
 ```
 
-Use storage service:
+Use the storage service:
 
 ```kotlin
 import com.wutsi.koki.platform.storage.StorageService
@@ -152,7 +167,7 @@ class FileUploadService(
 }
 ```
 
-### Messaging Service Usage
+### Messaging Service
 
 Configure RabbitMQ:
 
@@ -206,7 +221,7 @@ wutsi:
                 url: redis://localhost:6379
 ```
 
-Use caching:
+Use caching annotations:
 
 ```kotlin
 import org.springframework.cache.annotation.Cacheable
@@ -223,10 +238,9 @@ class LocationService {
 
 ### AI Provider Integration
 
-Configure AI provider:
+Use the AI provider factory for LLM integration:
 
 ```kotlin
-import com.wutsi.koki.platform.ai.AIProvider
 import com.wutsi.koki.platform.ai.AIProviderFactory
 
 @Service
@@ -248,7 +262,7 @@ class ContentGenerator(
 
 ### Tenant Context
 
-Use tenant provider for multi-tenant operations:
+Access tenant information in multi-tenant scenarios:
 
 ```kotlin
 import com.wutsi.koki.platform.tenant.TenantProvider
@@ -267,7 +281,7 @@ class AccountService(
 
 ### Structured Logging
 
-Use KVLogger for structured logging:
+Use **KVLogger** for structured, machine-parsable logs:
 
 ```kotlin
 import com.wutsi.koki.platform.logger.KVLogger
@@ -290,7 +304,7 @@ class OrderService(
 
 ### Templating
 
-Use Mustache templates:
+Render dynamic templates using Mustache:
 
 ```kotlin
 import com.wutsi.koki.platform.templating.TemplateEngine
@@ -308,6 +322,18 @@ class EmailTemplateService(
     }
 }
 ```
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details on how to get started.
+
+### Local Development
+
+For instructions on setting up your local development environment, see [DEVELOP.md](../../DEVELOP.md).
+
+### Testing
+
+For information about running tests and our testing practices, see [TESTING.md](../../TESTING.md).
 
 ## License
 

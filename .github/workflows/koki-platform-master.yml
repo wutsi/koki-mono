@@ -50,7 +50,7 @@ jobs:
                 with:
                     generate-branches-badge: false
                     jacoco-csv-file: modules/koki-platform/target/site/jacoco/jacoco.csv
-                    coverage-badge-filename: koki-platform-jococo.svg
+                    coverage-badge-filename: koki-platform-jacoco.svg
 
             -   name: Commit the badge (if it changed)
                 continue-on-error: true
