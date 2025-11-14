@@ -33,15 +33,18 @@ class KokiLead(
 
     fun search(
         ids: List<Long> = emptyList(),
+        keyword: String? = null,
         listingIds: List<Long> = emptyList(),
         agentUserIds: List<Long> = emptyList(),
         statuses: List<LeadStatus> = emptyList(),
+        keywords: String? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): SearchLeadResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
+                "q" to keywords,
                 "id" to ids,
                 "listing-id" to listingIds,
                 "agent-user-id" to agentUserIds,
