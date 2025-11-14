@@ -31,6 +31,7 @@ class LeadService(
 
     fun search(
         tenantId: Long,
+        keyword: String? = null,
         ids: List<Long> = emptyList(),
         listingIds: List<Long> = emptyList(),
         agentUserIds: List<Long> = emptyList(),
@@ -40,6 +41,9 @@ class LeadService(
     ): List<LeadEntity> {
         val jql = StringBuilder("SELECT L FROM LeadEntity L WHERE L.tenantId = :tenantId")
 
+        if (keyword != null) {
+            jql.append(" AND ( (UPPER(L.firstName) LIKE :keyword) OR (UPPER(L.lastName) LIKE :keyword) OR (UPPER(L.email) LIKE :keyword) )")
+        }
         if (ids.isNotEmpty()) {
             jql.append(" AND L.id IN :ids")
         }
@@ -56,6 +60,9 @@ class LeadService(
 
         val query = em.createQuery(jql.toString(), LeadEntity::class.java)
         query.setParameter("tenantId", tenantId)
+        if (keyword.isNullOrEmpty().not()) {
+            query.setParameter("keyword", "%${keyword.uppercase()}%")
+        }
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
@@ -82,6 +89,7 @@ class LeadService(
                 tenantId = tenantId,
                 listing = listingService.get(request.listingId, tenantId),
                 status = LeadStatus.NEW,
+                source = request.source,
                 createdAt = now,
                 modifiedAt = now,
                 email = request.email,

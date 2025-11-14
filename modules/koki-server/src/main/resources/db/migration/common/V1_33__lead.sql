@@ -5,6 +5,7 @@ CREATE TABLE T_LEAD(
   listing_fk                BIGINT,
 
   status                    INT NOT NULL DEFAULT 0,
+  source                    INT NOT NULL DEFAULT 0,
   first_name                VARCHAR(50) NOT NULL,
   last_name                 VARCHAR(50) NOT NULL,
   email                     VARCHAR(255),
@@ -12,7 +13,7 @@ CREATE TABLE T_LEAD(
   message                   TEXT,
   visit_requested_at        DATETIME,
   next_contact_at           DATETIME,
-  next_visit_at           DATETIME,
+  next_visit_at             DATETIME,
 
   created_at                DATETIME NOT NULL DEFAULT NOW(),
   modified_at               DATETIME NOT NULL DEFAULT NOW(),
@@ -25,6 +26,7 @@ CREATE INDEX listing ON T_LEAD(listing_fk);
 CREATE INDEX next_contact_at ON T_LEAD(next_contact_at);
 CREATE INDEX next_visit_at ON T_LEAD(next_visit_at);
 CREATE INDEX status ON T_LEAD(status);
+CREATE INDEX first_last_email ON T_LEAD(first_name, last_name, email);
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)

@@ -76,6 +76,7 @@ class LeadEndpoints(
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "listing-id") listingIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "agent-user-id") agentUserIds: List<Long> = emptyList(),

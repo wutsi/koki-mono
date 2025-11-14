@@ -68,7 +68,7 @@ class ContactService(
 
         val query = em.createQuery(jql.toString(), ContactEntity::class.java)
         query.setParameter("tenantId", tenantId)
-        if (keyword != null) {
+        if (keyword.isNullOrEmpty().not()) {
             query.setParameter("keyword", "%${keyword.uppercase()}%")
         }
         if (ids.isNotEmpty()) {

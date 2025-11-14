@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
+import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
 import com.wutsi.koki.lead.server.dao.LeadRepository
@@ -34,7 +35,8 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         lastName = "Sponsible",
         visitRequestedAt = Date(),
         phoneNumber = "+15147589999",
-        email = "ray.sponsible@gmail.com"
+        email = "ray.sponsible@gmail.com",
+        source = LeadSource.WEBSITE,
     )
 
     @Test
@@ -55,6 +57,7 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.phoneNumber, lead.phoneNumber)
         assertEquals(request.email, lead.email)
         assertEquals(LeadStatus.NEW, lead.status)
+        assertEquals(request.source, lead.source)
 
         val event = argumentCaptor<LeadCreatedEvent>()
         verify(publisher).publish(event.capture())

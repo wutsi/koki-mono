@@ -1,5 +1,6 @@
 package com.wutsi.koki.lead.server.domain
 
+import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import jakarta.persistence.Column
@@ -33,6 +34,7 @@ data class LeadEntity(
     val message: String? = null,
     val visitRequestedAt: Date? = null,
     var status: LeadStatus = LeadStatus.UNKNOWN,
+    val source: LeadSource = LeadSource.UNKNOWN,
     var nextContactAt: Date? = null,
     var nextVisitAt: Date? = null,
     val createdAt: Date = Date(),
