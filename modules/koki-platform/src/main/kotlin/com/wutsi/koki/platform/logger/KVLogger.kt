@@ -2,6 +2,18 @@ package com.wutsi.koki.platform.logger
 
 import java.util.Optional
 
+/**
+ * Key-Value logging for structured logs.
+ *
+ * Usage:
+ * ```
+ * val logger: KVLogger = ...
+ * logger.add("key1", "value1")
+ * logger.add("key2", 123)
+ * logger.setException(exception) // If exception needs to be logged
+ * logger.log()
+ * ```
+ */
 interface KVLogger {
     fun log()
     fun add(key: String, value: String?)
