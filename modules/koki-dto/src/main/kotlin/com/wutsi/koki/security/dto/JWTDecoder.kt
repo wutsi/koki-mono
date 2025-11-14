@@ -8,6 +8,10 @@ open class JWTDecoder {
         const val ISSUER = "Koki"
     }
 
+    fun decode(accessToken: String): JWTPrincipal {
+        val verifier = JWT.require(getAlgorithm())
+            .withIssuer(ISSUER)
+            .build()
         return JWTPrincipal(verifier.verify(accessToken))
     }
 
@@ -15,4 +19,3 @@ open class JWTDecoder {
         return Algorithm.none()
     }
 }
-    private fun getAlgorithm(): Algorithm {
