@@ -4,6 +4,7 @@ on:
     pull_request:
         paths:
             - 'modules/koki-portal/**'
+            - '!modules/koki-portal/**/*.md'
             - '.github/workflows/koki-portal-pr.yml'
 
 jobs:

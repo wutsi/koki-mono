@@ -6,8 +6,8 @@ on:
             - master
         paths:
             - 'modules/koki-sdk/**'
-            - '.github/workflows/koki-sdk-master.yml'
             - '!modules/koki-sdk/**/*.md'
+            - '.github/workflows/koki-sdk-master.yml'
 
 jobs:
     build:

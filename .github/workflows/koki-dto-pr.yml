@@ -4,6 +4,7 @@ on:
     pull_request:
         paths:
             - 'modules/koki-dto/**'
+            - 'modules/koki-dto/**/*.md'
             - '.github/workflows/koki-dto-pr.yml'
 
 jobs:

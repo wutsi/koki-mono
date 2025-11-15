@@ -4,6 +4,7 @@ on:
     pull_request:
         paths:
             - 'modules/koki-tracking-server/**'
+            - '!modules/koki-tracking-server/**/*.md'
             - '.github/workflows/koki-tracking-server-pr.yml'
 
 jobs:
