@@ -6,7 +6,7 @@ on:
             - master
         paths:
             - 'modules/koki-platform/**'
-            - '!modules/koki-platform/**/*.md'
+            - '!modules/koki-platform/*.md'
             - '.github/workflows/koki-platform-master.yml'
 
 jobs:

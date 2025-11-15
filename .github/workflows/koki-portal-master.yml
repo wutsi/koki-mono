@@ -6,7 +6,7 @@ on:
             - master
         paths:
             - 'modules/koki-portal/**'
-            - '!modules/koki-portal/**/*.md'
+            - '!modules/koki-portal/*.md'
             - '.github/workflows/koki-portal-master.yml'
 
 jobs:

@@ -7,7 +7,7 @@ on:
             - master
         paths:
             - 'modules/koki-tracking-server/**'
-            - '!modules/koki-tracking-server/**/*.md'
+            - '!modules/koki-tracking-server/*.md'
             - '.github/workflows/koki-tracking-server-master.yml'
 
 jobs:

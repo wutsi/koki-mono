@@ -6,7 +6,7 @@ on:
             - master
         paths:
             - 'modules/koki-dto/**'
-            - 'modules/koki-dto/**/*.md'
+            - 'modules/koki-dto/*.md'
             - '.github/workflows/koki-dto-master.yml'
 
 jobs:
