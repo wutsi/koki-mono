@@ -12,21 +12,20 @@ The generated ARCHITECTURE.md should have the following sections:
 
 - **Overview**: A concise summary of what this document covers and why the architecture was chosen
 
-- **Project Structure**: This section provides a high-level overview of the project's directory structure, categorised
-  by architectural layer or major functional area. It is essential for quickly
-  navigating the codebase, locating relevant files, and understanding the overall organization and separation of
-  concerns.
+- **Project Structure**: This section provides a high-level overview of the project's directory structure (structure as
+  tree, without files). It is
+  essential for quickly navigating the codebase and understanding the overall organization and separation of concerns.
 
 - **High-Level System Diagram**: Provide a simple block diagram (e.g., a C4 Model Level 1: System Context diagram, or a
   basic component diagram) or a clear text-based description of the major components and their interactions. Focus on
   how data flows, services communicate, and key architectural boundaries.
 
-- **Core Components**: List and describe the main components of the system. For each, include its primary
-  responsibility.
+- **Core Components**: List and describe the main components of the system. For each component, include:
+    - Name of the component
+    - Briefly describe its primary purpose, key functionalities, and how users or other systems/layers interact with it.
+    - Describe each component as a separate subsection for clarity.
 
-- **Data Stores**: List and describe the databases and other persistent storage solutions used.
-
-- **External Integrations / APIs**: List any third-party services or external APIs the system interacts with.
+- **Data Stores**: List and describe the databases and other persistent storage solutions currently used.
 
 - **Deployment & Infrastructure**: Provide details about the deployment strategy and infrastructure setup, if
   applicable.
@@ -46,9 +45,9 @@ The generated ARCHITECTURE.md should have the following sections:
 # CONSTRAINTS AND BEST PRACTICES
 
 - Do not include any conversational preamble or outro. The output must begin immediately with the README.md content.
-- Do not make up technical details. If information is missing, use clear, bracketed placeholders
-  like [REPLACE WITH PROJECT DESCRIPTION] or [YOUR\_EMAIL@example.com].
+- Do not make up technical details. If information is missing, don't add anything.
 - Focus on the user's intent. If the user provides a programming language (e.g., "a Python web scraper"), tailor the
 - Prerequisites and Installation sections accordingly (e.g., mentioning pip and venv).
 - For dependencies to add in Maven or Gradle, do not use actual version, use VERSION_NUMBER placeholder instead.
 - If a section is not applicable, it should be omitted entirely from the final output.
+- Do not add any section that is not specified in the instructions.
