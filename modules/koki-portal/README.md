@@ -2,17 +2,17 @@
 
 A Spring Boot web application providing server-side rendered administrative interfaces for the Koki platform.
 
-![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml/badge.svg)
+[![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml)
 
-![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml/badge.svg)
+[![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml)
 
-![JaCoCo](../../.github/badges/koki-portal-jacoco.svg)
+[![JaCoCo](../../.github/badges/koki-portal-jacoco.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml)
 
-![Java](https://img.shields.io/badge/Java-17-blue)
+[![Java](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/)
 
-![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)
+[![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)](https://kotlinlang.org/)
 
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)](https://spring.io/projects/spring-boot)
 
 ## Table of Contents
 
@@ -29,7 +29,8 @@ A Spring Boot web application providing server-side rendered administrative inte
 The **koki-portal** is a server-side rendered web application that serves as the primary administrative interface for
 the Koki platform. It provides user-friendly web pages for managing accounts, contacts, listings, leads, messages,
 files, offers, and tenant configurations. Built with Spring Boot and Thymeleaf, the portal integrates with the
-koki-server backend via the koki-sdk client, implementing session-based authentication with JWT tokens and providing a
+**koki-server** backend via the koki-sdk client, implementing session-based authentication with JWT tokens and providing
+a
 responsive, accessible user experience.
 
 Key features include:
@@ -43,6 +44,10 @@ Key features include:
 - **Responsive Design**: Mobile-friendly interfaces using modern CSS frameworks
 - **Internationalization**: Multi-language support with message bundles
 - **Integration via SDK**: Seamless communication with koki-server REST APIs through the SDK client
+
+**Problem it solves:** Consolidates disparate administrative tasks (content management, tenant setup, user and module
+governance, operational monitoring) into a single, secure, multi-tenant interface—eliminating the need for ad-hoc
+tooling or direct API interaction and reducing operational complexity.
 
 ## Getting Started
 
@@ -123,7 +128,7 @@ Expected response:
 
 ```json
 {
-  "status": "UP"
+    "status": "UP"
 }
 ```
 
@@ -151,5 +156,4 @@ The coverage report will be available at **target/site/jacoco/index.html**.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE.md](../../LICENSE.md) for details.
-
+This project is licensed under the MIT License. See **[License](../../LICENSE.md)** for details.

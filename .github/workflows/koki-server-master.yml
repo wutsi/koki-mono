@@ -8,6 +8,7 @@ on:
         paths:
             - 'modules/koki-server/**'
             - '.github/workflows/koki-server-master.yml'
+            - '!modules/koki-server/**/*.md'
 
 jobs:
     build:

@@ -4,7 +4,6 @@ import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.signup.form.SignupForm
 import com.wutsi.koki.portal.user.service.InvitationService
 import com.wutsi.koki.tenant.dto.InvitationStatus
-import org.apache.commons.math3.fitting.leastsquares.LeastSquaresFactory.model
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller

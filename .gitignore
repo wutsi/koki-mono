@@ -36,3 +36,4 @@ chromedriver
 **/.jython_cache/
 
 *.tmp.html
+*.bak

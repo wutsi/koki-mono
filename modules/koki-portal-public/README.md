@@ -2,21 +2,21 @@
 
 A Spring Boot web application providing public-facing server-side rendered interfaces for the Koki platform.
 
-![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml/badge.svg)
+[![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml)
 
-![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml/badge.svg)
+[![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml)
 
-![JaCoCo](../../.github/badges/koki-portal-public-jacoco.svg)
+[![JaCoCo](../../.github/badges/koki-portal-public-jacoco.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml)
 
-![Java](https://img.shields.io/badge/Java-17-blue)
+[![Java](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/)
 
-![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)
+[![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)](https://kotlinlang.org/)
 
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)](https://spring.io/projects/spring-boot)
 
-![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4.0-orange)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4.0-orange)](https://www.rabbitmq.com/)
 
-![Redis](https://img.shields.io/badge/Redis-7.0-red)
+[![Redis](https://img.shields.io/badge/Redis-7.0-red)](https://redis.io/)
 
 ## Table of Contents
 
@@ -31,9 +31,10 @@ A Spring Boot web application providing public-facing server-side rendered inter
 ## About the Project
 
 The **koki-portal-public** is a public-facing web application that provides customer-facing interfaces for the Koki
-platform. Unlike the administrative koki-portal, this module serves end users with access to public listings, file
-sharing, reference data, and tracking capabilities. Built with Spring Boot and Thymeleaf, it integrates with koki-server
-via the koki-sdk client and implements lightweight authentication for public access scenarios.
+platform. Unlike the administrative **koki-portal**, this module serves end users with access to public listings, file
+sharing, reference data, and tracking capabilities. Built with Spring Boot and Thymeleaf, it integrates with *
+*koki-server** via the koki-sdk client and implements lightweight access patterns for anonymous and semi-authenticated
+interactions.
 
 Key features include:
 
@@ -45,6 +46,10 @@ Key features include:
 - **Performance Optimization**: Redis caching for frequently accessed content
 - **SEO Friendly**: Server-side rendering with semantic HTML for search engine optimization
 - **Integration via SDK**: Seamless communication with koki-server REST APIs
+
+**Problem it solves:** Provides a secure, performant, and SEO-friendly public presentation layer for marketplace
+content, removing the need for ad-hoc static sites or direct API consumption and enabling consistent tracking, caching,
+and tenant-aware content delivery.
 
 ## Getting Started
 
@@ -161,5 +166,4 @@ The coverage report will be available at **target/site/jacoco/index.html**.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE.md](../../LICENSE.md) for details.
-
+This project is licensed under the MIT License. See **[License](../../LICENSE.md)** for details.

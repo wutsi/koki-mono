@@ -1,5 +1,0 @@
-name,type,required,active,choices,label,description
-neq,TEXT,,yes,,NEQ,Numero d'entreprise du quebec
-id_tps,TEXT,,yes,,ID/TPS,Numero d'identification TPS
-id_tvq,TEXT,,yes,,ID/TVQ,Numero d'identification TVQ
-client_since,NUMBER,,yes,,Client Since,Year when the account was acquired
