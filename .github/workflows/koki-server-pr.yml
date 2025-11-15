@@ -5,6 +5,7 @@ on:
         paths:
             - 'modules/koki-server/**'
             - '.github/workflows/koki-server-pr.yml'
+            - '!modules/koki-server/**/*.md'
 
 jobs:
     build:
