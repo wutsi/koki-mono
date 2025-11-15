@@ -3,59 +3,31 @@
 ## Table of Content
 
 - [Overview](#overview)
-    - [Evolution & Versioning](#evolution--versioning)
 - [Project Structure](#project-structure)
 - [High-Level System Diagram](#high-level-system-diagram)
 - [Core Components](#core-components)
 - [Data Stores](#data-stores)
-- [External Integrations / APIs](#external-integrations--apis)
 - [Deployment & Infrastructure](#deployment--infrastructure)
 - [Security Considerations](#security-considerations)
 
-<!-- NOTE: Update the ToC when headings change. -->
-
 ## Overview
 
-The **koki-dto** module is the central, authoritative data contract library for the Koki platform. It supplies immutable
-Kotlin data classes (DTOs) for requests, responses, events, errors, security, reference data, and cross-domain helpers.
-These contracts are consumed compile‑time by backend services (**koki-server**), portals (**koki-portal**, *
-*koki-portal-public**), chatbots, tracking services, and the client SDK (**koki-sdk**).
+The **koki-dto** module is the authoritative data contract library for the Koki platform. It supplies immutable Kotlin
+data classes (DTOs) for requests, responses, events, errors, security, reference data, and cross-domain helpers. These
+contracts are consumed compile-time by backend services (koki-server), portals (koki-portal, koki-portal-public),
+chatbots, tracking services, and the client SDK (koki-sdk).
 
-Key characteristics:
+Evolution & Versioning (integrated): Changes prioritize backward compatibility by introducing new optional fields rather
+than repurposing existing ones. Field removals/renames are avoided unless coordinated across all dependents using a
+MAJOR version increment. Deprecated fields are retained for a transition period and documented. Snapshot artifacts (
+-SNAPSHOT) enable rapid iteration; releases follow semantic versioning (MAJOR.MINOR.PATCH). Cross-module compatibility
+is validated in CI when shared dependency versions are bumped.
 
-- Single source of truth for REST and asynchronous (event) payload schemas
-- Immutable, type‑safe Kotlin data classes with declarative Jakarta Validation constraints on inbound request models
-- Domain‑partitioned package structure (account, listing, offer, lead, tenant, security, etc.) for clear separation of
-  concerns
-- Event model subpackages enabling strongly‑typed, message‑queue based, asynchronous workflows (e.g., RabbitMQ consumers
-  in other modules)
-- Minimal runtime footprint: no networking, persistence, caching, or business logic contained here
-- Explicit evolution strategy favoring additive, backward‑compatible changes (never silently repurposing fields)
-- Security contract objects (JWT principal / decoder, login request/response) enabling consistent authentication
-  semantics across services
+Non-Goals: Executing business rules, persistence operations, service orchestration, external API calls, or managing
+storage schemas/migrations.
 
-Non‑Goals:
-
-- Executing business rules or persistence operations
-- Implementing service orchestration or external API calls
-- Managing storage schemas or migrations
-
-Benefits:
-
-- Eliminates schema drift across independently deployed services
-- Improves IDE discoverability and refactoring safety
-- Standardizes validation and error representation
-- Enables consistent event typing and safer asynchronous integration
-
-### Evolution & Versioning
-
-Approach focuses on backward compatibility:
-
-- Additive changes first: introduce new optional fields instead of repurposing existing ones
-- Field removals/renames avoided unless coordinated across all dependents with a MAJOR version increment
-- Deprecated fields documented and retained for a transition period before removal
-- Snapshot artifacts (`-SNAPSHOT`) enable rapid iteration; releases follow semantic versioning (MAJOR.MINOR.PATCH)
-- Cross-module compatibility validated by CI on upgrade of shared dependency versions
+Benefits: Eliminates schema drift; improves IDE discoverability and refactoring safety; standardizes validation and
+error representation; enables consistent event typing and safer asynchronous integration.
 
 ## Project Structure
 
@@ -67,30 +39,30 @@ modules/koki-dto/
 └── src/
     ├── main/
     │   ├── kotlin/com/wutsi/koki/
-    │   │   ├── account/dto/      (Account & identity domain)
+    │   │   ├── account/dto/
     │   │   │   └── event/
-    │   │   ├── agent/dto/        (Automation / AI)
-    │   │   ├── common/dto/       (Cross-cutting primitives)
-    │   │   ├── contact/dto/      (CRM / contacts)
-    │   │   ├── error/dto/        (Standardized error modeling)
-    │   │   ├── file/dto/         (File metadata)
+    │   │   ├── agent/dto/
+    │   │   ├── common/dto/
+    │   │   ├── contact/dto/
+    │   │   ├── error/dto/
+    │   │   ├── file/dto/
     │   │   │   └── event/
-    │   │   ├── lead/dto/         (Lead management)
+    │   │   ├── lead/dto/
     │   │   │   └── event/
-    │   │   ├── listing/dto/      (Property listings)
+    │   │   ├── listing/dto/
     │   │   │   └── event/
-    │   │   ├── message/dto/      (Messaging)
+    │   │   ├── message/dto/
     │   │   │   └── event/
-    │   │   ├── module/dto/       (Module configuration)
-    │   │   ├── note/dto/         (Notes)
+    │   │   ├── module/dto/
+    │   │   ├── note/dto/
     │   │   │   └── event/
-    │   │   ├── offer/dto/        (Offers)
+    │   │   ├── offer/dto/
     │   │   │   └── event/
-    │   │   ├── refdata/dto/      (Reference data)
-    │   │   ├── security/dto/     (Auth/JWT contracts)
-    │   │   ├── tenant/dto/       (Multi-tenancy)
+    │   │   ├── refdata/dto/
+    │   │   ├── security/dto/
+    │   │   ├── tenant/dto/
     │   │   │   └── event/
-    │   │   └── track/dto/        (Tracking / analytics)
+    │   │   └── track/dto/
     │   │       └── event/
     │   └── resources/
     └── test/
@@ -98,27 +70,17 @@ modules/koki-dto/
         └── resources/
 ```
 
-Structure principles:
-
-- Package‑by‑domain: Each business domain isolated for readability & modular evolution
-- `dto/event` subfolders: Dedicated namespace for asynchronous lifecycle transitions (Created/Updated/Deleted events)
-- Naming
-  conventions: `CreateXRequest`, `UpdateXRequest`, `SearchXResponse`, `XSummary`, `XCreatedEvent`, `XUpdatedEvent`, `XDeletedEvent`
-- Immutable data classes: Prefer non‑nullable fields; nullable only where semantically optional
-- Validation annotations only on inbound request DTOs (responses/events are server‑controlled and unvalidated)
-- Enumerations codify bounded value sets (object types, statuses, roles, etc.)
-- Cross‑cutting primitives (ObjectReference, ImportResponse, HttpHeader) centralized in `common/dto`
-- Reference data (countries, cities, attribute types, configuration forms) isolated in `refdata/dto`
+Structure principles: Package-by-domain isolation; `event` subfolder per domain for asynchronous lifecycle transitions;
+naming conventions (`CreateXRequest`, `XCreatedEvent`, etc.); immutable data classes; validation annotations only on
+inbound request DTOs; enums for bounded sets; cross-cutting primitives centralized in `common/dto`.
 
 ## High-Level System Diagram
-
-Textual (C4-ish) context depiction:
 
 ```
 +------------------+        +--------------------+        +------------------+
 |  Client SDK      | -----> |  Backend Services  | -----> |  Message Queue   |
 |  (koki-sdk)      |        |  (koki-server,     |        |  (RabbitMQ)      |
-|                  | <----- |   chatbots, etc.)  | <----- |  Consumers       |
+|                  | <----- |   portals, etc.)   | <----- |  Consumers       |
 +------------------+        +--------------------+        +------------------+
          ^                           ^    ^                         ^
          |                           |    |                         |
@@ -130,178 +92,90 @@ Textual (C4-ish) context depiction:
                     +----------------------------------+
 ```
 
-Data & Event Flow:
+Flow Summary: Request DTO serialized by client → validated & deserialized by service → business logic executes →
+Response DTO returned; Event DTOs published for async processing; consumers deserialize events for side-effects.
 
-1. Client or portal constructs a Request DTO (using validation annotations) and serializes to JSON
-2. Service deserializes JSON to the same Request DTO, triggers Jakarta Validation
-3. Business logic (outside koki-dto) processes; Response DTO assembled and serialized
-4. For asynchronous changes, an Event DTO is created and published to the queue by service code
-5. Downstream consumers deserialize Event DTO and execute side‑effects (notifications, indexing, analytics)
-
-Boundary Emphasis:
-
-- **koki-dto** is purely a compile‑time artifact; it does not emit, receive, or store data at runtime
-- All inbound/outbound I/O, persistence, and queue operations are implemented by consuming modules
+Boundary: koki-dto is purely a compile-time artifact; no runtime I/O or persistence.
 
 ## Core Components
 
-### 1. Request DTOs
+### Request DTOs
 
-- Define inbound payload schema & constraints (`@NotNull`, `@NotEmpty`, `@Size`, `@Email`, `@Min`, `@Max`)
-- Used at controller boundaries for automatic validation in Spring (`@Valid`)
-- Express intent (Create, Update, Search) via naming
+Purpose: Define inbound payload schema with validation constraints. Interaction: Used at controller boundaries with
+automatic validation.
 
-### 2. Response DTOs
+### Response DTOs
 
-- Server‑controlled payload shapes returned to clients (entity details, summaries, paginated results)
-- Omit validation annotations; serialization ensures integrity
-- Provide consistent pagination & metadata wrappers where applicable
+Purpose: Represent outbound payloads (details, summaries, paginated sets). Interaction: Serialized back to clients; no
+validation annotations.
 
-### 3. Event DTOs
+### Event DTOs
 
-- Represent domain lifecycle transitions (Created/Updated/Deleted, Sent, etc.) for asynchronous processing
-- Contain identifiers + timestamps; never include heavy/large embedded structures unnecessarily
-- Enable loosely coupled inter‑service workflows (tracking, email, analytics)
+Purpose: Capture domain lifecycle transitions for asynchronous workflows. Interaction: Published by services; consumed
+by downstream processors.
 
-### 4. Error Models
+### Error Models
 
-- Unified error envelope (**ErrorResponse**) with list of errors and parameter diagnostics
-- Standardized codes via **ErrorCode** enumeration (e.g., validation failures, domain constraints)
-- Parameter model distinguishes source (`PATH`, `QUERY`, `BODY`, `HEADER`)
+Purpose: Standard error envelope and codes for uniform failure representation. Interaction: Emitted by services; clients
+parse for diagnostics.
 
-### 5. Security DTOs
+### Security DTOs
 
-- **JWTDecoder** & **JWTPrincipal** abstractions for token verification & claim access
-- **LoginRequest**/**LoginResponse** modeling authentication flows
-- **ApplicationName** / subject type enumerations for scoping
+Purpose: Model authentication flows and token claim access. Interaction: Consumed by auth layers to decode/represent
+principals.
 
-### 6. Common DTOs
+### Common DTOs
 
-- Cross-domain primitives: **ObjectReference**, **ObjectType**, **ImportResponse**, **ImportMessage**, **HttpHeader**
-  constants
-- Promote reuse & reduce duplication of generic patterns
+Purpose: Cross-domain primitives (references, import responses, headers). Interaction: Reused across domains to reduce
+duplication.
 
-### 7. Reference Data DTOs
+### Reference Data DTOs
 
-- Static / slowly changing lookup representations (countries, cities, attribute types)
-- Form / configuration abstractions enabling dynamic portal rendering
+Purpose: Represent relatively static lookup data (locations, attribute types). Interaction: Served by backend;
+referenced in other DTOs.
 
-### 8. Domain-Specific DTOs
+### Domain-Specific DTOs
 
-- Accounts, Listings, Offers, Leads, Contacts, Messages, Notes, Files, Tenants, Tracking
-- Each domain isolates: request/response/event enumerations & summary projections
+Purpose: Encapsulate business concepts (accounts, listings, offers, leads, contacts, messages, notes, files, tenants,
+tracking). Interaction: Shared across services for consistency.
 
-### 9. Enumerations & Constants
+### Enumerations & Constants
 
-- Provide strongly typed, discoverable value sets preventing magic strings
-- Facilitate compile‑time safety during feature evolution
+Purpose: Typed value sets preventing magic strings; ensure safe evolution. Interaction: Embedded in DTO fields and logic
+in consuming services.
 
 ## Data Stores
 
-None. The **koki-dto** module is stateless and persistence‑agnostic.
-
-- No database, cache, filesystem, or external storage interactions
-- Avoids coupling with ORM frameworks; enables flexible backend storage strategies
-- Storage schemas, migrations, indexing handled exclusively by consuming services (e.g., **koki-server**)
-
-## External Integrations / APIs
-
-### Direct Dependencies (Compile-Time Only)
-
-- **Jakarta Validation API** – Declarative constraint annotations on Request DTOs
-- **Auth0 Java JWT** – Token decoding & signature verification utilities (via JWTDecoder/JWTPrincipal)
-- **Kotlin Stdlib & JDK** – Language/runtime foundations
-
-(Dependency versions are managed by the parent POM; when documenting, use `VERSION_NUMBER` placeholders if examples are
-added.)
-
-### Indirect Integrations (Implemented by Consumers)
-
-- **RabbitMQ (or AMQP)** – Event transport; koki-dto supplies event models only
-- **AWS S3** – File domain references validated in portals/server; DTO contains configuration fields
-- **Payment Providers (Stripe/PayPal)** – Offer/transaction related DTO fields consumed by payment workflows
-- **Email / Notification Services (SMTP, etc.)** – Event DTOs drive templated notifications
-- **AI Services (e.g., Google Gemini)** – Agent/automation DTOs enabling inference requests/responses
-
-### Upgrade & Dependency Hygiene
-
-- Centralized parent POM + automated Renovate/Dependabot scanning
-- Additive upgrades validated by consumer module CI pipelines
+None. The module is stateless and persistence-agnostic.
 
 ## Deployment & Infrastructure
 
-### Build & Packaging
-
-- **Build Tool:** Maven (inherits parent monorepo POM)
-- **Lifecycle:**
+Build & Package:
 
 ```bash
 mvn clean install
 ```
 
-Produces artifact: `com.wutsi.koki:koki-dto:VERSION_NUMBER`
+Produces artifact: `com.wutsi.koki:koki-dto:VERSION_NUMBER`.
 
-- **Artifact:** Lightweight JAR (no resources-heavy assets)
+Distribution: Published to internal Maven repository (GitHub Packages). Snapshot (`-SNAPSHOT`) for iteration; semantic
+versioning for releases.
 
-### Distribution
+Runtime Footprint: None. No environment variables, ports, external services required directly.
 
-- Published to GitHub Packages (Maven repository)
-- Snapshot versions (`-SNAPSHOT`) for iterative development; releases tagged semantically (MAJOR.MINOR.PATCH)
-
-### CI/CD
-
-- **Pull Request Workflow:** compile Kotlin sources, run unit tests (if present), dependency & vulnerability scan
-- **Master / Release Workflow:** build, test, publish artifact, tag version, optionally trigger downstream notifications
-
-### Consumption Requirements
-
-- Maven `settings.xml` must include authenticated repository credentials (GitHub user/token)
-- Downstream modules declare dependency: `com.wutsi.koki:koki-dto:VERSION_NUMBER`
-
-### Runtime Footprint
-
-- None; zero servers or service processes required
-- No environment variables, ports, or infrastructure provisioning for this module
+Consumption: Add dependency in downstream `pom.xml` and import domain packages.
 
 ## Security Considerations
 
-### Validation
+Validation: Constraint annotations reject malformed input early when applied with `@Valid` in consuming services.
 
-- Declarative constraints ensure malformed input rejected early at controller boundary
-- Consumers must annotate controller parameters with `@Valid` to activate automatic constraint checks
-- Complex business invariants should be enforced in service layer, not embedded as implicit DTO logic
+JWT Handling: Decoder-related DTOs require proper algorithm configuration in consumers; transport secured via HTTPS.
 
-### JWT Handling
+Privacy & PII: DTOs may include personal data; consumers must avoid logging raw PII and apply encryption at rest/in
+transit.
 
-- **JWTDecoder** expects proper algorithm configuration; placeholder `Algorithm.none()` must be replaced in production
-- Custom claims include tenant/user identifiers enabling multi‑tenant isolation
-- Enforce HTTPS for token transport; apply standard expiration & rotation policies in consumers
+Backward Compatibility: Prefer additive changes; coordinate MAJOR version increments on breaking changes.
 
-### Dependency Hygiene
+Immutability: Kotlin data classes discourage shared mutable state; nullability explicit only for optional semantics.
 
-- Minimal dependency surface reduces attack vectors
-- Automated vulnerability scanning & timely upgrades via CI tooling
-- Avoid introduction of heavy transitive dependencies inside DTO definitions
-
-### Privacy & PII
-
-- DTOs may encode personal data (names, emails, phone numbers, addresses)
-- Consumers must prevent logging of raw PII and ensure encryption at rest/in transit
-- Favor explicit, purpose‑limited fields; avoid bundling unnecessary sensitive attributes
-
-### Immutability & Safety
-
-- Kotlin data classes discourage mutable shared state
-- Prefer explicit nullability semantics; absence represented by `null` only where required
-- Additive evolution: introduce new optional fields before deprecating existing ones; document deprecations clearly
-
-### Backward Compatibility
-
-- Avoid breaking changes (field removals/renames) without version strategy
-- If unavoidable, coordinate synchronized release across dependent services and increment MAJOR version
-
-### Production Hardening Guidance (for consumers)
-
-- Replace default JWT algorithm with HMAC256 or RSA256
-- Apply rate limiting & abuse detection at service boundaries (outside this module)
-- Implement structured logging filters redacting PII field values
+Dependency Hygiene: Minimal dependencies reduce attack surface; upgrades managed centrally in parent POM.
