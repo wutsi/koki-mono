@@ -7,7 +7,6 @@
 - [High-Level System Diagram](#high-level-system-diagram)
 - [Core Components](#core-components)
 - [Data Stores](#data-stores)
-- [External Integrations / APIs](#external-integrations--apis)
 - [Deployment & Infrastructure](#deployment--infrastructure)
 - [Security Considerations](#security-considerations)
 
@@ -278,58 +277,6 @@ services:
 
 **Note**: Relational database schemas are owned by consuming services (e.g., **koki-server**). This module provides
 Hibernate utility types (JSON mapping) but no entity definitions.
-
-## External Integrations / APIs
-
-### AWS Services
-
-**AWS S3**
-
-- **Purpose**: Object storage for production deployments
-- **Authentication**: IAM credentials or instance profile
-- **SDK**: `aws-java-sdk-s3`
-
-**AWS Translate**
-
-- **Purpose**: Machine translation for multilingual support
-- **Authentication**: IAM credentials
-- **SDK**: `aws-java-sdk-translate`
-
-### RabbitMQ
-
-- **Purpose**: Asynchronous messaging and event distribution
-- **Protocol**: AMQP
-- **Features**: Retry logic, dead-letter queues, message durability
-- **Client**: `amqp-client`
-
-### Redis
-
-- **Purpose**: Distributed caching and session storage
-- **Protocol**: Redis protocol
-- **Client**: Lettuce (`lettuce-core`)
-
-### AI/LLM Providers
-
-- **Supported**: OpenAI, Anthropic (extensible)
-- **Purpose**: Generative AI tasks (text completion, summarization)
-- **Configuration**: API keys, model selection, temperature
-
-### Spring Framework
-
-- **Scope**: Provided (compile-time only)
-- **Components**: `spring-web`, `spring-boot-autoconfigure`, `spring-security-core`, `spring-boot-actuator`
-- **Purpose**: Autoconfiguration and integration hooks
-
-### Jakarta APIs
-
-- **Scope**: Provided
-- **APIs**: `jakarta.mail-api`, `jakarta.servlet-api`
-- **Purpose**: Email composition and servlet context access
-
-### Hibernate
-
-- **Scope**: Provided
-- **Purpose**: Extended types for JSON/array mapping in consumer ORMs
 
 ## Deployment & Infrastructure
 
