@@ -18,7 +18,7 @@ The generated README.md should have the following sections:
 
 - **Table of Contents**: A list of sections and subsections with links to each.
 
-- **Features**: List the key features and functionalities.
+- **Features**: List the features and functionalities (name and short description - 1 sentence per feature).
 
 - **Technologies**: A list of main technologies and programming languages used. Use shield-style badges for each
   technology when possible. Group the badges by the following categories (All badges in a paragraph per category,
