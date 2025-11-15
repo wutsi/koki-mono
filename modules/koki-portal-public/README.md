@@ -1,149 +1,135 @@
 # koki-portal-public
 
-A Spring Boot Kotlin web application providing the public-facing portal for browsing property listings, viewing details,
-and submitting inquiries without authentication.
+A Spring Boot web application providing public-facing server-side rendered interfaces for the Koki platform.
 
-[![koki-portal-public CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml)
+![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-master.yml/badge.svg)
 
-[![koki-portal-public CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml)
+![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-public-pr.yml/badge.svg)
 
-![Coverage](../../.github/badges/koki-portal-public-jococo.svg)
+![JaCoCo](../../.github/badges/koki-portal-public-jacoco.svg)
 
-![Java 17](https://img.shields.io/badge/Java-17-red.svg)
+![Java](https://img.shields.io/badge/Java-17-blue)
 
-![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)
 
-![Spring Boot 3.5.7](https://img.shields.io/badge/SpringBoot-3.5.7-green.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)
+
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4.0-orange)
+
+![Redis](https://img.shields.io/badge/Redis-7.0-red)
+
+## Table of Contents
+
+- [About the Project](#about-the-project)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Running the Project](#running-the-project)
+    - [Running Tests](#running-tests)
+- [License](#license)
 
 ## About the Project
 
-`koki-portal-public` is the consumer-facing web portal for the Koki platform. It provides unauthenticated access to
-property listings, search functionality, detailed listing views with image galleries, and inquiry submission forms. The
-portal consumes public APIs from `koki-server` via `koki-sdk`, applies server-side rendering with Thymeleaf, and tracks
-visitor interactions for analytics.
+The **koki-portal-public** is a public-facing web application that provides customer-facing interfaces for the Koki
+platform. Unlike the administrative koki-portal, this module serves end users with access to public listings, file
+sharing, reference data, and tracking capabilities. Built with Spring Boot and Thymeleaf, it integrates with koki-server
+via the koki-sdk client and implements lightweight authentication for public access scenarios.
 
-### Features
+Key features include:
 
-- **Public Listing Browsing** – Search and filter property listings without login (price range, location, property type,
-  amenities).
-- **Detailed Listing Pages** – Rich property detail views with image galleries, maps, amenities, and pricing
-  information.
-- **Inquiry Submission** – Contact forms for prospective buyers/renters to express interest and request information.
-- **SEO-Optimized Markup** – Server-side rendering with semantic HTML and structured data for search engine visibility.
-- **Responsive UI** – Mobile-first design with Thymeleaf templates ensuring cross-device compatibility.
+- **Public Listing Views**: Browse and search product/service listings without authentication
+- **File Sharing**: Access shared files and documents via public links
+- **Reference Data**: Display categories, locations, and amenities for public consumption
+- **Tracking Integration**: Track user interactions and page views via RabbitMQ
+- **Responsive Design**: Mobile-friendly interfaces optimized for public access
+- **Performance Optimization**: Redis caching for frequently accessed content
+- **SEO Friendly**: Server-side rendering with semantic HTML for search engine optimization
+- **Integration via SDK**: Seamless communication with koki-server REST APIs
 
 ## Getting Started
 
-Run the public portal locally to interact with a running `koki-server` backend.
-
 ### Prerequisites
 
-- **Java 17+**
-- **Maven 3.6+**
-- A running instance of `koki-server` (local or remote) with public endpoints enabled
+Before running the project, ensure you have the following installed:
 
-### 1. Clone Repository
+- **Java 17** or higher
+- **Maven 3.8+**
+- **Koki Server**: The backend API must be running and accessible
+- **RabbitMQ 4.0+**: For tracking event processing
+- **Redis 7.0+**: For caching
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/wutsi/koki-mono.git
 cd koki-mono/modules/koki-portal-public
 ```
 
-### 2. Configure Backend URL & Tenant
-
-Set environment variables or use an `application-local.yml` profile:
-
-```yaml
-koki:
-    api:
-        base-url: http://localhost:8080
-    tenant:
-        id: 1
-```
-
-Activate with:
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=local"
-```
-
-### 3. Build
+2. Build the project:
 
 ```bash
 mvn clean install
 ```
 
-Generates the portal JAR and runs unit/integration tests (86%+ coverage target).
+3. Configure the application by creating **application-local.yml** (optional):
 
-### 4. Run
+```yaml
+server:
+    port: 8082
+
+koki:
+    webapp:
+        client-id: koki-portal-public
+    server:
+        url: http://localhost:8080
+
+wutsi:
+    platform:
+        cache:
+            type: redis
+            redis:
+                url: redis://localhost:6379
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+        storage:
+            type: local
+            local:
+                directory: ${user.home}/__wutsi
+```
+
+### Running the Project
+
+Run the application locally:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Or:
+Or run the JAR directly:
 
 ```bash
 java -jar target/koki-portal-public-VERSION_NUMBER.jar
 ```
 
-Portal default URL: `http://localhost:8080`
+The portal will start on port **8082** by default.
 
-### 5. Browse Listings
-
-Navigate to:
+Access the public portal:
 
 ```
-http://localhost:8080/
+http://localhost:8082
 ```
 
-Search and filter listings by:
-
-- Location (city, region)
-- Price range
-- Property type (house, apartment, villa, etc.)
-- Number of bedrooms/bathrooms
-- Amenities (pool, parking, etc.)
-
-### 6. View Listing Details
-
-Click any listing to see:
-
-- Full property description
-- Image gallery
-- Amenities list
-- Location map
-- Contact/inquiry form
-
-### 7. Submit Inquiry
-
-Fill out the inquiry form with:
-
-- Name
-- Email
-- Phone (optional)
-- Message
-
-No authentication required for submission.
-
-### 8. Common Environment Overrides
-
-| Purpose              | Property                       | Example                 |
-|----------------------|--------------------------------|-------------------------|
-| Change port          | `server.port`                  | `9092`                  |
-| Custom API URL       | `koki.api.base-url`            | `https://api.koki.prod` |
-| Tenant ID            | `koki.tenant.id`               | `42`                    |
-| Enable debug logging | `logging.level.com.wutsi.koki` | `DEBUG`                 |
-
-### 9. Health Check
-
-If actuator enabled:
+Verify the service is running:
 
 ```bash
-curl http://localhost:8080/actuator/health
+curl http://localhost:8082/actuator/health
 ```
 
-Expected:
+Expected response:
 
 ```json
 {
@@ -151,20 +137,29 @@ Expected:
 }
 ```
 
-### 10. Updating Dependencies
+### Running Tests
 
-Use placeholder version numbers in a consuming project:
+Execute unit tests:
 
-```xml
-
-<dependency>
-    <groupId>com.wutsi.koki</groupId>
-    <artifactId>koki-portal-public</artifactId>
-    <version>VERSION_NUMBER</version>
-</dependency>
+```bash
+mvn test
 ```
+
+Run all tests including integration tests:
+
+```bash
+mvn verify
+```
+
+Generate test coverage report:
+
+```bash
+mvn clean test jacoco:report
+```
+
+The coverage report will be available at **target/site/jacoco/index.html**.
 
 ## License
 
-See the root [License](../../LICENSE.md).
+This project is licensed under the MIT License. See [LICENSE.md](../../LICENSE.md) for details.
 
