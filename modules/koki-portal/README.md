@@ -1,139 +1,155 @@
 # koki-portal
 
-A Spring Boot Kotlin web application providing the Koki browser-based portal (UI orchestration, listing management, lead
-tracking, user onboarding, messaging, and account administration).
+A Spring Boot web application providing server-side rendered administrative interfaces for the Koki platform.
 
-[![koki-portal CI (master)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml)
+![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-master.yml/badge.svg)
 
-[![koki-portal CI (PR)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml)
+![pr](https://github.com/wutsi/koki-mono/actions/workflows/koki-portal-pr.yml/badge.svg)
 
-![Coverage](../../.github/badges/koki-portal-jococo.svg)
+![JaCoCo](../../.github/badges/koki-portal-jacoco.svg)
 
-![Java 17](https://img.shields.io/badge/Java-17-red.svg)
+![Java](https://img.shields.io/badge/Java-17-blue)
 
-![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-language-purple)
 
-![Spring Boot 3.5.7](https://img.shields.io/badge/SpringBoot-3.5.7-green.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-green)
+
+## Table of Contents
+
+- [About the Project](#about-the-project)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Running the Project](#running-the-project)
+    - [Running Tests](#running-tests)
+- [License](#license)
 
 ## About the Project
 
-`koki-portal` is the user-facing operational portal for the Koki platform. It aggregates and presents backend
-capabilities (accounts, listings, offers, leads, messaging, tenant setup, translation, and AI-assisted flows) via a
-secure web interface. The portal consumes Koki APIs through `koki-sdk`, applies server-side rendering (Thymeleaf) for
-dynamic views, and enforces JWT authentication and multi-tenancy at the edge.
+The **koki-portal** is a server-side rendered web application that serves as the primary administrative interface for
+the Koki platform. It provides user-friendly web pages for managing accounts, contacts, listings, leads, messages,
+files, offers, and tenant configurations. Built with Spring Boot and Thymeleaf, the portal integrates with the
+koki-server backend via the koki-sdk client, implementing session-based authentication with JWT tokens and providing a
+responsive, accessible user experience.
 
-### Features
+Key features include:
 
-- **Integrated Domain UI** – Unified interface for accounts, contacts, listings, offers, notes, leads, and messaging.
-- **Secure Access & Roles** – JWT authentication, role-based conditional rendering, tenant isolation with header
-  propagation.
-- **Server-Side Rendering** – Thymeleaf templates with dynamic fragments, localization, and SEO-friendly markup.
-- **Action & Workflow Orchestration** – Guided onboarding, signup, forgot password, share flows, and listing publishing.
-- **Extensible Service Adapters** – Uses `koki-sdk` and `koki-platform` for API calls, translation, AI prompts, and file
-  handling.
+- **Server-Side Rendered UI**: Thymeleaf templates for dynamic HTML generation with SEO benefits
+- **Comprehensive Management Pages**: Web interfaces for all Koki platform features including accounts, contacts,
+  listings, leads, messaging, files, and offers
+- **Session-Based Authentication**: Secure login flows with JWT token handling and HTTP-only cookies
+- **Form Handling**: Robust form processing with validation, error handling, and user feedback
+- **Multi-Tenant Support**: Tenant-aware navigation and data isolation
+- **Responsive Design**: Mobile-friendly interfaces using modern CSS frameworks
+- **Internationalization**: Multi-language support with message bundles
+- **Integration via SDK**: Seamless communication with koki-server REST APIs through the SDK client
 
 ## Getting Started
 
-Run the portal locally to interact with a running `koki-server` backend.
-
 ### Prerequisites
 
-- **Java 17+**
-- **Maven 3.6+**
-- A running instance of `koki-server` (local or remote)
-- Valid JWT tokens for protected routes (login flow enabled)
+Before running the project, ensure you have the following installed:
 
-### 1. Clone Repository
+- **Java 17** or higher
+- **Maven 3.8+**
+- **Koki Server**: The backend API must be running and accessible
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/wutsi/koki-mono.git
 cd koki-mono/modules/koki-portal
 ```
 
-### 2. Configure Backend URL & Tenant
-
-Set environment variables or use an `application-local.yml` profile:
-
-```yaml
-koki:
-    api:
-        base-url: http://localhost:8080
-    tenant:
-        id: 1
-```
-
-Activate with:
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=local"
-```
-
-### 3. Build
+2. Build the project:
 
 ```bash
 mvn clean install
 ```
 
-Generates the portal JAR and runs unit/integration tests.
+3. Configure the application by creating **application-local.yml** (optional):
 
-### 4. Run
+```yaml
+server:
+    port: 8081
+
+koki:
+    webapp:
+        client-id: koki-portal
+    server:
+        url: http://localhost:8080
+
+wutsi:
+    platform:
+        cache:
+            type: none
+        storage:
+            type: local
+            local:
+                directory: ${user.home}/__wutsi
+```
+
+### Running the Project
+
+Run the application locally:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Or:
+Or run the JAR directly:
 
 ```bash
 java -jar target/koki-portal-VERSION_NUMBER.jar
 ```
 
-Portal default URL: `http://localhost:8080`
+The portal will start on port **8081** by default.
 
-### 5. Authentication
+Access the portal:
 
-Login flow issues a JWT. After login, the portal sends `Authorization: Bearer <token>` and `X-Tenant-ID` automatically
-for server-side requests.
-
-### 6. Common Environment Overrides
-
-| Purpose              | Property                       | Example                 |
-|----------------------|--------------------------------|-------------------------|
-| Change port          | `server.port`                  | `9091`                  |
-| Custom API URL       | `koki.api.base-url`            | `https://api.koki.prod` |
-| Tenant ID            | `koki.tenant.id`               | `42`                    |
-| Enable debug logging | `logging.level.com.wutsi.koki` | `DEBUG`                 |
-
-### 7. Health Check
-
-If actuator enabled:
-
-```bash
-curl http://localhost:8080/actuator/health
+```
+http://localhost:8081
 ```
 
-Expected:
+Verify the service is running:
+
+```bash
+curl http://localhost:8081/actuator/health
+```
+
+Expected response:
 
 ```json
 {
-    "status": "UP"
+  "status": "UP"
 }
 ```
 
-### 8. Updating Dependencies
+### Running Tests
 
-Use placeholder version numbers in a consuming project:
+Execute unit tests:
 
-```xml
-
-<dependency>
-    <groupId>com.wutsi.koki</groupId>
-    <artifactId>koki-portal</artifactId>
-    <version>VERSION_NUMBER</version>
-</dependency>
+```bash
+mvn test
 ```
+
+Run all tests including integration tests:
+
+```bash
+mvn verify
+```
+
+Generate test coverage report:
+
+```bash
+mvn clean test jacoco:report
+```
+
+The coverage report will be available at **target/site/jacoco/index.html**.
 
 ## License
 
-See the root [License](../../LICENSE.md).
+This project is licensed under the MIT License. See [LICENSE.md](../../LICENSE.md) for details.
 
