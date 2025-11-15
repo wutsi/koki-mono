@@ -51,7 +51,7 @@ jobs:
                 with:
                     generate-branches-badge: false
                     jacoco-csv-file: modules/koki-portal/target/site/jacoco/jacoco.csv
-                    coverage-badge-filename: koki-portal-jococo.svg
+                    coverage-badge-filename: koki-portal-jacoco.svg
 
             -   name: Commit the badge (if it changed)
                 continue-on-error: true
