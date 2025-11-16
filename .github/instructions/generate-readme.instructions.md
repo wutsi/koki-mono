@@ -11,18 +11,19 @@ The generated README.md should have the following sections:
 - **Overview**: Contains the project name and a brief, compelling one-sentence description and a list of badges:
     - Github Action workflow badges. The badge link should point to the corresponding workflow page
         - For top-level module, use the workflow file are `_master.yml` and `_pr.yml`.
-        - The non top-level module, use the workflow file are  `MODULE_NAME-*.yml`.
-    - The code coverage. The badge image is `.github/badges/MODULE_NAME-jacoco.svg`. Do not add this badge if the badge
-      SVG not available. The badge link should point to the corresponding workflow page (where the user can download the
+        - The non top-level module, use the workflow file are  `PROJECT_NAME-*.yml`.
+    - The code coverage. The badge image is `.github/badges/PROJECT_NAME-jacoco.svg`. The badge link should point to the
+      corresponding workflow page (where the user can download the
       jacoco report).
+        - Do not add this badge if the badge SVG not available.
+        - PROJECT_NAME should match the name of the project.
 
 - **Table of Contents**: A list of sections and subsections with links to each.
 
 - **Features**: List the features and functionalities (name and short description - 1 sentence per feature).
 
 - **Technologies**: A list of main technologies and programming languages used. Use shield-style badges for each
-  technology when possible. Group the badges by the following categories (All badges in a paragraph per category,
-  separated by space):
+  technology when possible. Group the badges by the following categories:
     - Programming Languages
     - Frameworks
     - Databases
@@ -33,7 +34,8 @@ The generated README.md should have the following sections:
     - Name: The name of the module. It must be a link to the corresponding module folder.
     - Status: The Github Actions and code coverage badges of the module.
 
-- **Getting Started**: This section provides instructions for setting up the project locally. Include the following
+- **Getting Started**: (Ignore for multi-modules projects) This section provides instructions for setting up the project
+  locally. It contains the following
   subsections:
     - **Prerequisites**: List of software and tools required to run the project (e.g., Java version, database, message
       queue etc.).
