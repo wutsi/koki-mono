@@ -121,7 +121,7 @@
         <mysql.version>9.5.0</mysql.version>
         <pdfbox.vesion>3.0.6</pdfbox.vesion>
         <plexus-utils.version>4.0.2</plexus-utils.version>
-        <poi.version>5.4.1</poi.version>
+        <poi.version>5.5.0</poi.version>
         <qrcode-kotlin.version>4.2.0</qrcode-kotlin.version>
         <rome.version>2.1.0</rome.version>
         <scribe.version>8.3.3</scribe.version>
