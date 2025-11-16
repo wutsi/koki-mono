@@ -50,8 +50,13 @@ The generated README.md should have the following sections:
 
 - **High-Level Architecture**: This section provides an overview of the system architecture. Include the following
   subsections:
-    - **Repository Structure** Include the complete structure of the repository. For each part, provide a brief
-      explanation of its purpose and function within the project. Use a tree format for clarity.
+    - **Repository Structure** This section provides a high-level overview of the project's directory tree structure.
+      It is essential for quickly navigating the codebase and understanding the overall organization and separation of
+      concerns..
+        - Each part should include a brief explanation of its purpose and function within the project.
+        - Do not include individual files, only directories and packages.
+        - Do not include sub-directories or files related to tests.
+        - Do not include output/build directories or files.
 
     - **High-Level System Diagram**: Provide a simple block diagram (e.g., a C4 Model Level 1: System Context diagram,
       or a basic component diagram) or a clear text-based description of the major components and their interactions.
@@ -59,7 +64,8 @@ The generated README.md should have the following sections:
 
 - **API Reference**: (If applicable) This section describes the API exposed by the project, including the endpoints and
   their functionalities. Include:
-    - Include a paragraph with springdoc badges, linked to LOCAL and TEST environments (if applicable).
+    - Include a paragraph with springdoc badges, linked to LOCAL and TEST environments, if the project has springdoc
+      integration.
     - A summary of all the API endpoint, in a tabular format with the following columns:
         - The method
         - The request path
