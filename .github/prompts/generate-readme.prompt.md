@@ -1,4 +1,4 @@
-`---
+---
 mode: 'agent'
 description: 'Generate the README.md files for the project'
 ---

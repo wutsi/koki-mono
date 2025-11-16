@@ -47,6 +47,12 @@ jobs:
                     name: appbundle
                     path: modules/koki-portal/target/*.jar
 
+            -   name: Upload JaCoCo Report
+                uses: actions/upload-artifact@v5
+                with:
+                    name: jacoco
+                    path: modules/koki-server/target/site/jacoco/**/*
+
             -   name: Generate JaCoCo Badge
                 uses: cicirello/jacoco-badge-generator@v2
                 with:

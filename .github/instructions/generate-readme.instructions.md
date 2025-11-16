@@ -57,8 +57,14 @@ The generated README.md should have the following sections:
       or a basic component diagram) or a clear text-based description of the major components and their interactions.
       Focus on how data flows, services communicate, and key architectural boundaries.
 
-- **API Reference**: (If applicable) Describe the API exposed by the project, including the endpoints and their
-  description
+- **API Reference**: (If applicable) This section describes the API exposed by the project, including the endpoints and
+  their functionalities. Include:
+    - Include a paragraph with springdoc badges, linked to LOCAL and TEST environments (if applicable).
+    - A summary of all the API endpoint, in a tabular format with the following columns:
+        - The method
+        - The request path
+        - A short description
+    - Do not include any other section or details about the API.
 
 - **License**: A short section specifying the license under which the project is distributed, with a link to the full
   license text (e.g., [License](LICENSE)).
@@ -103,3 +109,4 @@ The badges should have the following format:
 - If a section is not applicable, it should be omitted entirely from the final output.
 - Do not add any section that is not specified in the instructions.
 - Before overwriting the existing README.md file, backup the original file by renaming it to README.md.bak.
+- Load `metadata.json` in the project root folder to get additional information about the project.
