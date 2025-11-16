@@ -13,8 +13,7 @@ The generated README.md should have the following sections:
         - For top-level module, use the workflow file are `_master.yml` and `_pr.yml`.
         - The non top-level module, use the workflow file are  `PROJECT_NAME-*.yml`.
     - The code coverage. The badge image is `.github/badges/PROJECT_NAME-jacoco.svg`. The badge link should point to the
-      corresponding workflow page (where the user can download the
-      jacoco report).
+      corresponding workflow page (where the user can download the jacoco report).
         - Do not add this badge if the badge SVG not available.
         - PROJECT_NAME should match the name of the project.
 
