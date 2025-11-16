@@ -97,12 +97,53 @@
     padding: 1em;
     position: sticky;
     top: 6.5em;
-    text-align: center;
     width: 100%;
 }
 
+.listing-contact-details-inner .agent-info {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.listing-contact-details-inner .agent-info h2 {
+    margin-bottom: 0;
+}
+
+.listing-contact-details-inner .agent-info img {
+    border-radius: 50%;
+    height: 64px;
+    width: 64px;
+    object-fit: cover;
+    margin-right: 1em;
+}
+
+.listing-contact-details-inner .message {
+    padding: 1em;
+    margin-bottom: 1em;
+    background: #e0e0e0;
+    border-radius: 0.5em;
+    text-align: left;
+}
+
 .listing-contact-details-inner button {
-    margin-top: 1em;
+    width: 100%;
+}
+
+
+#lead-modal .agent-info {
+    display: flex;
+}
+
+#lead-modal .agent-info h3 {
+    margin-bottom: 0;
+}
+
+#lead-modal .agent-info img {
+    border-radius: 50%;
+    height: 64px;
+    width: 64px;
+    object-fit: cover;
+    margin-right: 1em;
 }
 
 .listing-info #listing-map {
@@ -168,10 +209,6 @@
         z-index: 1000;
     }
 
-    .listing-contact-details h3 {
-        display: none;
-    }
-
     .listing-contact-details-inner {
         width: 100%;
         display: flex;
@@ -180,8 +217,23 @@
         box-shadow: none;
     }
 
+    .listing-contact-details-inner .agent-info,
+    .listing-contact-details-inner .agent-info h2 {
+        font-size: small;
+        margin-bottom: 0;
+    }
+
+    .listing-contact-details-inner .agent-info img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .listing-contact-details-inner .message {
+        display: none;
+    }
+
     .listing-contact-details-inner button {
-        margin-top: .5em;
+        width: auto;
     }
 }
 

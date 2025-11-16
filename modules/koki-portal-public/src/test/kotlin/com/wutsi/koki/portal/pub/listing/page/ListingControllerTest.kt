@@ -75,6 +75,15 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun sendMessage() {
+        navigateTo("${listing.publicUrl}")
+
+        scroll(.33)
+        click("#btn-send-message")
+        assertElementVisible("#lead-modal")
+    }
+
+    @Test
     fun share() {
         navigateTo("${listing.publicUrl}")
 

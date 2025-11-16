@@ -273,17 +273,78 @@
     <!-- Contact -->
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
-            <div>
-                <img class="listing-agent" height="48" th:src="${listing.sellerAgentUser.photoUrl}" width="48"/>
+            <div class="agent-info">
+                <img th:if="${listing.sellerAgentUser.photoUrl}" th:src="${listing.sellerAgentUser.photoUrl}"/>
+                <div>
+                    <h2 th:text="${listing.sellerAgentUser.displayName}">AGENT</h2>
+                    <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
+                </div>
+            </div>
 
-                <button class="btn btn-primary" data-bs-target="#listing-message-modal" data-bs-toggle="modal"
-                        id="btn-contact-us"
-                        th:text="#{button.send_message}">
-                    Send a Message
-                </button>
+            <div class="message" th:text="#{page.listing.section.message.modal.body}">MESSAGE</div>
+
+            <button class="btn btn-primary" data-bs-target="#lead-modal" data-bs-toggle="modal"
+                    id="btn-send-message"
+                    th:text="#{button.send_message}">
+                Send a Message
+            </button>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="lead-modal-label" class="modal fade" id="lead-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="room-message-modal-label"
+                        th:text="#{page.listing.section.message.modal.title}">Send a Message</h1>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body padding">
+                    <form id="frm-send" method="POST" th:action="@{/listings/send}" th:object="${form}">
+                        <input th:field="*{listingId}" type="hidden"/>
+                        <div class="agent-info">
+                            <img th:if="${listing.sellerAgentUser.photoUrl}"
+                                 th:src="${listing.sellerAgentUser.photoUrl}"/>
+                            <div>
+                                <h3 th:text="${listing.sellerAgentUser.displayName}">AGENT</h3>
+                                <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
+                            </div>
+                        </div>
+                        <div class="form-group margin-top">
+                            <input class="form-control" required th:field="*{firstName}"
+                                   th:placeholder="#{page.listing.section.message.modal.first-name}"/>
+                        </div>
+                        <div class="form-group margin-top">
+                            <input class="form-control" required th:field="*{lastName}"
+                                   th:placeholder="#{page.listing.section.message.modal.last-name}"/>
+                        </div>
+                        <div class="form-group margin-top">
+                            <input class="form-control" required th:field="*{email}"
+                                   th:placeholder="#{page.listing.section.message.modal.email}" type="email"/>
+                        </div>
+                        <div class="form-group margin-top">
+                            <input class="form-control"
+                                   th:data-country="*{country}"
+                                   th:field="*{phone}"
+                                   type="tel"/>
+                        </div>
+                        <div class="form-group margin-top">
+                        <textarea class="form-control w-100" placeholder="Message" required rows="3"
+                                  th:data-body="#{page.listing.section.message.modal.body}"
+                                  th:field="*{message}">
+                        </textarea>
+                        </div>
+                        <div class="form-group margin-top">
+                            <button class="btn btn-primary w-100" id="btn-send" th:text="#{button.send}" type="submit">
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>

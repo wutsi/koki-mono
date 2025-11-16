@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.listing.page
 
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.listing.form.LeadForm
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.refdata.dto.CategoryType
@@ -9,8 +10,11 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
@@ -31,6 +35,16 @@ class ListingController(
             throw HttpClientErrorException(HttpStatusCode.valueOf(404))
         }
         model.addAttribute("listing", listing)
+
+        /* Form */
+        model.addAttribute(
+            "form",
+            LeadForm(
+                listingId = id,
+                message = getMessage("page.listing.section.message.modal.body"),
+                country = tenantHolder.get()?.country,
+            ),
+        )
 
         /* Amenities */
         val categoryIds = listing.amenities.map { amenity -> amenity.categoryId }.distinct()
@@ -72,5 +86,22 @@ class ListingController(
         )
 
         return "listings/show"
+    }
+
+    @PostMapping("/send")
+    @ResponseBody
+    fun send(@ModelAttribute form: LeadForm): Map<String, Any> {
+        try {
+            return mapOf(
+                "success" to true,
+                "listingId" to form.listingId,
+            )
+        } catch (ex: HttpClientErrorException) {
+            val response = toErrorResponse(ex)
+            return mapOf(
+                "success" to false,
+                "error" to response.error.code,
+            )
+        }
     }
 }
