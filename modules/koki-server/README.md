@@ -5,6 +5,7 @@ listing discovery, lead tracking, and analytics capabilities.
 
 [![master](https://github.com/wutsi/koki-mono/actions/workflows/koki-server-master.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-server-master.yml)
 [![pull_request](https://github.com/wutsi/koki-mono/actions/workflows/koki-server-pr.yml/badge.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-server-pr.yml)
+
 [![JaCoCo](https://github.com/wutsi/koki-mono/blob/master/.github/badges/koki-server-jacoco.svg)](https://github.com/wutsi/koki-mono/actions/workflows/koki-server-master.yml)
 
 ## Table of Contents
@@ -17,6 +18,9 @@ listing discovery, lead tracking, and analytics capabilities.
     - [Configuration](#configuration)
     - [Running the Project](#running-the-project)
     - [Running Tests](#running-tests)
+- [Contributing](#contributing)
+    - [Local Development](#local-development)
+    - [Testing](#testing)
 - [High-Level Architecture](#high-level-architecture)
     - [Repository Structure](#repository-structure)
     - [High-Level System Diagram](#high-level-system-diagram)
@@ -181,6 +185,22 @@ mvn jacoco:report
 ```
 
 The coverage report will be generated at `target/site/jacoco/index.html`.
+
+## Contributing
+
+Contributions are welcome! Please follow the guidelines outlined in our contributing documentation.
+
+For detailed contribution guidelines, please refer to [CONTRIBUTING.md](../../CONTRIBUTING.md).
+
+### Local Development
+
+For instructions on setting up the project for local development, please refer to
+the [Local Development Guide](../../CONTRIBUTING.md#getting-the-code).
+
+### Testing
+
+For detailed testing guidelines and best practices, please refer to
+the [Testing Section](../../CONTRIBUTING.md#building-the-application) in the contributing guide.
 
 ## High-Level Architecture
 
