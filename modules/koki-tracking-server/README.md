@@ -11,15 +11,9 @@ real-time event processing with modular enrichment pipelines and scheduled KPI a
 
 - [Features](#features)
 - [Technologies](#technologies)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Running the Project](#running-the-project)
-  - [Running Tests](#running-tests)
 - [High-Level Architecture](#high-level-architecture)
-  - [Repository Structure](#repository-structure)
-  - [High-Level System Diagram](#high-level-system-diagram)
+    - [Repository Structure](#repository-structure)
+    - [High-Level System Diagram](#high-level-system-diagram)
 - [Usage Examples](#usage-examples)
 - [License](#license)
 
@@ -75,134 +69,6 @@ real-time event processing with modular enrichment pipelines and scheduled KPI a
 ![Apache Commons CSV](https://img.shields.io/badge/Apache-Commons%20CSV-blue)
 ![UAParser](https://img.shields.io/badge/UAParser-Java-lightgrey)
 ![SpringDoc OpenAPI](https://img.shields.io/badge/SpringDoc-OpenAPI-green)
-
-## Getting Started
-
-### Prerequisites
-
-Before running the project, ensure you have the following installed:
-
-- **Java 17** or higher
-- **Maven 3.8+**
-- **RabbitMQ 4.0+** (for message queue consumption)
-- **Redis 7.0+** (for caching GeoIP and reference data)
-- **AWS S3** (optional, for production storage) or local filesystem for development
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/wutsi/koki-mono.git
-cd koki-mono
-```
-
-2. Build the project:
-
-```bash
-mvn clean install
-```
-
-3. Navigate to the koki-tracking-server module:
-
-```bash
-cd modules/koki-tracking-server
-```
-
-### Configuration
-
-Configure the application by creating or editing **application-local.yml** in `src/main/resources/`:
-
-```yaml
-koki:
-  persister:
-    buffer-size: 10000                          # Event buffer size before flush
-    cron: "0 */15 * * * *"                      # Flush schedule (every 15 mins)
-
-  kpi:
-    listing:
-      daily-cron: "0 */15 * * * *"            # Daily KPI generation schedule
-      monthly-cron: "0 30 5 2 * *"            # Monthly KPI (2nd of month at 5:30 AM)
-
-  module:
-    tracking:
-      mq:
-        consumer-delay-seconds: 1           # Delay between message consumption
-        queue: koki-tracking-queue          # Main tracking queue
-        dlq: koki-tracking-dlq              # Dead letter queue
-        dlq-cron: "0 */15 * * * *"          # Process DLQ every 15 mins
-
-wutsi:
-  platform:
-    cache:
-      type: redis
-      redis:
-        url: redis://localhost:6379
-
-    mq:
-      type: rabbitmq
-      rabbitmq:
-        url: amqp://localhost
-        exchange-name: koki-tracking
-        max-retries: 24
-        ttl-seconds: 84600
-
-    storage:
-      type: local                             # local | s3
-      local:
-        directory: ${user.home}/__wutsi
-      s3:
-        bucket: [YOUR_S3_BUCKET]
-        region: [YOUR_AWS_REGION]
-        access-key: [YOUR_ACCESS_KEY]
-        secret-key: [YOUR_SECRET_KEY]
-```
-
-**Configuration sections:**
-
-- **Persister**: Controls event buffering and flush frequency
-- **KPI Generation**: Schedules for daily and monthly aggregations
-- **RabbitMQ**: Queue names, DLQ handling, and retry policies
-- **Storage**: Choose between local filesystem or S3 for CSV persistence
-- **Cache**: Redis configuration for GeoIP and reference data caching
-
-### Running the Project
-
-Run the application locally:
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=local
-```
-
-The server will start on port **8083** by default.
-
-Verify the service is running:
-
-```bash
-curl http://localhost:8083/actuator/health
-```
-
-You can also access the API documentation at:
-
-```
-http://localhost:8083/swagger-ui.html
-```
-
-### Running Tests
-
-Run all tests:
-
-```bash
-mvn test
-```
-
-Run tests with coverage report:
-
-```bash
-mvn clean verify
-```
-
-The JaCoCo coverage report will be generated at `target/site/jacoco/index.html`.
 
 ## High-Level Architecture
 
@@ -490,18 +356,18 @@ Failed messages are automatically routed to the dead letter queue and retried:
 ```yaml
 # Configure DLQ processing
 koki:
-  module:
-    tracking:
-      mq:
-        dlq-cron: "0 */15 * * * *"  # Retry every 15 minutes
-        max-retries: 24               # Maximum retry attempts
+    module:
+        tracking:
+            mq:
+                dlq-cron: "0 */15 * * * *"  # Retry every 15 minutes
+                max-retries: 24               # Maximum retry attempts
 
 wutsi:
-  platform:
-    mq:
-      rabbitmq:
-        max-retries: 24
-        ttl-seconds: 84600            # 23.5 hours before expiry
+    platform:
+        mq:
+            rabbitmq:
+                max-retries: 24
+                ttl-seconds: 84600            # 23.5 hours before expiry
 ```
 
 ## License
