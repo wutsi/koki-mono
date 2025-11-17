@@ -33,20 +33,6 @@ The generated README.md should have the following sections:
     - Name: The name of the module. It must be a link to the corresponding module folder.
     - Status: The Github Actions and code coverage badges of the module.
 
-- **Getting Started**: (Ignore for multi-modules projects) This section provides instructions for setting up the project
-  locally. It contains the following
-  subsections:
-    - **Prerequisites**: List of software and tools required to run the project (e.g., Java version, database, message
-      queue etc.).
-    - **Installation**: Step-by-step instructions to install and configure the project locally. Include code blocks for
-      commands.
-    - **Configuration*: Instructions on how to configure the project, including any necessary environment variables,
-      configuration files, or settings.
-    - **Running the Project**: Instructions on how to run the project locally, including any necessary commands
-      or scripts.
-    - **Running Tests**: Instructions for running tests locally, including commands for unit tests, integration tests,
-      and any other relevant testing procedures.
-
 - **High-Level Architecture**: This section provides an overview of the system architecture. Include the following
   subsections:
     - **Repository Structure** This section provides a high-level overview of the project's directory tree structure.
