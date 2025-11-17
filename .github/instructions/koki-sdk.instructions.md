@@ -1,15 +1,14 @@
+---
+title: "GitHub Copilot Instructions for koki-sdk Module"
+applyTo: "modules/koki-sdk/**"
+---
+
 # GitHub Copilot Instructions for koki-sdk Module
 
 You are an expert Kotlin/Java developer specializing in REST API client development, SDK design, and Spring Framework
 integration.
 Your primary goal is to assist with the **koki-sdk** module - a type-safe Kotlin client library for seamless integration
 with Koki REST APIs.
-
-## Apply To
-
-- `modules/koki-sdk/**`
-
----
 
 ## Project Context
 

@@ -1,93 +1,121 @@
 # Setup Guide - koki-tracking-server
 
-This guide provides detailed instructions for setting up the koki-tracking-server module for local development.
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Configuration](#configuration)
+- [Running the Project](#running-the-project)
+- [Running Tests](#running-tests)
 
 ## Prerequisites
 
-Before you begin, ensure you have the following software and tools installed:
-
-### Required Software
+Before running the koki-tracking-server, ensure you have the following installed and configured:
 
 - **Java Development Kit (JDK) 17** or higher
-    - Verify installation: `java -version`
-    - Download from: [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)or [OpenJDK](https://openjdk.org/)
+    - Verify: `java -version`
+    - Download from: [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
+      or [OpenJDK](https://openjdk.org/)
 
-- **Apache Maven 3.8+**
-    - Verify installation: `mvn -version`
-    - Download from: [Apache Maven](https://maven.apache.org/download.cgi)
+- **Maven 3.8+** for dependency management
+    - Verify: `mvn -version`
+    - Download from: [Maven](https://maven.apache.org/download.cgi)
 
-- **RabbitMQ 4.0+**
-    - Required for message queue consumption
-    - Verify installation: `rabbitmqctl status`
-    - Download from: [RabbitMQ Downloads](https://www.rabbitmq.com/download.html)
+- **RabbitMQ 4.0+** message broker for event consumption
+    - Verify: `rabbitmqctl status`
+    - Download from: [RabbitMQ](https://www.rabbitmq.com/download.html)
 
-- **Redis 7.0+**
-    - Required for caching GeoIP lookups and reference data
-    - Verify installation: `redis-cli ping` (should return `PONG`)
-    - Download from: [Redis Downloads](https://redis.io/download)
+- **Redis 7.0+** for caching GeoIP lookups and reference data
+    - Verify: `redis-cli ping`
+    - Download from: [Redis](https://redis.io/download/)
 
-### Optional Software
+### Optional Tools
 
-- **Docker** and **Docker Compose** (recommended for running RabbitMQ and Redis)
-    - Download from: [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- **Docker & Docker Compose** for containerized service dependencies
+    - Download from: [Docker](https://www.docker.com/get-started)
 
-- **AWS CLI** (if using AWS S3 for storage)
+- **AWS CLI** if using S3 storage backend
     - Download from: [AWS CLI](https://aws.amazon.com/cli/)
+
+- **IntelliJ IDEA** or other Kotlin-compatible IDE for development
+
+### Quick Start With Docker (Optional)
+
+If you prefer to use Docker for dependencies:
+
+```bash
+# Start RabbitMQ with management UI
+docker run -d --name koki-rabbit \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  rabbitmq:3-management
+
+# Start Redis
+docker run -d --name koki-redis \
+  -p 6379:6379 \
+  redis:7-alpine redis-server --requirepass test
+```
+
+RabbitMQ Management UI: http://localhost:15672 (default credentials: guest/guest)
 
 ## Installation
 
-Follow these steps to install and build the project locally.
-
-### 1. Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/wutsi/koki-mono.git
 cd koki-mono
 ```
 
-### 2. Build the Parent Project
+### Build Shared Modules
 
-Build the entire monorepo from the root directory:
+Build the required dependency modules first:
 
 ```bash
-mvn clean install
+mvn clean install -DskipTests
 ```
 
-This will build all modules including dependencies (`koki-dto`, `koki-platform`) required by `koki-tracking-server`.
+This will build and install:
 
-### 3. Navigate to the Module
+- `koki-dto` - Data Transfer Objects
+- `koki-platform` - Platform utilities
+
+### Build the Tracking Server Module
 
 ```bash
 cd modules/koki-tracking-server
-```
-
-### 4. Verify the Build
-
-```bash
 mvn clean package
 ```
 
-The build should complete successfully and create `target/koki-tracking-server.jar`.
+The compiled JAR will be available at: `target/koki-tracking-server.jar`
 
 ## Database Setup
 
-**Note:** The koki-tracking-server module does **not** use a traditional database. Instead, it uses:
+The koki-tracking-server does **not** use a traditional relational database. Instead, it uses:
 
 - **CSV-based Storage**: Raw tracking events and KPI reports are stored as CSV files
-- **Redis**: Used for caching GeoIP lookups and reference data
+- **Redis**: Used for caching GeoIP lookups and reference data to minimize external API calls
 
 ### Redis Setup
 
-If you don't have Redis running, you can start it using Docker:
+#### Using Docker
 
 ```bash
-docker run -d \
-  --name redis-koki \
+docker run -d --name koki-redis \
   -p 6379:6379 \
   redis:7-alpine redis-server --requirepass test
 ```
 
-Or install Redis locally:
+Verify Redis is running:
+
+```bash
+redis-cli -a test ping
+```
+
+Expected response: `PONG`
+
+#### Native Installation
 
 **macOS (Homebrew):**
 
@@ -102,21 +130,53 @@ brew services start redis
 sudo apt-get update
 sudo apt-get install redis-server
 sudo systemctl start redis-server
+sudo systemctl enable redis-server
+```
+
+**Configure Redis Password (Optional):**
+
+Edit Redis configuration:
+
+```bash
+# macOS
+sudo nano /usr/local/etc/redis.conf
+
+# Linux
+sudo nano /etc/redis/redis.conf
+```
+
+Add or uncomment:
+
+```
+requirepass test
+```
+
+Restart Redis:
+
+```bash
+# macOS
+brew services restart redis
+
+# Linux
+sudo systemctl restart redis-server
 ```
 
 ### RabbitMQ Setup
 
-Start RabbitMQ using Docker:
+#### Using Docker
 
 ```bash
-docker run -d \
-  --name rabbitmq-koki \
+docker run -d --name koki-rabbit \
   -p 5672:5672 \
   -p 15672:15672 \
   rabbitmq:3-management
 ```
 
-Or install RabbitMQ locally:
+Access RabbitMQ Management Console: http://localhost:15672
+
+- Default credentials: `guest` / `guest`
+
+#### Native Installation
 
 **macOS (Homebrew):**
 
@@ -131,49 +191,65 @@ brew services start rabbitmq
 sudo apt-get update
 sudo apt-get install rabbitmq-server
 sudo systemctl start rabbitmq-server
+sudo systemctl enable rabbitmq-server
 ```
 
-Access RabbitMQ Management Console at: `http://localhost:15672`
+**Enable Management Plugin:**
 
-- Default credentials: `guest` / `guest`
+```bash
+sudo rabbitmq-plugins enable rabbitmq_management
+```
 
 ### Storage Setup
 
 The module supports two storage backends:
 
-#### Local Filesystem Storage (Default for Development)
+#### Local Filesystem Storage (Default)
 
-The application will automatically create the storage directory at:
+The application automatically creates the storage directory at:
 
 ```
 ${user.home}/__wutsi
 ```
 
-No additional setup required.
+For manual creation:
+
+```bash
+mkdir -p ${HOME}/__wutsi
+chmod 755 ${HOME}/__wutsi
+```
 
 #### AWS S3 Storage (Production)
 
-If you plan to use AWS S3:
+For production environments using AWS S3:
 
 1. Create an S3 bucket in your AWS account
 2. Obtain AWS credentials (Access Key ID and Secret Access Key)
-3. Configure the credentials in `application-local.yml` (see Configuration section)
+3. Ensure the IAM user has permissions to read/write objects in the bucket
+4. Configure the credentials in your application configuration (see Configuration section)
 
 ## Configuration
 
-Create a local configuration file for development settings.
+The application uses Spring Boot configuration with profile-specific overrides.
 
-### 1. Create Local Configuration File
+### Base Configuration
 
-Create the file `src/main/resources/application-local.yml`:
+Default configuration is in `src/main/resources/application.yml`:
 
-```bash
-touch src/main/resources/application-local.yml
-```
+- Server port: `8083`
+- Event buffer size: `10000`
+- Flush schedule: Every 15 minutes
+- KPI generation schedules
+- RabbitMQ queue names
+- Redis connection settings
 
-### 2. Configure Application Settings
+### Profile-Specific Configuration
 
-Add the following configuration to `application-local.yml`:
+Create profile-specific configuration files for different environments:
+
+#### Local Development (`application-local.yml`)
+
+Create `src/main/resources/application-local.yml`:
 
 ```yaml
 koki:
@@ -224,43 +300,103 @@ wutsi:
                 base-url: http://localhost:8083
                 servlet-path: /local-storage
 
-            # Uncomment and configure if using AWS S3
-            # s3:
-            #   bucket: your-bucket-name
-            #   region: us-east-1
-            #   access-key: YOUR_AWS_ACCESS_KEY
-            #   secret-key: YOUR_AWS_SECRET_KEY
+logging:
+    level:
+        com.wutsi: DEBUG
+        org.springframework: INFO
 ```
 
-### Configuration Sections Explained
+#### Production Configuration
 
-- **persister**: Controls event buffering and flush frequency to CSV storage
-- **kpi.listing**: Schedules for daily and monthly KPI aggregation jobs
-- **module.tracking.mq**: RabbitMQ queue configuration, DLQ handling, and retry policies
-- **platform.cache**: Redis configuration for caching GeoIP lookups
-- **platform.mq**: RabbitMQ connection settings and message retry configuration
-- **platform.storage**: Storage backend configuration (local filesystem or AWS S3)
+For production using AWS S3:
 
-### Environment Variables (Alternative)
+```yaml
+wutsi:
+    platform:
+        storage:
+            type: s3
+            s3:
+                bucket: your-bucket-name
+                region: us-east-1
+                access-key: ${AWS_ACCESS_KEY}
+                secret-key: ${AWS_SECRET_KEY}
+```
 
-You can also configure the application using environment variables:
+### Environment Variables
+
+You can override configuration using environment variables:
 
 ```bash
-export REDIS_URL=redis://:test@localhost:6379
-export RABBITMQ_URL=amqp://localhost
-export STORAGE_TYPE=local
-export STORAGE_LOCAL_DIRECTORY=${HOME}/__wutsi
+# Redis
+export REDIS_URL="redis://:test@localhost:6379"
+
+# RabbitMQ
+export RABBITMQ_URL="amqp://localhost"
+
+# Storage Backend
+export STORAGE_TYPE=local  # or s3
+export STORAGE_LOCAL_DIRECTORY="${HOME}/__wutsi"
+
+# AWS S3 (if using S3 storage)
+export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+export AWS_S3_BUCKET="your-bucket-name"
+export AWS_REGION="us-east-1"
+
+# Server
+export SERVER_PORT=8083
+```
+
+### Event Processing Configuration
+
+#### Buffer and Flush Settings
+
+Control event buffering and persistence:
+
+```yaml
+koki:
+    persister:
+        buffer-size: 10000                    # Number of events before auto-flush
+        cron: "0 */15 * * * *"                # Flush every 15 minutes
+```
+
+#### KPI Generation Schedules
+
+Configure when KPI aggregation jobs run:
+
+```yaml
+koki:
+    kpi:
+        listing:
+            daily-cron: "0 */15 * * * *"        # Generate daily KPIs every 15 minutes (for dev)
+            monthly-cron: "0 30 5 2 * *"        # Generate monthly KPIs on 2nd of month at 5:30 AM
+```
+
+#### Message Queue Configuration
+
+Configure RabbitMQ message consumption:
+
+```yaml
+koki:
+    module:
+        tracking:
+            mq:
+                consumer-delay-seconds: 1         # Delay between message processing
+                queue: koki-tracking-queue        # Main event queue
+                dlq: koki-tracking-dlq            # Dead letter queue for failed messages
+                dlq-cron: "0 */15 * * * *"        # Process DLQ every 15 minutes
+                max-retries: 24                   # Maximum retry attempts
 ```
 
 ## Running the Project
 
-### 1. Start Required Services
+### Start Required Services
 
 Ensure RabbitMQ and Redis are running:
 
 ```bash
 # Check Redis
-redis-cli ping
+redis-cli -a test ping
 
 # Check RabbitMQ
 rabbitmqctl status
@@ -273,26 +409,39 @@ docker ps | grep redis
 docker ps | grep rabbitmq
 ```
 
-### 2. Run the Application
+### Run via Maven (Development)
 
-Run the application with the `local` profile:
+Run the application using Maven Spring Boot plugin:
 
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-Or run from the JAR:
+This runs the application directly without creating a JAR file.
+
+### Run Packaged JAR
+
+Build and run the packaged application:
 
 ```bash
 mvn clean package
 java -jar -Dspring.profiles.active=local target/koki-tracking-server.jar
 ```
 
-### 3. Verify the Application is Running
+### Run with Environment Variables
 
-The server will start on port **8083** by default.
+```bash
+export SPRING_PROFILES_ACTIVE=local
+export REDIS_URL="redis://:test@localhost:6379"
+export RABBITMQ_URL="amqp://localhost"
+java -jar target/koki-tracking-server.jar
+```
 
-Check the health endpoint:
+### Verify the Application
+
+Once the application starts, verify it's running:
+
+#### Health Check
 
 ```bash
 curl http://localhost:8083/actuator/health
@@ -317,140 +466,272 @@ Expected response:
 }
 ```
 
-### 4. Access API Documentation
-
-Open your browser and navigate to:
-
-```
-http://localhost:8083/swagger-ui.html
-```
-
-This provides interactive API documentation powered by SpringDoc OpenAPI.
-
-### 5. View Application Info
-
-Check application information and Git details:
+#### Info Endpoint
 
 ```bash
 curl http://localhost:8083/actuator/info
 ```
 
-### 6. Monitor Scheduled Tasks
+#### Scheduled Tasks
 
-View all scheduled tasks:
+View all scheduled tasks (persister, KPI generation, DLQ processing):
 
 ```bash
 curl http://localhost:8083/actuator/scheduledtasks
+```
+
+### API Documentation
+
+Access the interactive Swagger UI at:
+
+```
+http://localhost:8083/swagger-ui.html
+```
+
+### Verify External Services
+
+#### Check RabbitMQ
+
+```bash
+# Status
+rabbitmqctl status
+
+# List queues
+rabbitmqctl list_queues
+
+# Management UI
+open http://localhost:15672
+```
+
+#### Check Redis
+
+```bash
+# Ping
+redis-cli -a test ping
+
+# Monitor commands
+redis-cli -a test monitor
+
+# Check cache keys
+redis-cli -a test keys "*"
+```
+
+### Verify Event Processing
+
+To test event processing:
+
+1. **Publish a test event** to the `koki-tracking-queue` via RabbitMQ Management UI
+2. **Check logs** for event consumption and enrichment
+3. **Verify storage** - CSV files should be created in the storage directory after flush
+
+Example test event payload:
+
+```json
+{
+    "tenantId": 1,
+    "time": "2025-11-17T10:00:00Z",
+    "type": "impression",
+    "productId": "123",
+    "page": "/listings/123",
+    "referrer": "https://google.com",
+    "userAgent": "Mozilla/5.0...",
+    "ip": "8.8.8.8",
+    "ua": "desktop",
+    "deviceType": "desktop"
+}
 ```
 
 ## Running Tests
 
 ### Run All Tests
 
-Execute all unit and integration tests:
-
 ```bash
 mvn test
 ```
 
-### Run Tests with Coverage Report
+This runs all unit and integration tests using Spring Boot Test framework.
 
-Generate JaCoCo code coverage report:
-
-```bash
-mvn clean verify
-```
-
-The coverage report will be generated at:
-
-```
-target/site/jacoco/index.html
-```
-
-Open it in your browser:
-
-```bash
-open target/site/jacoco/index.html    # macOS
-xdg-open target/site/jacoco/index.html # Linux
-```
-
-### Run Specific Test Classes
+### Run Specific Test Class
 
 ```bash
 mvn test -Dtest=TrackingConsumerTest
 ```
 
-### Run Tests in Watch Mode
-
-For continuous testing during development:
+### Run Tests Matching Pattern
 
 ```bash
-mvn test -Dsurefire.failIfNoSpecifiedTests=false -DfailIfNoTests=false
+mvn test -Dtest=*Filter*
 ```
 
-### Coverage Thresholds
+### Full Verification with Coverage
 
-The project enforces the following JaCoCo coverage thresholds:
+Run tests and generate coverage report:
 
-- **Line Coverage**: 97%
-- **Class Coverage**: 91%
+```bash
+mvn clean verify
+```
 
-If coverage falls below these thresholds, the build will fail.
+This command:
+
+1. Compiles the code
+2. Runs all tests
+3. Generates JaCoCo coverage report
+4. Enforces coverage thresholds (97% line coverage, 91% class coverage)
+
+The build will fail if coverage is below the threshold.
+
+### View Coverage Report
+
+After running `mvn verify`, open the coverage report:
+
+```bash
+# macOS
+open target/site/jacoco/index.html
+
+# Linux
+xdg-open target/site/jacoco/index.html
+
+# Windows
+start target/site/jacoco/index.html
+```
+
+### Skip Tests (Quick Build)
+
+To build without running tests:
+
+```bash
+mvn clean package -DskipTests
+```
+
+**Note**: This is useful for rapid development but should not be used before committing code.
+
+### Test Configuration
+
+Tests use the `test` profile with configuration in `application-test.yml`:
+
+```yaml
+wutsi:
+    platform:
+        cache:
+            redis:
+                url: ${REDISCLOUD_URL}
+        mq:
+            rabbitmq:
+                url: ${CLOUDAMQP_URL}
+```
+
+For CI/CD environments, set these environment variables:
+
+- `REDISCLOUD_URL`
+- `CLOUDAMQP_URL`
+
+### Integration Tests
+
+Integration tests verify:
+
+- Event consumption from RabbitMQ
+- Enrichment pipeline processing
+- CSV file generation
+- KPI aggregation
+- Dead letter queue handling
+
+Example integration test:
+
+```kotlin
+@SpringBootTest
+@ActiveProfiles("test")
+class TrackingConsumerTest {
+
+    @Autowired
+    private lateinit var trackingConsumer: TrackingConsumer
+
+    @Test
+    fun `should consume and enrich tracking event`() {
+        val event = TrackEvent(
+            tenantId = 1,
+            type = "impression",
+            productId = "123"
+        )
+
+        trackingConsumer.consume(event)
+
+        // Verify event was enriched and buffered
+    }
+}
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-#### 1. Redis Connection Failed
+#### Redis Connection Failed
 
-**Error:** `Unable to connect to Redis at localhost:6379`
+**Error**: `Unable to connect to Redis at localhost:6379`
 
-**Solution:**
+**Solution**:
 
-- Verify Redis is running: `redis-cli ping`
-- Check Redis URL in configuration matches your setup
+- Verify Redis is running: `redis-cli -a test ping`
+- Check Redis URL in configuration
+- Verify password if using authentication
 - If using Docker, ensure port 6379 is mapped correctly
+- Check Redis logs: `docker logs koki-redis`
 
-#### 2. RabbitMQ Connection Failed
+#### RabbitMQ Connection Failed
 
-**Error:** `Connection refused to amqp://localhost`
+**Error**: `Connection refused to amqp://localhost`
 
-**Solution:**
+**Solution**:
 
 - Verify RabbitMQ is running: `rabbitmqctl status`
 - Check RabbitMQ URL in configuration
 - Ensure port 5672 is accessible
-- Check RabbitMQ logs: `docker logs rabbitmq-koki`
+- Check firewall settings
+- View RabbitMQ logs: `docker logs koki-rabbit`
 
-#### 3. Storage Directory Permission Denied
+#### Storage Directory Permission Denied
 
-**Error:** `Permission denied: ${user.home}/__wutsi`
+**Error**: `Permission denied: ${user.home}/__wutsi`
 
-**Solution:**
+**Solution**:
 
 ```bash
 mkdir -p ${HOME}/__wutsi
 chmod 755 ${HOME}/__wutsi
 ```
 
-#### 4. Port 8083 Already in Use
+Or specify a different directory with write permissions:
 
-**Error:** `Port 8083 is already in use`
+```yaml
+wutsi:
+    platform:
+        storage:
+            local:
+                directory: /tmp/__wutsi
+```
 
-**Solution:**
+#### Port 8083 Already in Use
 
-- Stop the process using port 8083
-- Or change the port in configuration:
-  ```yaml
-  server:
-    port: 8084
+**Error**: `Address already in use: bind :8083`
+
+**Solution**:
+
+- Change port: `export SERVER_PORT=8084` or update `application.yml`
+- Find and stop conflicting process:
+  ```bash
+  # macOS/Linux
+  lsof -i :8083
+  kill -9 <PID>
+
+  # Windows
+  netstat -ano | findstr :8083
+  taskkill /PID <PID> /F
   ```
 
-#### 5. Maven Build Fails
+#### Maven Build Fails
 
-**Error:** `Could not resolve dependencies`
+**Error**: `Could not resolve dependencies`
 
-**Solution:**
+**Solution**:
 
 ```bash
 # Clean Maven cache
@@ -460,46 +741,98 @@ rm -rf ~/.m2/repository/com/wutsi/koki
 cd ../..
 mvn clean install -DskipTests
 cd modules/koki-tracking-server
-mvn clean install
+mvn clean package
 ```
 
-### Logs
+#### Events Not Being Consumed
 
-Application logs are written to the console. To view logs:
+**Error**: No events being processed
 
-```bash
-# When running with maven
-mvn spring-boot:run -Dspring-boot.run.profiles=local | grep "com.wutsi"
+**Solution**:
 
-# When running from JAR
-java -jar target/koki-tracking-server.jar | tee application.log
-```
+- Verify queue exists in RabbitMQ: `rabbitmqctl list_queues`
+- Check queue name matches configuration
+- Ensure messages are being published to the correct exchange
+- Check consumer delay settings: `consumer-delay-seconds`
+- Review application logs for errors
 
-Log levels can be adjusted in `application-local.yml`:
+#### Low Test Coverage
+
+**Error**: `Rule violated for bundle koki-tracking-server: lines covered ratio is 0.95, but expected minimum is 0.97`
+
+**Solution**:
+
+- Write additional tests for uncovered code
+- Identify gaps: Review JaCoCo report at `target/site/jacoco/index.html`
+- Focus on service and filter classes
+- Temporarily adjust threshold in `pom.xml` (not recommended):
+  ```xml
+  <jacoco.threshold.line>0.95</jacoco.threshold.line>
+  ```
+
+### Logging Configuration
+
+Adjust log levels for debugging:
 
 ```yaml
 logging:
     level:
-        com.wutsi.koki: DEBUG
-        org.springframework: INFO
+        com.wutsi: DEBUG
+        com.wutsi.koki.tracking.server: TRACE
+        org.springframework.amqp: DEBUG
 ```
+
+### Monitoring Event Processing
+
+Enable detailed logging for tracking events:
+
+```yaml
+logging:
+    level:
+        com.wutsi.koki.tracking.server.service.TrackingConsumer: DEBUG
+        com.wutsi.koki.tracking.server.service.filter: DEBUG
+```
+
+### Check Application Logs
+
+View recent logs:
+
+```bash
+tail -f logs/application.log
+```
+
+Or check console output when running via Maven or JAR.
+
+### Verify CSV File Generation
+
+Check storage directory for generated files:
+
+```bash
+ls -lh ${HOME}/__wutsi/track/
+ls -lh ${HOME}/__wutsi/kpi/listing/
+```
+
+Files should be generated after buffer flush or scheduled job execution.
 
 ## Next Steps
 
-After completing the setup:
+After successfully setting up koki-tracking-server:
 
-1. **Review the Architecture**: Read the [High-Level Architecture](README.md#high-level-architecture) section in the
-   README
-2. **Explore the API**: Use the Swagger UI to understand available endpoints
-3. **Send Test Events**: Publish test tracking events to RabbitMQ
-4. **Monitor Event Processing**: Check logs for event consumption and enrichment
-5. **View Generated KPIs**: Check the storage directory for generated CSV reports
+1. **Integrate with koki-server**: Configure koki-server to publish tracking events to RabbitMQ
+2. **Monitor Event Flow**: Watch logs to see events being consumed and enriched
+3. **Review Generated Reports**: Check CSV files in storage directory for KPI data
+4. **Configure Production Settings**: Set up AWS S3, adjust buffer sizes and cron schedules
+5. **Set Up Monitoring**: Configure alerting for failed events in DLQ
+6. **Scale Horizontally**: Deploy multiple instances for high-volume event processing
 
 ## Additional Resources
 
-- [README.md](README.md) - Project overview and features
+- [README.md](README.md) - Project overview and architecture
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines
+- [koki-server](../koki-server/README.md) - Main server that publishes tracking events
+- [koki-dto](../koki-dto/README.md) - Data Transfer Objects
 - [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
-- [RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
+- [RabbitMQ Documentation](https://www.rabbitmq.com/documentation.html)
 - [Redis Documentation](https://redis.io/documentation)
+- [UAParser Documentation](https://github.com/ua-parser/uap-java)
 

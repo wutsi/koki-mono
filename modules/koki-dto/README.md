@@ -10,11 +10,6 @@ platform APIs, ensuring consistency between client and server communication.
 
 - [Features](#features)
 - [Technologies](#technologies)
-- [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Configuration](#configuration)
-    - [Running Tests](#running-tests)
 - [High-Level Architecture](#high-level-architecture)
     - [Repository Structure](#repository-structure)
     - [Domain Reference](#domain-reference)
@@ -54,44 +49,6 @@ platform APIs, ensuring consistency between client and server communication.
 ![Jakarta Validation](https://img.shields.io/badge/Jakarta%20Validation-3.1.0-orange)
 ![Auth0 JWT](https://img.shields.io/badge/Auth0%20JWT-4.4.0-blue)
 ![Maven](https://img.shields.io/badge/Maven-3.8+-red?logo=apachemaven)
-
-## Getting Started
-
-### Prerequisites
-
-- **Java 17** or higher
-- **Maven 3.8+**
-
-### Installation
-
-Add the dependency to your Maven project:
-
-```xml
-
-<dependency>
-    <groupId>com.wutsi.koki</groupId>
-    <artifactId>koki-dto</artifactId>
-    <version>0.0.279-SNAPSHOT</version>
-</dependency>
-```
-
-Or build from source:
-
-```bash
-cd modules/koki-dto
-mvn clean install
-```
-
-### Configuration
-
-This module requires no runtime configuration as it contains only data classes and utilities.
-
-### Running Tests
-
-```bash
-cd modules/koki-dto
-mvn test
-```
 
 ## High-Level Architecture
 
