@@ -9,17 +9,26 @@ import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
 import com.wutsi.koki.lead.server.dao.LeadRepository
 import com.wutsi.koki.lead.server.domain.LeadEntity
 import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.util.UUID
 
 @Service
 class LeadService(
     private val dao: LeadRepository,
     private val listingService: ListingService,
+    private val userService: UserService,
     private val em: EntityManager,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(LeadService::class.java)
+    }
+
     fun get(id: Long, tenantId: Long): LeadEntity {
         val room = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.LEAD_NOT_FOUND)) }
 
@@ -33,6 +42,7 @@ class LeadService(
         tenantId: Long,
         keyword: String? = null,
         ids: List<Long> = emptyList(),
+        userId: Long? = null,
         listingIds: List<Long> = emptyList(),
         agentUserIds: List<Long> = emptyList(),
         statuses: List<LeadStatus> = emptyList(),
@@ -56,6 +66,9 @@ class LeadService(
         if (statuses.isNotEmpty()) {
             jql.append(" AND L.status IN :statuses")
         }
+        if (userId != null) {
+            jql.append(" AND L.userId = :userId")
+        }
         jql.append(" ORDER BY L.id DESC")
 
         val query = em.createQuery(jql.toString(), LeadEntity::class.java)
@@ -75,6 +88,9 @@ class LeadService(
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
         }
+        if (userId != null) {
+            query.setParameter("userId", userId)
+        }
 
         query.firstResult = offset
         query.maxResults = limit
@@ -82,11 +98,13 @@ class LeadService(
     }
 
     @Transactional
-    fun create(request: CreateLeadRequest, tenantId: Long): LeadEntity {
+    fun create(request: CreateLeadRequest, tenantId: Long, deviceId: String? = null): LeadEntity {
         val now = Date()
         return dao.save(
             LeadEntity(
                 tenantId = tenantId,
+                deviceId = deviceId,
+                userId = findByUserIdOrCreate(request, tenantId, deviceId),
                 listing = listingService.get(request.listingId, tenantId),
                 status = LeadStatus.NEW,
                 source = request.source,
@@ -110,5 +128,29 @@ class LeadService(
         lead.nextVisitAt = request.nextVisitAt
         lead.modifiedAt = Date()
         return dao.save(lead)
+    }
+
+    private fun findByUserIdOrCreate(request: CreateLeadRequest, tenantId: Long, deviceId: String?): Long? {
+        if (request.userId != null) {
+            return request.userId
+        }
+
+        try {
+            return userService.getByEmail(request.email, tenantId).id
+        } catch (ex: NotFoundException) {
+            try {
+                val request = CreateUserRequest(
+                    username = request.email,
+                    email = request.email,
+                    displayName = "${request.firstName} ${request.lastName}".trim(),
+                    password = UUID.randomUUID().toString(),
+                    mobile = request.phoneNumber,
+                )
+                return userService.create(request, tenantId, deviceId).id
+            } catch (ex: Exception) {
+                LOGGER.warn("Unable to create user for lead with email=${request.email}", ex)
+                return null
+            }
+        }
     }
 }

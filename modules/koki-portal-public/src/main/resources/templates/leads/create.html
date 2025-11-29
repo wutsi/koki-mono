@@ -1,0 +1,44 @@
+<form class="form" id="frm-send" method="POST" th:action="@{/leads/create}" th:object="${form}">
+    <input th:field="*{listingId}" type="hidden"/>
+    <input th:field="*{publicUrl}" type="hidden"/>
+
+    <div class="agent-info">
+        <img th:if="${listing.sellerAgentUser.photoUrl}" th:src="${listing.sellerAgentUser.photoUrl}"/>
+        <div>
+            <h3 th:text="${listing.sellerAgentUser.displayName}">AGENT</h3>
+            <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
+        </div>
+    </div>
+    <div class="form-group margin-top">
+        <input class="form-control" required th:field="*{firstName}"
+               th:placeholder="#{page.lead.first-name}"/>
+    </div>
+    <div class="form-group margin-top">
+        <input class="form-control" required th:field="*{lastName}"
+               th:placeholder="#{page.lead.last-name}"/>
+    </div>
+    <div class="form-group margin-top">
+        <input class="form-control" required th:disabled="${user != null}"
+               th:field="*{email}"
+               th:placeholder="#{page.lead.email}"
+               type="email"
+        />
+    </div>
+    <div class="form-group margin-top">
+        <input class="form-control"
+               th:data-country="*{country}"
+               th:field="*{phone}"
+               type="tel"/>
+    </div>
+    <div class="form-group margin-top">
+        <textarea class="form-control w-100" placeholder="Message" required rows="3"
+                  th:data-body="#{page.lead.message-default}"
+                  th:field="*{message}">
+        </textarea>
+    </div>
+    <div class="form-group margin-top">
+        <button class="btn btn-primary w-100" data-async id="btn-send" th:text="#{button.send}" type="submit">
+            Send
+        </button>
+    </div>
+</form>

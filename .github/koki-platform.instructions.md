@@ -10,20 +10,24 @@ applyTo: modules/koki-platform/**
 ## Tech Stack
 
 ### Language
+
 - **Kotlin 2.1.0**: Primary language for all platform classes
 - **Java 17**: Target JVM version
 
 ### Build Tools
+
 - **Maven 3.8+**: Dependency management and build automation
 - **Spring Boot Parent 3.5.7**: Parent POM for dependency version management
 
 ### Frameworks & Libraries
+
 - **Spring Boot 3.5.7**: Core framework for configuration and dependency injection
 - **Spring Security 6.x**: Authentication and authorization framework
 - **Hibernate 6.x**: ORM framework (provided scope)
 - **koki-dto**: Shared DTOs for domain models
 
 ### Infrastructure
+
 - **AWS S3**: Cloud storage service
 - **AWS Translate**: Translation service
 - **Redis (Lettuce 7.0)**: Distributed caching
@@ -31,6 +35,7 @@ applyTo: modules/koki-platform/**
 - **Google Gemini**: AI/LLM provider
 
 ### Libraries
+
 - **Mustache (0.9.14)**: Template engine
 - **Apache Commons IO**: File utilities
 - **Apache Commons Lang3**: String and utility functions
@@ -39,30 +44,36 @@ applyTo: modules/koki-platform/**
 - **SLF4J**: Logging facade (provided scope)
 
 ### Testing
+
 - **JUnit 5**: Unit testing framework
 - **Kotlin Test**: Kotlin testing utilities
 - **Mockito**: Mocking framework
 - **Code Coverage**: Jacoco with 85% line and class coverage thresholds
 
 ### Packaging
+
 - **JAR**: Packaged as a library for consumption by other modules
 - **GitHub Packages**: Distributed via GitHub Maven repository
 
 ## Coding Style and Idioms
 
 ### File Organization
+
 - One class/interface per file
 - File name must match the class/interface name
 - Package structure: `com.wutsi.koki.platform.<module>`
-- Modules: ai, cache, debug, executor, geoip, logger, messaging, mq, security, storage, templating, tenant, tracing, tracking, translation, url, util
+- Modules: ai, cache, debug, executor, geoip, logger, messaging, mq, security, storage, templating, tenant, tracing,
+  tracking, translation, url, util
 
 ### Interface Design Pattern
+
 - **Provider Interface**: Define contract for infrastructure services
 - **Multiple Implementations**: Provide different implementations (local, cloud, test)
 - **Builder Pattern**: Use builders for complex object creation
 - **Configuration Classes**: Spring Boot auto-configuration for wiring
 
 **Example:**
+
 ```kotlin
 // Interface
 interface StorageService {
@@ -98,12 +109,14 @@ class LocalStorageConfiguration {
 ### Class Patterns
 
 #### Interface Classes
+
 - Define contracts for infrastructure services
 - Use simple, clear method signatures
 - Throw checked exceptions where appropriate (IOException)
 - Document with KDoc
 
 #### Implementation Classes
+
 - Implement interface contracts
 - Constructor dependency injection
 - All properties as constructor parameters
@@ -111,6 +124,7 @@ class LocalStorageConfiguration {
 - No mutable state unless necessary
 
 #### Configuration Classes
+
 - Use `@Configuration` annotation
 - Conditional loading with `@ConditionalOnProperty`
 - Define beans with `@Bean` annotation
@@ -118,12 +132,14 @@ class LocalStorageConfiguration {
 - Group related beans together
 
 #### Builder Classes
+
 - Pattern: `<Service>Builder`
 - Provide fluent API for object creation
 - Handle complex initialization logic
 - Validate required parameters
 
 #### Health Indicator Classes
+
 - Implement Spring Boot `HealthIndicator` interface
 - Check infrastructure service health
 - Return UP/DOWN status with details
@@ -132,42 +148,51 @@ class LocalStorageConfiguration {
 ### Naming Conventions
 
 #### Interfaces
+
 - Pattern: `<Service>` (e.g., `StorageService`, `CacheService`, `MessagingService`)
 - No "I" prefix
 - Use nouns describing the service
 
 #### Implementations
+
 - Pattern: `<Type><Service>` (e.g., `LocalStorageService`, `S3StorageService`, `RedisCache`)
 - Indicate implementation type in name
 
 #### Builders
+
 - Pattern: `<Type>Builder` or `<Service>Builder`
 - Examples: `LocalStorageServiceBuilder`, `SMTPMessagingServiceBuilder`
 
 #### Configuration Classes
+
 - Pattern: `<Type>Configuration` or `<Module>Configuration`
 - Examples: `LocalCacheConfiguration`, `RedisCacheConfiguration`, `StorageConfiguration`
 
 #### Exceptions
+
 - Pattern: `<Context>Exception`
 - Examples: `MessagingException`, `TranslationException`, `LLMException`
 - Extend appropriate base exception
 
 #### Providers
+
 - Pattern: `<Context>Provider`
 - Examples: `TenantProvider`, `ChannelTypeProvider`
 
 #### Filters
+
 - Pattern: `<Context>Filter`
 - Examples: `TenantFilter`, `ChannelTypeFilter`
 
 #### Interceptors
+
 - Pattern: `<Context>Interceptor`
 - Examples: `DebugRestInterceptor`, `AuthorizationRestInterceptor`
 
 ### Method Patterns
 
 #### Service Interface Methods
+
 ```kotlin
 // Store/persist operation
 fun store(path: String, content: InputStream, ...): URL
@@ -183,6 +208,7 @@ fun find(criteria: ...): List<Entity>
 ```
 
 #### Builder Methods
+
 ```kotlin
 fun build(config: Map<String, String>): Service {
     // Validate
@@ -194,6 +220,7 @@ fun build(config: Map<String, String>): Service {
 ```
 
 #### Configuration Bean Methods
+
 ```kotlin
 @Bean
 fun serviceName(
@@ -207,12 +234,14 @@ fun serviceName(
 ### Exception Handling
 
 #### Custom Exceptions
+
 - Extend `RuntimeException` for unchecked exceptions
 - Extend `Exception` for checked exceptions
 - Provide meaningful error messages
 - Include cause when wrapping exceptions
 
 **Example:**
+
 ```kotlin
 class MessagingException(message: String, cause: Throwable? = null) :
     RuntimeException(message, cause)
@@ -222,6 +251,7 @@ class TranslationNotConfiguredException :
 ```
 
 #### Throwing Exceptions
+
 ```kotlin
 // With message
 throw MessagingException("Failed to send email")
@@ -237,6 +267,7 @@ check(isInitialized) { "Service not initialized" }
 ### Logging Patterns
 
 #### KVLogger (Key-Value Logger)
+
 ```kotlin
 class ServiceImpl(private val logger: KVLogger) {
     fun process(id: Long, data: String) {
@@ -259,13 +290,16 @@ class ServiceImpl(private val logger: KVLogger) {
 ### Tenant Awareness
 
 #### Tenant-Aware Services
+
 Services that need tenant context:
+
 - Use `TenantProvider` to get current tenant ID
 - Include tenant ID in cache keys
 - Include tenant ID in storage paths
 - Include tenant ID in log messages
 
 **Example:**
+
 ```kotlin
 class TenantAwareStorageService(
     private val storage: StorageService,
@@ -280,19 +314,21 @@ class TenantAwareStorageService(
 ```
 
 ### Imports
+
 - No wildcard imports
 - Import only what's needed
 - Standard order:
-  1. Java/JDK imports
-  2. Spring imports
-  3. Third-party library imports
-  4. koki-dto imports
-  5. koki-platform internal imports
-  6. Kotlin stdlib
+    1. Java/JDK imports
+    2. Spring imports
+    3. Third-party library imports
+    4. koki-dto imports
+    5. koki-platform internal imports
+    6. Kotlin stdlib
 
 ## Architecture
 
 ### Package Structure
+
 ```
 com.wutsi.koki.platform/
 ├── KokiApplication.kt              # Main platform annotation
@@ -369,27 +405,33 @@ com.wutsi.koki.platform/
 ### Core Patterns
 
 #### Provider Pattern
+
 - Define interface for infrastructure service
 - Provide multiple implementations for different environments
 - Use configuration to select implementation at runtime
 
 #### Builder Pattern
+
 - Complex object creation with validation
 - Fluent API for configuration
 - Separate construction from representation
 
 #### Configuration Pattern
+
 - Spring Boot auto-configuration
 - Conditional bean creation based on properties
 - Default implementations with override capability
 
 #### Health Check Pattern
+
 - Implement `HealthIndicator` for each infrastructure service
 - Provide detailed health information
 - Enable monitoring and alerting
 
 ### Main Annotation
+
 `@KokiApplication` - Meta-annotation that imports all platform configurations:
+
 - AI Configuration
 - Cache Configuration (Local, Redis, None)
 - Executor Configuration
@@ -401,12 +443,14 @@ com.wutsi.koki.platform/
 ### Multi-Tenancy Architecture
 
 #### Tenant Resolution
+
 1. Request comes in with tenant identifier (header, cookie, subdomain)
 2. Filter extracts tenant ID and stores in `TenantHolder`
 3. Services access tenant ID via `TenantProvider`
 4. Tenant ID propagates through cache keys, storage paths, logs
 
 #### Tenant Isolation
+
 - Storage paths: `tenants/{tenantId}/...`
 - Cache keys: `{tenant}:{key}`
 - Database queries: Filtered by tenant_id column
@@ -415,12 +459,14 @@ com.wutsi.koki.platform/
 ### Security Architecture
 
 #### JWT Authentication
+
 1. Request contains JWT token (Authorization header, cookie)
 2. Filter validates and decodes JWT
 3. Creates Spring Security `Authentication` object
 4. Token available via `AccessTokenHolder`
 
 #### Token Propagation
+
 - `RequestAccessTokenHolder`: Request-scoped token storage
 - `CookieAccessTokenHolder`: Cookie-based token storage
 - Used by SDK clients to propagate tokens to downstream services
@@ -428,11 +474,13 @@ com.wutsi.koki.platform/
 ## Testing Guidelines
 
 ### Test Coverage Requirements
+
 - **Line Coverage**: 85% minimum
 - **Class Coverage**: 85% minimum
 - Enforced by Jacoco in build
 
 ### Test Structure
+
 - One test class per implementation class
 - Test class name: `<ClassName>Test`
 - Place in same package structure under `src/test/kotlin`
@@ -440,6 +488,7 @@ com.wutsi.koki.platform/
 ### Test Patterns
 
 #### Unit Test Pattern
+
 ```kotlin
 class ServiceImplTest {
     private lateinit var service: ServiceImpl
@@ -468,6 +517,7 @@ class ServiceImplTest {
 ```
 
 #### Integration Test Pattern
+
 ```kotlin
 @SpringBootTest
 class StorageIntegrationTest {
@@ -492,6 +542,7 @@ class StorageIntegrationTest {
 ```
 
 #### Health Indicator Test Pattern
+
 ```kotlin
 class ServiceHealthIndicatorTest {
     @Test
@@ -511,12 +562,14 @@ class ServiceHealthIndicatorTest {
 ```
 
 ### Test Frameworks
+
 - **JUnit 5**: Main testing framework
 - **Kotlin Test**: Kotlin-specific assertions
 - **Mockito**: Mocking dependencies
 - **Spring Boot Test**: Integration testing support
 
 ### Mocking Guidelines
+
 - Mock external dependencies (databases, APIs, file systems)
 - Don't mock value objects or DTOs
 - Use `mock()` for interface/class mocking
@@ -525,12 +578,14 @@ class ServiceHealthIndicatorTest {
 ## Documentation Guidelines
 
 ### Interface Documentation
+
 - Add KDoc for all public interfaces
 - Document method parameters and return values
 - Include usage examples
 - Document exceptions
 
 **Example:**
+
 ```kotlin
 /**
  * Storage service for file operations.
@@ -539,24 +594,27 @@ class ServiceHealthIndicatorTest {
  *
  * Example:
  * ```
- * val url = storage.store("path/file.txt", inputStream, "text/plain", 1024)
- * storage.get(url, outputStream)
- * ```
- */
+
+* val url = storage.store("path/file.txt", inputStream, "text/plain", 1024)
+* storage.get(url, outputStream)
+* ```
+
+*/
 interface StorageService {
-    /**
-     * Stores a file at the specified path.
-     *
-     * @param path Relative path for the file
-     * @param content Input stream containing file content
-     * @param contentType MIME type (optional)
-     * @param contentLength Size in bytes
-     * @return URL to access the stored file
-     * @throws IOException if storage operation fails
-     */
-    @Throws(IOException::class)
-    fun store(path: String, content: InputStream, contentType: String?, contentLength: Long): URL
+/**
+* Stores a file at the specified path.
+*
+* @param path Relative path for the file
+* @param content Input stream containing file content
+* @param contentType MIME type (optional)
+* @param contentLength Size in bytes
+* @return URL to access the stored file
+* @throws IOException if storage operation fails
+*/
+@Throws(IOException::class)
+fun store(path: String, content: InputStream, contentType: String?, contentLength: Long): URL
 }
+
 ```
 
 ### Implementation Documentation
@@ -709,12 +767,14 @@ class S3StorageConfiguration {
 ```
 
 #### Default Values
+
 ```kotlin
 @Value("\${koki.cache.ttl:3600}")
 private val ttl: Int = 3600
 ```
 
 ### Performance Considerations
+
 - Use caching to reduce database/API calls
 - Implement connection pooling
 - Use async processing for non-critical operations

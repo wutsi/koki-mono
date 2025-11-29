@@ -5,6 +5,8 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.portal.pub.common.model.PageModel
 import com.wutsi.koki.portal.pub.tenant.model.TenantModel
 import com.wutsi.koki.portal.pub.tenant.service.CurrentTenantHolder
+import com.wutsi.koki.portal.pub.user.model.UserModel
+import com.wutsi.koki.portal.pub.user.service.CurrentUserHolder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
@@ -27,11 +29,19 @@ abstract class AbstractPageController {
     protected lateinit var tenantHolder: CurrentTenantHolder
 
     @Autowired
+    protected lateinit var userHolder: CurrentUserHolder
+
+    @Autowired
     protected lateinit var messages: MessageSource
 
     @ModelAttribute("tenant")
     fun getTenant(): TenantModel? {
         return tenantHolder.get()
+    }
+
+    @ModelAttribute("user")
+    fun getUser(): UserModel? {
+        return userHolder.get()
     }
 
     protected open fun createPageModel(

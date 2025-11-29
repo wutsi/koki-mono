@@ -11,6 +11,8 @@ class LeadMapper {
         return Lead(
             id = entity.id ?: -1,
             listingId = entity.listing?.id,
+            deviceId = entity.deviceId,
+            userId = entity.userId,
             firstName = entity.firstName,
             lastName = entity.lastName,
             email = entity.email,

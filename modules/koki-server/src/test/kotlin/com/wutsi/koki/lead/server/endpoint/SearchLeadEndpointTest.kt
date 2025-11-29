@@ -49,4 +49,15 @@ class SearchLeadEndpointTest : AuthorizationAwareEndpointTest() {
         val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
         assertEquals(listOf(400L, 401L, 402L), ids)
     }
+
+    @Test
+    fun `by user-id`() {
+        val response =
+            rest.getForEntity("/v1/leads?user-id=1111", SearchLeadResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(500L), ids)
+    }
 }

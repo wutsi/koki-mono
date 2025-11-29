@@ -7,11 +7,12 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
+import com.wutsi.koki.lead.dto.CreateLeadRequest
+import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.FileFixtures
-import com.wutsi.koki.portal.pub.ListingFixtures
 import com.wutsi.koki.portal.pub.ListingFixtures.listing
 import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.common.page.PageName
@@ -80,7 +81,29 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         scroll(.33)
         click("#btn-send-message")
-        assertElementVisible("#lead-modal")
+        assertElementVisible("#koki-modal")
+
+        input("#firstName", "Ray")
+        input("#lastName", "Sponsible")
+        input("#email", "ray.sponsible@gmail.com")
+        input("#message", "I am interested in your property. Please contact me.")
+        input("#phone", "2025550147")
+        click("#btn-send")
+
+        val request = argumentCaptor<CreateLeadRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/leads"),
+            request.capture(),
+            eq(CreateLeadResponse::class.java)
+        )
+        assertEquals("Ray", request.firstValue.firstName)
+        assertEquals("Sponsible", request.firstValue.lastName)
+        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
+        assertEquals("I am interested in your property. Please contact me.", request.firstValue.message)
+        assertEquals("+12025550147", request.firstValue.phoneNumber)
+
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementVisible("#toast-message")
     }
 
     @Test
@@ -194,7 +217,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
     private fun setupListing(status: ListingStatus) {
         doReturn(
             ResponseEntity(
-                GetListingResponse(ListingFixtures.listing.copy(status = status)),
+                GetListingResponse(listing.copy(status = status)),
                 HttpStatus.OK,
             )
         ).whenever(rest)

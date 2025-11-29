@@ -11,6 +11,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.lead.dto.CreateLeadRequest
+import com.wutsi.koki.lead.dto.CreateLeadResponse
+import com.wutsi.koki.lead.dto.GetLeadResponse
+import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
@@ -187,6 +191,7 @@ abstract class AbstractPageControllerTest {
         setupTenantModule()
         setupUserModule()
         setupListingModule()
+        setupLeadModule()
     }
 
     private fun setupRefDataModule() {
@@ -366,6 +371,42 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetListingResponse::class.java)
+            )
+    }
+
+    fun setupLeadModule() {
+        doReturn(
+            ResponseEntity(
+                GetLeadResponse(lead = LeadFixtures.lead),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetLeadResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SearchLeadResponse(leads = LeadFixtures.leads),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchLeadResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                CreateLeadResponse(leadId = 4304039),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                any<CreateLeadRequest>(),
+                eq(CreateLeadResponse::class.java)
             )
     }
 

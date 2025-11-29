@@ -84,6 +84,7 @@ CREATE TABLE T_USER(
   city_fk                 BIGINT,
   invitation_fk           VARCHAR(36) REFERENCES T_INVITATION(id),
 
+  device_id               VARCHAR(36),
   username                VARCHAR(50) NOT NULL,
   password                VARCHAR(32) NOT NULL,
   salt                    VARCHAR(36) NOT NULL DEFAULT '',
@@ -112,6 +113,7 @@ CREATE TABLE T_USER(
 CREATE INDEX tenant ON T_USER(tenant_fk);
 CREATE INDEX category ON T_USER(category_fk);
 CREATE INDEX city ON T_USER(city_fk);
+CREATE INDEX device_id ON T_USER(device_id);
 
 CREATE TABLE T_PASSWORD_RESET_TOKEN(
     id              VARCHAR(36),

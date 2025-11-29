@@ -1,29 +1,20 @@
-package com.wutsi.koki.portal.user.service
+package com.wutsi.koki.portal.pub.user.service
 
-import com.wutsi.koki.platform.security.JWTAuthentication
-import com.wutsi.koki.portal.security.service.LoginService
-import com.wutsi.koki.portal.user.model.UserModel
-import com.wutsi.koki.security.dto.JWTPrincipal
+import com.wutsi.koki.portal.pub.user.model.UserModel
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 class CurrentUserHolder(
     private val service: UserService,
-    private val loginService: LoginService,
+    private val userIdProvider: UserIdProvider,
 ) {
     private var model: UserModel? = null
 
     fun id(): Long? {
-        val auth = SecurityContextHolder.getContext().authentication
-        if (auth is JWTAuthentication) {
-            return (auth.principal as JWTPrincipal).getUserId()
-        } else {
-            return null
-        }
+        return userIdProvider.get()
     }
 
     fun get(): UserModel? {
@@ -36,8 +27,7 @@ class CurrentUserHolder(
             model = service.get(id)
             return model
         } catch (ex: Exception) {
-            loginService.logout()
-            SecurityContextHolder.clearContext()
+            userIdProvider.remove()
             return null
         }
     }
