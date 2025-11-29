@@ -160,7 +160,7 @@ data class ListingModel(
     }
 
     fun canManage(user: UserModel?): Boolean {
-        /**
+        /*
          * - User can manage AND user is the seller agent
          * - user has full access
          */
@@ -169,7 +169,7 @@ data class ListingModel(
     }
 
     fun canAccess(user: UserModel?): Boolean {
-        /**
+        /*
          * - User can access AND user is the seller agent or listing is not draft
          * - user has full access
          */

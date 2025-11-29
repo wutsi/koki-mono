@@ -32,9 +32,7 @@ class LeadService(
 
         // Set current user
         val lead = koki.get(leadId).lead
-        if (lead.userId == null) {
-            userIdProvider.remove()
-        } else {
+        if (lead.userId != null) {
             userIdProvider.set(lead.userId!!)
         }
 

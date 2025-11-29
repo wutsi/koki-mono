@@ -63,3 +63,9 @@ jobs:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     min-coverage-overall: 90
                     min-coverage-changed-files: 90
+
+            -   name: Upload JaCoCo Report
+                uses: actions/upload-artifact@v5
+                with:
+                    name: jacoco-report
+                    path: modules/koki-server/target/site/jacoco/**/*
