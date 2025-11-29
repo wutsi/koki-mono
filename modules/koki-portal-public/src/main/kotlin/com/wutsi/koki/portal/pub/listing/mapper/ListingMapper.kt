@@ -36,7 +36,7 @@ class ListingMapper(
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
-        val df = createDateFormat()
+        createDateFormat()
         val mdf = createMediumDateFormat()
         val address = toAddress(entity.address, locations)
 
@@ -63,7 +63,7 @@ class ListingMapper(
             distanceFromMainRoad = entity.distanceFromMainRoad,
             roadPavement = entity.roadPavement,
             availableAt = entity.availableAt,
-            availableAtText = entity.availableAt?.let { date -> df.format(date) },
+            availableAtText = entity.availableAt?.let { date -> mdf.format(date) },
 
             furnitureType = entity.furnitureType,
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
@@ -186,7 +186,7 @@ class ListingMapper(
             street = address.street,
             postalCode = address.postalCode,
             countryName = address.country?.let { country ->
-                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
+                Locale(LocaleContextHolder.getLocale().language, country).displayCountry
             },
         )
     }

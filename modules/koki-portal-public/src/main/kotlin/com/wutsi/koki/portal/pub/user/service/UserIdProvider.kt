@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Service
 
 @Service
-class CurrentUserHolder(
+class UserIdProvider(
     private val request: HttpServletRequest,
     private val response: HttpServletResponse,
 ) {

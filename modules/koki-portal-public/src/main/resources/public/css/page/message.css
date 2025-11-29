@@ -1,0 +1,15 @@
+#koki-modal .agent-info {
+    display: flex;
+}
+
+#koki-modal .agent-info h3 {
+    margin-bottom: 0;
+}
+
+#koki-modal .agent-info img {
+    border-radius: 50%;
+    height: 64px;
+    width: 64px;
+    object-fit: cover;
+    margin-right: 1em;
+}

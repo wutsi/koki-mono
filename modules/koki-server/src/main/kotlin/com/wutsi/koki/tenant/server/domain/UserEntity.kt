@@ -11,7 +11,6 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import java.util.Date
-import kotlin.collections.mutableListOf
 
 @Entity
 @Table(name = "T_USER")
@@ -38,6 +37,7 @@ data class UserEntity(
     @Column(name = "invitation_fk")
     val invitationId: String? = null,
 
+    val deviceId: String? = null,
     var username: String = "",
     var password: String = "",
     var salt: String = "",

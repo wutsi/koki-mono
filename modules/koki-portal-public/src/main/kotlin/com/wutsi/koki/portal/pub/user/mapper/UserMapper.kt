@@ -4,11 +4,34 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.user.model.UserModel
+import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
 import org.springframework.stereotype.Service
 
 @Service
 class UserMapper : TenantAwareMapper() {
+    fun toUserModel(entity: User, city: LocationModel?): UserModel {
+        val fmt = createDateTimeFormat()
+        return UserModel(
+            id = entity.id,
+            username = entity.username,
+            email = entity.email,
+            displayName = entity.displayName,
+            status = entity.status,
+            createdAt = entity.createdAt,
+            createdAtText = fmt.format(entity.createdAt),
+            modifiedAt = entity.modifiedAt,
+            modifiedAtText = fmt.format(entity.modifiedAt),
+            employer = entity.employer,
+            photoUrl = entity.photoUrl,
+            mobile = entity.mobile,
+            whatsappUrl = entity.mobile?.let { mobile -> "https://wa.me/" + (mobile.substring(1)) },
+            mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
+            city = city,
+            country = entity.country,
+        )
+    }
+
     fun toUserModel(entity: UserSummary, cities: Map<Long, LocationModel>): UserModel {
         val fmt = createDateTimeFormat()
         val city = entity.cityId?.let { id -> cities[id] }

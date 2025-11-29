@@ -25,6 +25,8 @@ class GetLeadEndpointTest : AuthorizationAwareEndpointTest() {
 
         val lead = response.body!!.lead
         assertEquals(111L, lead.listingId)
+        assertEquals("xxx", lead.deviceId)
+        assertEquals(11L, lead.userId)
         assertEquals("Hello world", lead.message)
         assertEquals("Yo", lead.firstName)
         assertEquals("Man", lead.lastName)

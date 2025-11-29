@@ -49,7 +49,7 @@ class UserService(
     }
 
     @Transactional
-    fun create(request: CreateUserRequest, tenantId: Long): UserEntity {
+    fun create(request: CreateUserRequest, tenantId: Long, deviceId: String? = null): UserEntity {
         checkDuplicateUsername(null, request.username, tenantId)
         checkDuplicateEmail(null, request.email, tenantId)
 
@@ -60,6 +60,7 @@ class UserService(
         val user = dao.save(
             UserEntity(
                 tenantId = tenantId,
+                deviceId = deviceId,
                 username = request.username.lowercase(),
                 email = request.email?.lowercase()?.ifEmpty { null },
                 displayName = request.displayName?.ifEmpty { null },

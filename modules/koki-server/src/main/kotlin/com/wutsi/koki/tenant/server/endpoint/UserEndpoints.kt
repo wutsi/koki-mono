@@ -79,9 +79,10 @@ class UserEndpoints(
     @PostMapping
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestHeader(name = "X-Device-ID", required = false) deviceId: String? = null,
         @RequestBody @Valid request: CreateUserRequest
     ): CreateUserResponse {
-        val userId = service.create(request, tenantId).id ?: -1
+        val userId = service.create(request, tenantId, deviceId).id ?: -1
 
         publisher.publish(
             UserCreatedEvent(

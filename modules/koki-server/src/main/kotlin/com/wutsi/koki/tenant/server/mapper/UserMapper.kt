@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 class UserMapper {
     fun toUser(entity: UserEntity) = User(
         id = entity.id!!,
+        deviceId = entity.deviceId,
         displayName = entity.displayName,
         username = entity.username,
         email = entity.email,

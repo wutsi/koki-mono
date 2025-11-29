@@ -22,6 +22,7 @@ import kotlin.test.assertEquals
 abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
     companion object {
         const val TENANT_ID = 1L
+        const val DEVICE_ID = "device-test"
     }
 
     @Autowired
@@ -36,11 +37,13 @@ abstract class TenantAwareEndpointTest : ClientHttpRequestInterceptor {
         body: ByteArray,
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
+        request.headers.remove(HttpHeader.TENANT_ID)
         if (!ignoreTenantIdHeader) {
             request.headers.add(HttpHeader.TENANT_ID, TENANT_ID.toString())
-        } else {
-            request.headers.remove(HttpHeader.TENANT_ID)
         }
+
+        request.headers.remove(HttpHeader.DEVICE_ID)
+        request.headers.add(HttpHeader.DEVICE_ID, DEVICE_ID)
         return execution.execute(request, body)
     }
 

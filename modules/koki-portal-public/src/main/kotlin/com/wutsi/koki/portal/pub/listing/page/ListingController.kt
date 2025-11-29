@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.pub.listing.page
 
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
-import com.wutsi.koki.portal.pub.listing.form.LeadForm
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.refdata.dto.CategoryType
@@ -10,11 +9,9 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
 
 @Controller
@@ -23,28 +20,34 @@ class ListingController(
     private val service: ListingService,
     private val categoryService: CategoryService,
 ) : AbstractPageController() {
+    companion object {
+        const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
+        const val TOAST_MESSAGE_SENT = "msg-sent"
+    }
+
     @GetMapping("/{id}/{slug}")
-    fun show(@PathVariable slug: String, @PathVariable id: Long, model: Model): String {
-        return show(id, model)
+    fun show(
+        @PathVariable slug: String,
+        @PathVariable id: Long,
+        @RequestParam(name = "_toast", required = false) toast: String? = null,
+        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
+        model: Model,
+    ): String {
+        return show(id, toast, timestamp, model)
     }
 
     @GetMapping("/{id}")
-    fun show(@PathVariable id: Long, model: Model): String {
+    fun show(
+        @PathVariable id: Long,
+        @RequestParam(name = "_toast", required = false) toast: String? = null,
+        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
+        model: Model,
+    ): String {
         val listing = service.get(id)
         if (!listing.statusActive && !listing.statusSold) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(404))
         }
         model.addAttribute("listing", listing)
-
-        /* Form */
-        model.addAttribute(
-            "form",
-            LeadForm(
-                listingId = id,
-                message = getMessage("page.listing.section.message.modal.body"),
-                country = tenantHolder.get()?.country,
-            ),
-        )
 
         /* Amenities */
         val categoryIds = listing.amenities.map { amenity -> amenity.categoryId }.distinct()
@@ -76,7 +79,6 @@ class ListingController(
             createPageModel(
                 name = PageName.LISTING,
                 title = listOf(listing.title, listing.price?.displayText)
-                    .filterNotNull()
                     .joinToString(" - "),
                 description = listing.summary,
                 image = listing.heroImageUrl,
@@ -85,23 +87,28 @@ class ListingController(
             )
         )
 
+        /* Toast */
+        loadToast(toast, timestamp, model)
+
         return "listings/show"
     }
 
-    @PostMapping("/send")
-    @ResponseBody
-    fun send(@ModelAttribute form: LeadForm): Map<String, Any> {
-        try {
-            return mapOf(
-                "success" to true,
-                "listingId" to form.listingId,
-            )
-        } catch (ex: HttpClientErrorException) {
-            val response = toErrorResponse(ex)
-            return mapOf(
-                "success" to false,
-                "error" to response.error.code,
-            )
+    private fun loadToast(
+        @RequestParam(name = "_toast", required = false) toast: String? = null,
+        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
+        model: Model,
+    ) {
+        if (toast == null || timestamp == null) {
+            return
         }
+        if (System.currentTimeMillis() - timestamp > TOAST_TIMEOUT_MILLIS) {
+            return
+        }
+
+        val message = when (toast) {
+            TOAST_MESSAGE_SENT -> getMessage("page.listing.toast.message-sent")
+            else -> null
+        }
+        model.addAttribute("toastMessage", message)
     }
 }

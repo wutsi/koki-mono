@@ -13,6 +13,12 @@ class UserService(
     private val mapper: UserMapper,
     private val locationService: LocationService,
 ) {
+    fun get(id: Long): UserModel {
+        val user = koki.user(id).user
+        val city = user.cityId?.let { cityId -> locationService.get(cityId) }
+        return mapper.toUserModel(user, city)
+    }
+
     fun search(
         keyword: String? = null,
         ids: List<Long> = emptyList(),

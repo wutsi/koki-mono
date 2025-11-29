@@ -1,4 +1,4 @@
-package com.wutsi.koki.lead.server.endpoints
+package com.wutsi.koki.lead.server.endpoint
 
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
@@ -32,9 +32,10 @@ class LeadEndpoints(
     @PostMapping
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @RequestHeader(name = "X-Device-ID", required = false) deviceId: String? = null,
         @Valid @RequestBody request: CreateLeadRequest,
     ): CreateLeadResponse {
-        val lead = service.create(request, tenantId)
+        val lead = service.create(request, tenantId, deviceId)
         publisher.publish(
             LeadCreatedEvent(
                 leadId = lead.id ?: -1,
@@ -78,6 +79,7 @@ class LeadEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
+        @RequestParam(required = false, name = "user-id") userId: Long? = null,
         @RequestParam(required = false, name = "listing-id") listingIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "agent-user-id") agentUserIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<LeadStatus> = emptyList(),
@@ -86,7 +88,9 @@ class LeadEndpoints(
     ): SearchLeadResponse {
         val leads = service.search(
             tenantId = tenantId,
+            keyword = keyword,
             ids = ids,
+            userId = userId,
             listingIds = listingIds,
             agentUserIds = agentUserIds,
             statuses = statuses,

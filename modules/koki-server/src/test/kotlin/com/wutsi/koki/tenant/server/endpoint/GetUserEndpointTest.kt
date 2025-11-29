@@ -22,6 +22,7 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
 
         val user = result.body!!.user
         assertEquals(11L, user.id)
+        assertEquals("xxx", user.deviceId)
         assertEquals("Ray Sponsible", user.displayName)
         assertEquals("ray.sponsible", user.username)
         assertEquals("ray.sponsible@gmail.com", user.email)

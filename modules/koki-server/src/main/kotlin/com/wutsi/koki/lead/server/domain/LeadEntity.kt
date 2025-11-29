@@ -27,6 +27,10 @@ data class LeadEntity(
     @JoinColumn(name = "listing_fk")
     val listing: ListingEntity? = null,
 
+    @Column(name = "user_fk")
+    val userId: Long? = null,
+
+    val deviceId: String? = null,
     val firstName: String = "",
     val lastName: String = "",
     val email: String? = null,

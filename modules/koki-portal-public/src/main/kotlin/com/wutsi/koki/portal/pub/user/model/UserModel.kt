@@ -25,6 +25,9 @@ data class UserModel(
     val country: String? = null,
     val whatsappUrl: String? = null,
 ) {
-    val mobileUrl: String?
-        get() = mobile?.let { "tel:" + mobile }
+    val firstName: String
+        get() = displayName?.split(" ")?.firstOrNull() ?: ""
+
+    val lastName: String
+        get() = displayName?.split(" ")?.drop(1)?.joinToString(" ") ?: ""
 }

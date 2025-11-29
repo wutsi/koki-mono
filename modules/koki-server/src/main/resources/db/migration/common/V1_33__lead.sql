@@ -3,7 +3,9 @@ CREATE TABLE T_LEAD(
 
   tenant_fk                 BIGINT NOT NULL,
   listing_fk                BIGINT,
+  user_fk                   BIGINT,
 
+  device_id                 VARCHAR(36),
   status                    INT NOT NULL DEFAULT 0,
   source                    INT NOT NULL DEFAULT 0,
   first_name                VARCHAR(50) NOT NULL,
@@ -23,10 +25,12 @@ CREATE TABLE T_LEAD(
 
 CREATE INDEX tenant ON T_LEAD(tenant_fk);
 CREATE INDEX listing ON T_LEAD(listing_fk);
+CREATE INDEX `user` ON T_LEAD(user_fk);
 CREATE INDEX next_contact_at ON T_LEAD(next_contact_at);
 CREATE INDEX next_visit_at ON T_LEAD(next_visit_at);
-CREATE INDEX status ON T_LEAD(status);
+CREATE INDEX `status` ON T_LEAD(status);
 CREATE INDEX first_last_email ON T_LEAD(first_name, last_name, email);
+CREATE INDEX device_id ON T_LEAD(device_id);
 
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)

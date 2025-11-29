@@ -118,6 +118,7 @@ class CreateUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(36, user.salt.length)
         assertEquals(HASHED_PASSWORD, user.password)
         assertEquals(TENANT_ID, user.tenantId)
+        assertEquals(DEVICE_ID, user.deviceId)
         assertEquals(UserStatus.ACTIVE, user.status)
         assertEquals(request.categoryId, user.categoryId)
         assertEquals(request.employer?.uppercase(), user.employer)
