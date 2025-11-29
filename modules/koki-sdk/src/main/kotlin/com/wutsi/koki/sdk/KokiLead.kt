@@ -19,11 +19,12 @@ class KokiLead(
 
     fun get(id: Long): GetLeadResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetLeadResponse::class.java).body
+        return rest.getForEntity(url, GetLeadResponse::class.java).body!!
     }
 
     fun create(request: CreateLeadRequest): CreateLeadResponse {
-        return rest.postForEntity(PATH_PREFIX, request, CreateLeadResponse::class.java).body
+        val url = urlBuilder.build(PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateLeadResponse::class.java).body!!
     }
 
     fun updateStatus(id: Long, request: UpdateLeadStatusRequest) {
@@ -33,7 +34,7 @@ class KokiLead(
 
     fun search(
         ids: List<Long> = emptyList(),
-        keyword: String? = null,
+        userId: Long? = null,
         listingIds: List<Long> = emptyList(),
         agentUserIds: List<Long> = emptyList(),
         statuses: List<LeadStatus> = emptyList(),
@@ -42,10 +43,11 @@ class KokiLead(
         offset: Int = 0,
     ): SearchLeadResponse {
         val url = urlBuilder.build(
-            PATH_PREFIX,
-            mapOf(
+            path = PATH_PREFIX,
+            parameters = mapOf(
                 "q" to keywords,
                 "id" to ids,
+                "user-id" to userId,
                 "listing-id" to listingIds,
                 "agent-user-id" to agentUserIds,
                 "status" to statuses,
