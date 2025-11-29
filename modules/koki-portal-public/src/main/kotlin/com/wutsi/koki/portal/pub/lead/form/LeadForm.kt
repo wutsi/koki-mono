@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.pub.listing.form
+package com.wutsi.koki.portal.pub.agent.form
 
 data class LeadForm(
     val listingId: Long = -1,

@@ -4,6 +4,7 @@ import java.util.Date
 
 data class User(
     val id: Long = -1,
+    val deviceId: String? = null,
     val status: UserStatus = UserStatus.NEW,
     val username: String = "",
     val email: String? = null,

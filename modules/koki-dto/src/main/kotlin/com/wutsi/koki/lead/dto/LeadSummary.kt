@@ -5,6 +5,7 @@ import java.util.Date
 data class LeadSummary(
     val id: Long = -1,
     val listingId: Long? = null,
+    val userId: Long? = null,
     val source: LeadSource = LeadSource.UNKNOWN,
     val status: LeadStatus = LeadStatus.UNKNOWN,
     val firstName: String = "",
