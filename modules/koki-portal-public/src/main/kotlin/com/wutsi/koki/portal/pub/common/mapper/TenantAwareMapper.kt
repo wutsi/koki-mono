@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.pub.common.mapper
 
 import com.wutsi.koki.portal.pub.tenant.service.CurrentTenantHolder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.i18n.LocaleContextHolder
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -15,32 +14,22 @@ abstract class TenantAwareMapper {
 
     protected fun createDateTimeFormat(): DateFormat {
         val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.dateTimeFormat ?: "yyyy-MM-dd HH:mm")
+        return SimpleDateFormat(tenant.dateTimeFormat)
     }
 
     protected fun createDateFormat(): DateFormat {
         val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.dateFormat ?: "yyyy-MM-dd")
+        return SimpleDateFormat(tenant.dateFormat)
     }
 
     protected fun createMediumDateFormat(): DateFormat {
         val tenant = currentTenant.get()
-        tenant?.locale?.let { locale -> Locale(locale) } ?: LocaleContextHolder.getLocale()
+        tenant.locale.let { locale -> Locale(locale) }
         return DateFormat.getDateInstance(DateFormat.MEDIUM)
-    }
-
-    protected fun createTimeFormat(): DateFormat {
-        val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.timeFormat ?: "HH:mm")
-    }
-
-    protected fun createNumberFormat(): DecimalFormat {
-        val tenant = currentTenant.get()
-        return DecimalFormat(tenant?.numberFormat ?: "##.#")
     }
 
     protected fun createMoneyFormat(): NumberFormat {
         val tenant = currentTenant.get()
-        return DecimalFormat(tenant?.monetaryFormat ?: "##.#")
+        return DecimalFormat(tenant.monetaryFormat)
     }
 }
