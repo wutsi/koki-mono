@@ -36,6 +36,6 @@ abstract class AbstractKokiModule(
             HttpMethod.POST,
             requestEntity,
             responseType,
-        ).body
+        ).body!!
     }
 }

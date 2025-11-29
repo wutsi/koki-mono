@@ -14,6 +14,6 @@ class KokiAuthentication(
 
     fun login(request: LoginRequest): LoginResponse {
         val url = urlBuilder.build("$PATH_PREFIX/login")
-        return rest.postForEntity(url, request, LoginResponse::class.java).body
+        return rest.postForEntity(url, request, LoginResponse::class.java).body!!
     }
 }

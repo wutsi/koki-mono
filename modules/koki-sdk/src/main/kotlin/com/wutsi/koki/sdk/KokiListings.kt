@@ -30,7 +30,7 @@ class KokiListings(
 
     fun create(request: CreateListingRequest): CreateListingResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateListingResponse::class.java).body
+        return rest.postForEntity(url, request, CreateListingResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateListingRequest) {
@@ -80,7 +80,7 @@ class KokiListings(
 
     fun get(id: Long): GetListingResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetListingResponse::class.java).body
+        return rest.getForEntity(url, GetListingResponse::class.java).body!!
     }
 
     fun search(
@@ -132,7 +132,7 @@ class KokiListings(
                 "offset" to offset,
             ),
         )
-        return rest.getForEntity(url, SearchListingResponse::class.java).body
+        return rest.getForEntity(url, SearchListingResponse::class.java).body!!
     }
 
     fun publish(id: Long) {

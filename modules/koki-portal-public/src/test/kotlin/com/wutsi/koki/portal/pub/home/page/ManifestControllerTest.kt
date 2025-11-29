@@ -14,7 +14,7 @@ class ManifestControllerTest : AbstractPageControllerTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val manifest = response.body as Map<String, Any>
+        val manifest = response.body as Map<*, *>
         assertEquals(TenantFixtures.tenants[0].name, manifest["name"])
         assertEquals(TenantFixtures.tenants[0].name, manifest["shortName"])
         assertEquals("standalone", manifest["display"])

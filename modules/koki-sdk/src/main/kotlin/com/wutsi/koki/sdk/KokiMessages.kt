@@ -19,12 +19,12 @@ class KokiMessages(
 
     fun send(request: SendMessageRequest): SendMessageResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, SendMessageResponse::class.java).body
+        return rest.postForEntity(url, request, SendMessageResponse::class.java).body!!
     }
 
     fun message(id: Long): GetMessageResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetMessageResponse::class.java).body
+        return rest.getForEntity(url, GetMessageResponse::class.java).body!!
     }
 
     fun messages(
@@ -46,7 +46,7 @@ class KokiMessages(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchMessageResponse::class.java).body
+        return rest.getForEntity(url, SearchMessageResponse::class.java).body!!
     }
 
     fun status(id: Long, request: UpdateMessageStatusRequest) {

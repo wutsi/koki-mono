@@ -20,7 +20,7 @@ class KokiRefData(
 
     fun location(id: Long): GetLocationResponse {
         val url = urlBuilder.build("$LOCATION_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetLocationResponse::class.java).body
+        return rest.getForEntity(url, GetLocationResponse::class.java).body!!
     }
 
     fun locations(
@@ -43,7 +43,7 @@ class KokiRefData(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchLocationResponse::class.java).body
+        return rest.getForEntity(url, SearchLocationResponse::class.java).body!!
     }
 
     fun categories(
@@ -68,7 +68,7 @@ class KokiRefData(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchCategoryResponse::class.java).body
+        return rest.getForEntity(url, SearchCategoryResponse::class.java).body!!
     }
 
     fun amenities(
@@ -87,6 +87,6 @@ class KokiRefData(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAmenityResponse::class.java).body
+        return rest.getForEntity(url, SearchAmenityResponse::class.java).body!!
     }
 }

@@ -34,7 +34,7 @@ class KokiRoles(
 
     fun create(request: CreateRoleRequest): CreateRoleResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateRoleResponse::class.java).body
+        return rest.postForEntity(url, request, CreateRoleResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateRoleRequest) {

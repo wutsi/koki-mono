@@ -55,6 +55,6 @@ class KokiLeads(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchLeadResponse::class.java).body
+        return rest.getForEntity(url, SearchLeadResponse::class.java).body!!
     }
 }

@@ -22,7 +22,7 @@ class KokiAccounts(
 
     fun create(request: CreateAccountRequest): CreateAccountResponse {
         val url = urlBuilder.build(ACCOUNT_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body
+        return rest.postForEntity(url, request, CreateAccountResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateAccountRequest) {
@@ -37,7 +37,7 @@ class KokiAccounts(
 
     fun account(id: Long): GetAccountResponse {
         val url = urlBuilder.build("$ACCOUNT_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAccountResponse::class.java).body
+        return rest.getForEntity(url, GetAccountResponse::class.java).body!!
     }
 
     fun accounts(
@@ -61,12 +61,12 @@ class KokiAccounts(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAccountResponse::class.java).body
+        return rest.getForEntity(url, SearchAccountResponse::class.java).body!!
     }
 
     fun attribute(id: Long): GetAttributeResponse {
         val url = urlBuilder.build("$ATTRIBUTE_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAttributeResponse::class.java).body
+        return rest.getForEntity(url, GetAttributeResponse::class.java).body!!
     }
 
     fun attributes(
@@ -86,7 +86,7 @@ class KokiAccounts(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAttributeResponse::class.java).body
+        return rest.getForEntity(url, SearchAttributeResponse::class.java).body!!
     }
 
     fun uploadAttributes(file: MultipartFile): ImportResponse {

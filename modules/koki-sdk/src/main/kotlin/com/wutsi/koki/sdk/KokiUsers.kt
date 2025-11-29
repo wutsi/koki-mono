@@ -57,7 +57,7 @@ class KokiUsers(
 
     fun create(request: CreateUserRequest): CreateUserResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateUserResponse::class.java).body
+        return rest.postForEntity(url, request, CreateUserResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateUserRequest) {
@@ -82,7 +82,7 @@ class KokiUsers(
 
     fun sendPassword(request: SendPasswordRequest): SendPasswordResponse {
         val url = urlBuilder.build("$PATH_PREFIX/password/send")
-        return rest.postForEntity(url, request, SendPasswordResponse::class.java).body
+        return rest.postForEntity(url, request, SendPasswordResponse::class.java).body!!
     }
 
     fun resetPassword(request: ResetPasswordRequest) {

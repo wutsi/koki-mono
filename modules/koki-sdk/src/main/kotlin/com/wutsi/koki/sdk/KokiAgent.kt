@@ -15,12 +15,12 @@ class KokiAgent(
 
     fun get(id: Long): GetAgentResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetAgentResponse::class.java).body
+        return rest.getForEntity(url, GetAgentResponse::class.java).body!!
     }
 
     fun getByUser(userId: Long): GetAgentResponse {
         val url = urlBuilder.build("$USER_PATH_PREFIX/$userId/agent")
-        return rest.getForEntity(url, GetAgentResponse::class.java).body
+        return rest.getForEntity(url, GetAgentResponse::class.java).body!!
     }
 
     fun search(
@@ -38,6 +38,6 @@ class KokiAgent(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchAgentResponse::class.java).body
+        return rest.getForEntity(url, SearchAgentResponse::class.java).body!!
     }
 }

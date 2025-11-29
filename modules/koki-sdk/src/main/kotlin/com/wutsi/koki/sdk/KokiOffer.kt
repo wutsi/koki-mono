@@ -20,12 +20,12 @@ class KokiOffer(
 
     fun create(request: CreateOfferRequest): CreateOfferResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateOfferResponse::class.java).body
+        return rest.postForEntity(url, request, CreateOfferResponse::class.java).body!!
     }
 
     fun get(id: Long): GetOfferResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetOfferResponse::class.java).body
+        return rest.getForEntity(url, GetOfferResponse::class.java).body!!
     }
 
     fun search(
@@ -51,7 +51,7 @@ class KokiOffer(
                 "offset" to offset,
             ),
         )
-        return rest.getForEntity(url, SearchOfferResponse::class.java).body
+        return rest.getForEntity(url, SearchOfferResponse::class.java).body!!
     }
 
     fun updateStatus(id: Long, request: UpdateOfferStatusRequest) {

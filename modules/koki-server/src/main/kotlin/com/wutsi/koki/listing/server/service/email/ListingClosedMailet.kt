@@ -50,11 +50,11 @@ class ListingClosedMailet(
 
         val city = listing.cityId?.let { id -> locationService.get(id) }
         val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
-        val address = listOf(
+        val address = listOfNotNull(
             listing.street,
             neighbourhood?.name,
             city?.name
-        ).filterNotNull().joinToString(", ")
+        ).joinToString(", ")
 
         val tenant = tenantService.get(event.tenantId)
         val fmt = DecimalFormat(tenant.monetaryFormat)

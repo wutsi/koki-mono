@@ -17,7 +17,7 @@ class KokiContacts(
 
     fun create(request: CreateContactRequest): CreateContactResponse {
         val url = urlBuilder.build(CONTACT_PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateContactResponse::class.java).body
+        return rest.postForEntity(url, request, CreateContactResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateContactRequest) {
@@ -32,7 +32,7 @@ class KokiContacts(
 
     fun contact(id: Long): GetContactResponse {
         val url = urlBuilder.build("$CONTACT_PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetContactResponse::class.java).body
+        return rest.getForEntity(url, GetContactResponse::class.java).body!!
     }
 
     fun contacts(
@@ -58,6 +58,6 @@ class KokiContacts(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchContactResponse::class.java).body
+        return rest.getForEntity(url, SearchContactResponse::class.java).body!!
     }
 }

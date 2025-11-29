@@ -17,7 +17,7 @@ class KokiTypes(
 
     fun type(id: Long): GetTypeResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetTypeResponse::class.java).body
+        return rest.getForEntity(url, GetTypeResponse::class.java).body!!
     }
 
     fun types(
@@ -39,7 +39,7 @@ class KokiTypes(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchTypeResponse::class.java).body
+        return rest.getForEntity(url, SearchTypeResponse::class.java).body!!
     }
 
     fun uploadTypes(file: MultipartFile, objectType: ObjectType): ImportResponse {

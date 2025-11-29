@@ -18,7 +18,7 @@ class KokiNotes(
 
     fun create(request: CreateNoteRequest): CreateNoteResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateNoteResponse::class.java).body
+        return rest.postForEntity(url, request, CreateNoteResponse::class.java).body!!
     }
 
     fun update(id: Long, request: UpdateNoteRequest) {
@@ -33,7 +33,7 @@ class KokiNotes(
 
     fun note(id: Long): GetNoteResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetNoteResponse::class.java).body
+        return rest.getForEntity(url, GetNoteResponse::class.java).body!!
     }
 
     fun notes(
@@ -53,6 +53,6 @@ class KokiNotes(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchNoteResponse::class.java).body
+        return rest.getForEntity(url, SearchNoteResponse::class.java).body!!
     }
 }

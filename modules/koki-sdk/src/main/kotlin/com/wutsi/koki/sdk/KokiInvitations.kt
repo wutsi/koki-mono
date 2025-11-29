@@ -5,7 +5,6 @@ import com.wutsi.koki.tenant.dto.CreateInvitationResponse
 import com.wutsi.koki.tenant.dto.GetInvitationResponse
 import com.wutsi.koki.tenant.dto.InvitationStatus
 import com.wutsi.koki.tenant.dto.SearchInvitationResponse
-import org.springframework.boot.context.properties.bind.Bindable.mapOf
 import org.springframework.web.client.RestTemplate
 import java.util.Collections.emptyList
 
@@ -37,12 +36,12 @@ class KokiInvitations(
 
     fun create(request: CreateInvitationRequest): CreateInvitationResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.postForEntity(url, request, CreateInvitationResponse::class.java).body
+        return rest.postForEntity(url, request, CreateInvitationResponse::class.java).body!!
     }
 
     fun get(id: String): GetInvitationResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetInvitationResponse::class.java).body
+        return rest.getForEntity(url, GetInvitationResponse::class.java).body!!
     }
 
     fun delete(id: String) {

@@ -14,11 +14,11 @@ class KokiTenants(
 
     fun tenant(id: Long): GetTenantResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetTenantResponse::class.java).body
+        return rest.getForEntity(url, GetTenantResponse::class.java).body!!
     }
 
     fun tenants(): SearchTenantResponse {
         val url = urlBuilder.build(PATH_PREFIX)
-        return rest.getForEntity(url, SearchTenantResponse::class.java).body
+        return rest.getForEntity(url, SearchTenantResponse::class.java).body!!
     }
 }

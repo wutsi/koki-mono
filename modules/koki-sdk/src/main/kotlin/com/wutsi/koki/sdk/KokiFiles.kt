@@ -23,7 +23,7 @@ class KokiFiles(
 
     fun file(id: Long): GetFileResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
-        return rest.getForEntity(url, GetFileResponse::class.java).body
+        return rest.getForEntity(url, GetFileResponse::class.java).body!!
     }
 
     fun delete(id: Long) {
@@ -77,6 +77,6 @@ class KokiFiles(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchFileResponse::class.java).body
+        return rest.getForEntity(url, SearchFileResponse::class.java).body!!
     }
 }

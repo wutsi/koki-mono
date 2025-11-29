@@ -15,7 +15,7 @@ class KokiModules(
 
     fun modules(): SearchModuleResponse {
         val url = urlBuilder.build(MODULE_PATH_PREFIX)
-        return rest.getForEntity(url, SearchModuleResponse::class.java).body
+        return rest.getForEntity(url, SearchModuleResponse::class.java).body!!
     }
 
     fun permissions(
@@ -33,6 +33,6 @@ class KokiModules(
                 "offset" to offset,
             )
         )
-        return rest.getForEntity(url, SearchPermissionResponse::class.java).body
+        return rest.getForEntity(url, SearchPermissionResponse::class.java).body!!
     }
 }
