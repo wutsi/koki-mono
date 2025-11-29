@@ -100,6 +100,12 @@
                                     <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
                                 </td>
                             </tr>
+                            <tr th:if="${lead.email}">
+                                <td><b th:text="#{page.lead.source}">Source</b></td>
+                                <td>
+                                    <a th:href="${lead.emailUrl}" th:text="#{'lead-source.' + ${lead.source}}">EMAIL</a>
+                                </td>
+                            </tr>
                             <tr th:if="${lead.nextVisitAtText}">
                                 <td><b th:text="#{page.lead.next-visit-at}">Next Visit</b></td>
                                 <td>

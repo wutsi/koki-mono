@@ -22,10 +22,10 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th colspan="5">
+                            <th colspan="7">
                                 <form action="/leads">
                                     <div class="input-group" style="width:auto">
-                                        <input class="form-control" id="keyword" name="q" th:value="${keyword}"/>
+                                        <input class="form-control" id="keyword" name="q" th:value="${keywords}"/>
                                         <button class="btn btn-light btn-sm" id="btn-search" type="submit">
                                             <i class="fa-solid fa-magnifying-glass"></i>
                                             <span th:text="#{button.search}">Search</span>
@@ -36,13 +36,15 @@
                         </tr>
                         <tr class="d-none d-md-table-row">
                             <th colspan="2" th:text="#{page.lead.display-name}">NAME</th>
+                            <th th:text="#{page.lead.status}">STATUS</th>
+                            <th th:text="#{page.lead.source}">SOURCE</th>
                             <th th:text="#{page.lead.next-contact-at}">NEXT-CONTACT</th>
                             <th th:text="#{page.lead.next-visit-at}">NEXT-VISIT</th>
                             <th class="text-right" th:text="#{page.lead.created-at}">DATE</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="entity" th:each="lead : ${leads}">
+                        <tr class="entity lead" th:each="lead : ${leads}">
                             <div th:replace="~{__components/lead :: lead-row(${lead})}"></div>
                         </tr>
                         <tr id="lead-load-more" th:if="${moreUrl}">

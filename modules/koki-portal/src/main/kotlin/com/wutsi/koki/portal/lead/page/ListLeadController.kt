@@ -1,23 +1,25 @@
 package com.wutsi.koki.portal.lead.page
 
-import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.lead.model.LeadModel
+import com.wutsi.koki.portal.lead.service.LeadService
 import com.wutsi.koki.portal.security.RequiresPermission
-import org.apache.commons.lang3.time.DateUtils
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.util.Date
+import java.net.URLEncoder
 
 @Controller
 @RequestMapping("/leads")
 @RequiresPermission(["lead", "lead:full_access"])
-class ListLeadController : AbstractLeadController() {
+class ListLeadController(private val service: LeadService) : AbstractLeadController() {
     @GetMapping
-    fun list(model: Model): String {
+    fun list(
+        @RequestParam(required = false, name = "q") keywords: String? = null,
+        model: Model,
+    ): String {
         model.addAttribute(
             "page",
             createPageModel(
@@ -26,65 +28,38 @@ class ListLeadController : AbstractLeadController() {
             )
         )
 
-        more(20, 0, model)
+        model.addAttribute("keywords", keywords)
+        more(keywords, 20, 0, model)
         return "leads/list"
     }
 
     @GetMapping("/more")
     fun more(
+        @RequestParam(required = false, name = "q") keywords: String? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model,
     ): String {
-        val leads = findLeads(limit, offset)
+        val leads = findLeads(keywords, limit, offset)
         if (leads.isNotEmpty()) {
             model.addAttribute("leads", leads)
-            if (leads.size > limit) {
+            if (leads.size >= limit) {
                 model.addAttribute(
                     "moreUrl",
-                    "/leads/more?limit=$limit&offset=" + (offset + limit),
+                    "/leads/more?limit=$limit&offset=" + (offset + limit) +
+                        (keywords?.trim()?.ifEmpty { null }?.let { q -> "&q=" + URLEncoder.encode(q, "UTF-8") } ?: ""),
                 )
             }
         }
         return "leads/more"
     }
 
-    private fun findLeads(limit: Int, offset: Int): List<LeadModel> {
-        return listOf(
-            LeadModel(
-                id = 111L,
-                displayName = "Ray Sponsible",
-                status = LeadStatus.NEW,
-                createdAtText = "1 Aout 2025",
-            ),
-            LeadModel(
-                id = 112L,
-                displayName = "John Smith",
-                status = LeadStatus.NEW,
-                createdAtText = "30 Sept 2025",
-            ),
-            LeadModel(
-                id = 113L,
-                displayName = "Roger Milla",
-                status = LeadStatus.NEW,
-                createdAtText = "30 Sept 2025",
-            ),
-            LeadModel(
-                id = 114L,
-                displayName = "Thomas Nkono",
-                status = LeadStatus.CONTACT_LATER,
-                createdAt = DateUtils.addDays(Date(), -5),
-                nextContactAtText = "1 Aout 2025",
-                nextVisitAtText = "10 Sept 2025",
-                createdAtText = "30 Sept 2025",
-            ),
-            LeadModel(
-                id = 114L,
-                displayName = "Omam Mbiyick",
-                status = LeadStatus.VISIT_SET,
-                createdAtText = "1 Jul 2025",
-                nextVisitAtText = "10 Sept 2025",
-            ),
+    private fun findLeads(keywords: String?, limit: Int, offset: Int): List<LeadModel> {
+        return service.search(
+            agentUserIds = listOf(userHolder.id() ?: -1),
+            keywords = keywords,
+            limit = limit,
+            offset = offset,
         )
     }
 }

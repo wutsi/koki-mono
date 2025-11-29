@@ -71,6 +71,10 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell">
+        <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
+    </td>
+    <td class="d-none d-md-table-cell" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
+    <td class="d-none d-md-table-cell">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.nextContactAtText}">YYYY-MM-DD</a>
     </td>
     <td class="d-none d-md-table-cell">

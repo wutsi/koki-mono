@@ -207,5 +207,6 @@ object ModuleFixtures {
         Permission(id = 2900, moduleId = 290, name = "agent", description = "View Agents"),
 
         Permission(id = 3000, moduleId = 300, name = "lead", description = "View Leads"),
+        Permission(id = 3001, moduleId = 300, name = "lead:full_access", description = "Manage All Leads"),
     )
 }

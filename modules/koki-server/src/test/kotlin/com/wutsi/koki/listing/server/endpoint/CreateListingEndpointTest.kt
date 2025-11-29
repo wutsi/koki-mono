@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -62,6 +63,7 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
     @Test
     fun create() {
         val df = SimpleDateFormat("yyyy-MM-dd")
+        df.timeZone = TimeZone.getTimeZone("UTC")
 
         val response = rest.postForEntity("/v1/listings", request, CreateListingResponse::class.java)
 

@@ -21,6 +21,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -84,6 +85,8 @@ class UpdateOfferStatusEndpointTest : AuthorizationAwareEndpointTest() {
 
     private fun test(id: Long, status: OfferStatus) {
         val fmt = SimpleDateFormat("yyyy-MM-dd")
+        fmt.timeZone = TimeZone.getTimeZone("UTC")
+
         val now = Date()
         val closedAt = Date()
         val request = UpdateOfferStatusRequest(

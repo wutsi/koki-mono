@@ -7,12 +7,12 @@ import com.wutsi.koki.portal.pub.lead.form.LeadForm
 import com.wutsi.koki.portal.pub.lead.mapper.LeadMapper
 import com.wutsi.koki.portal.pub.lead.model.LeadModel
 import com.wutsi.koki.portal.pub.user.service.UserIdProvider
-import com.wutsi.koki.sdk.KokiLead
+import com.wutsi.koki.sdk.KokiLeads
 import org.springframework.stereotype.Service
 
 @Service
 class LeadService(
-    private val koki: KokiLead,
+    private val koki: KokiLeads,
     private val mapper: LeadMapper,
     private val userIdProvider: UserIdProvider,
 ) {

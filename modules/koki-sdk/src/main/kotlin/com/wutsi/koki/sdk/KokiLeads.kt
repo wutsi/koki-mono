@@ -9,7 +9,7 @@ import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
 import org.springframework.web.client.RestTemplate
 import java.util.Collections.emptyList
 
-class KokiLead(
+class KokiLeads(
     private val urlBuilder: URLBuilder,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {
@@ -28,7 +28,7 @@ class KokiLead(
     }
 
     fun updateStatus(id: Long, request: UpdateLeadStatusRequest) {
-        val url = urlBuilder.build("$PATH_PREFIX/$id")
+        val url = urlBuilder.build("$PATH_PREFIX/$id/status")
         rest.postForEntity(url, request, Any::class.java)
     }
 

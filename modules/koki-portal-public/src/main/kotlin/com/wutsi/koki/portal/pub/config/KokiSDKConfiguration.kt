@@ -9,7 +9,7 @@ import com.wutsi.koki.platform.tracing.spring.ClientRestInterceptor
 import com.wutsi.koki.platform.tracing.spring.DeviceIdRestInterceptor
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles
-import com.wutsi.koki.sdk.KokiLead
+import com.wutsi.koki.sdk.KokiLeads
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiRefData
@@ -55,8 +55,8 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiLeads(): KokiLead {
-        return KokiLead(urlBuilder(), rest())
+    fun kokiLeads(): KokiLeads {
+        return KokiLeads(urlBuilder(), rest())
     }
 
     @Bean

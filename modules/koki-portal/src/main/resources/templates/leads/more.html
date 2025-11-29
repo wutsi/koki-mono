@@ -1,4 +1,4 @@
-<tr class="entity" th:each="lead : ${leads}">
+<tr class="entity lead" th:each="lead : ${leads}">
     <div th:replace="~{__components/lead :: lead-row(${lead})}"></div>
 </tr>
 <tr id="lead-load-more" th:if="${moreUrl}">

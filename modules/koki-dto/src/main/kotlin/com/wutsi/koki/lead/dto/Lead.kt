@@ -16,7 +16,7 @@ data class Lead(
     val message: String? = null,
     val visitRequestedAt: Date? = null,
     val nextContactAt: Date? = null,
-    val nextMeetingAt: Date? = null,
+    val nextVisitAt: Date? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )

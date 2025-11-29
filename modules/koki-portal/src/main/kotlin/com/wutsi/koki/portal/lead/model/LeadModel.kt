@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.lead.model
 
+import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.listing.model.ListingModel
@@ -14,7 +15,7 @@ data class LeadModel(
     val displayName: String = "",
     val email: String? = null,
     val phoneNumber: String = "",
-    val phoneNumberFormatted: String = "",
+    val phoneNumberFormatted: String? = null,
     val message: String? = null,
     val visitRequestedAt: Date? = null,
     val nextContactAt: Date? = null,
@@ -26,16 +27,19 @@ data class LeadModel(
     val modifiedAt: Date = Date(),
     val createdAtText: String = "",
     val modifiedAtText: String = "",
-    val whatsappUrl: String? = null
+    val source: LeadSource = LeadSource.UNKNOWN,
 ) {
     val statusNew: Boolean
         get() = status == LeadStatus.NEW
 
     val phoneNumberUrl: String?
-        get() = phoneNumber.let { "tel:$phoneNumber" }
+        get() = phoneNumber.ifEmpty { null }?.let { number -> "tel:$number" }
 
     val emailUrl: String?
-        get() = email.let { "mailto:$email" }
+        get() = email?.ifEmpty { null }?.let { email -> "mailto:$email" }
+
+    val whatsappUrl: String?
+        get() = phoneNumber.ifEmpty { null }?.let { number -> "https://wa.me/" + number.substring(1) }
 
     val messageHtml: String?
         get() = message?.let { msg -> HtmlUtils.toHtml(msg) }

@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.lead
+package com.wutsi.koki.portal.lead.form
 
 import com.wutsi.koki.lead.dto.LeadStatus
 

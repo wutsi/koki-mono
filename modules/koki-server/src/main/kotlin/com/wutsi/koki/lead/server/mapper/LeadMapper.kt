@@ -24,7 +24,7 @@ class LeadMapper {
             modifiedAt = entity.modifiedAt,
             createdAt = entity.createdAt,
             nextContactAt = entity.nextContactAt,
-            nextMeetingAt = entity.nextVisitAt,
+            nextVisitAt = entity.nextVisitAt,
         )
     }
 

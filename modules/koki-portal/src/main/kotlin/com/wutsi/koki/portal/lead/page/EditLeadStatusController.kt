@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.lead.page
 
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.lead.LeadForm
+import com.wutsi.koki.portal.lead.form.LeadForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 class EditLeadStatusController : AbstractLeadDetailsController() {
     @GetMapping
     fun status(@RequestParam id: Long, model: Model): String {
-        val df = SimpleDateFormat("yyyy-MM-dd'T'MM:mm")
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
         val lead = findLead(id)
         model.addAttribute("lead", lead)
         model.addAttribute("statuses", LeadStatus.entries.filter { status -> status != LeadStatus.UNKNOWN })
@@ -45,6 +45,7 @@ class EditLeadStatusController : AbstractLeadDetailsController() {
 
     @PostMapping
     fun submit(@ModelAttribute form: LeadForm): String {
+        service.updateStatus(form)
         return "redirect:/leads/${form.id}"
     }
 }

@@ -81,7 +81,7 @@ class ListContactController(
                 if (typeId != null) {
                     url = "$url&type-id=$typeId"
                 }
-                if (keyword?.trim()?.isNullOrEmpty() == false) {
+                if (keyword?.trim()?.isEmpty() == false) {
                     url = "$url&q=${keyword.trim()}"
                 }
                 model.addAttribute("moreUrl", url)
