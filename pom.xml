@@ -113,7 +113,7 @@
         <kotlin-jackson.version>2.20.1</kotlin-jackson.version>
         <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
-        <ktlint.version>1.7.1</ktlint.version>
+        <ktlint.version>1.8.0</ktlint.version>
         <lettuce.version>7.1.0.RELEASE</lettuce.version>
         <libphonenumber.version>9.0.19</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
