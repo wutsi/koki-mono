@@ -1,4 +1,4 @@
-package com.wutsi.koki.agent.server.mq
+package com.wutsi.koki.agent.server.service.mq
 
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.platform.mq.Consumer

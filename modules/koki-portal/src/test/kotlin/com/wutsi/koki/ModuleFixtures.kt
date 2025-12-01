@@ -151,7 +151,7 @@ object ModuleFixtures {
             name = "lead",
             title = "Leads",
             homeUrl = "/leads",
-            tabUrl = null,
+            tabUrl = "/leads/tab",
             settingsUrl = null,
             jsUrl = null,
             cssUrl = "/css/leads.css",

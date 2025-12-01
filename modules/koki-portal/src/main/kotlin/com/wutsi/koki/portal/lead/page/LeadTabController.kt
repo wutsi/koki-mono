@@ -1,7 +1,6 @@
 package com.wutsi.koki.portal.lead.page
 
-import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.lead.model.LeadModel
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.portal.lead.service.LeadService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -9,57 +8,55 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.net.URLEncoder
 
 @Controller
-@RequestMapping("/leads")
+@RequestMapping("/leads/tab")
 @RequiresPermission(["lead", "lead:full_access"])
-class ListLeadController(private val service: LeadService) : AbstractLeadController() {
+class LeadTabController(private val service: LeadService) : AbstractLeadController() {
     @GetMapping
     fun list(
-        @RequestParam(required = false, name = "q") keywords: String? = null,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
+        @RequestParam(required = false, name = "test-mode") testMode: String? = null,
         model: Model,
     ): String {
-        model.addAttribute(
-            "page",
-            createPageModel(
-                name = PageName.LEAD_LIST,
-                title = getMessage("page.lead.list.meta.title"),
-            )
-        )
-
-        model.addAttribute("keywords", keywords)
-        more(keywords, 20, 0, model)
-        return "leads/list"
+        model.addAttribute("testMode", testMode)
+        model.addAttribute("ownerId", ownerId)
+        model.addAttribute("ownerType", ownerType)
+        more(ownerId, ownerType, model = model)
+        return "leads/tab"
     }
 
     @GetMapping("/more")
     fun more(
-        @RequestParam(required = false, name = "q") keywords: String? = null,
+        @RequestParam(name = "owner-id") ownerId: Long,
+        @RequestParam(name = "owner-type") ownerType: ObjectType,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
         model: Model,
     ): String {
-        val leads = findLeads(keywords, limit, offset)
+        model.addAttribute("ownerId", ownerId)
+        model.addAttribute("ownerType", ownerType)
+
+        val leads = if (ownerType == ObjectType.LISTING) {
+            service.search(
+                listingIds = listOf(ownerId),
+                limit = limit,
+                offset = offset,
+            )
+        } else {
+            emptyList()
+        }
+
         if (leads.isNotEmpty()) {
             model.addAttribute("leads", leads)
             if (leads.size >= limit) {
                 model.addAttribute(
                     "moreUrl",
-                    "/leads/more?limit=$limit&offset=" + (offset + limit) +
-                        (keywords?.trim()?.ifEmpty { null }?.let { q -> "&q=" + URLEncoder.encode(q, "UTF-8") } ?: ""),
+                    "/leads/more?owner-id=$ownerId&owner-type=$ownerType&limit=$limit&offset=" + (offset + limit),
                 )
             }
         }
         return "leads/more"
-    }
-
-    private fun findLeads(keywords: String?, limit: Int, offset: Int): List<LeadModel> {
-        return service.search(
-            agentUserIds = listOf(userHolder.id() ?: -1),
-            keywords = keywords,
-            limit = limit,
-            offset = offset,
-        )
     }
 }

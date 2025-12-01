@@ -15,6 +15,7 @@ class Toggles {
             "contact" -> modules.contact
             "file" -> modules.file
             "image" -> modules.image
+            "lead" -> modules.lead
             "listing" -> modules.listing
             "message" -> modules.message
             "offer" -> modules.offer
@@ -29,6 +30,7 @@ class ModuleToggles {
     var contact: Boolean = false
     var file: Boolean = false
     var image: Boolean = false
+    var lead: Boolean = false
     var listing: Boolean = false
     var message: Boolean = false
     var offer: Boolean = false

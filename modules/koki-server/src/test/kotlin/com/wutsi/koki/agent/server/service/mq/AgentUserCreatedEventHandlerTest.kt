@@ -1,4 +1,4 @@
-package com.wutsi.koki.agent.server.mq
+package com.wutsi.koki.agent.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.agent.server.domain.AgentEntity
 import com.wutsi.koki.agent.server.service.AgentService
+import com.wutsi.koki.agent.server.service.mq.AgentUserCreatedEventHandler
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tenant.dto.InvitationType
 import com.wutsi.koki.tenant.dto.event.UserCreatedEvent

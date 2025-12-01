@@ -29,6 +29,10 @@ class LeadService(
         private val LOGGER = LoggerFactory.getLogger(LeadService::class.java)
     }
 
+    fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long {
+        return dao.countByListingIdAndTenantId(listingId, tenantId) ?: 0
+    }
+
     fun get(id: Long, tenantId: Long): LeadEntity {
         val room = dao.findById(id).orElseThrow { NotFoundException(Error(ErrorCode.LEAD_NOT_FOUND)) }
 

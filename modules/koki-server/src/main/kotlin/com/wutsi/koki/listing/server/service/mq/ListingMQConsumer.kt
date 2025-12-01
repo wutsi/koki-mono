@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent

@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.common.dto.ObjectType

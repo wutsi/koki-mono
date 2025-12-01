@@ -710,6 +710,7 @@ table tr.entity td a {
     display: block !important;
     color: black !important;
     text-decoration: none !important;
+    font-size: 1em !important;
 }
 
 a.phone {

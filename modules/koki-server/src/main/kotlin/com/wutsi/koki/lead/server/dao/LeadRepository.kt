@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface LeadRepository : CrudRepository<LeadEntity, Long>
+interface LeadRepository : CrudRepository<LeadEntity, Long> {
+    fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long?
+}

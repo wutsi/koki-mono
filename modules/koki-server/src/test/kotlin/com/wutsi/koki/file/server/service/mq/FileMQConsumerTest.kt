@@ -1,10 +1,12 @@
-package com.wutsi.koki.file.server.mq
+package com.wutsi.koki.file.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
+import com.wutsi.koki.file.server.service.mq.FileMQConsumer
+import com.wutsi.koki.file.server.service.mq.FileUploadedEventHandler
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import kotlin.test.assertFalse

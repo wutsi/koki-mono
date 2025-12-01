@@ -1,3 +1,7 @@
+.lead {
+    font-size: 1em !important;
+}
+
 .lead-status {
     text-transform: uppercase;
 }

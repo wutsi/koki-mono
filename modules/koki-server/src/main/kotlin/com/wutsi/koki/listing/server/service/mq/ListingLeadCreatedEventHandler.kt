@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
 import com.wutsi.koki.lead.server.service.LeadService
