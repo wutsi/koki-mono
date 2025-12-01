@@ -68,6 +68,7 @@ data class Listing(
     val totalImages: Int? = null,
     val totalFiles: Int? = null,
     val totalOffers: Int? = null,
+    val totalLeads: Int? = null,
     val sellerAgentUserId: Long? = null,
 
     val createdById: Long? = null,

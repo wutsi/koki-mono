@@ -21,11 +21,11 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class OfferSubmittedEventHandlerTest {
+class ListingOfferSubmittedEventHandlerTest {
     private val offerService = mock<OfferService>()
     private val listingService = mock<ListingService>()
     private val logger = DefaultKVLogger()
-    private val handler = OfferSubmittedEventHandler(offerService, listingService, logger)
+    private val handler = ListingOfferSubmittedEventHandler(offerService, listingService, logger)
 
     private val tenantId = 1L
     private val listing = ListingEntity(

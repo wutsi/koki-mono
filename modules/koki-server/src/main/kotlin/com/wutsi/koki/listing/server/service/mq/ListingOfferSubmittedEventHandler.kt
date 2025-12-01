@@ -8,7 +8,7 @@ import com.wutsi.koki.platform.logger.KVLogger
 import org.springframework.stereotype.Service
 
 @Service
-class OfferSubmittedEventHandler(
+class ListingOfferSubmittedEventHandler(
     private val offerService: OfferService,
     private val listingService: ListingService,
     private val logger: KVLogger,

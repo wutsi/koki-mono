@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service
 import java.util.Date
 
 @Service
-class OfferStatusChangedEventHandler(
+class ListingOfferStatusChangedEventHandler(
     private val offerService: OfferService,
     private val listingService: ListingService,
     private val logger: KVLogger,

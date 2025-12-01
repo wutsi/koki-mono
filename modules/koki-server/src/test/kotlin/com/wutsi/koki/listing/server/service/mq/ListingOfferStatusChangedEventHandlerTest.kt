@@ -31,12 +31,12 @@ import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class OfferStatusChangedEventHandlerTest {
+class ListingOfferStatusChangedEventHandlerTest {
     private val offerService = mock<OfferService>()
     private val listingService = mock<ListingService>()
     private val publisher = mock<Publisher>()
     private val logger = DefaultKVLogger()
-    private val handler = OfferStatusChangedEventHandler(
+    private val handler = ListingOfferStatusChangedEventHandler(
         offerService = offerService,
         listingService = listingService,
         publisher = publisher,
