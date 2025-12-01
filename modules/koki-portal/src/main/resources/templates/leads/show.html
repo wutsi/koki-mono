@@ -84,7 +84,8 @@
                             <tr>
                                 <td><b th:text="#{page.lead.phone-number}">Phone Number</b></td>
                                 <td>
-                                    <a th:href="${lead.phoneNumberUrl}"
+                                    <a class="btn-call btn btn-light btn-sm"
+                                       th:href="${lead.phoneNumberUrl}"
                                        th:text="${lead.phoneNumberFormatted}">MOBILE</a>
 
                                     <a class="btn btn-sm btn-whatsapp margin-left" target="_blank"

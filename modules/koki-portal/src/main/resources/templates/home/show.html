@@ -35,6 +35,13 @@
 
             <div class="margin-bottom"
                  data-component-id="ajax-fragment"
+                 data-url="/leads/widgets/new"
+                 th:if="${user.hasPermission('leads')}"
+            >
+            </div>
+
+            <div class="margin-bottom"
+                 data-component-id="ajax-fragment"
                  data-url="/listings/widgets/recent"
                  th:if="${user.hasPermission('listing')}"
             >
