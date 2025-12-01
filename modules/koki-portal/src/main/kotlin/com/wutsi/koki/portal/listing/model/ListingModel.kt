@@ -85,6 +85,7 @@ data class ListingModel(
     val totalImages: Int? = null,
     val totalOffers: Int? = null,
     val totalFiles: Int? = null,
+    val totalLeads: Int? = null,
     val totalActiveMessages: Int? = null,
     val transactionParty: OfferParty? = null,
 ) {

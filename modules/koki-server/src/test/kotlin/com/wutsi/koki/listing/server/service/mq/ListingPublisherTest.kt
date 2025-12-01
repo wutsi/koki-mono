@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
@@ -15,6 +15,7 @@ import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
+import com.wutsi.koki.listing.server.service.mq.ListingPublisher
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

@@ -33,7 +33,7 @@ class CreateLeadController(
                 listingId = listingId,
                 phone = user?.mobile ?: "",
                 email = user?.email ?: "",
-                country = user?.country ?: tenantHolder.get()?.country,
+                country = user?.country ?: tenantHolder.get().country,
                 firstName = user?.firstName ?: "",
                 lastName = user?.lastName ?: "",
                 message = getMessage("page.lead.message-default"),

@@ -1,4 +1,4 @@
-package com.wutsi.koki.agent.server.mq
+package com.wutsi.koki.agent.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -11,6 +11,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.agent.server.domain.AgentEntity
 import com.wutsi.koki.agent.server.service.AgentService
+import com.wutsi.koki.agent.server.service.mq.AgentListingStatusChangedEventHandler
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.domain.ListingEntity

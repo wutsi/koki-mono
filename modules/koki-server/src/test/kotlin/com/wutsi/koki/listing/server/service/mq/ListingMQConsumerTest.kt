@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
@@ -7,6 +7,13 @@ import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
+import com.wutsi.koki.listing.server.service.mq.ListingFileDeletedEventHandler
+import com.wutsi.koki.listing.server.service.mq.ListingFileUploadedEventHandler
+import com.wutsi.koki.listing.server.service.mq.ListingLeadCreatedEventHandler
+import com.wutsi.koki.listing.server.service.mq.ListingMQConsumer
+import com.wutsi.koki.listing.server.service.mq.ListingOfferStatusChangedEventHandler
+import com.wutsi.koki.listing.server.service.mq.ListingOfferSubmittedEventHandler
+import com.wutsi.koki.listing.server.service.mq.ListingStatusChangedEventHandler
 import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
 import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
 import org.mockito.Mockito.mock

@@ -3,7 +3,7 @@ package com.wutsi.koki.file.server.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.config.AbstractRabbitMQConsumerConfiguration
-import com.wutsi.koki.file.server.mq.FileMQConsumer
+import com.wutsi.koki.file.server.service.mq.FileMQConsumer
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value

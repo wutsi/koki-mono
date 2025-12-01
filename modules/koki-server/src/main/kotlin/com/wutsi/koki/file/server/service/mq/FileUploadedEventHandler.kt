@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.mq
+package com.wutsi.koki.file.server.service.mq
 
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity

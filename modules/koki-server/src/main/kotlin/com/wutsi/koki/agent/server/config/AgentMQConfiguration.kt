@@ -2,7 +2,7 @@ package com.wutsi.koki.agent.server.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
-import com.wutsi.koki.agent.server.mq.AgentMQConsumer
+import com.wutsi.koki.agent.server.service.mq.AgentMQConsumer
 import com.wutsi.koki.config.AbstractRabbitMQConsumerConfiguration
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.annotation.PostConstruct

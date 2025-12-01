@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.mq
+package com.wutsi.koki.listing.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -12,6 +12,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.listing.server.service.mq.ListingOfferSubmittedEventHandler
 import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
 import com.wutsi.koki.offer.server.service.OfferService
 import com.wutsi.koki.platform.logger.DefaultKVLogger

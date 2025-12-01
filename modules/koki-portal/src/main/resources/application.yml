@@ -75,6 +75,7 @@ koki:
             contact: true
             image: true
             file: false
+            lead: true
             listing: true
             message: true
             offer: false

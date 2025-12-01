@@ -6,6 +6,7 @@ koki:
             contact: true
             image: true
             file: true
+            lead: true
             listing: true
             message: true
             offer: true

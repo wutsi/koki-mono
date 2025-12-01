@@ -143,6 +143,7 @@ class ListingMapper(
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
             totalOffers = entity.totalOffers,
+            totalLeads = entity.totalLeads,
 
             sellerAgentUser = entity.sellerAgentUserId
                 ?.let { id ->
@@ -265,7 +266,7 @@ class ListingMapper(
             street = address.street,
             postalCode = address.postalCode,
             countryName = address.country?.let { country ->
-                Locale(LocaleContextHolder.getLocale().language, country).getDisplayCountry()
+                Locale(LocaleContextHolder.getLocale().language, country).displayCountry
             }
         )
     }

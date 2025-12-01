@@ -1,8 +1,11 @@
-package com.wutsi.koki.agent.server.mq
+package com.wutsi.koki.agent.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.koki.agent.server.service.mq.AgentListingStatusChangedEventHandler
+import com.wutsi.koki.agent.server.service.mq.AgentMQConsumer
+import com.wutsi.koki.agent.server.service.mq.AgentUserCreatedEventHandler
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.tenant.dto.event.UserCreatedEvent

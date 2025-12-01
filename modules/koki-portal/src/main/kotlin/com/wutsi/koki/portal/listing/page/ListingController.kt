@@ -48,10 +48,10 @@ class ListingController(
         }
 
         // Tab to exclude
-        val excludedTabs = listOf(
+        val excludedTabs = listOfNotNull(
             if (canViewMessageTab(listing)) null else "message",
             if (canViewOfferTab(listing, user)) null else "offer",
-        ).filterNotNull()
+        )
         model.addAttribute("excludedTabs", excludedTabs)
 
         model.addAttribute(

@@ -109,6 +109,7 @@ data class ListingEntity(
     var totalImages: Int? = null,
     var totalFiles: Int? = null,
     var totalOffers: Int? = null,
+    var totalLeads: Int? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

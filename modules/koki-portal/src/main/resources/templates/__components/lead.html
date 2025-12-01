@@ -67,6 +67,11 @@
                     <td><i class="fa-solid fa-calendar-days"></i></td>
                     <td class="margin-left" th:text="${lead.nextVisitAtText}">yyyy-MM-dd</td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
+                    </td>
+                </tr>
             </table>
         </a>
     </td>
@@ -74,12 +79,6 @@
         <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
     </td>
     <td class="d-none d-md-table-cell" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
-    <td class="d-none d-md-table-cell">
-        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.nextContactAtText}">YYYY-MM-DD</a>
-    </td>
-    <td class="d-none d-md-table-cell">
-        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.nextVisitAtText}">YYYY-MM-DD</a>
-    </td>
     <td class="text-right">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>
     </td>

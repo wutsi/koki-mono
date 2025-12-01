@@ -1,4 +1,4 @@
-package com.wutsi.koki.file.server.mq
+package com.wutsi.koki.file.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -13,6 +13,7 @@ import com.wutsi.koki.file.server.service.FileInfoExtractor
 import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.file.server.service.StorageProvider
+import com.wutsi.koki.file.server.service.mq.FileUploadedEventHandler
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import org.junit.jupiter.api.AfterEach
