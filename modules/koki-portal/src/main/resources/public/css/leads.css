@@ -4,6 +4,7 @@
 
 .lead-status {
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .lead-status-new {
