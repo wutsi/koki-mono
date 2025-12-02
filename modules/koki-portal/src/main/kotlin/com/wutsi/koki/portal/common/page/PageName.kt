@@ -67,6 +67,7 @@ object PageName {
     const val LEAD = "page.lead"
     const val LEAD_LIST = "page.lead.list"
     const val LEAD_STATUS = "page.lead.status"
+    const val LEAD_STATUS_DONE = "page.lead.status.done"
 
     const val LISTING = "page.listing"
     const val LISTING_CREATE = "page.listing.create"

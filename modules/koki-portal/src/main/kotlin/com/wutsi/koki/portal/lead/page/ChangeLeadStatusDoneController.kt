@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.lead.page
 
-import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.lead.form.LeadForm
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -11,36 +10,24 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.text.SimpleDateFormat
 
 @Controller
-@RequestMapping("/leads/status")
+@RequestMapping("/leads/status/done")
 @RequiresPermission(["lead", "lead:full_access"])
-class EditLeadStatusController : AbstractLeadDetailsController() {
+class ChangeLeadStatusDoneController : AbstractLeadDetailsController() {
     @GetMapping
     fun status(@RequestParam id: Long, model: Model): String {
-        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
         val lead = findLead(id)
         model.addAttribute("lead", lead)
-        model.addAttribute("statuses", LeadStatus.entries.filter { status -> status != LeadStatus.UNKNOWN })
-        model.addAttribute(
-            "form",
-            LeadForm(
-                id = id,
-                status = lead.status,
-                nextContactAt = lead.nextContactAt?.let { date -> df.format(date) },
-                nextVisitAt = (lead.nextVisitAt ?: lead.visitRequestedAt)?.let { date -> df.format(date) }
-            )
-        )
 
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.LEAD_STATUS,
+                name = PageName.LEAD_STATUS_DONE,
                 title = lead.displayName,
             )
         )
-        return "leads/status"
+        return "leads/status-done"
     }
 
     @PostMapping

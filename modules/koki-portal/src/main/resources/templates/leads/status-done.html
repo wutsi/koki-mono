@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('lead')}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+    <div class="row margin-top-4x">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div class="widget">
+                <div class="widget-body text-center">
+                    <h1 class="margin-none success">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </h1>
+                    <div class="margin-top text-larger"
+                         th:utext="#{page.lead.status.done(${lead.displayName})}">
+                        DESCRIPTION
+                    </div>
+                    <div class="margin-top" th:if="${lead.statusContactLater}">
+                        <b th:text="#{page.lead.next-contact-at}">NEXT</b>
+                        <i class="fa-solid fa-calendar-days margin-left"></i>
+                        <span th:text="${lead.nextContactAtText}">YYYY-MM-DD</span>
+                    </div>
+                    <div class="margin-top" th:if="${lead.statusVisitSet}">
+                        <b th:text="#{page.lead.next-visit-at}">NEXT</b>
+                        <i class="fa-solid fa-calendar-days margin-left"></i>
+                        <span th:text="${lead.nextVisitAtText}">YYYY-MM-DD</span>
+                    </div>
+                    <div class="margin-top-2x">
+                        <a class="btn btn-primary w-100" id="btn-continue"
+                           th:href="'/leads/' + ${lead.id}"
+                           th:text="#{button.continue}">
+                            CONTINUE
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

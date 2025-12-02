@@ -51,6 +51,7 @@ class ListingController(
         val excludedTabs = listOfNotNull(
             if (canViewMessageTab(listing)) null else "message",
             if (canViewOfferTab(listing, user)) null else "offer",
+            if (canViewLeadTab(listing)) null else "lead",
         )
         model.addAttribute("excludedTabs", excludedTabs)
 
@@ -109,6 +110,10 @@ class ListingController(
     }
 
     private fun canViewMessageTab(listing: ListingModel): Boolean {
+        return !listing.statusDraft
+    }
+
+    private fun canViewLeadTab(listing: ListingModel): Boolean {
         return !listing.statusDraft
     }
 }
