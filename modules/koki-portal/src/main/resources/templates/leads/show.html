@@ -28,10 +28,7 @@
                             <i class="fa-brands fa-whatsapp"></i>
                             <span th:text="#{button.whatsapp}">Whatsapp</span>
                         </a>
-                        <a class="btn btn-sm btn-primary" th:href="'/leads/status?id=' + ${lead.id}"
-                           th:text="#{button.modify}">
-                            MODIFY
-                        </a>
+                        <div th:replace="~{__components/lead :: lead-status-button(${lead})}"></div>
                     </div>
                     <h1 class="entity-title">
                         <span th:text="${lead.displayName}">NAME</span>

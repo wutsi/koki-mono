@@ -47,6 +47,32 @@
           th:text="#{'lead-status.' + ${lead.status}}">UNQUALIFIED</span>
 </div>
 
+<div th:fragment="lead-status-button(lead)" th:remove="tag">
+    <a class="btn btn-sm btn-warning lead-status" th:href="'/leads/status?id=' + ${lead.id}"
+       th:if="${lead.status.name() == 'NEW'}">
+        <span th:text="#{'lead-status.' + ${lead.status}}">STATUS</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </a>
+
+    <a class="btn btn-sm btn-primary lead-status" th:href="'/leads/status?id=' + ${lead.id}"
+       th:if="${lead.status.name() == 'VISIT_SET'} OR ${lead.status.name() == 'CONTACT_LATER'} OR ${lead.status.name() == 'CONTACTED'}">
+        <span th:text="#{'lead-status.' + ${lead.status}}">STATUS</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </a>
+
+    <a class="btn btn-sm btn-success lead-status" th:href="'/leads/status?id=' + ${lead.id}"
+       th:if="${lead.status.name() == 'CLIENT'}">
+        <span th:text="#{'lead-status.' + ${lead.status}}">STATUS</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </a>
+
+    <a class="btn btn-sm btn-secondary lead-status" th:href="'/leads/status?id=' + ${lead.id}"
+       th:if="${lead.status == 'UNQUALIFIED'} OR ${lead.status == 'UNRESPONSIVE'}">
+        <span th:text="#{'lead-status.' + ${lead.status}}">STATUS</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </a>
+</div>
+
 <tr th:fragment="lead-row(lead, showStatus)" th:remove="tag">
     <td>
         <a th:href="'/leads/' + ${lead.id}">
