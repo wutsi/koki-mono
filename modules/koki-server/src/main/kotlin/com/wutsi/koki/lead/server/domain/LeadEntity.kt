@@ -25,22 +25,26 @@ data class LeadEntity(
 
     @ManyToOne()
     @JoinColumn(name = "listing_fk")
-    val listing: ListingEntity? = null,
+    val listing: ListingEntity = ListingEntity(),
 
     @Column(name = "user_fk")
-    val userId: Long? = null,
+    val userId: Long = -1,
+
+    @Column(name = "city_fk")
+    var cityId: Long? = null,
 
     val deviceId: String? = null,
-    val firstName: String = "",
-    val lastName: String = "",
-    val email: String? = null,
-    val phoneNumber: String = "",
-    val message: String? = null,
-    val visitRequestedAt: Date? = null,
+    var firstName: String = "",
+    var lastName: String = "",
+    val email: String = "",
+    var phoneNumber: String = "",
+    var message: String? = null,
+    var visitRequestedAt: Date? = null,
     var status: LeadStatus = LeadStatus.UNKNOWN,
     val source: LeadSource = LeadSource.UNKNOWN,
     var nextContactAt: Date? = null,
     var nextVisitAt: Date? = null,
+    var country: String? = null,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),
 )

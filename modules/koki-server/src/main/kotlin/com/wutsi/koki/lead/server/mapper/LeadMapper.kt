@@ -10,7 +10,7 @@ class LeadMapper {
     fun toLead(entity: LeadEntity): Lead {
         return Lead(
             id = entity.id ?: -1,
-            listingId = entity.listing?.id,
+            listingId = entity.listing.id ?: -1,
             deviceId = entity.deviceId,
             userId = entity.userId,
             firstName = entity.firstName,
@@ -25,13 +25,15 @@ class LeadMapper {
             createdAt = entity.createdAt,
             nextContactAt = entity.nextContactAt,
             nextVisitAt = entity.nextVisitAt,
+            country = entity.country,
+            cityId = entity.cityId,
         )
     }
 
     fun toLeadSummary(entity: LeadEntity): LeadSummary {
         return LeadSummary(
             id = entity.id ?: -1,
-            listingId = entity.listing?.id ?: -1,
+            listingId = entity.listing.id ?: -1,
             firstName = entity.firstName,
             lastName = entity.lastName,
             email = entity.email,
@@ -43,6 +45,7 @@ class LeadMapper {
             nextVisitAt = entity.nextVisitAt,
             modifiedAt = entity.modifiedAt,
             createdAt = entity.createdAt,
+            country = entity.country,
         )
     }
 }

@@ -7,6 +7,7 @@ import com.wutsi.koki.portal.lead.form.LeadForm
 import com.wutsi.koki.portal.lead.mapper.LeadMapper
 import com.wutsi.koki.portal.lead.model.LeadModel
 import com.wutsi.koki.portal.listing.service.ListingService
+import com.wutsi.koki.portal.refdata.service.LocationService
 import com.wutsi.koki.sdk.KokiLeads
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
@@ -17,11 +18,13 @@ class LeadService(
     private val koki: KokiLeads,
     private val mapper: LeadMapper,
     private val listingService: ListingService,
+    private val locationService: LocationService,
 ) {
     fun get(id: Long): LeadModel {
         val lead: Lead = koki.get(id).lead
-        val listing = lead.listingId?.let { id -> listingService.get(id) }
-        return mapper.toLeadModel(lead, listing)
+        val listing = listingService.get(lead.listingId)
+        val city = lead.cityId?.let { id -> locationService.get(id) }
+        return mapper.toLeadModel(lead, listing, city)
     }
 
     fun search(
@@ -44,17 +47,27 @@ class LeadService(
             offset = offset,
         ).leads
 
-        val listingIds = leads.mapNotNull { lead -> lead.listingId }
+        val listingIds = leads.map { lead -> lead.listingId }
         val listings = if (listingIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
             listingService.search(
                 ids = listingIds,
-                limit = limit,
+                limit = listingIds.size,
             ).items.associateBy { listing -> listing.id }
         }
 
-        return leads.map { lead -> mapper.toLeadModel(lead, listings) }
+        val cityIds = leads.mapNotNull { lead -> lead.cityId }
+        val cities = if (cityIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            locationService.search(
+                ids = cityIds,
+                limit = cityIds.size,
+            ).associateBy { city -> city.id }
+        }
+
+        return leads.map { lead -> mapper.toLeadModel(lead, listings, cities) }
     }
 
     fun updateStatus(form: LeadForm) {

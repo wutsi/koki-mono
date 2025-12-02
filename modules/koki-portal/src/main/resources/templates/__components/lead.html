@@ -61,6 +61,10 @@
                     <td><i class="fa-solid fa-calendar-days"></i></td>
                     <td class="margin-left" th:text="${lead.nextVisitAtText}">yyyy-MM-dd</td>
                 </tr>
+                <tr th:if="${lead.address}">
+                    <td><i class="fa-solid fa-location-dot"></i></td>
+                    <td class="margin-left" th:text="${lead.address}">ADDRESS</td>
+                </tr>
                 <tr th:if="${showStatus}">
                     <td colspan="2">
                         <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
@@ -72,6 +76,7 @@
     <td class="d-none d-md-table-cell" th:if="${showStatus}">
         <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
     </td>
+    <td class="d-none d-md-table-cell" th:text="${lead.address}">ADDRESS</td>
     <td class="d-none d-md-table-cell" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
     <td class="text-right">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>

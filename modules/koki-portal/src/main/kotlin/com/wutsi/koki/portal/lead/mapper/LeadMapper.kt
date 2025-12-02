@@ -5,11 +5,15 @@ import com.wutsi.koki.lead.dto.LeadSummary
 import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.lead.model.LeadModel
 import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.refdata.model.AddressModel
+import com.wutsi.koki.portal.refdata.model.LocationModel
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
 class LeadMapper : TenantAwareMapper() {
-    fun toLeadModel(entity: Lead, listing: ListingModel?): LeadModel {
+    fun toLeadModel(entity: Lead, listing: ListingModel, city: LocationModel?): LeadModel {
         val df = createDateFormat()
         return LeadModel(
             id = entity.id,
@@ -31,14 +35,19 @@ class LeadMapper : TenantAwareMapper() {
             createdAt = entity.createdAt,
             createdAtText = df.format(entity.createdAt),
             message = entity.message,
+            address = toAddress(city, entity.country),
         )
     }
 
-    fun toLeadModel(entity: LeadSummary, listings: Map<Long, ListingModel>): LeadModel {
+    fun toLeadModel(
+        entity: LeadSummary,
+        listings: Map<Long, ListingModel>,
+        cities: Map<Long, LocationModel>
+    ): LeadModel {
         val df = createDateFormat()
         return LeadModel(
             id = entity.id,
-            listing = entity.listingId?.let { id -> listings[id] },
+            listing = listings[entity.listingId] ?: ListingModel(id = entity.listingId),
             firstName = entity.firstName,
             lastName = entity.lastName,
             displayName = "${entity.firstName} ${entity.lastName}".trim(),
@@ -55,6 +64,22 @@ class LeadMapper : TenantAwareMapper() {
             nextVisitAtText = entity.nextVisitAt?.let { date -> df.format(date) },
             createdAt = entity.createdAt,
             createdAtText = df.format(entity.createdAt),
+            address = toAddress(
+                city = entity.cityId?.let { id -> cities[id] },
+                country = entity.country
+            )
+        )
+    }
+
+    private fun toAddress(city: LocationModel?, country: String?): AddressModel? {
+        if (city == null && country == null) {
+            return null
+        }
+        val xcountry = city?.country ?: country
+        return AddressModel(
+            country = xcountry,
+            countryName = Locale(LocaleContextHolder.getLocale().language, xcountry).displayCountry,
+            city = city,
         )
     }
 }

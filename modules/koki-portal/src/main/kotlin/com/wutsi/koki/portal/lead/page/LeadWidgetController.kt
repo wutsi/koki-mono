@@ -25,6 +25,7 @@ class LeadWidgetController(private val service: LeadService) : AbstractLeadContr
             statuses = listOf(
                 LeadStatus.NEW,
             ),
+            agentUserIds = listOf(userHolder.get()?.id ?: -1L),
             limit = 5,
         )
         if (leads.isNotEmpty()) {

@@ -4,11 +4,12 @@ import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.refdata.model.AddressModel
 import java.util.Date
 
 data class LeadModel(
     val id: Long = -1,
-    val listing: ListingModel? = null,
+    val listing: ListingModel = ListingModel(),
     val status: LeadStatus = LeadStatus.UNKNOWN,
     val firstName: String = "",
     val lastName: String = "",
@@ -28,6 +29,7 @@ data class LeadModel(
     val createdAtText: String = "",
     val modifiedAtText: String = "",
     val source: LeadSource = LeadSource.UNKNOWN,
+    val address: AddressModel? = null,
 ) {
     val statusNew: Boolean
         get() = status == LeadStatus.NEW

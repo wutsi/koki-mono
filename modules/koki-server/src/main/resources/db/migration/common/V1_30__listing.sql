@@ -87,6 +87,7 @@ CREATE TABLE T_LISTING(
   total_images              INT,
   total_files               INT,
   total_offers              INT,
+  total_leads               INT,
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),

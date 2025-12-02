@@ -13,6 +13,7 @@ object UserFixtures {
         language = "fr",
         employer = "REIMAX Inc.",
         photoUrl = "https://picsum.photos/1005/200",
+        mobile = "+15147580000",
     )
 
     val users = listOf(

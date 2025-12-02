@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal
 
 import com.wutsi.koki.ListingFixtures
+import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.lead.dto.Lead
 import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.lead.dto.LeadStatus
@@ -25,6 +26,8 @@ object LeadFixtures {
         message = "I am interested in your listing. Please contact me.",
         nextContactAt = DateUtils.addDays(Date(), 7),
         nextVisitAt = DateUtils.addDays(Date(), 14),
+        country = RefDataFixtures.cities[0].country,
+        cityId = RefDataFixtures.cities[0].id,
     )
 
     val leads = listOf(
@@ -39,6 +42,8 @@ object LeadFixtures {
             modifiedAt = Date(),
             listingId = ListingFixtures.listing.id,
             nextContactAt = DateUtils.addDays(Date(), 7),
+            country = RefDataFixtures.cities[0].country,
+            cityId = RefDataFixtures.cities[0].id,
         ),
         LeadSummary(
             firstName = "John",
@@ -52,6 +57,8 @@ object LeadFixtures {
             listingId = ListingFixtures.listings[0].id,
             nextContactAt = DateUtils.addDays(Date(), 7),
             nextVisitAt = DateUtils.addDays(Date(), 14),
+            country = RefDataFixtures.cities[1].country,
+            cityId = RefDataFixtures.cities[1].id,
         ),
         LeadSummary(
             firstName = "Thomas",
@@ -77,6 +84,8 @@ object LeadFixtures {
             modifiedAt = Date(),
             listingId = ListingFixtures.listings[0].id,
             nextContactAt = DateUtils.addDays(Date(), 7),
+            country = RefDataFixtures.cities[2].country,
+            cityId = RefDataFixtures.cities[2].id,
         ),
     )
 }
