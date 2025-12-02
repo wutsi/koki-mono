@@ -36,12 +36,14 @@ class LeadEndpoints(
         @Valid @RequestBody request: CreateLeadRequest,
     ): CreateLeadResponse {
         val lead = service.create(request, tenantId, deviceId)
-        publisher.publish(
-            LeadCreatedEvent(
-                leadId = lead.id ?: -1,
-                tenantId = tenantId,
+        if (lead.status == LeadStatus.NEW && lead.createdAt == lead.modifiedAt) {
+            publisher.publish(
+                LeadCreatedEvent(
+                    leadId = lead.id ?: -1,
+                    tenantId = tenantId,
+                )
             )
-        )
+        }
         return CreateLeadResponse(
             leadId = lead.id ?: -1
         )

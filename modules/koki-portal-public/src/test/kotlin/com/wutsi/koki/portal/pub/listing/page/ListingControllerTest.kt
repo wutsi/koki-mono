@@ -11,22 +11,39 @@ import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.platform.geoip.GeoIp
+import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.ListingFixtures.listing
+import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.TenantFixtures
+import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.user.service.UserIdProvider
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class ListingControllerTest : AbstractPageControllerTest() {
+    @MockitoBean
+    private lateinit var ipService: GeoIpService
+
+    @MockitoBean
+    private lateinit var userIdProvider: UserIdProvider
+
+    private val geoIp = GeoIp(
+        countryCode = "CA",
+        city = cities[0].name,
+    )
+
     @BeforeEach
     override fun setUp() {
         super.setUp()
@@ -41,6 +58,10 @@ class ListingControllerTest : AbstractPageControllerTest() {
                 any<String>(),
                 eq(SearchFileResponse::class.java)
             )
+
+        doReturn(geoIp).whenever(ipService).resolve(any())
+
+        doReturn(null).whenever(userIdProvider).get()
     }
 
     @Test
@@ -87,7 +108,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         input("#lastName", "Sponsible")
         input("#email", "ray.sponsible@gmail.com")
         input("#message", "I am interested in your property. Please contact me.")
-        input("#phone", "2025550147")
+        input("#phone", "5147580100")
         click("#btn-send")
 
         val request = argumentCaptor<CreateLeadRequest>()
@@ -100,7 +121,40 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertEquals("Sponsible", request.firstValue.lastName)
         assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
         assertEquals("I am interested in your property. Please contact me.", request.firstValue.message)
-        assertEquals("+12025550147", request.firstValue.phoneNumber)
+        assertEquals("+15147580100", request.firstValue.phoneNumber)
+        assertEquals("CA", request.firstValue.country)
+        assertNotNull(request.firstValue.cityId)
+
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementVisible("#toast-message")
+    }
+
+    @Test
+    fun `sendMessage for logged in user`() {
+        doReturn(USER_ID).whenever(userIdProvider).get()
+
+        navigateTo("${listing.publicUrl}?lang=fr")
+
+        scroll(.33)
+        click("#btn-send-message")
+        assertElementVisible("#koki-modal")
+
+        assertElementAttribute("#email", "disabled", "true")
+        click("#btn-send")
+
+        val request = argumentCaptor<CreateLeadRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/leads"),
+            request.capture(),
+            eq(CreateLeadResponse::class.java)
+        )
+        assertEquals("Ray", request.firstValue.firstName)
+        assertEquals("Sponsible", request.firstValue.lastName)
+        assertEquals(user.email, request.firstValue.email)
+        assertEquals("Bonjour, je suis intéressé par cette propriété.", request.firstValue.message)
+        assertEquals(user.mobile, request.firstValue.phoneNumber)
+        assertEquals("CA", request.firstValue.country)
+        assertNotNull(request.firstValue.cityId)
 
         assertCurrentPageIs(PageName.LISTING)
         assertElementVisible("#toast-message")

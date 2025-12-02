@@ -28,6 +28,10 @@
                             <i class="fa-brands fa-whatsapp"></i>
                             <span th:text="#{button.whatsapp}">Whatsapp</span>
                         </a>
+                        <a class="btn btn-sm btn-primary" th:href="'/leads/status?id=' + ${lead.id}"
+                           th:text="#{button.modify}">
+                            MODIFY
+                        </a>
                     </div>
                     <h1 class="entity-title">
                         <span th:text="${lead.displayName}">NAME</span>
@@ -37,7 +41,6 @@
                             <b th:text="#{page.lead.status}">Status</b><br/>
                             <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
                             <br/>
-                            <a th:href="'/leads/status?id=' + ${lead.id}" th:text="#{button.modify}">MODIFY</a>
                         </div>
                         <div class="margin-left-2x d-none d-md-block" th:if="${lead.email}">
                             <b th:text="#{page.lead.email}">EMAIL</b><br/>
@@ -84,14 +87,18 @@
                             <tr>
                                 <td><b th:text="#{page.lead.phone-number}">Phone Number</b></td>
                                 <td>
-                                    <a th:href="${lead.phoneNumberUrl}"
-                                       th:text="${lead.phoneNumberFormatted}">MOBILE</a>
+                                    <div class="flex">
+                                        <span th:text="${lead.phoneNumberFormatted}">(XXX) XXX-XXXX</span>
+                                        <a class="btn-call btn btn-light btn-sm margin-left"
+                                           th:href="${lead.phoneNumberUrl}"
+                                           th:text="#{button.call}">CALL</a>
 
-                                    <a class="btn btn-sm btn-whatsapp margin-left" target="_blank"
-                                       th:href="${lead.whatsappUrl}">
-                                        <i class="fa-brands fa-whatsapp"></i>
-                                        <span th:text="#{button.whatsapp}">Whatsapp</span>
-                                    </a>
+                                        <a class="btn btn-sm btn-whatsapp margin-left" target="_blank"
+                                           th:href="${lead.whatsappUrl}">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                            <span th:text="#{button.whatsapp}">Whatsapp</span>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr th:if="${lead.email}">
@@ -99,6 +106,10 @@
                                 <td>
                                     <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
                                 </td>
+                            </tr>
+                            <tr th:if="${lead.address}">
+                                <td><b th:text="#{page.lead.address}">ADDRESS</b></td>
+                                <td th:text="${lead.address}">ADDRESS</td>
                             </tr>
                             <tr th:if="${lead.email}">
                                 <td><b th:text="#{page.lead.source}">Source</b></td>
@@ -126,8 +137,8 @@
                                 <td th:text="${lead.visitRequestedAtText}">HTML</td>
                             </tr>
                             <tr>
-                                <td><b th:text="#{page.lead.created-at}">Created At</b></td>
-                                <td th:text="${lead.createdAtText}">HTML</td>
+                                <td><b th:text="#{page.lead.contacted-at}">Created At</b></td>
+                                <td th:text="${lead.modifiedAtText}">HTML</td>
                             </tr>
                         </table>
                     </div>

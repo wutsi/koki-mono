@@ -34,6 +34,8 @@ class GetLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("+15477580000", lead.phoneNumber)
         assertEquals("yo.man@gmail.com", lead.email)
         assertEquals(LeadStatus.CONTACTED, lead.status)
+        assertEquals("ca", lead.country)
+        assertEquals(1111L, lead.cityId)
     }
 
     @Test

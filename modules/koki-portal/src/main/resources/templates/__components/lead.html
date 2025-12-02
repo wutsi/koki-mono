@@ -47,13 +47,7 @@
           th:text="#{'lead-status.' + ${lead.status}}">UNQUALIFIED</span>
 </div>
 
-<tr th:fragment="lead-row(lead)" th:remove="tag">
-    <td class="text-small" width="1%">
-        <a th:href="'/leads/' + ${lead.id}">
-            <i class="fa-solid fa-circle lead-status-new margin-top-small"
-               th:if="${lead.statusNew}"></i>
-        </a>
-    </td>
+<tr th:fragment="lead-row(lead, showStatus)" th:remove="tag">
     <td>
         <a th:href="'/leads/' + ${lead.id}">
             <span th:text="${lead.displayName}">NAME</span>
@@ -67,7 +61,11 @@
                     <td><i class="fa-solid fa-calendar-days"></i></td>
                     <td class="margin-left" th:text="${lead.nextVisitAtText}">yyyy-MM-dd</td>
                 </tr>
-                <tr>
+                <tr th:if="${lead.address}">
+                    <td><i class="fa-solid fa-location-dot"></i></td>
+                    <td class="margin-left" th:text="${lead.address}">ADDRESS</td>
+                </tr>
+                <tr th:if="${showStatus}">
                     <td colspan="2">
                         <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
                     </td>
@@ -75,9 +73,10 @@
             </table>
         </a>
     </td>
-    <td class="d-none d-md-table-cell">
+    <td class="d-none d-md-table-cell" th:if="${showStatus}">
         <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
     </td>
+    <td class="d-none d-md-table-cell" th:text="${lead.address}">ADDRESS</td>
     <td class="d-none d-md-table-cell" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
     <td class="text-right">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>

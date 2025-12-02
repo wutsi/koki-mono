@@ -9,11 +9,11 @@ import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
 import com.wutsi.koki.lead.server.dao.LeadRepository
 import com.wutsi.koki.lead.server.domain.LeadEntity
 import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Date
 import java.util.UUID
@@ -23,12 +23,9 @@ class LeadService(
     private val dao: LeadRepository,
     private val listingService: ListingService,
     private val userService: UserService,
+    private val messageService: MessageService,
     private val em: EntityManager,
 ) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(LeadService::class.java)
-    }
-
     fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long {
         return dao.countByListingIdAndTenantId(listingId, tenantId) ?: 0
     }
@@ -73,7 +70,7 @@ class LeadService(
         if (userId != null) {
             jql.append(" AND L.userId = :userId")
         }
-        jql.append(" ORDER BY L.id DESC")
+        jql.append(" ORDER BY L.modifiedAt DESC")
 
         val query = em.createQuery(jql.toString(), LeadEntity::class.java)
         query.setParameter("tenantId", tenantId)
@@ -103,25 +100,42 @@ class LeadService(
 
     @Transactional
     fun create(request: CreateLeadRequest, tenantId: Long, deviceId: String? = null): LeadEntity {
+        val userId = findByUserIdOrCreate(request, tenantId, deviceId)
+        var lead = dao.findByListingIdAndUserIdAndTenantId(request.listingId, userId, tenantId)
         val now = Date()
-        return dao.save(
-            LeadEntity(
-                tenantId = tenantId,
-                deviceId = deviceId,
-                userId = findByUserIdOrCreate(request, tenantId, deviceId),
-                listing = listingService.get(request.listingId, tenantId),
-                status = LeadStatus.NEW,
-                source = request.source,
-                createdAt = now,
-                modifiedAt = now,
-                email = request.email,
-                firstName = request.firstName,
-                lastName = request.lastName,
-                phoneNumber = request.phoneNumber,
-                message = request.message,
-                visitRequestedAt = request.visitRequestedAt
+        lead = if (lead == null) {
+            dao.save(
+                LeadEntity(
+                    tenantId = tenantId,
+                    deviceId = deviceId,
+                    userId = userId,
+                    listing = listingService.get(request.listingId, tenantId),
+                    status = LeadStatus.NEW,
+                    source = request.source,
+                    createdAt = now,
+                    modifiedAt = now,
+                    email = request.email,
+                    firstName = request.firstName,
+                    lastName = request.lastName,
+                    phoneNumber = request.phoneNumber,
+                    message = request.message,
+                    visitRequestedAt = request.visitRequestedAt,
+                    country = request.country?.lowercase()?.ifEmpty { null },
+                    cityId = request.cityId,
+                )
             )
-        )
+        } else {
+            lead.firstName = request.firstName
+            lead.lastName = request.lastName
+            lead.phoneNumber = request.phoneNumber
+            lead.country = request.country?.lowercase()?.ifEmpty { null }
+            lead.cityId = request.cityId
+            lead.message = request.message
+            lead.visitRequestedAt = request.visitRequestedAt
+            lead.modifiedAt = now
+            dao.save(lead)
+        }
+        return lead
     }
 
     @Transactional
@@ -134,27 +148,23 @@ class LeadService(
         return dao.save(lead)
     }
 
-    private fun findByUserIdOrCreate(request: CreateLeadRequest, tenantId: Long, deviceId: String?): Long? {
+    private fun findByUserIdOrCreate(request: CreateLeadRequest, tenantId: Long, deviceId: String?): Long {
         if (request.userId != null) {
-            return request.userId
+            return request.userId!!
         }
 
         try {
-            return userService.getByEmail(request.email, tenantId).id
+            return userService.getByEmail(request.email, tenantId).id!!
         } catch (ex: NotFoundException) {
-            try {
-                val request = CreateUserRequest(
-                    username = request.email,
-                    email = request.email,
-                    displayName = "${request.firstName} ${request.lastName}".trim(),
-                    password = UUID.randomUUID().toString(),
-                    mobile = request.phoneNumber,
-                )
-                return userService.create(request, tenantId, deviceId).id
-            } catch (ex: Exception) {
-                LOGGER.warn("Unable to create user for lead with email=${request.email}", ex)
-                return null
-            }
+            val request = CreateUserRequest(
+                username = request.email,
+                email = request.email,
+                displayName = "${request.firstName} ${request.lastName}".trim(),
+                password = UUID.randomUUID().toString(),
+                mobile = request.phoneNumber,
+                country = request.country,
+            )
+            return userService.create(request, tenantId, deviceId).id!!
         }
     }
 }

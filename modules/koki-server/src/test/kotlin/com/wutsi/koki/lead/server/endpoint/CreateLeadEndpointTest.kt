@@ -1,6 +1,8 @@
 package com.wutsi.koki.lead.server.endpoint
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.lead.dto.CreateLeadRequest
@@ -41,6 +43,8 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         phoneNumber = "+15147589999",
         email = "ray.sponsible@gmail.com",
         source = LeadSource.WEBSITE,
+        country = "CA",
+        cityId = 333L,
     )
 
     @Test
@@ -62,6 +66,8 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.email, lead.email)
         assertEquals(LeadStatus.NEW, lead.status)
         assertEquals(request.source, lead.source)
+        assertEquals(request.country?.lowercase(), lead.country)
+        assertEquals(request.cityId, lead.cityId)
 
         val event = argumentCaptor<LeadCreatedEvent>()
         verify(publisher).publish(event.capture())
@@ -103,10 +109,42 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(LeadStatus.NEW, lead.status)
         assertEquals(request.source, lead.source)
         assertEquals(11L, lead.userId)
+        assertEquals(request.country?.lowercase(), lead.country)
+        assertEquals(request.cityId, lead.cityId)
 
         val event = argumentCaptor<LeadCreatedEvent>()
         verify(publisher).publish(event.capture())
         assertEquals(lead.id, event.firstValue.leadId)
         assertEquals(lead.tenantId, event.firstValue.tenantId)
+    }
+
+    @Test
+    fun `create with existing lead`() {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        df.timeZone = TimeZone.getTimeZone("UTC")
+
+        val response = rest.postForEntity(
+            "/v1/leads",
+            request.copy(userId = 12L, email = "roger.milla@gmail.com"),
+            CreateLeadResponse::class.java,
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val lead = dao.findById(response.body!!.leadId).get()
+        assertEquals(request.listingId, lead.listing?.id)
+        assertEquals(request.message, lead.message)
+        assertEquals(request.firstName, lead.firstName)
+        assertEquals(request.lastName, lead.lastName)
+        assertEquals(df.format(request.visitRequestedAt), df.format(lead.visitRequestedAt))
+        assertEquals(request.phoneNumber, lead.phoneNumber)
+        assertEquals("roger.milla@gmail.com", lead.email)
+        assertEquals(LeadStatus.CONTACTED, lead.status)
+        assertEquals(LeadSource.UNKNOWN, lead.source)
+        assertEquals(12L, lead.userId)
+        assertEquals(request.country?.lowercase(), lead.country)
+        assertEquals(request.cityId, lead.cityId)
+
+        verify(publisher, never()).publish(any())
     }
 }
