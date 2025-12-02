@@ -46,6 +46,7 @@ class LeadMapper {
             modifiedAt = entity.modifiedAt,
             createdAt = entity.createdAt,
             country = entity.country,
+            cityId = entity.cityId,
         )
     }
 }

@@ -34,6 +34,12 @@ data class LeadModel(
     val statusNew: Boolean
         get() = status == LeadStatus.NEW
 
+    val statusContactLater: Boolean
+        get() = status == LeadStatus.CONTACT_LATER
+
+    val statusVisitSet: Boolean
+        get() = status == LeadStatus.VISIT_SET
+
     val phoneNumberUrl: String?
         get() = phoneNumber.ifEmpty { null }?.let { number -> "tel:$number" }
 

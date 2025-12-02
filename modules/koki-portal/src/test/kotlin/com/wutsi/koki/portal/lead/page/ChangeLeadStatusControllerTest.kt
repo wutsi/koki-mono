@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
+import com.wutsi.koki.lead.dto.GetLeadResponse
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
 import com.wutsi.koki.listing.dto.GetListingResponse
@@ -22,7 +23,7 @@ import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class EditLeadStatusControllerTest : AbstractPageControllerTest() {
+class ChangeLeadStatusControllerTest : AbstractPageControllerTest() {
     private val fmt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
 
     @Test
@@ -42,10 +43,16 @@ class EditLeadStatusControllerTest : AbstractPageControllerTest() {
         assertEquals(LeadStatus.CONTACTED, request.firstValue.status)
         assertEquals(fmt.format(lead.nextVisitAt), fmt.format(request.firstValue.nextVisitAt))
         assertEquals(fmt.format(lead.nextContactAt), fmt.format(request.firstValue.nextContactAt))
+
+        assertCurrentPageIs(PageName.LEAD_STATUS_DONE)
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LEAD)
     }
 
     @Test
     fun contactLater() {
+        setupLead(LeadStatus.CONTACT_LATER)
+
         navigateTo("/leads/status?id=${lead.id}")
 
         val date = fmt.format(DateUtils.addDays(Date(), 3)).replaceFirst("-", "\t")
@@ -64,10 +71,16 @@ class EditLeadStatusControllerTest : AbstractPageControllerTest() {
         assertEquals(LeadStatus.CONTACT_LATER, request.firstValue.status)
         assertEquals(fmt.format(lead.nextVisitAt), fmt.format(request.firstValue.nextVisitAt))
         assertNotNull(request.firstValue.nextContactAt)
+
+        assertCurrentPageIs(PageName.LEAD_STATUS_DONE)
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LEAD)
     }
 
     @Test
     fun visitSet() {
+        setupLead(LeadStatus.VISIT_SET)
+
         navigateTo("/leads/status?id=${lead.id}")
 
         val date = fmt.format(DateUtils.addDays(Date(), 3)).replaceFirst("-", "\t")
@@ -86,6 +99,10 @@ class EditLeadStatusControllerTest : AbstractPageControllerTest() {
         assertEquals(LeadStatus.VISIT_SET, request.firstValue.status)
         assertEquals(fmt.format(lead.nextContactAt), fmt.format(request.firstValue.nextContactAt))
         assertNotNull(request.firstValue.nextVisitAt)
+
+        assertCurrentPageIs(PageName.LEAD_STATUS_DONE)
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LEAD)
     }
 
     @Test
@@ -130,9 +147,7 @@ class EditLeadStatusControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LEAD_STATUS)
     }
 
-    private fun setupListing(
-        sellerAgentUserId: Long? = null,
-    ) {
+    private fun setupListing(sellerAgentUserId: Long? = null) {
         doReturn(
             ResponseEntity(
                 GetListingResponse(
@@ -147,6 +162,21 @@ class EditLeadStatusControllerTest : AbstractPageControllerTest() {
             .getForEntity(
                 any<String>(),
                 eq(GetListingResponse::class.java),
+            )
+    }
+
+    private fun setupLead(status: LeadStatus) {
+        doReturn(
+            ResponseEntity(
+                GetLeadResponse(
+                    lead.copy(status = status)
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetLeadResponse::class.java),
             )
     }
 }
