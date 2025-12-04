@@ -1,0 +1,268 @@
+database:
+    pool-size: 4
+
+spring:
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/koki?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password:
+        hikari:
+            connection-timeout: 30000
+            connection-test-query: "SELECT 1"
+            idle-timeout: 600000             # 10 mins
+            initialization-fail-timeout: 60000
+            leak-detection-threshold: 0
+            max-lifetime: 1800000            # 30 mins
+            maximum-pool-size: ${database.pool-size}
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+    flyway:
+        clean-disabled: false
+        locations: "classpath:db/migration/common,classpath:db/migration/local"
+    jpa:
+        show-sql: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: com.wutsi.koki.platform.util.CustomPhysicalNamingStrategy
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQLDialect
+
+    jackson:
+        default-property-inclusion: non_null
+        deserialization:
+            FAIL_ON_UNKNOWN_PROPERTIES: false
+            ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
+        mapper:
+            ACCEPT_CASE_INSENSITIVE_ENUMS: true
+            ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+        parser:
+            INCLUDE_SOURCE_IN_LOCATION: true
+
+    mvc:
+        pathmatch:
+            matching-strategy: ANT_PATH_MATCHER
+    servlet:
+        multipart:
+            max-file-size: 10240KB
+            max-request-size: 10240KB
+
+server:
+    port: 8080
+    compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+        min-response-size: 512
+
+springdoc:
+    packages-to-scan: com.wutsi.koki
+    show-actuator: true
+    swagger-ui:
+        path: /api.html
+        operations-sorter: alpha
+        tags-sorter: alpha
+    group-configs:
+        -   group: authentication
+            display-name: Authentication API
+            paths-to-match: /v1/auth, /v1/auth/*
+
+        -   group: accounts
+            display-name: Account API
+            paths-to-match: /v1/attributes, /v1/attributes/**, /v1/accounts, /v1/accounts/**
+
+        -   group: agent
+            display-name: Agent API
+            paths-to-match: /v1/agents, /v1/agents/**
+
+        -   group: contacts
+            display-name: Contact API
+            paths-to-match: /v1/contacts, /v1/contacts/**
+
+        -   group: files
+            display-name: File API
+            paths-to-match: /v1/files, /v1/files/**
+
+        -   group: lead
+            display-name: Lead API
+            paths-to-match: /v1/leads, /v1/leads/**
+
+        -   group: listing
+            display-name: Listing API
+            paths-to-match: /v1/listings, /v1/listings/**
+
+        -   group: messages
+            display-name: Message API
+            paths-to-match: /v1/messages, /v1/messages/**
+
+        -   group: modules
+            display-name: Module API
+            paths-to-match: /v1/modules, /v1/modules/**, /v1/permissions
+
+        -   group: notes
+            display-name: Note API
+            paths-to-match: /v1/notes, /v1/notes/*
+
+        -   group: offer
+            display-name: Offer API
+            paths-to-match: /v1/offers, /v1/offers/**, /v1/offer-versions, /v1/offer-versions/**
+
+        -   group: refdata
+            display-name: RefData API
+            paths-to-match: /v1/amenities, /v1/amenities/**, /v1/categories, /v1/categories/**, /v1/locations, /v1/locations/*, /v1/refdata/**
+
+        -   group: tenant
+            display-name: Tenant API
+            paths-to-match: /v1/tenants, /v1/tenants/**, /v1/types, /v1/types/**, /v1/configurations, /v1/configurations/**
+
+        -   group: user
+            display-name: User API
+            paths-to-match: /v1/users, /v1/users/**, /v1/roles, /v1/roles/**, /v1/invitations, /v1/invitations/**
+
+management:
+    endpoint:
+        health:
+            show-details: always
+        info:
+            git:
+                mode: full
+    endpoints:
+        web:
+            exposure:
+                include: "beans,flyway,health,info,scheduledtasks,mappings"
+
+logging:
+    level:
+        root: INFO
+        com.amazonaws: ERROR
+        com.icegreen.greenmail.smtp.SmtpManager: ERROR
+        org.springframework: INFO
+        org.hibernate: ERROR
+        org.apache.poi: ERROR
+        org.hibernate.engine.jdbc.spi.SqlExceptionHelper: OFF
+        com.wutsi: DEBUG
+        springfox: ERROR
+
+    pattern:
+        console: "%d Type=%level Logger=%c Thread=%thread %m%n"
+        file: "%d Type=%level Logger=%c Thread=%thread %m%n"
+
+koki:
+    webapp:
+        client-id: koki-server
+        server-url: http://localhost:${server.port}
+
+    translation:
+        type: ai  # AI | AWS
+        aws:
+            region: us-east-1
+            access-key: ""
+            secret-key: ""
+
+    smtp:
+        host: localhost
+        port: 3025
+        username: wutsi
+        password: secret
+        from: no-reply@wutsi.com
+
+    module:
+        consumer-delay-seconds: 1
+
+        agent:
+            metrics:
+                jobs:
+                    daily: "0 0 1 * * *"     # Every day at 1:00AM
+                    monthly: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-agent-queue
+                dlq: koki-agent-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        email:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-email-queue
+                dlq: koki-email-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        invitation:
+            ttl-days: 7                   # 7 days
+            cron:
+                expire: "0 0 1 * * *"     # Every date at 1AM
+
+        file:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-file-queue
+                dlq: koki-file-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        listing:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-listing-queue
+                dlq: koki-listing-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        offer:
+            cron:
+                expire: "0 0 1 * * *"     # Every date at 1AM
+
+        ref-data:
+            geonames:
+                connect-timeout: 30000
+                read-timeout: 60000
+
+        security:
+            access-token:
+                ttl: 86400 # 1 day
+
+wutsi:
+    platform:
+        ai:
+            enabled: true
+            rest:
+                read-timeout: 60000 # 1 minute
+                connect-timeout: 60000 # 1 minute
+            model:
+                type: gemini
+                deepseek:
+                    api-key: ${DEEPSEEK_API_KEY}
+                    model: deepseek-chat
+                gemini:
+                    api-key: ${GEMINI_API_KEY}
+                    model: gemini-2.0-flash
+        cache:
+            name: koki
+            type: redis
+            ttl: 86400
+            redis:
+                url: redis://:test@localhost:6379
+        executor:
+            thread-pool:
+                name: ${koki.webapp.client-id}
+                size: 16
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+                exchange-name: koki
+                max-retries: 24
+                ttl-seconds: 84600
+        storage:
+            enabled: true
+            type: local # local | s3
+            local:
+                directory: ${user.home}/__wutsi
+                base-url: http://localhost:${server.port}
+                servlet-path: /local-storage
+            s3:
+                bucket: koki-test
+                region: us-east-1
+                access-key: ""
+                secret-key: ""

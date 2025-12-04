@@ -1,0 +1,61 @@
+id,category,amenity,fr,top
+1000,Basic Essentials,Electricity,Électricité,0
+1001,Basic Essentials,Prepaid meter,Compteur prépayé,1
+1002,Basic Essentials,Running Water,Eau courante,0
+1003,Basic Essentials,Hot Water,Eau chaude,0
+1004,Basic Essentials,Water drilling,Forage d'eau,1
+1005,Basic Essentials,Cubitainer,Cubitainer,1
+1006,Basic Essentials,Air Conditioning,Climatisation,1
+1007,Basic Essentials,Heating,Chauffage,0
+1008,Basic Essentials,Wi-Fi,Wi-Fi,1
+1009,Kitchen & Dining,Refrigerator,Réfrigérateur,1
+1010,Kitchen & Dining,Microwave,Micro-ondes,0
+1011,Kitchen & Dining,Stove,Cuisinière,1
+1012,Kitchen & Dining,Oven,Four,0
+1013,Kitchen & Dining,Dishwasher,Lave-vaisselle,1
+1014,Kitchen & Dining,Coffee Maker,Cafetière,0
+1015,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base,0
+1016,Kitchen & Dining,Dining Table,Table à manger,0
+1017,Kitchen & Dining,Toaster,Grille-pain,0
+1018,Kitchen & Dining,Blender,Mixeur,0
+1019,Bathroom Amenities,Hair Dryer,Sèche-cheveux,0
+1020,Bathroom Amenities,Bath Towels,Serviettes de bain,0
+1021,Bathroom Amenities,Bidet,Bidet,0
+1022,Bathroom Amenities,Bathtub,Baignoire,0
+1023,Bathroom Amenities,Jacuzzi,Jacuzzi,0
+1024,Bedroom Amenities,Bed Linens,Draps,0
+1025,Bedroom Amenities,Pillows,Oreillers,0
+1026,Bedroom Amenities,Wardrobe,Armoire,0
+1027,Bedroom Amenities,Closet,Placard,1
+1028,Bedroom Amenities,Dresser,Commode,0
+1029,Bedroom Amenities,Safe,Coffre-fort,0
+1030,Bedroom Amenities,Locker,Casier,0
+1031,Entertainment & Electronics,TV,Télévision,1
+1032,Entertainment & Electronics,Cable/Satellite,Câble/Satellite,1
+1033,Entertainment & Electronics,Streaming Services,Service de streaming,1
+1034,Entertainment & Electronics,Sound System,Système de son,0
+1035,Entertainment & Electronics,Speakers,Haut-parleurs,0
+1036,Entertainment & Electronics,Board Games,Jeux de société,0
+1037,Entertainment & Electronics,Books,Livres,0
+1038,Entertainment & Electronics,DVD Player,Lecteur DVD,0
+1039,Entertainment & Electronics,Video Game Console,Console de jeux vidéo,0
+1040,Laundry & Cleaning,Washing Machine,Machine à laver,1
+1041,Laundry & Cleaning,Dryer,Sécheuse,1
+1042,Laundry & Cleaning,Iron,Fer à repasser,0
+1043,Laundry & Cleaning,Ironing Board,Planche à repasser,0
+1044,Laundry & Cleaning,Vacuum Cleaner,Aspirateur,0
+1045,Laundry & Cleaning,Laundry Detergent,Lessive,0
+1046,Outdoor & Recreational,Swimming Pool,Piscine,1
+1047,Outdoor & Recreational,Garden,Jardin,0
+1048,Outdoor & Recreational,Yard,Cour,0
+1049,Outdoor & Recreational,BBQ Grill,Barbecue,0
+1050,Outdoor & Recreational,Patio,Terrasse,0
+1051,Outdoor & Recreational,Rooftop,Toit-terrasse,1
+1052,Outdoor & Recreational,Balcony,Balcon,0
+1053,Outdoor & Recreational,Mountain view,Vue sur la montage,0
+1054,Outdoor & Recreational,Beach view,Vue sur la plage,1
+1055,Outdoor & Recreational,Beach Access,Accès à la plage,1
+1056,Outdoor & Recreational,Ocean view,Vue sur l'océan,1
+1057,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée,0
+1058,Safety & Security,Security Cameras,Caméras de sécurité,0
+1059,Safety & Security,Security guard,Gardien de sécurité,1

@@ -22,6 +22,7 @@ import java.util.Date
 import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/lead/CreateLeadEndpoint.sql"])
 class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
@@ -68,6 +69,7 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.source, lead.source)
         assertEquals(request.country?.lowercase(), lead.country)
         assertEquals(request.cityId, lead.cityId)
+        assertNotNull(lead.userId)
 
         val event = argumentCaptor<LeadCreatedEvent>()
         verify(publisher).publish(event.capture())
@@ -79,7 +81,7 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(DEVICE_ID, user?.deviceId)
         assertEquals(TENANT_ID, user?.tenantId)
         assertEquals(lead.email, user?.email)
-        assertEquals(lead.email, user?.username)
+        assertEquals("ray.sponsible", user?.username)
         assertEquals(lead.firstName + " " + lead.lastName, user?.displayName)
         assertEquals(false, user?.password?.isEmpty())
         assertEquals(lead.phoneNumber, user?.mobile)
@@ -116,6 +118,50 @@ class CreateLeadEndpointTest : AuthorizationAwareEndpointTest() {
         verify(publisher).publish(event.capture())
         assertEquals(lead.id, event.firstValue.leadId)
         assertEquals(lead.tenantId, event.firstValue.tenantId)
+    }
+
+    @Test
+    fun `create with existing username`() {
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        df.timeZone = TimeZone.getTimeZone("UTC")
+
+        val response = rest.postForEntity(
+            "/v1/leads",
+            request.copy(email = "omam.mbiyick@hotmail.com"),
+            CreateLeadResponse::class.java,
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val lead = dao.findById(response.body!!.leadId).get()
+        assertEquals(request.listingId, lead.listing?.id)
+        assertEquals(request.message, lead.message)
+        assertEquals(request.firstName, lead.firstName)
+        assertEquals(request.lastName, lead.lastName)
+        assertEquals(df.format(request.visitRequestedAt), df.format(lead.visitRequestedAt))
+        assertEquals(request.phoneNumber, lead.phoneNumber)
+        assertEquals("omam.mbiyick@hotmail.com", lead.email)
+        assertEquals(LeadStatus.NEW, lead.status)
+        assertEquals(request.source, lead.source)
+        assertNotNull(lead.userId)
+        assertEquals(request.country?.lowercase(), lead.country)
+        assertEquals(request.cityId, lead.cityId)
+
+        val event = argumentCaptor<LeadCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(lead.id, event.firstValue.leadId)
+        assertEquals(lead.tenantId, event.firstValue.tenantId)
+
+        val user = userDao.findByEmailAndTenantId(lead.email, lead.tenantId)!!
+        assertEquals(user?.id, lead.userId)
+        assertEquals(DEVICE_ID, user?.deviceId)
+        assertEquals(TENANT_ID, user?.tenantId)
+        assertEquals(lead.email, user?.email)
+        assertEquals(true, user.username.startsWith("omam.mbiyick"))
+        assertEquals(true, user.username.length > "omam.mbiyick".length)
+        assertEquals(lead.firstName + " " + lead.lastName, user?.displayName)
+        assertEquals(false, user?.password?.isEmpty())
+        assertEquals(lead.phoneNumber, user?.mobile)
     }
 
     @Test
