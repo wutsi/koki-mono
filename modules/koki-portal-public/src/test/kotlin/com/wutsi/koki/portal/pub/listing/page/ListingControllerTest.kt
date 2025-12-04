@@ -66,7 +66,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.LISTING)
 
         // Meta
@@ -130,6 +130,41 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `sendMessage no IP - country resolved from IP`() {
+        doReturn(null).whenever(ipService).resolve(any())
+
+        navigateTo(listing.publicUrl!!)
+
+        scroll(.33)
+        click("#btn-send-message")
+        assertElementVisible("#koki-modal")
+
+        input("#firstName", "Ray")
+        input("#lastName", "Sponsible")
+        input("#email", "ray.sponsible@gmail.com")
+        input("#message", "I am interested in your property. Please contact me.")
+        input("#phone", "6467580100")
+        click("#btn-send")
+
+        val request = argumentCaptor<CreateLeadRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/leads"),
+            request.capture(),
+            eq(CreateLeadResponse::class.java)
+        )
+        assertEquals("Ray", request.firstValue.firstName)
+        assertEquals("Sponsible", request.firstValue.lastName)
+        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
+        assertEquals("I am interested in your property. Please contact me.", request.firstValue.message)
+        assertEquals("+16467580100", request.firstValue.phoneNumber)
+        assertEquals("US", request.firstValue.country)
+        assertEquals(null, request.firstValue.cityId)
+
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementVisible("#toast-message")
+    }
+
+    @Test
     fun `sendMessage for logged in user`() {
         doReturn(USER_ID).whenever(userIdProvider).get()
 
@@ -162,7 +197,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun share() {
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
 
         click("#btn-share-navbar")
         assertElementVisible("#koki-modal")
@@ -175,28 +210,28 @@ class ListingControllerTest : AbstractPageControllerTest() {
     @Test
     fun sold() {
         setupListing(ListingStatus.SOLD)
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.LISTING)
     }
 
     @Test
     fun expired() {
         setupListing(ListingStatus.EXPIRED)
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun draft() {
         setupListing(ListingStatus.DRAFT)
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
     @Test
     fun cancelled() {
         setupListing(ListingStatus.CANCELLED)
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.ERROR_404)
     }
 
@@ -210,7 +245,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun `show amenities`() {
-        navigateTo("/listings/${listing.id}")
+        navigateTo(listing.publicUrl!!)
 
         scroll(.25)
         click("#btn-amenities")
