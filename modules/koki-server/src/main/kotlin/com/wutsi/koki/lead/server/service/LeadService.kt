@@ -9,7 +9,6 @@ import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
 import com.wutsi.koki.lead.server.dao.LeadRepository
 import com.wutsi.koki.lead.server.domain.LeadEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.message.server.service.MessageService
 import com.wutsi.koki.tenant.dto.CreateUserRequest
 import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
@@ -23,7 +22,6 @@ class LeadService(
     private val dao: LeadRepository,
     private val listingService: ListingService,
     private val userService: UserService,
-    private val messageService: MessageService,
     private val em: EntityManager,
 ) {
     fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long {

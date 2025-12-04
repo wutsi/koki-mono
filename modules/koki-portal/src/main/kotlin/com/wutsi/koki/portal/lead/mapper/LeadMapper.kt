@@ -60,7 +60,6 @@ class LeadMapper : TenantAwareMapper() {
             source = entity.source,
             modifiedAt = entity.modifiedAt,
             modifiedAtText = df.format(entity.modifiedAt),
-            nextContactAt = entity.nextContactAt,
             nextContactAtText = entity.nextContactAt?.let { date -> df.format(date) },
             nextVisitAt = entity.nextVisitAt,
             nextVisitAtText = entity.nextVisitAt?.let { date -> df.format(date) },
