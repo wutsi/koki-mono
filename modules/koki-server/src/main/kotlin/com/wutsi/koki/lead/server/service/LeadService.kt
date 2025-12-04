@@ -14,6 +14,7 @@ import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.lang.Math.random
 import java.util.Date
 import java.util.UUID
 
@@ -155,7 +156,7 @@ class LeadService(
             return userService.getByEmail(request.email, tenantId).id!!
         } catch (ex: NotFoundException) {
             val request = CreateUserRequest(
-                username = request.email,
+                username = generateUsername(request.email, tenantId),
                 email = request.email,
                 displayName = "${request.firstName} ${request.lastName}".trim(),
                 password = UUID.randomUUID().toString(),
@@ -164,5 +165,23 @@ class LeadService(
             )
             return userService.create(request, tenantId, deviceId).id!!
         }
+    }
+
+    private fun generateUsername(email: String, tenantId: Long): String {
+        val i = email.indexOf('@')
+        var username = if (i > 0) {
+            email.substring(0, i).take(45)
+        } else {
+            email.take(45)
+        }
+        for (i in 0..10) {
+            if (userService.getByUsernameOrNull(username, tenantId) != null) {
+                val suffix = (i + 1) + (random() * 8999).toInt()
+                username = "$username$suffix"
+            } else {
+                return username
+            }
+        }
+        return UUID.randomUUID().toString()
     }
 }

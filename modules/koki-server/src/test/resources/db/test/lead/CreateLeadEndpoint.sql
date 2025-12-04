@@ -3,7 +3,8 @@ INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listin
 
 INSERT INTO T_USER(id, tenant_fk, username, email, password, display_name)
     VALUES (11, 1, 'thomas.nkono', 'thomas.nkono@gmail.com', '---', 'Thomas Nkono'),
-           (12, 1, 'roger.milla', 'roger.milla@gmail.com', '---', 'Thomas Nkono');
+           (12, 1, 'roger.milla', 'roger.milla@gmail.com', '---', 'Thomas Nkono'),
+           (13, 1, 'omam.mbiyick', 'omam.mbiyick@gmail.com', '---', 'Omam Mbiyick');
 
 INSERT INTO T_LEAD(id, tenant_fk, listing_fk, user_fk, status, first_name, last_name, email, phone_number)
     VALUES (101, 1, 111, 12, 2, 'R', 'M', 'roger.milla@gmail.com', '--');

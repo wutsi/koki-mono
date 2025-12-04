@@ -48,6 +48,10 @@ class UserService(
             ?: throw NotFoundException(Error(ErrorCode.USER_NOT_FOUND))
     }
 
+    fun getByUsernameOrNull(username: String, tenantId: Long): UserEntity? {
+        return dao.findByUsernameAndTenantId(username.lowercase(), tenantId)
+    }
+
     @Transactional
     fun create(request: CreateUserRequest, tenantId: Long, deviceId: String? = null): UserEntity {
         checkDuplicateUsername(null, request.username, tenantId)
