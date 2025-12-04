@@ -107,7 +107,7 @@ class EditContactController(
     ): String {
         // Check Permission
         val contact = service.get(id)
-        if (!contact.canDelete(userHolder.get())) {
+        if (!contact.canManage(userHolder.get())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }
 
