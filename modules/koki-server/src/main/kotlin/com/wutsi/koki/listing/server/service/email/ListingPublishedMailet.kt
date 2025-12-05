@@ -1,8 +1,8 @@
 package com.wutsi.koki.listing.server.service.email
 
-import com.wutsi.koki.email.server.mq.AbstractMailet
 import com.wutsi.koki.email.server.service.EmailTemplateResolver
 import com.wutsi.koki.email.server.service.Sender
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.service.ListingService
@@ -10,20 +10,24 @@ import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 
 @Service
 class ListingPublishedMailet(
+    val locationService: LocationService,
+    val fileService: FileService,
+    val messages: MessageSource,
+
+    private val tenantService: TenantService,
     private val listingService: ListingService,
     private val userService: UserService,
-    private val locationService: LocationService,
-    private val tenantService: TenantService,
     private val templateResolver: EmailTemplateResolver,
     private val sender: Sender,
     private val logger: KVLogger,
-) : AbstractMailet() {
+) : AbstractListingMailet(locationService, fileService, messages) {
     companion object {
-        const val SUBJECT = "Votre propriété a été publiée"
+        const val SUBJECT = "Listing #{{listingNumber}}: Votre listing a été publiée"
     }
 
     override fun service(event: Any): Boolean {
@@ -37,47 +41,23 @@ class ListingPublishedMailet(
     private fun service(event: ListingStatusChangedEvent): Boolean {
         val listing = listingService.get(event.listingId, event.tenantId)
         if (listing.status != ListingStatus.ACTIVE) {
-            logger.add("success", false)
-            logger.add("error", "Listing is not active")
+            logger.add("warning", "Listing is not active")
             return false
         }
-
-        val agent = listing.sellerAgentUserId?.let { id -> userService.get(id, event.tenantId) }
-        if (agent == null) {
-            logger.add("success", false)
-            logger.add("error", "No agent associate with listing")
-            return false
-        }
-
-        val city = listing.cityId?.let { id -> locationService.get(id) }
-        val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
-        val address = listOf(
-            listing.street,
-            neighbourhood?.name,
-            city?.name
-        ).filterNotNull().joinToString(", ")
 
         val tenant = tenantService.get(event.tenantId)
-
-        val data = mapOf(
-            "recipient" to (agent.displayName ?: ""),
-            "address" to address,
-            "listingNumber" to listing.listingNumber,
-            "listingUrl" to "${tenant.portalUrl}/listings/${listing.id}",
-        )
+        val recipient = listing.sellerAgentUserId?.let { id -> userService.get(id, event.tenantId) } ?: return false
+        val data = getListingData(listing, tenant, recipient)
         val body = templateResolver.resolve("/listing/email/published.html", data)
+        val subject = SUBJECT.replace("{{listingNumber}}", listing.listingNumber.toString())
 
-        logger.add("recipient_user_id", agent.id)
-        logger.add("recipient_user_email", agent.email)
         sender.send(
-            recipient = agent,
-            subject = SUBJECT,
+            recipient = recipient,
+            subject = subject,
             body = body,
             attachments = emptyList(),
             tenantId = event.tenantId,
         )
-
-        logger.add("success", true)
         return true
     }
 }

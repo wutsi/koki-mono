@@ -1,6 +1,5 @@
 package com.wutsi.koki.listing.server.service.email
 
-import com.github.mustachejava.DefaultMustacheFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
@@ -8,81 +7,33 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.email.server.service.EmailTemplateResolver
-import com.wutsi.koki.email.server.service.Sender
+import com.wutsi.koki.agent.server.domain.AgentEntity
+import com.wutsi.koki.agent.server.service.AgentService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
-import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.platform.logger.DefaultKVLogger
-import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.messaging.Party
-import com.wutsi.koki.platform.templating.MustacheTemplatingEngine
-import com.wutsi.koki.refdata.server.domain.LocationEntity
-import com.wutsi.koki.refdata.server.service.LocationService
-import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.domain.UserEntity
-import com.wutsi.koki.tenant.server.service.TenantService
-import com.wutsi.koki.tenant.server.service.UserService
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingClosedMailetTest {
-    private val listingService = mock<ListingService>()
-    private val userService = mock<UserService>()
-    private val locationService = mock<LocationService>()
-    private val tenantService = mock<TenantService>()
-    private val templateResolver = EmailTemplateResolver(MustacheTemplatingEngine(DefaultMustacheFactory()))
-    private val sender = mock<Sender>()
-    private val logger: KVLogger = DefaultKVLogger()
+class ListingClosedMailetTest : AbstractListingMailetTest() {
+    private val agentService = mock(AgentService::class.java)
     private val mailet = ListingClosedMailet(
         listingService = listingService,
         userService = userService,
         locationService = locationService,
         templateResolver = templateResolver,
         tenantService = tenantService,
+        fileService = fileService,
+        messages = messages,
         sender = sender,
+        agentService = agentService,
         logger = logger
     )
 
-    private val city = LocationEntity(id = 111, name = "Yaounde", country = "CM")
-    private val neighbourhood = LocationEntity(id = 222, name = "Bastos", country = "CM")
-    private val tenant = TenantEntity(
-        id = 1L,
-        name = "Test",
-        clientPortalUrl = "https://realtor.com",
-        logoUrl = "https://picsum.photos/200/200",
-        monetaryFormat = "C\$ #,###,##0.00",
-    )
-    private val listing = ListingEntity(
-        id = 111L,
-        listingNumber = 24309500,
-        tenantId = tenant.id!!,
-        status = ListingStatus.ACTIVE,
-        listingType = ListingType.RENTAL,
-        sellerContactId = 111L,
-        sellerAgentUserId = 333L,
-        buyerAgentUserId = 555L,
-        street = "340 Pascal",
-        cityId = city.id,
-        neighbourhoodId = neighbourhood.id,
-        buyerAgentCommission = 3.0,
-        finalBuyerAgentCommissionAmount = 50000,
-    )
-
-    private val seller = UserEntity(
-        id = listing.sellerAgentUserId,
-        tenantId = 1L,
-        displayName = "JOHN SMITH",
-        email = "john.smith@gmail.com",
-        employer = "REIMAX LAVAL",
-        mobile = "+15147580011",
-        photoUrl = "https://picsum.photos/200/200"
-    )
     private val buyer = UserEntity(
         id = listing.buyerAgentUserId,
         tenantId = 1L,
@@ -93,19 +44,16 @@ class ListingClosedMailetTest {
         photoUrl = "https://picsum.photos/200/200"
     )
 
-    @BeforeEach
-    fun setUp() {
-        doReturn(listing).whenever(listingService).get(any(), any())
-        doReturn(tenant).whenever(tenantService).get(any())
-        doReturn(seller).whenever(userService).get(eq(seller.id!!), any())
-        doReturn(buyer).whenever(userService).get(eq(buyer.id!!), any())
-        doReturn(city).whenever(locationService).get(city.id!!)
-        doReturn(neighbourhood).whenever(locationService).get(neighbourhood.id!!)
-    }
+    private val agent = AgentEntity(
+        id = 7777L,
+    )
 
-    @AfterEach
-    fun tearDown() {
-        logger.log()
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        doReturn(buyer).whenever(userService).get(eq(buyer.id!!), any())
+        doReturn(agent).whenever(agentService).getByUser(any(), any())
     }
 
     @Test
@@ -128,36 +76,45 @@ class ListingClosedMailetTest {
         )
 
         assertEquals(
-            "Clôture au 340 Pascal, Bastos, Yaounde - Merci, RAY SPONSIBLE!",
+            "Listing #111: La propriété est VENDU!",
             subjectArg.firstValue
         )
         assertEquals(
             """
-                Bonjour RAY SPONSIBLE,<br/><br/>
+                <center class="text-larger">
+                    Nous avons le plaisir de vous informer que la transaction du listing <em>#111</em> à l'addresse <em>340 Pascal, Bastos, Yaounde</em> a été clôturée.
+                </center>
 
-                Nous avons le plaisir de vous informer que la transaction du listing <a href="/listings/111">#24309500</a>
-                situé au <b>340 Pascal, Bastos, Yaounde</b> a été clôturée.<br/><br/>
+                <p>
+                    Cette transaction a été réalisée au prix de <b>C$ 175,000</b>, en co-courtage avec l'agent <a href="/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
+                    <br/>
+                    Votre commission s'élève à <b>3.0%</b>.
+                </p>
 
-                Nous vous confirmons que votre commission pour cette transaction est de <b>C${'$'} 50,000.00 (3.0%)</b>.<br/><br/>
+                <br/><br/>
 
-                Cordialement,<br/><br/>
-
-                <hr/>
-                <table border="0" cellpadding="10" cellspacing="0">
-                    <tr>
-                        <td>
-                            <img height="64" src="https://picsum.photos/200/200" style="border-radius: 1em" width="64"/>
-                        </td>
-
-                        <td>
-                            <b>JOHN SMITH</b><br/>
-
-                            <div>REIMAX LAVAL</div>
-
-                            <div>+1 514-758-0011</div>
-                        </td>
-                    </tr>
-                </table>
+                <center>
+                    <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
+                        <tr>
+                            <td width="1%">
+                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                    <img src="https://picsum.photos/1200/800"
+                                         style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
+                                    />
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="padding" valign="top">
+                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                    <b class="text-larger">C$ 150,000</b><br/><br/>
+                                    3 Chambres | 2 Bains | 750 m2<br/>
+                                    340 Pascal, Bastos, Yaounde<br/>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </center>
 
             """.trimIndent(),
             bodyArg.firstValue,
@@ -165,21 +122,77 @@ class ListingClosedMailetTest {
     }
 
     @Test
-    fun rend() {
-        doReturn(listing.copy(listingType = ListingType.SALE)).whenever(listingService).get(any(), any())
+    fun rent() {
+        doReturn(listing.copy(listingType = ListingType.RENTAL)).whenever(listingService).get(any(), any())
 
         val event = createEvent(status = ListingStatus.RENTED)
         val result = mailet.service(event)
 
         assertEquals(true, result)
 
+        val bodyArg = argumentCaptor<String>()
+        val subjectArg = argumentCaptor<String>()
         verify(sender).send(
             eq(buyer),
-            any(),
-            any(),
+            subjectArg.capture(),
+            bodyArg.capture(),
             eq(emptyList()),
             eq(event.tenantId)
         )
+
+        assertEquals(
+            "Listing #111: La propriété est LOUÉE!",
+            subjectArg.firstValue
+        )
+        assertEquals(
+            """
+                <center class="text-larger">
+                    Nous avons le plaisir de vous informer que la transaction du listing <em>#111</em> à l'addresse <em>340 Pascal, Bastos, Yaounde</em> a été clôturée.
+                </center>
+
+                <p>
+                    Cette transaction a été réalisée au prix de <b>C$ 175,000/mo</b>, en co-courtage avec l'agent <a href="/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
+                    <br/>
+                    Votre commission s'élève à <b>3.0%</b>.
+                </p>
+
+                <br/><br/>
+
+                <center>
+                    <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
+                        <tr>
+                            <td width="1%">
+                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                    <img src="https://picsum.photos/1200/800"
+                                         style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
+                                    />
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="padding" valign="top">
+                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                    <b class="text-larger">C$ 150,000/mo</b><br/><br/>
+                                    3 Chambres | 2 Bains | 750 m2<br/>
+                                    340 Pascal, Bastos, Yaounde<br/>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </center>
+
+            """.trimIndent(),
+            bodyArg.firstValue,
+        )
+    }
+
+    @Test
+    fun `event not supported`() {
+        val event = emptyMap<String, String>()
+        val result = mailet.service(event)
+
+        assertEquals(false, result)
+        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
     }
 
     @Test
