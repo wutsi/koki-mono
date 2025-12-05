@@ -11,14 +11,13 @@
     align-items: center;
     justify-content: center;
     background: #f8f8f8;
-    border: 1px solid lightgray !important;
     vertical-align: middle;
 }
 
 .image .image-frame img {
-    max-width: 398px;
-    max-height: 264px;
-    margin: auto 0;
+    width: 400px;
+    height: 266px;
+    object-fit: cover;
 }
 
 .image .badge {
@@ -77,8 +76,8 @@ body.image-viewer .image-footer {
     }
 
     .tab-images .image-frame img {
-        max-width: 348px;
-        max-height: 231px;
+        width: 400px;
+        height: 233px;
     }
 }
 
