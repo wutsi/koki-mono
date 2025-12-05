@@ -59,6 +59,7 @@ ul.amenities li {
 
 .listing-card {
     border: 1px solid lightgray;
+    border-radius: .5em;
 }
 
 .listing-card .listing-status-container {
@@ -69,11 +70,6 @@ ul.amenities li {
     display: inline;
 }
 
-.listing-card .listing-details a {
-    text-decoration: none;
-    color: #040404;
-}
-
 .listing-card .hero-image-container {
     width: 302px;
     height: 202px;
@@ -82,11 +78,24 @@ ul.amenities li {
     justify-content: center;
     background: #f0f0f0;
     margin-top: -1.5em;
+    border-radius: .5em .5em 0 0;
 }
 
 .listing-card img.hero-image {
-    max-width: 300px;
-    max-height: 200px;
+    width: 302px;
+    height: 202px;
+    object-fit: cover;
+    border-radius: .5em .5em 0 0;
+}
+
+.listing-card .listing-details {
+    border: 1px solid lightgray;
+    border-radius:  0 0 .5em .5em;
+}
+
+.listing-card .listing-details a {
+    text-decoration: none;
+    color: #040404;
 }
 
 .listing-card .address-street {

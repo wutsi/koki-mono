@@ -310,7 +310,7 @@
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
             <div class="margin-top-small" th:if="${listing.sellerAgentUser}">
-                <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, true)}"></div>
+                <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
             </div>
         </a>
     </div>
