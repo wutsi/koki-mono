@@ -18,6 +18,7 @@
     width: 400px;
     height: 266px;
     object-fit: cover;
+    border-radius: .5em;
 }
 
 .image .badge {
