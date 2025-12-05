@@ -7,30 +7,44 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
+import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
+import com.wutsi.koki.lead.server.domain.LeadEntity
+import com.wutsi.koki.lead.server.service.LeadService
 import com.wutsi.koki.platform.messaging.Party
+import org.junit.jupiter.api.BeforeEach
+import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingPublishedMailetTest : AbstractListingMailetTest() {
-    private val mailet = ListingPublishedMailet(
-        listingService = listingService,
+class ListingLeadCreatedMailetTest : AbstractListingMailetTest() {
+    private val leadService = mock<LeadService>()
+    private val mailet = ListingLeadCreatedMailet(
         userService = userService,
         locationService = locationService,
         templateResolver = templateResolver,
         tenantService = tenantService,
+        leadService = leadService,
         fileService = fileService,
-        messages = messages,
         sender = sender,
+        messages = messages,
         logger = logger
     )
 
-    @Test
-    fun published() {
-        doReturn(listing.copy(listingType = ListingType.SALE)).whenever(listingService).get(any(), any())
+    private val lead = LeadEntity(
+        id = 222L,
+        firstName = "Jimmy",
+        lastName = "Smith",
+        listing = listing
+    )
 
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        doReturn(lead).whenever(leadService).get(any(), any())
+    }
+
+    @Test
+    fun created() {
         val event = createEvent()
         val result = mailet.service(event)
 
@@ -46,16 +60,16 @@ class ListingPublishedMailetTest : AbstractListingMailetTest() {
             eq(emptyList()),
             eq(event.tenantId)
         )
-        assertEquals("Listing #111: Votre listing a été publiée", subjectArg.firstValue)
+        assertEquals("Listing #111: Nouveau client potentiel, à vous de jouer!", subjectArg.firstValue)
         assertEquals(
             """
                 <center class="text-larger">
-                    Votre listing listing <em>#111</em> à l'addresse <em>340 Pascal, Bastos, Yaounde</em>
-                    a été publiée avec succès, et est maintenant disponible en ligne et visible par tous
-                    les agents et visiteurs qui utilisent notre plateforme
+                    Vous avez reçu un message d'un potential client pour votre listing <em>#111</em> à l'addresse <em>340 Pascal, Bastos, Yaounde</em>.
+                    <br/><br/>
+                    <a class="btn btn-primary" href="/leads/222">Lire le Message</a>
                 </center>
 
-                <br/><br>
+                <br/><br/>
 
                 <center>
                     <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
@@ -71,7 +85,7 @@ class ListingPublishedMailetTest : AbstractListingMailetTest() {
                         <tr>
                             <td class="padding" valign="top">
                                 <a href="/listings/111" style="text-decoration: none; color: inherit;">
-                                    <b class="text-larger">C$ 150,000</b><br/><br/>
+                                    <b class="text-larger">C$ 150,000/mo</b><br/><br/>
                                     3 Chambres | 2 Bains | 750 m2<br/>
                                     340 Pascal, Bastos, Yaounde<br/>
                                 </a>
@@ -94,41 +108,9 @@ class ListingPublishedMailetTest : AbstractListingMailetTest() {
         verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
     }
 
-    @Test
-    fun `event status not PUBLISHED`() {
-        val event = createEvent(ListingStatus.PUBLISHING)
-        val result = mailet.service(event)
-
-        assertEquals(false, result)
-        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
-    }
-
-    @Test
-    fun `listing not active`() {
-        doReturn(listing.copy(status = ListingStatus.PUBLISHING)).whenever(listingService).get(any(), any())
-
-        val event = createEvent()
-        val result = mailet.service(event)
-
-        assertEquals(false, result)
-        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
-    }
-
-    @Test
-    fun `no agent`() {
-        doReturn(listing.copy(sellerAgentUserId = null)).whenever(listingService).get(any(), any())
-
-        val event = createEvent()
-        val result = mailet.service(event)
-
-        assertEquals(false, result)
-        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
-    }
-
-    private fun createEvent(status: ListingStatus = ListingStatus.ACTIVE): ListingStatusChangedEvent {
-        return ListingStatusChangedEvent(
-            status = status,
-            listingId = listing.id!!,
+    private fun createEvent(): LeadCreatedEvent {
+        return LeadCreatedEvent(
+            leadId = 222L,
             tenantId = listing.tenantId,
         )
     }

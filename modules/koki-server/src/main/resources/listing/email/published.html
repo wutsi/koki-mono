@@ -1,9 +1,30 @@
-Bonjour {{recipient}},<br/><br/>
+<center class="text-larger">
+    Votre listing listing <em>#{{listingNumber}}</em> à l'addresse <em>{{listingAddress}}</em>
+    a été publiée avec succès, et est maintenant disponible en ligne et visible par tous
+    les agents et visiteurs qui utilisent notre plateforme
+</center>
 
-Excellente nouvelle! Votre listing <a href="{{{listingUrl}}}">#{{listingNumber}}</a> situé au
-&nbsp;<b>{{address}}</b> a été publiée avec succès!<br/>
-Il est maintenant visible par des tous les agents qui utilisent notre plateforme.<br/><br>
+<br/><br>
 
-Nous vous aviserons de toute demande de visite ou autre requêtes concernant votre listing.<br/><br>
-
-Cordialement,
+<center>
+    <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
+        <tr>
+            <td width="1%">
+                <a href="{{listingUrl}}" style="text-decoration: none; color: inherit;">
+                    <img src="{{listingImageUrl}}"
+                         style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
+                    />
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td class="padding" valign="top">
+                <a href="{{listingUrl}}" style="text-decoration: none; color: inherit;">
+                    <b class="text-larger">{{listingPrice}}</b><br/><br/>
+                    {{listingDescription}}<br/>
+                    {{listingAddress}}<br/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</center>

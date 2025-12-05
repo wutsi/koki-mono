@@ -1,32 +1,39 @@
 package com.wutsi.koki.listing.server.service.email
 
-import com.google.i18n.phonenumbers.NumberParseException
-import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.wutsi.koki.email.server.mq.AbstractMailet
+import com.wutsi.koki.agent.server.service.AgentService
 import com.wutsi.koki.email.server.service.EmailTemplateResolver
 import com.wutsi.koki.email.server.service.Sender
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
+import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.tenant.server.domain.TenantEntity
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
-import java.text.DecimalFormat
 
 @Service
 class ListingClosedMailet(
+    val locationService: LocationService,
+    val fileService: FileService,
+    val messages: MessageSource,
+
     private val listingService: ListingService,
     private val userService: UserService,
-    private val locationService: LocationService,
     private val tenantService: TenantService,
+    private val agentService: AgentService,
     private val templateResolver: EmailTemplateResolver,
     private val sender: Sender,
     private val logger: KVLogger,
-) : AbstractMailet() {
+) : AbstractListingMailet(locationService, fileService, messages) {
     companion object {
-        const val SUBJECT = "Clôture au {{address}} - Merci, {{recipient}}!"
+        const val SUBJECT_SOLD = "Listing #{{listingNumber}}: La propriété est VENDU!"
+        const val SUBJECT_RENTED = "Listing #{{listingNumber}}: La propriété est LOUÉE!"
     }
 
     override fun service(event: Any): Boolean {
@@ -43,60 +50,51 @@ class ListingClosedMailet(
         val buyerAgentId = listing.buyerAgentUserId
         val sellerAgentId = listing.sellerAgentUserId
         if (buyerAgentId == null || buyerAgentId == sellerAgentId) {
-            logger.add("success", false)
-            logger.add("error", "No co-brokerage transaction")
+            logger.add("warning", "Not co-brokerage transaction - buyer and seller agent are the same!")
             return false
         }
 
-        val city = listing.cityId?.let { id -> locationService.get(id) }
-        val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
-        val address = listOfNotNull(
-            listing.street,
-            neighbourhood?.name,
-            city?.name
-        ).joinToString(", ")
-
         val tenant = tenantService.get(event.tenantId)
-        val fmt = DecimalFormat(tenant.monetaryFormat)
 
         val buyerAgent = userService.get(buyerAgentId, event.tenantId)
         val sellerAgent = userService.get(sellerAgentId!!, event.tenantId)
-        val recipient = (buyerAgent.displayName ?: "")
-        val data = mapOf(
-            "recipient" to recipient,
-            "address" to address,
-            "listingNumber" to listing.listingNumber,
-            "listingUrl" to "${tenant.portalUrl}/listings/${listing.id}",
-            "sender" to sellerAgent.displayName,
-            "senderPhotoUrl" to sellerAgent.photoUrl,
-            "senderEmployer" to sellerAgent.employer,
-            "senderMobile" to sellerAgent.mobile?.let { phone -> formatPhoneNumber(phone, sellerAgent.country) },
-            "commission" to listing.finalBuyerAgentCommissionAmount?.let { amount -> fmt.format(amount) } +
-                " (${listing.buyerAgentCommission}%)"
-        ).filter { entry -> entry.value != null } as Map<String, Any>
+        val data = getData(listing, tenant, buyerAgent, sellerAgent)
         val body = templateResolver.resolve("/listing/email/closed-buyer.html", data)
+        val subject = getSubject(event).replace("{{listingNumber}}", listing.listingNumber.toString())
 
-        logger.add("recipient_user_id", buyerAgent.id)
-        logger.add("recipient_user_email", buyerAgent.email)
-        sender.send(
+        return sender.send(
             recipient = buyerAgent,
-            subject = SUBJECT.replace("{{address}}", address).replace("{{recipient}}", recipient),
+            subject = subject,
             body = body,
             attachments = emptyList(),
             tenantId = event.tenantId,
         )
-
-        logger.add("success", true)
-        return true
     }
 
-    protected fun formatPhoneNumber(number: String, country: String? = null): String {
-        try {
-            val pnu = PhoneNumberUtil.getInstance()
-            val phoneNumber = pnu.parse(number, country ?: "")
-            return pnu.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
-        } catch (ex: NumberParseException) {
-            return number
+    private fun getSubject(event: ListingStatusChangedEvent): String {
+        return if (event.status == ListingStatus.SOLD) {
+            SUBJECT_SOLD
+        } else {
+            SUBJECT_RENTED
         }
+    }
+
+    private fun getData(
+        listing: ListingEntity,
+        tenant: TenantEntity,
+        buyer: UserEntity,
+        seller: UserEntity
+    ): Map<String, Any> {
+        val agent = agentService.getByUser(seller.id!!, seller.tenantId)
+        val agentName = listOfNotNull(
+            seller.displayName,
+            seller.employer?.let { employer -> "($employer)" }
+        ).joinToString(separator = " ")
+        val data = mapOf(
+            "agentName" to agentName,
+            "agentUrl" to "${tenant.portalUrl}/agents/${agent.id}",
+        ).filter { entry -> entry.value != null } as Map<String, Any>
+
+        return data + getListingData(listing, tenant, buyer)
     }
 }
