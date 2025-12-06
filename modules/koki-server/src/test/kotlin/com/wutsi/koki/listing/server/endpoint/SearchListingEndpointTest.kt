@@ -4,7 +4,6 @@ import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.net.URLEncoder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -114,9 +113,9 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bedroom`() {
+    fun `by bedroom exact match`() {
         val response = rest.getForEntity(
-            "/v1/listings?bedrooms=2",
+            "/v1/listings?min-bedrooms=2&max-bedrooms=2",
             SearchListingResponse::class.java
         )
 
@@ -127,9 +126,9 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bedroom+`() {
+    fun `by bedroom minimum`() {
         val response = rest.getForEntity(
-            "/v1/listings?bedrooms=" + URLEncoder.encode("2+", "utf-8"),
+            "/v1/listings?min-bedrooms=2",
             SearchListingResponse::class.java
         )
 
@@ -140,9 +139,9 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bathroom`() {
+    fun `by bathroom exact match`() {
         val response = rest.getForEntity(
-            "/v1/listings?bathrooms=2",
+            "/v1/listings?min-bathrooms=2&max-bathrooms=2",
             SearchListingResponse::class.java
         )
 
@@ -153,9 +152,9 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bathroom+`() {
+    fun `by bathroom minimum`() {
         val response = rest.getForEntity(
-            "/v1/listings?bathrooms=" + URLEncoder.encode("2+", "utf-8"),
+            "/v1/listings?min-bathrooms=2",
             SearchListingResponse::class.java
         )
 

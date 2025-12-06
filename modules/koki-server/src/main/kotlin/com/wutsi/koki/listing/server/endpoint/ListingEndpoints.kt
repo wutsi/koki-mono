@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.net.URLDecoder
 
 @RestController
 @RequestMapping("/v1/listings")
@@ -144,8 +143,10 @@ class ListingEndpoints(
         @RequestParam(required = false, name = "property-type") propertyTypes: List<PropertyType> = emptyList(),
         @RequestParam(required = false, name = "furniture-type") furnitureTypes: List<FurnitureType> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<ListingStatus> = emptyList(),
-        @RequestParam(required = false, name = "bedrooms") bedrooms: String? = null,
-        @RequestParam(required = false, name = "bathrooms") bathrooms: String? = null,
+        @RequestParam(required = false, name = "min-bedrooms") minBedrooms: Int? = null,
+        @RequestParam(required = false, name = "max-bedrooms") maxBedrooms: Int? = null,
+        @RequestParam(required = false, name = "min-bathrooms") minBathrooms: Int? = null,
+        @RequestParam(required = false, name = "max-bathrooms") maxBathrooms: Int? = null,
         @RequestParam(required = false, name = "min-price") minPrice: Long? = null,
         @RequestParam(required = false, name = "max-price") maxPrice: Long? = null,
         @RequestParam(required = false, name = "min-lot-area") minLotArea: Int? = null,
@@ -168,8 +169,10 @@ class ListingEndpoints(
             propertyTypes = propertyTypes,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
-            bedrooms = bedrooms?.let { URLDecoder.decode(bedrooms, "utf-8") },
-            bathrooms = bathrooms?.let { URLDecoder.decode(bathrooms, "utf-8") },
+            minBedrooms = minBedrooms,
+            maxBedrooms = maxBedrooms,
+            minBathrooms = minBathrooms,
+            maxBathrooms = maxBathrooms,
             minPrice = minPrice,
             maxPrice = maxPrice,
             minLotArea = minLotArea,
@@ -192,8 +195,10 @@ class ListingEndpoints(
             propertyTypes = propertyTypes,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
-            bedrooms = bedrooms?.let { URLDecoder.decode(bedrooms, "utf-8") },
-            bathrooms = bathrooms?.let { URLDecoder.decode(bathrooms, "utf-8") },
+            minBedrooms = minBedrooms,
+            maxBedrooms = maxBedrooms,
+            minBathrooms = minBathrooms,
+            maxBathrooms = maxBathrooms,
             minPrice = minPrice,
             maxPrice = maxPrice,
             minLotArea = minLotArea,

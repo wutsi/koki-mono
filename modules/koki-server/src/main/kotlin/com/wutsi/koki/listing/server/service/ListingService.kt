@@ -73,8 +73,10 @@ class ListingService(
         propertyTypes: List<PropertyType> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
         statuses: List<ListingStatus> = emptyList(),
-        bedrooms: String? = null,
-        bathrooms: String? = null,
+        minBedrooms: Int? = null,
+        maxBedrooms: Int? = null,
+        minBathrooms: Int? = null,
+        maxBathrooms: Int? = null,
         minPrice: Long? = null,
         maxPrice: Long? = null,
         minLotArea: Int? = null,
@@ -112,19 +114,17 @@ class ListingService(
         if (statuses.isNotEmpty()) {
             jql.append(" AND L.status IN :statuses")
         }
-        if (bedrooms != null) {
-            if (bedrooms.endsWith("+")) {
-                jql.append(" AND L.bedrooms >= :bedrooms")
-            } else {
-                jql.append(" AND L.bedrooms = :bedrooms")
-            }
+        if (minBedrooms != null) {
+            jql.append(" AND L.bedrooms >= :minBedrooms")
         }
-        if (bathrooms != null) {
-            if (bathrooms.endsWith("+")) {
-                jql.append(" AND L.bathrooms >= :bathrooms")
-            } else {
-                jql.append(" AND L.bathrooms = :bathrooms")
-            }
+        if (maxBedrooms != null) {
+            jql.append(" AND L.bedrooms <= :maxBedrooms")
+        }
+        if (minBathrooms != null) {
+            jql.append(" AND L.bathrooms >= :minBathrooms")
+        }
+        if (maxBathrooms != null) {
+            jql.append(" AND L.bathrooms <= :maxBathrooms")
         }
         if (minPrice != null) {
             jql.append(" AND L.price >= :minPrice")
@@ -189,11 +189,17 @@ class ListingService(
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
         }
-        if (bedrooms != null) {
-            query.setParameter("bedrooms", roomValue(bedrooms))
+        if (minBedrooms != null) {
+            query.setParameter("minBedrooms", minBedrooms)
         }
-        if (bathrooms != null) {
-            query.setParameter("bathrooms", roomValue(bathrooms))
+        if (maxBedrooms != null) {
+            query.setParameter("maxBedrooms", maxBedrooms)
+        }
+        if (minBathrooms != null) {
+            query.setParameter("minBathrooms", minBathrooms)
+        }
+        if (maxBathrooms != null) {
+            query.setParameter("maxBathrooms", maxBathrooms)
         }
         if (minPrice != null) {
             query.setParameter("minPrice", minPrice)
@@ -237,8 +243,10 @@ class ListingService(
         propertyTypes: List<PropertyType> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
         statuses: List<ListingStatus> = emptyList(),
-        bedrooms: String? = null,
-        bathrooms: String? = null,
+        minBedrooms: Int? = null,
+        maxBedrooms: Int? = null,
+        minBathrooms: Int? = null,
+        maxBathrooms: Int? = null,
         minPrice: Long? = null,
         maxPrice: Long? = null,
         minLotArea: Int? = null,
@@ -273,19 +281,17 @@ class ListingService(
         if (statuses.isNotEmpty()) {
             jql.append(" AND L.status IN :statuses")
         }
-        if (bedrooms != null) {
-            if (bedrooms.endsWith("+")) {
-                jql.append(" AND L.bedrooms >= :bedrooms")
-            } else {
-                jql.append(" AND L.bedrooms = :bedrooms")
-            }
+        if (minBedrooms != null) {
+            jql.append(" AND L.bedrooms >= :minBedrooms")
         }
-        if (bathrooms != null) {
-            if (bathrooms.endsWith("+")) {
-                jql.append(" AND L.bathrooms >= :bathrooms")
-            } else {
-                jql.append(" AND L.bathrooms = :bathrooms")
-            }
+        if (maxBedrooms != null) {
+            jql.append(" AND L.bedrooms <= :maxBedrooms")
+        }
+        if (minBathrooms != null) {
+            jql.append(" AND L.bathrooms >= :minBathrooms")
+        }
+        if (maxBathrooms != null) {
+            jql.append(" AND L.bathrooms <= :maxBathrooms")
         }
         if (minPrice != null) {
             jql.append(" AND L.price >= :minPrice")
@@ -339,11 +345,17 @@ class ListingService(
         if (statuses.isNotEmpty()) {
             query.setParameter("statuses", statuses)
         }
-        if (bedrooms != null) {
-            query.setParameter("bedrooms", roomValue(bedrooms))
+        if (minBedrooms != null) {
+            query.setParameter("minBedrooms", minBedrooms)
         }
-        if (bathrooms != null) {
-            query.setParameter("bathrooms", roomValue(bathrooms))
+        if (maxBedrooms != null) {
+            query.setParameter("maxBedrooms", maxBedrooms)
+        }
+        if (minBathrooms != null) {
+            query.setParameter("minBathrooms", minBathrooms)
+        }
+        if (maxBathrooms != null) {
+            query.setParameter("maxBathrooms", maxBathrooms)
         }
         if (minPrice != null) {
             query.setParameter("minPrice", minPrice)
@@ -374,14 +386,6 @@ class ListingService(
         }
 
         return query.singleResult as Long
-    }
-
-    private fun roomValue(str: String): Int {
-        return if (str.endsWith("+")) {
-            str.substring(0, str.length - 1).toInt()
-        } else {
-            str.toInt()
-        }
     }
 
     @Transactional
