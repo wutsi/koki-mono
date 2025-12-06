@@ -145,6 +145,10 @@ class ListingService(
         offset: Int = 0,
         fullGraph: Boolean = true,
     ): ResultSetModel<ListingModel> {
+        // Map old string parameters to new integer min/max parameters
+        val bedroomRange = parseRoomParameter(bedrooms)
+        val bathroomRange = parseRoomParameter(bathrooms)
+
         val response = koki.search(
             ids = ids,
             listingNumber = listingNumber,
@@ -153,8 +157,10 @@ class ListingService(
             propertyTypes = propertyTypes,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
-            bedrooms = bedrooms,
-            bathrooms = bathrooms,
+            minBedrooms = bedroomRange.first,
+            maxBedrooms = bedroomRange.second,
+            minBathrooms = bathroomRange.first,
+            maxBathrooms = bathroomRange.second,
             minPrice = minPrice,
             maxPrice = maxPrice,
             minLotArea = minLotArea,
@@ -362,5 +368,27 @@ class ListingService(
                 buyerAgentUserId = form.buyerAgentUserId,
             )
         )
+    }
+
+    /**
+     * Parse a room parameter string (bedrooms or bathrooms) and convert it to min/max integer pair.
+     * - "2" -> (2, 2) - exact match
+     * - "2+" -> (2, null) - minimum threshold
+     * - null -> (null, null) - no filter
+     */
+    private fun parseRoomParameter(value: String?): Pair<Int?, Int?> {
+        if (value == null) {
+            return Pair(null, null)
+        }
+
+        return if (value.endsWith("+")) {
+            // "2+" means 2 or more bedrooms/bathrooms
+            val min = value.substring(0, value.length - 1).toInt()
+            Pair(min, null)
+        } else {
+            // "2" means exactly 2 bedrooms/bathrooms
+            val exact = value.toInt()
+            Pair(exact, exact)
+        }
     }
 }
