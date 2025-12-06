@@ -388,7 +388,6 @@ class ListingService(
         return query.singleResult as Long
     }
 
-
     @Transactional
     fun create(request: CreateListingRequest, tenantId: Long): ListingEntity {
         val now = Date()
