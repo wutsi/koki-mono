@@ -59,7 +59,7 @@
             <b th:text="${me.displayName}">NAME</b><br/>
         </a>
 
-        <div th:text="${me.employer}">EMPLOYER</div>
+        <div class="text-small" th:text="${me.employer}">EMPLOYER</div>
         <div class="flex margin-top-small" th:if="${sendMessage} AND (${user?.id} != ${me.id})">
             <div class="margin-right" th:if="${me.whatsappUrl}">
                 <a class="btn btn-whatsapp btn-sm" target="_blank" th:href="${me.whatsappUrl}">

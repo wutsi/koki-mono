@@ -84,8 +84,8 @@
             <li th:if="${listing.bathrooms}">
                 <span>&#x2022;</span>
                 <span th:text="${listing.bathrooms}">00</span>
-                <span th:if="${listing.bathrooms == 1}" th:text="#{page.listing.bedroom}">BATHROOM</span>
-                <span th:if="${listing.bathrooms > 1}" th:text="#{page.listing.bedrooms}">BATHROOMS</span>
+                <span th:if="${listing.bathrooms == 1}" th:text="#{page.listing.bathroom}">BATHROOM</span>
+                <span th:if="${listing.bathrooms > 1}" th:text="#{page.listing.bathrooms}">BATHROOMS</span>
             </li>
             <li th:if="${listing.lotArea} OR ${listing.propertyArea}">
                 <span>&#x2022;</span>

@@ -100,10 +100,16 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${showStatus}">
-        <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
+        <a th:href="'/leads/' + ${lead.id}">
+            <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
+        </a>
     </td>
-    <td class="d-none d-md-table-cell" th:text="${lead.address}">ADDRESS</td>
-    <td class="d-none d-md-table-cell" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.address}">ADDRESS</a>
+    </td>
+    <td class="d-none d-md-table-cell">
+        <a th:href="'/leads/' + ${lead.id}" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</a>
+    </td>
     <td class="text-right">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>
     </td>

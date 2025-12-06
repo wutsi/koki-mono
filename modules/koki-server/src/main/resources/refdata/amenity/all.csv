@@ -1,6 +1,6 @@
 id,category,amenity,fr,top
 1000,Basic Essentials,Electricity,Électricité,0
-1001,Basic Essentials,Prepaid meter,Compteur prépayé,1
+1001,Basic Essentials,Prepaid electricity meter,Compteur électricité prépayé,1
 1002,Basic Essentials,Running Water,Eau courante,0
 1003,Basic Essentials,Hot Water,Eau chaude,0
 1004,Basic Essentials,Water drilling,Forage d'eau,1
@@ -14,7 +14,7 @@ id,category,amenity,fr,top
 1012,Kitchen & Dining,Oven,Four,0
 1013,Kitchen & Dining,Dishwasher,Lave-vaisselle,1
 1014,Kitchen & Dining,Coffee Maker,Cafetière,0
-1015,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base,0
+1015,Kitchen & Dining,Cooking Basics,Nécessaire de cuisine de base,1
 1016,Kitchen & Dining,Dining Table,Table à manger,0
 1017,Kitchen & Dining,Toaster,Grille-pain,0
 1018,Kitchen & Dining,Blender,Mixeur,0
@@ -22,7 +22,7 @@ id,category,amenity,fr,top
 1020,Bathroom Amenities,Bath Towels,Serviettes de bain,0
 1021,Bathroom Amenities,Bidet,Bidet,0
 1022,Bathroom Amenities,Bathtub,Baignoire,0
-1023,Bathroom Amenities,Jacuzzi,Jacuzzi,0
+1023,Bathroom Amenities,Jacuzzi,Jacuzzi,1
 1024,Bedroom Amenities,Bed Linens,Draps,0
 1025,Bedroom Amenities,Pillows,Oreillers,0
 1026,Bedroom Amenities,Wardrobe,Armoire,0
@@ -43,19 +43,19 @@ id,category,amenity,fr,top
 1041,Laundry & Cleaning,Dryer,Sécheuse,1
 1042,Laundry & Cleaning,Iron,Fer à repasser,0
 1043,Laundry & Cleaning,Ironing Board,Planche à repasser,0
-1044,Laundry & Cleaning,Vacuum Cleaner,Aspirateur,0
+1044,Laundry & Cleaning,Vacuum Cleaner,Aspirateur,1
 1045,Laundry & Cleaning,Laundry Detergent,Lessive,0
 1046,Outdoor & Recreational,Swimming Pool,Piscine,1
-1047,Outdoor & Recreational,Garden,Jardin,0
-1048,Outdoor & Recreational,Yard,Cour,0
+1047,Outdoor & Recreational,Garden,Jardin,1
+1048,Outdoor & Recreational,Yard,Cour,1
 1049,Outdoor & Recreational,BBQ Grill,Barbecue,0
-1050,Outdoor & Recreational,Patio,Terrasse,0
+1050,Outdoor & Recreational,Patio,Terrasse,1
 1051,Outdoor & Recreational,Rooftop,Toit-terrasse,1
-1052,Outdoor & Recreational,Balcony,Balcon,0
-1053,Outdoor & Recreational,Mountain view,Vue sur la montage,0
+1052,Outdoor & Recreational,Balcony,Balcon,1
+1053,Outdoor & Recreational,Mountain view,Vue sur la montage,1
 1054,Outdoor & Recreational,Beach view,Vue sur la plage,1
 1055,Outdoor & Recreational,Beach Access,Accès à la plage,1
 1056,Outdoor & Recreational,Ocean view,Vue sur l'océan,1
 1057,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée,0
-1058,Safety & Security,Security Cameras,Caméras de sécurité,0
+1058,Safety & Security,Security Cameras,Caméras de sécurité,1
 1059,Safety & Security,Security guard,Gardien de sécurité,1

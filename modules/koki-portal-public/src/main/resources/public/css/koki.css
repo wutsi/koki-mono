@@ -5,6 +5,10 @@ body {
     background: #f0f0f0;
     color: #555;
     margin-top: 4.8em;
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -535,6 +539,10 @@ ul.breadcrumb li:first-child {
 .btn-whatsapp:hover {
     background: #25D366;
     color: black;
+}
+
+.form-control {
+    font-weight: 200;
 }
 
 a.btn-back {
