@@ -7,12 +7,13 @@ body {
     margin-top: 4.8em;
     font-family: "Outfit", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 200;
+    font-weight: 300;
     font-style: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: #000;
+    font-weight: 500 !important;
 }
 
 .flex {
@@ -542,7 +543,7 @@ ul.breadcrumb li:first-child {
 }
 
 .form-control {
-    font-weight: 200;
+    font-weight: 300;
 }
 
 a.btn-back {
