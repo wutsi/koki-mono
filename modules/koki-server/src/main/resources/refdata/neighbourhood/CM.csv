@@ -1,184 +1,396 @@
 id,name,city,latitude,longitude
-237000,Akwa,Douala,4.0475,9.7003
-237001,Bonanjo,Douala,4.038,9.684
-237002,Bépanda,Douala,4.065000,9.731000
-237003,Bonabéri,Douala,4.057,9.655
-237004,Bonendale,Douala,,
-237005,Bali,Douala,4.042,9.692
-237006,Bonapriso,Douala,4.029,9.704
-237007,Deido,Douala,4.061,9.715
-237008,New Bell,Douala,4.031,9.723
-237009,Bonamoussadi,Douala,4.095,9.743
-237010,Kotto,Douala,4.089200,9.758100
-237011,Makepe,Douala,4.080000,9.750000
-237012,Ndogbong,Douala,4.050000,9.752000
-237013,Cité des Palmiers,Douala,,
-237014,Logbaba,Douala,,
-237015,Bessengue,Douala,,
-237016,Ndokoti,Douala,4.068,9.740
-237017,Nyalla,Douala,,
-237018,Ndogpassi,Douala,,
-237019,Yassa,Douala,,
-237020,Bonaloka,Douala,,
-237021,Bastos,Yaoundé,3.895,11.512
-237022,Biyem-Assi,Yaoundé,3.851,11.485
-237023,Nsimeyong,Yaoundé,3.845000,11.505000
-237024,Mballa II,Yaoundé,3.901000,11.518000
-237025,Essos,Yaoundé,3.86,11.53
-237026,Ekounou,Yaoundé,3.832000,11.535000
-237027,Mokolo,Yaoundé,3.875,11.501
-237028,Obili,Yaoundé,3.885000,11.490000
-237029,Etoug-Ebe,Yaoundé,3.8543005808801793,11.476789759561948
-237030,Nkolbisson,Yaoundé,,
-237031,Mvog-Beti,Yaoundé,,
-237032,Mvog-Ada,Yaoundé,,
-237033,Mvog-Mbi,Yaoundé,,
-237034,Nkolndongo,Yaoundé,,
-237035,Mvog-Atangana Mballa,Yaoundé,,
-237036,Mvog-Fouda,Yaoundé,,
-237037,Mvog-Leppi,Yaoundé,,
-237038,Mvog-Belinga,Yaoundé,,
-237039,Mvog-Ebanda,Yaoundé,,
-237040,Nlongkak,Yaoundé,3.88,11.52
-237041,Nkol-Eton,Yaoundé,,
-237042,Odza,Yaoundé,,
-237043,Mimboman,Yaoundé,,
-237044,Biteng,Yaoundé,,
-237045,Banengo,Bafoussam,5.481000,10.405000
-237046,Djeleng,Bafoussam,5.465000,10.423000
-237047,Famla,Bafoussam,,
-237048,Kamkop,Bafoussam,,
-237049,Quartier Eveché,Bafoussam,5.475,10.419
-237050,Quartier Haussa,Bafoussam,,
-237051,Tamdja,Bafoussam,5.470000,10.410000
-237052,Bamendzi,Bafoussam,,
-237053,Demsiem,Bafoussam,,
-237054,Gouache,Bafoussam,,
-237055,Lemgwo,Bafoussam,,
-237056,Hélak,Bafoussam,,
-237057,Houmkahaa,Bafoussam,,
-237058,Kena,Bafoussam,,
-237059,Keuleu,Bafoussam,,
-237060,Kouogouo,Bafoussam,,
-237061,Metto,Bafoussam,,
-237062,Mewehee,Bafoussam,,
-237063,Ndianso,Bafoussam,,
-237064,Ndianbou,Bafoussam,,
-237065,Ndiandam,Bafoussam,,
-237066,Nylon,Bafoussam,,
-237067,Sachiè,Bafoussam,,
-237068,Toket,Bafoussam,,
-237069,Toungang,Bafoussam,,
-237070,Touhenyee,Bafoussam,,
-237071,Touhekououp,Bafoussam,,
-237072,Tyo,Bafoussam,,
-237073,Yanmbah,Bafoussam,,
-237074,Kribi Centre,Kribi,2.940,9.911
-237075,Mpolongwe,Kribi,2.952000,9.925000
-237076,Nkolo,Kribi,2.933000,9.901000
-237077,Nziou,Kribi,,
-237078,Ebome,Kribi,,
-237079,Eboundja I,Kribi,,
-237080,Eboundja II,Kribi,,
-237081,Grand-Batanga I,Kribi,2.88,9.85
-237082,Lobé,Kribi,2.90,9.88
-237083,Bikondo,Kribi,,
-237084,Londji I,Kribi,,
-237085,Londji II,Kribi,,
-237086,Afan-Mabé,Kribi,,
-237087,Bibolo,Kribi,,
-237088,Bebambwe II,Kribi,,
-237089,Ebouyoe,Kribi,,
-237090,Elabe,Kribi,,
-237091,Ngoye-Wamie,Kribi,,
-237092,Ngoye-Réserve,Kribi,,
-237093,New-Town I,Kribi,,
-237094,New-Town II,Kribi,,
-237095,Petit-Paris,Kribi,,
-237096,Mile 1,Limbe,4.018,9.201
-237097,Mile 2,Limbe,4.015,9.195
-237098,Mile 3,Limbe,4.019500,9.189000
-237099,Mile 4,Limbe,4.022,9.183
-237100,Mile 6,Limbe,,
-237101,Down Beach,Limbe,4.009,9.210
-237102,Middle Farms,Limbe,,
-237103,Bota,Limbe,3.987,9.162
-237104,Isokolo,Limbe,,
-237105,Cassava Farms,Limbe,,
-237106,Clerks Quarters,Limbe,,
-237107,Church Street,Limbe,,
-237108,Garden Street,Limbe,,
-237109,Limbe Camp,Limbe,,
-237110,Limbola,Limbe,,
-237111,New Town,Limbe,,
-237112,Ngeme,Limbe,,
-237113,Wovia,Limbe,,
-237114,Mile 2,Buea,,
-237115,Mile 16,Buea,4.169,9.342
-237116,Mile 17,Buea,4.173,9.350
-237117,Great Soppo,Buea,4.160,9.275
-237118,Small Soppo,Buea,4.165000,9.268000
-237119,Bonduma,Buea,,
-237120,Molyko,Buea,4.152,9.291
-237121,Muea,Buea,4.12,9.33
-237122,Bokwango,Buea,,
-237123,Clerks Quarters,Buea,,
-237124,Django,Buea,,
-237125,Wonia Mavio,Buea,,
-237126,Likoko Membea,Buea,,
-237127,Sandpit,Buea,,
-237128,Bomaka,Buea,,
-237129,Check Point,Buea,,
-237130,Federal Quarters,Buea,,
-237131,Ntadi,Buea,,
-237132,Mile 4,Bamenda,5.948,10.135
-237133,Mile 3,Bamenda,5.955000,10.142000
-237134,Mile 2,Bamenda,,
-237135,Mile 1,Bamenda,,
-237136,Mile 6,Bamenda,,
-237137,Ntarikon,Bamenda,5.97,10.14
-237138,Old Town,Bamenda,,
-237139,Meta Quarters,Bamenda,,
-237140,Commercial Avenue,Bamenda,5.963,10.157
-237141,Ntamulung,Bamenda,,
-237142,Ndamukong,Bamenda,,
-237143,Foncha Street,Bamenda,,
-237144,Up Station,Bamenda,,
-237145,Mankon,Bamenda,5.95,10.16
-237147,Alakuma,Bamenda,,
-237148,Mile 90,Bamenda,,
-237149,Banja Street,Bamenda,,
-237150,Mbayangui,Bamenda,,
-237151,Plateau,Garoua,9.305,13.397
-237152,Pitoa,Garoua,9.360000,13.520000
-237153,Yelwa,Garoua,,
-237154,Bocklé,Garoua,,
-237155,Djamboutou,Garoua,,
-237156,Haoussa,Garoua,,
-237157,Roumdé Adjia,Garoua,,
-237158,Poumpoumré,Garoua,,
-237159,Marouaré,Garoua,,
-237160,Laindé,Garoua,,
-237161,Domayo,Maroua,10.589,14.322
-237162,Doualaré,Maroua,10.595000,14.310000
-237163,Hardé,Maroua,,
-237164,Pitoare,Maroua,,
-237165,Dougoy,Maroua,,
-237166,Djarengol,Maroua,,
-237167,Dougoi,Maroua,,
-237168,Kongola,Maroua,,
-237169,Frolina,Maroua,,
-237170,Meskine,Maroua,,
-237171,Zokok,Maroua,,
-237172,Sabongari,Maroua,,
-237173,Lopéré,Ngaoundéré,7.315000,13.588000
-237174,Bamyanga,Ngaoundéré,7.330000,13.570000
-237175,Baladji,Ngaoundéré,,
-237176,Gada-Mabanga,Ngaoundéré,,
-237177,Beka-Hosséré,Ngaoundéré,,
-237178,Bamyanga II,Ngaoundéré,,
-237179,Sabongari,Ngaoundéré,7.325,13.578
-237180,Wouro Sangue,Ngaoundéré,,
-237181,Camp SIC,Ngaoundéré,,
-237182,Bamyanga III,Ngaoundéré,,
-237183,Hippodrome,Yaoundé,3.8740014504739255,11.517027441828011
+237000,Centre Ville,Yaoundé,3.8675,11.5175
+237001,Nlongkak,Yaoundé,3.876,11.524
+237002,Bastos,Yaoundé,3.879,11.492
+237003,Mvog-Mbi,Yaoundé,3.856,11.498
+237004,Messa,Yaoundé,3.882,11.488
+237005,Nkolbikok,Yaoundé,3.865,11.535
+237006,Obili,Yaoundé,3.87,11.50
+237007,Mvog-Ada,Yaoundé,3.848,11.515
+237008,Mokolo,Yaoundé,3.896,11.472
+237009,Cité Verte,Yaoundé,3.8753,11.4889
+237010,Etoa-Meki,Yaoundé,3.8711,11.5312
+237011,Nsimeyong,Yaoundé,3.8289,11.4881
+237012,Mimboman,Yaoundé,3.8631,11.554
+237013,Melen,Yaoundé,3.8673,11.4949
+237014,Odza,Yaoundé,3.7833,11.5333
+237015,Tsinga,Yaoundé,3.8847,11.5033
+237016,Kondengui,Yaoundé,3.8486,11.5012
+237017,Essos,Yaoundé,3.87,11.5422
+237018,Ekounou,Yaoundé,3.8439,11.5399
+237019,Elig-Essono,Yaoundé,3.8687,11.5144
+237020,Nkolndongo,Yaoundé,3.4833,11.5167
+237021,Biyem-Assi,Yaoundé,3.8403,11.4867
+237022,Etoudi,Yaoundé,3.8572,11.5256
+237023,Olezoa,Yaoundé,3.8414,11.4921
+237024,Ngousso,Yaoundé,3.8972,11.5404
+237025,Nsam,Yaoundé,3.8532,11.5148
+237026,Nkolmesseng,Yaoundé,3.8757,11.5583
+237027,Anguissa,Yaoundé,3.8753,11.51
+237028,Awae,Yaoundé,3.841,11.5761
+237029,Nkoabang,Yaoundé,3.8884,11.5901
+237030,Titi-Gare,Yaoundé,3.8833,11.5083
+237031,Mimbé,Yaoundé,,
+237032,Mfoundi,Yaoundé,3.85,11.5167
+237033,Nkol-Ewoué,Yaoundé,3.8667,11.4722
+237034,Ekoudou,Yaoundé,,
+237035,Briquetterie,Yaoundé,3.8797,11.5097
+237036,Carrière,Yaoundé,3.881,11.488
+237037,Fouda,Yaoundé,3.8997,11.5113
+237038,Mvog-Fouda,Yaoundé,3.86,11.483
+237039,Mbankolo,Yaoundé,3.8889,11.4444
+237040,Nkoleton,Yaoundé,,
+237041,Nkol-Bisson,Yaoundé,3.8665,11.4589
+237042,Mfandena,Yaoundé,3.8853,11.5408
+237043,Nkozoa,Yaoundé,,
+237044,Nkolkumu,Yaoundé,,
+237045,Ntem,Yaoundé,,
+237046,Nkon,Yaoundé,,
+237047,Nkolafamba,Yaoundé,3.8724,11.6667
+237048,Tropicana,Yaoundé,,
+237049,Simbock,Yaoundé,3.8167,11.4497
+237050,Mont-Fébé,Yaoundé,3.8833,11.45
+237051,Golf,Yaoundé,3.876,11.51
+237052,Ahanda,Yaoundé,,
+237053,Ekoumdoum,Yaoundé,3.8667,11.5222
+237054,Mbankomo,Yaoundé,3.7542,11.3917
+237055,Mvog-Eda,Yaoundé,,
+237056,Efoulan,Yaoundé,3.832,11.4925
+237057,Nsimalen,Yaoundé,3.7147,11.5208
+237058,Mbankana,Yaoundé,,
+237059,Nkoltame,Yaoundé,,
+237060,Awae-Escalier,Yaoundé,,
+237061,Nkom Kana,Yaoundé,3.8906,11.5086
+237062,Ngoa-Ekélé,Yaoundé,3.8565,11.5235
+237063,Elig-Edzoa,Yaoundé,3.8647,11.5126
+237064,Olembé,Yaoundé,3.9667,11.5167
+237065,Mvolyé,Yaoundé,3.8344,11.505
+237066,Mendong,Yaoundé,3.816,11.4594
+237067,Mballa II,Yaoundé,3.874,11.499
+237068,Mballa III,Yaoundé,3.874,11.499
+237069,Etam-Bafia,Yaoundé,,
+237070,Nkolondom,Yaoundé,3.8901,11.509
+237071,Tongolo,Yaoundé,3.8833,11.5056
+237072,Nkolmessi,Yaoundé,,
+237073,Oliga,Yaoundé,3.86,11.5167
+237074,Nkomo,Yaoundé,3.8553,11.5199
+237075,Messa Carrière,Yaoundé,,
+237076,Efoulan Dakar,Yaoundé,,
+237077,Ahala,Yaoundé,3.805,11.525
+237078,Biteng,Yaoundé,3.8242,11.5458
+237079,Mbalngong,Yaoundé,3.884,11.517
+237080,Nkoléwé,Yaoundé,3.8667,11.4722
+237081,Nsimeyong II,Yaoundé,3.82,11.49
+237082,Nsimeyong III,Yaoundé,,
+237083,Etoug-Ebe,Yaoundé,3.851,11.48
+237084,Ekie,Yaoundé,3.861,11.545
+237085,Emombo,Yaoundé,,
+237086,Nkol-Ebogo,Yaoundé,,
+237087,Obobogo,Yaoundé,3.8277,11.4883
+237088,Mbalngong,Yaoundé,3.884,11.517
+237089,Messa Biyem-Mvoundi,Yaoundé,,
+237090,Emia,Yaoundé,3.874,11.504
+237091,Messassi,Yaoundé,3.883,11.55
+237092,Nkol-Aton,Yaoundé,,
+237093,Eko-Douala,Yaoundé,,
+237094,Mvolyé Cité,Yaoundé,,
+237095,Nsam Efoulan,Yaoundé,,
+237096,Nkolbisson I,Yaoundé,,
+237097,Nkolbisson II,Yaoundé,,
+237098,Mefou,Yaoundé,,
+237099,Biyem-Mvoundi,Yaoundé,3.8443,11.4907
+237100,Akwa,Douala,4.0525,9.6963
+237101,Bonanjo,Douala,4.0483,9.7043
+237102,Bonapriso,Douala,4.0456,9.7181
+237103,Bonamoussadi,Douala,4.0903,9.7397
+237104,New Bell,Douala,4.0357,9.6932
+237105,Deïdo,Douala,4.0583,9.715
+237106,Bali,Douala,4.0399,9.6930
+237107,Bépanda,Douala,4.07,9.71
+237108,Bonabéri,Douala,4.04,9.62
+237109,Bassa,Douala,4.0532,9.7615
+237110,Ndokoti,Douala,4.057,9.75
+237111,Logpom,Douala,4.1039,9.756
+237112,Logbaba,Douala,4.075,9.742
+237113,Kotto,Douala,4.0991,9.7513
+237114,Cité des Palmiers,Douala,4.103,9.748
+237115,Logbessou,Douala,4.1204,9.7711
+237116,Makèpè,Douala,4.079,9.734
+237117,Bonassama,Douala,4.038,9.673
+237118,Nylon,Douala,4.0628,9.738
+237119,Makea,Douala,4.046,9.706
+237120,Koumassi,Douala,4.045,9.702
+237121,Dibamba,Douala,,
+237122,Mboppi,Douala,4.06,9.715
+237123,Banguè,Douala,4.0933,9.744
+237124,Yassa,Douala,4.0543,9.8055
+237125,Japoma,Douala,4.0203,9.7997
+237126,Ndogpassi,Douala,4.092,9.745
+237127,PK 10,Douala,4.101,9.76
+237128,PK 14,Douala,4.12,9.782
+237129,Ngodi,Douala,4.053,9.701
+237130,Vallée des Rois,Douala,,
+237131,Ndogsimbi,Douala,4.0881,9.7458
+237132,Ndogbong,Douala,4.0863,9.7515
+237133,Ndobo,Douala,,
+237134,Beedi,Douala,,
+237135,Youpwè,Douala,4.0315,9.7188
+237136,Cité CICAM,Douala,4.085,9.742
+237137,Cité SIC,Douala,4.081,9.745
+237138,Bonendalè,Douala,4.08,9.75
+237139,Nyalla,Douala,4.089,9.757
+237140,Ngoma,Douala,,
+237141,Ngombé,Douala,,
+237142,Mabanda,Douala,4.096,9.757
+237143,Nkongmondo,Douala,,
+237144,Sodiko,Douala,4.0933,9.759
+237145,Bassa-Ndongo,Douala,4.065,9.764
+237146,Bonamikano,Douala,,
+237147,Penda Mboko,Douala,,
+237148,Mabanga,Douala,4.058,9.754
+237149,Ngombé,Douala,,
+237150,Mbanya,Douala,,
+237151,Ndogbati,Douala,4.078,9.739
+237152,Ndogkeki,Douala,4.08,9.73
+237153,Ndoghem,Douala,4.087,9.745
+237154,Bilongué,Douala,,
+237155,Logbilong,Douala,,
+237156,Nkomba,Douala,4.041,9.689
+237157,Ngombè,Douala,,
+237158,Makepe Missoke,Douala,4.08,9.733
+237159,Ndobo,Douala,,
+237160,Nkomba,Douala,4.041,9.689
+237161,Bonanloka,Douala,4.045,9.702
+237162,Ndogsimbi,Douala,4.0881,9.7458
+237163,Nyalla Ngong,Douala,,
+237164,Makéa II,Douala,,
+237165,Bessengue,Douala,4.0573,9.7119
+237166,Bonantone,Douala,4.0618,9.7074
+237167,Quartier Latin,Douala,,
+237168,PK 5,Douala,4.083,9.735
+237169,Cité Bassa,Douala,4.08,9.742
+237170,Ndogmbe,Douala,,
+237171,Ndoghem,Douala,4.087,9.745
+237172,Bonadiwoto,Douala,,
+237173,Bonakou,Douala,,
+237174,Bonanloka,Douala,4.045,9.702
+237175,Bonatsana,Douala,,
+237176,Bonatone,Douala,4.0618,9.7074
+237177,Bonewanda,Douala,,
+237178,Bonadibong,Douala,4.049,9.704
+237179,Ndobo,Douala,,
+237180,Logmayi,Douala,,
+237181,Ngoma,Douala,,
+237182,Ngombe,Douala,,
+237183,Yansoki,Douala,,
+237184,Zone Industrielle Bassa,Douala,4.063,9.761
+237185,Zone Industrielle Bonabéri,Douala,4.047,9.645
+237186,Zone Industrielle Ndokoti,Douala,4.06,9.753
+237187,Cité des Impôts,Douala,,
+237188,Cité des Douanes,Douala,,
+237189,Kumba-Bonabéri,Douala,,
+237190,Nyalla,Douala,4.089,9.757
+237191,Quartier Makéa,Douala,,
+237192,PK 21,Douala,4.16,9.85
+237193,PK 23,Douala,4.17,9.87
+237194,Tongo Bassa,Douala,,
+237195,Ndogmbe,Douala,,
+237196,Ndogkoti,Douala,,
+237197,Ndogkewele,Douala,,
+237198,Ndogpassi,Douala,4.092,9.745
+237199,Bonewanda,Douala,,
+237200,Bépanda Omnisports,Douala,4.0561,9.72
+237201,Bépanda Petit Train,Douala,,
+237202,New Bell Airport,Douala,4.0135,9.717
+237203,New Bell Tiko,Douala,,
+237204,New Bell Ngangue,Douala,4.0301,9.7083
+237205,Bonamoussadi Akwa Nord,Douala,,
+237206,Bonamoussadi Akwa Sud,Douala,,
+237207,Logpom Gendarmerie,Douala,,
+237208,Logpom Sapeurs,Douala,,
+237209,Makèpè Bloc,Douala,,
+237210,Makèpè 2,Douala,4.07,9.738
+237211,Makèpè Rhone,Douala,,
+237212,Ndogbong Cité,Douala,4.0507,9.7472
+237213,Ndogbong Camp,Douala,,
+237214,Ndokoti Ngousso,Douala,,
+237300,Commercial Avenue,Bamenda,5.967,10.155
+237301,Old Town,Bamenda,5.968,10.151
+237302,Ntamulung,Bamenda,5.976,10.165
+237303,Bamenda Station,Bamenda,5.961,10.158
+237304,Mankon,Bamenda,5.965,10.14
+237305,Nkwen,Bamenda,5.98,10.17
+237306,Bamendakwe,Bamenda,5.962,10.11
+237307,Up-Station,Bamenda,5.973,10.148
+237308,Mile 3 Nkwen,Bamenda,5.996,10.176
+237309,Mile 4 Nkwen,Bamenda,6.002,10.183
+237310,Mulang,Bamenda,5.955,10.165
+237311,Bayelle,Bamenda,5.97,10.152
+237312,Menteh,Bamenda,,
+237313,Fundong,Bamenda,6.25,10.2667
+237314,Foncha Street,Bamenda,5.98,10.15
+237315,Food Market,Bamenda,5.967,10.16
+237316,T-Junction,Bamenda,5.972,10.162
+237317,Nso,Bamenda,,
+237318,Mbatu,Bamenda,5.953,10.18
+237319,Futru,Bamenda,,
+237320,Nsongwa,Bamenda,5.962,10.11
+237321,Alakuma,Bamenda,5.945,10.138
+237322,Small Mankon,Bamenda,5.955,10.148
+237323,Musang,Bamenda,,
+237324,Alahnting,Bamenda,,
+237325,Atuakom,Bamenda,,
+237326,Azire,Bamenda,5.971,10.156
+237327,Mile 2 Nkwen,Bamenda,5.99,10.173
+237328,New Layout,Bamenda,5.965,10.153
+237329,Quartier Babadjou,Bamenda,5.667,10.2
+237330,Mbengwi Road,Bamenda,,
+237331,Government Residential Area,Bamenda,5.97,10.14
+237332,Metta Quarter,Bamenda,,
+237333,Bali Road,Bamenda,5.95,10.1
+237334,Sonac Street,Bamenda,,
+237335,Ntahsa,Bamenda,,
+237336,Abangoh,Bamenda,5.99,10.16
+237337,Bayelle Nta'afi,Bamenda,,
+237338,Cow Street,Bamenda,5.965,10.156
+237339,Chefferie Mankon,Bamenda,5.97,10.14
+237340,Chefferie Nkwen,Bamenda,5.985,10.175
+237341,Chefferie Bamendakwe,Bamenda,5.96,10.11
+237342,New Church Street,Bamenda,5.953,10.165
+237343,Hospital Roundabout,Bamenda,5.968,10.155
+237344,Catholic Mission,Bamenda,5.97,10.15
+237345,Veterinary Junction,Bamenda,5.9675,10.159
+237346,Small-Holders,Bamenda,,
+237347,Government Practicing School,Bamenda,5.969,10.156
+237348,City Chemist,Bamenda,5.965,10.154
+237349,Ntambang,Bamenda,,
+237400,Djeleng,Bafoussam,5.4741,10.422
+237401,Banengo,Bafoussam,5.4795,10.428
+237402,Bamendzi,Bafoussam,5.4668,10.429
+237403,Tamdja,Bafoussam,5.464,10.418
+237404,Gouache,Bafoussam,5.476,10.425
+237405,Kamkop,Bafoussam,5.477,10.435
+237406,Quartier Administratif,Bafoussam,5.475,10.418
+237407,Haoussa,Bafoussam,5.48,10.42
+237408,Baleng,Bafoussam,5.516,10.416
+237409,Bamougoum,Bafoussam,5.503,10.46
+237410,Famla,Bafoussam,5.474,10.42
+237411,Djemoun,Bafoussam,,
+237412,Quartier Évêché,Bafoussam,5.472,10.421
+237413,Nylon,Bafoussam,5.48,10.428
+237414,Ndiangdam,Bafoussam,,
+237415,Kena,Bafoussam,,
+237416,Keuleu,Bafoussam,,
+237417,Kouogouo,Bafoussam,5.479,10.448
+237418,Metto,Bafoussam,,
+237419,Mewehee,Bafoussam,,
+237420,Ndianbou,Bafoussam,,
+237421,Ndiandam,Bafoussam,,
+237422,Sachiè,Bafoussam,,
+237423,Toket,Bafoussam,,
+237424,Toungang,Bafoussam,5.478,10.43
+237425,Touhenyee,Bafoussam,,
+237426,Touhekououp,Bafoussam,,
+237427,Tyo,Bafoussam,5.47,10.42
+237428,Yanmbah,Bafoussam,,
+237429,Baleng Chefferie,Bafoussam,5.514,10.414
+237430,Bandeng,Bafoussam,,
+237431,Banefo,Bafoussam,,
+237432,Bapi,Bafoussam,5.465,10.458
+237433,Baye,Bafoussam,,
+237434,Koptchou,Bafoussam,5.485,10.435
+237435,Tchada,Bafoussam,,
+237436,Tchitchap,Bafoussam,,
+237437,Tougang II Djassa,Bafoussam,,
+237438,Tyo Village,Bafoussam,5.469,10.425
+237439,Kouogouo-Sud,Bafoussam,,
+237440,Kouogouo-Village,Bafoussam,,
+237441,Lafe,Bafoussam,5.495,10.43
+237442,Ndembou Menjo,Bafoussam,,
+237443,Ndembou Medjo,Bafoussam,,
+237444,King-Place Bafoussam,Bafoussam,,
+237445,Djeleng I,Bafoussam,5.474,10.424
+237446,Djeleng II,Bafoussam,5.473,10.426
+237447,Lagoueng,Bafoussam,,
+237448,Marché A,Bafoussam,5.475,10.42
+237449,Marché B,Bafoussam,5.47,10.42
+237500,Massaka,Kribi,2.9248,9.919
+237501,Dombé,Kribi,2.949,9.932
+237502,Quartier Administratif,Kribi,2.935,9.915
+237503,Kribi Port,Kribi,2.92,9.908
+237504,Grand-Batanga I,Kribi,2.87,9.87
+237505,Grand-Batanga II,Kribi,2.85,9.85
+237506,New Town 1,Kribi,2.94,9.92
+237507,New Town 2,Kribi,2.94,9.93
+237508,Afan-Mabé,Kribi,2.95,9.93
+237509,Mpolongwé I,Kribi,2.945,9.93
+237510,Mpolongwé II,Kribi,2.955,9.935
+237511,Ngoyé,Kribi,2.95,9.92
+237512,Nziou,Kribi,,
+237513,Mpalla,Kribi,2.942,9.929
+237514,Elabé,Kribi,2.96,9.93
+237515,Eboydé / Ebouyoe,Kribi,2.933,9.92
+237516,Wamié,Kribi,,
+237517,Lobe,Kribi,2.85,9.85
+237518,Chutes de la Lobé,Kribi,2.83,9.96
+237519,Londji I,Kribi,2.983,9.975
+237520,Londji II,Kribi,2.99,9.98
+237521,Bikondo,Kribi,,
+237522,Bibolo,Kribi,,
+237523,Bebambwe I,Kribi,,
+237524,Bebambwe II,Kribi,,
+237525,Ebome,Kribi,2.93,9.915
+237526,Eboundja I,Kribi,2.766,9.88
+237527,Eboundja II,Kribi,,
+237528,Nléndé-Dibè,Kribi,,
+237529,Port Autonome de Kribi,Kribi,3.018,9.88
+237530,Mbeka'a,Kribi,,
+237531,Nkuli Makeli,Kribi,,
+237532,Campo,Kribi,2.378,9.83
+237533,Fifinda,Kribi,3.25,10.05
+237534,Ngoyé-Réserve,Kribi,,
+237535,Bella,Kribi,,
+237536,Pama,Kribi,,
+237537,Lobé I,Kribi,2.85,9.85
+237538,Mabi Sud,Kribi,2.93,9.91
+237539,Batanga Lohove,Kribi,2.87,9.86
+237500,Massaka,Kribi,2.9248,9.919
+237501,Dombé,Kribi,2.949,9.932
+237502,Quartier Administratif,Kribi,2.935,9.915
+237503,Kribi Port,Kribi,2.92,9.908
+237504,Grand-Batanga I,Kribi,2.87,9.87
+237505,Grand-Batanga II,Kribi,2.85,9.85
+237506,New Town 1,Kribi,2.94,9.92
+237507,New Town 2,Kribi,2.94,9.93
+237508,Afan-Mabé,Kribi,2.95,9.93
+237509,Mpolongwé I,Kribi,2.945,9.93
+237510,Mpolongwé II,Kribi,2.955,9.935
+237511,Ngoyé,Kribi,2.95,9.92
+237512,Nziou,Kribi,,
+237513,Mpalla,Kribi,2.942,9.929
+237514,Elabé,Kribi,2.96,9.93
+237515,Eboydé / Ebouyoe,Kribi,2.933,9.92
+237516,Wamié,Kribi,,
+237517,Lobe,Kribi,2.85,9.85
+237518,Chutes de la Lobé,Kribi,2.83,9.96
+237519,Londji I,Kribi,2.983,9.975
+237520,Londji II,Kribi,2.99,9.98
+237521,Bikondo,Kribi,,
+237522,Bibolo,Kribi,,
+237523,Bebambwe I,Kribi,,
+237524,Bebambwe II,Kribi,,
+237525,Ebome,Kribi,2.93,9.915
+237526,Eboundja I,Kribi,2.766,9.88
+237527,Eboundja II,Kribi,,
+237528,Nléndé-Dibè,Kribi,,
+237529,Port Autonome de Kribi,Kribi,3.018,9.88
+237530,Mbeka'a,Kribi,,
+237531,Nkuli Makeli,Kribi,,
+237532,Campo,Kribi,2.378,9.83
+237533,Fifinda,Kribi,3.25,10.05
+237534,Ngoyé-Réserve,Kribi,,
+237535,Bella,Kribi,,
+237536,Pama,Kribi,,
+237537,Lobé I,Kribi,2.85,9.85
+237538,Mabi Sud,Kribi,2.93,9.91
+237539,Batanga Lohove,Kribi,2.87,9.86
