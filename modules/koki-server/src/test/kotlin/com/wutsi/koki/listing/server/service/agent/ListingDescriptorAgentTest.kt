@@ -15,9 +15,9 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class ListingDescriptorAgentTest {
@@ -72,6 +72,7 @@ class ListingDescriptorAgentTest {
     }
 
     @Test
+    @Ignore("Because of rate limit")
     fun run() {
         val json = agent.run(ListingDescriptorAgent.QUERY, files)
         val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
@@ -79,6 +80,7 @@ class ListingDescriptorAgentTest {
     }
 
     @Test
+    @Ignore("Because of rate limit")
     fun land() {
         val xagent = ListingDescriptorAgent(
             listing.copy(propertyType = PropertyType.LAND, listingType = ListingType.SALE),
@@ -90,6 +92,7 @@ class ListingDescriptorAgentTest {
     }
 
     @Test
+    @Ignore("Because of rate limit")
     fun `no image`() {
         val json = agent.run(ListingDescriptorAgent.QUERY, emptyList<File>())
         val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
