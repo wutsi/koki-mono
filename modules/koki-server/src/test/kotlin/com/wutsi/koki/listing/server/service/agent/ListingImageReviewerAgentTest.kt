@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertNotNull
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class ListingImageReviewerAgentTest {
@@ -33,6 +34,7 @@ class ListingImageReviewerAgentTest {
     }
 
     @Test
+    @Ignore("For rate limiting")
     fun `invalid file`() {
         val file = getValidFile("/fs/listing/bad-image.jpg")
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
