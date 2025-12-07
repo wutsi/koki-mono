@@ -61,7 +61,7 @@ applyTo: modules/koki-server/**
 - **GreenMail** - Email testing framework
 - **JaCoCo** - Code coverage analysis (92% threshold enforced)
 - Build Instructions
-    - Compile the code always skip linting checks with `-Dktlint.skip=true` flag.
+    - Always skip linting checks when running maven with the flag `-Dktlint.skip=true`.
     - After completing all the code changes, run `ktlint -F` to fix code style issues.
 
 ### Cloud & Storage

@@ -197,74 +197,75 @@ The Koki Server follows a layered architecture with clear separation of concerns
 
 ### Core API Endpoints
 
-| Method             | Path                              | Description                            |
-|--------------------|-----------------------------------|----------------------------------------|
+| Method             | Path                              | Description                                     |
+|--------------------|-----------------------------------|-------------------------------------------------|
 | **Authentication** |
-| POST               | `/v1/auth/login`                  | Authenticate user and obtain JWT token |
+| POST               | `/v1/auth/login`                  | Authenticate user and obtain JWT token          |
 | **Accounts**       |
-| POST               | `/v1/accounts`                    | Create a new account                   |
-| POST               | `/v1/accounts/{id}`               | Update an existing account             |
-| DELETE             | `/v1/accounts/{id}`               | Delete an account                      |
-| GET                | `/v1/accounts/{id}`               | Retrieve account details by ID         |
-| GET                | `/v1/accounts`                    | Search accounts with filters           |
+| POST               | `/v1/accounts`                    | Create a new account                            |
+| POST               | `/v1/accounts/{id}`               | Update an existing account                      |
+| DELETE             | `/v1/accounts/{id}`               | Delete an account                               |
+| GET                | `/v1/accounts/{id}`               | Retrieve account details by ID                  |
+| GET                | `/v1/accounts`                    | Search accounts with filters                    |
 | **Attributes**     |
-| GET                | `/v1/attributes/{id}`             | Retrieve attribute details by ID       |
-| GET                | `/v1/attributes`                  | Search attributes with filters         |
-| POST               | `/v1/attributes/csv`              | Bulk import attributes from CSV        |
-| GET                | `/v1/attributes/csv`              | Export attributes to CSV               |
+| GET                | `/v1/attributes/{id}`             | Retrieve attribute details by ID                |
+| GET                | `/v1/attributes`                  | Search attributes with filters                  |
+| POST               | `/v1/attributes/csv`              | Bulk import attributes from CSV                 |
+| GET                | `/v1/attributes/csv`              | Export attributes to CSV                        |
 | **Listings**       |
-| POST               | `/v1/listings`                    | Create a new property listing          |
-| POST               | `/v1/listings/{id}`               | Update listing details                 |
-| POST               | `/v1/listings/{id}/amenities`     | Update listing amenities               |
-| POST               | `/v1/listings/{id}/address`       | Update listing address                 |
-| POST               | `/v1/listings/{id}/geo-location`  | Update listing geo-location            |
-| POST               | `/v1/listings/{id}/price`         | Update listing price                   |
-| POST               | `/v1/listings/{id}/leasing`       | Update listing leasing terms           |
-| POST               | `/v1/listings/{id}/seller`        | Update listing seller information      |
-| POST               | `/v1/listings/{id}/remarks`       | Update listing remarks                 |
-| POST               | `/v1/listings/{id}/publish`       | Publish a listing                      |
-| POST               | `/v1/listings/{id}/close`         | Close a listing                        |
-| GET                | `/v1/listings/{id}`               | Retrieve listing details by ID         |
-| GET                | `/v1/listings`                    | Search listings with filters           |
+| POST               | `/v1/listings`                    | Create a new property listing                   |
+| POST               | `/v1/listings/{id}`               | Update listing details                          |
+| POST               | `/v1/listings/{id}/amenities`     | Update listing amenities                        |
+| POST               | `/v1/listings/{id}/address`       | Update listing address                          |
+| POST               | `/v1/listings/{id}/geo-location`  | Update listing geo-location                     |
+| POST               | `/v1/listings/{id}/price`         | Update listing price                            |
+| POST               | `/v1/listings/{id}/leasing`       | Update listing leasing terms                    |
+| POST               | `/v1/listings/{id}/seller`        | Update listing seller information               |
+| POST               | `/v1/listings/{id}/remarks`       | Update listing remarks                          |
+| POST               | `/v1/listings/{id}/publish`       | Publish a listing                               |
+| POST               | `/v1/listings/{id}/close`         | Close a listing                                 |
+| GET                | `/v1/listings/{id}`               | Retrieve listing details by ID                  |
+| GET                | `/v1/listings/{id}/similar`       | Find similar listings based on similarity score |
+| GET                | `/v1/listings`                    | Search listings with filters                    |
 | **Leads**          |
-| POST               | `/v1/leads`                       | Create a new lead                      |
-| POST               | `/v1/leads/{id}/status`           | Update lead status                     |
-| GET                | `/v1/leads/{id}`                  | Retrieve lead details by ID            |
-| GET                | `/v1/leads`                       | Search leads with filters              |
+| POST               | `/v1/leads`                       | Create a new lead                               |
+| POST               | `/v1/leads/{id}/status`           | Update lead status                              |
+| GET                | `/v1/leads/{id}`                  | Retrieve lead details by ID                     |
+| GET                | `/v1/leads`                       | Search leads with filters                       |
 | **Contacts**       |
-| GET                | `/v1/contacts/{id}`               | Retrieve contact details by ID         |
-| GET                | `/v1/contacts`                    | Search contacts with filters           |
+| GET                | `/v1/contacts/{id}`               | Retrieve contact details by ID                  |
+| GET                | `/v1/contacts`                    | Search contacts with filters                    |
 | **Offers**         |
-| GET                | `/v1/offers/{id}`                 | Retrieve offer details by ID           |
-| GET                | `/v1/offers`                      | Search offers with filters             |
+| GET                | `/v1/offers/{id}`                 | Retrieve offer details by ID                    |
+| GET                | `/v1/offers`                      | Search offers with filters                      |
 | **Offer Versions** |
-| GET                | `/v1/offer-versions/{id}`         | Retrieve offer version details by ID   |
-| GET                | `/v1/offer-versions`              | Search offer versions with filters     |
+| GET                | `/v1/offer-versions/{id}`         | Retrieve offer version details by ID            |
+| GET                | `/v1/offer-versions`              | Search offer versions with filters              |
 | **Messages**       |
-| POST               | `/v1/messages`                    | Create and send a message              |
-| POST               | `/v1/messages/{id}/status`        | Update message status                  |
+| POST               | `/v1/messages`                    | Create and send a message                       |
+| POST               | `/v1/messages/{id}/status`        | Update message status                           |
 | **Files**          |
-| POST               | `/v1/files`                       | Upload a file                          |
-| GET                | `/v1/files/{id}`                  | Retrieve file metadata by ID           |
-| GET                | `/v1/files/{id}/content`          | Download file content                  |
-| DELETE             | `/v1/files/{id}`                  | Delete a file                          |
+| POST               | `/v1/files`                       | Upload a file                                   |
+| GET                | `/v1/files/{id}`                  | Retrieve file metadata by ID                    |
+| GET                | `/v1/files/{id}/content`          | Download file content                           |
+| DELETE             | `/v1/files/{id}`                  | Delete a file                                   |
 | **Agents**         |
-| GET                | `/v1/agents/{id}`                 | Retrieve agent details by ID           |
-| GET                | `/v1/agents`                      | Search agents with filters             |
-| GET                | `/v1/agents/jobs/metrics/daily`   | Get daily agent job metrics            |
-| GET                | `/v1/agents/jobs/metrics/monthly` | Get monthly agent job metrics          |
-| GET                | `/v1/users/{id}/agent`            | Get agent by user ID                   |
+| GET                | `/v1/agents/{id}`                 | Retrieve agent details by ID                    |
+| GET                | `/v1/agents`                      | Search agents with filters                      |
+| GET                | `/v1/agents/jobs/metrics/daily`   | Get daily agent job metrics                     |
+| GET                | `/v1/agents/jobs/metrics/monthly` | Get monthly agent job metrics                   |
+| GET                | `/v1/users/{id}/agent`            | Get agent by user ID                            |
 | **Modules**        |
-| GET                | `/v1/modules`                     | List all available modules             |
+| GET                | `/v1/modules`                     | List all available modules                      |
 | **Permissions**    |
-| GET                | `/v1/permissions`                 | List all permissions                   |
+| GET                | `/v1/permissions`                 | List all permissions                            |
 | **Reference Data** |
-| GET                | `/v1/refdata`                     | Get all reference data                 |
-| GET                | `/v1/categories`                  | List categories                        |
-| GET                | `/v1/locations`                   | Search locations                       |
-| GET                | `/v1/amenities`                   | List amenities                         |
+| GET                | `/v1/refdata`                     | Get all reference data                          |
+| GET                | `/v1/categories`                  | List categories                                 |
+| GET                | `/v1/locations`                   | Search locations                                |
+| GET                | `/v1/amenities`                   | List amenities                                  |
 | **Invitations**    |
-| POST               | `/v1/invitations`                 | Create tenant invitation               |
+| POST               | `/v1/invitations`                 | Create tenant invitation                        |
 
 All endpoints require the `X-Tenant-ID` header for tenant context, except for authentication endpoints.
 
