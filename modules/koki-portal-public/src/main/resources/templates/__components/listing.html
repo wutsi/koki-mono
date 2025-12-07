@@ -14,5 +14,84 @@
     >SOLD</span>
 </div>
 
+<div class="listing-carousel" th:fragment="listing-carousel(listings)">
+    <div th:each="listing : ${listings}" th:remove="tag">
+        <div th:replace="~{__components/listing :: listing-card(${listing})}"></div>
+    </div>
+</div>
+
+<div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
+    <a th:href="'/listings/' + ${listing.id}">
+        <div class="listing-status-container">
+            <div th:if="${listing.statusSold}" th:remove="tag">
+                <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
+            </div>
+        </div>
+        <div class="hero-image-container flex flex-center">
+            <img class="hero-image" th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
+        </div>
+    </a>
+    <div class="listing-details padding-small">
+        <a th:href="'/listings/' + ${listing.id}">
+            <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
+            <b class="listing-price" th:if="${listing.statusSold}"
+               th:text="${listing.salePrice.displayText}">$$$</b>
+            <div class="text-small">
+                <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
+            </div>
+            <div class="text-small address" th:if="${listing.address}" th:text="${listing.address?.street}">STREET</div>
+            <div class="text-small" th:if="${listing.address}">
+                <span th:text="${listing.address?.neighbourhood?.name}">XXX</span>
+                <span>-</span>
+                <span th:text="${listing.address?.city?.name}">XXX</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="flex" th:fragment="listing-bed-bath-area(listing)">
+    <div th:if="${listing.bedrooms}">
+        <span th:text="${listing.bedrooms}">00</span>
+        <span th:text="#{page.listing.bedrooms-short}">BED</span>
+    </div>
+    <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
+    <div th:if="${listing.bathrooms}">
+        <span th:text="${listing.bathrooms}">00</span>
+        <span th:text="#{page.listing.bathrooms-short}">BATH</span>
+    </div>
+    <div class="padding-left-small padding-right-small"
+         th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">
+        -
+    </div>
+    <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
+        <span th:if="${listing.lotArea}" th:text="${listing.lotArea}">00</span>
+        <span th:if="!${listing.lotArea}" th:text="${listing.propertyArea}">00</span>
+        m<sup>2</sup>
+    </div>
+</div>
+
+<div th:fragment="listing-status-badge(listing)" th:remove="tag">
+    <span class="listing-status badge text-bg-secondary"
+          th:if="${listing.status.name() == 'DRAFT'}"
+          th:text="#{'listing-status.' + ${listing.status}}">DRAFT</span>
+
+    <span class="listing-status badge text-bg-warning"
+          th:if="${listing.status.name() == 'PUBLISHING'} OR ${listing.status.name() == 'PENDING'}"
+          th:text="#{'listing-status.' + ${listing.status}}">PUBLISHING</span>
+
+    <span class="listing-status badge text-bg-primary"
+          th:if="${listing.status.name() == 'ACTIVE'} OR ${listing.status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
+          th:text="#{'listing-status.' + ${listing.status}}">ACTIVE</span>
+
+    <span class="listing-status badge text-bg-success"
+          th:if="${listing.status.name() == 'RENTED'} OR ${listing.status.name() == 'SOLD'}"
+          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}">SOLD</span>
+
+    <span class="listing-status badge text-bg-danger"
+          th:if="${listing.status == 'EXPIRED'} OR ${listing.status.name() == 'WITHDRAWN'} OR ${listing.status.name() == 'CANCELLED'}"
+          th:text="#{'listing-status.' + ${listing.status}}">CANCELLED</span>
+</div>
+
+
 </body>
 </html>

@@ -3,9 +3,6 @@
 
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
-
-    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/listing.css'"/>
-    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/page/lead.css'"/>
 </head>
 
 <body>
@@ -95,7 +92,7 @@
             </li>
         </ul>
 
-        <!-- Description -->
+        <!-- DETAILS -->
         <div class="margin-top border-top padding-top description-container">
             <div id="listing-description" th:utext="${listing.descriptionHtml}">DESCRIPTION</div>
             <div class="row margin-top">
@@ -149,7 +146,7 @@
             </div>
         </div>
 
-        <!-- Amenities -->
+        <!-- AMENITIES -->
         <div class="margin-top border-top padding-top amenity-container"
              th:if="${listing.furnitureType} OR !${listing.amenities.isEmpty()}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
@@ -206,7 +203,7 @@
             </div>
         </div>
 
-        <!-- Terms & Conditions -->
+        <!-- TERMS & CONDITION -->
         <div class="margin-top border-top padding-small terms-container">
             <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
             <div class="row">
@@ -240,7 +237,7 @@
             </div>
         </div>
 
-        <!-- Neighborhood -->
+        <!-- NEIGHBORHOOD -->
         <div class="margin-top border-top padding-top map-container">
             <h2 th:text="#{page.listing.section.map.title}">Map &amp; Neighborhood</h2>
             <ul class="breadcrumb">
@@ -269,9 +266,17 @@
             >
             </div>
         </div>
+
+        <!-- SIMILAR LISTINGS -->
+        <div class="margin-bottom"
+             data-component-id="ajax-fragment"
+             id="similar-listings"
+             th:data-url="'/listings/similar?id=' + ${listing.id}"
+        >
+        </div>
     </div>
 
-    <!-- Contact -->
+    <!-- CONTACT AGENT -->
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
             <div class="agent-info">

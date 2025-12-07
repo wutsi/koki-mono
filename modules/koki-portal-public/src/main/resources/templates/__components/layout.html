@@ -36,6 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInput.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script th:src="${page.assetUrl} + '/js/koki.js'"></script>
+    <script th:src="${page.assetUrl} + '/js/widgets/koki-ajax-fragment.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-intl-tel.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-map.js'"></script>
     <script th:src="${page.assetUrl} + '/js/widgets/koki-modal.js'"></script>
@@ -48,6 +49,8 @@
     <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet">
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/koki.css'"/>
+    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/listings.css'"/>
+    <link rel="stylesheet" th:href="${page.assetUrl} + '/css/leads.css'"/>
 
     <link rel="shortcut icon" th:href="${tenant.iconUrl}" th:if="${tenant?.iconUrl}"/>
     <link href="/manifest.json" rel="manifest">

@@ -93,6 +93,26 @@ class ListingController(
         return "listings/show"
     }
 
+    @GetMapping("/similar")
+    fun similar(
+        @RequestParam id: Long,
+        model: Model,
+    ): String {
+        val listings = service.getSimilar(
+            id,
+            sameNeighborhood = true,
+            limit = 10,
+        )
+        if (listings.isNotEmpty()) {
+            model.addAttribute("listings", listings)
+
+            val neighborhood =
+                listings.find { listing -> listing.address?.neighbourhood != null }?.address?.neighbourhood
+            model.addAttribute("neighborhood", neighborhood)
+        }
+        return "listings/show-similar"
+    }
+
     private fun loadToast(
         @RequestParam(name = "_toast", required = false) toast: String? = null,
         @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
