@@ -18,6 +18,9 @@ applyTo: modules/koki-dto/**
 
 - **Maven 3.8+**: Dependency management and build automation
 - **Spring Boot Parent 3.5.7**: Parent POM for dependency version management
+- Build Instructions
+    - Compile the code always skip linting checks with `-Dktlint.skip=true` flag.
+    - After completing all the code changes, run `ktlint -F` to fix code style issues.
 
 ### Libraries & Frameworks
 
