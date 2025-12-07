@@ -79,6 +79,8 @@ class ListingService(
         maxBathrooms: Int? = null,
         minPrice: Long? = null,
         maxPrice: Long? = null,
+        minSalePrice: Long? = null,
+        maxSalePrice: Long? = null,
         minLotArea: Int? = null,
         maxLotArea: Int? = null,
         minPropertyArea: Int? = null,
@@ -131,6 +133,15 @@ class ListingService(
         }
         if (maxPrice != null) {
             jql.append(" AND L.price <= :maxPrice")
+        }
+        if (minSalePrice != null || maxSalePrice != null) {
+            jql.append(" AND L.salePrice IS NOT NULL")
+            if (minSalePrice != null) {
+                jql.append(" AND L.salePrice >= :minSalePrice")
+            }
+            if (maxSalePrice != null) {
+                jql.append(" AND L.salePrice <= :maxSalePrice")
+            }
         }
         if (minLotArea != null) {
             jql.append(" AND L.lotArea >= :minLotArea")
@@ -207,6 +218,12 @@ class ListingService(
         if (maxPrice != null) {
             query.setParameter("maxPrice", maxPrice)
         }
+        if (minSalePrice != null) {
+            query.setParameter("minSalePrice", minSalePrice)
+        }
+        if (maxSalePrice != null) {
+            query.setParameter("maxSalePrice", maxSalePrice)
+        }
         if (minLotArea != null) {
             query.setParameter("minLotArea", minLotArea)
         }
@@ -249,6 +266,8 @@ class ListingService(
         maxBathrooms: Int? = null,
         minPrice: Long? = null,
         maxPrice: Long? = null,
+        minSalePrice: Long? = null,
+        maxSalePrice: Long? = null,
         minLotArea: Int? = null,
         maxLotArea: Int? = null,
         minPropertyArea: Int? = null,
@@ -298,6 +317,15 @@ class ListingService(
         }
         if (maxPrice != null) {
             jql.append(" AND L.price <= :maxPrice")
+        }
+        if (minSalePrice != null || maxSalePrice != null) {
+            jql.append(" AND L.salePrice IS NOT NULL")
+            if (minSalePrice != null) {
+                jql.append(" AND L.salePrice >= :minSalePrice")
+            }
+            if (maxSalePrice != null) {
+                jql.append(" AND L.salePrice <= :maxSalePrice")
+            }
         }
         if (minLotArea != null) {
             jql.append(" AND L.lotArea >= :minLotArea")
@@ -362,6 +390,12 @@ class ListingService(
         }
         if (maxPrice != null) {
             query.setParameter("maxPrice", maxPrice)
+        }
+        if (minSalePrice != null) {
+            query.setParameter("minSalePrice", minSalePrice)
+        }
+        if (maxSalePrice != null) {
+            query.setParameter("maxSalePrice", maxSalePrice)
         }
         if (minLotArea != null) {
             query.setParameter("minLotArea", minLotArea)
