@@ -18,7 +18,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(20, response.body!!.listings.size)
-        assertEquals(27, response.body!!.total)
+        assertEquals(30, response.body!!.total)
     }
 
     @Test
@@ -240,5 +240,57 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listings = response.body!!.listings
         assertEquals(2, listings.size)
         assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(125L, 126L)))
+    }
+
+    @Test
+    fun `by sale-price range`() {
+        val response = rest.getForEntity(
+            "/v1/listings?min-sale-price=250000&max-sale-price=400000",
+            SearchListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val listings = response.body!!.listings
+        assertEquals(2, listings.size)
+        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(127L, 128L)))
+    }
+
+    @Test
+    fun `by sale-price minimum`() {
+        val response = rest.getForEntity(
+            "/v1/listings?min-sale-price=350000",
+            SearchListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val listings = response.body!!.listings
+        assertEquals(2, listings.size)
+        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(128L, 129L)))
+    }
+
+    @Test
+    fun `by sale-price maximum`() {
+        val response = rest.getForEntity(
+            "/v1/listings?max-sale-price=350000",
+            SearchListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val listings = response.body!!.listings
+        assertEquals(2, listings.size)
+        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(127L, 128L)))
+    }
+
+    @Test
+    fun `by sale-price exact match`() {
+        val response = rest.getForEntity(
+            "/v1/listings?min-sale-price=350000&max-sale-price=350000",
+            SearchListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val listings = response.body!!.listings
+        assertEquals(1, listings.size)
+        assertEquals(128L, listings[0].id)
     }
 }
