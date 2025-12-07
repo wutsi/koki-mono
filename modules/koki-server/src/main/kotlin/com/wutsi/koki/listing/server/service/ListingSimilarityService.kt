@@ -1,11 +1,7 @@
 package com.wutsi.koki.listing.server.service
 
-import com.wutsi.koki.error.dto.Error
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.PropertyType
-import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.similarity.ListingSimilarityStrategy
 import org.springframework.stereotype.Service
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service
  */
 @Service
 class ListingSimilarityService(
-    private val dao: ListingRepository,
     private val listingService: ListingService,
     private val similarityStrategy: ListingSimilarityStrategy,
 ) {
@@ -49,12 +44,7 @@ class ListingSimilarityService(
         limit: Int = 10,
     ): List<Pair<Long, Double>> {
         // Get the reference listing
-        val reference = dao.findById(referenceId)
-            .orElseThrow { NotFoundException(Error(ErrorCode.LISTING_NOT_FOUND)) }
-
-        if (reference.tenantId != tenantId) {
-            throw NotFoundException(Error(ErrorCode.LISTING_NOT_FOUND))
-        }
+        val reference = listingService.get(referenceId, tenantId)
 
         // Find candidate listings
         val candidates = findCandidates(
