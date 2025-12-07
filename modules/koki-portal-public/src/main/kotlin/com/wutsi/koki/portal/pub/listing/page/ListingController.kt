@@ -98,7 +98,11 @@ class ListingController(
         @RequestParam id: Long,
         model: Model,
     ): String {
-        val listings = service.getSimilar(id, sameNeighborhood = true)
+        val listings = service.getSimilar(
+            id,
+            sameNeighborhood = true,
+            limit = 10,
+        )
         if (listings.isNotEmpty()) {
             model.addAttribute("listings", listings)
 

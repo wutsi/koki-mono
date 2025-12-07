@@ -1,4 +1,4 @@
 <div class="margin-top margin-bottom" th:if="${listings}">
-    <h2 th:text="#{page.listing.section.similar.title(${neighborhood.name})}">Similar Homes </h2>
+    <h2 th:text="#{page.listing.section.similar.title}">Similar Homes </h2>
     <div th:replace="~{__components/listing :: listing-carousel(${listings})}"></div>
 </div>
