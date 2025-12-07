@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
@@ -257,5 +258,11 @@ object ListingFixtures {
             transactionPrice = Money(195000.0, "CAD"),
             transactionDate = DateUtils.addDays(Date(), -1)
         )
+    )
+
+    val similar = listOf(
+        ListingSimilaritySummary(id = listings[0].id, score = 0.798),
+        ListingSimilaritySummary(id = listings[1].id, score = 0.300),
+        ListingSimilaritySummary(id = listings[3].id, score = 0.123)
     )
 }

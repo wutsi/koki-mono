@@ -1,6 +1,3 @@
-/* ============================= */
-/* ROOM                          */
-/* ============================= */
 .hero-image-container {
     width: 100%;
     height: 534px;
@@ -84,6 +81,20 @@
     margin-bottom: 10em;
 }
 
+.listing-info #listing-map {
+    height: 680px;
+}
+
+#koki-modal img {
+    max-width: 100%;
+    max-height: 534px;
+}
+
+#listing-amenities-modal h3 {
+    font-size: 1.25em;
+}
+
+/** ===== LISTING CONTACT DETAILS STYLES ===== */
 .listing-contact-details {
     width: 380px;
 }
@@ -130,25 +141,76 @@
 }
 
 
-.listing-info #listing-map {
-    height: 680px;
-}
-
-#koki-modal img {
-    max-width: 100%;
-    max-height: 534px;
-}
-
-#listing-amenities-modal h3 {
-    font-size: 1.25em;
-}
-
+/* ===== LISTING BADGE STYLES ===== */
 .listing-status {
     text-transform: uppercase;
 }
 
 .listing-type {
     text-transform: uppercase;
+}
+
+
+/* ===== LISTING CAROUSEL ===== */
+.listing-carousel {
+    display: flex;
+    overflow-y: auto;
+}
+
+
+/* ===== LISTING CARD STYLES ===== */
+.listing-card {
+    border-radius: .5em;
+    background: white;
+}
+
+.listing-carousel .listing-card {
+    margin-right: .5em;
+}
+
+.listing-carousel .listing-card:last-child {
+    margin-right: 0;
+}
+
+.listing-card .listing-status-container {
+    position: relative;
+    margin-left: .2em;
+    margin-top: .2em;
+    z-index: 1000;
+    display: inline;
+}
+
+.listing-card .hero-image-container {
+    width: 302px;
+    height: 202px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    margin-top: -1.5em;
+    border-radius: .5em .5em 0 0;
+}
+
+.listing-card img.hero-image {
+    width: 302px;
+    height: 202px;
+    object-fit: cover;
+    border-radius: .5em .5em 0 0;
+}
+
+.listing-card .listing-details {
+    border: 1px solid lightgray;
+    border-radius: 0 0 .5em .5em;
+}
+
+.listing-card .listing-details a {
+    text-decoration: none;
+    color: #040404;
+}
+
+.listing-card .address-street {
+    overflow: hidden;
+    height: 1.25em;
 }
 
 

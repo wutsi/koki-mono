@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.pub.listing.mapper
 
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
@@ -125,56 +126,56 @@ class ListingMapper(
         )
     }
 
-//    fun toListingModel(
-//        entity: ListingSummary,
-//        locations: Map<Long, LocationModel>,
-//        users: Map<Long, UserModel>,
-//        images: Map<Long, FileModel>
-//    ): ListingModel {
-//        val price = toPrice(entity.price, entity.listingType)
-//        val lang = LocaleContextHolder.getLocale().language
-//        val df = createDateFormat()
-//        val address = toAddress(entity.address, locations)
-//
-//        return ListingModel(
-//            id = entity.id,
-//            status = entity.status,
-//            listingNumber = entity.listingNumber.toString(),
-//            listingType = entity.listingType,
-//            propertyType = entity.propertyType,
-//            bedrooms = entity.bedrooms,
-//            bathrooms = entity.bathrooms,
-//            halfBathrooms = entity.halfBathrooms,
-//            lotArea = entity.lotArea,
-//            propertyArea = entity.propertyArea,
-//            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
-//            furnitureType = entity.furnitureType,
-//            address = address,
-//            price = price,
-//            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
-//            sellerAgentCommission = entity.sellerAgentCommission,
-//            buyerAgentCommission = entity.buyerAgentCommission,
-//            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
-//            transactionDate = entity.transactionDate,
-//            transactionDateText = entity.transactionDate?.let { date -> df.format(date) },
-//            transactionPrice = toPrice(entity.transactionPrice, entity.listingType),
-//            title = if (lang == "fr") {
-//                entity.titleFr ?: entity.title
-//            } else {
-//                entity.title
-//            },
-//            summary = if (lang == "fr") {
-//                entity.summaryFr ?: entity.summary
-//            } else {
-//                entity.summary
-//            },
-//            publicUrl = if (lang == "fr") {
-//                toPublicUrl(entity.publicUrlFr ?: entity.publicUrl)
-//            } else {
-//                toPublicUrl(entity.publicUrl)
-//            }
-//        )
-//    }
+    fun toListingModel(
+        entity: ListingSummary,
+        locations: Map<Long, LocationModel>,
+        users: Map<Long, UserModel>,
+        images: Map<Long, FileModel>
+    ): ListingModel {
+        val price = toPrice(entity.price, entity.listingType)
+        val lang = LocaleContextHolder.getLocale().language
+        val df = createDateFormat()
+        val address = toAddress(entity.address, locations)
+
+        return ListingModel(
+            id = entity.id,
+            status = entity.status,
+            listingNumber = entity.listingNumber.toString(),
+            listingType = entity.listingType,
+            propertyType = entity.propertyType,
+            bedrooms = entity.bedrooms,
+            bathrooms = entity.bathrooms,
+            halfBathrooms = entity.halfBathrooms,
+            lotArea = entity.lotArea,
+            propertyArea = entity.propertyArea,
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            furnitureType = entity.furnitureType,
+            address = address,
+            price = price,
+            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            sellerAgentCommission = entity.sellerAgentCommission,
+            buyerAgentCommission = entity.buyerAgentCommission,
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
+            soldAt = entity.transactionDate,
+            soldAtText = entity.transactionDate?.let { date -> df.format(date) },
+            salePrice = toPrice(entity.transactionPrice, entity.listingType),
+            title = if (lang == "fr") {
+                entity.titleFr ?: entity.title
+            } else {
+                entity.title
+            },
+            summary = if (lang == "fr") {
+                entity.summaryFr ?: entity.summary
+            } else {
+                entity.summary
+            },
+            publicUrl = if (lang == "fr") {
+                toPublicUrl(entity.publicUrlFr ?: entity.publicUrl)
+            } else {
+                toPublicUrl(entity.publicUrl)
+            }
+        )
+    }
 
     private fun toAddress(address: Address?, locations: Map<Long, LocationModel>): AddressModel? {
         address ?: return null

@@ -16,6 +16,7 @@ import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.ListingFixtures.listing
+import com.wutsi.koki.portal.pub.ListingFixtures.similar
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.UserFixtures.user
@@ -94,6 +95,9 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         // Share
         assertElementPresent("#btn-share-navbar")
+
+        // Similar listings
+        assertElementCount("#similar-listings .listing-card", similar.size)
     }
 
     @Test

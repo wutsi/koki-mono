@@ -12,9 +12,6 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
-import java.lang.StringBuilder
-import kotlin.jvm.java
-import kotlin.let
 
 @Controller
 @RequestMapping
@@ -35,10 +32,10 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
 
             val ex = getException(request)
             if (ex != null) {
-                return handleException(ex, model)
+                return handleException(request, ex, model)
             } else {
                 val code = request.getAttribute("jakarta.servlet.error.status_code") as Int?
-                return handleStatusCode(code, model)
+                return handleStatusCode(request, code, model)
             }
         } finally {
             val ex = request.getAttribute("jakarta.servlet.error.exception") as Throwable?
@@ -50,15 +47,19 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
         }
     }
 
-    private fun handleException(ex: Throwable, model: Model): String {
+    private fun handleException(request: HttpServletRequest, ex: Throwable, model: Model): String {
         return if (ex is HttpClientErrorException) {
-            handleStatusCode(ex.statusCode.value(), model)
+            handleStatusCode(request, ex.statusCode.value(), model)
         } else {
-            handleStatusCode(500, model)
+            handleStatusCode(request, 500, model)
         }
     }
 
-    private fun handleStatusCode(code: Int?, model: Model): String {
+    private fun handleStatusCode(request: HttpServletRequest, code: Int?, model: Model): String {
+        if (isAjax(request)) {
+            return "error/ajax"
+        }
+
         when (code) {
             400, 404 -> {
                 model.addAttribute(
@@ -82,6 +83,11 @@ class WutsiErrorController : ErrorController, AbstractPageController() {
                 return "error/500"
             }
         }
+    }
+
+    private fun isAjax(request: HttpServletRequest): Boolean {
+        val header = request.getHeader("X-Requested-With")
+        return header != null && header.equals("XMLHttpRequest", ignoreCase = true)
     }
 
     private fun getException(request: HttpServletRequest): Throwable? {
