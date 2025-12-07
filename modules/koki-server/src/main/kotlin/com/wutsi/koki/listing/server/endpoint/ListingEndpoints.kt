@@ -5,11 +5,13 @@ import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.SearchListingResponse
+import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
@@ -21,6 +23,7 @@ import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.listing.server.service.ListingSimilarityService
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/listings")
 class ListingEndpoints(
     private val service: ListingService,
+    private val similarityService: ListingSimilarityService,
     private val mapper: ListingMapper,
     private val publisher: Publisher,
 ) {
@@ -218,6 +222,39 @@ class ListingEndpoints(
         return SearchListingResponse(
             total = total,
             listings = listings.map { listing -> mapper.toListingSummary(listing) }
+        )
+    }
+
+    @GetMapping("/{id}/similar")
+    fun searchSimilar(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @RequestParam(required = false, name = "status") statuses: List<ListingStatus> = emptyList(),
+        @RequestParam(required = false, name = "same-agent", defaultValue = "false") sameAgent: Boolean = false,
+        @RequestParam(
+            required = false,
+            name = "same-neighborhood",
+            defaultValue = "false"
+        ) sameNeighborhood: Boolean = false,
+        @RequestParam(required = false, name = "same-city", defaultValue = "false") sameCity: Boolean = false,
+        @RequestParam(required = false, name = "limit", defaultValue = "10") limit: Int = 10,
+    ): SearchSimilarListingResponse {
+        val effectiveLimit = limit.coerceIn(1, 50)
+
+        val similarListings = similarityService.findSimilar(
+            referenceId = id,
+            tenantId = tenantId,
+            statuses = statuses,
+            sameAgent = sameAgent,
+            sameNeighborhood = sameNeighborhood,
+            sameCity = sameCity,
+            limit = effectiveLimit
+        )
+
+        return SearchSimilarListingResponse(
+            listings = similarListings.map { (listingId, score) ->
+                ListingSimilaritySummary(id = listingId, score = score)
+            }
         )
     }
 

@@ -143,6 +143,27 @@ class KokiListings(
         return rest.getForEntity(url, SearchListingResponse::class.java).body!!
     }
 
+    fun searchSimilar(
+        id: Long,
+        statuses: List<ListingStatus> = emptyList(),
+        sameAgent: Boolean = false,
+        sameNeighborhood: Boolean = false,
+        sameCity: Boolean = false,
+        limit: Int = 10,
+    ): SearchSimilarListingResponse {
+        val url = urlBuilder.build(
+            "$PATH_PREFIX/$id/similar",
+            mapOf(
+                "status" to statuses,
+                "same-agent" to sameAgent,
+                "same-neighborhood" to sameNeighborhood,
+                "same-city" to sameCity,
+                "limit" to limit,
+            ),
+        )
+        return rest.getForEntity(url, SearchSimilarListingResponse::class.java).body!!
+    }
+
     fun publish(id: Long) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/publish")
         rest.postForEntity(url, emptyMap<String, Any>(), Any::class.java)
