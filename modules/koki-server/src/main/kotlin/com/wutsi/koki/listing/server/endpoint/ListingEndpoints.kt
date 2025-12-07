@@ -24,6 +24,7 @@ import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ListingSimilarityService
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -42,6 +43,7 @@ class ListingEndpoints(
     private val similarityService: ListingSimilarityService,
     private val mapper: ListingMapper,
     private val publisher: Publisher,
+    private val logger: KVLogger,
 ) {
     @PostMapping
     fun create(
@@ -49,6 +51,8 @@ class ListingEndpoints(
         @Valid @RequestBody request: CreateListingRequest,
     ): CreateListingResponse {
         val listing = service.create(request, tenantId)
+
+        logger.add("response_listing_id", listing.id)
         return CreateListingResponse(
             listingId = listing.id ?: -1
         )
@@ -219,6 +223,8 @@ class ListingEndpoints(
             buyerAgentUserId = buyerAgentUserId,
             agentUserId = agentUserId,
         )
+
+        logger.add("response_listing_size", listings.size)
         return SearchListingResponse(
             total = total,
             listings = listings.map { listing -> mapper.toListingSummary(listing) }
@@ -250,6 +256,7 @@ class ListingEndpoints(
             sameCity = sameCity,
             limit = effectiveLimit
         )
+        logger.add("response_listing_size", similarListings.size)
 
         return SearchSimilarListingResponse(
             listings = similarListings.map { (listingId, score) ->

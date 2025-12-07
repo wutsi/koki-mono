@@ -92,8 +92,7 @@ class ListingSimilarityService(
         val (minBedrooms, maxBedrooms) = calculateBedroomRange(reference)
 
         // Calculate price range (±25%)
-        val refPrice = reference.salePrice ?: reference.price
-        val (minPrice, maxPrice, minSalePrice, maxSalePrice) = calculatePriceRange(refPrice)
+        val (minPrice, maxPrice, minSalePrice, maxSalePrice) = calculatePriceRange(reference)
 
         // Determine location IDs for filtering
         val locationIds = mutableListOf<Long>()
@@ -157,11 +156,18 @@ class ListingSimilarityService(
     /**
      * Calculates price range (±25%) for both regular price and sale price.
      */
-    private fun calculatePriceRange(refPrice: Long?): Tuple4<Long?, Long?, Long?, Long?> {
+    private fun calculatePriceRange(reference: ListingEntity): Tuple4<Long?, Long?, Long?, Long?> {
+        val sold = reference.status == ListingStatus.RENTED || reference.status == ListingStatus.SOLD
+        val refPrice = reference.salePrice ?: reference.price
+
         return if (refPrice != null && refPrice > 0) {
             val minPrice = (refPrice * 0.75).toLong()
             val maxPrice = (refPrice * 1.25).toLong()
-            Tuple4(minPrice, maxPrice, minPrice, maxPrice)
+            if (sold) {
+                return Tuple4(null, null, minPrice, maxPrice)
+            } else {
+                Tuple4(minPrice, maxPrice, null, null)
+            }
         } else {
             Tuple4(null, null, null, null)
         }
