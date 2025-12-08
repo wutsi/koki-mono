@@ -69,7 +69,8 @@
     color: #444;
 }
 
-.listing-info {
+/** ===== LISTING DETAILS STYLES ===== */
+.listing-info-container {
     width: 1200px;
     margin: 1em auto 0 auto;
     display: flex;
@@ -81,7 +82,7 @@
     margin-bottom: 10em;
 }
 
-.listing-info #listing-map {
+.listing-info-container #listing-map {
     height: 680px;
 }
 
@@ -221,7 +222,7 @@
 /* ======================================================================== */
 /* Large Tablet */
 @media only screen and (max-width: 992px) and (orientation: portrait) {
-    .listing-info {
+    .listing-info-container {
         width: 100%;
         padding: 0 1em;
     }
@@ -237,7 +238,7 @@
 
 /* Mini Tablet */
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-    .listing-info {
+    .listing-info-container {
         display: block;
     }
 

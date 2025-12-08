@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.pub.listing.mapper
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
@@ -34,6 +35,7 @@ class ListingMapper(
         users: Map<Long, UserModel>,
         amenities: Map<Long, AmenityModel>,
         images: Map<Long, FileModel>,
+        agents: Map<Long, AgentModel>,
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
         val lang = LocaleContextHolder.getLocale().language
@@ -86,7 +88,7 @@ class ListingMapper(
 
             publicRemarks = entity.publicRemarks,
 
-            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
+            buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id]?.copy(agentId = toAgentId(id, agents)) },
             soldAt = entity.soldAt,
             soldAtText = entity.soldAt?.let { date -> mdf.format(date) },
             salePrice = toPrice(entity.salePrice, entity.listingType),
@@ -115,7 +117,7 @@ class ListingMapper(
             totalImages = entity.totalImages,
             totalOffers = entity.totalOffers,
 
-            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id]?.copy(agentId = toAgentId(id, agents)) },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
             publishedAt = entity.publishedAt,
@@ -173,7 +175,8 @@ class ListingMapper(
                 toPublicUrl(entity.publicUrlFr ?: entity.publicUrl)
             } else {
                 toPublicUrl(entity.publicUrl)
-            }
+            },
+            geoLocation = toGeoLocation(entity.geoLocation),
         )
     }
 
@@ -234,5 +237,9 @@ class ListingMapper(
         return publicUrl?.let { url ->
             currentTenant.get()?.let { tenant -> tenant.clientPortalUrl + url }
         }
+    }
+
+    private fun toAgentId(userId: Long, agents: Map<Long, AgentModel>): Long? {
+        return agents.values.find { agent -> agent.user.id == userId }?.id
     }
 }

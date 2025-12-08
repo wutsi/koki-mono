@@ -1,14 +1,15 @@
-package com.wutsi.koki.portal.agent.page
+package com.wutsi.koki.portal.pub.agent.page
 
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.portal.agent.model.AgentModel
-import com.wutsi.koki.portal.common.page.PageName
-import com.wutsi.koki.portal.listing.model.ListingModel
-import com.wutsi.koki.portal.listing.service.ListingService
-import com.wutsi.koki.portal.refdata.model.LocationModel
-import com.wutsi.koki.portal.security.RequiresPermission
+import com.wutsi.koki.portal.pub.agent.model.AgentModel
+import com.wutsi.koki.portal.pub.agent.service.AgentService
+import com.wutsi.koki.portal.pub.common.page.AbstractPageController
+import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.listing.model.ListingModel
+import com.wutsi.koki.portal.pub.listing.service.ListingService
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -18,24 +19,36 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/agents")
-@RequiresPermission(["agent", "agent:full_access"])
 class AgentController(
-    private val listingService: ListingService
-) : AbstractAgentController() {
+    private val agentService: AgentService,
+    private val listingService: ListingService,
+) : AbstractPageController() {
+    @GetMapping("/{id}/{slug}")
+    fun show(
+        @PathVariable id: Long,
+        @PathVariable slug: String,
+        model: Model,
+    ): String {
+        return show(id, model)
+    }
+
     @GetMapping("/{id}")
-    fun list(@PathVariable id: Long, model: Model): String {
-        val agent = findAgent(id)
+    fun show(
+        @PathVariable id: Long,
+        model: Model,
+    ): String {
+        val agent = agentService.get(id)
         model.addAttribute("agent", agent)
 
-        val activeListings = findActiveListings(agent)
+        val activeListings = loadActiveListings(agent, model)
         val soldListings = findSoldListings(agent)
-        model.addAttribute("activeListings", activeListings)
-        model.addAttribute("soldListings", soldListings)
-
         val listings = activeListings + soldListings
-        model.addAttribute("listings", listings)
-        model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
-        model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
+        if (listings.isNotEmpty()) {
+            model.addAttribute("listings", listings)
+            model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
+            model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
+        }
+
         model.addAttribute(
             "page",
             createPageModel(
@@ -46,12 +59,8 @@ class AgentController(
         return "agents/show"
     }
 
-    private fun findAgent(id: Long): AgentModel {
-        return agentService.get(id)
-    }
-
-    private fun findActiveListings(agent: AgentModel): List<ListingModel> {
-        return listingService.search(
+    private fun loadActiveListings(agent: AgentModel, model: Model): List<ListingModel> {
+        val listings = listingService.search(
             agentUserId = agent.user.id,
             statuses = listOf(
                 ListingStatus.ACTIVE,
@@ -60,6 +69,10 @@ class AgentController(
             sortBy = ListingSort.NEWEST,
             limit = 20,
         ).items
+        if (listings.isNotEmpty()) {
+            model.addAttribute("activeListings", listings)
+        }
+        return listings
     }
 
     private fun findSoldListings(agent: AgentModel): List<ListingModel> {
@@ -70,7 +83,7 @@ class AgentController(
                 ListingStatus.SOLD,
             ),
             sortBy = ListingSort.TRANSACTION_DATE,
-            limit = 20,
+            limit = 100,
         ).items
     }
 

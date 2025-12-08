@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.model.ResultSetModel
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.file.service.FileService
@@ -30,6 +31,7 @@ class ListingService(
     private val userService: UserService,
     private val amenityService: AmenityService,
     private val fileService: FileService,
+    private val agentService: AgentService,
 ) {
     fun get(id: Long, fullGraph: Boolean = true): ListingModel {
         val listing = koki.get(id).listing
@@ -74,12 +76,23 @@ class ListingService(
             ).associateBy { image -> image.id }
         }
 
+        val agentUserIds = listOfNotNull(listing.buyerAgentUserId, listing.sellerAgentUserId)
+        val agents = if (agentUserIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            agentService.search(
+                userIds = agentUserIds,
+                limit = agentUserIds.size
+            ).associateBy { agent -> agent.id }
+        }
+
         return mapper.toListingModel(
             entity = listing,
             locations = locations,
             users = users,
             amenities = amenities,
             images = images,
+            agents = agents,
         )
     }
 

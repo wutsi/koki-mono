@@ -7,6 +7,7 @@ import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.platform.tracing.spring.ClientRestInterceptor
 import com.wutsi.koki.platform.tracing.spring.DeviceIdRestInterceptor
+import com.wutsi.koki.sdk.KokiAgent
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiLeads
@@ -42,6 +43,11 @@ class KokiSDKConfiguration(
     @Bean
     fun urlBuilder(): URLBuilder {
         return URLBuilder(baseUrl)
+    }
+
+    @Bean
+    fun kokiAgents(): KokiAgent {
+        return KokiAgent(urlBuilder(), rest())
     }
 
     @Bean

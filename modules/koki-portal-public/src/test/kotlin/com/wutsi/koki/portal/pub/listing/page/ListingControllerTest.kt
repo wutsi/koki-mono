@@ -199,6 +199,17 @@ class ListingControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
+    fun `open agent`() {
+        doReturn(USER_ID).whenever(userIdProvider).get()
+
+        navigateTo("${listing.publicUrl}?lang=fr")
+
+        scroll(.33)
+        click(".agent-info a")
+        assertCurrentPageIs(PageName.AGENT)
+    }
+
+    @Test
     fun share() {
         navigateTo(listing.publicUrl!!)
 

@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.pub.user.mapper
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.user.model.UserModel
@@ -29,6 +30,14 @@ class UserMapper : TenantAwareMapper() {
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             city = city,
             country = entity.country,
+            biography = entity.biography,
+            websiteUrl = entity.websiteUrl,
+            facebookUrl = entity.facebookUrl,
+            instagramUrl = entity.instagramUrl,
+            tiktokUrl = entity.tiktokUrl,
+            youtubeUrl = entity.youtubeUrl,
+            twitterUrl = entity.twitterUrl,
+            slug = slug(entity.displayName),
         )
     }
 
@@ -52,6 +61,7 @@ class UserMapper : TenantAwareMapper() {
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             city = city,
             country = entity.country,
+            slug = slug(entity.displayName),
         )
     }
 
@@ -73,5 +83,12 @@ class UserMapper : TenantAwareMapper() {
         } catch (ex: Exception) {
             return null
         }
+    }
+
+    private fun slug(displayName: String?): String? {
+        if (displayName == null) {
+            return null
+        }
+        return StringUtils.toSlug("", displayName).substring(1)
     }
 }
