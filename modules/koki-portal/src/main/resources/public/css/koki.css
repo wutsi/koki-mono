@@ -6,6 +6,11 @@ body {
     margin-top: 4.8em;
 }
 
+a {
+    color: #1D7EDF;
+}
+
+
 /*.fa-whatsapp {*/
 /*    color: #075E54*/
 /*}*/
@@ -815,14 +820,13 @@ a.phone {
     border: 1px solid lightgray;
 }
 
-.user-card a {
-    color: black;
-    text-decoration: none;
-}
-
-.user-card a:hover {
-    text-decoration: underline;
-}
+/*.user-card a {*/
+/*    color: black;*/
+/*    text-decoration: none;*/
+/*}*/
+/*.user-card a:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
 
 /* ============================= */
 /* highlightjs line-number       */

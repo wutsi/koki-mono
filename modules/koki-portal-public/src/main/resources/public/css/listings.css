@@ -119,6 +119,7 @@
 
 .listing-contact-details-inner .agent-info h2 {
     margin-bottom: 0;
+    color: inherit;
 }
 
 .listing-contact-details-inner .agent-info img {

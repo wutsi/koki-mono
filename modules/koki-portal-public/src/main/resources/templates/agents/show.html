@@ -10,6 +10,8 @@
 
 <div class="agent-info-container">
     <div class="agent-info-details">
+        <div class="margin-top-2x">&nbsp;</div>
+
         <!-- PICTURE + PKI -->
         <div class="flex flex-wrap">
             <img class="user-photo"
@@ -148,31 +150,28 @@
 
         for (var i = 0; i < json.length; i++) {
             let item = json[i];
-            // console.log('adding item', item);
-            let marker = L.marker(
-                [item.latitude, item.longitude],
-                {
-                    color: 'gray',
-                    fillColor: item.rental ? 'darkred' : '#1d7edf',
-                    fillOpacity: 0.9,
-                    radius: 5
-                }
-            );
+            const icon = L.AwesomeMarkers.icon({
+                icon: 'home',
+                markerColor: item.sold ? 'gray' : '#1d7edf',
+                prefix: 'fa'
+            })
+
+            let marker = L.marker([item.latitude, item.longitude], {icon: icon});
             marker.on('mouseover', () => {
                 const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
                     <a href="${item.url}" target="_blank">
                         <div class="flex">
-                            <div>
+                            <div class="listing-image">
                                 <img src="${item.heroImageUrl}" />
                             </div>
-                            <div class="text-small margin-left">
+                            <div class="listing-details">
                                 <b class="listing-price">${item.price}</b>
                                 <div class="flex">
                                    <div>${item.bedrooms}</div>
                                    <div class="margin-left-small">${item.area}</div>
                                 </div>
                                 <div class="gray">${item.location}</div>
-                                <div class="text-danger"><b>${item.status}</b></div>
+                                <div class="text-danger margin-top-small"><b>${item.status}</b></div>
                             </div>
                         </div>
                     </a>

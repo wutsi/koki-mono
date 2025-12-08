@@ -22,9 +22,9 @@
 }
 
 .leaflet-popup-content {
-    margin: .5em;
+    margin: 0;
     padding: 0;
-    width: 200px;
+    width: 300px;
 }
 
 .leaflet-popup-content .map-listing-card-details {
@@ -37,9 +37,21 @@
     text-decoration: none;
 }
 
-.leaflet-popup-content .map-listing-card img {
-    max-height: 48px;
-    max-width: 48px;
+.leaflet-popup-content .map-listing-card .listing-image {
+    height: 100px;
+    width: 100px;
+    border-radius: 1em 0 0 1em
+}
+
+.leaflet-popup-content .map-listing-card .listing-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1em 0 0 1em
+}
+
+.leaflet-popup-content .map-listing-card .listing-details {
+    padding: 1em;
 }
 
 

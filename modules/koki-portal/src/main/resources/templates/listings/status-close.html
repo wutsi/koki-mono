@@ -42,7 +42,7 @@
                                 <span th:text="#{page.listing.sold-at}">SOLD_AT</span>
                                 <span class="required">*</span>
                             </label>
-                            <input class="form-control" th:field="*{soldAt}" type="date"/>
+                            <input class="form-control" required th:field="*{soldAt}" type="date"/>
                         </div>
                         <div class="section-item" th:if="${closing}">
                             <label class="title">
