@@ -8,7 +8,7 @@
 <body>
 <div th:replace="~{__components/layout :: navbar}"></div>
 
-<!-- images -->
+<!-- IMAGES -->
 <div class="hero-image-container">
     <div class="hero-1">
         <a data-component-id="modal-button"
@@ -55,8 +55,9 @@
     <span th:text="#{page.listing.section.photo.show-all(${listing.images.size()})}">Show all</span>
 </button>
 
-<div class="listing-info">
-    <!-- infos -->
+<!-- LISTING INFO + CONTACT AGENT -->
+<div class="listing-info-container">
+    <!-- LISTING -->
     <div class="listing-info-details">
         <div class="listing-status badge text-bg-danger"
              th:if="${listing.statusSold}"
@@ -283,10 +284,14 @@
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
             <div class="agent-info">
-                <img th:if="${listing.sellerAgentUser.photoUrl}" th:src="${listing.sellerAgentUser.photoUrl}"/>
+                <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
+                    <img th:if="${listing.sellerAgentUser.photoUrl}" th:src="${listing.sellerAgentUser.photoUrl}"/>
+                </a>
                 <div>
-                    <h2 th:text="${listing.sellerAgentUser.displayName}">AGENT</h2>
-                    <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
+                    <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
+                        <h2 th:text="${listing.sellerAgentUser.displayName}">AGENT</h2>
+                        <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
+                    </a>
                 </div>
             </div>
 
@@ -304,6 +309,7 @@
 
 </div>
 
+<!-- TOAST -->
 <div class="d-flex justify-content-center align-items-center w-100 h-100 position-fixed top-0 start-0"
      th:if="${toastMessage}">
     <div aria-atomic="true" aria-live="assertive" class="toast text-bg-primary" data-bs-animation="true"

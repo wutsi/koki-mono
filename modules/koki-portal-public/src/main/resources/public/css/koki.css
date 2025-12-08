@@ -24,6 +24,27 @@ b, strong {
     display: flex;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.flex-space-evenly {
+    justify-content: space-evenly;
+}
+
 .hidden {
     display: none;
 }
@@ -393,6 +414,24 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .radio-container {
     display: flex;
     justify-content: space-between;
+}
+
+/* === USER ===== */
+.user-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+.user-photo-empty {
+    width: 64px;
+    height: 1px;
+}
+
+.user-photo-small {
+    width: 32px;
+    height: 32px;
+    border-radius: .5em;
 }
 
 

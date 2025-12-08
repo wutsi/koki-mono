@@ -7,6 +7,7 @@ object PageName {
     const val ERROR_SUSPENDED = "page.error.suspended"
     const val ERROR_UNDER_CONSTRUCTION = "page.error.under-construction"
 
+    val AGENT: String = "page.agent"
     val HOME: String = "page.home"
     val LISTING: String = "page.listing"
 }

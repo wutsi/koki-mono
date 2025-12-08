@@ -27,7 +27,7 @@
                         <div class="margin-left margin-right">
                             <h1 class="entity-title text-center" th:text="${agent.user.displayName}">NAME</h1>
                             <div th:text="${agent.user.employer}">EMPLOYER</div>
-                            <div class="text-small gray" th:if="${agent.user.city.name}"
+                            <div class="text-small gray" th:if="${agent.user.city}"
                                  th:text="${agent.user.city.name}">CITY
                             </div>
                         </div>

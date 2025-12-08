@@ -8,9 +8,13 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.agent.dto.GetAgentResponse
+import com.wutsi.koki.agent.dto.SearchAgentResponse
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.error.dto.Parameter
+import com.wutsi.koki.file.dto.GetFileResponse
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.lead.dto.GetLeadResponse
@@ -194,6 +198,8 @@ abstract class AbstractPageControllerTest {
         setupUserModule()
         setupListingModule()
         setupLeadModule()
+        setupAgentModule()
+        setupFileModule()
     }
 
     private fun setupRefDataModule() {
@@ -419,6 +425,54 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateLeadRequest>(),
                 eq(CreateLeadResponse::class.java)
+            )
+    }
+
+    private fun setupAgentModule() {
+        doReturn(
+            ResponseEntity(
+                SearchAgentResponse(AgentFixtures.agents),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchAgentResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetAgentResponse(AgentFixtures.agent),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetAgentResponse::class.java)
+            )
+    }
+
+    private fun setupFileModule() {
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(FileFixtures.files),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetFileResponse(FileFixtures.file),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetFileResponse::class.java)
             )
     }
 

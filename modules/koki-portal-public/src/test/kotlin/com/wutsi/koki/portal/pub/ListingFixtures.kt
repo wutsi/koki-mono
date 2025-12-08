@@ -156,7 +156,7 @@ object ListingFixtures {
 
             buyerAgentUserId = UserFixtures.users[2].id,
             transactionPrice = Money(195000.0, "CAD"),
-            transactionDate = DateUtils.addDays(Date(), -10)
+            transactionDate = DateUtils.addDays(Date(), -10),
         ),
         ListingSummary(
             id = 1116,
