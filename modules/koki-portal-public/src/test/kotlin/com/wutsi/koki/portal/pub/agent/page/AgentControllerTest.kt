@@ -8,6 +8,7 @@ import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
+import com.wutsi.koki.portal.pub.ListingFixtures.listings
 import com.wutsi.koki.portal.pub.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
@@ -35,5 +36,9 @@ class AgentControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/agents/${agent.id}")
         assertCurrentPageIs(PageName.AGENT)
+
+        assertCurrentPageIs(PageName.AGENT)
+        assertElementPresent("#map-container")
+        assertElementCount(".listing-card", listings.size)
     }
 }

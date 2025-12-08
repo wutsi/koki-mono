@@ -42,7 +42,7 @@ class AgentController(
 
         val activeListings = loadActiveListings(agent, model)
         val soldListings = findSoldListings(agent)
-        val listings = activeListings + soldListings
+        val listings = soldListings + activeListings
         if (listings.isNotEmpty()) {
             model.addAttribute("listings", listings)
             model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
@@ -95,6 +95,7 @@ class AgentController(
                 mapOf(
                     "id" to listing.id,
                     "rental" to (listing.listingType == ListingType.RENTAL),
+                    "sold" to (listing.status == ListingStatus.RENTED || listing.status == ListingStatus.SOLD),
                     "latitude" to listing.geoLocation?.latitude,
                     "longitude" to listing.geoLocation?.longitude,
                     "location" to listOfNotNull(listing.address?.neighbourhood?.name, listing.address?.city?.name)
@@ -103,7 +104,7 @@ class AgentController(
                     "heroImageUrl" to listing.heroImageUrl,
                     "bedrooms" to (listing.bedrooms?.toString() ?: "--") + " " + beds,
                     "area" to ((listing.lotArea?.let { listing.propertyArea }?.toString() ?: "--") + "m2"),
-                    "url" to "/listings/${listing.id}",
+                    "url" to listing.publicUrl,
                     "status" to if (listing.status == ListingStatus.RENTED) {
                         getMessage("listing-status.RENTED") + " " + listing.soldAtText
                     } else if (listing.status == ListingStatus.SOLD) {

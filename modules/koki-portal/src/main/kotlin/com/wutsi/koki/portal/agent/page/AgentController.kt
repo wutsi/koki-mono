@@ -81,6 +81,7 @@ class AgentController(
             .map { listing ->
                 mapOf(
                     "id" to listing.id,
+                    "sold" to (listing.status == ListingStatus.RENTED || listing.status == ListingStatus.SOLD),
                     "rental" to (listing.listingType == ListingType.RENTAL),
                     "latitude" to listing.geoLocation?.latitude,
                     "longitude" to listing.geoLocation?.longitude,
