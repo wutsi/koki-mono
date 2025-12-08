@@ -58,18 +58,21 @@
 <div class="listing-info">
     <!-- infos -->
     <div class="listing-info-details">
-        <h2 class="text-primary margin-none" id="listing-price">
-            <span th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$$</span>
-            <span th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$$</span>
-        </h2>
+        <div class="listing-status badge text-bg-danger"
+             th:if="${listing.statusSold}"
+             th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}"
+        >SOLD
+        </div>
+        <h2 class="text-primary margin-none" id="listing-price"
+            th:if="${listing.statusActive}"
+            th:text="${listing.price.displayText}"
+        >$$$</h2>
+
         <h1 class="margin-none" id="listing-title" th:text="${listing.title}">TITLE</h1>
         <div class="margin-bottom-small flex">
             <div>
                 <span th:text="#{page.listing.listing-number} + ':'">LISTING_NUMBER</span>
                 <span th:text="${listing.listingNumber}">###</span>
-            </div>
-            <div class="margin-left" th:if="${listing.statusSold}">
-                <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
             </div>
         </div>
         <ul class="breadcrumb">
@@ -287,11 +290,12 @@
                 </div>
             </div>
 
-            <div class="message" th:text="#{page.lead.message-default}">MESSAGE</div>
+            <div class="message" th:if="${listing.statusActive}" th:text="#{page.lead.message-default}">MESSAGE</div>
 
             <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
                     th:data-modal-body-url="'/leads/create?listing-id=' + ${listing.id}"
                     th:data-modal-title="#{page.lead.modal.title}"
+                    th:if="${listing.statusActive}"
                     th:text="#{button.send_message}">
                 Send Message
             </button>

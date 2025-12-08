@@ -3,15 +3,10 @@
 <body>
 
 <div th:fragment="listing-status-badge(listing)" th:remove="tag">
-    <span class="listing-status badge text-bg-primary"
-          th:if="${listing.statusActive}"
-          th:text="#{'listing-status.' + ${listing.status}}"
-    >ACTIVE</span>
-
-    <span class="listing-status badge text-bg-success"
-          th:if="${listing.statusSold}"
+    <span class="listing-status badge"
+          th:classappend="${listing.statusSold} ? 'text-bg-danger' : 'text-bg-primary'"
           th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}"
-    >SOLD</span>
+    >STATUS</span>
 </div>
 
 <div class="listing-carousel" th:fragment="listing-carousel(listings)">

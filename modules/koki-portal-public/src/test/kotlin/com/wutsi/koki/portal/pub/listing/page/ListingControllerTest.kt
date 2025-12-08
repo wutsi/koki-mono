@@ -93,11 +93,10 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("#listing-map", "data-show-marker", "true")
         assertElementAttribute("#listing-map", "data-zoom", "18")
 
-        // Share
+        // Content
         assertElementPresent("#btn-share-navbar")
-
-        // Similar listings
-        assertElementCount("#similar-listings .listing-card", similar.size)
+        assertElementNotPresent(".listing-status") // Status badge - only for sold listings
+        assertElementCount("#similar-listings .listing-card", similar.size) // Similar listings
     }
 
     @Test
@@ -216,6 +215,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         setupListing(ListingStatus.SOLD)
         navigateTo(listing.publicUrl!!)
         assertCurrentPageIs(PageName.LISTING)
+
+        assertElementPresent(".listing-status")
+        assertElementNotPresent("#listing-price")
+        assertElementNotPresent(".listing-contact-details .message")
+        assertElementNotPresent(".listing-contact-details #btn-send-message")
     }
 
     @Test

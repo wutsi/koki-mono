@@ -99,12 +99,8 @@ data class ListingModel(
     val statusActive: Boolean
         get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES
 
-    val statusOnMarket: Boolean
-        get() = status == ListingStatus.ACTIVE || status == ListingStatus.ACTIVE_WITH_CONTINGENCIES
-
     val statusSold: Boolean
-        get() = status == ListingStatus.SOLD ||
-            status == ListingStatus.RENTED
+        get() = status == ListingStatus.SOLD || status == ListingStatus.RENTED
 
     fun amenitiesByCategoryId(categoryId: Long): List<AmenityModel> {
         return amenities.filter { amenity -> amenity.categoryId == categoryId }
