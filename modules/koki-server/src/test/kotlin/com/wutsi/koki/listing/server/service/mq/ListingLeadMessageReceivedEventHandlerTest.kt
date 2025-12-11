@@ -12,7 +12,6 @@ import com.wutsi.koki.lead.server.service.LeadService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.listing.server.service.mq.ListingLeadCreatedEventHandler
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -24,7 +23,7 @@ class ListingLeadCreatedEventHandlerTest {
     private val leadService = mock<LeadService>()
     private val listingService = mock<ListingService>()
     private val logger = DefaultKVLogger()
-    private val handler = ListingLeadCreatedEventHandler(
+    private val handler = ListingLeadMessageReceivedEventHandler(
         leadService = leadService,
         listingService = listingService,
         logger = logger,

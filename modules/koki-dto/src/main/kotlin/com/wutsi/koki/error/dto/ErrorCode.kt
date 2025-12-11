@@ -56,6 +56,7 @@ object ErrorCode {
     val INVITATION_BAD_STATUS: String = "$PREFIX:invitation:bad-status"
 
     val LEAD_NOT_FOUND: String = "$PREFIX:lead:not-found"
+    val LEAD_LISTING_OR_AGENT_MISSING: String = "$PREFIX:lead:listing-or-agent-missing"
 
     val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
     val LISTING_INVALID_BUYER_COMMISSION: String = "$PREFIX:listing:invalid-buyer-commission"

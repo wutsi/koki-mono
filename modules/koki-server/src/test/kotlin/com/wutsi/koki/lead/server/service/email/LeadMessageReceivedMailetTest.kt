@@ -1,4 +1,4 @@
-package com.wutsi.koki.listing.server.service.email
+package com.wutsi.koki.lead.server.service.email
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -10,15 +10,16 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
 import com.wutsi.koki.lead.server.domain.LeadEntity
 import com.wutsi.koki.lead.server.service.LeadService
+import com.wutsi.koki.listing.server.service.email.AbstractListingMailetTest
 import com.wutsi.koki.platform.messaging.Party
 import org.junit.jupiter.api.BeforeEach
-import org.mockito.Mockito.mock
+import org.mockito.Mockito
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingLeadCreatedMailetTest : AbstractListingMailetTest() {
-    private val leadService = mock<LeadService>()
-    private val mailet = ListingLeadCreatedMailet(
+class LeadCreatedMailetTest : AbstractListingMailetTest() {
+    private val leadService = Mockito.mock<LeadService>()
+    private val mailet = LeadCreatedMailet(
         userService = userService,
         locationService = locationService,
         templateResolver = templateResolver,
@@ -27,14 +28,14 @@ class ListingLeadCreatedMailetTest : AbstractListingMailetTest() {
         fileService = fileService,
         sender = sender,
         messages = messages,
-        logger = logger
     )
 
     private val lead = LeadEntity(
         id = 222L,
-        firstName = "Jimmy",
-        lastName = "Smith",
-        listing = listing
+//        firstName = "Jimmy",
+//        lastName = "Smith",
+        listing = listing,
+        agentUserId = sellerAgent.id!!,
     )
 
     @BeforeEach
@@ -44,7 +45,7 @@ class ListingLeadCreatedMailetTest : AbstractListingMailetTest() {
     }
 
     @Test
-    fun created() {
+    fun `lead from listing`() {
         val event = createEvent()
         val result = mailet.service(event)
 
@@ -101,6 +102,17 @@ class ListingLeadCreatedMailetTest : AbstractListingMailetTest() {
 
     @Test
     fun `event not supported`() {
+        val event = emptyMap<String, String>()
+        val result = mailet.service(event)
+
+        assertEquals(false, result)
+        verify(sender, never()).send(any<Party>(), any(), any(), any(), any())
+    }
+
+    @Test
+    fun `lead from agent`() {
+        doReturn(lead.copy(listing = null)).whenever(leadService).get(any(), any())
+
         val event = emptyMap<String, String>()
         val result = mailet.service(event)
 

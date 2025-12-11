@@ -2,8 +2,8 @@ package com.wutsi.koki.lead.dto
 
 enum class LeadSource {
     UNKNOWN,
-    WEBSITE,
-    REFERRAL,
+    LISTING,
+    AGENT,
     SOCIAL_MEDIA,
     ADVERTISEMENT,
     EVENT,
