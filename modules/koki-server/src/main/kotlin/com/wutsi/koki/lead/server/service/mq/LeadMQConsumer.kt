@@ -2,7 +2,9 @@ package com.wutsi.koki.lead.server.service.mq
 
 import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.platform.mq.Consumer
+import org.springframework.stereotype.Service
 
+@Service
 class LeadMQConsumer(
     private val leadMessageReceivedEventHandler: LeadMessageReceivedEventHandler,
 ) : Consumer {
