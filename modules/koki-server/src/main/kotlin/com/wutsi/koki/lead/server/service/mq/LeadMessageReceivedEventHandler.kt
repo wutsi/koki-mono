@@ -4,7 +4,9 @@ import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.lead.server.service.LeadMessageService
 import com.wutsi.koki.lead.server.service.LeadService
 import com.wutsi.koki.platform.logger.KVLogger
+import org.springframework.stereotype.Service
 
+@Service
 class LeadMessageReceivedEventHandler(
     private val leadMessageService: LeadMessageService,
     private val leadService: LeadService,
