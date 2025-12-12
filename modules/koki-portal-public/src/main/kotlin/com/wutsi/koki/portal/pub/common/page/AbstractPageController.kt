@@ -35,7 +35,7 @@ abstract class AbstractPageController {
     protected lateinit var messages: MessageSource
 
     @ModelAttribute("tenant")
-    fun getTenant(): TenantModel? {
+    fun getTenant(): TenantModel {
         return tenantHolder.get()
     }
 

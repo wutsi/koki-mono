@@ -36,7 +36,7 @@ class SearchLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
-        assertEquals(listOf(300L), ids)
+        assertEquals(listOf(300L, 301L), ids)
     }
 
     @Test
@@ -59,5 +59,16 @@ class SearchLeadEndpointTest : AuthorizationAwareEndpointTest() {
 
         val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
         assertEquals(listOf(500L), ids)
+    }
+
+    @Test
+    fun `by keyword`() {
+        val response =
+            rest.getForEntity("/v1/leads?q=RogEr", SearchLeadResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val ids = response.body!!.leads.map { lead -> lead.id }.sorted()
+        assertEquals(listOf(600L, 601L, 602L), ids)
     }
 }

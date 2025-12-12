@@ -23,7 +23,7 @@ class ListingOfferStatusChangedEventHandler(
     private val logger: KVLogger,
     private val publisher: Publisher,
 ) {
-    fun handle(event: OfferStatusChangedEvent) {
+    fun handle(event: OfferStatusChangedEvent): Boolean {
         logger.add("event_status", event.status)
         logger.add("event_offer_id", event.offerId)
         logger.add("event_tenant_id", event.tenantId)
@@ -31,7 +31,7 @@ class ListingOfferStatusChangedEventHandler(
         logger.add("event_owner_type", event.owner?.type)
 
         if (!accept(event)) {
-            return
+            return false
         }
 
         val offer = offerService.get(event.offerId, event.tenantId)
@@ -39,15 +39,16 @@ class ListingOfferStatusChangedEventHandler(
             logger.add("offer_status", offer.status)
             logger.add("ignored", true)
             logger.add("reason", "Offer/Event status mismatch")
-            return
+            return false
         }
 
         when (event.status) {
             OfferStatus.ACCEPTED -> offerAccepted(event)
             OfferStatus.WITHDRAWN -> offerWithdrawn(event)
             OfferStatus.CLOSED -> offerClosed(event, offer)
-            else -> {}
+            else -> return false
         }
+        return true
     }
 
     private fun offerAccepted(event: OfferStatusChangedEvent) {

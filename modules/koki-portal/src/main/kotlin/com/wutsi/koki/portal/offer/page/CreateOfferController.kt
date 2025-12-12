@@ -36,7 +36,7 @@ class CreateOfferController(
             ownerId = listingId,
             ownerType = ObjectType.LISTING,
             price = listing.price?.amount?.toLong(),
-            currency = tenantHolder.get()?.currency,
+            currency = tenantHolder.get().currency,
             pricePerMonth = listing.listingTypeRental,
             expiresAtMin = df.format(DateUtils.addDays(Date(), 1)),
             submittingParty = OfferParty.BUYER,

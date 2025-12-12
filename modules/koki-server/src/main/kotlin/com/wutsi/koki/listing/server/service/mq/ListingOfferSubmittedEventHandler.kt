@@ -13,14 +13,14 @@ class ListingOfferSubmittedEventHandler(
     private val listingService: ListingService,
     private val logger: KVLogger,
 ) {
-    fun handle(event: OfferSubmittedEvent) {
+    fun handle(event: OfferSubmittedEvent): Boolean {
         logger.add("event_offer_id", event.offerId)
         logger.add("event_tenant_id", event.tenantId)
         logger.add("event_owner_id", event.owner?.id)
         logger.add("event_owner_type", event.owner?.type)
 
         if (!accept(event)) {
-            return
+            return false
         }
 
         val listing = listingService.get(event.owner!!.id, event.tenantId)
@@ -31,6 +31,7 @@ class ListingOfferSubmittedEventHandler(
         )
         listingService.save(listing)
         logger.add("listing_total_offers", listing.totalOffers)
+        return true
     }
 
     private fun accept(event: OfferSubmittedEvent): Boolean {

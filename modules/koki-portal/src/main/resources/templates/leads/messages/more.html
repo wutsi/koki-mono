@@ -1,0 +1,15 @@
+<tr class="message" th:each="message: ${messages}" th:id="'message-' + ${message.id}">
+    <div th:replace="~{__components/lead :: lead-message(${message})}"></div>
+</tr>
+<tr id="message-load-more" th:if="${moreUrl}">
+    <td class="text-center">
+        <button
+            class="btn btn-sm btn-light w-100-mobile"
+            data-component-id='load-more'
+            data-container-id="message-load-more"
+            th:data-url="${moreUrl}"
+            th:text="#{button.load_more}">
+            Load more...
+        </button>
+    </td>
+</tr>

@@ -6,7 +6,7 @@ import com.wutsi.koki.lead.dto.GetLeadResponse
 import com.wutsi.koki.lead.dto.LeadStatus
 import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.lead.dto.UpdateLeadStatusRequest
-import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
+import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.lead.dto.event.LeadStatusChangedEvent
 import com.wutsi.koki.lead.server.mapper.LeadMapper
 import com.wutsi.koki.lead.server.service.LeadService
@@ -36,14 +36,13 @@ class LeadEndpoints(
         @Valid @RequestBody request: CreateLeadRequest,
     ): CreateLeadResponse {
         val lead = service.create(request, tenantId, deviceId)
-        if (lead.status == LeadStatus.NEW && lead.createdAt == lead.modifiedAt) {
-            publisher.publish(
-                LeadCreatedEvent(
-                    leadId = lead.id ?: -1,
-                    tenantId = tenantId,
-                )
+        publisher.publish(
+            LeadMessageReceivedEvent(
+                messageId = lead.lastMessage?.id ?: -1,
+                tenantId = tenantId,
+                newLead = lead.createdAt == lead.modifiedAt
             )
-        }
+        )
         return CreateLeadResponse(
             leadId = lead.id ?: -1
         )

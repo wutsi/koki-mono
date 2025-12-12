@@ -30,7 +30,7 @@ class ProfileController(
             email = user.email,
             language = user.language,
             country = city?.country
-                ?: tenantHolder.get()?.locale?.let { locale -> Locale.forLanguageTag(locale) }?.country,
+                ?: tenantHolder.get().locale.let { locale -> Locale.forLanguageTag(locale) }.country,
             cityId = city?.id,
         )
         return index(form, model, city)
@@ -82,7 +82,8 @@ class ProfileController(
         val parent = resolveParent(city)
 
         model.addAttribute("city", city)
-        model.addAttribute("cityName",
+        model.addAttribute(
+            "cityName",
             city?.let {
                 parent?.let { "${city.name}, ${parent.name}" } ?: city.name
             }

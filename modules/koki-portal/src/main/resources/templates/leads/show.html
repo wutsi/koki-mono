@@ -20,18 +20,18 @@
             <div class="widget lead-summary">
                 <div class="widget-body">
                     <div class="text-right">
-                        <a class="btn-call btn btn-light btn-sm" th:href="${lead.phoneNumberUrl}">
+                        <a class="btn-call btn btn-light btn-sm" th:href="${lead.user.mobileUrl}">
                             <i class="fa-solid fa-mobile-screen-button"></i>
                             <span th:text="#{button.call}">CALL</span>
                         </a>
-                        <a class="btn btn-sm btn-whatsapp" target="_blank" th:href="${lead.whatsappUrl}">
+                        <a class="btn btn-sm btn-whatsapp" target="_blank" th:href="${lead.user.whatsappUrl}">
                             <i class="fa-brands fa-whatsapp"></i>
                             <span th:text="#{button.whatsapp}">Whatsapp</span>
                         </a>
                         <div th:replace="~{__components/lead :: lead-status-button(${lead})}"></div>
                     </div>
                     <h1 class="entity-title">
-                        <span th:text="${lead.displayName}">NAME</span>
+                        <span th:text="${lead.user.displayName}">NAME</span>
                     </h1>
                     <div class="flex margin-top">
                         <div>
@@ -39,9 +39,9 @@
                             <div th:replace="~{__components/lead :: lead-status-badge(${lead})}"></div>
                             <br/>
                         </div>
-                        <div class="margin-left-2x d-none d-md-block" th:if="${lead.email}">
+                        <div class="margin-left-2x d-none d-md-block" th:if="${lead.user.email}">
                             <b th:text="#{page.lead.email}">EMAIL</b><br/>
-                            <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
+                            <a th:href="'mailto:' + ${lead.user.email}" th:text="${lead.user.email}">EMAIL</a>
                         </div>
                     </div>
                     <div th:replace="~{__components/layout :: error-message(${error})}"></div>
@@ -67,10 +67,15 @@
                                     </a>
                                 </td>
                             </tr>
-                            <tr th:if="${lead.message}">
+                            <tr>
                                 <td><b th:text="#{page.lead.message}">Message</b></td>
-                                <td th:utext="${lead.messageHtml}">HTML</td>
+                                <td th:utext="${lead.lastMessage.contentHtml}">HTML</td>
                             </tr>
+                            <tr th:if="${lead.lastMessage.visitRequestedAt}">
+                                <td><b th:text="#{page.lead.visit-request-at}">Request a Visit</b></td>
+                                <td th:text="${lead.lastMessage.visitRequestedAtText}">HTML</td>
+                            </tr>
+
                             <tr>
                                 <td><b th:text="#{page.lead.status}">Status</b></td>
                                 <td>
@@ -79,58 +84,48 @@
                             </tr>
                             <tr>
                                 <td width="20%"><b th:text="#{page.lead.display-name}">First Name</b></td>
-                                <td th:text="${lead.displayName}">TYPE</td>
+                                <td th:text="${lead.user.displayName}">TYPE</td>
                             </tr>
                             <tr>
                                 <td><b th:text="#{page.lead.phone-number}">Phone Number</b></td>
                                 <td>
                                     <div class="flex">
-                                        <span th:text="${lead.phoneNumberFormatted}">(XXX) XXX-XXXX</span>
+                                        <span th:text="${lead.user.mobileText}">(XXX) XXX-XXXX</span>
                                         <a class="btn-call btn btn-light btn-sm margin-left"
-                                           th:href="${lead.phoneNumberUrl}"
+                                           th:href="${lead.user.mobileUrl}"
                                            th:text="#{button.call}">CALL</a>
 
                                         <a class="btn btn-sm btn-whatsapp margin-left" target="_blank"
-                                           th:href="${lead.whatsappUrl}">
+                                           th:href="${lead.user.whatsappUrl}">
                                             <i class="fa-brands fa-whatsapp"></i>
                                             <span th:text="#{button.whatsapp}">Whatsapp</span>
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                            <tr th:if="${lead.email}">
+                            <tr th:if="${lead.user.email}">
                                 <td><b th:text="#{page.lead.email}">Email</b></td>
                                 <td>
-                                    <a th:href="${lead.emailUrl}" th:text="${lead.email}">EMAIL</a>
+                                    <a th:href="'mailto:' + ${lead.user.email}" th:text="${lead.user.email}">EMAIL</a>
                                 </td>
                             </tr>
-                            <tr th:if="${lead.address}">
-                                <td><b th:text="#{page.lead.address}">ADDRESS</b></td>
-                                <td th:text="${lead.address}">ADDRESS</td>
+                            <tr th:if="${lead.user.location}">
+                                <td><b th:text="#{page.lead.location}">ADDRESS</b></td>
+                                <td th:text="${lead.user.location}">LOCATION</td>
                             </tr>
-                            <tr th:if="${lead.email}">
+                            <tr th:if="${lead.source}">
                                 <td><b th:text="#{page.lead.source}">Source</b></td>
                                 <td th:text="#{'lead-source.' + ${lead.source}}">SOURCE</td>
                             </tr>
                             <tr th:if="${lead.nextVisitAtText}">
                                 <td><b th:text="#{page.lead.next-visit-at}">Next Visit</b></td>
-                                <td>
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                    <span th:text="${lead.nextVisitAtText}">YYY-MM-DD</span>
-                                </td>
+                                <td th:text="${lead.nextVisitAtText}">YYY-MM-DD</td>
                             </tr>
                             <tr th:if="${lead.nextContactAtText}">
                                 <td><b th:text="#{page.lead.next-contact-at}">Next Communication</b></td>
-                                <td>
-                                    <i class="fa-solid fa-mobile-screen-button"></i>
-                                    <span th:text="${lead.nextContactAtText}">YYY-MM-DD</span>
-                                </td>
+                                <td th:text="${lead.nextContactAtText}">YYY-MM-DD</td>
                             </tr>
 
-                            <tr th:if="${lead.visitRequestedAt}">
-                                <td><b th:text="#{page.lead.visit-request-at}">Request a Visit</b></td>
-                                <td th:text="${lead.visitRequestedAtText}">HTML</td>
-                            </tr>
                             <tr>
                                 <td><b th:text="#{page.lead.contacted-at}">Created At</b></td>
                                 <td th:text="${lead.modifiedAtText}">HTML</td>

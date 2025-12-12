@@ -11,10 +11,6 @@ class LeadMapper {
             id = entity.id,
             listingId = entity.listingId,
             userId = entity.userId,
-            firstName = entity.firstName,
-            lastName = entity.lastName,
-            email = entity.email,
-            phoneNumber = entity.phoneNumber,
             status = entity.status,
             source = entity.source,
         )

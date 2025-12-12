@@ -8,9 +8,9 @@ import com.wutsi.koki.portal.user.model.RoleModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import java.util.Locale
-import kotlin.collections.flatMap
 
 @Service
 class UserMapper : TenantAwareMapper() {
@@ -41,6 +41,9 @@ class UserMapper : TenantAwareMapper() {
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             category = category,
             country = entity.country,
+            countryName = entity.country
+                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayName }
+                ?: city?.countryName,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
                 .distinctBy { permission -> permission.id }
@@ -75,6 +78,9 @@ class UserMapper : TenantAwareMapper() {
             mobileText = formatPhone(entity.mobile, city?.country ?: entity.country),
             city = city,
             country = entity.country,
+            countryName = entity.country
+                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayName }
+                ?: city?.countryName,
         )
     }
 

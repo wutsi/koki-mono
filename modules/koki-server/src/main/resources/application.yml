@@ -88,7 +88,7 @@ springdoc:
 
         -   group: lead
             display-name: Lead API
-            paths-to-match: /v1/leads, /v1/leads/**
+            paths-to-match: /v1/leads, /v1/leads/**, /v1/lead-messages, /v1/lead-messages/**
 
         -   group: listing
             display-name: Listing API
@@ -200,6 +200,13 @@ koki:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-file-queue
                 dlq: koki-file-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+        lead:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-lead-queue
+                dlq: koki-lead-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
         listing:

@@ -16,7 +16,7 @@ class ListingFileDeletedEventHandler(
     private val listingService: ListingService,
     private val logger: KVLogger,
 ) {
-    fun handle(event: FileDeletedEvent) {
+    fun handle(event: FileDeletedEvent): Boolean {
         logger.add("event_file_id", event.fileId)
         logger.add("event_file_type", event.fileType)
         logger.add("event_tenant_id", event.tenantId)
@@ -24,7 +24,7 @@ class ListingFileDeletedEventHandler(
         logger.add("event_owner_type", event.owner?.type)
 
         if (!accept(event)) {
-            return
+            return false
         }
 
         val listing = listingService.get(event.owner!!.id, event.tenantId)
@@ -45,6 +45,7 @@ class ListingFileDeletedEventHandler(
             )?.toInt()
         }
         listingService.save(listing)
+        return true
     }
 
     private fun accept(event: FileDeletedEvent): Boolean {

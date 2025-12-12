@@ -156,6 +156,16 @@ object ModuleFixtures {
             jsUrl = null,
             cssUrl = "/css/leads.css",
         ),
+        Module(
+            id = 301,
+            name = "lead_message",
+            title = "Messages",
+            homeUrl = null,
+            tabUrl = "/leads/messages/tab",
+            settingsUrl = null,
+            jsUrl = null,
+            cssUrl = null,
+        ),
     )
 
     val permissions = listOf(
@@ -208,5 +218,13 @@ object ModuleFixtures {
 
         Permission(id = 3000, moduleId = 300, name = "lead", description = "View Leads"),
         Permission(id = 3001, moduleId = 300, name = "lead:full_access", description = "Manage All Leads"),
+
+        Permission(id = 3010, moduleId = 301, name = "lead_message", description = "View Messages"),
+        Permission(
+            id = 3011,
+            moduleId = 301,
+            name = "lead_message:full_access",
+            description = "Full access on messages"
+        ),
     )
 }

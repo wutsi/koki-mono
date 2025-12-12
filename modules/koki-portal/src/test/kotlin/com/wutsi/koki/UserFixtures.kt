@@ -46,6 +46,8 @@ object UserFixtures {
             employer = "REIMAX",
             photoUrl = "https://picsum.photos/800/600",
             mobile = "+15147580000",
+            cityId = RefDataFixtures.cities[0].id,
+            country = RefDataFixtures.cities[0].country,
         ),
         UserSummary(
             id = 12L,
@@ -56,6 +58,8 @@ object UserFixtures {
             employer = "REALTOR",
             photoUrl = "https://picsum.photos/800/600",
             mobile = "+15147580011",
+            cityId = RefDataFixtures.cities[1].id,
+            country = RefDataFixtures.cities[1].country,
         ),
         UserSummary(
             id = 13L,
@@ -66,6 +70,8 @@ object UserFixtures {
             employer = "IMMO",
             photoUrl = "https://picsum.photos/800/600",
             mobile = "+15147580022",
+            cityId = RefDataFixtures.cities[2].id,
+            country = RefDataFixtures.cities[2].country,
         ),
         UserSummary(
             id = 14L,

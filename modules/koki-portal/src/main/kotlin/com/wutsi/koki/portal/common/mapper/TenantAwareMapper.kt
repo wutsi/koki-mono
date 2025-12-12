@@ -24,16 +24,19 @@ abstract class TenantAwareMapper {
     @Autowired
     private lateinit var messages: MessageSource
 
-    protected fun createDateTimeFormat(): DateFormat {
+    protected fun getLocale(): Locale {
         val tenant = currentTenant.get()
-        tenant?.locale?.let { locale -> Locale(locale) } ?: LocaleContextHolder.getLocale()
-        return DateFormat.getDateInstance(DateFormat.LONG)
+        return Locale(tenant.country, LocaleContextHolder.getLocale().language)
+    }
+
+    protected fun createDateTimeFormat(): DateFormat {
+        val locale = getLocale()
+        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale)
     }
 
     protected fun createDateFormat(): DateFormat {
-        val tenant = currentTenant.get()
-        tenant?.locale?.let { locale -> Locale(locale) } ?: LocaleContextHolder.getLocale()
-        return DateFormat.getDateInstance(DateFormat.MEDIUM)
+        val locale = getLocale()
+        return DateFormat.getDateInstance(DateFormat.MEDIUM, locale)
     }
 
     protected fun createTimeFormat(): DateFormat {

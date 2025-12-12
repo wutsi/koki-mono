@@ -14,11 +14,14 @@ class CurrentTenantHolder(
 ) {
     private var model: TenantModel? = null
 
-    fun get(): TenantModel? {
+    fun get(): TenantModel {
         if (model == null) {
             val url = request.requestURL.toString()
             model = service.tenants().find { tenant -> url.startsWith(tenant.portalUrl) }
         }
-        return model
+        if (model == null) {
+            throw IllegalStateException("Tenant not found for URL: ${request.requestURL}")
+        }
+        return model!!
     }
 }

@@ -8,6 +8,7 @@ data class LocationModel(
     val name: String = "",
     val type: LocationType = LocationType.UNKNOWN,
     val country: String = "",
-    var latitude: Double? = null,
-    var longitude: Double? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val countryName: String = "",
 )

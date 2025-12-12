@@ -8,8 +8,12 @@ INSERT INTO T_USER(id, tenant_fk, username, email, password, display_name)
 
 INSERT INTO T_LEAD(id, tenant_fk, listing_fk, agent_user_fk,  user_fk, status, created_at, modified_at)
     VALUES (100, 1, 111, 1111, 12, 2, '2024-01-10 10:00:00', '2024-01-10 10:00:00'),
+           (101, 1, null, 1111, 12, 2, '2024-01-10 10:00:00', '2024-01-10 10:00:00'),
            (200, 2, null, 7777, 12, 2, '2024-01-10 10:00:00', '2024-01-10 10:00:00');
 
 INSERT INTO T_LEAD_MESSAGE(id, tenant_fk, lead_fk, content)
-    VALUES (111, 1, 100, 'Hello, I am interested in this property.'),
+    VALUES (1001, 1, 100, 'Hello, I am interested in this property.'),
+           (1002, 1, 100, 'Hello, I am interested in this property.'),
+           (1003, 1, 100, 'Hello, I am interested in this property.'),
+           (1011, 1, 101, 'Hello, I am interested in this property.'),
            (201, 2, 200, 'Is this property still available?');

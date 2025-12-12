@@ -2,6 +2,7 @@ package com.wutsi.koki.lead.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.LeadStatus
@@ -23,6 +24,7 @@ class LeadService(
     private val dao: LeadRepository,
     private val listingService: ListingService,
     private val userService: UserService,
+    private val leadMessageService: LeadMessageService,
     private val em: EntityManager,
 ) {
     fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long {
@@ -49,10 +51,14 @@ class LeadService(
         limit: Int = 20,
         offset: Int = 0
     ): List<LeadEntity> {
-        val jql = StringBuilder("SELECT L FROM LeadEntity L WHERE L.tenantId = :tenantId")
-
+        val jql = StringBuilder("SELECT L FROM LeadEntity L ")
         if (keyword != null) {
-            jql.append(" AND ( (UPPER(L.firstName) LIKE :keyword) OR (UPPER(L.lastName) LIKE :keyword) OR (UPPER(L.email) LIKE :keyword) )")
+            jql.append(" JOIN UserEntity U ON L.userId = U.id ")
+        }
+
+        jql.append(" WHERE L.tenantId = :tenantId")
+        if (keyword != null) {
+            jql.append(" AND ( (UPPER(U.displayName) LIKE :keyword) OR (UPPER(U.email) LIKE :keyword) )")
         }
         if (ids.isNotEmpty()) {
             jql.append(" AND L.id IN :ids")
@@ -61,7 +67,7 @@ class LeadService(
             jql.append(" AND L.listing.id IN :listingIds")
         }
         if (agentUserIds.isNotEmpty()) {
-            jql.append(" AND L.listing.sellerAgentUserId IN :agentUserIds")
+            jql.append(" AND L.agentUserId IN :agentUserIds")
         }
         if (statuses.isNotEmpty()) {
             jql.append(" AND L.status IN :statuses")
@@ -100,41 +106,49 @@ class LeadService(
     @Transactional
     fun create(request: CreateLeadRequest, tenantId: Long, deviceId: String? = null): LeadEntity {
         val userId = findByUserIdOrCreate(request, tenantId, deviceId)
-        var lead = dao.findByListingIdAndUserIdAndTenantId(request.listingId, userId, tenantId)
+        var lead = findLead(request, userId, tenantId)
         val now = Date()
-        lead = if (lead == null) {
-            dao.save(
+        val listing = request.listingId?.let { id -> listingService.get(id, tenantId) }
+        val agentUserId = (listing?.sellerAgentUserId ?: request.agentUserId)!!
+
+        if (lead == null) {
+            lead = dao.save(
                 LeadEntity(
                     tenantId = tenantId,
                     deviceId = deviceId,
                     userId = userId,
-                    listing = listingService.get(request.listingId, tenantId),
+                    listing = listing,
+                    agentUserId = agentUserId,
                     status = LeadStatus.NEW,
                     source = request.source,
                     createdAt = now,
                     modifiedAt = now,
-                    email = request.email,
-                    firstName = request.firstName,
-                    lastName = request.lastName,
-                    phoneNumber = request.phoneNumber,
-                    message = request.message,
-                    visitRequestedAt = request.visitRequestedAt,
-                    country = request.country?.lowercase()?.ifEmpty { null },
-                    cityId = request.cityId,
                 )
             )
-        } else {
-            lead.firstName = request.firstName
-            lead.lastName = request.lastName
-            lead.phoneNumber = request.phoneNumber
-            lead.country = request.country?.lowercase()?.ifEmpty { null }
-            lead.cityId = request.cityId
-            lead.message = request.message
-            lead.visitRequestedAt = request.visitRequestedAt
-            lead.modifiedAt = now
-            dao.save(lead)
         }
+
+        lead.lastMessage = leadMessageService.create(request, lead)
+        lead.modifiedAt = now
+        dao.save(lead)
         return lead
+    }
+
+    @Transactional
+    fun save(lead: LeadEntity): LeadEntity {
+        lead.modifiedAt = Date()
+        return dao.save(lead)
+    }
+
+    fun findLead(request: CreateLeadRequest, userId: Long, tenantId: Long): LeadEntity? {
+        if (request.listingId != null) {
+            return dao.findByListingIdAndUserIdAndTenantId(request.listingId!!, userId, tenantId)
+        } else if (request.agentUserId != null) {
+            return dao.findByListingIdAndUserIdAndAgentUserIdAndTenantId(null, userId, request.agentUserId!!, tenantId)
+        } else {
+            throw BadRequestException(
+                error = Error(ErrorCode.LEAD_LISTING_OR_AGENT_MISSING)
+            )
+        }
     }
 
     @Transactional
@@ -162,6 +176,7 @@ class LeadService(
                 password = UUID.randomUUID().toString(),
                 mobile = request.phoneNumber,
                 country = request.country,
+                cityId = request.cityId,
             )
             return userService.create(request, tenantId, deviceId).id!!
         }

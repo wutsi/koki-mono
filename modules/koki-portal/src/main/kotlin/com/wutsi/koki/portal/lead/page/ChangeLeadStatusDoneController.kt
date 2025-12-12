@@ -24,7 +24,7 @@ class ChangeLeadStatusDoneController : AbstractLeadDetailsController() {
             "page",
             createPageModel(
                 name = PageName.LEAD_STATUS_DONE,
-                title = lead.displayName,
+                title = lead.user.displayName ?: "",
             )
         )
         return "leads/status-done"

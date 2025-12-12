@@ -7,7 +7,7 @@ import com.wutsi.koki.portal.lead.form.LeadForm
 import com.wutsi.koki.portal.lead.mapper.LeadMapper
 import com.wutsi.koki.portal.lead.model.LeadModel
 import com.wutsi.koki.portal.listing.service.ListingService
-import com.wutsi.koki.portal.refdata.service.LocationService
+import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.sdk.KokiLeads
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
@@ -18,13 +18,15 @@ class LeadService(
     private val koki: KokiLeads,
     private val mapper: LeadMapper,
     private val listingService: ListingService,
-    private val locationService: LocationService,
+    private val userService: UserService,
+    private val leadMessageService: LeadMessageService,
 ) {
     fun get(id: Long): LeadModel {
         val lead: Lead = koki.get(id).lead
-        val listing = listingService.get(lead.listingId)
-        val city = lead.cityId?.let { id -> locationService.get(id) }
-        return mapper.toLeadModel(lead, listing, city)
+        val listing = lead.listingId?.let { id -> listingService.get(id) }
+        val user = userService.get(lead.userId)
+        val message = leadMessageService.get(lead.lastMessageId)
+        return mapper.toLeadModel(lead, listing, user, message)
     }
 
     fun search(
@@ -47,7 +49,7 @@ class LeadService(
             offset = offset,
         ).leads
 
-        val listingIds = leads.map { lead -> lead.listingId }
+        val listingIds = leads.mapNotNull { lead -> lead.listingId }
         val listings = if (listingIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -57,17 +59,27 @@ class LeadService(
             ).items.associateBy { listing -> listing.id }
         }
 
-        val cityIds = leads.mapNotNull { lead -> lead.cityId }
-        val cities = if (cityIds.isEmpty() || !fullGraph) {
+        val userIds = leads.map { lead -> lead.userId }
+        val users = if (userIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
-            locationService.search(
-                ids = cityIds,
-                limit = cityIds.size,
-            ).associateBy { city -> city.id }
+            userService.search(
+                ids = userIds,
+                limit = userIds.size,
+            ).associateBy { user -> user.id }
         }
 
-        return leads.map { lead -> mapper.toLeadModel(lead, listings, cities) }
+        val messageIds = leads.map { lead -> lead.lastMessageId }
+        val messages = if (messageIds.isEmpty() || !fullGraph) {
+            emptyMap()
+        } else {
+            leadMessageService.search(
+                ids = messageIds,
+                limit = messageIds.size,
+            ).associateBy { message -> message.id }
+        }
+
+        return leads.map { lead -> mapper.toLeadModel(lead, listings, users, messages) }
     }
 
     fun updateStatus(form: LeadForm) {

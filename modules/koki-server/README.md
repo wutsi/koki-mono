@@ -232,6 +232,9 @@ The Koki Server follows a layered architecture with clear separation of concerns
 | POST               | `/v1/leads/{id}/status`           | Update lead status                              |
 | GET                | `/v1/leads/{id}`                  | Retrieve lead details by ID                     |
 | GET                | `/v1/leads`                       | Search leads with filters                       |
+| **Lead Messages**  |
+| GET                | `/v1/lead-messages/{id}`          | Retrieve lead message details by ID             |
+| GET                | `/v1/lead-messages`               | Search lead messages with filters               |
 | **Contacts**       |
 | GET                | `/v1/contacts/{id}`               | Retrieve contact details by ID                  |
 | GET                | `/v1/contacts`                    | Search contacts with filters                    |

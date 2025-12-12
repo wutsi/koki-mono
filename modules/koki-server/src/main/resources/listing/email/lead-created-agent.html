@@ -1,30 +1,46 @@
-<center class="text-larger">
-    Vous avez reçu un message d'un potential client pour votre listing <em>#{{listingNumber}}</em> à l'addresse <em>{{listingAddress}}</em>.
-    <br/><br/>
-    <a class="btn btn-primary" href="{{leadUrl}}">Lire le Message</a>
-</center>
+<h3>Nouvelle Demande de Contact Direct</h3>
+<div>
+    Ceci est un prospect qui a choisi de vous contacter directement en se basant sur votre profil
+</div>
 
-<br/><br/>
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td><b>Nom du Prospect:</b></td>
+        <td>{{leadName}}</td>
+    </tr>
+    <tr>
+        <td><b>Numero de téléphone:</b></td>
+        <td>{{leadPhoneNumber}}</td>
+    </tr>
+    <tr>
+        <td><b>Email:</b></td>
+        <td>{{leadEmail}}</td>
+    </tr>
+</table>
 
-<center>
-    <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
-        <tr>
-            <td width="1%">
-                <a href="{{listingUrl}}" style="text-decoration: none; color: inherit;">
-                    <img src="{{listingImageUrl}}"
-                         style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
-                    />
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td class="padding" valign="top">
-                <a href="{{listingUrl}}" style="text-decoration: none; color: inherit;">
-                    <b class="text-larger">{{listingPrice}}</b><br/><br/>
-                    {{listingDescription}}<br/>
-                    {{listingAddress}}<br/>
-                </a>
-            </td>
-        </tr>
-    </table>
-</center>
+<h3>Message du Prospect</h3>
+<div class="padding box-highlight-light rounded">
+    {{leadMessage}}
+</div>
+
+
+<h3>Prochaines Étapes</h3>
+<ol>
+    <li>
+        <b>Réponse Prioritaire :</b> Répondez dans l'heure. Remerciez le prospect pour avoir choisi votre profil et
+        confirmez la réception de sa demande.
+    </li>
+    <li>
+        <b>Mise à Jour :</b> Enregistrez cette interaction dans le dossier du prospect.
+    </li>
+</ol>
+
+<h3>Liens d'action rapide</h3>
+<ol>
+    <li>
+        Voir le Profil de {{leadName}} en ligne. <a href="{{leadUrl}}">Voir le profil</a>
+    </li>
+    <li>
+        Appeler {{leadName}} maintenant: <a href="{{leadPhoneNumberUrl}}">{{leadPhoneNumber}}</a>.
+    </li>
+</ol>
