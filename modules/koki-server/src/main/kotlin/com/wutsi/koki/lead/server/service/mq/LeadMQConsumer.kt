@@ -1,4 +1,3 @@
 package com.wutsi.koki.lead.server.service.mq
 
-class LeadMQConsumer {
-}
+class LeadMQConsumer

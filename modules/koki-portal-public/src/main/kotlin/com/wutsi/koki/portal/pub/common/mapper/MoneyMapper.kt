@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.pub.common.mapper
 
+import com.wutsi.koki.platform.util.NumberUtils
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
-import com.wutsi.koki.portal.pub.common.service.NumberUtils
 import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
 import java.text.NumberFormat

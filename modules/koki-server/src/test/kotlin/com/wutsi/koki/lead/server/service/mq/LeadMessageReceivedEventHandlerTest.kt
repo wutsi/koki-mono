@@ -1,4 +1,2 @@
 import org.junit.jupiter.api.Assertions.*
-class LeadMessageReceivedEventHandlerTest {
-
-}
+class LeadMessageReceivedEventHandlerTest

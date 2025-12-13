@@ -1,4 +1,3 @@
 package com.wutsi.koki.lead.server.mapper
 
-class LeadMessageMapper {
-}
+class LeadMessageMapper

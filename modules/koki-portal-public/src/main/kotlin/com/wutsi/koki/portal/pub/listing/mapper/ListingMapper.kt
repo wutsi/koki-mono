@@ -3,11 +3,11 @@ package com.wutsi.koki.portal.pub.listing.mapper
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
-import com.wutsi.koki.portal.pub.common.service.Moment
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.refdata.model.AddressModel

@@ -5,6 +5,7 @@ import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.security.AuthorizationRestInterceptor
 import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
+import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.sdk.KokiAccounts
 import com.wutsi.koki.sdk.KokiAgent
 import com.wutsi.koki.sdk.KokiAuthentication
@@ -31,6 +32,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.web.client.RestTemplate
+import java.time.Clock
 import java.time.Duration
 
 @Configuration
@@ -40,11 +42,17 @@ class KokiSDKConfiguration(
     private val tenantRestInterceptor: TenantRestInterceptor,
     private val debugRestInterceptor: DebugRestInterceptor,
     private val authorizationRestInterceptor: AuthorizationRestInterceptor,
+    private val clock: Clock,
 
     @param:Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
     @param:Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
     @param:Value("\${koki.sdk.base-url}") private val baseUrl: String,
 ) {
+    @Bean
+    fun moment(): Moment {
+        return Moment(clock)
+    }
+
     @Bean
     fun urlBuilder(): URLBuilder {
         return URLBuilder(baseUrl)
