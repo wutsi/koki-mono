@@ -59,13 +59,13 @@ jobs:
                     mvn -Dspring.datasource.username=root -Dspring.datasource.password=root -q -s ../../settings.xml install
 
             -   name: Upload app bundle
-                uses: actions/upload-artifact@v5
+                uses: actions/upload-artifact@v6
                 with:
                     name: appbundle
                     path: modules/koki-server/target/*.jar
 
             -   name: Upload JaCoCo Report
-                uses: actions/upload-artifact@v5
+                uses: actions/upload-artifact@v6
                 with:
                     name: jacoco
                     path: modules/koki-server/target/site/jacoco/**/*
@@ -94,7 +94,7 @@ jobs:
                     heroku plugins:install @heroku-cli/plugin-java
 
             -   name: Get artifact
-                uses: actions/download-artifact@v6
+                uses: actions/download-artifact@v7
                 with:
                     name: appbundle
 

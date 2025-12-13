@@ -49,13 +49,13 @@ jobs:
                     mvn -s ../../settings.xml install -Dheadless=true
 
             -   name: Upload app bundle
-                uses: actions/upload-artifact@v5
+                uses: actions/upload-artifact@v6
                 with:
                     name: appbundle
                     path: modules/koki-portal-public/target/*.jar
 
             -   name: Upload JaCoCo Report
-                uses: actions/upload-artifact@v5
+                uses: actions/upload-artifact@v6
                 with:
                     name: jacoco-report
                     path: modules/koki-portal-public/target/site/jacoco/**/*
@@ -84,7 +84,7 @@ jobs:
                     heroku plugins:install @heroku-cli/plugin-java
 
             -   name: Get artifact
-                uses: actions/download-artifact@v6
+                uses: actions/download-artifact@v7
                 with:
                     name: appbundle
 
