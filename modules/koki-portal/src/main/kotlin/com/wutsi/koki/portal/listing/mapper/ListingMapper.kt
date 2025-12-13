@@ -6,11 +6,11 @@ import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.offer.dto.OfferParty
+import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.common.model.MoneyModel
-import com.wutsi.koki.portal.common.service.Moment
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.ListingModel

@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.common.mapper
 
+import com.wutsi.koki.platform.util.NumberUtils
 import com.wutsi.koki.portal.common.model.MoneyModel
-import com.wutsi.koki.portal.common.service.NumberUtils
 import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
 import java.text.NumberFormat
@@ -17,7 +17,7 @@ class MoneyMapper : TenantAwareMapper() {
         val text = createMoneyFormat().format(amount)
         return MoneyModel(
             amount = amount,
-            currency = currentTenant.get()?.currency ?: "",
+            currency = currentTenant.get().currency,
             text = text,
             displayText = text,
         )

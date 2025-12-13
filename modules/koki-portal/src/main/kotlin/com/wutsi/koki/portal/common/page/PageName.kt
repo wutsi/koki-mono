@@ -7,11 +7,7 @@ object PageName {
     const val ACCOUNT_CREATE = "page.account.create"
     const val ACCOUNT_SETTINGS = "page.settings.account"
     const val ACCOUNT_SETTINGS_ATTRIBUTE = "page.settings.account.attribute"
-    const val ACCOUNT_SETTINGS_ATTRIBUTE_IMPORT = "page.settings.account.attribute.import"
     const val ACCOUNT_SETTINGS_ATTRIBUTE_LIST = "page.settings.account.attribute.list"
-    const val ACCOUNT_SETTINGS_TYPE = "page.settings.account.type"
-    const val ACCOUNT_SETTINGS_TYPE_IMPORT = "page.settings.account.type.import"
-    const val ACCOUNT_SETTINGS_TYPE_LIST = "page.settings.account.type.list"
 
     const val AGENT = "page.agent"
     const val AGENT_LIST = "page.agent.list"
@@ -99,7 +95,6 @@ object PageName {
 
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"
-    const val TENANT_SETTINGS_TYPE_IMPORT = "page.settings.tenant.type.import"
     const val TENANT_SETTINGS_TYPE_LIST = "page.settings.tenant.type.list"
 
     const val SECURITY_SETTINGS = "page.settings.security"

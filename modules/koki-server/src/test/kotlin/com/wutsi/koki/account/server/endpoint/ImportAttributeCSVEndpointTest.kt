@@ -30,7 +30,7 @@ class ImportAttributeCSVEndpointTest : TenantAwareEndpointTest() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        val fileMap = LinkedMultiValueMap<String, String>()
+        val fileMap = HttpHeaders()
         val contentDisposition = ContentDisposition
             .builder("form-data")
             .name("file")

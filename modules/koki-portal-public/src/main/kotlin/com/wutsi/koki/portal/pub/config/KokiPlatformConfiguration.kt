@@ -17,11 +17,13 @@ import com.wutsi.koki.platform.tracking.ChannelTypeDetector
 import com.wutsi.koki.platform.tracking.ChannelTypeProvider
 import com.wutsi.koki.platform.tracking.CookieChannelTypeProvider
 import com.wutsi.koki.platform.tracking.servlet.ChannelTypeFilter
+import com.wutsi.koki.platform.util.Moment
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Clock
 
 @Configuration
 class KokiPlatformConfiguration(
@@ -29,15 +31,21 @@ class KokiPlatformConfiguration(
     private val request: HttpServletRequest,
     private val response: HttpServletResponse,
     private val logger: KVLogger,
+    private val clock: Clock,
 
-    @Value("\${koki.webapp.client-id}") private val clientId: String,
-    @Value("\${koki.webapp.base-url}") private val serverUrl: String,
+    @param:Value("\${koki.webapp.client-id}") private val clientId: String,
+    @param:Value("\${koki.webapp.base-url}") private val serverUrl: String,
 ) {
     companion object {
         const val COOKIE_ACCESS_TOKEN = "__atk"
         const val COOKIE_DEVICE_ID = "__did"
         const val COOKIE_CHANNEL_TYPE = "__chn"
         const val TTL = 86400
+    }
+
+    @Bean
+    fun moment(): Moment {
+        return Moment(clock)
     }
 
     @Bean

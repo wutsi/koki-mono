@@ -1,8 +1,8 @@
 package com.wutsi.koki.portal.pub.file.mapper
 
 import com.wutsi.koki.file.dto.FileSummary
+import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
-import com.wutsi.koki.portal.pub.common.service.Moment
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service

@@ -28,8 +28,6 @@ import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
 import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
-import com.wutsi.koki.common.dto.ImportMessage
-import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
 import com.wutsi.koki.contact.dto.CreateContactResponse
 import com.wutsi.koki.contact.dto.GetContactResponse
@@ -114,7 +112,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
@@ -242,27 +239,6 @@ abstract class AbstractPageControllerTest {
     }
 
     protected fun setupFileUploads() {
-        doReturn(
-            ResponseEntity(
-                ImportResponse(
-                    added = 4,
-                    updated = 5,
-                    errors = 3,
-                    errorMessages = listOf(
-                        ImportMessage(location = "1", code = "INVALID_NAME"),
-                        ImportMessage(location = "2", code = "INVALID_ADDRESS", "LocationModel is not valid"),
-                    )
-                ),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .exchange(
-                any<String>(),
-                any<HttpMethod>(),
-                any(),
-                any<Class<ImportResponse>>(),
-            )
-
         doReturn("http://localhost:$port/file/upload")
             .whenever(fileUploadUrlProvider)
             .get(anyOrNull(), anyOrNull(), anyOrNull())

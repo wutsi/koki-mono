@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.listing.form
 
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyType
-import com.wutsi.koki.portal.common.service.NumberUtils
+import com.wutsi.koki.platform.util.NumberUtils
 
 data class ListingFilterForm(
     val listingNumber: String? = null,
