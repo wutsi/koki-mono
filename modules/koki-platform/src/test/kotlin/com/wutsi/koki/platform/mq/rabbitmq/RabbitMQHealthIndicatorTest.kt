@@ -9,8 +9,8 @@ import com.rabbitmq.client.Connection
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.actuate.health.HealthIndicator
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.HealthIndicator
+import org.springframework.boot.health.contributor.Status
 
 class RabbitMQHealthIndicatorTest {
     private lateinit var channel: Channel
@@ -35,7 +35,7 @@ class RabbitMQHealthIndicatorTest {
 
         val result = health.health()
 
-        assertEquals(Status.UP, result.status)
+        assertEquals(Status.UP, result?.status)
     }
 
     @Test
@@ -44,6 +44,6 @@ class RabbitMQHealthIndicatorTest {
 
         val result = health.health()
 
-        assertEquals(Status.DOWN, result.status)
+        assertEquals(Status.DOWN, result?.status)
     }
 }

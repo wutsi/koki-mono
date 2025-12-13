@@ -1,6 +1,5 @@
 package com.wutsi.koki.listing.server.service.mq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
@@ -14,6 +13,7 @@ import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
 import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import tools.jackson.databind.json.JsonMapper
 import java.util.Date
 
 @Service
@@ -21,7 +21,7 @@ class ListingPublisher(
     private val listingService: ListingService,
     private val agentFactory: ListingAgentFactory,
     private val fileService: FileService,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val logger: KVLogger
 ) {
     @Transactional
@@ -45,7 +45,7 @@ class ListingPublisher(
         )
         val files = images.map { file -> fileService.download(file) }
         val json = agent.run(ListingDescriptorAgent.QUERY, files)
-        val result = objectMapper.readValue(json, ListingDescriptorAgentResult::class.java)
+        val result = jsonMapper.readValue(json, ListingDescriptorAgentResult::class.java)
         listing.status = ListingStatus.ACTIVE
         listing.title = result.title
         listing.summary = result.summary

@@ -1,6 +1,5 @@
 package com.wutsi.koki.listing.server.service.mq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -15,13 +14,13 @@ import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
-import com.wutsi.koki.listing.server.service.mq.ListingPublisher
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertNull
 import org.mockito.Mockito.mock
+import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -30,13 +29,13 @@ class ListingPublisherTest {
     private val agentFactory = mock<ListingAgentFactory>()
     private val fileService = mock<FileService>()
     private val listingService = mock<ListingService>()
-    private val objectMapper = ObjectMapper()
+    private val jsonMapper = JsonMapper()
     private val logger = DefaultKVLogger()
     private val handler = ListingPublisher(
         agentFactory = agentFactory,
         fileService = fileService,
         listingService = listingService,
-        objectMapper = objectMapper,
+        jsonMapper = jsonMapper,
         logger = logger
     )
 
@@ -75,7 +74,7 @@ class ListingPublisherTest {
         doReturn(agent).whenever(agentFactory).createDescriptorAgent(any(), any())
 
         doReturn(
-            ObjectMapper().writeValueAsString(result)
+            jsonMapper.writeValueAsString(result)
         ).whenever(agent).run(any(), any())
 
         doReturn(images).whenever(fileService).search(

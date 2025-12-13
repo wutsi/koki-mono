@@ -11,7 +11,6 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
-import org.apache.poi.hssf.usermodel.HeaderFooter.file
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -24,13 +23,12 @@ import java.nio.file.Files
 import java.util.Locale
 import java.util.UUID
 import java.util.zip.ZipFile
-import kotlin.io.outputStream
 
 @Service
 class GeonamesImporter(
     private val service: LocationService,
-    @Value("\${koki.module.ref-data.geonames.connect-timeout}") private val connectTimeout: Int,
-    @Value("\${koki.module.ref-data.geonames.read-timeout}") private val readTimeout: Int
+    @param:Value("\${koki.module.ref-data.geonames.connect-timeout}") private val connectTimeout: Int,
+    @param:Value("\${koki.module.ref-data.geonames.read-timeout}") private val readTimeout: Int
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(GeonamesImporter::class.java)

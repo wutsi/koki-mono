@@ -36,12 +36,11 @@ spring:
         default-property-inclusion: non_null
         deserialization:
             FAIL_ON_UNKNOWN_PROPERTIES: false
+            FAIL_ON_NULL_FOR_PRIMITIVES: false
             ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
         mapper:
             ACCEPT_CASE_INSENSITIVE_ENUMS: true
             ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
-        parser:
-            INCLUDE_SOURCE_IN_LOCATION: true
 
     mvc:
         pathmatch:

@@ -13,7 +13,7 @@ import java.util.Collections
 @Service
 class PersisterFilter(
     private val dao: TrackRepository,
-    @Value("\${koki.persister.buffer-size}") private val bufferSize: Int,
+    @param:Value("\${koki.persister.buffer-size}") private val bufferSize: Int,
 ) : Filter {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(PersisterFilter::class.java)

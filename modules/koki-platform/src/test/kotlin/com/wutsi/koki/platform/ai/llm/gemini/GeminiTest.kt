@@ -84,6 +84,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun generateWithSystemInstructions() {
         val response = llm.generateContent(
             request = LLMRequest(

@@ -52,7 +52,8 @@ abstract class AbstractListingMailet(
             "listingPrice" to format(listing.price, fmt, listing.listingType),
             "listingSalePrice" to format(listing.salePrice, fmt, listing.listingType),
             "listingBuyerCommissionPercent" to (listing.buyerAgentCommission ?: 0).toString() + "%",
-        ).filter { entry -> entry.value != null } as Map<String, Any>
+        ).filter { entry -> entry.value != null }
+            .map { entry -> entry.key to entry.value!! }.toMap()
     }
 
     private fun format(price: Long?, fmt: DecimalFormat, listingType: ListingType?): String? {

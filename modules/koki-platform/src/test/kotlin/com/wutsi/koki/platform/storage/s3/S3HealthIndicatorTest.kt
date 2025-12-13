@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.Status
 import kotlin.test.assertEquals
 
 class S3HealthIndicatorTest {

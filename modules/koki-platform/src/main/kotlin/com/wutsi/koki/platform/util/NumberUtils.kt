@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.pub.common.service
+package com.wutsi.koki.platform.util
 
 import java.text.DecimalFormat
 import java.text.StringCharacterIterator

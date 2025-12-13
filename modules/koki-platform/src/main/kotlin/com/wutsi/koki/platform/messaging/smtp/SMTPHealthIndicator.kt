@@ -2,8 +2,8 @@ package com.wutsi.koki.platform.messaging.smtp
 
 import jakarta.mail.Session
 import org.slf4j.LoggerFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 
 class SMTPHealthIndicator(
     private val session: Session

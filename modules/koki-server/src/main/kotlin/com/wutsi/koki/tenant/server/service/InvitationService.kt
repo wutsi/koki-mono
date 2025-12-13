@@ -29,7 +29,7 @@ class InvitationService(
     private val securityService: SecurityService,
     private val configurationService: ConfigurationService,
     private val em: EntityManager,
-    @Value("\${koki.module.invitation.ttl-days}") private val ttlDays: Int,
+    @param:Value("\${koki.module.invitation.ttl-days}") private val ttlDays: Int,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InvitationService::class.java)

@@ -12,7 +12,7 @@ import java.util.Date
 @Service
 open class AccessTokenService(
     private val jwtDecoder: JWTDecoder,
-    @Value("\${koki.module.security.access-token.ttl}") private val ttl: Int,
+    @param:Value("\${koki.module.security.access-token.ttl}") private val ttl: Int,
 ) {
     fun create(
         application: String,

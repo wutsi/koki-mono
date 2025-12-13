@@ -44,7 +44,7 @@ class ChannelTypeDetector {
         )
     }
 
-    open fun detect(url: String, referer: String, ua: String): ChannelType {
+    fun detect(url: String, referer: String, ua: String): ChannelType {
         // APP
         if (ua.contains("(dart:io)", true)) {
             return ChannelType.APP

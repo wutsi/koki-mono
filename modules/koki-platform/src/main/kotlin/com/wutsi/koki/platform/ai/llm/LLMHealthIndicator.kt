@@ -1,8 +1,8 @@
 package com.wutsi.koki.platform.ai.llm
 
 import org.slf4j.LoggerFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 
 class LLMHealthIndicator(
     private val llm: LLM

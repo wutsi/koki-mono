@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.pub.common.page
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.portal.pub.common.model.PageModel
 import com.wutsi.koki.portal.pub.tenant.model.TenantModel
@@ -13,11 +12,12 @@ import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
+import tools.jackson.databind.json.JsonMapper
 import java.util.Locale
 
 abstract class AbstractPageController {
     @Autowired
-    protected lateinit var objectMapper: ObjectMapper
+    protected lateinit var jsonMapper: JsonMapper
 
     @Value("\${koki.webapp.asset-url}")
     protected lateinit var assetUrl: String
@@ -65,7 +65,7 @@ abstract class AbstractPageController {
     }
 
     protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
-        return objectMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        return jsonMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
     }
 
     protected fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {

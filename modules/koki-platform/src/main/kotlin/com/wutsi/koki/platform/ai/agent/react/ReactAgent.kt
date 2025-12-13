@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.ai.agent.react
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.LLM
@@ -10,7 +9,7 @@ import com.wutsi.koki.platform.ai.llm.Role
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
-import java.lang.IllegalStateException
+import tools.jackson.databind.json.JsonMapper
 
 /**
  * Implementation of <a href="https://medium.com/google-cloud/building-react-agents-from-scratch-a-hands-on-guide-using-gemini-ffe4621d90ae">ReAct</a> agents
@@ -19,7 +18,7 @@ class ReactAgent(
     private val llm: LLM,
     private val query: String,
     private val agentTools: List<Tool>,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val memory: MutableList<String> = mutableListOf(),
     private val template: String = TEMPLATE,
     private val maxIterations: Int = 5,
@@ -103,7 +102,7 @@ class ReactAgent(
         logger.info("> model: " + llm::class.java.name)
 
         try {
-            val resp: Response = objectMapper.readValue(response, Response::class.java)
+            val resp: Response = jsonMapper.readValue(response, Response::class.java)
             logger.info("> ${resp.thought}")
 
             if (resp.answer != null) {

@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.pub
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doAnswer
@@ -73,6 +72,7 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
+import tools.jackson.databind.json.JsonMapper
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
@@ -131,7 +131,7 @@ abstract class AbstractPageControllerTest {
     protected lateinit var publisher: Publisher
 
     @Autowired
-    protected lateinit var objectMapper: ObjectMapper
+    protected lateinit var jsonMapper: JsonMapper
 
     protected val accessToken: String =
         "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJLb2tpIiwic3ViIjoiSGVydmUgVGNoZXBhbm5vdSIsInVzZXJJZCI6MjA0LCJ0ZW5hbnRJZCI6MSwiaWF0IjoxNzMxNTA5MDM0LCJleHAiOjE3MzE1OTU0MzR9."
@@ -505,7 +505,7 @@ abstract class AbstractPageControllerTest {
         return HttpClientErrorException(
             HttpStatusCode.valueOf(statusCode),
             "Error",
-            objectMapper.writeValueAsString(response).toByteArray(charset),
+            jsonMapper.writeValueAsString(response).toByteArray(charset),
             charset
         )
     }

@@ -1,11 +1,11 @@
 package com.wutsi.koki.listing.server.service.agent
 
 import com.amazonaws.util.IOUtils
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.file.dto.ImageQuality
 import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertNotNull
+import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.test.Ignore
@@ -27,7 +27,7 @@ class ListingImageReviewerAgentTest {
     fun run() {
         val file = getValidFile("/fs/listing/room.jpg")
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
-        val result = ObjectMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
         assertEquals(ImageQuality.HIGH, result.quality)
         assertEquals(true, result.valid)
         assertEquals(null, result.reason)
@@ -39,7 +39,7 @@ class ListingImageReviewerAgentTest {
         val file = getValidFile("/fs/listing/bad-image.jpg")
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
         println(json)
-        val result = ObjectMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
         assertEquals(ImageQuality.POOR, result.quality)
         assertEquals(false, result.valid)
         assertNotNull(result.reason)

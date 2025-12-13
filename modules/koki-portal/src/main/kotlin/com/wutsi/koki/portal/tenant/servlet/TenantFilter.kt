@@ -21,9 +21,7 @@ class TenantFilter(private val currentTenant: CurrentTenantHolder) : Filter {
                 val tenant = currentTenant.get()
 
                 // Check status
-                if (tenant == null) {
-                    response.sendError(404)
-                } else if (tenant.status == TenantStatus.SUSPENDED) {
+                if (tenant.status == TenantStatus.SUSPENDED) {
                     response.sendRedirect("/error/suspended")
                 } else if (tenant.status != TenantStatus.ACTIVE) {
                     response.sendRedirect("/error/under-construction")

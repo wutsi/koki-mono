@@ -17,9 +17,12 @@ import com.wutsi.koki.platform.ai.llm.gemini.model.GInlineData
 import com.wutsi.koki.platform.ai.llm.gemini.model.GPart
 import com.wutsi.koki.platform.ai.llm.gemini.model.GThinkingConfig
 import org.apache.commons.io.IOUtils
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.http.MediaType
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
 import org.springframework.web.client.HttpStatusCodeException
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.json.JsonMapper
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import java.util.Base64
@@ -33,6 +36,14 @@ class Gemini(
     private val rest = RestTemplateBuilder()
         .readTimeout(Duration.of(readTimeoutMillis, ChronoUnit.MILLIS))
         .connectTimeout(Duration.of(connectTimeoutMillis, ChronoUnit.MILLIS))
+        .additionalMessageConverters(
+            JacksonJsonHttpMessageConverter(
+                JsonMapper.builderWithJackson2Defaults()
+                    .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .build()
+            )
+        )
         .build()
 
     override fun models(): List<String> {
@@ -51,7 +62,7 @@ class Gemini(
             contents = request.messages.map { message ->
                 GContent(
                     role = toRole(message.role),
-                    parts = listOf(
+                    parts = listOfNotNull(
                         message.text?.let { text -> GPart(text = text) },
                         message.document?.let { document ->
                             GPart(
@@ -62,7 +73,7 @@ class Gemini(
                                 )
                             )
                         }
-                    ).filterNotNull()
+                    )
                 )
             },
             generationConfig = createConfig(request.config),
@@ -78,7 +89,7 @@ class Gemini(
             return LLMResponse(
                 messages = resp.candidates
                     .flatMap { candidate -> candidate.content.parts }
-                    .mapNotNull { part ->
+                    .map { part ->
                         Message(
                             role = Role.MODEL,
                             text = encodeResponse(request.config?.responseType, part.text),

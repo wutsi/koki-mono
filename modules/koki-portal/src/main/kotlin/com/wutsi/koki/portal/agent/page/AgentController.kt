@@ -101,7 +101,7 @@ class AgentController(
                     }
                 )
             }
-        return objectMapper.writeValueAsString(markers)
+        return jsonMapper.writeValueAsString(markers)
     }
 
     fun toMapCenterPoint(listings: List<ListingModel>): LocationModel? {

@@ -1,6 +1,5 @@
 package com.wutsi.koki.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
 import com.wutsi.koki.platform.mq.Consumer
@@ -9,12 +8,13 @@ import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQConsumer
 import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQPublisher
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.json.JsonMapper
 import java.util.Timer
 import java.util.TimerTask
 
 abstract class AbstractRabbitMQConsumerConfiguration(
     private val channel: Channel,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val publisher: Publisher,
 ) {
     protected fun processDlq(queue: String, dlq: String) {
@@ -40,7 +40,7 @@ abstract class AbstractRabbitMQConsumerConfiguration(
                     queue,
                     false, // auto-ack
                     RabbitMQConsumer(
-                        objectMapper = objectMapper,
+                        jsonMapper = jsonMapper,
                         delegate = consumer,
                         channel = channel,
                     ),

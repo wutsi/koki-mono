@@ -9,8 +9,8 @@ import com.wutsi.koki.platform.ai.llm.gemini.Gemini
 import com.wutsi.koki.platform.ai.llm.gemini.GeminiBuilder
 import com.wutsi.koki.platform.ai.llm.koki.KokiBuilder
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -21,13 +21,13 @@ import org.springframework.context.annotation.Configuration
     matchIfMissing = false,
 )
 class AIConfiguration(
-    @Value("\${wutsi.platform.ai.rest.read-timeout}") private val restReadTimeoutMillis: Long,
-    @Value("\${wutsi.platform.ai.rest.connect-timeout}") private val restConnectTimeoutMillis: Long,
-    @Value("\${wutsi.platform.ai.model.type}") private val model: String,
-    @Value("\${wutsi.platform.ai.model.gemini.model}") private val geminiModel: String,
-    @Value("\${wutsi.platform.ai.model.gemini.api-key}") private val geminiApiKey: String,
-    @Value("\${wutsi.platform.ai.model.deepseek.model}") private val deepseekModel: String,
-    @Value("\${wutsi.platform.ai.model.deepseek.api-key}") private val deepseekApiKey: String,
+    @param:Value("\${wutsi.platform.ai.rest.read-timeout}") private val restReadTimeoutMillis: Long,
+    @param:Value("\${wutsi.platform.ai.rest.connect-timeout}") private val restConnectTimeoutMillis: Long,
+    @param:Value("\${wutsi.platform.ai.model.type}") private val model: String,
+    @param:Value("\${wutsi.platform.ai.model.gemini.model}") private val geminiModel: String,
+    @param:Value("\${wutsi.platform.ai.model.gemini.api-key}") private val geminiApiKey: String,
+    @param:Value("\${wutsi.platform.ai.model.deepseek.model}") private val deepseekModel: String,
+    @param:Value("\${wutsi.platform.ai.model.deepseek.api-key}") private val deepseekApiKey: String,
 ) {
     @Bean
     fun LLMBuilder(): LLMBuilder {

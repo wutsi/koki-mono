@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.GetResponse
@@ -8,6 +7,7 @@ import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.json.JsonMapper
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -15,7 +15,7 @@ import java.util.Date
 
 class RabbitMQPublisher(
     private val channel: Channel,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val storageBuilder: StorageServiceBuilder,
     private val exchangeName: String,
     private val maxRetries: Int,
@@ -32,7 +32,7 @@ class RabbitMQPublisher(
                 exchangeName,
                 "", // routing-key
                 properties(), // basic-properties
-                objectMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
+                jsonMapper.writeValueAsString(rabbitMQEvent).toByteArray(Charset.forName("utf-8")),
             )
         } catch (ex: Exception) {
             LOGGER.warn("Unnable to publish event: $event", ex)
@@ -96,7 +96,7 @@ class RabbitMQPublisher(
     private fun createRabbitMQEvent(event: Any): RabbitMQEvent {
         return RabbitMQEvent(
             classname = event::class.java.name,
-            payload = objectMapper.writeValueAsString(event),
+            payload = jsonMapper.writeValueAsString(event),
         )
     }
 

@@ -86,7 +86,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                 </center>
 
                 <p>
-                    Cette transaction a été réalisée au prix de <b>C$ 175,000</b>, en co-courtage avec l'agent <a href="/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
+                    Cette transaction a été réalisée au prix de <b>C$ 175,000</b>, en co-courtage avec l'agent <a href="https://realtor.com/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
                     <br/>
                     Votre commission s'élève à <b>3.0%</b>.
                 </p>
@@ -97,7 +97,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                     <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
                         <tr>
                             <td width="1%">
-                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                <a href="https://realtor.com/listings/111" style="text-decoration: none; color: inherit;">
                                     <img src="https://picsum.photos/1200/800"
                                          style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
                                     />
@@ -106,7 +106,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                         </tr>
                         <tr>
                             <td class="padding" valign="top">
-                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                <a href="https://realtor.com/listings/111" style="text-decoration: none; color: inherit;">
                                     <b class="text-larger">C$ 150,000</b><br/><br/>
                                     3 Chambres | 2 Bains | 750 m2<br/>
                                     340 Pascal, Bastos, Yaounde<br/>
@@ -151,7 +151,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                 </center>
 
                 <p>
-                    Cette transaction a été réalisée au prix de <b>C$ 175,000/mo</b>, en co-courtage avec l'agent <a href="/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
+                    Cette transaction a été réalisée au prix de <b>C$ 175,000/mo</b>, en co-courtage avec l'agent <a href="https://realtor.com/agents/7777"><b>John Smith (REIMAX LAVAL)</b></a>.
                     <br/>
                     Votre commission s'élève à <b>3.0%</b>.
                 </p>
@@ -162,7 +162,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                     <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
                         <tr>
                             <td width="1%">
-                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                <a href="https://realtor.com/listings/111" style="text-decoration: none; color: inherit;">
                                     <img src="https://picsum.photos/1200/800"
                                          style="width: 400px; height: 300px; object-fit: cover; border-radius: 0.5em 0.5em 0 0"
                                     />
@@ -171,7 +171,7 @@ class ListingClosedMailetTest : AbstractListingMailetTest() {
                         </tr>
                         <tr>
                             <td class="padding" valign="top">
-                                <a href="/listings/111" style="text-decoration: none; color: inherit;">
+                                <a href="https://realtor.com/listings/111" style="text-decoration: none; color: inherit;">
                                     <b class="text-larger">C$ 150,000/mo</b><br/><br/>
                                     3 Chambres | 2 Bains | 750 m2<br/>
                                     340 Pascal, Bastos, Yaounde<br/>

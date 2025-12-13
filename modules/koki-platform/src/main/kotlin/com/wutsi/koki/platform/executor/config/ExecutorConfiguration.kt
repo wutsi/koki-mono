@@ -9,15 +9,16 @@ import java.util.concurrent.Executors
 
 @Configuration
 class ExecutorConfiguration(
-    @Value("\${wutsi.platform.executor.thread-pool.name}") private val name: String,
-    @Value("\${wutsi.platform.executor.thread-pool.size:16}") private val size: Int
+    @param:Value("\${wutsi.platform.executor.thread-pool.name}") private val name: String,
+    @param:Value("\${wutsi.platform.executor.thread-pool.size:16}") private val size: Int
 ) {
     @Bean(destroyMethod = "shutdown")
     open fun executorService(): ExecutorService {
         val tf = BasicThreadFactory
-            .Builder()
+            .builder()
             .namingPattern("$name-%d")
             .build()
+
         return Executors.newFixedThreadPool(size, tf)
     }
 }

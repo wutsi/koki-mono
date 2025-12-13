@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.module.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.portal.common.service.TogglesHolder
 import com.wutsi.koki.portal.module.mapper.ModuleMapper
 import com.wutsi.koki.portal.module.model.LayoutDescriptor
@@ -10,12 +9,13 @@ import com.wutsi.koki.sdk.KokiModules
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import tools.jackson.databind.json.JsonMapper
 
 @Service
 class ModuleService(
     private val koki: KokiModules,
     private val mapper: ModuleMapper,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val toggleHolder: TogglesHolder,
 ) {
     companion object {
@@ -35,7 +35,7 @@ class ModuleService(
             throw IllegalStateException("Layout descriptor not found: $path")
         }
 
-        layoutDescriptor = objectMapper.readValue(input, LayoutDescriptor::class.java)
+        layoutDescriptor = jsonMapper.readValue(input, LayoutDescriptor::class.java)
     }
 
     fun modules(): List<ModuleModel> {

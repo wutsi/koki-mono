@@ -8,7 +8,7 @@ import jakarta.mail.Session
 import jakarta.mail.Transport
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.Status
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

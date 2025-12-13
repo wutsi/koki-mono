@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.common.page
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
@@ -23,6 +22,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.client.HttpClientErrorException
+import tools.jackson.databind.json.JsonMapper
 import java.util.Locale
 
 abstract class AbstractPageController {
@@ -31,7 +31,7 @@ abstract class AbstractPageController {
     }
 
     @Autowired
-    protected lateinit var objectMapper: ObjectMapper
+    protected lateinit var jsonMapper: JsonMapper
 
     @Autowired
     protected lateinit var userHolder: CurrentUserHolder
@@ -76,7 +76,7 @@ abstract class AbstractPageController {
     }
 
     protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
-        return objectMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        return jsonMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
     }
 
     protected fun canShowToasts(
@@ -120,7 +120,7 @@ abstract class AbstractPageController {
         )
     }
 
-    protected fun getMessage(key: String, args: Array<Any?>? = null, locale: Locale? = null): String {
+    protected fun getMessage(key: String, args: Array<Any>? = null, locale: Locale? = null): String {
         try {
             val loc = locale ?: LocaleContextHolder.getLocale()
             return messages.getMessage(key, args, loc)
