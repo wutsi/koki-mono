@@ -50,6 +50,9 @@ abstract class AbstractListingMailetTest {
         logoUrl = "https://picsum.photos/200/200",
         monetaryFormat = "C\$ #,###,##0",
         numberFormat = "#,###,##0.00",
+        portalUrl = "https://realtor.com",
+        dateFormat = "YYYY-MM-DD",
+        dateTimeFormat = "YYYY-MM-DD HH:mm:ss",
     )
     protected val sellerAgent = UserEntity(
         id = 333L,

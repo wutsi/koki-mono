@@ -27,15 +27,11 @@ class GetLeadEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(111L, lead.listingId)
         assertEquals("xxx", lead.deviceId)
         assertEquals(11L, lead.userId)
-        assertEquals("Hello world", lead.message)
-        assertEquals("Yo", lead.firstName)
-        assertEquals("Man", lead.lastName)
-        assertEquals("2026-12-30", df.format(lead.visitRequestedAt))
-        assertEquals("+15477580000", lead.phoneNumber)
-        assertEquals("yo.man@gmail.com", lead.email)
+        assertEquals(222L, lead.agentUserId)
+        assertEquals(1000, lead.lastMessageId)
         assertEquals(LeadStatus.CONTACTED, lead.status)
-        assertEquals("ca", lead.country)
-        assertEquals(1111L, lead.cityId)
+        assertEquals("2026-12-30", df.format(lead.nextVisitAt))
+        assertEquals("2026-11-30", df.format(lead.nextContactAt))
     }
 
     @Test

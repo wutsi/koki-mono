@@ -1,13 +1,57 @@
-<center class="text-larger">
-    Vous avez reçu un message d'un potential client pour votre listing <em>#{{listingNumber}}</em> à l'addresse <em>{{listingAddress}}</em>.
-    <br/><br/>
-    <a class="btn btn-primary" href="{{leadUrl}}">Lire le Message</a>
-</center>
+{{#leadNew}}
+<h3>Nouvelle Demande de Prospect (Action Requise!)</h3>
+{{/leadNew}}
+{{^leadNew}}
+<h3>Message de Suivi (Engagement Élevé)</h3>
+{{/leadNew}}
+
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <td><b>Nom du Prospect:</b></td>
+        <td>{{leadName}}</td>
+    </tr>
+    <tr>
+        <td><b>Numero de téléphone:</b></td>
+        <td>{{leadPhoneNumber}}</td>
+    </tr>
+    <tr>
+        <td><b>Email:</b></td>
+        <td>{{leadEmail}}</td>
+    </tr>
+</table>
+
+<h3>Message du Prospect</h3>
+<div class="padding box-highlight-light rounded">
+    {{leadMessage}}
+</div>
+
+<h3>Prochaines Étapes</h3>
+<ol>
+    <li>
+        <b>Réponse Prioritaire :</b> Contactez le prospect dans les 15 minutes.
+    </li>
+    <li>
+        <b>Planification :</b> Confirmez l'heure de la visite ou proposez des alternatives.
+    </li>
+    <li>
+        <b>Mise à Jour :</b> Enregistrez cette interaction dans le dossier du prospect.
+    </li>
+</ol>
+
+<h3>Liens d'action rapide</h3>
+<ol>
+    <li>
+        Voir le Profil de {{leadName}} en ligne. <a href="{{leadUrl}}">Voir le profil</a>
+    </li>
+    <li>
+        Appeler {{leadName}} maintenant: <a href="{{leadPhoneNumberUrl}}">{{leadPhoneNumber}}</a>.
+    </li>
+</ol>
 
 <br/><br/>
 
 <center>
-    <table width="400" cellspacing="0" cellpadding="0" style="border: 1px solid gray; border-radius: 0.5em">
+    <table cellpadding="0" cellspacing="0" style="border: 1px solid gray; border-radius: 0.5em" width="400">
         <tr>
             <td width="1%">
                 <a href="{{listingUrl}}" style="text-decoration: none; color: inherit;">

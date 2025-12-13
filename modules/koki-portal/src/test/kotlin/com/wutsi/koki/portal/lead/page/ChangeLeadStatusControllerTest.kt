@@ -24,7 +24,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ChangeLeadStatusControllerTest : AbstractPageControllerTest() {
-    private val fmt = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+    private val fmt = SimpleDateFormat("yyyy-MM-dd'T'hh:mm a")
 
     @Test
     fun edit() {
@@ -55,7 +55,9 @@ class ChangeLeadStatusControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/leads/status?id=${lead.id}")
 
-        val date = fmt.format(DateUtils.addDays(Date(), 3)).replaceFirst("-", "\t")
+        val date = fmt.format(DateUtils.addDays(Date(), 3))
+            .replaceFirst("-", "\t")
+            .replace(" ", "")
         assertCurrentPageIs(PageName.LEAD_STATUS)
         click("#chk-status-" + LeadStatus.CONTACT_LATER)
         scrollToBottom()
@@ -83,7 +85,9 @@ class ChangeLeadStatusControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/leads/status?id=${lead.id}")
 
-        val date = fmt.format(DateUtils.addDays(Date(), 3)).replaceFirst("-", "\t")
+        val date = fmt.format(DateUtils.addDays(Date(), 3))
+            .replaceFirst("-", "\t")
+            .replace(" ", "")
         assertCurrentPageIs(PageName.LEAD_STATUS)
         click("#chk-status-" + LeadStatus.VISIT_SET)
         scrollToBottom()

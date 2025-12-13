@@ -29,6 +29,7 @@ data class UserModel(
     val category: CategoryModel? = null,
     val city: LocationModel? = null,
     val country: String? = null,
+    val countryName: String? = null,
     val whatsappUrl: String? = null,
     val biography: String? = null,
     val websiteUrl: String? = null,
@@ -79,4 +80,7 @@ data class UserModel(
 
     val biographyHtml: String?
         get() = biography?.let { bio -> HtmlUtils.toHtml(bio) }
+
+    val location: String?
+        get() = city?.let { c -> "${c.name}, ${c.countryName}" } ?: countryName
 }

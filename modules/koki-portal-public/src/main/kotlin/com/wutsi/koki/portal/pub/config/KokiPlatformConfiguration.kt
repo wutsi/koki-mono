@@ -33,8 +33,8 @@ class KokiPlatformConfiguration(
     private val logger: KVLogger,
     private val clock: Clock,
 
-    @Value("\${koki.webapp.client-id}") private val clientId: String,
-    @Value("\${koki.webapp.base-url}") private val serverUrl: String,
+    @param:Value("\${koki.webapp.client-id}") private val clientId: String,
+    @param:Value("\${koki.webapp.base-url}") private val serverUrl: String,
 ) {
     companion object {
         const val COOKIE_ACCESS_TOKEN = "__atk"

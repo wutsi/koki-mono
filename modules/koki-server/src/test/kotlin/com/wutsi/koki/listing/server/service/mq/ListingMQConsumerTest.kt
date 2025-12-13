@@ -1,21 +1,17 @@
 package com.wutsi.koki.listing.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
-import com.wutsi.koki.lead.dto.event.LeadCreatedEvent
+import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
-import com.wutsi.koki.listing.server.service.mq.ListingFileDeletedEventHandler
-import com.wutsi.koki.listing.server.service.mq.ListingFileUploadedEventHandler
-import com.wutsi.koki.listing.server.service.mq.ListingLeadCreatedEventHandler
-import com.wutsi.koki.listing.server.service.mq.ListingMQConsumer
-import com.wutsi.koki.listing.server.service.mq.ListingOfferStatusChangedEventHandler
-import com.wutsi.koki.listing.server.service.mq.ListingOfferSubmittedEventHandler
-import com.wutsi.koki.listing.server.service.mq.ListingStatusChangedEventHandler
 import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
 import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
+import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,15 +22,25 @@ class ListingMQConsumerTest {
     private val listingStatusChangedEventHandler = mock<ListingStatusChangedEventHandler>()
     private val offerSubmittedEventHandler = mock<ListingOfferSubmittedEventHandler>()
     private val offerStatusChangedEventHandler = mock<ListingOfferStatusChangedEventHandler>()
-    private val leadCreatedEventHandler = mock<ListingLeadCreatedEventHandler>()
+    private val leadMessageReceivedEventHandler = mock<ListingLeadMessageReceivedEventHandler>()
     private val consumer = ListingMQConsumer(
         fileUploadedEventHandler = fileUploadedEventHandler,
         fileDeletedEventHandler = fileDeletedEventHandler,
         listingStatusChangedEventHandler = listingStatusChangedEventHandler,
         offerSubmittedEventHandler = offerSubmittedEventHandler,
         offerStatusChangedEventHandler = offerStatusChangedEventHandler,
-        leadCreatedEventHandler = leadCreatedEventHandler
+        leadMessageReceivedEventHandler = leadMessageReceivedEventHandler
     )
+
+    @BeforeEach
+    fun setUp() {
+        doReturn(true).whenever(fileUploadedEventHandler).handle(any())
+        doReturn(true).whenever(fileDeletedEventHandler).handle(any())
+        doReturn(true).whenever(listingStatusChangedEventHandler).handle(any())
+        doReturn(true).whenever(offerSubmittedEventHandler).handle(any())
+        doReturn(true).whenever(offerStatusChangedEventHandler).handle(any())
+        doReturn(true).whenever(leadMessageReceivedEventHandler).handle(any())
+    }
 
     @Test
     fun fileUploaded() {
@@ -47,7 +53,7 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
     @Test
@@ -61,7 +67,7 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
     @Test
@@ -75,7 +81,7 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler).handle(event)
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
     @Test
@@ -89,7 +95,7 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler).handle(event)
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
     @Test
@@ -103,12 +109,12 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler).handle(event)
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
     @Test
     fun leadCreatedEvent() {
-        val event = LeadCreatedEvent()
+        val event = LeadMessageReceivedEvent()
         val result = consumer.consume(event)
 
         assertEquals(true, result)
@@ -117,7 +123,7 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler).handle(event)
+        verify(leadMessageReceivedEventHandler).handle(event)
     }
 
     @Test
@@ -130,6 +136,6 @@ class ListingMQConsumerTest {
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
-        verify(leadCreatedEventHandler, never()).handle(any())
+        verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 }

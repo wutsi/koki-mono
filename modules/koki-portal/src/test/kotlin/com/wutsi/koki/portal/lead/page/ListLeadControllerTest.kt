@@ -24,7 +24,7 @@ class ListLeadControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun loadMore() {
-        var entries = mutableListOf<LeadSummary>()
+        val entries = mutableListOf<LeadSummary>()
         var seed = System.currentTimeMillis()
         repeat(20) {
             entries.add(leads[0].copy(id = ++seed))

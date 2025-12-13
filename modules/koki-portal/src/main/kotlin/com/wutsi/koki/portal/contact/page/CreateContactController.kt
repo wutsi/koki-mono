@@ -9,8 +9,6 @@ import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.tenant.service.TypeService
-import io.lettuce.core.KillArgs.Builder.id
-import jdk.javadoc.internal.doclets.toolkit.util.DocPath.parent
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -47,7 +45,7 @@ class CreateContactController(
         val form = ContactForm(
             accountId = account?.id ?: -1,
             language = account?.language ?: LocaleContextHolder.getLocale().language,
-            country = city?.country ?: tenantHolder.get()?.country,
+            country = city?.country ?: tenantHolder.get().country,
             cityId = city?.id,
         )
         return create(form, model, city)

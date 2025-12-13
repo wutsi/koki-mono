@@ -46,7 +46,7 @@ class LeadService(
             message = form.message,
             email = email,
             phoneNumber = form.phoneFull,
-            source = LeadSource.WEBSITE,
+            source = LeadSource.LISTING,
             userId = userIdProvider.get(),
             cityId = city?.id,
             country = city?.country ?: resolveCountryFromPhone(form.phoneFull),
