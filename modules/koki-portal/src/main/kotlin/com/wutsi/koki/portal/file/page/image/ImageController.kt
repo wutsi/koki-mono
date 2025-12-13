@@ -50,9 +50,8 @@ class ImageController(
     private fun getCloseUrl(file: FileModel): String? {
         val owner = file.owner
         if (owner != null) {
-            val module = tenantHolder.get()
-                ?.modules
-                ?.find { module -> module.objectType == owner.type }
+            val module = tenantHolder.get().modules
+                .find { module -> module.objectType == owner.type }
 
             if (module?.homeUrl != null) {
                 return "${module.homeUrl}/${owner.id}?tab=image"

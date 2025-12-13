@@ -10,7 +10,7 @@ abstract class AbstractModulePageController : AbstractPageController() {
     @ModelAttribute("module")
     fun getModule(): ModuleModel {
         val name = getModuleName()
-        return tenantHolder.get()!!.modules.find { module -> module.name == name }
+        return tenantHolder.get().modules.find { module -> module.name == name }
             ?: throw IllegalStateException("Invalid module: $name")
     }
 }

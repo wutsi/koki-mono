@@ -16,6 +16,7 @@ import java.util.Locale
 @Service
 class RefDataMapper : TenantAwareMapper() {
     fun toLocationModel(entity: Location): LocationModel {
+        val locale = Locale(LocaleContextHolder.getLocale().language, entity.country)
         return LocationModel(
             id = entity.id,
             name = entity.name,
@@ -24,6 +25,7 @@ class RefDataMapper : TenantAwareMapper() {
             country = entity.country,
             longitude = entity.longitude,
             latitude = entity.latitude,
+            countryName = locale.displayCountry,
         )
     }
 

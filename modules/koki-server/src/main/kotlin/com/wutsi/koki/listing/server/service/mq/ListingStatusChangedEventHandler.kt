@@ -12,7 +12,7 @@ class ListingStatusChangedEventHandler(
     private val publisher: Publisher,
     private val logger: KVLogger,
 ) {
-    fun handle(event: ListingStatusChangedEvent) {
+    fun handle(event: ListingStatusChangedEvent): Boolean {
         logger.add("event_status", event.status)
         logger.add("event_listing_id", event.listingId)
         logger.add("event_tenant_id", event.tenantId)
@@ -28,6 +28,9 @@ class ListingStatusChangedEventHandler(
                     )
                 )
             }
+            return true
+        } else {
+            return false
         }
     }
 }

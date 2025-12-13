@@ -27,7 +27,7 @@ abstract class AbstractModuleDetailsPageController : AbstractModulePageControlle
         val logger = LoggerFactory.getLogger(this::class.java)
 
         val user = userHolder.get() ?: return super.createPageModel(name, title)
-        val tenant = tenantHolder.get() ?: return super.createPageModel(name, title)
+        val tenant = tenantHolder.get()
         val moduleMap = tenant.modules.associateBy { module -> module.name }
 
         return PageModel(

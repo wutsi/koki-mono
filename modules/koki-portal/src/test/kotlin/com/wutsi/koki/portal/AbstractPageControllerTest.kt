@@ -41,7 +41,9 @@ import com.wutsi.koki.file.dto.GetFileResponse
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
+import com.wutsi.koki.lead.dto.GetLeadMessageResponse
 import com.wutsi.koki.lead.dto.GetLeadResponse
+import com.wutsi.koki.lead.dto.SearchLeadMessageResponse
 import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
@@ -831,6 +833,7 @@ abstract class AbstractPageControllerTest {
     }
 
     fun setupLeadModule() {
+        // Lead
         doReturn(
             ResponseEntity(
                 GetLeadResponse(lead = LeadFixtures.lead),
@@ -863,6 +866,29 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateLeadRequest>(),
                 eq(CreateLeadResponse::class.java)
+            )
+
+        // LeadMessage
+        doReturn(
+            ResponseEntity(
+                GetLeadMessageResponse(message = LeadFixtures.message),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetLeadMessageResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SearchLeadMessageResponse(messages = LeadFixtures.messages),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchLeadMessageResponse::class.java)
             )
     }
 

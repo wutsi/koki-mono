@@ -2,16 +2,17 @@ package com.wutsi.koki.portal.lead.page
 
 import com.wutsi.koki.portal.lead.model.LeadModel
 import com.wutsi.koki.portal.lead.service.LeadService
+import com.wutsi.koki.portal.module.page.AbstractModuleDetailsPageController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
-abstract class AbstractLeadDetailsController : AbstractLeadController() {
+abstract class AbstractLeadDetailsController : AbstractModuleDetailsPageController() {
     @Autowired
     protected lateinit var service: LeadService
 
     override fun getModuleName(): String {
-        return MODULE_NAME
+        return AbstractLeadController.MODULE_NAME
     }
 
     protected fun findLead(id: Long): LeadModel {

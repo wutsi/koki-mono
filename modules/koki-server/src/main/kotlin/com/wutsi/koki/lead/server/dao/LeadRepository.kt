@@ -7,5 +7,16 @@ import org.springframework.stereotype.Repository
 @Repository
 interface LeadRepository : CrudRepository<LeadEntity, Long> {
     fun countByListingIdAndTenantId(listingId: Long, tenantId: Long): Long?
-    fun findByListingIdAndUserIdAndTenantId(listingId: Long, userId: Long, tenantId: Long): LeadEntity?
+    fun findByListingIdAndUserIdAndTenantId(
+        listingId: Long,
+        userId: Long,
+        tenantId: Long
+    ): LeadEntity?
+
+    fun findByListingIdAndUserIdAndAgentUserIdAndTenantId(
+        listingId: Long?,
+        userId: Long,
+        agentUserId: Long,
+        tenantId: Long
+    ): LeadEntity?
 }

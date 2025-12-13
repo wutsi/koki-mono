@@ -59,7 +59,7 @@ class FileController(
             )
         )
 
-        val ownerModule = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
+        val ownerModule = tenantHolder.get().modules.find { module -> module.objectType == ownerType }!!
         model.addAttribute("ownerModule", ownerModule)
         model.addAttribute("ownerUrl", "${ownerModule.homeUrl}/$ownerId?tab=file")
         model.addAttribute(
@@ -83,7 +83,7 @@ class FileController(
         val file = service.get(id)
         service.delete(id)
 
-        val module = tenantHolder.get()!!.modules.find { module -> module.objectType == ownerType }!!
+        val module = tenantHolder.get().modules.find { module -> module.objectType == ownerType }!!
         val tab = if (file.type == FileType.IMAGE) {
             "image"
         } else {

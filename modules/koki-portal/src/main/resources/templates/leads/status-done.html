@@ -16,9 +16,8 @@
                     <h1 class="margin-none success">
                         <i class="fa-solid fa-circle-check"></i>
                     </h1>
-                    <div class="margin-top text-larger"
-                         th:utext="#{page.lead.status.done(${lead.displayName})}">
-                        DESCRIPTION
+                    <div class="margin-top text-larger" th:utext="#{page.lead.status.done(${lead.user.displayName})}">
+                        USER
                     </div>
                     <div class="margin-top" th:if="${lead.statusContactLater}">
                         <b th:text="#{page.lead.next-contact-at}">NEXT</b>

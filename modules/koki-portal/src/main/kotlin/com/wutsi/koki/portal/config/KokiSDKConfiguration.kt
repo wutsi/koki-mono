@@ -12,6 +12,7 @@ import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
 import com.wutsi.koki.sdk.KokiFiles
 import com.wutsi.koki.sdk.KokiInvitations
+import com.wutsi.koki.sdk.KokiLeadMessages
 import com.wutsi.koki.sdk.KokiLeads
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiMessages
@@ -88,6 +89,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiLeads(): KokiLeads {
         return KokiLeads(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiLeadMessages(): KokiLeadMessages {
+        return KokiLeadMessages(urlBuilder(), rest())
     }
 
     @Bean

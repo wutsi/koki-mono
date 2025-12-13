@@ -13,7 +13,7 @@
                     <a href="/leads" th:text="#{module.lead}">MODULE</a>
                 </li>
                 <li class="breadcrumb-item active" th:if="${lead}">
-                    <span th:text="${lead.displayName}">NAME</span>
+                    <span th:text="${lead.user.displayName}">NAME</span>
                 </li>
                 <li class="breadcrumb-item active" th:if="!${lead}" th:text="#{module.lead}">MODULE</li>
             </ol>
@@ -76,7 +76,7 @@
 <tr th:fragment="lead-row(lead, showStatus)" th:remove="tag">
     <td>
         <a th:href="'/leads/' + ${lead.id}">
-            <span th:text="${lead.displayName}">NAME</span>
+            <span th:text="${lead.user.displayName}">NAME</span>
             <table class="text-small d-block d-md-none"
                    th:if="${lead.nextContactAtText} OR ${lead.nextVisitAtText}">
                 <tr th:if="${lead.nextContactAtText}">
@@ -87,9 +87,9 @@
                     <td><i class="fa-solid fa-calendar-days"></i></td>
                     <td class="margin-left" th:text="${lead.nextVisitAtText}">yyyy-MM-dd</td>
                 </tr>
-                <tr th:if="${lead.address}">
+                <tr th:if="${lead.user.location}">
                     <td><i class="fa-solid fa-location-dot"></i></td>
-                    <td class="margin-left" th:text="${lead.address}">ADDRESS</td>
+                    <td class="margin-left" th:text="${lead.user.location}">LOCATION</td>
                 </tr>
                 <tr th:if="${showStatus}">
                     <td colspan="2">
@@ -105,13 +105,27 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.address}">ADDRESS</a>
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.user.city?.name}">ADDRESS</a>
     </td>
     <td class="d-none d-md-table-cell">
         <a th:href="'/leads/' + ${lead.id}" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</a>
     </td>
     <td class="text-right">
         <a th:href="'/leads/' + ${lead.id}" th:text="${lead.createdAtText}">YYYY-MM-DD</a>
+    </td>
+</tr>
+
+<tr th:fragment="lead-message(msg)" th:remove="tag">
+    <td class="border margin-bottom border-rounded padding">
+        <div th:utext="${msg.contentHtml}">CONTENT</div>
+        <div class="margin-top text-small">
+            <b th:text="#{page.lead.sent-at} + ': '">SENT</b>
+            <span th:text="${msg.createdAt}">YYY-MM-DD</span>
+        </div>
+        <div class="margin-top-small text-small" th:if="${message.visitRequestedAt}">
+            <b th:text="#{page.lead.visit-request-at} + ': '">VISIT</b>
+            <span th:text="${msg.visitRequestedAtText}">YYY-MM-DD</span>
+        </div>
     </td>
 </tr>
 </body>

@@ -29,7 +29,7 @@ class ChangeLeadStatusController : AbstractLeadDetailsController() {
                 id = id,
                 status = lead.status,
                 nextContactAt = lead.nextContactAt?.let { date -> df.format(date) },
-                nextVisitAt = (lead.nextVisitAt ?: lead.visitRequestedAt)?.let { date -> df.format(date) }
+                nextVisitAt = (lead.nextVisitAt ?: lead.lastMessage.visitRequestedAt)?.let { date -> df.format(date) }
             )
         )
 
@@ -37,7 +37,7 @@ class ChangeLeadStatusController : AbstractLeadDetailsController() {
             "page",
             createPageModel(
                 name = PageName.LEAD_STATUS,
-                title = lead.displayName,
+                title = lead.user.displayName ?: "",
             )
         )
         return "leads/status"

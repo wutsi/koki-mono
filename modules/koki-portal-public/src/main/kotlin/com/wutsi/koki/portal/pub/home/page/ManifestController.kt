@@ -1,11 +1,9 @@
 package com.wutsi.koki.portal.pub.home.page
 
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.client.HttpClientErrorException
 
 @Controller
 class ManifestController : AbstractPageController() {
@@ -13,8 +11,6 @@ class ManifestController : AbstractPageController() {
     @GetMapping("/manifest.json")
     fun show(): Map<String, Any> {
         val tenant = tenantHolder.get()
-            ?: throw HttpClientErrorException(HttpStatus.NOT_FOUND)
-
         return mapOf(
             "name" to tenant.name,
             "shortName" to tenant.name,

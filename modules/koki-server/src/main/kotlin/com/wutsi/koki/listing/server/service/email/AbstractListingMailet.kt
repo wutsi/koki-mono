@@ -10,7 +10,6 @@ import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.springframework.context.MessageSource
 import java.text.DecimalFormat
 import java.util.Locale
-import java.util.Map.entry
 
 abstract class AbstractListingMailet(
     private val locationService: LocationService,
