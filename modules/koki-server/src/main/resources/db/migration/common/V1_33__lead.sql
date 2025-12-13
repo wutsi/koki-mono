@@ -44,7 +44,7 @@ CREATE TABLE T_LEAD_MESSAGE(
 
 INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
     VALUES (300, 18, 'lead', 'Leads', '/leads', '/leads/tab', null, null, '/css/leads.css'),
-           (301, null, 'lead_message', 'Messages', null, '/leads/messages/tab', null, null, null);
+           (301, 0, 'lead_message', 'Messages', null, '/leads/messages/tab', null, null, null);
 
 INSERT INTO T_PERMISSION(id, module_fk, name, description)
     VALUES (3000, 300, 'lead',             'View Leads'),

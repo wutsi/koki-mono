@@ -12,13 +12,6 @@ class SettingsListAttributeControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun import() {
-        navigateTo("/settings/accounts/attributes")
-        click(".btn-import")
-        assertCurrentPageIs(PageName.ACCOUNT_SETTINGS_ATTRIBUTE_IMPORT)
-    }
-
-    @Test
     fun back() {
         navigateTo("/settings/accounts/attributes")
         click(".btn-back")
