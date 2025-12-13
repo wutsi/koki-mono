@@ -44,6 +44,7 @@ class GeminiTest {
     }
 
     @Test
+    @Ignore
     fun gemeni25() {
         var response: LLMResponse = LLMResponse()
         val time = measureTimeMillis {

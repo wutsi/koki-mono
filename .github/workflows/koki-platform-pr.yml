@@ -34,7 +34,7 @@ jobs:
                     mvn -s ../../settings.xml package
 
             -   name: Upload JaCoCo Report
-                uses: actions/upload-artifact@v5
+                uses: actions/upload-artifact@v6
                 with:
                     name: jacoco-report
                     path: modules/koki-platform/target/site/jacoco/**/*
