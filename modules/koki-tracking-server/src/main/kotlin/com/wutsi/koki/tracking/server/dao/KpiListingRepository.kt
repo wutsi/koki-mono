@@ -55,7 +55,7 @@ class KpiListingRepository(private val storageServiceBuilder: StorageServiceBuil
         writer.use {
             val printer = CSVPrinter(
                 writer,
-                CSVFormat.DEFAULT.builder().setHeader(*HEADERS).build(),
+                CSVFormat.DEFAULT.builder().setHeader(*HEADERS).get()
             )
             printer.use {
                 items.forEach {

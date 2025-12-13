@@ -3,8 +3,8 @@ package com.wutsi.koki.platform.translation.aws
 import com.amazonaws.services.translate.AmazonTranslate
 import com.amazonaws.services.translate.model.TranslateTextRequest
 import org.slf4j.LoggerFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 
 class AWSTranslationHealthIndicator(
     private val translator: AmazonTranslate

@@ -5,8 +5,8 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import org.mockito.Mockito.mock
-import org.springframework.boot.actuate.health.Status
-import java.lang.RuntimeException
+import org.springframework.boot.health.contributor.Status.DOWN
+import org.springframework.boot.health.contributor.Status.UP
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -20,7 +20,7 @@ class LLMHealthIndicatorTest {
 
         val result = health.health()
 
-        assertEquals(Status.UP, result.status)
+        assertEquals(UP, result.status)
     }
 
     @Test
@@ -29,6 +29,6 @@ class LLMHealthIndicatorTest {
 
         val result = health.health()
 
-        assertEquals(Status.DOWN, result.status)
+        assertEquals(DOWN, result.status)
     }
 }

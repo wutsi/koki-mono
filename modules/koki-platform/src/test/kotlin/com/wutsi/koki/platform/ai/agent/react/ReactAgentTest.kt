@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.ai.agent.react
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
@@ -17,6 +16,7 @@ import com.wutsi.koki.platform.ai.llm.Message
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import org.springframework.http.MediaType
+import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -309,7 +309,7 @@ class ReactAgentTest {
         return ReactAgent(
             llm = llm,
             agentTools = listOf(tool1, tool2),
-            objectMapper = ObjectMapper(),
+            jsonMapper = JsonMapper(),
             query = query,
             maxIterations = maxIterations,
             memory = memory,

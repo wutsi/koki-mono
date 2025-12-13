@@ -1,7 +1,7 @@
 package com.wutsi.koki.platform.url
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.json.JsonMapper
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -9,7 +9,7 @@ import java.net.http.HttpResponse
 
 class BitlyUrlShortener(
     private val accessToken: String,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val client: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()
 ) : UrlShortener {
     companion object {
@@ -36,7 +36,7 @@ class BitlyUrlShortener(
         try {
             val response: HttpResponse<String> = client.send(request, HttpResponse.BodyHandlers.ofString())
             if (response.statusCode() / 100 == 2) {
-                val data = objectMapper.readValue(response.body(), Map::class.java)
+                val data = jsonMapper.readValue(response.body(), Map::class.java)
                 return data["link"]?.toString() ?: url
             } else {
                 LOGGER.warn("Unable to shorten $url. Error=${response.statusCode()} - ${response.body()}")

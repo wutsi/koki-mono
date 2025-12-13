@@ -8,8 +8,8 @@ import com.wutsi.koki.platform.storage.s3.S3Builder
 import com.wutsi.koki.platform.storage.s3.S3HealthIndicator
 import com.wutsi.koki.platform.storage.s3.S3StorageServiceBuilder
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,14 +21,14 @@ import org.springframework.context.annotation.Configuration
     matchIfMissing = false,
 )
 class StorageConfiguration(
-    @Value("\${wutsi.platform.storage.type}") private val type: String,
-    @Value("\${wutsi.platform.storage.local.directory}") private val directory: String,
-    @Value("\${wutsi.platform.storage.local.base-url}") private val baseUrl: String,
-    @Value("\${wutsi.platform.storage.local.servlet-path}") private val servletPath: String,
-    @Value("\${wutsi.platform.storage.s3.bucket}") private val s3Bucket: String,
-    @Value("\${wutsi.platform.storage.s3.region}") private val s3Region: String,
-    @Value("\${wutsi.platform.storage.s3.access-key}") private val s3AccessKey: String,
-    @Value("\${wutsi.platform.storage.s3.secret-key}") private val s3SecretKey: String,
+    @param:Value("\${wutsi.platform.storage.type}") private val type: String,
+    @param:Value("\${wutsi.platform.storage.local.directory}") private val directory: String,
+    @param:Value("\${wutsi.platform.storage.local.base-url}") private val baseUrl: String,
+    @param:Value("\${wutsi.platform.storage.local.servlet-path}") private val servletPath: String,
+    @param:Value("\${wutsi.platform.storage.s3.bucket}") private val s3Bucket: String,
+    @param:Value("\${wutsi.platform.storage.s3.region}") private val s3Region: String,
+    @param:Value("\${wutsi.platform.storage.s3.access-key}") private val s3AccessKey: String,
+    @param:Value("\${wutsi.platform.storage.s3.secret-key}") private val s3SecretKey: String,
 ) {
     @Bean
     fun storageServiceBuilder(): StorageServiceBuilder {

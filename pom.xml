@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.8</version>
+        <version>4.0.0</version>
     </parent>
 
     <name>koki-mono</name>
@@ -51,7 +51,7 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-platform.version>0.0.49</wutsi-platform.version>
+        <wutsi-platform.version>0.0.53</wutsi-platform.version>
         <wutsi-dto.version>0.0.288</wutsi-dto.version>
         <wutsi-sdk.version>0.0.58</wutsi-sdk.version>
 
@@ -72,7 +72,7 @@
         <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
 
         <amqp-client.version>5.28.0</amqp-client.version>
-        <aws.version>1.12.794</aws.version>
+        <aws.version>1.12.795</aws.version>
         <commons-cli.version>1.9.0</commons-cli.version>
         <commons-codec.version>1.17.1</commons-codec.version>
         <commons-csv.version>1.14.1</commons-csv.version>
@@ -80,7 +80,7 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <common-net.version>3.12.0</common-net.version>
-        <commons-text.version>1.14.0</commons-text.version>
+        <commons-text.version>1.15.0</commons-text.version>
         <commons-validator.version>1.10.1</commons-validator.version>
         <epub4j.version>4.2.1</epub4j.version>
         <flyway.version>10.18.0</flyway.version>
@@ -99,7 +99,6 @@
         <jakarta.activation-api.version>2.1.5</jakarta.activation-api.version>
         <jakarta.mail-api.version>2.1.5</jakarta.mail-api.version>
         <jakarta.mail-impl.version>2.0.2</jakarta.mail-impl.version>
-        <jakarta-persistence.version>3.1.0</jakarta-persistence.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
@@ -125,14 +124,14 @@
         <qrcode-kotlin.version>4.2.0</qrcode-kotlin.version>
         <rome.version>2.1.0</rome.version>
         <scribe.version>8.3.3</scribe.version>
-        <selenium.version>4.38.0</selenium.version>
+        <selenium.version>4.39.0</selenium.version>
         <slf4j.version>2.0.17</slf4j.version>
-        <spring.version>6.2.14</spring.version>
-        <spring-boot.version>3.5.8</spring-boot.version>
+        <spring.version>7.0.2</spring.version>
+        <spring-boot.version>4.0.0</spring-boot.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
-        <spring-security.version>6.5.7</spring-security.version>
+        <spring-security.version>7.0.0</spring-security.version>
         <spring-tx.version>2.4.5</spring-tx.version>
-        <springdoc-openapi.version>2.8.14</springdoc-openapi.version>
+        <springdoc-openapi.version>3.0.0</springdoc-openapi.version>
         <swagger-parser.version>2.1.22</swagger-parser.version>
         <telegrambots.version>9.2.0</telegrambots.version>
         <thymeleaf.version>3.1.3.RELEASE</thymeleaf.version>

@@ -9,7 +9,6 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
 import org.springframework.stereotype.Service
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileInputStream
@@ -61,7 +60,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                 .setDelimiter(",")
                 .setHeader(*HEADERS)
                 .setAllowMissingColumnNames(true)
-                .build(),
+                .get(),
         )
         return parser.map {
             TrackEntity(
@@ -143,7 +142,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
         writer.use {
             val printer = CSVPrinter(
                 writer,
-                CSVFormat.DEFAULT.builder().setHeader(*HEADERS).build(),
+                CSVFormat.DEFAULT.builder().setHeader(*HEADERS).get(),
             )
             printer.use {
                 items.forEach {

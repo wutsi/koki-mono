@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
@@ -12,6 +11,7 @@ import com.rabbitmq.client.Envelope
 import com.wutsi.koki.platform.mq.Consumer
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
 
 class RabbitMQConsumerTest {
@@ -19,15 +19,15 @@ class RabbitMQConsumerTest {
     private val delegate = mock<Consumer>()
     private val envelope = mock<Envelope>()
     private val properties = mock<AMQP.BasicProperties>()
-    private val objectMapper: ObjectMapper = ObjectMapper()
+    private val jsonMapper: JsonMapper = JsonMapper()
     private val deliveryTag = 111L
-    private val consumer = RabbitMQConsumer(objectMapper, delegate, channel)
+    private val consumer = RabbitMQConsumer(jsonMapper, delegate, channel)
 
     private val payload = TestEvent("foo", 11)
-    val json = objectMapper.writeValueAsString(
+    val json = jsonMapper.writeValueAsString(
         RabbitMQEvent(
             classname = payload::class.java.name,
-            payload = objectMapper.writeValueAsString(payload),
+            payload = jsonMapper.writeValueAsString(payload),
         )
     )
 

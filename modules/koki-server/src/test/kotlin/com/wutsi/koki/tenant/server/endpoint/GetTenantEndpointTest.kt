@@ -1,13 +1,12 @@
 package com.wutsi.koki.tenant.server.endpoint
 
+import com.wutsi.koki.TenantAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.GetTenantResponse
 import com.wutsi.koki.tenant.dto.TenantStatus
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.text.SimpleDateFormat
@@ -16,9 +15,12 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/GetTenantEndpoint.sql"])
-class GetTenantEndpointTest {
-    @Autowired
-    private lateinit var rest: TestRestTemplate
+class GetTenantEndpointTest : TenantAwareEndpointTest() {
+
+    override fun setUp() {
+        super.setUp()
+        ignoreTenantIdHeader = true
+    }
 
     @Test
     fun get() {

@@ -27,7 +27,7 @@ import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -42,9 +42,9 @@ class KokiSDKConfiguration(
     private val debugRestInterceptor: DebugRestInterceptor,
     private val authorizationRestInterceptor: AuthorizationRestInterceptor,
 
-    @Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
-    @Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
-    @Value("\${koki.sdk.base-url}") private val baseUrl: String,
+    @param:Value("\${koki.rest.connection-timeout}") private val connectionTimeout: Long,
+    @param:Value("\${koki.rest.read-timeout}") private val readTimeout: Long,
+    @param:Value("\${koki.sdk.base-url}") private val baseUrl: String,
 ) {
     @Bean
     fun urlBuilder(): URLBuilder {

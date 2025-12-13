@@ -11,8 +11,8 @@ import com.wutsi.koki.platform.translation.aws.AWSTranslationHealthIndicator
 import com.wutsi.koki.platform.translation.aws.AWSTranslationServiceBuilder
 import org.apache.tika.language.detect.LanguageDetector
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -20,9 +20,9 @@ import org.springframework.context.annotation.Configuration
 class TranslationConfiguration(
     private val llmBuilder: LLMBuilder,
 
-    @Value("\${koki.translation.aws.region}") private val awsRegion: String,
-    @Value("\${koki.translation.aws.access-key}") private val awsAccessKey: String,
-    @Value("\${koki.translation.aws.secret-key}") private val awsSecretKey: String,
+    @param:Value("\${koki.translation.aws.region}") private val awsRegion: String,
+    @param:Value("\${koki.translation.aws.access-key}") private val awsAccessKey: String,
+    @param:Value("\${koki.translation.aws.secret-key}") private val awsSecretKey: String,
 ) {
     @Bean
     fun getLanguageDetector(): LanguageDetector {

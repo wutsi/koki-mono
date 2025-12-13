@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import org.apache.commons.io.IOUtils
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -18,7 +19,7 @@ abstract class AbstractKokiModule(
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        val fileMap = LinkedMultiValueMap<String, String>()
+        val fileMap = HttpHeaders()
         val contentDisposition = ContentDisposition
             .builder("form-data")
             .name("file")
@@ -35,7 +36,7 @@ abstract class AbstractKokiModule(
             url,
             HttpMethod.POST,
             requestEntity,
-            responseType,
-        ).body!!
+            ParameterizedTypeReference.forType(responseType),
+        ).body!! as T
     }
 }

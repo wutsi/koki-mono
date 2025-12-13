@@ -2,8 +2,8 @@ package com.wutsi.koki.platform.storage.s3
 
 import com.amazonaws.services.s3.AmazonS3
 import org.slf4j.LoggerFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 
 class S3HealthIndicator(
     private val s3: AmazonS3,

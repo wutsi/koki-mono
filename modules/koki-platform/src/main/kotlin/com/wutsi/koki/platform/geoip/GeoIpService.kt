@@ -1,10 +1,19 @@
 package com.wutsi.koki.platform.geoip
 
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.cache.Cache
-import org.springframework.web.client.RestTemplate
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.json.JsonMapper
 
 class GeoIpService(private val cache: Cache) {
-    private val rest: RestTemplate = RestTemplate()
+    private val jsonMapper = JsonMapper.builderWithJackson2Defaults()
+        .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build()
+    private val rest = RestTemplateBuilder()
+        .additionalMessageConverters(JacksonJsonHttpMessageConverter(jsonMapper))
+        .build()
 
     fun resolve(ip: String): GeoIp? {
         val key = cacheKey(ip)

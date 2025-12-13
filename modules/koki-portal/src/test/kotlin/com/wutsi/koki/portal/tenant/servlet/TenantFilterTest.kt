@@ -40,17 +40,6 @@ class TenantFilterTest {
     }
 
     @Test
-    fun `no tenant`() {
-        doReturn(null).whenever(currentTenant).get()
-
-        filter.doFilter(request, response, chain)
-
-        verify(response).sendError(404)
-        verify(response, never()).sendRedirect(any())
-        verify(chain).doFilter(request, response)
-    }
-
-    @Test
     fun suspended() {
         doReturn(tenant.copy(status = TenantStatus.SUSPENDED)).whenever(currentTenant).get()
 

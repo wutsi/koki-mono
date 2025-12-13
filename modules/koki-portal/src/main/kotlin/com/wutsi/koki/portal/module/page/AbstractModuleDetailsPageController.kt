@@ -20,7 +20,7 @@ abstract class AbstractModuleDetailsPageController : AbstractModulePageControlle
             throw IllegalStateException("Layout descriptor not found: $path")
         }
 
-        layoutDescriptor = objectMapper.readValue(input, PageLayoutDescriptor::class.java)
+        layoutDescriptor = jsonMapper.readValue(input, PageLayoutDescriptor::class.java)
     }
 
     override fun createPageModel(name: String, title: String): PageModel {

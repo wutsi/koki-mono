@@ -18,19 +18,19 @@ class CookieDeviceIdProvider(private val cookieName: String) : DeviceIdProvider 
             ?: UUID.randomUUID().toString()
     }
 
-    override fun set(duid: String, request: HttpServletRequest, response: HttpServletResponse) {
+    override fun set(id: String, request: HttpServletRequest, response: HttpServletResponse) {
         // Set in request
-        request.setAttribute(cookieName, duid)
+        request.setAttribute(cookieName, id)
 
         // Return
         var cookie = getCookie(request)
         if (cookie == null) {
-            cookie = Cookie(cookieName, duid)
+            cookie = Cookie(cookieName, id)
         }
 
         cookie.path = PATH
         cookie.maxAge = EXPIRES
-        cookie.value = duid
+        cookie.value = id
         response.addCookie(cookie)
     }
 

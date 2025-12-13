@@ -23,7 +23,7 @@ class JWTAuthentication(private val principal: JWTPrincipal) : Authentication {
         return null
     }
 
-    override fun getAuthorities(): Collection<GrantedAuthority?>? {
+    override fun getAuthorities(): Collection<GrantedAuthority> {
         return emptyList()
     }
 

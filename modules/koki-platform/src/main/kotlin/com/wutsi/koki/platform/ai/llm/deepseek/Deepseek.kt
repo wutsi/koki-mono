@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.ai.llm.deepseek
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
@@ -17,18 +16,20 @@ import com.wutsi.koki.platform.ai.llm.deepseek.model.DSTool
 import org.apache.commons.io.IOUtils
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
 import org.springframework.web.client.HttpStatusCodeException
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import java.util.UUID
-import kotlin.collections.flatMap
 
 class Deepseek(
     private val apiKey: String,
@@ -36,10 +37,14 @@ class Deepseek(
     private val readTimeoutMillis: Long = 60000,
     private val connectTimeoutMillis: Long = 30000,
 ) : LLM {
-    private val objectMapper = ObjectMapper()
+    private val jsonMapper = JsonMapper.builderWithJackson2Defaults()
+        .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build()
     private val rest = RestTemplateBuilder()
         .readTimeout(Duration.of(readTimeoutMillis, ChronoUnit.MILLIS))
         .connectTimeout(Duration.of(connectTimeoutMillis, ChronoUnit.MILLIS))
+        .additionalMessageConverters(JacksonJsonHttpMessageConverter(jsonMapper))
         .build()
 
     override fun models(): List<String> {
@@ -92,11 +97,11 @@ class Deepseek(
 
         try {
             val entity = HttpEntity<DSCompletionRequest>(req, headers)
-            val resp = rest.postForObject(
+            val resp = rest.postForEntity(
                 "https://api.deepseek.com/chat/completions",
                 entity,
                 DSCompletionResponse::class.java
-            )
+            ).body!!
 
             return LLMResponse(
                 messages = resp.choices.map { choice ->
@@ -113,10 +118,11 @@ class Deepseek(
                                 args = if (call.function.arguments.isEmpty()) {
                                     emptyMap()
                                 } else {
-                                    objectMapper.readValue(
+                                    jsonMapper.readValue(
                                         call.function.arguments,
-                                        Any::class.java
-                                    ) as Map<String, String>
+                                        Map::class.java
+                                    ).map { entry -> entry.key.toString() to entry.value.toString() }
+                                        .toMap()
                                 }
                             )
                         }

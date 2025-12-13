@@ -124,7 +124,9 @@ class LeadMessageReceivedMailet(
             "leadMessageDate" to fmt.format(message.createdAt),
             "leadMessage" to message.content,
             "leadNew" to event.newLead,
-        ).filter { entry -> entry.value != null } as Map<String, Any>
+        ).filter { entry -> entry.value != null }
+            .map { entry -> entry.key to entry.value!! }
+            .toMap()
         return if (lead.listing == null) {
             map
         } else {

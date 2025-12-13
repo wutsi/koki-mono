@@ -93,8 +93,7 @@ class ListingClosedMailet(
         val data = mapOf(
             "agentName" to agentName,
             "agentUrl" to "${tenant.portalUrl}/agents/${agent.id}",
-        ).filter { entry -> entry.value != null } as Map<String, Any>
-
+        )
         return data + getListingData(listing, tenant, buyer)
     }
 }

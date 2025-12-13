@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.DefaultConsumer
@@ -9,9 +8,10 @@ import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.logger.KVLoggerThreadLocal
 import com.wutsi.koki.platform.mq.Consumer
+import tools.jackson.databind.json.JsonMapper
 
 class RabbitMQConsumer(
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val delegate: Consumer,
     channel: Channel,
 ) : DefaultConsumer(channel) {
@@ -27,7 +27,7 @@ class RabbitMQConsumer(
 
         try {
             // Read the event...
-            val event = objectMapper.readValue(body, RabbitMQEvent::class.java)
+            val event = jsonMapper.readValue(body, RabbitMQEvent::class.java)
 
             // Process the event
             val payload = extractPayload(event, logger)
@@ -54,6 +54,6 @@ class RabbitMQConsumer(
 
     private fun extractPayload(event: RabbitMQEvent, logger: KVLogger): Any {
         val clazz = Class.forName(event.classname)
-        return objectMapper.readValue(event.payload, clazz)
+        return jsonMapper.readValue(event.payload, clazz)
     }
 }

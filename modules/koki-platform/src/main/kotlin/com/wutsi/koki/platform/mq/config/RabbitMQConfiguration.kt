@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.mq.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.wutsi.koki.platform.mq.Publisher
@@ -8,10 +7,11 @@ import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQHealthIndicator
 import com.wutsi.koki.platform.mq.rabbitmq.RabbitMQPublisher
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import tools.jackson.databind.json.JsonMapper
 import java.util.concurrent.ExecutorService
 
 @Configuration
@@ -22,13 +22,13 @@ import java.util.concurrent.ExecutorService
 )
 class RabbitMQConfiguration(
     private val executorService: ExecutorService,
-    private val objectMapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
     private val storageServiceBuilder: StorageServiceBuilder,
 
-    @Value("\${wutsi.platform.mq.rabbitmq.url}") private val url: String,
-    @Value("\${wutsi.platform.mq.rabbitmq.exchange-name}") private val exchangeName: String,
-    @Value("\${wutsi.platform.mq.rabbitmq.max-retries:24}") private val maxRetries: Int,
-    @Value("\${wutsi.platform.mq.rabbitmq.ttl-seconds:86400}") private val ttl: Int
+    @param:Value("\${wutsi.platform.mq.rabbitmq.url}") private val url: String,
+    @param:Value("\${wutsi.platform.mq.rabbitmq.exchange-name}") private val exchangeName: String,
+    @param:Value("\${wutsi.platform.mq.rabbitmq.max-retries:24}") private val maxRetries: Int,
+    @param:Value("\${wutsi.platform.mq.rabbitmq.ttl-seconds:86400}") private val ttl: Int
 ) {
     @Bean
     open fun connectionFactory(): ConnectionFactory {
@@ -52,7 +52,7 @@ class RabbitMQConfiguration(
             exchangeName = exchangeName,
             ttl = ttl,
             maxRetries = maxRetries,
-            objectMapper = objectMapper,
+            jsonMapper = jsonMapper,
             storageBuilder = storageServiceBuilder,
         )
     }

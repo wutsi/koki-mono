@@ -2,6 +2,7 @@ package com.wutsi.koki.refdata.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.dao.LocationRepository
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -115,7 +116,7 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun invalid() {
-        val response = rest.getForEntity("/v1/locations/import?country=xx", ImportResponse::class.java)
+        val response = rest.getForEntity("/v1/locations/import?country=xx", ErrorResponse::class.java)
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
     }

@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import org.mockito.Mockito.mock
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.Status
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

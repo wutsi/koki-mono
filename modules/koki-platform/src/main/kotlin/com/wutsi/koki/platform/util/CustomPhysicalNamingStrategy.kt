@@ -1,6 +1,6 @@
 package com.wutsi.koki.platform.util
 
-import com.vladmihalcea.hibernate.naming.CamelCaseToSnakeCaseNamingStrategy
+import io.hypersistence.utils.hibernate.naming.CamelCaseToSnakeCaseNamingStrategy
 import org.hibernate.boot.model.naming.Identifier
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment
 

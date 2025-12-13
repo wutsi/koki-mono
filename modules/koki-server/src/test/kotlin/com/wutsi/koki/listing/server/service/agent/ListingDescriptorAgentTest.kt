@@ -1,7 +1,6 @@
 package com.wutsi.koki.listing.server.service.agent
 
 import com.amazonaws.util.IOUtils
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -15,6 +14,7 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.test.Ignore
@@ -75,7 +75,7 @@ class ListingDescriptorAgentTest {
     @Ignore("Because of rate limit")
     fun run() {
         val json = agent.run(ListingDescriptorAgent.QUERY, files)
-        val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)
         assertEquals(true, result.heroImageIndex >= 0)
     }
 
@@ -87,7 +87,7 @@ class ListingDescriptorAgentTest {
             locationService, llm, 5
         )
         val json = xagent.run(ListingDescriptorAgent.QUERY, files)
-        val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)
 //        assertEquals(true, result.heroImageIndex >= 0)
     }
 
@@ -95,7 +95,7 @@ class ListingDescriptorAgentTest {
     @Ignore("Because of rate limit")
     fun `no image`() {
         val json = agent.run(ListingDescriptorAgent.QUERY, emptyList<File>())
-        val result = ObjectMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)
         assertEquals(true, result.heroImageIndex <= 0)
     }
 

@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.mq.rabbitmq
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -19,6 +18,7 @@ import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import tools.jackson.databind.json.JsonMapper
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.test.Test
@@ -27,12 +27,12 @@ class RabbitMQPublisherTest {
     private val storage = mock<StorageService>()
     private val storageBuilder = mock<StorageServiceBuilder>()
     private val channel = mock<Channel>()
-    private val objectMapper: ObjectMapper = ObjectMapper()
+    private val jsonMapper: JsonMapper = JsonMapper()
     private val exchangeName: String = "koki"
     private val maxRetries: Int = 24
     private val ttl: Int = 86400
 
-    private val publisher = RabbitMQPublisher(channel, objectMapper, storageBuilder, exchangeName, maxRetries, ttl)
+    private val publisher = RabbitMQPublisher(channel, jsonMapper, storageBuilder, exchangeName, maxRetries, ttl)
     private val queue = "test-queue"
     private val dlq = "test-dlq"
 
@@ -77,7 +77,7 @@ class RabbitMQPublisherTest {
         assertEquals(maxRetries, properties.firstValue.headers["x-max-retries"])
 
         val json = String(data.firstValue)
-        val evt = objectMapper.readValue(json, RabbitMQEvent::class.java)
+        val evt = jsonMapper.readValue(json, RabbitMQEvent::class.java)
         assertEquals(TestEvent::class.java.name, evt.classname)
         assertEquals("{\"name\":\"foo\",\"value\":11}", evt.payload)
     }

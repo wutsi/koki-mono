@@ -1,6 +1,8 @@
 package com.wutsi.koki.listing.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -106,9 +108,10 @@ class SearchSimilarListingEndpointTest : AuthorizationAwareEndpointTest() {
     fun `listing not found returns 404`() {
         val response = rest.getForEntity(
             "/v1/listings/99999/similar",
-            SearchSimilarListingResponse::class.java
+            ErrorResponse::class.java
         )
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorCode.LISTING_NOT_FOUND, response.body?.error?.code)
     }
 }

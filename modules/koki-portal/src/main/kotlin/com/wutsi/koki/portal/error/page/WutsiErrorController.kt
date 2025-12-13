@@ -7,7 +7,7 @@ import jakarta.servlet.RequestDispatcher
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
-import org.springframework.boot.web.servlet.error.ErrorController
+import org.springframework.boot.webmvc.error.ErrorController
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.client.HttpClientErrorException
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.lang.StringBuilder
-import kotlin.jvm.java
-import kotlin.let
 
 @Controller
 @RequestMapping

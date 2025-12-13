@@ -1,6 +1,5 @@
 package com.wutsi.koki.platform.cache.redis
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.lettuce.core.AbstractRedisClient
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.StatefulConnection
@@ -13,13 +12,14 @@ import io.lettuce.core.cluster.api.sync.RedisClusterCommands
 import org.springframework.cache.Cache
 import org.springframework.cache.Cache.ValueWrapper
 import org.springframework.cache.support.SimpleValueWrapper
+import tools.jackson.databind.json.JsonMapper
 import java.util.concurrent.Callable
 
 class RedisCache(
     private val name: String,
     private val ttl: Int,
     private val client: AbstractRedisClient,
-    private val mapper: ObjectMapper,
+    private val jsonMapper: JsonMapper,
 ) : Cache {
     override fun getName(): String = name
 
@@ -44,16 +44,16 @@ class RedisCache(
         }
     }
 
-    override fun <T : Any?> get(key: Any, clazz: Class<T>): T? {
+    override fun <T : Any> get(key: Any, type: Class<T>?): T? {
         val value = get(key)
         return if (value != null) {
-            mapper.readValue(value.get().toString(), clazz)
+            jsonMapper.readValue(value.get().toString(), type)
         } else {
             null
         }
     }
 
-    override fun <T : Any?> get(key: Any, callable: Callable<T>): T? {
+    override fun <T : Any> get(key: Any, callable: Callable<T>): T? {
         val value = get(key)
         if (value != null) {
             return value.get() as T
@@ -106,7 +106,7 @@ class RedisCache(
         return if (type.isPrimitive) {
             value.toString()
         } else {
-            mapper.writeValueAsString(value)
+            jsonMapper.writeValueAsString(value)
         }
     }
 
