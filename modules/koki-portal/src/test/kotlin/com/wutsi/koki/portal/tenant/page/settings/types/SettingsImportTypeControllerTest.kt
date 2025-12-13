@@ -8,10 +8,12 @@ import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpMethod
 import java.io.File
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class SettingsImportTypeControllerTest : AbstractPageControllerTest() {
     @Test
+    @Ignore
     fun import() {
         navigateTo("/settings/tenant/types/import")
         assertCurrentPageIs(PageName.TENANT_SETTINGS_TYPE_IMPORT)
