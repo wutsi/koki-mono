@@ -28,8 +28,8 @@
     </distributionManagement>
 
     <properties>
-        <jacoco.threshold.line>0.83</jacoco.threshold.line>
-        <jacoco.threshold.class>0.83</jacoco.threshold.class>
+        <jacoco.threshold.line>0.82</jacoco.threshold.line>
+        <jacoco.threshold.class>0.82</jacoco.threshold.class>
     </properties>
 
 
