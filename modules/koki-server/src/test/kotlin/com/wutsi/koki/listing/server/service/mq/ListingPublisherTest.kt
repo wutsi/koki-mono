@@ -78,7 +78,7 @@ class ListingPublisherTest {
 
         doReturn(
             jsonMapper.writeValueAsString(result)
-        ).whenever(agent).run(any(), any())
+        ).whenever(agent).run(any())
 
         doReturn(images).whenever(fileService).search(
             anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
