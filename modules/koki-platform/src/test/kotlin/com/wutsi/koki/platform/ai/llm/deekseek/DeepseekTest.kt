@@ -5,10 +5,6 @@ import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 
 class DeepseekTest : AbstractLLMTest() {
-    override fun delayMillis(): Long {
-        return 100L
-    }
-
     override fun image() {
         // Nothing - deepseek does not support image generation
     }
