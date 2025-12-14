@@ -9,6 +9,10 @@ class DeepseekTest : AbstractLLMTest() {
         // Nothing - deepseek does not support image generation
     }
 
+    override fun systemInstructions() {
+        // Ignore
+    }
+
     override fun createLLM(): LLM {
         return Deepseek(
             apiKey = System.getenv("DEEPSEEK_API_KEY"),
