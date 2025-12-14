@@ -31,9 +31,9 @@ object ModuleFixtures {
             name = "email",
             title = "Emails",
             homeUrl = null,
-            tabUrl = "/emails/tab",
+            tabUrl = null,
             settingsUrl = "/settings/email",
-            objectType = ObjectType.EMAIL,
+            objectType = ObjectType.UNKNOWN,
             jsUrl = "/js/emails.js",
         ),
         Module(
@@ -87,25 +87,6 @@ object ModuleFixtures {
             jsUrl = null,
         ),
 
-        Module(
-            id = 220,
-            name = "ai",
-            title = "AI",
-            homeUrl = null,
-            tabUrl = null,
-            settingsUrl = "/settings/ai",
-            jsUrl = null,
-        ),
-
-        Module(
-            id = 240,
-            name = "translation",
-            title = "Translation",
-            homeUrl = null,
-            tabUrl = null,
-            settingsUrl = "/settings/translations",
-            jsUrl = null,
-        ),
         Module(
             id = 260,
             name = "message",
@@ -198,10 +179,6 @@ object ModuleFixtures {
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
-
-        Permission(id = 2200, moduleId = 220, name = "ai:admin", description = "Configure AI"),
-
-        Permission(id = 2400, moduleId = 240, name = "translation:admin", description = "Configure Translation"),
 
         Permission(id = 2600, moduleId = 260, name = "message", description = "View Messages"),
         Permission(id = 2601, moduleId = 260, name = "message:manage", description = "Manage Messages"),

@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.ai.llm.deekseek
 
+<<<<<<< Updated upstream
 import com.wutsi.koki.platform.ai.llm.Config
 import com.wutsi.koki.platform.ai.llm.Document
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
@@ -33,24 +34,22 @@ class DeepseekTest {
             ),
             models
         )
+=======
+import com.wutsi.koki.platform.ai.llm.AbstractLLMTest
+import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
+
+class DeepseekTest : AbstractLLMTest() {
+    override fun delayMillis(): Long {
+        return 100L
+>>>>>>> Stashed changes
     }
 
-    @Test
-    fun generateText() {
-        val response = llm.generateContent(
-            request = LLMRequest(
-                messages = listOf(
-                    Message(
-                        role = Role.USER,
-                        text = "What is an API"
-                    )
-                )
-            )
-        )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> print(message) }
+    override fun image() {
+        // Nothing - deepseek does not support image generation
     }
 
+<<<<<<< Updated upstream
     @Test
     fun generateJson() {
         val response = llm.generateContent(
@@ -167,20 +166,16 @@ class DeepseekTest {
     }
 
     private fun createLLM(): LLM {
+=======
+    override fun createLLM(): LLM {
+>>>>>>> Stashed changes
         return Deepseek(
             apiKey = System.getenv("DEEPSEEK_API_KEY"),
             model = "deepseek-chat",
         )
     }
 
-    private fun print(response: LLMResponse) {
-        println("---------")
-        println("Usage: ${response.usage}")
-        println("${response.messages.size} message(s)")
-        println()
-        response.messages.forEach { message ->
-            message.functionCall?.let { println("FUNCTION: ${message.functionCall}") }
-            message.text?.let { println("TEXT: ${message.text}") }
-        }
+    override fun createVisionLLM(): LLM {
+        return createLLM()
     }
 }

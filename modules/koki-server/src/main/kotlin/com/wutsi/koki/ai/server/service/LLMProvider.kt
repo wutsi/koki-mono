@@ -1,20 +1,15 @@
 package com.wutsi.koki.ai.server.service
 
+import com.wutsi.koki.config.AIConfiguration
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMBuilder
-import com.wutsi.koki.tenant.server.service.ConfigurationService
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
 class LLMProvider(
-    private val configurationService: ConfigurationService,
-    private val llmBuilder: LLMBuilder,
-) {
-    fun get(tenantId: Long): LLM {
-        val configs = configurationService.search(keyword = "ai.", tenantId = tenantId)
-            .map { config -> config.name to config.value }
-            .toMap()
+    @param:Qualifier(AIConfiguration.CHAT_LLM_BEAN_NAME)
+    val chatLLM: LLM,
 
-        return llmBuilder.build(configs)
-    }
-}
+    @param:Qualifier(AIConfiguration.VISION_LLM_BEAN_NAME)
+    val visionLLM: LLM,
+)

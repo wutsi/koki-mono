@@ -15,6 +15,7 @@ import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
@@ -29,14 +30,16 @@ class ListingPublisherTest {
     private val agentFactory = mock<ListingAgentFactory>()
     private val fileService = mock<FileService>()
     private val listingService = mock<ListingService>()
+    private val locationService = mock<LocationService>()
     private val jsonMapper = JsonMapper()
     private val logger = DefaultKVLogger()
     private val handler = ListingPublisher(
+        listingService = listingService,
         agentFactory = agentFactory,
         fileService = fileService,
-        listingService = listingService,
         jsonMapper = jsonMapper,
-        logger = logger
+        logger = logger,
+        locationService = locationService
     )
 
     private val tenantId = 1L
@@ -71,7 +74,7 @@ class ListingPublisherTest {
         doReturn(listing).whenever(listingService).get(any(), any())
         doReturn(listing).whenever(listingService).save(any(), anyOrNull())
 
-        doReturn(agent).whenever(agentFactory).createDescriptorAgent(any(), any())
+        doReturn(agent).whenever(agentFactory).createDescriptorAgent(any(), any(), anyOrNull(), anyOrNull())
 
         doReturn(
             jsonMapper.writeValueAsString(result)

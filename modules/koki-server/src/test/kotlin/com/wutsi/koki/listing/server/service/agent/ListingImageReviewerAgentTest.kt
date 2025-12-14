@@ -1,30 +1,35 @@
 package com.wutsi.koki.listing.server.service.agent
 
 import com.amazonaws.util.IOUtils
+import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.file.dto.ImageQuality
-import com.wutsi.koki.platform.ai.llm.gemini.Gemini
+import com.wutsi.koki.platform.ai.agent.Agent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertNotNull
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.test.Ignore
 import kotlin.test.Test
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ListingImageReviewerAgentTest {
-    private val llm = Gemini(
-        apiKey = System.getenv("GEMINI_API_KEY"),
-        model = "gemini-2.5-flash",
-    )
-    private val agent = ListingImageReviewerAgent(llm)
+    @Autowired
+    private lateinit var provider: LLMProvider
 
     @Test
     fun tools() {
-        assertEquals(0, agent.tools().size)
+        assertEquals(0, createAgent().tools().size)
     }
 
     @Test
     fun run() {
+        Thread.sleep(30000L) // Delay to avoid rate limiting
+
+        val agent = createAgent()
         val file = getValidFile("/fs/listing/room.jpg")
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
         val result = JsonMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
@@ -34,8 +39,10 @@ class ListingImageReviewerAgentTest {
     }
 
     @Test
-    @Ignore("For rate limiting")
     fun `invalid file`() {
+        Thread.sleep(30000L) // Delay to avoid rate limiting
+
+        val agent = createAgent()
         val file = getValidFile("/fs/listing/bad-image.jpg")
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
         println(json)
@@ -53,5 +60,9 @@ class ListingImageReviewerAgentTest {
             IOUtils.copy(fin, fout)
         }
         return file
+    }
+
+    private fun createAgent(): Agent {
+        return ListingImageReviewerAgent(provider.visionLLM)
     }
 }

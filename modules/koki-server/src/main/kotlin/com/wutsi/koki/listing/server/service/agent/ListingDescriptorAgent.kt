@@ -1,18 +1,20 @@
 package com.wutsi.koki.listing.server.service.agent
 
+import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.http.MediaType
 
 class ListingDescriptorAgent(
     val listing: ListingEntity,
-    val locationService: LocationService,
+    val images: List<FileEntity>,
+    val city: LocationEntity?,
+    val neighbourhood: LocationEntity?,
     val llm: LLM,
-    val maxIterations: Int = 5,
-) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
+) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
         val SYSTEM_INSTRUCTIONS = """
             You are a real estate agent helping customers to rent or buy properties.
@@ -65,11 +67,11 @@ class ListingDescriptorAgent(
     }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
-        val amenities = listing.amenities
-            .map { amenity -> amenity.name }
-            .joinToString(separator = ",")
-        val city = listing.cityId?.let { id -> locationService.get(id) }
-        val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
+        val amenities = listing.amenities.joinToString(separator = ",") { amenity -> amenity.name }
+        var i = 0
+        val imageText = images.joinToString(separator = "\n") { image ->
+            "- Image ${i++}: ${image.description ?: "No description available"}"
+        }
         return """
             Goal: Create the detailed description of a property listing.
             Query: {{query}}
@@ -87,22 +89,26 @@ class ListingDescriptorAgent(
             - Lot area: {{lotArea}}
             - Amenities: {{amenities}}
 
+            Images Description:
+            {{images}}
+
             Observations:
             {{observations}}
         """.trimIndent()
-            .replace("{{amenities}}", amenities)
-            .replace("{{propertyType}}", listing.propertyType?.name ?: "Unknown")
+            .replace("{{query}}", query)
             .replace("{{listingType}}", listing.listingType?.name ?: "Unknown")
+            .replace("{{propertyType}}", listing.propertyType?.name ?: "Unknown")
             .replace("{{bedrooms}}", listing.bedrooms?.toString() ?: "Unknown")
             .replace("{{bathrooms}}", listing.bathrooms?.toString() ?: "Unknown")
             .replace("{{furnished}}", listing.furnitureType?.name ?: "Unknown")
+            .replace("{{street}}", listing.street ?: "Unknown")
             .replace("{{country}}", city?.country?.uppercase() ?: "Unknown")
             .replace("{{city}}", city?.name ?: "Unknown")
             .replace("{{neighbourhood}}", neighbourhood?.name ?: "Unknown")
-            .replace("{{street}}", listing.street ?: "Unknown")
             .replace("{{lotArea}}", listing.lotArea?.toString() ?: "Unknown")
-            .replace("{{query}}", query)
-            .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
+            .replace("{{amenities}}", amenities)
+            .replace("{{images}}", imageText)
+            .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
 
     override fun tools(): List<Tool> = emptyList<Tool>()

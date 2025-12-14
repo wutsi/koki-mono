@@ -56,7 +56,7 @@ class ListingFileUploadedEventHandler(
             return image
         }
 
-        val agent = agentFactory.createImageReviewerAgent(image.tenantId)
+        val agent = agentFactory.createImageReviewerAgent()
         val f = fileService.download(image)
         val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(f))
         val result = jsonMapper.readValue(json, ListingImageReviewerAgentResult::class.java)

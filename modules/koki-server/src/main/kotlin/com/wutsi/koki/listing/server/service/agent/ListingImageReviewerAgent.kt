@@ -10,8 +10,7 @@ import org.springframework.http.MediaType
  */
 class ListingImageReviewerAgent(
     val llm: LLM,
-    val maxIterations: Int = 5,
-) : Agent(llm, maxIterations, MediaType.APPLICATION_JSON) {
+) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
         val SYSTEM_INSTRUCTIONS = """
             You are a real estate agent helping customers to rent or buy properties.

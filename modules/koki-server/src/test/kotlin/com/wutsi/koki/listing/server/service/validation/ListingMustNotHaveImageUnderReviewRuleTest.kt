@@ -17,24 +17,14 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingMustHaveImageApprovedRuleTest {
+class ListingMustNotHaveImageUnderReviewRuleTest {
     private val fileService = mock<FileService>()
-    private val rule = ListingMustHaveImageApprovedRule(fileService)
+    private val rule = ListingMustNotHaveImageUnderReviewRule(fileService)
     private val listing = ListingEntity(id = 1, tenantId = 11L)
 
     @Test
     fun success() {
-        doReturn(
-            listOf(
-                FileEntity(id = 1),
-                FileEntity(id = 2),
-                FileEntity(id = 3),
-                FileEntity(id = 4),
-                FileEntity(id = 5),
-                FileEntity(id = 6),
-                FileEntity(id = 7),
-            )
-        ).whenever(fileService).search(
+        doReturn(emptyList<FileEntity>()).whenever(fileService).search(
             listing.tenantId,
             emptyList(), // ids
             listing.id, // ownerId
@@ -50,7 +40,15 @@ class ListingMustHaveImageApprovedRuleTest {
     @Test
     fun `no image`() {
         doReturn(
-            emptyList<FileEntity>()
+            listOf(
+                FileEntity(id = 1),
+                FileEntity(id = 2),
+                FileEntity(id = 3),
+                FileEntity(id = 4),
+                FileEntity(id = 5),
+                FileEntity(id = 6),
+                FileEntity(id = 7),
+            )
         ).whenever(fileService).search(
             any(),
             anyOrNull(),
@@ -65,6 +63,6 @@ class ListingMustHaveImageApprovedRuleTest {
         val ex = assertThrows<ValidationException> {
             rule.validate(listing)
         }
-        assertEquals(ErrorCode.LISTING_MISSING_APPROVED_IMAGE, ex.message)
+        assertEquals(ErrorCode.LISTING_IMAGE_UNDER_REVIEW, ex.message)
     }
 }

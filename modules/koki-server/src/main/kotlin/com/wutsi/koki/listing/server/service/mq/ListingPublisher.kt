@@ -11,6 +11,7 @@ import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
 import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.refdata.server.service.LocationService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
@@ -22,7 +23,8 @@ class ListingPublisher(
     private val agentFactory: ListingAgentFactory,
     private val fileService: FileService,
     private val jsonMapper: JsonMapper,
-    private val logger: KVLogger
+    private val logger: KVLogger,
+    private val locationService: LocationService
 ) {
     @Transactional
     fun publish(listingId: Long, tenantId: Long): ListingEntity? {
@@ -34,17 +36,18 @@ class ListingPublisher(
             return null
         }
 
-        val agent = agentFactory.createDescriptorAgent(listing, tenantId)
         val images = fileService.search(
             tenantId = tenantId,
             ownerId = listing.id,
             ownerType = ObjectType.LISTING,
             status = FileStatus.APPROVED,
             type = FileType.IMAGE,
-            limit = Integer.MAX_VALUE,
+            limit = 100,
         )
-        val files = images.map { file -> fileService.download(file) }
-        val json = agent.run(ListingDescriptorAgent.QUERY, files)
+        val city = listing.cityId?.let { id -> locationService.get(id) }
+        val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
+        val agent = agentFactory.createDescriptorAgent(listing, images, city, neighbourhood)
+        val json = agent.run(ListingDescriptorAgent.QUERY)
         val result = jsonMapper.readValue(json, ListingDescriptorAgentResult::class.java)
         listing.status = ListingStatus.ACTIVE
         listing.title = result.title

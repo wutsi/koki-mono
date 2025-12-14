@@ -3,16 +3,16 @@ package com.wutsi.koki.listing.server.service
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveAddressRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveApprovedImageRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralInformationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
+import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerAgentCommissionRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveValidBuyerAgentCommissionRule
+import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import kotlin.jvm.Throws
 
 @Service
 class ListingPublisherValidator(
@@ -26,7 +26,8 @@ class ListingPublisherValidator(
         ListingMustHaveSellerAgentCommissionRule(),
         ListingMustHaveValidBuyerAgentCommissionRule(),
         ListingMustHaveSellerRule(),
-        ListingMustHaveApprovedImageRule(fileService),
+        ListingMustHaveImageApprovedRule(fileService),
+        ListingMustNotHaveImageUnderReviewRule(fileService)
     )
 
     @Throws(ValidationException::class)

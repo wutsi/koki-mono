@@ -2,9 +2,9 @@ package com.wutsi.koki.listing.server.service
 
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveAddressRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveApprovedImageRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralInformationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
+import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerAgentCommissionRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerRule
@@ -33,7 +33,7 @@ class ListingPublisherValidatorTest {
         assertEquals(ListingMustHaveSellerAgentCommissionRule::class, validator.rules[4]::class)
         assertEquals(ListingMustHaveValidBuyerAgentCommissionRule::class, validator.rules[5]::class)
         assertEquals(ListingMustHaveSellerRule::class, validator.rules[6]::class)
-        assertEquals(ListingMustHaveApprovedImageRule::class, validator.rules[7]::class)
+        assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[7]::class)
     }
 
     @Test

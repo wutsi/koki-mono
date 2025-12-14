@@ -1,26 +1,29 @@
 package com.wutsi.koki.listing.server.service.agent
 
 import com.wutsi.koki.ai.server.service.LLMProvider
+import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.stereotype.Service
 
 @Service
-class ListingAgentFactory(
-    private val llmProvider: LLMProvider,
-    private val locationService: LocationService,
-) {
-    fun createImageReviewerAgent(tenantId: Long): ListingImageReviewerAgent {
-        val llm = llmProvider.get(tenantId)
-        return ListingImageReviewerAgent(llm = llm)
+class ListingAgentFactory(private val llmProvider: LLMProvider) {
+    fun createImageReviewerAgent(): ListingImageReviewerAgent {
+        return ListingImageReviewerAgent(llm = llmProvider.visionLLM)
     }
 
-    fun createDescriptorAgent(listing: ListingEntity, tenantId: Long): ListingDescriptorAgent {
-        val llm = llmProvider.get(tenantId)
+    fun createDescriptorAgent(
+        listing: ListingEntity,
+        images: List<FileEntity>,
+        city: LocationEntity?,
+        neighbourhood: LocationEntity?,
+    ): ListingDescriptorAgent {
         return ListingDescriptorAgent(
-            llm = llm,
+            llm = llmProvider.visionLLM,
             listing = listing,
-            locationService = locationService,
+            images = images,
+            city = city,
+            neighbourhood = neighbourhood,
         )
     }
 }

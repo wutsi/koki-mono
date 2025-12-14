@@ -154,12 +154,18 @@ koki:
         client-id: koki-server
         server-url: http://localhost:${server.port}
 
-    translation:
-        type: ai  # AI | AWS
-        aws:
-            region: us-east-1
-            access-key: ""
-            secret-key: ""
+    ai:
+        rest:
+            read-timeout-millis: 60000 # 1 minute
+            connect-timeout-millis: 60000 # 1 minute
+        chat:
+            type: deepseek
+            api-key: ${DEEPSEEK_API_KEY}
+            model: deepseek-chat
+        vision:
+            type: kimi
+            api-key: ${KIMI_API_KEY}
+            model: moonshot-v1-8k-vision-preview
 
     smtp:
         host: localhost
@@ -230,19 +236,6 @@ koki:
 
 wutsi:
     platform:
-        ai:
-            enabled: true
-            rest:
-                read-timeout: 60000 # 1 minute
-                connect-timeout: 60000 # 1 minute
-            model:
-                type: gemini
-                deepseek:
-                    api-key: ${DEEPSEEK_API_KEY}
-                    model: deepseek-chat
-                gemini:
-                    api-key: ${GEMINI_API_KEY}
-                    model: gemini-2.0-flash
         cache:
             name: koki
             type: redis

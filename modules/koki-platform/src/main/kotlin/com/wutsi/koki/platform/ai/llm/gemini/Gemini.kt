@@ -46,17 +46,6 @@ class Gemini(
         )
         .build()
 
-    override fun models(): List<String> {
-        return listOf(
-            "gemini-2.5-flash",
-            "gemini-2.0-flash",
-            "gemini-2.0-flash-lite",
-            "gemini-1.5-pro",
-            "gemini-1.5-flash",
-            "gemini-1.5-flash-8b"
-        )
-    }
-
     override fun generateContent(request: LLMRequest): LLMResponse {
         val req = GGenerateContentRequest(
             contents = request.messages.map { message ->
