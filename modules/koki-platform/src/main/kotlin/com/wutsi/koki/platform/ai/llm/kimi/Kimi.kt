@@ -1,4 +1,4 @@
-package com.wutsi.koki.platform.ai.llm.kimi
+package com.wutsi.koki.platform.ai.llm.deepseek.kimi
 
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
 

@@ -11,6 +11,8 @@ import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.ai.llm.Usage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
+import com.wutsi.koki.platform.ai.llm.deepseek.model.DSContent
+import com.wutsi.koki.platform.ai.llm.deepseek.model.DSImageUrl
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSMessage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSTool
 import org.apache.commons.io.IOUtils
@@ -29,6 +31,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.time.Duration
 import java.time.temporal.ChronoUnit
+import java.util.Base64
 import java.util.UUID
 
 /**
@@ -162,37 +165,48 @@ open class Deepseek(
             Role.SYSTEM, Role.MODEL -> "system"
         }
 
-        val result = mutableListOf<DSMessage>()
+        val content = mutableListOf<DSContent>()
 
         if (message.text != null) {
-            result.add(
-                DSMessage(
-                    content = message.text,
-                    role = role
+            content.add(
+                DSContent(
+                    type = "text",
+                    text = message.text,
                 )
             )
         }
+
         if (message.document != null) {
-            val contentType = message.document.contentType
-            if (contentType.toString().startsWith("text/") || contentType == MediaType.APPLICATION_JSON) {
-                result.add(
-                    DSMessage(
-                        content = IOUtils.toString(message.document.content, "utf-8"),
-                        role = role
+            if (message.document.contentType == MediaType.APPLICATION_PDF) {
+                content.add(
+                    DSContent(
+                        type = "text",
+                        text = pdf2Text(message.document.content),
                     )
                 )
-            } else if (contentType == MediaType.APPLICATION_PDF) {
-                result.add(
-                    DSMessage(
-                        content = pdf2Text(message.document.content),
-                        role = role
+            } else if (message.document.contentType.toString().startsWith("image/")) {
+                val base64Content = Base64
+                    .getEncoder()
+                    .encodeToString(IOUtils.toByteArray(message.document.content))
+
+                content.add(
+                    DSContent(
+                        type = "image_url",
+                        image_url = DSImageUrl(
+                            url = "data:${message.document.contentType};base64,$base64Content"
+                        )
                     )
                 )
             } else {
-                throw LLMDocumentTypeNotSupportedException(contentType)
+                throw LLMDocumentTypeNotSupportedException(message.document.contentType)
             }
         }
-        return result
+        return listOf(
+            DSMessage(
+                role = role,
+                content = content
+            )
+        )
     }
 
     private fun pdf2Text(input: InputStream): String {

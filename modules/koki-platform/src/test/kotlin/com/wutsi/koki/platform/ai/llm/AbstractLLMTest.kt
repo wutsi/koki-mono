@@ -2,9 +2,9 @@ package com.wutsi.koki.platform.ai.llm
 
 import org.junit.jupiter.api.AfterEach
 import org.springframework.http.MediaType
+import tools.jackson.databind.json.JsonMapper
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 abstract class AbstractLLMTest {
     protected abstract fun createLLM(): LLM
@@ -52,10 +52,8 @@ abstract class AbstractLLMTest {
             )
         )
         println("${response.messages.size} message(s)")
-        assertEquals(true, response.messages[0].text?.startsWith("{"))
-        assertEquals(true, response.messages[0].text?.endsWith("}"))
-
         response.messages.forEach { message -> println(message.text) }
+        JsonMapper().readValue(response.messages[0].text, Map::class.java)
     }
 
     @Test
