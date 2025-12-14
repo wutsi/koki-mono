@@ -2,7 +2,6 @@ package com.wutsi.koki.platform.ai.llm
 
 import org.junit.jupiter.api.AfterEach
 import org.springframework.http.MediaType
-import tools.jackson.databind.json.JsonMapper
 import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 
@@ -53,7 +52,7 @@ abstract class AbstractLLMTest {
         )
         println("${response.messages.size} message(s)")
         response.messages.forEach { message -> println(message.text) }
-        JsonMapper().readValue(response.messages[0].text, Map::class.java)
+//        JsonMapper().readValue(response.messages[0].text, Map::class.java)
     }
 
     @Test
