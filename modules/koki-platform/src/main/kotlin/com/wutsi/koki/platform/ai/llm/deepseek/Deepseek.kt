@@ -2,6 +2,7 @@ package com.wutsi.koki.platform.ai.llm.deepseek
 
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
 import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
@@ -10,8 +11,6 @@ import com.wutsi.koki.platform.ai.llm.Role
 import com.wutsi.koki.platform.ai.llm.Usage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
-import com.wutsi.koki.platform.ai.llm.deepseek.model.DSContent
-import com.wutsi.koki.platform.ai.llm.deepseek.model.DSImageUrl
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSMessage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSTool
 import org.apache.commons.io.IOUtils
@@ -100,11 +99,7 @@ open class Deepseek(
         try {
             val entity = HttpEntity<DSCompletionRequest>(req, headers)
             val resp = rest.postForEntity(
-<<<<<<< Updated upstream
-                "https://api.deepseek.com/chat/completions",
-=======
                 getEndpoint(),
->>>>>>> Stashed changes
                 entity,
                 DSCompletionResponse::class.java
             ).body!!
@@ -157,13 +152,10 @@ open class Deepseek(
         }
     }
 
-<<<<<<< Updated upstream
-=======
     protected open fun getEndpoint(): String {
         return DEEPSEEK_ENDPOINT
     }
 
->>>>>>> Stashed changes
     private fun toDSMessage(message: Message): List<DSMessage> {
         val role = when (message.role) {
             Role.USER -> "user"
@@ -181,7 +173,6 @@ open class Deepseek(
             )
         }
         if (message.document != null) {
-<<<<<<< Updated upstream
             val contentType = message.document.contentType
             if (contentType.toString().startsWith("text/") || contentType == MediaType.APPLICATION_JSON) {
                 result.add(
@@ -199,28 +190,6 @@ open class Deepseek(
                 )
             } else {
                 throw LLMDocumentTypeNotSupportedException(contentType)
-=======
-            if (message.document.contentType == MediaType.APPLICATION_PDF) {
-                content.add(
-                    DSContent(
-                        type = "text",
-                        text = pdf2Text(message.document.content),
-                    )
-                )
-            } else if (message.document.contentType.toString().startsWith("image/")) {
-                val base64Content = Base64
-                    .getEncoder()
-                    .encodeToString(IOUtils.toByteArray(message.document.content))
-
-                content.add(
-                    DSContent(
-                        type = "image_url",
-                        image_url = DSImageUrl(
-                            url = "data:${message.document.contentType};base64,$base64Content"
-                        )
-                    )
-                )
->>>>>>> Stashed changes
             }
         }
         return result
