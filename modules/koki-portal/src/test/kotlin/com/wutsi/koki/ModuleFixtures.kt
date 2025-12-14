@@ -88,16 +88,6 @@ object ModuleFixtures {
         ),
 
         Module(
-            id = 260,
-            name = "message",
-            title = "Messages",
-            homeUrl = null,
-            tabUrl = "/messages/tab",
-            settingsUrl = null,
-            jsUrl = "/js/messages.js",
-            cssUrl = "/css/messages.css",
-        ),
-        Module(
             id = 270,
             name = "listing",
             title = "Listings",
@@ -179,9 +169,6 @@ object ModuleFixtures {
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
-
-        Permission(id = 2600, moduleId = 260, name = "message", description = "View Messages"),
-        Permission(id = 2601, moduleId = 260, name = "message:manage", description = "Manage Messages"),
 
         Permission(id = 2700, moduleId = 270, name = "listing", description = "View Listings"),
         Permission(id = 2701, moduleId = 270, name = "listing:manage", description = "Manage Listings"),

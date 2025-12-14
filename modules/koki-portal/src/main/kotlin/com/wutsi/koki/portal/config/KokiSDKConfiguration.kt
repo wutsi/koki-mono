@@ -16,7 +16,6 @@ import com.wutsi.koki.sdk.KokiInvitations
 import com.wutsi.koki.sdk.KokiLeadMessages
 import com.wutsi.koki.sdk.KokiLeads
 import com.wutsi.koki.sdk.KokiListings
-import com.wutsi.koki.sdk.KokiMessages
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiOffer
@@ -107,11 +106,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiListings(): KokiListings {
         return KokiListings(urlBuilder(), rest())
-    }
-
-    @Bean
-    fun kokiMessages(): KokiMessages {
-        return KokiMessages(urlBuilder(), rest())
     }
 
     @Bean
