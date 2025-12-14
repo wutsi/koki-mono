@@ -2,6 +2,7 @@ package com.wutsi.koki.platform.ai.llm.kimi
 
 import com.wutsi.koki.platform.ai.llm.AbstractLLMTest
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.deepseek.kimi.Kimi
 
 class KimiTest : AbstractLLMTest() {
     override fun createVisionLLM(): LLM {
