@@ -53,6 +53,7 @@ jobs:
                     GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     STRIPE_API_KEY: ${{secrets.STRIPE_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
+                    KIMI_API_KEY: ${{secrets.KIMI_API_KEY_TEST}}
                 run: |
                     mvn -q -s settings.xml --non-recursive install
                     cd modules/koki-server
@@ -115,6 +116,7 @@ jobs:
                     GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY_TEST}}
                     STRIPE_API_KEY: ${{secrets.STRIPE_API_KEY_TEST}}
                     DEEPSEEK_API_KEY: ${{secrets.DEEPSEEK_API_KEY_TEST}}
+                    KIMI_API_KEY: ${{secrets.KIMI_API_KEY_TEST}}
                     REDISCLOUD_URL: ${{secrets.REDISCLOUD_URL_TEST}}
                 run: |
                     heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
@@ -133,6 +135,7 @@ jobs:
                     heroku config:set --app ${HEROKU_APP} SMTP_PORT=${SMTP_PORT}
                     heroku config:set --app ${HEROKU_APP} GEMINI_API_KEY=${GEMINI_API_KEY}
                     heroku config:set --app ${HEROKU_APP} DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+                    heroku config:set --app ${HEROKU_APP} KIMI_API_KEY=${KIMI_API_KEY}
                     heroku config:set --app ${HEROKU_APP} REDISCLOUD_URL=${REDISCLOUD_URL}
                     heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
                     cp modules/koki-server/system.properties .

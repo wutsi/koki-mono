@@ -9,6 +9,7 @@ import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerAgentCommissionRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveValidBuyerAgentCommissionRule
+import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
@@ -25,7 +26,7 @@ class ListingPublisherValidatorTest {
 
     @Test
     fun rules() {
-        assertEquals(8, validator.rules.size)
+        assertEquals(9, validator.rules.size)
         assertEquals(ListingMustHaveGeneralInformationRule::class, validator.rules[0]::class)
         assertEquals(ListingMustHaveAddressRule::class, validator.rules[1]::class)
         assertEquals(ListingMustHaveGeolocationRule::class, validator.rules[2]::class)
@@ -34,6 +35,7 @@ class ListingPublisherValidatorTest {
         assertEquals(ListingMustHaveValidBuyerAgentCommissionRule::class, validator.rules[5]::class)
         assertEquals(ListingMustHaveSellerRule::class, validator.rules[6]::class)
         assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[7]::class)
+        assertEquals(ListingMustNotHaveImageUnderReviewRule::class, validator.rules[8]::class)
     }
 
     @Test

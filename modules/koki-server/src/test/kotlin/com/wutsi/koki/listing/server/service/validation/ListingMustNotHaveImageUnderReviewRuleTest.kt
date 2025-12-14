@@ -4,10 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.file.dto.FileStatus
-import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
@@ -25,14 +22,14 @@ class ListingMustNotHaveImageUnderReviewRuleTest {
     @Test
     fun success() {
         doReturn(emptyList<FileEntity>()).whenever(fileService).search(
-            listing.tenantId,
-            emptyList(), // ids
-            listing.id, // ownerId
-            ObjectType.LISTING, // ownerType
-            FileType.IMAGE, // fileType
-            FileStatus.APPROVED, // fileStatus
-            1, // limit
-            0, // offset
+            any(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
         )
         rule.validate(listing)
     }

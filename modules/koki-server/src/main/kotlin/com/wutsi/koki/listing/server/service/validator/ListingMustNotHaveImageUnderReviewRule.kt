@@ -19,7 +19,7 @@ class ListingMustNotHaveImageUnderReviewRule(private val fileService: FileServic
             status = FileStatus.UNDER_REVIEW,
             limit = 1
         )
-        if (images.isEmpty()) {
+        if (images.isNotEmpty()) {
             throw ValidationException(ErrorCode.LISTING_IMAGE_UNDER_REVIEW)
         }
     }

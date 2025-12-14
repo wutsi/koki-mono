@@ -12,9 +12,6 @@ object PageName {
     const val AGENT = "page.agent"
     const val AGENT_LIST = "page.agent.list"
 
-    const val AI_SETTINGS = "page.settings.ai"
-    const val AI_SETTINGS_EDIT = "page.settings.ai.edit"
-
     const val OFFER = "page.offer"
     const val OFFER_LIST = "page.offer.list"
     const val OFFER_CREATE = "page.offer.create"
@@ -115,9 +112,6 @@ object PageName {
     const val SIGNUP_PROFILE = "page.signup.profile"
     const val SIGNUP_PHOTO = "page.signup.photo"
     const val SIGNUP_DONE = "page.signup.done"
-
-    const val TRANSLATION_SETTINGS = "settings.translation"
-    const val TRANSLATION_SETTINGS_EDIT = "settings.translation.edit"
 
     const val USER_PROFILE = "page.user.profile"
 }
