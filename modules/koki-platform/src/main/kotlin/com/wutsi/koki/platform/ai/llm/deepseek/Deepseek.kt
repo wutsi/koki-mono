@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.ai.llm.deepseek
 
+import com.wutsi.koki.platform.ai.llm.Content
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
@@ -115,21 +116,25 @@ open class Deepseek(
                             "assistant", "model" -> Role.MODEL
                             else -> Role.USER
                         },
-                        text = choice.message.content?.ifEmpty { null },
-                        functionCall = choice.message.toolCalls.firstOrNull()?.let { call ->
-                            FunctionCall(
-                                name = call.function.name,
-                                args = if (call.function.arguments.isEmpty()) {
-                                    emptyMap()
-                                } else {
-                                    jsonMapper.readValue(
-                                        call.function.arguments,
-                                        Map::class.java
-                                    ).map { entry -> entry.key.toString() to entry.value.toString() }
-                                        .toMap()
-                                }
-                            )
-                        }
+                        content = listOfNotNull(
+                            choice.message.content?.let { text -> Content(text = text) },
+                            choice.message.toolCalls.firstOrNull()?.let { call ->
+                                Content(
+                                    functionCall = FunctionCall(
+                                        name = call.function.name,
+                                        args = if (call.function.arguments.isEmpty()) {
+                                            emptyMap()
+                                        } else {
+                                            jsonMapper.readValue(
+                                                call.function.arguments,
+                                                Map::class.java
+                                            ).map { entry -> entry.key.toString() to entry.value.toString() }
+                                                .toMap()
+                                        }
+                                    )
+                                )
+                            }
+                        ),
                     )
                 },
                 usage = resp.usage?.let { usage ->
@@ -165,42 +170,37 @@ open class Deepseek(
             Role.SYSTEM, Role.MODEL -> "system"
         }
 
-        val content = mutableListOf<DSContent>()
-
-        if (message.text != null) {
-            content.add(
+        val content = message.content.mapNotNull { item ->
+            if (item.text != null) {
                 DSContent(
                     type = "text",
-                    text = message.text,
+                    text = item.text,
                 )
-            )
-        }
-
-        if (message.document != null) {
-            if (message.document.contentType == MediaType.APPLICATION_PDF) {
-                content.add(
+            } else if (item.document != null) {
+                if (item.document.contentType == MediaType.APPLICATION_PDF) {
                     DSContent(
                         type = "text",
-                        text = pdf2Text(message.document.content),
+                        text = pdf2Text(item.document.content),
                     )
-                )
-            } else if (message.document.contentType.toString().startsWith("image/")) {
-                val base64Content = Base64
-                    .getEncoder()
-                    .encodeToString(IOUtils.toByteArray(message.document.content))
+                } else if (item.document.contentType.toString().startsWith("image/")) {
+                    val base64Content = Base64
+                        .getEncoder()
+                        .encodeToString(IOUtils.toByteArray(item.document.content))
 
-                content.add(
                     DSContent(
                         type = "image_url",
                         image_url = DSImageUrl(
-                            url = "data:${message.document.contentType};base64,$base64Content"
+                            url = "data:${item.document.contentType};base64,$base64Content"
                         )
                     )
-                )
+                } else {
+                    throw LLMDocumentTypeNotSupportedException(item.document.contentType)
+                }
             } else {
-                throw LLMDocumentTypeNotSupportedException(message.document.contentType)
+                null
             }
         }
+
         return listOf(
             DSMessage(
                 role = role,

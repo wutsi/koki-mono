@@ -2,6 +2,7 @@ package com.wutsi.koki.platform.ai.agent.react
 
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.Config
+import com.wutsi.koki.platform.ai.llm.Content
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.Message
@@ -147,14 +148,11 @@ class ReactAgent(
             .replace("{{query}}", query)
             .replace(
                 "{{history}}",
-                memory
-                    .map { observation -> "- $observation" }
-                    .joinToString(separator = "\n")
+                memory.joinToString(separator = "\n") { observation -> "- $observation" }
             )
             .replace(
                 "{{tools}}",
-                toolMap.values.map { tool -> "- ${tool.function().name}: ${tool.function().description}" }
-                    .joinToString(separator = "\n")
+                toolMap.values.joinToString(separator = "\n") { tool -> "- ${tool.function().name}: ${tool.function().description}" }
             )
             .trimIndent()
     }
@@ -163,7 +161,9 @@ class ReactAgent(
         val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(text = prompt)
+                    Message(
+                        content = listOf(Content(text = prompt))
+                    )
                 ),
                 tools = toolMap.values.map { tool ->
                     com.wutsi.koki.platform.ai.llm.Tool(
@@ -175,7 +175,7 @@ class ReactAgent(
                 )
             )
         )
-        return response.messages[0].text ?: ""
+        return response.messages.firstOrNull()?.content?.firstOrNull()?.text ?: ""
     }
 
     private fun getLogger(): Logger {
