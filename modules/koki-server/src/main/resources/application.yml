@@ -165,7 +165,7 @@ koki:
         vision:
             type: kimi
             api-key: ${KIMI_API_KEY}
-            model: moonshot-v1-8k-vision-preview
+            model: moonshot-v1-128k-vision-preview
 
     smtp:
         host: localhost
