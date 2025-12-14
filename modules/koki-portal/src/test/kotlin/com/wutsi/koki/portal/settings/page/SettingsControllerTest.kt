@@ -32,11 +32,4 @@ class SettingsControllerTest : AbstractPageControllerTest() {
         click(".btn-security")
         assertCurrentPageIs(PageName.SECURITY_SETTINGS)
     }
-
-    @Test
-    fun ai() {
-        navigateTo("/settings")
-        click(".btn-ai")
-        assertCurrentPageIs(PageName.AI_SETTINGS)
-    }
 }
