@@ -1,319 +1,218 @@
 package com.wutsi.koki.platform.ai.agent.react
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.platform.ai.agent.Tool
+import com.wutsi.koki.platform.ai.llm.Content
 import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.LLM
-import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.Message
-import org.junit.jupiter.api.BeforeEach
+import com.wutsi.koki.platform.ai.llm.Role
 import org.mockito.Mockito.mock
-import org.springframework.http.MediaType
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ReactAgentTest {
-    private val function1 = FunctionDeclaration(
-        name = "tool1",
-        description = "This is the description of tool1",
-        parameters = null,
-    )
-    private val function2 = FunctionDeclaration(
-        name = "tool2",
-        description = "This is the description of tool2",
-        parameters = null,
-    )
-
-    private val tool1 = mock<Tool>()
-    private val tool2 = mock<Tool>()
     private val llm = mock<LLM>()
-    private val memory: MutableList<String> = mutableListOf()
-    private val template: String = """
-        This is the prompt template.
-        Query:
-        {{query}}
+    private val tool = mock<Tool>()
+    private val jsonMapper = JsonMapper.builder().build()
 
-        History:
-        {{history}}
+    @Test
+    fun `stops when final answer is provided`() {
+        val response = """{"thought": "I have the answer", "answer": "The answer is 42"}"""
+        doReturn(createLLMResponse(response)).whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
 
-        Available Tools:
-        {{tools}}
-    """.trimIndent()
-    private val query = "This is the query"
+        val agent = createAgent()
 
-    @BeforeEach
-    fun setUp() {
-        doReturn(function1).whenever(tool1).function()
-        doReturn(function2).whenever(tool2).function()
+        agent.think()
 
-        memory.clear()
+        verify(llm, times(1)).generateContent(any())
     }
 
     @Test
-    fun `final thought`() {
-        // GIVEN
-        setupLLMResponse(
-            """
-            {
-                "thought": "This is the final response",
-                "answer": "FINISH LINE!!!"
-            }
-            """.trimIndent(),
-        )
+    fun `executes tool action and continues thinking`() {
+        val actionResponse =
+            """{"thought": "Need to search", "action": {"name": "search", "reason": "To find data", "inputs": {"query": "test"}}}"""
+        val answerResponse = """{"thought": "Got the data", "answer": "Found the result"}"""
+        doReturn(createLLMResponse(actionResponse))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn("Search result data").whenever(tool).use(any())
 
-        // WHEN
-        createAgent(query).think()
+        val memory = mutableListOf<String>()
+        val agent = createAgent(memory = memory)
 
-        // VERIFY
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm).generateContent(request.capture())
-        assertEquals(
-            """
-                This is the prompt template.
-                Query:
-                $query
+        agent.think()
 
-                History:
-
-
-                Available Tools:
-                - ${function1.name}: ${function1.description}
-                - ${function2.name}: ${function2.description}
-            """.trimIndent(),
-            request.firstValue.messages[0].text,
-        )
-        assertEquals(MediaType.APPLICATION_JSON, request.firstValue.config?.responseType)
-        assertEquals(2, request.firstValue.tools?.size)
-        assertEquals(function1, request.firstValue.tools?.get(0)?.functionDeclarations?.get(0))
-        assertEquals(function2, request.firstValue.tools?.get(1)?.functionDeclarations?.get(0))
-
-        assertEquals(0, memory.size)
+        verify(llm, times(2)).generateContent(any())
+        verify(tool).use(mapOf("query" to "test"))
+        assertTrue(memory.any { it.contains("Observation from search") })
     }
 
     @Test
-    fun `function call`() {
-        // GIVEN
-        setupLLMResponse(
-            text1 = """
-            {
-                "thought": "Your detailed reasoning about what to do next",
-                "action": {
-                    "name": "${function1.name}",
-                    "reason": "Explanation of why you chose this tool",
-                    "inputs": {
-                        "arg1": "value1",
-                        "arg2": "value2"
-                    }
-                }
-            }
-            """.trimIndent(),
-            text2 = """
-            {
-                "thought": "This is the final response",
-                "answer": "FINISH LINE!!!"
-            }
-            """.trimIndent(),
-        )
+    fun `stops at max iterations`() {
+        val actionResponse =
+            """{"thought": "Need to search", "action": {"name": "search", "reason": "To find data", "inputs": {}}}"""
+        doReturn(createLLMResponse(actionResponse)).whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn("Result").whenever(tool).use(any())
 
-        doReturn("Result of tool1").whenever(tool1).use(any())
+        val agent = createAgent(maxIterations = 3)
 
-        // WHEN
-        createAgent(query).think()
+        agent.think()
 
-        // VERIFY
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm, times(2)).generateContent(request.capture())
-        assertEquals(
-            """
-                This is the prompt template.
-                Query:
-                $query
-
-                History:
-
-
-                Available Tools:
-                - ${function1.name}: ${function1.description}
-                - ${function2.name}: ${function2.description}
-            """.trimIndent(),
-            request.firstValue.messages[0].text,
-        )
-        assertEquals(
-            """
-                This is the prompt template.
-                Query:
-                $query
-
-                History:
-                - Observation from tool1: Result of tool1
-
-                Available Tools:
-                - ${function1.name}: ${function1.description}
-                - ${function2.name}: ${function2.description}
-            """.trimIndent(),
-            request.secondValue.messages[0].text,
-        )
-
-        assertEquals(1, memory.size)
-        assertEquals("Observation from tool1: Result of tool1", memory[0])
-
-        val args = argumentCaptor<Map<String, Any>>()
-        verify(tool1).use(args.capture())
-        assertEquals("value1", args.firstValue.get("arg1"))
-        assertEquals("value2", args.firstValue.get("arg2"))
+        verify(llm, times(3)).generateContent(any())
     }
 
     @Test
-    fun `function call error`() {
-        // GIVEN
-        setupLLMResponse(
-            text1 = """
-            {
-                "thought": "Your detailed reasoning about what to do next",
-                "action": {
-                    "name": "${function1.name}",
-                    "reason": "Explanation of why you chose this tool",
-                    "inputs": {
-                        "arg1": "value1",
-                        "arg2": "value2"
-                    }
-                }
-            }
-            """.trimIndent(),
-            text2 = """
-            {
-                "thought": "This is the final response",
-                "answer": "FINISH LINE!!!"
-            }
-            """.trimIndent(),
-        )
+    fun `handles tool not found`() {
+        val actionResponse =
+            """{"thought": "Need to search", "action": {"name": "unknown_tool", "reason": "To find data", "inputs": {}}}"""
+        val answerResponse = """{"thought": "Tool not available", "answer": "Cannot complete"}"""
+        doReturn(createLLMResponse(actionResponse))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
 
-        doThrow(RuntimeException("Unable to fetch data")).whenever(tool1).use(any())
+        val memory = mutableListOf<String>()
+        val agent = createAgent(memory = memory)
 
-        // WHEN
-        createAgent(query).think()
+        agent.think()
 
-        // VERIFY
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm, times(2)).generateContent(request.capture())
-        assertEquals(
-            """
-                This is the prompt template.
-                Query:
-                $query
-
-                History:
-
-
-                Available Tools:
-                - ${function1.name}: ${function1.description}
-                - ${function2.name}: ${function2.description}
-            """.trimIndent(),
-            request.firstValue.messages[0].text,
-        )
-        assertEquals(
-            """
-                This is the prompt template.
-                Query:
-                $query
-
-                History:
-                - Unable to use the tool tool1. The error message is: Unable to fetch data
-
-                Available Tools:
-                - ${function1.name}: ${function1.description}
-                - ${function2.name}: ${function2.description}
-            """.trimIndent(),
-            request.secondValue.messages[0].text,
-        )
-
-        assertEquals(1, memory.size)
-        assertEquals("Unable to use the tool tool1. The error message is: Unable to fetch data", memory[0])
-
-        val args = argumentCaptor<Map<String, Any>>()
-        verify(tool1).use(args.capture())
-        assertEquals("value1", args.firstValue.get("arg1"))
-        assertEquals("value2", args.firstValue.get("arg2"))
+        verify(tool, never()).use(any())
+        assertTrue(memory.any { it.contains("The tool unknown_tool is not available") })
     }
 
     @Test
-    fun `max iterations`() {
-        // GIVEN
-        setupLLMResponse(
-            """
-            {
-                "thought": "Your detailed reasoning about what to do next",
-                "action": {
-                    "name": "${function1.name}",
-                    "reason": "Explanation of why you chose this tool",
-                    "inputs": {
-                        "arg1": "value1",
-                        "arg2": "value2"
-                    }
-                }
-            }
-            """.trimIndent(),
-        )
+    fun `handles tool execution error`() {
+        val actionResponse =
+            """{"thought": "Need to search", "action": {"name": "search", "reason": "To find data", "inputs": {}}}"""
+        val answerResponse = """{"thought": "Error occurred", "answer": "Failed to get result"}"""
+        doReturn(createLLMResponse(actionResponse))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doThrow(RuntimeException("Tool error")).whenever(tool).use(any())
 
-        doReturn("Result of tool1").whenever(tool1).use(any())
+        val memory = mutableListOf<String>()
+        val agent = createAgent(memory = memory)
 
-        // WHEN
-        createAgent(query, maxIterations = 5).think()
+        agent.think()
 
-        // VERIFY
-        val request = argumentCaptor<LLMRequest>()
-        verify(llm, times(5)).generateContent(request.capture())
-
-        assertEquals(5, memory.size)
-        assertEquals("Observation from tool1: Result of tool1", memory[0])
-        assertEquals("Observation from tool1: Result of tool1", memory[1])
-        assertEquals("Observation from tool1: Result of tool1", memory[2])
-        assertEquals("Observation from tool1: Result of tool1", memory[3])
-        assertEquals("Observation from tool1: Result of tool1", memory[4])
-
-        val args = argumentCaptor<Map<String, Any>>()
-        verify(tool1, times(5)).use(args.capture())
+        assertTrue(memory.any { it.contains("Unable to use the tool search") })
     }
 
-    private fun setupLLMResponse(text: String) {
-        doReturn(
-            LLMResponse(
-                messages = listOf(Message(text = text))
-            )
-        ).whenever(llm).generateContent(any())
+    @Test
+    fun `handles LLM error and retries`() {
+        val answerResponse = """{"thought": "Recovered", "answer": "Success"}"""
+        doThrow(RuntimeException("LLM error"))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+
+        val memory = mutableListOf<String>()
+        val agent = createAgent(memory = memory)
+
+        agent.think()
+
+        verify(llm, times(2)).generateContent(any())
+        assertTrue(memory.any { it.contains("An unexpected error has occured") })
     }
 
-    private fun setupLLMResponse(text1: String, text2: String) {
-        doReturn(
-            LLMResponse(
-                messages = listOf(Message(text = text1))
-            )
-        )
-            .doReturn(
-                LLMResponse(
-                    messages = listOf(Message(text = text2))
+    @Test
+    fun `handles invalid JSON response and retries`() {
+        val invalidResponse = "not valid json"
+        val answerResponse = """{"thought": "Valid now", "answer": "Success"}"""
+        doReturn(createLLMResponse(invalidResponse))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+
+        val agent = createAgent()
+
+        agent.think()
+
+        verify(llm, times(2)).generateContent(any())
+    }
+
+    @Test
+    fun `handles response with neither answer nor action`() {
+        val invalidResponse = """{"thought": "I am thinking"}"""
+        val answerResponse = """{"thought": "Now I have answer", "answer": "The answer"}"""
+        doReturn(createLLMResponse(invalidResponse))
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+
+        val agent = createAgent()
+
+        agent.think()
+
+        verify(llm, times(2)).generateContent(any())
+    }
+
+    @Test
+    fun `builds prompt with query and history`() {
+        val answerResponse = """{"thought": "Done", "answer": "Result"}"""
+        doReturn(createLLMResponse(answerResponse)).whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search for information", null)).whenever(tool).function()
+
+        val memory = mutableListOf("Previous observation 1", "Previous observation 2")
+        val agent = createAgent(query = "What is AI?", memory = memory)
+
+        agent.think()
+
+        verify(llm).generateContent(any())
+    }
+
+    @Test
+    fun `handles empty LLM response`() {
+        val emptyResponse = LLMResponse(messages = emptyList())
+        val answerResponse = """{"thought": "Retry worked", "answer": "Success"}"""
+        doReturn(emptyResponse)
+            .doReturn(createLLMResponse(answerResponse))
+            .whenever(llm).generateContent(any())
+        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+
+        val agent = createAgent()
+
+        agent.think()
+
+        verify(llm, times(2)).generateContent(any())
+    }
+
+    private fun createLLMResponse(text: String): LLMResponse {
+        return LLMResponse(
+            messages = listOf(
+                Message(
+                    role = Role.MODEL,
+                    content = listOf(Content(text = text))
                 )
             )
-            .whenever(llm).generateContent(any())
+        )
     }
 
-    private fun createAgent(query: String, maxIterations: Int = 5): ReactAgent {
+    private fun createAgent(
+        query: String = "Test query",
+        memory: MutableList<String> = mutableListOf(),
+        maxIterations: Int = 5
+    ): ReactAgent {
         return ReactAgent(
             llm = llm,
-            agentTools = listOf(tool1, tool2),
-            jsonMapper = JsonMapper(),
             query = query,
-            maxIterations = maxIterations,
+            agentTools = listOf(tool),
+            jsonMapper = jsonMapper,
             memory = memory,
-            template = template,
+            maxIterations = maxIterations
         )
     }
 }

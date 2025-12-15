@@ -2,7 +2,6 @@ package com.wutsi.koki.platform.ai.llm
 
 import org.junit.jupiter.api.AfterEach
 import org.springframework.http.MediaType
-import kotlin.system.measureTimeMillis
 import kotlin.test.Test
 
 abstract class AbstractLLMTest {
@@ -20,20 +19,16 @@ abstract class AbstractLLMTest {
 
     @Test
     open fun chat() {
-        var response: LLMResponse = LLMResponse()
-        val time = measureTimeMillis {
-            response = createLLM().generateContent(
-                request = LLMRequest(
-                    messages = listOf(
-                        Message(
-                            text = "What is an API"
-                        )
+        val response = createLLM().generateContent(
+            request = LLMRequest(
+                messages = listOf(
+                    Message(
+                        content = listOf(Content(text = "What is an API")),
                     )
                 )
             )
-        }
-        println("${response.messages.size} message(s). duration=$time ms")
-        response.messages.forEach { message -> println(message.text) }
+        )
+        print(response)
     }
 
     @Test
@@ -42,7 +37,11 @@ abstract class AbstractLLMTest {
             request = LLMRequest(
                 messages = listOf(
                     Message(
-                        text = "Can you share an example of json of the request from Gemini API. Only the JSON please"
+                        content = listOf(
+                            Content(
+                                text = "Can you share an example of json of the request from Gemini API. Only the JSON please"
+                            )
+                        ),
                     )
                 ),
                 config = Config(
@@ -50,8 +49,7 @@ abstract class AbstractLLMTest {
                 )
             )
         )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> println(message.text) }
+        print(response)
 //        JsonMapper().readValue(response.messages[0].text, Map::class.java)
     }
 
@@ -62,17 +60,25 @@ abstract class AbstractLLMTest {
                 messages = listOf(
                     Message(
                         role = Role.MODEL,
-                        text = """
-                            You are a senior software developer, your name is Joe.
-                            You should just produce code, nothing else.
-                        """.trimIndent()
+                        content = listOf(
+                            Content(
+                                text = """
+                                    You are a senior software developer, your name is Joe.
+                                    You should just produce code, nothing else.
+                                """.trimIndent()
+                            )
+                        ),
                     ),
                     Message(
                         role = Role.USER,
-                        text = """
-                            Can you write code to count the number of words in a text in Kotlin.
-                            Add also unit tests en ensure that the code works as expected.
-                        """.trimIndent()
+                        content = listOf(
+                            Content(
+                                text = """
+                                    Can you write code to count the number of words in a text in Kotlin.
+                                    Add also unit tests en ensure that the code works as expected.
+                                """.trimIndent()
+                            )
+                        )
                     )
                 ),
                 config = Config(
@@ -81,8 +87,7 @@ abstract class AbstractLLMTest {
                 )
             )
         )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> println(message.text) }
+        print(response)
     }
 
     @Test
@@ -91,17 +96,22 @@ abstract class AbstractLLMTest {
             request = LLMRequest(
                 messages = listOf(
                     Message(
-                        text = "Can you summarize in 500 word the content of this document",
-                        document = Document(
-                            contentType = MediaType.APPLICATION_PDF,
-                            content = AbstractLLMTest::class.java.getResourceAsStream("/file/document-en.pdf")!!
+                        content = listOf(
+                            Content(
+                                text = "Can you summarize in 500 word the content of this document",
+                            ),
+                            Content(
+                                document = Document(
+                                    contentType = MediaType.APPLICATION_PDF,
+                                    content = AbstractLLMTest::class.java.getResourceAsStream("/file/document-en.pdf")!!
+                                )
+                            )
                         )
                     )
                 )
             )
         )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> println(message.text) }
+        print(response)
     }
 
     @Test
@@ -110,12 +120,22 @@ abstract class AbstractLLMTest {
             request = LLMRequest(
                 messages = listOf(
                     Message(
-                        text = """
-                            Can you extract the information of this image.
-                        """.trimIndent(),
-                        document = Document(
-                            contentType = MediaType.IMAGE_JPEG,
-                            content = AbstractLLMTest::class.java.getResourceAsStream("/file/document.jpg")!!
+                        content = listOf(
+                            Content(
+                                text = """
+                                    Can you extract the information of this image in JSON format having the following field:
+                                    - Name
+                                    - Document Type
+                                    - Document ID
+                                    - Expiry Date
+                                """.trimIndent()
+                            ),
+                            Content(
+                                document = Document(
+                                    contentType = MediaType.IMAGE_JPEG,
+                                    content = AbstractLLMTest::class.java.getResourceAsStream("/file/document.jpg")!!
+                                )
+                            )
                         )
                     ),
                 ),
@@ -124,8 +144,7 @@ abstract class AbstractLLMTest {
                 )
             )
         )
-        println("${response.messages.size} message(s)")
-        response.messages.forEach { message -> println(message.text) }
+        print(response)
     }
 
     @Test
@@ -134,9 +153,11 @@ abstract class AbstractLLMTest {
             request = LLMRequest(
                 messages = listOf(
                     Message(
-                        text = """
-                            What's the current weather like in Montreal?
-                        """.trimIndent(),
+                        content = listOf(
+                            Content(
+                                text = "What's the current weather like in Montreal?"
+                            )
+                        )
                     ),
                 ),
                 tools = listOf(
@@ -174,8 +195,10 @@ abstract class AbstractLLMTest {
         println("${response.messages.size} message(s)")
         println()
         response.messages.forEach { message ->
-            message.functionCall?.let { println("FUNCTION: ${message.functionCall}") }
-            message.text?.let { println("TEXT: ${message.text}") }
+            message.content.forEach { content ->
+                content.text?.let { println("TEXT: ${content.text}") }
+                content.functionCall?.let { println("FUNCTION: ${content.functionCall}") }
+            }
         }
     }
 }

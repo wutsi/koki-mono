@@ -1,6 +1,7 @@
 package com.wutsi.koki.platform.ai.llm.gemini
 
 import com.wutsi.koki.platform.ai.llm.Config
+import com.wutsi.koki.platform.ai.llm.Content
 import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.platform.ai.llm.LLMException
@@ -51,18 +52,21 @@ class Gemini(
             contents = request.messages.map { message ->
                 GContent(
                     role = toRole(message.role),
-                    parts = listOfNotNull(
-                        message.text?.let { text -> GPart(text = text) },
-                        message.document?.let { document ->
+                    parts = message.content.mapNotNull { item ->
+                        if (item.text != null) {
+                            GPart(text = item.text)
+                        } else if (item.document != null) {
                             GPart(
                                 inlineData = GInlineData(
-                                    mimeType = document.contentType.toString(),
+                                    mimeType = item.document.contentType.toString(),
                                     data = Base64.getEncoder()
-                                        .encodeToString(IOUtils.toByteArray(document.content))
+                                        .encodeToString(IOUtils.toByteArray(item.document.content))
                                 )
                             )
+                        } else {
+                            null
                         }
-                    )
+                    }
                 )
             },
             generationConfig = createConfig(request.config),
@@ -81,19 +85,26 @@ class Gemini(
                     .map { part ->
                         Message(
                             role = Role.MODEL,
-                            text = encodeResponse(request.config?.responseType, part.text),
-                            functionCall = part.functionCall?.let { function ->
-                                FunctionCall(
-                                    name = if (function.name.startsWith("default_api.")) {
-                                        function.name.substring(12)
-                                    } else {
-                                        function.name
-                                    },
-                                    args = function.args,
-                                )
-                            }
+                            content = listOfNotNull(
+                                encodeResponse(
+                                    request.config?.responseType,
+                                    part.text
+                                )?.let { text -> Content(text = text) },
+                                part.functionCall?.let { function ->
+                                    Content(
+                                        functionCall = FunctionCall(
+                                            name = if (function.name.startsWith("default_api.")) {
+                                                function.name.substring(12)
+                                            } else {
+                                                function.name
+                                            },
+                                            args = function.args,
+                                        )
+                                    )
+                                }
+                            ),
                         )
-                    }.filter { message -> message.text != null || message.functionCall != null },
+                    },
 
                 usage = resp.usageMetadata?.let { usage ->
                     Usage(
