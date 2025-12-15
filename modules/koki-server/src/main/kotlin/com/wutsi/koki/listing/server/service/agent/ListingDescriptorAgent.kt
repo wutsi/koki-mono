@@ -16,7 +16,7 @@ class ListingDescriptorAgent(
     val llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
-        val SYSTEM_INSTRUCTIONS = """
+        val PROMPT = """
             You are a real estate agent helping customers to rent or buy properties.
             You analyze all the images provided to provide an accurate and detailed description of the property.
 
@@ -57,22 +57,7 @@ class ListingDescriptorAgent(
             - Instructions for French translation:
               - The french abbreviation for "bedroom" is CAC. Example: "1BR" should be translate to "1CAC"
               - The french translation for "bathroom" is CDB. Example: "2BA" should be translate to "2SDB"
-        """.trimIndent()
 
-        const val QUERY = "Extract the information from the images provided for this property"
-    }
-
-    override fun systemInstructions(): String {
-        return SYSTEM_INSTRUCTIONS
-    }
-
-    override fun buildPrompt(query: String, memory: List<String>): String {
-        val amenities = listing.amenities.joinToString(separator = ",") { amenity -> amenity.name }
-        var i = 0
-        val imageText = images.joinToString(separator = "\n") { image ->
-            "- Image ${i++}: ${image.description ?: "No description available"}"
-        }
-        return """
             Goal: Create the detailed description of a property listing.
             Query: {{query}}
 
@@ -95,7 +80,21 @@ class ListingDescriptorAgent(
             Observations:
             {{observations}}
         """.trimIndent()
-            .replace("{{query}}", query)
+
+        const val QUERY = "Extract the information from the images provided for this property"
+    }
+
+    override fun systemInstructions(): String? {
+        return null
+    }
+
+    override fun buildPrompt(query: String, memory: List<String>): String {
+        val amenities = listing.amenities.joinToString(separator = ",") { amenity -> amenity.name }
+        var i = 0
+        val imageText = images.joinToString(separator = "\n") { image ->
+            "- Image ${i++}: ${image.description ?: "No description available"}"
+        }
+        return PROMPT.replace("{{query}}", query)
             .replace("{{listingType}}", listing.listingType?.name ?: "Unknown")
             .replace("{{propertyType}}", listing.propertyType?.name ?: "Unknown")
             .replace("{{bedrooms}}", listing.bedrooms?.toString() ?: "Unknown")

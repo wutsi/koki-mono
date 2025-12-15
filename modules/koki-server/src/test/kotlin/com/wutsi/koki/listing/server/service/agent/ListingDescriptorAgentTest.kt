@@ -69,6 +69,11 @@ class ListingDescriptorAgentTest {
     }
 
     @Test
+    fun systemInstructions() {
+        assertEquals(null, agent.systemInstructions())
+    }
+
+    @Test
     fun apartment() {
         val json = agent.run(ListingDescriptorAgent.QUERY)
         val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)

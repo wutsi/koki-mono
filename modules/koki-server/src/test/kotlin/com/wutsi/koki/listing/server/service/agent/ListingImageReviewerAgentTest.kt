@@ -4,7 +4,6 @@ import com.amazonaws.util.IOUtils
 import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.file.dto.ImageQuality
 import com.wutsi.koki.platform.ai.agent.Agent
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,11 +28,6 @@ class ListingImageReviewerAgentTest {
     @Test
     fun systemInstructions() {
         assertEquals(null, createAgent().systemInstructions())
-    }
-
-    @AfterEach
-    fun tearDown() {
-        Thread.sleep(30000L) // Delay to avoid rate limiting
     }
 
     @Test
