@@ -4,7 +4,6 @@ import com.amazonaws.util.IOUtils
 import com.wutsi.koki.ai.server.service.LLMProvider
 import com.wutsi.koki.file.dto.ImageQuality
 import com.wutsi.koki.platform.ai.agent.Agent
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +12,6 @@ import org.springframework.test.annotation.DirtiesContext
 import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -27,13 +25,12 @@ class ListingImageReviewerAgentTest {
         assertEquals(0, createAgent().tools().size)
     }
 
-    @AfterEach
-    fun tearDown() {
-        Thread.sleep(30000L) // Delay to avoid rate limiting
+    @Test
+    fun systemInstructions() {
+        assertEquals(null, createAgent().systemInstructions())
     }
 
     @Test
-    @Ignore("rate limited")
     fun run() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/room.jpg")
@@ -45,7 +42,6 @@ class ListingImageReviewerAgentTest {
     }
 
     @Test
-    @Ignore("rate limited")
     fun `invalid file`() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/bad-image.jpg")
