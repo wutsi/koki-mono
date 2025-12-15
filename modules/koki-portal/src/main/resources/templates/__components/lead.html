@@ -105,7 +105,7 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.user.city?.name}">ADDRESS</a>
+        <a th:href="'/leads/' + ${lead.id}" th:text="${lead.user.location}">ADDRESS</a>
     </td>
     <td class="d-none d-md-table-cell">
         <a th:href="'/leads/' + ${lead.id}" th:text="#{'lead-source.' + ${lead.source}}">SOURCE</a>
