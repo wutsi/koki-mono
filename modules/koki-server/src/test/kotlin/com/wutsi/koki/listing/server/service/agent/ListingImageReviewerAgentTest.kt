@@ -13,7 +13,6 @@ import org.springframework.test.annotation.DirtiesContext
 import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -27,13 +26,17 @@ class ListingImageReviewerAgentTest {
         assertEquals(0, createAgent().tools().size)
     }
 
+    @Test
+    fun systemInstructions() {
+        assertEquals(null, createAgent().systemInstructions())
+    }
+
     @AfterEach
     fun tearDown() {
         Thread.sleep(30000L) // Delay to avoid rate limiting
     }
 
     @Test
-    @Ignore("rate limited")
     fun run() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/room.jpg")
@@ -45,7 +48,6 @@ class ListingImageReviewerAgentTest {
     }
 
     @Test
-    @Ignore("rate limited")
     fun `invalid file`() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/bad-image.jpg")

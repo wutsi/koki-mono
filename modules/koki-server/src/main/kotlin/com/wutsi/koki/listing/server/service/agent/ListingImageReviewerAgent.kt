@@ -12,7 +12,7 @@ class ListingImageReviewerAgent(
     val llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
-        val SYSTEM_INSTRUCTIONS = """
+        val PROMPT = """
             You are a real estate agent helping customers to rent or buy properties.
             You analyze pictures provided to extract informations to describe the property.
             Provide accurate and detailed information about the picture, in a format that is SEO friendly and suitable for websites like AirBnB, VRBO or Bookings.com.
@@ -27,9 +27,7 @@ class ListingImageReviewerAgent(
             - reason: If the image is not valid, explain why.
 
             If you cannot extract the information from the provide image, you should return valid as "false", and all the other fields as "null"
-        """.trimIndent()
 
-        val PROMPT = """
             Goal: Extract informations from the provided image.
             Query: {{query}}
 
@@ -40,14 +38,14 @@ class ListingImageReviewerAgent(
         const val QUERY = "Extract the information from the image provided"
     }
 
-    override fun systemInstructions(): String {
-        return SYSTEM_INSTRUCTIONS
+    override fun systemInstructions(): String? {
+        return null
     }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
         return PROMPT
             .replace("{{query}}", query)
-            .replace("{{observations}}", memory.map { entry -> "- $entry" }.joinToString("\n"))
+            .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
 
     override fun tools(): List<Tool> = emptyList<Tool>()
