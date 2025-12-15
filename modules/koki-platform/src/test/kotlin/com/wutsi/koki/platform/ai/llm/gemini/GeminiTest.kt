@@ -16,7 +16,7 @@ class GeminiTest { // AbstractLLMTest()
         )
     }
 
-    override fun createVisionLLM(): LLM {
+    fun createVisionLLM(): LLM {
         return createLLM()
     }
 }
