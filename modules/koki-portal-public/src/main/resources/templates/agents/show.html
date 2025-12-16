@@ -140,8 +140,50 @@
         </div>
 
     </div>
+
+    <!-- CONTACT AGENT -->
+    <div class="listing-contact-details">
+        <div class="listing-contact-details-inner">
+            <div class="agent-info">
+                <img th:if="${agent.user.photoUrl}" th:src="${agent.user.photoUrl}"/>
+                <div>
+                    <h2 th:text="${agent.user.displayName}">AGENT</h2>
+                    <div th:text="${agent.user.employer}">EMPLOYER</div>
+                </div>
+            </div>
+
+            <div class="message" th:text="#{page.lead.agent-message-default}">
+                MESSAGE
+            </div>
+
+            <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
+                    th:data-modal-body-url="'/leads/create?agent-id=' + ${agent.id}"
+                    th:data-modal-title="#{page.lead.modal.title}"
+                    th:text="#{button.send_message}">
+                Send Message
+            </button>
+        </div>
+    </div>
 </div>
 
+<!-- TOAST -->
+<div class="d-flex justify-content-center align-items-center w-100 h-100 position-fixed top-0 start-0"
+     th:if="${toastMessage}">
+    <div aria-atomic="true" aria-live="assertive" class="toast text-bg-primary" data-bs-animation="true"
+         data-bs-autohide="true" data-bs-delay="5000" id="toast-message" role="alert"
+    >
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fa-solid fa-circle-check text-bg-success"></i>
+                <span class="margin-left" th:text="${toastMessage}">MESSAGE</span>
+            </div>
+            <button aria-label="Close" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    type="button"></button>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{__components/bootstrap :: modal}"></div>
 <script th:inline="javascript">
     const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
 
@@ -182,6 +224,19 @@
             map.addLayer(marker);
         }
     }
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            const elt = document.getElementById('toast-message');
+            if (elt) {
+                const toast = new bootstrap.Toast(elt);
+                toast.show();
+            }
+        },
+        false
+    );
+
 </script>
 </body>
 </html>

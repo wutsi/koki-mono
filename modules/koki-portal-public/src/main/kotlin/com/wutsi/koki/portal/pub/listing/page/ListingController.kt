@@ -114,8 +114,8 @@ class ListingController(
     }
 
     private fun loadToast(
-        @RequestParam(name = "_toast", required = false) toast: String? = null,
-        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
+        toast: String? = null,
+        timestamp: Long? = null,
         model: Model,
     ) {
         if (toast == null || timestamp == null) {

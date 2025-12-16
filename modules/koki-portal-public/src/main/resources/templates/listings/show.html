@@ -295,7 +295,9 @@
                 </div>
             </div>
 
-            <div class="message" th:if="${listing.statusActive}" th:text="#{page.lead.message-default}">MESSAGE</div>
+            <div class="message" th:if="${listing.statusActive}" th:text="#{page.lead.listing-message-default}">
+                MESSAGE
+            </div>
 
             <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
                     th:data-modal-body-url="'/leads/create?listing-id=' + ${listing.id}"

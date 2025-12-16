@@ -25,6 +25,9 @@ class AgentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             totalRentals = entity.totalRentals,
             past12mSales = entity.past12mSales,
             past12mRentals = entity.past12mRentals,
+            publicUrl = currentTenant.get().clientPortalUrl +
+                "/agents/${entity.id}" +
+                (users[entity.userId]?.let { user -> "/${user.slug}" } ?: ""),
         )
     }
 
@@ -39,6 +42,7 @@ class AgentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
             totalRentals = entity.totalRentals,
             past12mSales = entity.past12mSales,
             past12mRentals = entity.past12mRentals,
+            publicUrl = currentTenant.get().clientPortalUrl + "/agents/${entity.id}/${user.slug}",
 
             totalSalesMetric = entity.metrics
                 .find { metric -> metric.period == MetricPeriod.OVERALL && metric.listingType == ListingType.SALE }
