@@ -11,6 +11,7 @@ data class LeadModel(
     val id: Long = -1,
     val user: UserModel = UserModel(),
     val listing: ListingModel? = null,
+    val agentUserId: Long? = null,
     val status: LeadStatus = LeadStatus.UNKNOWN,
     val lastMessage: LeadMessageModel = LeadMessageModel(),
     val nextContactAt: Date? = null,

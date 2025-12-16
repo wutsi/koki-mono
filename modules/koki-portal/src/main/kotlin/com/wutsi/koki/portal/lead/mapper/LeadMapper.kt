@@ -21,6 +21,7 @@ class LeadMapper : TenantAwareMapper() {
         return LeadModel(
             id = entity.id,
             listing = listing,
+            agentUserId = entity.agentUserId,
             user = user,
             lastMessage = message,
             status = entity.status,
@@ -46,6 +47,7 @@ class LeadMapper : TenantAwareMapper() {
         val df = createDateTimeFormat()
         return LeadModel(
             id = entity.id,
+            agentUserId = entity.agentUserId,
             listing = entity.listingId?.let { id -> listings[id] },
             user = users[entity.userId] ?: UserModel(entity.userId),
             lastMessage = messages[entity.lastMessageId] ?: LeadMessageModel(entity.lastMessageId),

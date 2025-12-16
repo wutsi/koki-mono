@@ -20,7 +20,11 @@ abstract class AbstractLeadDetailsController : AbstractModuleDetailsPageControll
 
         // Check access
         val user = userHolder.get()
-        if (user?.id == lead.listing?.sellerAgentUser?.id || user?.hasFullAccess("lead") == true) {
+        if (
+            user?.id == lead.listing?.sellerAgentUser?.id ||
+            user?.id == lead.agentUserId ||
+            user?.hasFullAccess("lead") == true
+        ) {
             return lead
         }
 

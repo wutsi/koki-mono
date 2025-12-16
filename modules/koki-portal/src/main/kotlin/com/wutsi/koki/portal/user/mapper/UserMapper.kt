@@ -42,7 +42,7 @@ class UserMapper : TenantAwareMapper() {
             category = category,
             country = entity.country,
             countryName = entity.country
-                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayName }
+                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayCountry }
                 ?: city?.countryName,
             city = city,
             permissionNames = roles.flatMap { role -> role.permissions }
@@ -79,7 +79,7 @@ class UserMapper : TenantAwareMapper() {
             city = city,
             country = entity.country,
             countryName = entity.country
-                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayName }
+                ?.let { country -> Locale(LocaleContextHolder.getLocale().language, country).displayCountry }
                 ?: city?.countryName,
         )
     }
