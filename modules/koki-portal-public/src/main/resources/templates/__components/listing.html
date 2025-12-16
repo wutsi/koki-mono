@@ -23,7 +23,9 @@
             </div>
         </div>
         <div class="hero-image-container flex flex-center">
-            <img class="hero-image" th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
+            <img class="hero-image" th:alt="${listing.title}"
+                 th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'" th:title="${listing.title}"
+            />
         </div>
     </a>
     <div class="listing-details padding-small">

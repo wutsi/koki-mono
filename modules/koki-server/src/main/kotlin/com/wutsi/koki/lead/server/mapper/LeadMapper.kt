@@ -10,11 +10,11 @@ class LeadMapper {
     fun toLead(entity: LeadEntity): Lead {
         return Lead(
             id = entity.id ?: -1,
-            agentUserId = entity.agentUserId,
             lastMessageId = entity.lastMessage?.id ?: -1,
             listingId = entity.listing?.id,
-            deviceId = entity.deviceId,
+            agentUserId = entity.agentUserId,
             userId = entity.userId,
+            deviceId = entity.deviceId,
             status = entity.status,
             source = entity.source,
             modifiedAt = entity.modifiedAt,
@@ -28,8 +28,9 @@ class LeadMapper {
     fun toLeadSummary(entity: LeadEntity): LeadSummary {
         return LeadSummary(
             id = entity.id ?: -1,
-            agentUserId = entity.agentUserId,
             listingId = entity.listing?.id,
+            agentUserId = entity.agentUserId,
+            userId = entity.userId,
             lastMessageId = entity.lastMessage?.id ?: -1,
             status = entity.status,
             source = entity.source,

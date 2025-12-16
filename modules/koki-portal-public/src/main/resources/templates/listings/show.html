@@ -16,7 +16,7 @@
            href="#"
            th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
            th:data-modal-title="#{page.listing.section.photo.title}">
-            <img th:src="${listing.heroImageUrl}"/>
+            <img th:alt="${listing.title}" th:src="${listing.heroImageUrl}" th:title="${listing.title}"/>
         </a>
     </div>
     <div class="hero-2">
@@ -27,7 +27,7 @@
                    href="#"
                    th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
                    th:data-modal-title="#{page.listing.section.photo.title}">
-                    <img th:src="${img.contentUrl}"/>
+                    <img th:alt="${img.title}" th:src="${img.contentUrl}" th:time="${img.title}"/>
                 </a>
             </div>
         </div>
@@ -38,7 +38,7 @@
                    href="#"
                    th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
                    th:data-modal-title="#{page.listing.section.photo.title}">
-                    <img th:src="${img.contentUrl}"/>
+                    <img th:alt="${img.title}" th:src="${img.contentUrl}" th:time="${img.title}"/>
                 </a>
             </div>
         </div>

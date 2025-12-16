@@ -10,7 +10,7 @@
 
 <div class="agent-info-container">
     <div class="agent-info-details">
-        <div class="margin-top-2x">&nbsp;</div>
+        <div class="margin-top">&nbsp;</div>
 
         <!-- PICTURE + PKI -->
         <div class="flex flex-wrap">
@@ -108,6 +108,11 @@
                     <img height="48" th:src="${page.assetUrl} + '/image/social/instagram.png'" width="48"/></a>
 
                 <a class="margin-right" target="_blank"
+                   th:href="${agent.user.youtubeUrl}"
+                   th:if="${agent.user.youtubeUrl}">
+                    <img height="48" th:src="${page.assetUrl} + '/image/social/youtube.png'" width="48"/></a>
+
+                <a class="margin-right" target="_blank"
                    th:href="${agent.user.twitterUrl}"
                    th:if="${agent.user.twitterUrl}">
                     <img height="48" th:src="${page.assetUrl} + '/image/social/twitter.png'" width="48"/></a>
@@ -138,7 +143,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- CONTACT AGENT -->
