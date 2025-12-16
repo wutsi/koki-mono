@@ -41,12 +41,13 @@ class LeadService(
         val city = resolveCity()
         val request = CreateLeadRequest(
             listingId = form.listingId,
+            agentUserId = form.agentUserId,
             firstName = form.firstName,
             lastName = form.lastName,
             message = form.message,
             email = email,
             phoneNumber = form.phoneFull,
-            source = LeadSource.LISTING,
+            source = form.listingId?.let { LeadSource.LISTING } ?: LeadSource.AGENT,
             userId = userIdProvider.get(),
             cityId = city?.id,
             country = city?.country ?: resolveCountryFromPhone(form.phoneFull),

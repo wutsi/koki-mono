@@ -13,4 +13,5 @@ data class AgentModel(
     val past12mSalesMetric: AgentMetricModel? = null,
     val totalRentalsMetric: AgentMetricModel? = null,
     val past12mRentalsMetric: AgentMetricModel? = null,
+    val publicUrl: String = "",
 )

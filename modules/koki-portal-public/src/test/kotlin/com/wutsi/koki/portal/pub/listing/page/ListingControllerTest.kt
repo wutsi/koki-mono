@@ -9,6 +9,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
+import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.platform.geoip.GeoIp
@@ -101,7 +102,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun sendMessage() {
-        navigateTo("${listing.publicUrl}")
+        navigateTo(listing.publicUrl!!)
 
         scroll(.33)
         click("#btn-send-message")
@@ -120,6 +121,9 @@ class ListingControllerTest : AbstractPageControllerTest() {
             request.capture(),
             eq(CreateLeadResponse::class.java)
         )
+        assertEquals(listing.id, request.firstValue.listingId)
+        assertEquals(null, request.firstValue.agentUserId)
+        assertEquals(LeadSource.LISTING, request.firstValue.source)
         assertEquals("Ray", request.firstValue.firstName)
         assertEquals("Sponsible", request.firstValue.lastName)
         assertEquals("ray.sponsible@gmail.com", request.firstValue.email)

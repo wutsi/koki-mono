@@ -16,6 +16,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/agents")
@@ -23,18 +24,27 @@ class AgentController(
     private val agentService: AgentService,
     private val listingService: ListingService,
 ) : AbstractPageController() {
+    companion object {
+        const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
+        const val TOAST_MESSAGE_SENT = "msg-sent"
+    }
+
     @GetMapping("/{id}/{slug}")
     fun show(
         @PathVariable id: Long,
         @PathVariable slug: String,
+        @RequestParam(name = "_toast", required = false) toast: String? = null,
+        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
         model: Model,
     ): String {
-        return show(id, model)
+        return show(id, toast, timestamp, model)
     }
 
     @GetMapping("/{id}")
     fun show(
         @PathVariable id: Long,
+        @RequestParam(name = "_toast", required = false) toast: String? = null,
+        @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
         model: Model,
     ): String {
         val agent = agentService.get(id)
@@ -49,11 +59,14 @@ class AgentController(
             model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
         }
 
+        loadToast(toast, timestamp, model)
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.AGENT,
                 title = agent.user.displayName ?: "",
+                description = agent.user.biography,
+                url = agent.publicUrl,
             )
         )
         return "agents/show"
@@ -134,5 +147,24 @@ class AgentController(
 
         return sorted.firstOrNull { location -> location.type == LocationType.NEIGHBORHOOD }
             ?: sorted.firstOrNull()
+    }
+
+    private fun loadToast(
+        toast: String? = null,
+        timestamp: Long? = null,
+        model: Model,
+    ) {
+        if (toast == null || timestamp == null) {
+            return
+        }
+        if (System.currentTimeMillis() - timestamp > TOAST_TIMEOUT_MILLIS) {
+            return
+        }
+
+        val message = when (toast) {
+            TOAST_MESSAGE_SENT -> getMessage("page.agent.toast.message-sent")
+            else -> null
+        }
+        model.addAttribute("toastMessage", message)
     }
 }

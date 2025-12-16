@@ -167,7 +167,13 @@ class LeadService(
         }
 
         try {
-            return userService.getByEmail(request.email, tenantId).id!!
+            val user = userService.getByEmail(request.email, tenantId)
+            user.mobile = request.phoneNumber
+            user.displayName = "${request.firstName} ${request.lastName}".trim()
+            user.cityId = request.cityId
+            user.country = request.country
+            userService.save(user)
+            return user.id ?: -1
         } catch (ex: NotFoundException) {
             val request = CreateUserRequest(
                 username = generateUsername(request.email, tenantId),

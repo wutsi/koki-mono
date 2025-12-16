@@ -1,7 +1,8 @@
 package com.wutsi.koki.portal.pub.lead.form
 
 data class LeadForm(
-    val listingId: Long = -1,
+    val listingId: Long? = null,
+    val agentUserId: Long? = null,
     val firstName: String = "",
     val lastName: String = "",
     val message: String = "",
@@ -9,5 +10,5 @@ data class LeadForm(
     val phone: String = "",
     val phoneFull: String = "",
     val country: String? = null,
-    val publicUrl: String? = null,
+    val publicUrl: String = "",
 )
