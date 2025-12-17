@@ -188,7 +188,7 @@
                 icon: 'home',
                 markerColor: item.sold ? 'gray' : '#1d7edf',
                 prefix: 'fa'
-            })
+            });
 
             let marker = L.marker([item.latitude, item.longitude], {icon: icon});
             marker.on('mouseover', () => {
