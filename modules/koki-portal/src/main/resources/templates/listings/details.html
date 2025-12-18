@@ -236,7 +236,7 @@
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" id="buyer-agent-commission"
-             th:if="${listing.buyerAgentCommission} AND !${listing.statusSold}">
+             th:if="${toggles.coBrokering} AND ${listing.buyerAgentCommission} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
             <div>
                 <span th:text="${listing.buyerAgentCommissionMoney}">$$</span>

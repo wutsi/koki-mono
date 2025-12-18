@@ -46,10 +46,20 @@
                         </div>
                         <div class="section-item" th:if="${closing}">
                             <label class="title">
-                                <span th:text="#{page.listing.sale-price}">SALE_PRICE</span>
+                                <span th:if="!${listing.listingTypeRental}" th:text="#{page.listing.sale-price}">SALE_PRICE</span>
+                                <span th:if="${listing.listingTypeRental}" th:text="#{page.listing.rental-price}">SALE_PRICE</span>
                                 <span class="required">*</span>
                             </label>
-                            <input class="form-control" required step="0" th:field="*{salePrice}" type="number"/>
+                            <div class="input-group">
+                                <input class="form-control" required step="0" th:field="*{salePrice}" type="number"/>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span th:text="${tenant.currencySymbol}">XXX</span>
+                                        <span th:if="${listing.listingTypeRental}"
+                                              th:text="#{page.listing.rental-price-suffix} ">PER MONTH</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="section-item">
                             <label class="title" th:text="#{page.listing.comment}">COMMENT</label>

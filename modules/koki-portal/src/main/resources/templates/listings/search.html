@@ -83,7 +83,7 @@
                             </div>
 
                             <div
-                                th:replace="~{__components/listing :: listing-table(${listings.items}, ${form.listingType == 'SOLD'}, true, true, ${moreUrl})}">
+                                th:replace="~{__components/listing :: listing-table(${listings.items}, ${form.listingType == 'SOLD'}, true, ${toggles.coBrokering}, ${moreUrl})}">
                             </div>
                         </div>
                     </div>

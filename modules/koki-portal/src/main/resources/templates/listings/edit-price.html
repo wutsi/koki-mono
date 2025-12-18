@@ -81,17 +81,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="section-item">
+                            <div class="section-item" th:if="${toggles.coBrokering}">
                                 <label class="title">
                                     <span th:text="#{page.listing.buyer-agent-commission}">BUYER_COMMISSION</span>
-                                    <span class="required">*</span>
-
                                 </label>
-                                <div class="text-small" th:text="#{page.listing.buyer-agent-commission-help}">
-                                    HELP
-                                </div>
+                                <div class="text-small" th:text="#{page.listing.buyer-agent-commission-help}">HELP</div>
                                 <div class="input-group">
-                                    <input class="form-control" required
+                                    <input class="form-control"
                                            step="0.01" th:field="*{buyerAgentCommission}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -106,8 +102,8 @@
                                    th:href="'/listings/edit/remarks?id=' + ${form.id}"
                                    th:text="#{button.previous}"
                                 >PREV</a>
-                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}"
-                                        type="submit">NEXT
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}" type="submit">
+                                    NEXT
                                 </button>
                             </div>
                         </div>

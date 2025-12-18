@@ -170,7 +170,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#visitFees", "5")
         input("#sellerAgentCommission", "6.5")
         scrollToBottom()
-        input("#buyerAgentCommission", "3.0")
+//        input("#buyerAgentCommission", "3.0")
         click("button[type=submit]")
         val req7 = argumentCaptor<UpdateListingPriceRequest>()
         verify(rest).postForEntity(
@@ -181,7 +181,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         assertEquals(180000, req7.firstValue.price)
         assertEquals(5, req7.firstValue.visitFees)
         assertEquals(6.5, req7.firstValue.sellerAgentCommission)
-        assertEquals(3.0, req7.firstValue.buyerAgentCommission)
+        assertEquals(null, req7.firstValue.buyerAgentCommission)
 
         // Seller
         assertCurrentPageIs(PageName.LISTING_EDIT_SELLER)
@@ -284,7 +284,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#visitFees", "5")
         input("#sellerAgentCommission", "6.5")
         scrollToBottom()
-        input("#buyerAgentCommission", "3.0")
+//        input("#buyerAgentCommission", "3.0")
         click("button[type=submit]")
 
         // Leasing Info
