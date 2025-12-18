@@ -12,7 +12,6 @@ import com.wutsi.koki.ContactFixtures
 import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvitationFixtures
 import com.wutsi.koki.ListingFixtures
-import com.wutsi.koki.MessageFixtures
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.OfferFixtures
@@ -47,10 +46,6 @@ import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
-import com.wutsi.koki.message.dto.GetMessageResponse
-import com.wutsi.koki.message.dto.SearchMessageResponse
-import com.wutsi.koki.message.dto.SendMessageRequest
-import com.wutsi.koki.message.dto.SendMessageResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
 import com.wutsi.koki.note.dto.CreateNoteRequest
@@ -227,7 +222,6 @@ abstract class AbstractPageControllerTest {
         setupInvitationModule()
         setupFileModule()
         setupFileUploads()
-        setupMessageModule()
         setupNoteModule()
         setupAgentModule()
         setupContactModule()
@@ -528,42 +522,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetFileResponse::class.java)
-            )
-    }
-
-    private fun setupMessageModule() {
-        doReturn(
-            ResponseEntity(
-                SearchMessageResponse(MessageFixtures.messages),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchMessageResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetMessageResponse(MessageFixtures.message),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetMessageResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                SendMessageResponse(MessageFixtures.NEW_ID),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<SendMessageRequest>(),
-                eq(SendMessageResponse::class.java)
             )
     }
 
