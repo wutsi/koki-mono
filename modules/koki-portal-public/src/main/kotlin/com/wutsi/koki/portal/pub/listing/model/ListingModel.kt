@@ -30,6 +30,7 @@ data class ListingModel(
     val floors: Int? = null,
     val basementType: BasementType? = null,
     val level: Int? = null,
+    val levelHtml: String? = null,
     val unit: String? = null,
     val parkingType: ParkingType? = null,
     val parkings: Int? = null,

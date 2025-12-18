@@ -21,9 +21,6 @@ spring:
 
 server:
     port: 8081
-    error:
-        whitelabel:
-            enabled: false
     compression:
         enabled: true
         mime-types: application/json,application/xml,text/html,text/xml,text/plain
@@ -69,6 +66,7 @@ koki:
     toggles:
         paypal: true
         mobile-money: true
+        co-brokering: false
         modules:
             agent: true
             account: false

@@ -55,6 +55,7 @@ class ListingMapper(
             floors = entity.floors,
             basementType = entity.basementType,
             level = entity.level,
+            levelHtml = toLevelText(entity.level),
             unit = entity.unit,
             parkingType = entity.parkingType,
             parkings = entity.parkings,
@@ -220,6 +221,11 @@ class ListingMapper(
         }
     }
 
+    private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
+        val locale = LocaleContextHolder.getLocale()
+        return messages.getMessage(key, args, locale)
+    }
+
     private fun toAdvanceRentMoney(entity: Listing): MoneyModel? {
         return entity.price?.let { price ->
             entity.advanceRent?.let { advanceRent ->
@@ -230,6 +236,17 @@ class ListingMapper(
                     )
                 )
             }
+        }
+    }
+
+    private fun toLevelText(level: Int?): String? {
+        level ?: return null
+        return if (level < 0) {
+            getMessage("page.listing.level_-1")
+        } else if (level > 3) {
+            getMessage("page.listing.level_n", arrayOf(level))
+        } else {
+            getMessage("page.listing.level_$level")
         }
     }
 

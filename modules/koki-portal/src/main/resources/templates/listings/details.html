@@ -18,83 +18,89 @@
             <b class="text-small" th:text="#{page.listing.property-type}">KEY</b>
             <div th:text="#{'property-type.' + ${listing.propertyType}}">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.bedrooms}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.bedrooms}">KEY</b>
-            <div th:text="${listing.bedrooms}">VALUE</div>
+            <div th:text="${listing.bedrooms} ? ${listing.bedrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.bathrooms}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.bathrooms}">KEY</b>
-            <div th:text="${listing.bathrooms}">VALUE</div>
+            <div th:text="${listing.bathrooms} ? ${listing.bathrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.halfBathrooms}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.half-bathrooms}">KEY</b>
-            <div th:text="${listing.halfBathrooms}">VALUE</div>
+            <div th:text="${listing.halfBathrooms} ? ${listing.halfBathrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.floors}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.floors}">KEY</b>
-            <div th:text="${listing.floors}">VALUE</div>
+            <div th:text="${listing.floors} ? ${listing.floors} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.level}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.level}">KEY</b>
-            <div th:text="${listing.level}">VALUE</div>
+            <div th:utext="${listing.level}? ${listing.levelHtml} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.unit}">
+        <!--
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.unit}">KEY</b>
-            <div th:text="${listing.unit}">VALUE</div>
+            <div th:text="${listing.unit} ? ${listing.unit} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.basementType}">
+        -->
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.basement}">KEY</b>
-            <div th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</div>
+            <div th:if="${listing.basementType}" th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</div>
+            <div th:if="!${listing.basementType}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.propertyArea}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.property-area}">KEY</b>
-            <div>
+            <div th:if="${listing.propertyArea}">
                 <span th:text="${listing.propertyArea}">000</span>
                 <span>m<sup>2</sup></span>
             </div>
+            <div th:if="!${listing.propertyArea}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.lotArea}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.lot-area}">KEY</b>
-            <div>
+            <div th:if="${listing.lotArea}">
                 <span th:text="${listing.lotArea}">000</span>
                 <span>m<sup>2</sup></span>
             </div>
+            <div th:if="!${listing.lotArea}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.parkingType}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.parking-type}">KEY</b>
-            <div th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</div>
+            <div th:if="${listing.parkingType}" th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</div>
+            <div th:if="!${listing.parkingType}">-</div>
         </div>
         <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.parkings}">
             <b class="text-small" th:text="#{page.listing.parkings}">KEY</b>
-            <div th:text="${listing.parkings}">VALUE</div>
+            <div th:text="${listing.parkings} ? ${listing.parkings} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.fenceType}">
+        <div class="col-6 col-md-4 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.fence}">KEY</b>
-            <div th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
+            <div th:if="${listing.fenceType}" th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
+            <div th:if="!${listing.fenceType}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.fenceType}">
-            <b class="text-small" th:text="#{page.listing.fence}">KEY</b>
-            <div th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
-        </div>
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.distanceFromMainRoad}">
+        <div class="col-6 col-md-4  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.distance-from-main-road}">KEY</b>
-            <div>
+            <div th:if="${listing.distanceFromMainRoad}">
                 <span th:text="${listing.distanceFromMainRoad}">000</span>
                 <span>m</span>
             </div>
+            <div th:if="!${listing.distanceFromMainRoad}">-</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.roadPavement}">
+        <div class="col-6 col-md-4  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.road-pavement}">KEY</b>
-            <div th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</div>
+            <div th:if="${listing.roadPavement}" th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</div>
+            <div th:if="!${listing.roadPavement}">-</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.availableAt}">
+        <div class="col-6 col-md-4  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.available-at}">KEY</b>
-            <div th:text="${listing.availableAtText}">VALUE</div>
+            <div th:text="${listing.availableAtText} ? ${listing.availableAtText} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.year}">
+        <div class="col-6 col-md-4  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.year}">KEY</b>
-            <div th:text="${listing.year}">VALUE</div>
+            <div th:text="${listing.year} ? ${listing.year} : '-'">VALUE</div>
         </div>
+        <!--
         <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.daysInMarket}">
             <b class="text-small" th:text="#{page.listing.days-in-market}">KEY</b>
             <div th:if="${listing.daysInMarket <= 1}" th:text="#{page.listing.days-in-market-today}">VALUE</div>
@@ -103,6 +109,7 @@
                 <span th:text="#{page.listing.days-in-market-suffix}">DAYS</span>
             </div>
         </div>
+        -->
     </div>
     <hr/>
 </div>
@@ -236,7 +243,7 @@
             </div>
         </div>
         <div class="col-6 col-md-4 margin-bottom-small" id="buyer-agent-commission"
-             th:if="${listing.buyerAgentCommission} AND !${listing.statusSold}">
+             th:if="${toggles.coBrokering} AND ${listing.buyerAgentCommission} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
             <div>
                 <span th:text="${listing.buyerAgentCommissionMoney}">$$</span>

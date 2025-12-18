@@ -64,8 +64,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         scroll(.33)
         input("#floors", "10")
         select("#basementType", 3)
-        input("#level", "4")
-        input("#unit", "305")
+        select("#level", 4)
         select("#parkingType", 2)
         scrollToBottom()
         input("#parkings", "1")
@@ -88,8 +87,8 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         assertEquals(1, req1.firstValue.halfBathrooms)
         assertEquals(10, req1.firstValue.floors)
         assertEquals(BasementType.PART, req1.firstValue.basementType)
-        assertEquals(4, req1.firstValue.level)
-        assertEquals("305", req1.firstValue.unit)
+        assertEquals(2, req1.firstValue.level)
+        assertEquals(null, req1.firstValue.unit)
         assertEquals(ParkingType.GARAGE, req1.firstValue.parkingType)
         assertEquals(1, req1.firstValue.parkings)
         assertEquals(1000, req1.firstValue.lotArea)
@@ -171,7 +170,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#visitFees", "5")
         input("#sellerAgentCommission", "6.5")
         scrollToBottom()
-        input("#buyerAgentCommission", "3.0")
+//        input("#buyerAgentCommission", "3.0")
         click("button[type=submit]")
         val req7 = argumentCaptor<UpdateListingPriceRequest>()
         verify(rest).postForEntity(
@@ -182,7 +181,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         assertEquals(180000, req7.firstValue.price)
         assertEquals(5, req7.firstValue.visitFees)
         assertEquals(6.5, req7.firstValue.sellerAgentCommission)
-        assertEquals(3.0, req7.firstValue.buyerAgentCommission)
+        assertEquals(null, req7.firstValue.buyerAgentCommission)
 
         // Seller
         assertCurrentPageIs(PageName.LISTING_EDIT_SELLER)
@@ -242,8 +241,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         scroll(.33)
         input("#floors", "10")
         select("#basementType", 3)
-        input("#level", "4")
-        input("#unit", "305")
+        select("#level", 2)
         select("#parkingType", 2)
         scrollToBottom()
         input("#parkings", "1")
@@ -286,7 +284,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#visitFees", "5")
         input("#sellerAgentCommission", "6.5")
         scrollToBottom()
-        input("#buyerAgentCommission", "3.0")
+//        input("#buyerAgentCommission", "3.0")
         click("button[type=submit]")
 
         // Leasing Info

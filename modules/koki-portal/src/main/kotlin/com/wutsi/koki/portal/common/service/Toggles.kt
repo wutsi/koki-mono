@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class Toggles {
     var paypal: Boolean = false
     var mobileMoney: Boolean = false
+    var coBrokering: Boolean = false
     var modules: ModuleToggles = ModuleToggles()
 
     fun isModuleEnabled(name: String): Boolean {

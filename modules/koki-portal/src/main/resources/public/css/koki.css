@@ -471,7 +471,11 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .section-item .input-group .input-group-text > * {
-    padding: .5em;
+    padding: .5em 0;
+}
+
+.section-item .input-group .input-group-text {
+    border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0;
 }
 
 .section-item .file-upload-container input[type=file] {
