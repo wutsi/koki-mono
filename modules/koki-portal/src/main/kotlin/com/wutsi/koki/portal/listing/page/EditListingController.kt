@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
+import com.wutsi.koki.portal.listing.mapper.ListingMapper
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingController : AbstractEditListingController() {
+class EditListingController(private val mapper: ListingMapper) : AbstractEditListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
@@ -39,6 +40,16 @@ class EditListingController : AbstractEditListingController() {
         model.addAttribute("parkingTypes", ParkingType.entries)
         model.addAttribute("fenceTypes", FenceType.entries)
         model.addAttribute("roadPavements", RoadPavement.entries)
+
+        val levels = (-1..20).toList()
+        model.addAttribute("levels", levels)
+        model.addAttribute(
+            "levelTexts",
+            levels.map { level ->
+                mapper.toLevelText(level)
+                    ?.replace("<sup>", "")
+                    ?.replace("</sup>", "")
+            })
         return "listings/edit"
     }
 

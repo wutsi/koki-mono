@@ -59,6 +59,7 @@ class ListingMapper(
             floors = entity.floors,
             basementType = entity.basementType,
             level = entity.level,
+            levelHtml = toLevelText(entity.level),
             unit = entity.unit,
             parkingType = entity.parkingType,
             parkings = entity.parkings,
@@ -323,19 +324,18 @@ class ListingMapper(
         }
 
         val locale = LocaleContextHolder.getLocale()
-        val details = listOf(
+        val details = listOfNotNull(
             messages.getMessage("property-type.$propertyType", arrayOf(), locale),
 
             address?.toText(includeCountry = false)?.ifEmpty { null },
 
-            listOf(
+            listOfNotNull(
                 bedrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bedrooms-abbreviation") },
                 bathrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bathrooms-abbreviation") },
                 area?.let { area -> area.toString() + "m2" }
-            ).filterNotNull()
-                .joinToString(separator = " ")
+            ).joinToString(separator = " ")
                 .ifEmpty { null }
-        ).filterNotNull().joinToString(separator = " - ")
+        ).joinToString(separator = " - ")
         val text = getMessage("page.listing.whatsapp.body", arrayOf(listingNumber, details))
         return "https://wa.me/" + mobile.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
     }
@@ -343,6 +343,17 @@ class ListingMapper(
     private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
         val locale = LocaleContextHolder.getLocale()
         return messages.getMessage(key, args, locale)
+    }
+
+    public fun toLevelText(level: Int?): String? {
+        level ?: return null
+        return if (level < 0) {
+            getMessage("page.listing.level_-1")
+        } else if (level > 3) {
+            getMessage("page.listing.level_n", arrayOf(level))
+        } else {
+            getMessage("page.listing.level_$level")
+        }
     }
 
     private fun toPublicUrl(publicUrl: String?): String? {

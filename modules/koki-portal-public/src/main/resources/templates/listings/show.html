@@ -108,6 +108,10 @@
                     <b th:text="#{page.listing.floors}">Etages</b>
                     <span th:text="${listing.floors}">00</span>
                 </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.level}">
+                    <b th:text="#{page.listing.level}">Niveau</b>
+                    <span th:utext="${listing.levelHtml}">00</span>
+                </div>
                 <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.basementType}">
                     <b th:text="#{page.listing.basement}">Sous-Sol</b>
                     <span th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</span>

@@ -75,12 +75,21 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.level}">TYPE</label>
-                                <input class="form-control" step="0" th:field="*{level}" type="number"/>
+                                <select th:field="*{level}">
+                                    <option value=""></option>
+                                    <option th:each="level,it : ${levels}"
+                                            th:text="${levelTexts.get(it.index)}"
+                                            th:value="${level}">
+                                        LEVEL
+                                    </option>
+                                </select>
                             </div>
+                            <!--
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.unit}">TYPE</label>
                                 <input class="form-control" maxlength="5" th:field="*{unit}"/>
                             </div>
+                            -->
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.parking-type}">TYPE</label>
                                 <select class="form-select" th:field="*{parkingType}">
