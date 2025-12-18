@@ -75,7 +75,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.level}">TYPE</label>
-                                <select th:field="*{level}">
+                                <select class="form-select" th:field="*{level}">
                                     <option value=""></option>
                                     <option th:each="level,it : ${levels}"
                                             th:text="${levelTexts.get(it.index)}"

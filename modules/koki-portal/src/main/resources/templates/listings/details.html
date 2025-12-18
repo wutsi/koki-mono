@@ -14,42 +14,42 @@
         >EDIT</a>
     </h4>
     <div class="flex flex-wrap">
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.property-type}">KEY</b>
             <div th:text="#{'property-type.' + ${listing.propertyType}}">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.bedrooms}">KEY</b>
             <div th:text="${listing.bedrooms} ? ${listing.bedrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.bathrooms}">KEY</b>
             <div th:text="${listing.bathrooms} ? ${listing.bathrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.half-bathrooms}">KEY</b>
             <div th:text="${listing.halfBathrooms} ? ${listing.halfBathrooms} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.floors}">KEY</b>
             <div th:text="${listing.floors} ? ${listing.floors} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.level}">KEY</b>
             <div th:utext="${listing.level}? ${listing.levelHtml} : '-'">VALUE</div>
         </div>
         <!--
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.unit}">KEY</b>
             <div th:text="${listing.unit} ? ${listing.unit} : '-'">VALUE</div>
         </div>
         -->
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.basement}">KEY</b>
             <div th:if="${listing.basementType}" th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</div>
             <div th:if="!${listing.basementType}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.property-area}">KEY</b>
             <div th:if="${listing.propertyArea}">
                 <span th:text="${listing.propertyArea}">000</span>
@@ -57,7 +57,7 @@
             </div>
             <div th:if="!${listing.propertyArea}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.lot-area}">KEY</b>
             <div th:if="${listing.lotArea}">
                 <span th:text="${listing.lotArea}">000</span>
@@ -65,21 +65,21 @@
             </div>
             <div th:if="!${listing.lotArea}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.parking-type}">KEY</b>
             <div th:if="${listing.parkingType}" th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</div>
             <div th:if="!${listing.parkingType}">-</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small" th:if="${listing.parkings}">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small" th:if="${listing.parkings}">
             <b class="text-small" th:text="#{page.listing.parkings}">KEY</b>
             <div th:text="${listing.parkings} ? ${listing.parkings} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4 padding-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.fence}">KEY</b>
             <div th:if="${listing.fenceType}" th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</div>
             <div th:if="!${listing.fenceType}">-</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.distance-from-main-road}">KEY</b>
             <div th:if="${listing.distanceFromMainRoad}">
                 <span th:text="${listing.distanceFromMainRoad}">000</span>
@@ -87,21 +87,21 @@
             </div>
             <div th:if="!${listing.distanceFromMainRoad}">-</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.road-pavement}">KEY</b>
             <div th:if="${listing.roadPavement}" th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</div>
             <div th:if="!${listing.roadPavement}">-</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.available-at}">KEY</b>
             <div th:text="${listing.availableAtText} ? ${listing.availableAtText} : '-'">VALUE</div>
         </div>
-        <div class="col-6 col-md-4  margin-bottom-small">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.year}">KEY</b>
             <div th:text="${listing.year} ? ${listing.year} : '-'">VALUE</div>
         </div>
         <!--
-        <div class="col-6 col-md-4  margin-bottom-small" th:if="${listing.daysInMarket}">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small" th:if="${listing.daysInMarket}">
             <b class="text-small" th:text="#{page.listing.days-in-market}">KEY</b>
             <div th:if="${listing.daysInMarket <= 1}" th:text="#{page.listing.days-in-market-today}">VALUE</div>
             <div th:if="${listing.daysInMarket > 1}">
@@ -123,10 +123,13 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="row" th:if="${listing.furnitureType}">
+    <div class="row">
         <div class="col-12">
             <b class="text-small" th:text="#{page.listing.furniture-type}">KEY</b>
-            <div th:text="#{'furniture-type.' + ${listing.furnitureType}}">FURNITURE</div>
+            <div th:if="${listing.furnitureType}">
+                <div th:text="#{'furniture-type.' + ${listing.furnitureType}}">FURNITURE</div>
+            </div>
+            <div th:if="!${listing.furnitureType}">-</div>
         </div>
     </div>
 
@@ -149,37 +152,30 @@
 
 <div id="listing-address-section">
     <h4>
-        <span th:text="#{page.listing.show.address}">ADDRESS</span>
+        <span th:text="#{page.listing.show.location}">ADDRESS</span>
         <a class="text-small btn-section-edit"
            th:href="'/listings/edit/address?id=' + ${listing.id}"
            th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="row" th:if="${listing.address}">
-        <div class="col-12 padding-bottom-small" th:utext="${listing.address.toHtml(true)}">COUNTRY</div>
-    </div>
-    <hr/>
-</div>
-
-<div id="listing-geo-location-section">
-    <h4>
-        <span th:text="#{page.listing.show.geo-location}">GEO LOCATION</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/geo-location?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
-    <div class="row" th:if="${listing.geoLocation}">
-        <div>
-            <a class="btn btn-sm btn-light" target="_blank"
-               th:href="${listing.geoLocation.url}"
-               th:text="#{button.view-map}">MAP</a>
+    <div class="row">
+        <b class="text-small" th:text="#{page.listing.address}">ADDRESS</b>
+        <div class="col-12 padding-bottom-small"
+             th:utext="${listing.address} ? ${listing.address.toHtml(true)} : '-'">COUNTRY
         </div>
     </div>
-    <div class="row" th:if="!${listing.geoLocation}">
-        <i th:text="#{page.listing.show.no-geo-location}">NONE</i>
+    <div id="map-container" th:if="${listing.geoLocation}">
+        <div data-component-id="map"
+             data-disable-scroll-wheel-zoom="true"
+             data-disable-touch-zoom="true"
+             data-zoom="18"
+             id="map"
+             th:data-latitude="${listing.geoLocation.latitude}"
+             th:data-longitude="${listing.geoLocation.longitude}"
+             th:data-show-marker="true"
+        >
+        </div>
     </div>
     <hr/>
 </div>
@@ -193,20 +189,14 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div>
-        <div class="margin-bottom-small">
+    <div class="flex flex-wrap">
+        <div class="col-12 col-md-6">
             <b class="text-small" th:text="#{page.listing.public-remarks}">KEY</b>
-            <div>
-                <span th:if="${listing.publicRemarks}" th:utext="${listing.publicRemarksHtml}">VALE</span>
-                <i th:if="!${listing.publicRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
-            </div>
+            <div th:utext="${listing.publicRemarks} ? ${listing.publicRemarksHtml} : '-'">VALE</div>
         </div>
-        <div class="margin-bottom-small">
+        <div class="col-12 col-md-6">
             <b class="text-small" th:text="#{page.listing.agent-remarks}">KEY</b>
-            <div>
-                <span th:if="${listing.agentRemarks}" th:utext="${listing.agentRemarksHtml}">VALE</span>
-                <i th:if="!${listing.agentRemarks}" th:text="#{page.listing.show.no-remark}">NONE</i>
-            </div>
+            <div th:utext="${listing.agentRemarks} ? ${listing.agentRemarksHtml} : '-'">VALE</div>
         </div>
     </div>
     <hr/>
@@ -222,33 +212,35 @@
         >EDIT</a>
     </h4>
     <div class="flex flex-wrap">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.price}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.price}">KEY</b>
             <div>
-                <span th:text="${listing.price.displayText}">00</span>
+                <span th:text="${listing.price} ? ${listing.price.displayText} : '-'">$$</span>
             </div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.visitFees}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.visit-fees}">KEY</b>
             <div>
-                <span th:text="${listing.visitFees}">00</span>
+                <span th:text="${listing.visitFees} ? ${listing.visitFees} : '-'">00</span>
             </div>
         </div>
-        <div class="col-6 col-md-4" id="seller-agent-commission"
-             th:if="${listing.sellerAgentCommission} AND ${listing.canManage(user)} AND !${listing.statusSold}">
+        <div class="col-6 col-md-4 col-lg-3" id="seller-agent-commission"
+             th:if="${listing.canManage(user)} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
-            <div>
+            <div th:if="${listing.sellerAgentCommission}">
                 <span th:text="${listing.sellerAgentCommissionMoney}">$$</span>
                 <span th:text="'(' + ${listing.sellerAgentCommission} + '%)'">0.0</span>
             </div>
+            <div th:if="!${listing.sellerAgentCommission}">-</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" id="buyer-agent-commission"
-             th:if="${toggles.coBrokering} AND ${listing.buyerAgentCommission} AND !${listing.statusSold}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small" id="buyer-agent-commission"
+             th:if="${toggles.coBrokering} AND !${listing.statusSold}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
-            <div>
+            <div th:if="!${listing.buyerAgentCommission}">
                 <span th:text="${listing.buyerAgentCommissionMoney}">$$</span>
                 <span th:text="'(' + ${listing.buyerAgentCommission} + '%)'">0.0</span>
             </div>
+            <div th:if="!${listing.buyerAgentCommission}">-</div>
         </div>
     </div>
     <hr/>
@@ -264,30 +256,33 @@
         >EDIT</a>
     </h4>
     <div class="flex flex-wrap">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.leaseTerm}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.lease-terms}">KEY</b>
-            <div>
+            <div th:if="${listing.leaseTerm}">
                 <span th:text="${listing.leaseTerm}">00</span>
                 <span th:text="#{page.listing.unit-months}">00</span>
             </div>
+            <div th:if="!${listing.leaseTerm}">-</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.advanceRent}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.advance-rent}">KEY</b>
-            <div>
+            <div th:if="${listing.advanceRent}">
                 <span th:text="${listing.advanceRentMoney}">$$$</span>
                 <span th:text="'(' + ${listing.advanceRent} + ' ' + #{page.listing.unit-months} + ')'">00</span>
             </div>
+            <div th:if="!${listing.advanceRent}">-</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.securityDeposit}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
-            <div th:text="${listing.securityDeposit}">$$$</div>
+            <div th:text="${listing.securityDeposit} ? ${listing.securityDeposit} : '-'">$$$</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.noticePeriod}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.notice-period}">KEY</b>
-            <div>
+            <div th:if="${listing.noticePeriod}">
                 <span th:text="${listing.noticePeriod}">00</span>
                 <span th:text="#{page.listing.unit-months}">00</span>
             </div>
+            <div th:if="!${listing.noticePeriod}">-</div>
         </div>
     </div>
     <hr/>
@@ -302,9 +297,12 @@
            th:text="#{button.edit}"
         >EDIT</a>
     </h4>
-    <div class="margin-bottom-small" th:if="${listing.sellerContact}">
+    <div class="margin-bottom-small">
         <b class="text-small" th:text="#{page.listing.seller}">KEY</b>
-        <div th:replace="~{__components/contact :: contact-card(${listing.sellerContact})}"></div>
+        <div th:if="${listing.sellerContact}">
+            <div th:replace="~{__components/contact :: contact-card(${listing.sellerContact})}"></div>
+        </div>
+        <div th:if="!${listing.sellerContact}">-</div>
     </div>
     <hr th:if="${listing.statusSold}"/>
 </div>
@@ -312,44 +310,52 @@
 <div id="listing-sale-section" th:if="${listing.statusSold}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 
-    <div class="margin-bottom-small" id="buyer-contact-info"
-         th:if="${listing.buyerContact} AND ${listing.canManage(user)}">
+    <div class="margin-bottom-small" id="buyer-contact-info" th:if="${listing.canManage(user)}">
         <b class="text-small" th:if="${listing.listingTypeSale}" th:text="#{page.listing.buyer}">KEY</b>
         <b class="text-small" th:if="${listing.listingTypeRental}" th:text="#{page.listing.tenant}">KEY</b>
-
-        <div th:replace="~{__components/contact :: contact-card(${listing.buyerContact})}"></div>
+        <div th:if="${listing.buyerContact}">
+            <div th:replace="~{__components/contact :: contact-card(${listing.buyerContact})}"></div>
+        </div>
+        <div th:if="!${listing.buyerContact}">-</div>
     </div>
     <div class="flex flex-wrap margin-bottom-small">
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.soldAt}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.sold-at}">DATE</b>
-            <div th:text="${listing.soldAtText}">YYYY-MM-DD</div>
+            <div th:text="${listing.soldAt} ? ${listing.soldAtText} : '-'">YYYY-MM-DD</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" th:if="${listing.salePrice}">
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.sale-price}">KEY</b>
             <div class="listing-price">
-                <span th:text="${listing.salePrice.displayText}">$$</span>
+                <span th:text="${listing.salePrice} ? ${listing.salePrice.displayText} : '-'">$$</span>
             </div>
         </div>
-        <div class="col-6 col-md-4" id="final-seller-agent-commission"
-             th:if="${listing.finalSellerAgentCommissionMoney} AND ${listing.canManage(user)}">
+        <div class="col-6 col-md-4 col-lg-3" id="final-seller-agent-commission"
+             th:if="${listing.canManage(user)}">
             <b class="text-small" th:text="#{page.listing.seller-agent-commission}">KEY</b>
-            <div>
+            <div th:if="${listing.finalSellerAgentCommissionMoney}">
                 <span class="listing-price" th:text="${listing.finalSellerAgentCommissionMoney}">$$</span>
                 <span th:text="'(' + ${listing.sellerAgentCommission} + '%)'">0.0</span>
             </div>
+            <div th:if="!${listing.finalSellerAgentCommissionMoney}">-</div>
         </div>
-        <div class="col-6 col-md-4 margin-bottom-small" id="final-buyer-agent-commission"
-             th:if="${listing.finalBuyerAgentCommissionMoney}">
+
+        <div class="col-6 col-md-4 col-lg-3 margin-bottom-small" id="final-buyer-agent-commission"
+             th:if="${toggles.coBrokering}">
             <b class="text-small" th:text="#{page.listing.buyer-agent-commission}">KEY</b>
-            <div>
+            <div th:if="${listing.finalBuyerAgentCommissionMoney}">
                 <span class="listing-price" th:text="${listing.finalBuyerAgentCommissionMoney}">$$</span>
                 <span th:text="'(' + ${listing.buyerAgentCommission} + '%)'">0.0</span>
             </div>
+            <div th:if="!${listing.finalBuyerAgentCommissionMoney}">-</div>
         </div>
 
-        <div class="col-12 col-md-4 margin-bottom-small" th:if="${listing.buyerAgentUser}">
+
+        <div class="col-12 col-md-4 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.agent}">KEY</b>
-            <div th:replace="~{__components/user :: user-small-card(${listing.buyerAgentUser}, true)}"></div>
+            <div th:if="${listing.buyerAgentUser}">
+                <div th:replace="~{__components/user :: user-small-card(${listing.buyerAgentUser}, true)}"></div>
+            </div>
+            <div th:if="!${listing.buyerAgentUser}">-</div>
         </div>
     </div>
 </div>
