@@ -47,7 +47,7 @@ data class ListingForm(
     val leaseTerm: Int? = null,
     val noticePeriod: Int? = null,
     val advanceRent: Int? = null,
-    val securityDeposit: Long? = null,
+    val securityDeposit: Int? = null,
     val currency: String? = null,
     val sellerContactId: Long? = null,
     val sellerAgentCommission: Double? = null,

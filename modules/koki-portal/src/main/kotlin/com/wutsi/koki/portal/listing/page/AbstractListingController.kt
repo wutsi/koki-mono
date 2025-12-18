@@ -67,7 +67,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
             buyerAgentCommission = listing.buyerAgentCommission,
             sellerAgentCommission = listing.sellerAgentCommission,
 
-            securityDeposit = listing.securityDeposit?.amount?.toLong(),
+            securityDeposit = listing.securityDeposit,
             advanceRent = listing.advanceRent,
             leaseTerm = listing.leaseTerm,
             noticePeriod = listing.noticePeriod,

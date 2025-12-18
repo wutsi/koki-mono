@@ -83,7 +83,7 @@ data class ListingEntity(
     var sellerAgentCommissionAmount: Long? = null,
     var buyerAgentCommissionAmount: Long? = null,
 
-    var securityDeposit: Long? = null,
+    var securityDeposit: Int? = null,
     var advanceRent: Int? = null,
     var leaseTerm: Int? = null,
     var noticePeriod: Int? = null,

@@ -267,14 +267,18 @@
         <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.advance-rent}">KEY</b>
             <div th:if="${listing.advanceRent}">
-                <span th:text="${listing.advanceRentMoney}">$$$</span>
-                <span th:text="'(' + ${listing.advanceRent} + ' ' + #{page.listing.unit-months} + ')'">00</span>
+                <span th:text="${listing.advanceRent}">00</span>
+                <span th:text="#{page.listing.unit-months}">00</span>
             </div>
             <div th:if="!${listing.advanceRent}">-</div>
         </div>
         <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.security-deposit}">KEY</b>
-            <div th:text="${listing.securityDeposit} ? ${listing.securityDeposit} : '-'">$$$</div>
+            <div th:if="${listing.securityDeposit}">
+                <span th:text="${listing.securityDeposit}">00</span>
+                <span th:text="#{page.listing.unit-months}">00</span>
+            </div>
+            <div th:if="!${listing.securityDeposit}">-</div>
         </div>
         <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.notice-period}">KEY</b>

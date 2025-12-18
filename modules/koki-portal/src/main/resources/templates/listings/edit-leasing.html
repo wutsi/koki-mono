@@ -33,54 +33,54 @@
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.security-deposit}">LEASE</label>
                                 <div class="text-small" th:text="#{page.listing.security-deposit-help}">HELP</div>
-
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{securityDeposit}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="${tenant.currencySymbol}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <select class="form-select" th:field="*{securityDeposit}">
+                                    <option value=""></option>
+                                    <option
+                                        th:each="month : ${months}"
+                                        th:text="${month} + ' ' + #{page.listing.unit-months}"
+                                        th:value="${month}"
+                                    >XXX
+                                    </option>
+                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.advance-rent}">ADVANCE_TERM</label>
                                 <div class="text-small" th:text="#{page.listing.advance-rent-help}">HELP</div>
-
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{advanceRent}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="#{page.listing.unit-months}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <select class="form-select" th:field="*{advanceRent}">
+                                    <option value=""></option>
+                                    <option
+                                        th:each="month : ${months}"
+                                        th:text="${month} + ' ' + #{page.listing.unit-months}"
+                                        th:value="${month}"
+                                    >XXX
+                                    </option>
+                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.lease-terms}">TERMS</label>
                                 <div class="text-small" th:text="#{page.listing.lease-terms-help}">HELP</div>
-
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{leaseTerm}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="#{page.listing.unit-months}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <select class="form-select" th:field="*{leaseTerm}">
+                                    <option value=""></option>
+                                    <option
+                                        th:each="month : ${months}"
+                                        th:text="${month} + ' ' + #{page.listing.unit-months}"
+                                        th:value="${month}"
+                                    >XXX
+                                    </option>
+                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.notice-period}">NOTICE_PERIOD</label>
                                 <div class="text-small" th:text="#{page.listing.notice-period-help}">HELP</div>
-
-                                <div class="input-group">
-                                    <input class="form-control" step="0" th:field="*{noticePeriod}" type="number"/>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span th:text="#{page.listing.unit-months}">XXX</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <select class="form-select" th:field="*{noticePeriod}">
+                                    <option value=""></option>
+                                    <option
+                                        th:each="month : ${months}"
+                                        th:text="${month} + ' ' + #{page.listing.unit-months}"
+                                        th:value="${month}"
+                                    >XXX
+                                    </option>
+                                </select>
                             </div>
 
                             <div class="section-item flex flex-space-between">

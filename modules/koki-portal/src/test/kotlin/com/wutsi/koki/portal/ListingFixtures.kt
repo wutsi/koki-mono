@@ -94,7 +94,7 @@ object ListingFixtures {
 
         noticePeriod = 1,
         leaseTerm = 12,
-        securityDeposit = Money(1500.0, "CAD"),
+        securityDeposit = 2,
         advanceRent = 3,
 
         sellerContactId = contacts[0].id,

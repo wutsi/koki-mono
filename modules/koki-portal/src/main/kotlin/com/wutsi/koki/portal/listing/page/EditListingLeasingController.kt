@@ -20,6 +20,7 @@ class EditListingLeasingController : AbstractEditListingController() {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
         model.addAttribute("form", toListingForm(listing))
+        model.addAttribute("months", (1..36).toList())
 
         model.addAttribute(
             "page",
