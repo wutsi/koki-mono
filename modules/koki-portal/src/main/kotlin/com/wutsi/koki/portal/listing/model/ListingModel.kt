@@ -105,7 +105,7 @@ data class ListingModel(
         get() = listingType == ListingType.SALE
 
     val readOnly: Boolean
-        get() = statusOffMarket
+        get() = status != ListingStatus.DRAFT
 
     val statusDraft: Boolean
         get() = status == ListingStatus.DRAFT || status == ListingStatus.PUBLISHING

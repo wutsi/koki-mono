@@ -234,7 +234,7 @@
         </div>
         <div class="margin-top-small flex flex-space-between">
             <div>
-                <div th:if="${listing.price}">
+                <div th:if="${listing.price} AND ${listing.commission(user)}">
                     <b class="text-small" th:text="#{page.listing.commission}">COMMISSION</b><br/>
                     <span class="listing-price" th:text="${listing.commission(user)}">$$$</span>
                 </div>

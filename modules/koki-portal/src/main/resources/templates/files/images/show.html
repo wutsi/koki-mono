@@ -12,8 +12,8 @@
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
         </div>
-        <div>
-            <a class="btn btn-sm btn-danger"
+        <div th:if="!${readOnly}">
+            <a class="btn btn-sm btn-danger" id="btn-delete"
                th:href="'/images/delete?id=' + ${image.id}"
                th:onclick="'return confirm(\'' + #{page.image.confirm-delete} + '\')'"
                th:text="#{button.delete}"
@@ -24,7 +24,7 @@
         <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
     </div>
     <div class="image-footer padding" th:if="${image.description} OR !${image.approved}">
-        <div th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
+        <div class="text-center" th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
 
         <div class="file-status-container" th:if="!${image.approved}">
             <div th:replace="~{__components/file :: status(${image.status})}"></div>

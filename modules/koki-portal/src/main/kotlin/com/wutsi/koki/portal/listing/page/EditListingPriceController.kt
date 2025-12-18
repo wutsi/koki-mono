@@ -4,7 +4,6 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/price")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingPriceController : AbstractEditListingController() {
+class EditListingPriceController : AbstractEditorListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)

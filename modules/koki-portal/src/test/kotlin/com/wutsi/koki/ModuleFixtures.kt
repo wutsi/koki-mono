@@ -96,6 +96,7 @@ object ModuleFixtures {
             settingsUrl = null,
             jsUrl = "/js/listings.js",
             cssUrl = "/css/listings.css",
+            objectType = ObjectType.LISTING,
         ),
         Module(
             id = 280,
@@ -106,6 +107,7 @@ object ModuleFixtures {
             settingsUrl = null,
             jsUrl = "/js/offers.js",
             cssUrl = "/css/offers.css",
+            objectType = ObjectType.OFFER,
         ),
         Module(
             id = 290,
@@ -126,6 +128,7 @@ object ModuleFixtures {
             settingsUrl = null,
             jsUrl = null,
             cssUrl = "/css/leads.css",
+            objectType = ObjectType.LEAD,
         ),
         Module(
             id = 301,

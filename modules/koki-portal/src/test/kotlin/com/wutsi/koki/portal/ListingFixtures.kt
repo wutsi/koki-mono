@@ -23,7 +23,7 @@ object ListingFixtures {
     val listing = Listing(
         id = 1115,
         listingNumber = 243001,
-        status = ListingStatus.ACTIVE,
+        status = ListingStatus.DRAFT,
         listingType = ListingType.SALE,
         propertyType = PropertyType.APARTMENT,
         title = "House for sale, 3 bedrooms, Yaounde (Bastos)",
