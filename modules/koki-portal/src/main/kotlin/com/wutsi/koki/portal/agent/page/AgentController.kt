@@ -108,13 +108,13 @@ class AgentController(
         val locations =
             listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
                 .filterNotNull()
-                .filter { location -> location.latitude != null && location.longitude != null }
+                .filter { location -> location.geoLocation != null }
                 .distinctBy { location -> location.id }
 
         val locationCount =
             listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
                 .filterNotNull()
-                .filter { location -> location.latitude != null && location.longitude != null }
+                .filter { location -> location.geoLocation != null }
                 .groupBy { city -> city.id }
 
         val sorted = locations.sortedBy { location -> locationCount[location.id]?.size ?: 0 }

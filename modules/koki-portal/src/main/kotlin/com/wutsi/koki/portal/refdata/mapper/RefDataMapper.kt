@@ -4,6 +4,7 @@ import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.CategoryModel
+import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.Amenity
@@ -23,10 +24,20 @@ class RefDataMapper : TenantAwareMapper() {
             parentId = entity.parentId,
             type = entity.type,
             country = entity.country,
-            longitude = entity.longitude,
-            latitude = entity.latitude,
+            geoLocation = toGeoLocationModel(entity),
             countryName = locale.displayCountry,
         )
+    }
+
+    private fun toGeoLocationModel(entity: Location): GeoLocationModel? {
+        return if (entity.latitude != null && entity.longitude != null) {
+            GeoLocationModel(
+                latitude = entity.latitude!!,
+                longitude = entity.longitude!!,
+            )
+        } else {
+            null
+        }
     }
 
     fun toCategoryModel(entity: Category): CategoryModel {

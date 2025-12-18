@@ -124,7 +124,7 @@ class EditListingControllerTest : AbstractPageControllerTest() {
 
         // GeoLocation
         assertCurrentPageIs(PageName.LISTING_EDIT_GEOLOCATION)
-        input("#lat_long", "11.4509,-11.4509")
+        scrollToBottom()
         click("button[type=submit]")
         val req4 = argumentCaptor<UpdateListingGeoLocationRequest>()
         verify(rest).postForEntity(
@@ -132,8 +132,8 @@ class EditListingControllerTest : AbstractPageControllerTest() {
             req4.capture(),
             eq(Any::class.java),
         )
-        assertEquals(11.4509, req4.firstValue.geoLocation?.latitude)
-        assertEquals(-11.4509, req4.firstValue.geoLocation?.longitude)
+        assertEquals(listing.geoLocation?.latitude, req4.firstValue.geoLocation?.latitude)
+        assertEquals(listing.geoLocation?.longitude, req4.firstValue.geoLocation?.longitude)
 
         // Remarks
         assertCurrentPageIs(PageName.LISTING_EDIT_REMARK)
