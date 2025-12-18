@@ -25,7 +25,7 @@ listing discovery, lead tracking, and analytics capabilities.
 
 - **Multi-Tenant REST API**: Complete tenant isolation with context propagation across all endpoints via X-Tenant-ID
   headers
-- **Comprehensive Domain Services**: Property listings, offers, leads, accounts, contacts, files, messages, notes,
+- **Comprehensive Domain Services**: Property listings, offers, leads, accounts, contacts, files, notes,
   agents, roles, and reference data management
 - **Authentication & Authorization**: JWT-based authentication with Spring Security and role-based access control
 - **File Management**: Document upload, processing, and storage with support for local filesystem and AWS S3 backends
@@ -114,14 +114,12 @@ koki-server/
 │   ├── file/                             # File upload and storage management
 │   ├── lead/                             # Lead tracking and management
 │   ├── listing/                          # Property listing management
-│   ├── message/                          # Messaging and notifications
 │   ├── module/                           # Module and permission management
 │   ├── note/                             # Note taking and management
 │   ├── offer/                            # Offer and offer version management
 │   ├── refdata/                          # Reference data (categories, locations, amenities)
 │   ├── security/                         # Authentication and authorization
-│   ├── tenant/                           # Tenant and invitation management
-│   └── translation/                      # Translation service integration
+│   └── tenant/                           # Tenant and invitation management
 ├── src/main/resources/
 │   ├── application.yml                   # Application configuration
 │   ├── db/migration/                     # Flyway database migrations
@@ -161,7 +159,7 @@ The Koki Server follows a layered architecture with clear separation of concerns
 │  Data Access Layer │  │ External Services│  │ Infrastructure│
 │  - JPA Repositories│  │ - Email Service  │  │ - File Storage│
 │  - Entities        │  │ - AI Service     │  │ - Cache (Redis)│
-│  - Mappers         │  │ - Translation    │  │ - MQ (RabbitMQ)│
+│  - Mappers         │  │                  │  │ - MQ (RabbitMQ)│
 └─────────┬──────────┘  └─────────────────┘  └──────────────┘
           │
 ┌─────────┴──────────┐
@@ -232,9 +230,6 @@ The Koki Server follows a layered architecture with clear separation of concerns
 | POST               | `/v1/leads/{id}/status`           | Update lead status                              |
 | GET                | `/v1/leads/{id}`                  | Retrieve lead details by ID                     |
 | GET                | `/v1/leads`                       | Search leads with filters                       |
-| **Lead Messages**  |
-| GET                | `/v1/lead-messages/{id}`          | Retrieve lead message details by ID             |
-| GET                | `/v1/lead-messages`               | Search lead messages with filters               |
 | **Contacts**       |
 | GET                | `/v1/contacts/{id}`               | Retrieve contact details by ID                  |
 | GET                | `/v1/contacts`                    | Search contacts with filters                    |
@@ -244,9 +239,6 @@ The Koki Server follows a layered architecture with clear separation of concerns
 | **Offer Versions** |
 | GET                | `/v1/offer-versions/{id}`         | Retrieve offer version details by ID            |
 | GET                | `/v1/offer-versions`              | Search offer versions with filters              |
-| **Messages**       |
-| POST               | `/v1/messages`                    | Create and send a message                       |
-| POST               | `/v1/messages/{id}/status`        | Update message status                           |
 | **Files**          |
 | POST               | `/v1/files`                       | Upload a file                                   |
 | GET                | `/v1/files/{id}`                  | Retrieve file metadata by ID                    |
