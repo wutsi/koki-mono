@@ -73,6 +73,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#lotArea", "1000")
         input("#propertyArea", "800")
         input("#year", "1990")
+        scrollToBottom()
         click("button[type=submit]")
         val req1 = argumentCaptor<UpdateListingRequest>()
         verify(rest).postForEntity(
@@ -138,16 +139,16 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
 
         // GeoLocation
         assertCurrentPageIs(PageName.LISTING_EDIT_GEOLOCATION)
-        input("#lat_long", "11.4509,-11.4509")
-        click("button[type=submit]")
         val req4 = argumentCaptor<UpdateListingGeoLocationRequest>()
+        scrollToBottom()
+        click("button[type=submit]")
         verify(rest).postForEntity(
             eq("$sdkBaseUrl/v1/listings/${listing.id}/geo-location"),
             req4.capture(),
             eq(Any::class.java),
         )
-        assertEquals(11.4509, req4.firstValue.geoLocation?.latitude)
-        assertEquals(-11.4509, req4.firstValue.geoLocation?.longitude)
+        assertEquals(listing.geoLocation?.latitude, req4.firstValue.geoLocation?.latitude)
+        assertEquals(listing.geoLocation?.longitude, req4.firstValue.geoLocation?.longitude)
 
         // Remarks
         assertCurrentPageIs(PageName.LISTING_EDIT_REMARK)
@@ -250,6 +251,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
         input("#lotArea", "1000")
         input("#propertyArea", "800")
         input("#year", "1990")
+        scrollToBottom()
         click("button[type=submit]")
 
         // Amenities
@@ -268,7 +270,7 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
 
         // GeoLocation
         assertCurrentPageIs(PageName.LISTING_EDIT_GEOLOCATION)
-        input("#lat_long", "11.4509,-11.4509")
+        scrollToBottom()
         click("button[type=submit]")
 
         // Remarks

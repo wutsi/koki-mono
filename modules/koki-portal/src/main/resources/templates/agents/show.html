@@ -152,8 +152,8 @@
                              data-show-marker="false"
                              id="map"
                              th:data-city-id="${mapCenterPoint.id}"
-                             th:data-latitude="${mapCenterPoint.latitude}"
-                             th:data-longitude="${mapCenterPoint.longitude}"
+                             th:data-latitude="${mapCenterPoint.geoLocation?.latitude}"
+                             th:data-longitude="${mapCenterPoint.geoLocation?.longitude}"
                              th:data-on-ready="on_map_ready"
                              th:data-zoom="14"
                         >
@@ -188,7 +188,7 @@
                 icon: 'home',
                 markerColor: item.sold ? 'gray' : '#1d7edf',
                 prefix: 'fa'
-            })
+            });
 
             let marker = L.marker([item.latitude, item.longitude], {icon: icon});
             marker.on('mouseover', () => {

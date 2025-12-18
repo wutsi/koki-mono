@@ -27,6 +27,12 @@ class EditListingGeoLocationController : AbstractEditListingController() {
                 title = getMessage("page.listing.edit.meta.title"),
             )
         )
+        model.addAttribute(
+            "centerPoint",
+            listing.geoLocation
+                ?: listing.address?.neighbourhood?.geoLocation
+                ?: listing.address?.city?.geoLocation
+        )
 
         return "listings/edit-geo-location"
     }

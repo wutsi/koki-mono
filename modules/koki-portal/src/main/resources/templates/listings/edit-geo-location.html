@@ -19,14 +19,8 @@
         <div class="col-12">
             <form class="form" method="post" th:action="@{/listings/edit/geo-location}" th:object="${form}">
                 <input th:field="*{id}" type="hidden"/>
-                <input th:data-default="${listing.address?.neighbourhood} ? ${listing.address.neighbourhood.latitude}"
-                       th:field="*{latitude}"
-                       type="hidden"
-                />
-                <input th:data-default="${listing.address?.neighbourhood} ? ${listing.address.neighbourhood.longitude}"
-                       th:field="*{longitude}"
-                       type="hidden"
-                />
+                <input th:field="*{latitude}" type="hidden"/>
+                <input th:field="*{longitude}" type="hidden"/>
 
                 <div class="form-body">
                     <div class="section">
@@ -36,28 +30,37 @@
                                 <div th:text="#{page.listing.edit.geo-location.description}">DESCRIPTION</div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.latitude_longitude}">LATITUDE</label>
-                                <div class="text-small" th:utext="#{page.listing.latitude_longitude-help}">LATITUDE
-                                </div>
-                                <input id="lat_long"
-                                       oninput="on_lat_long_changed()"
-                                       pattern="^-?([0-8]?[0-9]|90)\.\d{1,20},\s*-?((1?[0-7]?|[0-9]?[0-9])?[0-9]|180)\.\d{1,20}$"
-                                       th:placeholder="#{page.listing.latitude_longitude}"
-                                       th:value="${listing.geoLocation} ? ${listing.geoLocation.latitude} + ',' + ${listing.geoLocation.longitude}"
-                                />
-                                <div class="margin-top flex">
+                                <label class="title" th:text="#{page.listing.address}">ADDRESS</label>
+                                <div th:utext="${listing.address.toHtml()}">ADDRESS</div>
+                            </div>
+                            <div class="section-item">
+                                <div class="flex">
                                     <a class="btn btn-light btn-sm" href="javascript: get_current_lat_long()">
                                         <i class="fa-solid fa-location-dot"></i>
                                         <span th:text="#{button.set_current_position}">POSITION</span>
                                     </a>
-
-                                    <a class="btn btn-light btn-sm margin-left-small"
-                                       href="javascript: open_google_map()"
-                                       id="btn-google-map"
+                                    <a class="btn btn-light btn-sm margin-left" href="javascript: reset_lat_long()"
+                                       id="btn-reset-position"
+                                       th:data-latitude="${listing.geoLocation?.latitude}"
+                                       th:data-longitude="${listing.geoLocation?.longitude}"
+                                       th:if="${listing.geoLocation}"
                                     >
-                                        <i class="fa-solid fa-map"></i>
-                                        <span th:text="#{button.open_google_map}">POSITION</span>
+                                        <span th:text="#{button.reset_position}">POSITION</span>
                                     </a>
+                                </div>
+                                <div class="margin-top">
+                                    <div id="map-container">
+                                        <div data-component-id="map"
+                                             data-on-click="on_map_click"
+                                             data-on-ready="on_map_ready"
+                                             id="map"
+                                             th:data-latitude="${centerPoint?.latitude}"
+                                             th:data-longitude="${centerPoint?.longitude}"
+                                             th:data-show-marker="${listing.geoLocation} ? 'true' : 'false'"
+                                             th:data-zoom="${listing.geoLocation} ? 18 : 14"
+                                        >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -80,12 +83,40 @@
 </div>
 
 <script>
+    var map = null;
+
+    function on_map_ready(id, zmap) {
+        console.log('on_map_ready', id, zmap);
+
+        map = zmap;
+    }
+
+    function on_map_click(evt) {
+        console.log('on_map_click', evt);
+
+        map_set_marker(evt.latlng.lat, evt.latlng.lng);
+    }
+
+    function map_set_marker(lat, long) {
+        // Record position
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = long;
+
+        // Move the marker
+        map.eachLayer(function (layer) {
+            if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+            }
+        });
+        marker = L.marker([lat, long]);
+        map.addLayer(marker);
+    }
+
     function get_current_lat_long() {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log('Position fetched', position);
-                document.getElementById('lat_long').value = position.coords.latitude + ',' + position.coords.longitude;
-                on_lat_long_changed();
+                map_set_marker(position.coords.latitude, position.coords.longitude);
             }, function (error) {
                 // Handle errors here
                 alert('Unable to fetch the geo-location');
@@ -110,32 +141,12 @@
         }
     }
 
-    function open_google_map() {
-        let lat = document.getElementById('latitude').value;
-        let long = document.getElementById('longitude').value;
-        if (!lat && lat.length === 0 && !long && long.length === 0) {
-            lat = document.getElementById('latitude').getAttribute('data-default');
-            long = document.getElementById('longitude').getAttribute('data-default');
-        }
+    function reset_lat_long() {
+        const btn = document.getElementById('btn-reset-position');
+        const lat = btn.getAttribute('data-latitude');
+        const long = btn.getAttribute('data-longitude');
 
-        const url = lat && lat.length > 0 && long && long.length > 0
-            ? `https://maps.google.com/maps?t=m&q=loc:${lat}+${long}`
-            : "https://maps.google.com"
-
-        window.open(url, '_blank');
-    }
-
-    function on_lat_long_changed() {
-        console.log('on_lat_long_changed()');
-
-        const latlong = document.getElementById('lat_long').value;
-        const parts = latlong.split(',');
-        if (parts.length === 2) {
-            document.getElementById('latitude').value = parts[0].trim();
-            document.getElementById('longitude').value = parts[1].trim();
-        } else {
-            document.error(latlong + ' is not a valid position');
-        }
+        map_set_marker(lat, long);
     }
 </script>
 </body>
