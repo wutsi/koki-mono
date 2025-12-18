@@ -15,6 +15,7 @@ import com.wutsi.koki.RefDataFixtures.neighborhoods
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -211,5 +212,35 @@ class EditListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings/edit?id=${listing.id}")
         assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    @Test
+    fun `ACTIVE listing`() {
+        setupListing(ListingStatus.ACTIVE)
+
+        navigateTo("/listings/edit?id=${listing.id}")
+        assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    @Test
+    fun `RENTED listing`() {
+        setupListing(ListingStatus.RENTED)
+
+        navigateTo("/listings/edit?id=${listing.id}")
+        assertCurrentPageIs(PageName.ERROR_403)
+    }
+
+    private fun setupListing(status: ListingStatus): Long {
+        doReturn(
+            ResponseEntity(
+                GetListingResponse(listing.copy(status = status)),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetListingResponse::class.java)
+            )
+        return listing.id
     }
 }

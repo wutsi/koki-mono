@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingController(private val mapper: ListingMapper) : AbstractEditListingController() {
+class EditListingController(private val mapper: ListingMapper) : AbstractEditorListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
