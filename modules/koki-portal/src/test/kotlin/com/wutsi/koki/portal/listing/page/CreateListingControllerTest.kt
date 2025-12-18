@@ -289,11 +289,11 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
 
         // Leasing Info
         assertCurrentPageIs(PageName.LISTING_EDIT_LEASING)
-        input("#securityDeposit", "360000")
-        input("#advanceRent", "5")
-        input("#leaseTerm", "12")
+        select("#securityDeposit", 2)
+        select("#advanceRent", 3)
+        select("#leaseTerm", 4)
         scrollToBottom()
-        input("#noticePeriod", "3")
+        select("#noticePeriod", 5)
         click("button[type=submit]")
         val req8 = argumentCaptor<UpdateListingLeasingRequest>()
         verify(rest).postForEntity(
@@ -301,10 +301,10 @@ class CreateListingControllerTest : AbstractPageControllerTest() {
             req8.capture(),
             eq(Any::class.java),
         )
-        assertEquals(360000, req8.firstValue.securityDeposit)
-        assertEquals(5, req8.firstValue.advanceRent)
-        assertEquals(12, req8.firstValue.leaseTerm)
-        assertEquals(3, req8.firstValue.noticePeriod)
+        assertEquals(2, req8.firstValue.securityDeposit)
+        assertEquals(3, req8.firstValue.advanceRent)
+        assertEquals(4, req8.firstValue.leaseTerm)
+        assertEquals(5, req8.firstValue.noticePeriod)
 
         // Seller
         assertCurrentPageIs(PageName.LISTING_EDIT_SELLER)

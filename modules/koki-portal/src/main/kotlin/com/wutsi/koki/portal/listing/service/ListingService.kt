@@ -51,9 +51,9 @@ class ListingService(
     fun get(id: Long, fullGraph: Boolean = true): ListingModel {
         val listing = koki.get(id).listing
 
-        val locationIds = listOf(listing.address?.cityId, listing.address?.stateId, listing.address?.neighborhoodId)
-            .filterNotNull()
-            .distinct()
+        val locationIds =
+            listOfNotNull(listing.address?.cityId, listing.address?.stateId, listing.address?.neighborhoodId)
+                .distinct()
         val locations = if (!fullGraph || locationIds.isEmpty()) {
             emptyMap<Long, LocationModel>()
         } else {
@@ -62,8 +62,7 @@ class ListingService(
             ).associateBy { location -> location.id }
         }
 
-        val userIds = listOf(listing.createdById, listing.sellerAgentUserId, listing.buyerAgentUserId)
-            .filterNotNull()
+        val userIds = listOfNotNull(listing.createdById, listing.sellerAgentUserId, listing.buyerAgentUserId)
             .distinct()
         val users = if (!fullGraph || userIds.isEmpty()) {
             emptyMap<Long, UserModel>()

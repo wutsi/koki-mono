@@ -91,9 +91,8 @@ class ListingMapper(
             },
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
 
-            securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
+            securityDeposit = entity.securityDeposit,
             advanceRent = entity.advanceRent,
-            advanceRentMoney = toAdvanceRentMoney(entity),
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
@@ -294,19 +293,6 @@ class ListingMapper(
             )
         } else {
             return price
-        }
-    }
-
-    private fun toAdvanceRentMoney(entity: Listing): MoneyModel? {
-        return entity.price?.let { price ->
-            entity.advanceRent?.let { advanceRent ->
-                moneyMapper.toMoneyModel(
-                    Money(
-                        amount = (price.amount.toDouble() * advanceRent).toDouble(),
-                        currency = price.currency
-                    )
-                )
-            }
         }
     }
 
