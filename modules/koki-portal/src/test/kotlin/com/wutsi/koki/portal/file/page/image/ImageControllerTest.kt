@@ -38,7 +38,7 @@ class ImageControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/images/$imageId")
 
-        assertElementNotVisible("#btn-delete")
+        assertElementNotPresent("#btn-delete")
     }
 
     @Test
