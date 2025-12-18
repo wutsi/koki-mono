@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/listings/edit/geo-location")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class EditListingGeoLocationController : AbstractEditListingController() {
+class EditListingGeoLocationController : AbstractEditorListingController() {
     @GetMapping
     fun edit(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
