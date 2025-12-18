@@ -147,6 +147,14 @@
                     <b th:text="#{page.listing.road-pavement}">Route</b>
                     <span th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</span>
                 </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.year}">
+                    <b th:text="#{page.listing.year}">Construction Year:</b>
+                    <span th:text="${listing.year}">yyyy</span>
+                </div>
+                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.visitFees}">
+                    <b th:text="#{page.listing.visit-fees}">Visit Fees:</b>
+                    <span th:text="${listing.visitFees}">$$</span>
+                </div>
             </div>
             <div class="margin-top" id="remarks" th:if="${listing.publicRemarks}">
                 <b th:text="#{page.listing.public-remarks}">Remarques Additionnelles</b>
@@ -212,16 +220,13 @@
         </div>
 
         <!-- TERMS & CONDITION -->
-        <div class="margin-top border-top padding-small terms-container">
+        <div class="margin-top border-top padding-small terms-container" th:if="${listing.listingTypeRental}">
             <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
             <div class="row">
                 <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">
                     <b th:text="#{page.listing.security-deposit}">Security Deposit:</b>
-                    <span th:text="${listing.securityDeposit.displayText}">$$$</span>
-                </div>
-                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.visitFees}">
-                    <b th:text="#{page.listing.visit-fees}">Visit Fees:</b>
-                    <span th:text="${listing.visitFees}">$$</span>
+                    <span th:text="${listing.securityDeposit}">00</span>
+                    <span th:text="#{label.months}">MONTH</span>
                 </div>
                 <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.leaseTerm}">
                     <b th:text="#{page.listing.lease-terms}">Lease Term:</b>
@@ -237,10 +242,6 @@
                 <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.availableAt}">
                     <b th:text="#{page.listing.available-at}">Availability Date:</b>
                     <span th:text="${listing.availableAtText}">yyyy-mm-dd</span>
-                </div>
-                <div class="col-12 col-md-6 margin-bottom-small" th:if="${listing.year}">
-                    <b th:text="#{page.listing.year}">Construction Year:</b>
-                    <span th:text="${listing.year}">yyyy</span>
                 </div>
             </div>
         </div>
@@ -312,7 +313,6 @@
             </button>
         </div>
     </div>
-
 </div>
 
 <!-- TOAST -->

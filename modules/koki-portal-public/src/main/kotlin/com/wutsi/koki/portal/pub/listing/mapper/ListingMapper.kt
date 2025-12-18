@@ -81,9 +81,8 @@ class ListingMapper(
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
 
-            securityDeposit = entity.securityDeposit?.let { money -> moneyMapper.toMoneyModel(money) },
+            securityDeposit = entity.securityDeposit,
             advanceRent = entity.advanceRent,
-            advanceRentMoney = toAdvanceRentMoney(entity),
             leaseTerm = entity.leaseTerm,
             noticePeriod = entity.noticePeriod,
 
@@ -224,19 +223,6 @@ class ListingMapper(
     private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
         val locale = LocaleContextHolder.getLocale()
         return messages.getMessage(key, args, locale)
-    }
-
-    private fun toAdvanceRentMoney(entity: Listing): MoneyModel? {
-        return entity.price?.let { price ->
-            entity.advanceRent?.let { advanceRent ->
-                moneyMapper.toMoneyModel(
-                    Money(
-                        amount = (price.amount.toDouble() * advanceRent).toDouble(),
-                        currency = price.currency
-                    )
-                )
-            }
-        }
     }
 
     private fun toLevelText(level: Int?): String? {
