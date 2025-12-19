@@ -99,13 +99,13 @@
         <!-- DETAILS -->
         <div class="margin-top border-top padding-top description-container">
             <div id="listing-description" th:utext="${listing.descriptionHtml}">DESCRIPTION</div>
-            <div class="row margin-top">
+            <div class="flex flex-wrap margin-top">
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bedrooms}">
-                    <b th:text="#{page.listing.bedroom}">Bedrooms</b>
+                    <b th:text="#{page.listing.bedrooms}">Bedrooms</b>
                     <span th:text="${listing.bedrooms}">00</span>
                 </div>
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bathrooms}">
-                    <b th:text="#{page.listing.bathroom}">Bedrooms</b>
+                    <b th:text="#{page.listing.bathrooms}">Bathrooms</b>
                     <span th:text="${listing.bathrooms}">00</span>
                 </div>
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.halfBathrooms}">
@@ -174,23 +174,22 @@
         <div class="margin-top border-top padding-top amenity-container"
              th:if="${listing.furnitureType} OR !${listing.amenities.isEmpty()}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-6 col-md-4" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
-                        <i class="fa-solid fa-couch"></i>
-                        <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
-                    </div>
-                    <div class="col-6 col-md-4" th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
-                        <i class="fa-solid fa-chair"></i>
-                        <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
-                    </div>
+            <div class="flex flex-wrap">
+                <div class="col-12 col-lg-4 col-md-6" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
+                    <i class="fa-solid fa-couch"></i>
+                    <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 " th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
+                    <i class="fa-solid fa-chair"></i>
+                    <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
+                </div>
 
-                    <div class="col-6 col-md-4" th:each="amenity:${topAmenities}">
-                        <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
-                        <span th:text="${amenity.name}">AMENITY</span>
-                    </div>
+                <div class="col-12 col-lg-4 col-md-6 " th:each="amenity:${topAmenities}">
+                    <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
+                    <span th:text="${amenity.name}">AMENITY</span>
                 </div>
             </div>
+
             <button class="btn btn-secondary margin-top" data-bs-target="#listing-amenities-modal"
                     data-bs-toggle="modal"
                     id="btn-amenities"
@@ -230,7 +229,7 @@
         <!-- TERMS & CONDITION -->
         <div class="margin-top border-top padding-top terms-container" th:if="${listing.listingTypeRental}">
             <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
-            <div class="row">
+            <div class="flex flex-wrap">
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">
                     <b th:text="#{page.listing.security-deposit}">Security Deposit:</b>
                     <span th:text="${listing.securityDeposit}">00</span>

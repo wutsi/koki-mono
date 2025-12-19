@@ -93,7 +93,6 @@ koki-portal/
 │   ├── home/                             # Dashboard and home page
 │   ├── lead/                             # Lead management pages
 │   ├── listing/                          # Property listing management pages
-│   ├── message/                          # Messaging and notification pages
 │   ├── module/                           # Module and permission pages
 │   ├── note/                             # Note management pages
 │   ├── offer/                            # Offer management pages
@@ -103,7 +102,6 @@ koki-portal/
 │   ├── share/                            # Sharing functionality
 │   ├── signup/                           # User registration and signup flows
 │   ├── tenant/                           # Tenant management and invitations
-│   ├── translation/                      # Translation service integration
 │   └── user/                             # User profile and management
 ├── src/main/resources/
 │   ├── application.yml                   # Application configuration
