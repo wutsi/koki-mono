@@ -11,7 +11,7 @@ object ErrorCode {
 
     val AGENT_NOT_FOUND: String = "$PREFIX:agent:not-found"
 
-    val AMENITY_NOT_FOUND: String = "$PREFIX:ameniry:amenity-not-found"
+    val AMENITY_NOT_FOUND: String = "$PREFIX:amenity:amenity-not-found"
 
     val ATTRIBUTE_NOT_FOUND: String = "$PREFIX:attribute:not-found"
     val ATTRIBUTE_NAME_MISSING: String = "$PREFIX:attribute:name-missing"
@@ -60,6 +60,7 @@ object ErrorCode {
 
     val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
     val LISTING_INVALID_BUYER_COMMISSION: String = "$PREFIX:listing:invalid-buyer-commission"
+    val LISTING_INVALID_TEXT: String = "$PREFIX:listing:invalid-text"
     val LISTING_INVALID_IMAGE: String = "$PREFIX:listing:invalid-image"
     val LISTING_INVALID_STATUS: String = "$PREFIX:listing:invalid-status"
     val LISTING_IMAGE_UNDER_REVIEW: String = "$PREFIX:listing:image-under-review"
