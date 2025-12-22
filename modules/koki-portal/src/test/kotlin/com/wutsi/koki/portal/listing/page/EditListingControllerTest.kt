@@ -23,6 +23,7 @@ import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
+import com.wutsi.koki.listing.dto.UpdateListingLeasingRequest
 import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
@@ -36,7 +37,7 @@ import kotlin.test.assertEquals
 
 class EditListingControllerTest : AbstractPageControllerTest() {
     @Test
-    fun edit() {
+    fun general() {
         navigateTo("/listings/edit?id=${listing.id}")
         assertCurrentPageIs(PageName.LISTING_EDIT)
         select("#listingType", 1)
@@ -82,6 +83,13 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(RoadPavement.CONCRETE, req1.firstValue.roadPavement)
         assertEquals(1990, req1.firstValue.year)
 
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun amenities() {
+        navigateTo("/listings/edit/amenities?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_AMENITIES)
         select("#furnitureType", 1)
         click("#chk-amenity-" + amenities[9].id)
@@ -104,7 +112,13 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(true, req2.firstValue.amenityIds.contains(amenities[10].id))
         assertEquals(true, req2.firstValue.amenityIds.contains(amenities[11].id))
 
-        // Address
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun address() {
+        navigateTo("/listings/edit/address?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_ADDRESS)
         select("#country", 3)
         select2("#cityId", "${locations[2].name}, ${locations[0].name}")
@@ -122,7 +136,13 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(neighborhoods[0].id, req3.firstValue.address?.neighborhoodId)
         assertEquals("340 Pascal", req3.firstValue.address?.street)
 
-        // GeoLocation
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun geoLocation() {
+        navigateTo("/listings/edit/geo-location?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_GEOLOCATION)
         scrollToBottom()
         click("button[type=submit]")
@@ -135,7 +155,13 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(listing.geoLocation?.latitude, req4.firstValue.geoLocation?.latitude)
         assertEquals(listing.geoLocation?.longitude, req4.firstValue.geoLocation?.longitude)
 
-        // Remarks
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun remarks() {
+        navigateTo("/listings/edit/remarks?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_REMARK)
         input("#publicRemarks", "These are public remarks")
         input("#agentRemarks", "Remarks from agent")
@@ -150,7 +176,13 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals("These are public remarks", req6.firstValue.publicRemarks)
         assertEquals("Remarks from agent", req6.firstValue.agentRemarks)
 
-        // Price
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun price() {
+        navigateTo("/listings/edit/price?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_PRICE)
         input("#price", "180000")
         input("#visitFees", "5")
@@ -169,7 +201,38 @@ class EditListingControllerTest : AbstractPageControllerTest() {
         assertEquals(6.5, req7.firstValue.sellerAgentCommission)
         assertEquals(null, req7.firstValue.buyerAgentCommission)
 
-        // Seller
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun leasing() {
+        navigateTo("/listings/edit/leasing?id=${listing.id}")
+
+        assertCurrentPageIs(PageName.LISTING_EDIT_LEASING)
+        select("#securityDeposit", 2)
+        select("#advanceRent", 3)
+        select("#leaseTerm", 4)
+        scrollToBottom()
+        select("#noticePeriod", 5)
+        click("button[type=submit]")
+        val req8 = argumentCaptor<UpdateListingLeasingRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/listings/${listing.id}/leasing"),
+            req8.capture(),
+            eq(Any::class.java),
+        )
+        assertEquals(2, req8.firstValue.securityDeposit)
+        assertEquals(3, req8.firstValue.advanceRent)
+        assertEquals(4, req8.firstValue.leaseTerm)
+        assertEquals(5, req8.firstValue.noticePeriod)
+
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
+    @Test
+    fun seller() {
+        navigateTo("/listings/edit/seller?id=${listing.id}")
+
         assertCurrentPageIs(PageName.LISTING_EDIT_SELLER)
         select2("#sellerContactId", contacts[1].firstName + " " + contacts[1].lastName)
         click("button[type=submit]")
@@ -180,10 +243,6 @@ class EditListingControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(contacts[1].id, req8.firstValue.sellerContactId)
-
-        // DONE
-        assertCurrentPageIs(PageName.LISTING_EDIT_DONE)
-        click("#btn-continue")
 
         assertCurrentPageIs(PageName.LISTING)
     }

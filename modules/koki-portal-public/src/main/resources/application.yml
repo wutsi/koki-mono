@@ -1,18 +1,13 @@
 spring:
     jackson:
         default-property-inclusion: non_null
+        use-jackson2-defaults: true
         deserialization:
             FAIL_ON_UNKNOWN_PROPERTIES: false
             ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
         mapper:
             ACCEPT_CASE_INSENSITIVE_ENUMS: true
             ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
-        parser:
-            INCLUDE_SOURCE_IN_LOCATION: true
-
-    mvc:
-        pathmatch:
-            matching-strategy: ANT_PATH_MATCHER
 
     servlet:
         multipart:

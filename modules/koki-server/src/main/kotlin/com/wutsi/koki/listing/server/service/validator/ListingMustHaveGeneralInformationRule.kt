@@ -8,11 +8,15 @@ import jakarta.validation.ValidationException
 
 class ListingMustHaveGeneralInformationRule : ListingPublishRule {
     override fun validate(listing: ListingEntity) {
-        if (listing.propertyType == PropertyType.LAND) {
+        if (listing.propertyType == PropertyType.LAND ||
+            listing.propertyType == PropertyType.COMMERCIAL ||
+            listing.propertyType == PropertyType.INDUSTRIAL
+        ) {
             validateLand(listing)
         } else if (
             listing.propertyType == PropertyType.APARTMENT ||
             listing.propertyType == PropertyType.STUDIO ||
+            listing.propertyType == PropertyType.DUPLEX ||
             listing.propertyType == PropertyType.HOUSE
         ) {
             validateHouse(listing)
@@ -20,7 +24,7 @@ class ListingMustHaveGeneralInformationRule : ListingPublishRule {
     }
 
     fun validateHouse(listing: ListingEntity) {
-        if (undefined(listing.bedrooms) || undefined(listing.bathrooms) || undefined(listing.propertyArea)) {
+        if (undefined(listing.bedrooms) || undefined(listing.bathrooms)) {
             throw ValidationException(ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE)
         }
     }

@@ -56,6 +56,6 @@ class EditListingAmenitiesController(
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updateAmenities(form)
-        return "redirect:/listings/edit/address?id=${form.id}"
+        return "redirect:/listings/${form.id}#listing-amenities-section"
     }
 }

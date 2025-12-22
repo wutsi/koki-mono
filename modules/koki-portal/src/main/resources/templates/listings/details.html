@@ -4,6 +4,7 @@
     <hr/>
 </div>
 
+<a name="listing-general-section"></a>
 <div id="listing-general-section">
     <h4>
         <span th:text="#{page.listing.show.general}">GENERAL</span>
@@ -70,7 +71,7 @@
             <div th:if="${listing.parkingType}" th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</div>
             <div th:if="!${listing.parkingType}">-</div>
         </div>
-        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small" th:if="${listing.parkings}">
+        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.parkings}">KEY</b>
             <div th:text="${listing.parkings} ? ${listing.parkings} : '-'">VALUE</div>
         </div>
@@ -114,6 +115,7 @@
     <hr/>
 </div>
 
+<a name="listing-amenity-section"></a>
 <div id="listing-amenity-section">
     <h4>
         <span th:text="#{page.listing.show.amenities}">AMENITIES</span>
@@ -134,7 +136,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-4 padding-top-small"
+        <div class="col-12 col-md-4 col-lg-3  padding-top-small"
              th:each="category : ${amenityCategories}"
              th:if="!${listing.amenitiesByCategoryId(category.id).isEmpty()}"
         >
@@ -150,6 +152,7 @@
     <hr/>
 </div>
 
+<a name="listing-address-section"></a>
 <div id="listing-address-section">
     <h4>
         <span th:text="#{page.listing.show.location}">ADDRESS</span>
@@ -165,6 +168,19 @@
              th:utext="${listing.address} ? ${listing.address.toHtml(true)} : '-'">COUNTRY
         </div>
     </div>
+    <hr/>
+</div>
+
+<a name="listing-geolocation-section"></a>
+<div id="listing-geolocation-section">
+    <h4>
+        <span th:text="#{page.listing.show.geo-location}">ADDRESS</span>
+        <a class="text-small btn-section-edit"
+           th:href="'/listings/edit/geo-location?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
     <div id="map-container" th:if="${listing.geoLocation}">
         <div data-component-id="map"
              data-disable-scroll-wheel-zoom="true"
@@ -177,9 +193,11 @@
         >
         </div>
     </div>
+    <div th:if="!${listing.geoLocation}">-</div>
     <hr/>
 </div>
 
+<a name="listing-remarks-section"></a>
 <div id="listing-remarks-section">
     <h4>
         <span th:text="#{page.listing.show.remarks}">REMARKS</span>
@@ -202,6 +220,7 @@
     <hr/>
 </div>
 
+<a name="listing-price-section"></a>
 <div id="listing-price-section">
     <h4>
         <span th:text="#{page.listing.show.price}">PRICE</span>
@@ -246,6 +265,7 @@
     <hr/>
 </div>
 
+<a name="listing-leasing-section"></a>
 <div id="listing-leasing-section" th:if="${listing.listingTypeRental}">
     <h4>
         <span th:text="#{page.listing.show.leasing}">LEASING</span>
@@ -292,6 +312,7 @@
     <hr/>
 </div>
 
+<a name="listing-seller-section"></a>
 <div id="listing-seller-section" th:if="${listing.canManage(user)}">
     <h4>
         <span th:text="#{page.listing.show.seller}">SELLER</span>
@@ -311,6 +332,7 @@
     <hr th:if="${listing.statusSold}"/>
 </div>
 
+<a name="listing-sale-section"></a>
 <div id="listing-sale-section" th:if="${listing.statusSold}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 

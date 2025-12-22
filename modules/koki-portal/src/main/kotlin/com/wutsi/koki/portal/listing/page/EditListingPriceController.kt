@@ -1,6 +1,5 @@
 package com.wutsi.koki.portal.listing.page
 
-import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -36,11 +35,6 @@ class EditListingPriceController : AbstractEditorListingController() {
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updatePrice(form)
-        val listing = findListing(form.id)
-        return if (listing.listingType == ListingType.RENTAL) {
-            "redirect:/listings/edit/leasing?id=${form.id}"
-        } else {
-            "redirect:/listings/edit/seller?id=${form.id}"
-        }
+        return "redirect:/listings/${form.id}#listing-price-section"
     }
 }

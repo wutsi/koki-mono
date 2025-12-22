@@ -51,9 +51,8 @@
                                 </div>
                             </div>
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.visit-fees}">TERMS</label>
-                                <div class="text-small" th:text="#{page.listing.visit-fees-help}"></div>
-
+                                <label class="title" th:text="#{page.listing.visit-fees}">VISIT_FEES</label>
+                                <div class="form-text" th:text="#{page.listing.visit-fees-help}"></div>
                                 <div class="input-group">
                                     <input class="form-control" step="0" th:field="*{visitFees}" type="number"/>
                                     <div class="input-group-append">
@@ -66,14 +65,11 @@
                             <div class="section-item">
                                 <label class="title">
                                     <span th:text="#{page.listing.seller-agent-commission}">SELLER_COMMISSION</span>
-                                    <span class="required">*</span>
                                 </label>
-                                <div class="text-small"
-                                     th:text="#{page.listing.seller-agent-commission-help}">HELP
-                                </div>
+                                <div class="form-text" th:text="#{page.listing.seller-agent-commission-help}">HELP</div>
                                 <div class="input-group">
                                     <input class="form-control"
-                                           required step="0.01" th:field="*{sellerAgentCommission}" type="number"/>
+                                           step="0.01" th:field="*{sellerAgentCommission}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span>%</span>
@@ -85,7 +81,7 @@
                                 <label class="title">
                                     <span th:text="#{page.listing.buyer-agent-commission}">BUYER_COMMISSION</span>
                                 </label>
-                                <div class="text-small" th:text="#{page.listing.buyer-agent-commission-help}">HELP</div>
+                                <div class="form-text" th:text="#{page.listing.buyer-agent-commission-help}">HELP</div>
                                 <div class="input-group">
                                     <input class="form-control"
                                            step="0.01" th:field="*{buyerAgentCommission}" type="number"/>
@@ -98,13 +94,12 @@
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <a class="btn btn-light w-49-mobile"
-                                   th:href="'/listings/edit/remarks?id=' + ${form.id}"
-                                   th:text="#{button.previous}"
-                                >PREV</a>
-                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}" type="submit">
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
                                     NEXT
                                 </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}"
+                                >PREV</a>
                             </div>
                         </div>
                     </div>

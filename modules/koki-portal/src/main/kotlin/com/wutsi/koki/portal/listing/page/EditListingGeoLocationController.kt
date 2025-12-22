@@ -40,6 +40,6 @@ class EditListingGeoLocationController : AbstractEditorListingController() {
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updateGeoLocation(form)
-        return "redirect:/listings/edit/remarks?id=${form.id}"
+        return "redirect:/listings/${form.id}#listing-geo-location-section"
     }
 }

@@ -69,17 +69,15 @@
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <a class="btn btn-light w-49-mobile"
-                                   th:href="'/listings/edit?id=' + ${form.id}"
-                                   th:text="#{button.previous}">
-                                    PREV
-                                </a>
-
                                 <button class="btn btn-primary w-49-mobile"
-                                        th:text="#{button.next}"
+                                        th:text="#{button.submit}"
                                         type="submit">
                                     NEXT
                                 </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}">
+                                    PREV
+                                </a>
                             </div>
                         </div>
                     </div>

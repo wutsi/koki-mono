@@ -6,9 +6,6 @@ import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralIn
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerAgentCommissionRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveValidBuyerAgentCommissionRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,16 +23,16 @@ class ListingPublisherValidatorTest {
 
     @Test
     fun rules() {
-        assertEquals(9, validator.rules.size)
+        assertEquals(6, validator.rules.size)
         assertEquals(ListingMustHaveGeneralInformationRule::class, validator.rules[0]::class)
         assertEquals(ListingMustHaveAddressRule::class, validator.rules[1]::class)
         assertEquals(ListingMustHaveGeolocationRule::class, validator.rules[2]::class)
         assertEquals(ListingMustHavePriceRule::class, validator.rules[3]::class)
-        assertEquals(ListingMustHaveSellerAgentCommissionRule::class, validator.rules[4]::class)
-        assertEquals(ListingMustHaveValidBuyerAgentCommissionRule::class, validator.rules[5]::class)
-        assertEquals(ListingMustHaveSellerRule::class, validator.rules[6]::class)
-        assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[7]::class)
-        assertEquals(ListingMustNotHaveImageUnderReviewRule::class, validator.rules[8]::class)
+//        assertEquals(ListingMustHaveSellerAgentCommissionRule::class, validator.rules[4]::class)
+//        assertEquals(ListingMustHaveValidBuyerAgentCommissionRule::class, validator.rules[5]::class)
+//        assertEquals(ListingMustHaveSellerRule::class, validator.rules[6]::class)
+        assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[4]::class)
+        assertEquals(ListingMustNotHaveImageUnderReviewRule::class, validator.rules[5]::class)
     }
 
     @Test

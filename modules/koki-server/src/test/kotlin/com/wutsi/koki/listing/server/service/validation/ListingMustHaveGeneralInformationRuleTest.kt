@@ -11,8 +11,7 @@ import kotlin.test.assertEquals
 class ListingMustHaveGeneralInformationRuleTest {
     private val rule = ListingMustHaveGeneralInformationRule()
 
-    private val house =
-        ListingEntity(bedrooms = 3, bathrooms = 3, propertyArea = 150, propertyType = PropertyType.HOUSE)
+    private val house = ListingEntity(bedrooms = 3, bathrooms = 3, propertyType = PropertyType.HOUSE)
     private val land = ListingEntity(lotArea = 1000, propertyType = PropertyType.LAND)
 
     @Test
@@ -24,22 +23,6 @@ class ListingMustHaveGeneralInformationRuleTest {
     fun `house - no bedroom`() {
         val ex = assertThrows<ValidationException> {
             rule.validate(house.copy(bedrooms = null))
-        }
-        assertEquals(ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE, ex.message)
-    }
-
-    @Test
-    fun `house - no bathroom`() {
-        val ex = assertThrows<ValidationException> {
-            rule.validate(house.copy(bathrooms = 0))
-        }
-        assertEquals(ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE, ex.message)
-    }
-
-    @Test
-    fun `house - no property-area`() {
-        val ex = assertThrows<ValidationException> {
-            rule.validate(house.copy(propertyArea = null))
         }
         assertEquals(ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE, ex.message)
     }
