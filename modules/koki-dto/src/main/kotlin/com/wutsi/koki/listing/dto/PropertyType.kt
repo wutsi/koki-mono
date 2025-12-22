@@ -2,11 +2,11 @@ package com.wutsi.koki.listing.dto
 
 enum class PropertyType {
     UNKNOWN,
-    HOUSE,
-    APARTMENT,
     STUDIO,
+    APARTMENT,
+    HOUSE,
+    DUPLEX,
     LAND,
     COMMERCIAL,
     INDUSTRIAL,
-    DUPLEX,
 }
