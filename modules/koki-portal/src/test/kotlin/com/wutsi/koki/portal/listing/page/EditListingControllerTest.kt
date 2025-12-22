@@ -67,7 +67,7 @@ class EditListingControllerTest : AbstractPageControllerTest() {
             eq(Any::class.java),
         )
         assertEquals(ListingType.RENTAL, req1.firstValue.listingType)
-        assertEquals(PropertyType.LAND, req1.firstValue.propertyType)
+        assertEquals(PropertyType.DUPLEX, req1.firstValue.propertyType)
         assertEquals(4, req1.firstValue.bedrooms)
         assertEquals(2, req1.firstValue.bathrooms)
         assertEquals(1, req1.firstValue.halfBathrooms)
