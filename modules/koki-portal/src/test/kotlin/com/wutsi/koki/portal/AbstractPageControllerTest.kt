@@ -42,7 +42,6 @@ import com.wutsi.koki.lead.dto.GetLeadMessageResponse
 import com.wutsi.koki.lead.dto.GetLeadResponse
 import com.wutsi.koki.lead.dto.SearchLeadMessageResponse
 import com.wutsi.koki.lead.dto.SearchLeadResponse
-import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
@@ -761,7 +760,7 @@ abstract class AbstractPageControllerTest {
         ).whenever(rest)
             .postForEntity(
                 any<String>(),
-                any<CreateListingRequest>(),
+                any(),
                 eq(CreateListingResponse::class.java)
             )
     }

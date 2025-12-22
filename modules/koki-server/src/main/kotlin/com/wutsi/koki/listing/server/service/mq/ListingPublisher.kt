@@ -7,9 +7,9 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgent
-import com.wutsi.koki.listing.server.service.agent.ListingDescriptorAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
+import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgent
+import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgentResult
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.service.LocationService
 import jakarta.transaction.Transactional

@@ -426,6 +426,8 @@ class ListingService(
     fun create(request: CreateListingRequest, tenantId: Long): ListingEntity {
         val now = Date()
         val userId = securityService.getCurrentUserIdOrNull()
+        val city = request.address?.cityId?.let { id -> locationService.get(id) }
+
         val listing = dao.save(
             ListingEntity(
                 tenantId = tenantId,
@@ -449,6 +451,37 @@ class ListingService(
                 availableAt = request.availableAt,
                 distanceFromMainRoad = request.distanceFromMainRoad,
                 roadPavement = request.roadPavement,
+
+                price = request.price,
+                visitFees = request.visitFees,
+                currency = request.currency?.uppercase()?.ifEmpty { null },
+                sellerAgentCommission = request.sellerAgentCommission,
+                buyerAgentCommission = request.buyerAgentCommission,
+                buyerAgentCommissionAmount = computeCommission(request.price, request.buyerAgentCommission),
+                sellerAgentCommissionAmount = computeCommission(request.price, request.sellerAgentCommission),
+
+                leaseTerm = request.leaseTerm,
+                noticePeriod = request.noticePeriod,
+                securityDeposit = request.securityDeposit,
+                advanceRent = request.advanceRent,
+
+                cityId = request.address?.cityId,
+                neighbourhoodId = request.address?.neighborhoodId,
+                stateId = city?.parentId,
+                country = request.address?.country?.lowercase()?.ifEmpty { null },
+                street = request.address?.street?.ifEmpty { null },
+                postalCode = request.address?.postalCode?.uppercase()?.ifEmpty { null },
+
+                publicRemarks = request.publicRemarks,
+
+                amenities = if (request.amenityIds.isNotEmpty()) {
+                    amenityService.search(
+                        ids = request.amenityIds,
+                        limit = request.amenityIds.size,
+                    ).toMutableList()
+                } else {
+                    mutableListOf()
+                },
 
                 sellerAgentUserId = userId,
                 createdAt = now,

@@ -64,6 +64,7 @@ object PageName {
 
     const val LISTING = "page.listing"
     const val LISTING_CREATE = "page.listing.create"
+    const val LISTING_CREATE_AI = "page.listing.create.ai"
     const val LISTING_EDIT = "page.listing.edit"
     const val LISTING_EDIT_ADDRESS = "listing.edit.address"
     const val LISTING_EDIT_AMENITIES = "page.listing.edit.amenities"

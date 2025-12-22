@@ -18,9 +18,9 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.listing.server.service.agent.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.agent.ListingImageReviewerAgent
-import com.wutsi.koki.listing.server.service.agent.ListingImageReviewerAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
+import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgent
+import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgentResult
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
