@@ -4,6 +4,7 @@ import com.wutsi.koki.agent.dto.MetricPeriod
 import com.wutsi.koki.agent.server.dao.AgentMetricRepository
 import com.wutsi.koki.agent.server.domain.AgentEntity
 import com.wutsi.koki.agent.server.domain.AgentMetricEntity
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.tenant.server.domain.TenantEntity
@@ -87,6 +88,7 @@ class AgentMetricService(
         val query = em.createQuery(jql, List::class.java)
 
         query.setParameter("listingType", type)
+        query.setParameter("status", if (type == ListingType.SALE) ListingStatus.SOLD else ListingStatus.RENTED)
         when (period) {
             MetricPeriod.PAST_12M ->
                 query.setParameter("date", DateUtils.addMonths(Date(), -12))
@@ -112,7 +114,7 @@ class AgentMetricService(
             """
                 SELECT COUNT(L), MIN(L.salePrice), MAX(L.salePrice), AVG(L.salePrice), SUM(L.salePrice)
                 FROM ListingEntity L
-                WHERE L.listingType =: listingType
+                WHERE L.listingType = :listingType AND L.status = :status
             """.trimIndent()
         )
         when (party) {
