@@ -32,7 +32,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.security-deposit}">LEASE</label>
-                                <div class="text-small" th:text="#{page.listing.security-deposit-help}">HELP</div>
+                                <div class="form-text" th:text="#{page.listing.security-deposit-help}">HELP</div>
                                 <select class="form-select" th:field="*{securityDeposit}">
                                     <option value=""></option>
                                     <option
@@ -45,7 +45,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.advance-rent}">ADVANCE_TERM</label>
-                                <div class="text-small" th:text="#{page.listing.advance-rent-help}">HELP</div>
+                                <div class="form-text" th:text="#{page.listing.advance-rent-help}">HELP</div>
                                 <select class="form-select" th:field="*{advanceRent}">
                                     <option value=""></option>
                                     <option
@@ -58,7 +58,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.lease-terms}">TERMS</label>
-                                <div class="text-small" th:text="#{page.listing.lease-terms-help}">HELP</div>
+                                <div class="form-text" th:text="#{page.listing.lease-terms-help}">HELP</div>
                                 <select class="form-select" th:field="*{leaseTerm}">
                                     <option value=""></option>
                                     <option
@@ -71,7 +71,7 @@
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.notice-period}">NOTICE_PERIOD</label>
-                                <div class="text-small" th:text="#{page.listing.notice-period-help}">HELP</div>
+                                <div class="form-text" th:text="#{page.listing.notice-period-help}">HELP</div>
                                 <select class="form-select" th:field="*{noticePeriod}">
                                     <option value=""></option>
                                     <option
@@ -84,13 +84,12 @@
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <a class="btn btn-light w-49-mobile"
-                                   th:href="'/listings/edit/price?id=' + ${form.id}"
-                                   th:text="#{button.previous}"
-                                >PREV</a>
-                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}"
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}"
                                         type="submit">NEXT
                                 </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}"
+                                >PREV</a>
                             </div>
                         </div>
                     </div>

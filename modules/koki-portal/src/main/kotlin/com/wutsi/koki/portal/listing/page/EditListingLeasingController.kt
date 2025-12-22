@@ -36,6 +36,6 @@ class EditListingLeasingController : AbstractEditorListingController() {
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updateLeasing(form)
-        return "redirect:/listings/edit/seller?id=${form.id}"
+        return "redirect:/listings/${form.id}#listing-leasing-section"
     }
 }

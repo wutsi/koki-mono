@@ -40,6 +40,6 @@ class EditListingSellerController : AbstractEditorListingController() {
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updateSeller(form)
-        return "redirect:/listings/edit/done?id=${form.id}"
+        return "redirect:/listings/${form.id}#listing-seller-section"
     }
 }

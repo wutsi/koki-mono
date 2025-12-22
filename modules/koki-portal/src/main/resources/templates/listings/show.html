@@ -31,12 +31,6 @@
                             </a>
                         </div>
                         <div class="margin-left-small" th:if="${listing.canManage(user)}">
-                            <a class="btn btn-light btn-sm" id="btn-edit"
-                               th:href="'/listings/edit?id=' + ${listing.id}"
-                               th:if="${listing.statusDraft}"
-                               th:text="#{button.edit}"
-                            >EDIT</a>
-
                             <a class="btn btn-primary btn-sm" id="btn-publish"
                                th:href="'/listings/publish?id=' + ${listing.id}"
                                th:if="${listing.statusDraft}"

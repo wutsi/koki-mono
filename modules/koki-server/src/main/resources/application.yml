@@ -34,6 +34,7 @@ spring:
 
     jackson:
         default-property-inclusion: non_null
+        use-jackson2-defaults: true
         deserialization:
             FAIL_ON_UNKNOWN_PROPERTIES: false
             FAIL_ON_NULL_FOR_PRIMITIVES: false

@@ -34,6 +34,6 @@ class EditListingRemarksController : AbstractEditorListingController() {
     @PostMapping
     fun submit(@ModelAttribute form: ListingForm): String {
         listingService.updateRemarks(form)
-        return "redirect:/listings/edit/price?id=${form.id}"
+        return "redirect:/listings/${form.id}#listing-remarks-section"
     }
 }

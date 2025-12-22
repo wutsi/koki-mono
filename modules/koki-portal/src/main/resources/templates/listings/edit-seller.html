@@ -25,7 +25,9 @@
                         <div class="section-body">
                             <div class="section-item">
                                 <h2 th:text="#{page.listing.edit.seller.title}">TITLE</h2>
-
+                                <div th:text="#{page.listing.edit.seller.description}">DESCRIPTION</div>
+                            </div>
+                            <div class="section-item">
                                 <select
                                     data-component-id="select2"
                                     data-url="/contacts/selector/search"
@@ -36,23 +38,21 @@
                                         ACCOUNT
                                     </option>
                                 </select>
+                                <div class="form-text margin-top-small">
+                                    <i class="fa-solid fa-lock"></i>
+                                    <span class="margin-top-small"
+                                          th:text="#{page.listing.edit.seller.privacy}">PRIVACY
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="section-item flex flex-space-between">
-                                <a class="btn btn-light w-49-mobile"
-                                   th:href="'/listings/edit/leasing?id=' + ${form.id}"
-                                   th:if="*{listingType.name() == 'RENTAL'}"
-                                   th:text="#{button.previous}"
-                                >PREV</a>
-                                <a class="btn btn-light w-49-mobile"
-                                   th:href="'/listings/edit/price?id=' + ${form.id}"
-                                   th:if="*{listingType.name() != 'RENTAL'}"
-                                   th:text="#{button.previous}"
-                                >PREV</a>
-
-                                <button class="btn btn-primary w-49-mobile" th:text="#{button.next}" type="submit">
-                                    NEXT
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
+                                    SUBMIT
                                 </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}"
+                                >PREV</a>
                             </div>
                         </div>
                     </div>

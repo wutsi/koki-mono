@@ -24,7 +24,7 @@ class ListListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun loadMore() {
-        var entries = mutableListOf<ListingSummary>()
+        val entries = mutableListOf<ListingSummary>()
         var seed = System.currentTimeMillis()
         repeat(20) {
             entries.add(listings[0].copy(id = ++seed))
@@ -72,5 +72,12 @@ class ListListingControllerTest : AbstractPageControllerTest() {
 
         navigateTo("/listings")
         assertCurrentPageIs(PageName.LISTING_LIST)
+    }
+
+    @Test
+    fun create() {
+        navigateTo("/listings")
+        click("#btn-create")
+        assertCurrentPageIs(PageName.LISTING_CREATE_AI)
     }
 }

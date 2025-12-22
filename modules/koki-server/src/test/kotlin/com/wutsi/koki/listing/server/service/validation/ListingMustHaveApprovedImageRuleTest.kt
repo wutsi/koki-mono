@@ -17,7 +17,7 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ListingMustHaveImageApprovedRuleTest {
+class ListingMustHaveApprovedImageRuleTest {
     private val fileService = mock<FileService>()
     private val rule = ListingMustHaveImageApprovedRule(fileService)
     private val listing = ListingEntity(id = 1, tenantId = 11L)

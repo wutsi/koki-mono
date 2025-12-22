@@ -13,7 +13,7 @@
         <div class="col-12">
             <div class="widget" th:if="${showToolbar}">
                 <div class="widget-body">
-                    <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create-listing"
+                    <a class="btn btn-primary btn-sm" href="/listings/create/ai" id="btn-create-listing"
                        th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
                         <i class="fa-solid fa-plus"></i>
                         <span th:text="#{button.listing}">CREATE</span>

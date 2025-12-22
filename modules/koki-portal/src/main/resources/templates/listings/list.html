@@ -36,7 +36,7 @@
                             </button>
                         </div>
                         <div>
-                            <a class="btn btn-primary btn-sm" href="/listings/create" id="btn-create"
+                            <a class="btn btn-primary btn-sm" href="/listings/create/ai" id="btn-create"
                                th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
                                 <i class="fa-solid fa-plus"></i>
                                 <span th:text="#{button.listing}">CREATE</span>

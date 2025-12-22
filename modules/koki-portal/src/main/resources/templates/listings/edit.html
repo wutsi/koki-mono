@@ -167,10 +167,14 @@
                                 <input class="form-control" step="0" th:field="*{year}" type="number"/>
                             </div>
 
-                            <div class="section-item text-right">
-                                <button class="btn btn-primary w-100-mobile" th:text="#{button.next}" type="submit">
-                                    NEXT
+                            <div class="section-item">
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}" type="submit">
+                                    SUBMIT
                                 </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}">
+                                    CANCEL
+                                </a>
                             </div>
                         </div>
                     </div>

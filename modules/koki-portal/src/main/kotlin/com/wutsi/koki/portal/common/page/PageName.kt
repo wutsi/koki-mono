@@ -68,7 +68,6 @@ object PageName {
     const val LISTING_EDIT = "page.listing.edit"
     const val LISTING_EDIT_ADDRESS = "listing.edit.address"
     const val LISTING_EDIT_AMENITIES = "page.listing.edit.amenities"
-    const val LISTING_EDIT_DONE = "page.listing.done"
     const val LISTING_EDIT_GEOLOCATION = "listing.edit.geo-location"
     const val LISTING_EDIT_LEASING = "listing.edit.leasing"
     const val LISTING_EDIT_PRICE = "listing.edit.price"

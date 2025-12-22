@@ -15,14 +15,15 @@ The listing information must be structured in the following JSON format:
 - valid: Whether the listing is valid or not (boolean)
 - reason: If valid is false, reason for invalidity
 - listingType: (REQUIRED) Type of listing. Values can be SALE or RENTAL
-- propertyType: (REQUIRED) Type of property. Values can be HOUSE, APARTMENT, STUDIO, LAND, COMMERCIAL,INDUSTRIAL
+- propertyType: (REQUIRED) Type of property. Values can be HOUSE, DUPLEX, APARTMENT, STUDIO, LAND, COMMERCIAL,INDUSTRIAL
 - bedrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bedrooms (integer)
 - bathrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bathrooms (integer)
 - halfBathrooms: Number of half bathrooms (integer)
 - floors: Number of floors (integer)
-- parkingType: Type of parking available. Values can be GARAGE, DRIVEWAY, STREET, PRIVATE, UNDERGROUND
+- parkingType: Type of parking available (when property has parking). Values can be PRIVATE, GARAGE, DRIVEWAY, STREET,
+  UNDERGROUND
 - parkings: Number of parking spaces (integer)
-- fenceType: Type of fence. Values can be NONE, CONCRETE, BRICK, WOOD, TREES or null
+- fenceType: Type of fence. Values can be NONE, CONCRETE, BRICK, WOOD, TREES
 - furnitureType: Type of furniture. Values can be FULLY_FURNISHED, SEMI_FURNISHED, UNFURNISHED
 - lotArea: (REQUIRED for LAND, LAND, COMMERCIAL,INDUSTRIAL) Area of the lot in square meters (integer)
 - propertyArea: Area of the property in square meters (integer)
@@ -37,8 +38,7 @@ The listing information must be structured in the following JSON format:
 - noticePeriod: Notice period in months (integer)
 - distanceFromMainRoad: Distance from the main road in meters (integer)
 - roadPavement: Type of road pavement. Values can be ASPHALT, CONCRETE, COBBLESTONE, GRAVEL, DIRT
-- amenityIds: List of amenities IDs of the property. (refer to the Amenities IDs Reference section). Set to -1 if the
-  amenity not found)
+- amenityIds: IDs of the amenities (array of integers)
 - street: Address - Name of the street
 - neighbourhood: Address - Name of the district/neighborhood
 - city: Address - Name of the city
@@ -47,14 +47,20 @@ The listing information must be structured in the following JSON format:
 - hasLandTitle: true if the land has a title, false otherwise (boolean)
 - publicRemarks: Any additional remarks about the property that was not captured in other fields
 
+# Amenities IDs Reference
+
+Here are all the amenities supported by the platform in CSV format:
+
+id,name
+{{amenities}}
+
 # Instructions
 
-- If you do not know the information, do not make up information
+- Assume that the property is located in {{city}} unless specified otherwise
 - Consider all fields are optional, including price, except those marked as REQUIRED
-- Do not include in the result JSON null or empty fields
+- Never include in the result JSON null or empty fields
 - If an integer field is not provided, do not include it in the result JSON
 - If an enumerated field is not provided or does not match the expected values, do not include it in the result JSON
-- Assume that the property is located in {{city}} unless specified otherwise
 - The furnitureType field should be determined based on the description of the property:
     - If the description include specifically "fully furnished" or similar, set it to FULLY_FURNISHED
     - If the description include specifically "semi furnished" or similar, set it to SEMI_FURNISHED
@@ -64,14 +70,11 @@ The listing information must be structured in the following JSON format:
       it to FULLY_FURNISHED.
     - If the description indicate the property is equipped only with any major kitchen appliances (fridge, stove,
       sometimes dishwasher), set it to SEMI_FURNISHED.
-- Phone number must be in E.164 format, if not provided or cannot be determined, do not include it in the result JSON
-
-# Amenities IDs Reference
-
-Here are all the amenities supported by the platform in CSV format:
-
-id,name
-{{amenities}}
+- If description indicate that the the property has parking, but does not include information about the type of parking,
+  you can assume it's PRIVATE.
+- Refer to the `Amenities IDs Reference` section for resolving the IDs of amenities.
+- Do not imply the date of availability, unless explicitly mentioned.
+- When the phone number is provided, make sure to format it in E.164.
 
 # Ask:
 

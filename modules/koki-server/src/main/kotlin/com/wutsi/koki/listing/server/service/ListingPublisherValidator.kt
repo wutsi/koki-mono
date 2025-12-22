@@ -7,9 +7,6 @@ import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralIn
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerAgentCommissionRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveSellerRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveValidBuyerAgentCommissionRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
@@ -23,9 +20,9 @@ class ListingPublisherValidator(
         ListingMustHaveAddressRule(),
         ListingMustHaveGeolocationRule(),
         ListingMustHavePriceRule(),
-        ListingMustHaveSellerAgentCommissionRule(),
-        ListingMustHaveValidBuyerAgentCommissionRule(),
-        ListingMustHaveSellerRule(),
+//        ListingMustHaveSellerAgentCommissionRule(),
+//        ListingMustHaveValidBuyerAgentCommissionRule(),
+//        ListingMustHaveSellerRule(),
         ListingMustHaveImageApprovedRule(fileService),
         ListingMustNotHaveImageUnderReviewRule(fileService)
     )
