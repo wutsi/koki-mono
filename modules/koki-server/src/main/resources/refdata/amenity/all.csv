@@ -4,7 +4,7 @@ id,category,amenity,fr,top
 1002,Basic Essentials,Running Water,Eau courante,0
 1003,Basic Essentials,Hot Water,Eau chaude,0
 1004,Basic Essentials,Water drilling,Forage d'eau,1
-1005,Basic Essentials,Cubitainer,Cubitainer,1
+1005,Basic Essentials,Cubitainer,Cubitenaire,1
 1006,Basic Essentials,Air Conditioning,Climatisation,1
 1007,Basic Essentials,Heating,Chauffage,0
 1008,Basic Essentials,Wi-Fi,Wi-Fi,1
@@ -53,9 +53,9 @@ id,category,amenity,fr,top
 1051,Outdoor & Recreational,Rooftop,Toit-terrasse,1
 1052,Outdoor & Recreational,Balcony,Balcon,1
 1053,Outdoor & Recreational,Mountain view,Vue sur la montage,1
-1054,Outdoor & Recreational,Beach view,Vue sur la plage,1
+1054,Outdoor & Recreational,Beach View,Vue sur la plage,1
 1055,Outdoor & Recreational,Beach Access,Accès à la plage,1
 1056,Outdoor & Recreational,Ocean view,Vue sur l'océan,1
 1057,Outdoor & Recreational,Hiking Trails,Sentiers de randonnée,0
 1058,Safety & Security,Security Cameras,Caméras de sécurité,1
-1059,Safety & Security,Security guard,Gardien de sécurité,1
+1059,Safety & Security,Security Guard,Gardien de sécurité,1

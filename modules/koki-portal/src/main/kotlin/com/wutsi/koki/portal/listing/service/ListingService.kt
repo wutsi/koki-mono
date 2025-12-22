@@ -1,6 +1,7 @@
 package com.wutsi.koki.portal.listing.service
 
 import com.wutsi.koki.listing.dto.CloseListingRequest
+import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
@@ -21,6 +22,7 @@ import com.wutsi.koki.portal.common.model.ResultSetModel
 import com.wutsi.koki.portal.contact.service.ContactService
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.file.service.FileService
+import com.wutsi.koki.portal.listing.form.AIListingForm
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.mapper.ListingMapper
 import com.wutsi.koki.portal.listing.model.ListingModel
@@ -99,7 +101,7 @@ class ListingService(
             ).associateBy { contact -> contact.id }
         }
 
-        val agentUserIds = listOf(listing.buyerAgentUserId, listing.sellerAgentUserId).filterNotNull()
+        val agentUserIds = listOfNotNull(listing.buyerAgentUserId, listing.sellerAgentUserId)
         val agents = if (agentUserIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -236,6 +238,15 @@ class ListingService(
             CreateListingRequest(
                 listingType = form.listingType,
                 propertyType = form.propertyType,
+            )
+        ).listingId
+    }
+
+    fun create(form: AIListingForm): Long {
+        return koki.create(
+            CreateAIListingRequest(
+                text = form.text,
+                cityId = form.cityId,
             )
         ).listingId
     }
