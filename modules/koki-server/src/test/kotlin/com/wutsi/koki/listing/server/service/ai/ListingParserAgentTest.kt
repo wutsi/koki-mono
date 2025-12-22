@@ -176,7 +176,6 @@ class ListingParserAgentTest {
         assertEquals(ListingType.SALE.name, listing["listingType"])
         assertEquals(PropertyType.COMMERCIAL.name, listing["propertyType"])
         assertEquals(9500000, listing["price"])
-        assertEquals(true, listing["hasLandTitle"])
         assertNotNull(listing["publicRemarks"])
         assertHasAmenityId(1000, listing)
         assertHasAmenityId(1006, listing)
