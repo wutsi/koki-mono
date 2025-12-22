@@ -1,6 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.listing.dto.CloseListingRequest
+import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -31,6 +32,11 @@ class KokiListings(
 
     fun create(request: CreateListingRequest): CreateListingResponse {
         val url = urlBuilder.build(PATH_PREFIX)
+        return rest.postForEntity(url, request, CreateListingResponse::class.java).body!!
+    }
+
+    fun create(request: CreateAIListingRequest): CreateListingResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/ai")
         return rest.postForEntity(url, request, CreateListingResponse::class.java).body!!
     }
 
