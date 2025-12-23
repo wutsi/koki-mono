@@ -35,22 +35,23 @@
                             <table class="w-100">
                                 <tr th:if="${agent.totalSalesMetric}">
                                     <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger" th:text="${agent.totalSalesMetric.total}">000</div>
+                                        <div th:text="${agent.totalSalesMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
                                     </td>
                                     <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</div>
-                                        <div class="text-small" th:text="#{page.agent.past-year}">SALES_12</div>
+                                        <div th:text="${agent.past12mSalesMetric.averagePrice.shortText}">000</div>
+                                        <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
+                                        </div>
                                     </td>
                                     <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger"
-                                             th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
+                                        <div
+                                            th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
                                             -
                                             <span th:text="${agent.totalSalesMetric.maxPrice.shortText}">$$</span>
                                         </div>
-                                        <div class="text-larger"
-                                             th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
+                                        <div
+                                            th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
                                         </div>
                                         <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
@@ -58,23 +59,23 @@
                                 </tr>
                                 <tr th:if="${agent.totalRentalsMetric}">
                                     <td class="text-center text-top">
-                                        <div class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</div>
+                                        <div th:text="${agent.totalRentalsMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
                                     </td>
                                     <td class="text-center text-top">
-                                        <div class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000
+                                        <div th:text="${agent.past12mRentalsMetric.averagePrice.shortText}">000</div>
+                                        <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
                                         </div>
-                                        <div class="text-small" th:text="#{page.agent.past-year}">RENTALS_12</div>
                                     </td>
                                     <td class="text-center text-top">
-                                        <div class="text-larger"
-                                             th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
+                                        <div
+                                            th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
                                             -
                                             <span th:text="${agent.totalRentalsMetric.maxPrice.shortText}">$$</span>
                                         </div>
-                                        <div class="text-larger"
-                                             th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
+                                        <div
+                                            th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
                                         </div>
                                         <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
@@ -149,12 +150,11 @@
                     <h2 th:text="#{page.agent.show.listings}">LISTINGS</h2>
                     <div id="map-container">
                         <div data-component-id="map"
-                             data-show-marker="false"
                              id="map"
-                             th:data-city-id="${mapCenterPoint.id}"
-                             th:data-latitude="${mapCenterPoint.geoLocation?.latitude}"
-                             th:data-longitude="${mapCenterPoint.geoLocation?.longitude}"
+                             th:data-latitude="${mapCenterPoint?.latitude}"
+                             th:data-longitude="${mapCenterPoint?.longitude}"
                              th:data-on-ready="on_map_ready"
+                             th:data-show-marker="${mapCenterPoint} ? true : false"
                              th:data-zoom="14"
                         >
                         </div>

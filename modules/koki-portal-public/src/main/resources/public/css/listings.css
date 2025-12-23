@@ -162,7 +162,7 @@
 
 /* ===== LISTING CARD STYLES ===== */
 .listing-card {
-    border-radius: .5em;
+    border-radius: 1em;
     background: white;
 }
 
@@ -190,14 +190,14 @@
     justify-content: center;
     background: #f0f0f0;
     margin-top: -1.5em;
-    border-radius: .5em .5em 0 0;
+    border-radius: 1em 1em 0 0;
 }
 
 .listing-card img.hero-image {
     width: 302px;
     height: 202px;
     object-fit: cover;
-    border-radius: .5em .5em 0 0;
+    border-radius: 1em 1em 0 0;
 }
 
 .listing-card .listing-details {

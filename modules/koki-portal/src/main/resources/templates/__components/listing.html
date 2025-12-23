@@ -52,7 +52,6 @@
     <table class="table">
         <tr class="d-none d-md-table-row">
             <th colspan="2"></th>
-            <th th:if="${sold}" width="1%"></th>
             <th th:text="#{page.listing.status}">STATUS</th>
             <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
             <th class="text-right" th:if="${sold}" th:text="#{page.listing.sale-price}">PRICE</th>
@@ -104,22 +103,20 @@
                 </div>
                 <div class="d-block d-md-none">
                     <div class="flex">
+                        <div>
+                            <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
+                        </div>
+                        <!--
                         <div class="margin-right-small" th:if="${sold} AND ${listing.transactionParty}">
                             <div
                                 th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
                         </div>
-                        <div>
-                            <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
-                        </div>
+                        -->
                     </div>
                 </div>
             </div>
 
             <table border="0" class="d-block d-md-none text-small margin-top-small">
-                <tr th:if="${sold} AND ${listing.soldAt}">
-                    <th th:text="#{page.listing.sold-at}">TRANSACTION_DATE</th>
-                    <td class="padding-left-small" th:text="${listing.soldAtText}">DATE</td>
-                </tr>
                 <tr th:if="${sold} AND ${listing.salePrice}">
                     <th th:text="#{page.listing.sale-price}">TRANSACTION_PRICE</th>
                     <td class="listing-price padding-left-small">
@@ -147,14 +144,12 @@
             </table>
         </a>
     </td>
-    <td class="d-none d-md-table-cell" th:if="${sold}">
-        <a target="_blank" th:href="'/listings/' + ${listing.id}" th:if="${listing.transactionParty}">
-            <div th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
-        </a>
-    </td>
     <td class="d-none d-md-table-cell">
         <a target="_blank" th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
+            <!--
+                <div th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
+            -->
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${showAgent}">

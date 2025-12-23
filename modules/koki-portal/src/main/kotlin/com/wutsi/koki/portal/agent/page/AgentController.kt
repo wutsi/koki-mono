@@ -7,9 +7,8 @@ import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.listing.service.ListingService
-import com.wutsi.koki.portal.refdata.model.LocationModel
+import com.wutsi.koki.portal.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
-import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -104,22 +103,19 @@ class AgentController(
         return jsonMapper.writeValueAsString(markers)
     }
 
-    fun toMapCenterPoint(listings: List<ListingModel>): LocationModel? {
-        val locations =
-            listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
-                .filterNotNull()
-                .filter { location -> location.geoLocation != null }
-                .distinctBy { location -> location.id }
+    fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
+        // Listings by neighborhoods
+        val listingsByNeighborhood = listings
+            .filter { listing -> listing.address?.neighbourhood?.id != null && listing.geoLocation != null }
+            .groupBy { listing -> listing.address?.neighbourhood?.id ?: -1 }
 
-        val locationCount =
-            listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
-                .filterNotNull()
-                .filter { location -> location.geoLocation != null }
-                .groupBy { city -> city.id }
+        // Top neighborhoods having the most listings
+        val topNeighborhoodId = listingsByNeighborhood.keys.maxByOrNull { neighbourhoodId ->
+            listingsByNeighborhood[neighbourhoodId]?.size ?: 0
+        } ?: -1
 
-        val sorted = locations.sortedBy { location -> locationCount[location.id]?.size ?: 0 }
-
-        return sorted.firstOrNull { location -> location.type == LocationType.NEIGHBORHOOD }
-            ?: sorted.firstOrNull()
+        return listings.filter { listing -> listing.geoLocation != null }
+            .find { listing -> listing.address?.neighbourhood?.id == topNeighborhoodId }
+            ?.geoLocation
     }
 }

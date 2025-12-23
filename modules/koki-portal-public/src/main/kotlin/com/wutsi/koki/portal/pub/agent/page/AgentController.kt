@@ -9,8 +9,7 @@ import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
-import com.wutsi.koki.portal.pub.refdata.model.LocationModel
-import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -52,7 +51,7 @@ class AgentController(
 
         val activeListings = loadActiveListings(agent, model)
         val soldListings = findSoldListings(agent)
-        val listings = soldListings + activeListings
+        val listings = activeListings + soldListings
         if (listings.isNotEmpty()) {
             model.addAttribute("listings", listings)
             model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
@@ -130,23 +129,20 @@ class AgentController(
         return jsonMapper.writeValueAsString(markers)
     }
 
-    fun toMapCenterPoint(listings: List<ListingModel>): LocationModel? {
-        val locations =
-            listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
-                .filterNotNull()
-                .filter { location -> location.latitude != null && location.longitude != null }
-                .distinctBy { location -> location.id }
+    fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
+        // Listings by neighborhoods
+        val listingsByNeighborhood = listings
+            .filter { listing -> listing.address?.neighbourhood?.id != null && listing.geoLocation != null }
+            .groupBy { listing -> listing.address?.neighbourhood?.id ?: -1 }
 
-        val locationCount =
-            listings.flatMap { listing -> listOf(listing.address?.city, listing.address?.neighbourhood) }
-                .filterNotNull()
-                .filter { location -> location.latitude != null && location.longitude != null }
-                .groupBy { city -> city.id }
+        // Top neighborhoods having the most listings
+        val topNeighborhoodId = listingsByNeighborhood.keys.maxByOrNull { neighbourhoodId ->
+            listingsByNeighborhood[neighbourhoodId]?.size ?: 0
+        } ?: -1
 
-        val sorted = locations.sortedBy { location -> locationCount[location.id]?.size ?: 0 }
-
-        return sorted.firstOrNull { location -> location.type == LocationType.NEIGHBORHOOD }
-            ?: sorted.firstOrNull()
+        return listings.filter { listing -> listing.geoLocation != null }
+            .find { listing -> listing.address?.neighbourhood?.id == topNeighborhoodId }
+            ?.geoLocation
     }
 
     private fun loadToast(
