@@ -36,18 +36,33 @@
                             <div class="section-item">
                                 <div class="flex">
                                     <a class="btn btn-light btn-sm" href="javascript: get_current_lat_long()">
-                                        <i class="fa-solid fa-location-dot"></i>
                                         <span th:text="#{button.set_current_position}">POSITION</span>
                                     </a>
-                                    <a class="btn btn-light btn-sm margin-left" href="javascript: reset_lat_long()"
+                                    <a class="btn btn-light margin-left-small"
+                                       href="javascript: map_reset_lat_long()"
                                        id="btn-reset-position"
                                        th:data-latitude="${listing.geoLocation?.latitude}"
                                        th:data-longitude="${listing.geoLocation?.longitude}"
-                                       th:if="${listing.geoLocation}"
-                                    >
+                                       th:if="${listing.geoLocation}">
                                         <span th:text="#{button.reset_position}">POSITION</span>
                                     </a>
                                 </div>
+                                <div class="flex margin-top-small">
+                                    <a class="btn btn-light btn-sm"
+                                       href="javascript: open_google_map()"
+                                       id="btn-google-map">
+                                        <i class="fa-solid fa-map"></i>
+                                        <span>Google Map</span>
+                                    </a>
+                                    <a class="btn btn-light btn-sm margin-left-small"
+                                       href="javascript: input_lat_long()"
+                                       id="btn-latlng"
+                                       th:data-text="#{page.listing.edit.geo-location.input}">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span th:text="#{button.lat_lng}">LAT/LONG</span>
+                                    </a>
+                                </div>
+
                                 <div class="margin-top">
                                     <div id="map-container">
                                         <div data-component-id="map"
@@ -94,10 +109,10 @@
     function on_map_click(evt) {
         console.log('on_map_click', evt);
 
-        map_set_marker(evt.latlng.lat, evt.latlng.lng);
+        map_set_marker(evt.latlng.lat, evt.latlng.lng, false);
     }
 
-    function map_set_marker(lat, long) {
+    function map_set_marker(lat, long, flyTo) {
         // Record position
         document.getElementById('latitude').value = lat;
         document.getElementById('longitude').value = long;
@@ -110,13 +125,17 @@
         });
         marker = L.marker([lat, long]);
         map.addLayer(marker);
+
+        if (flyTo) {
+            map.flyTo([lat, long]);
+        }
     }
 
     function get_current_lat_long() {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 console.log('Position fetched', position);
-                map_set_marker(position.coords.latitude, position.coords.longitude);
+                map_set_marker(position.coords.latitude, position.coords.longitude, true);
             }, function (error) {
                 // Handle errors here
                 alert('Unable to fetch the geo-location');
@@ -141,13 +160,42 @@
         }
     }
 
-    function reset_lat_long() {
+    function map_reset_lat_long() {
         const btn = document.getElementById('btn-reset-position');
         const lat = btn.getAttribute('data-latitude');
         const long = btn.getAttribute('data-longitude');
 
-        map_set_marker(lat, long);
+        map_set_marker(lat, long, true);
     }
+
+    function open_google_map() {
+        let lat = document.getElementById('latitude').value;
+        let long = document.getElementById('longitude').value;
+        if (!lat && lat.length === 0 && !long && long.length === 0) { // Fallback to map center point
+            lat = document.getElementById('map').getAttribute('data-latitude');
+            long = document.getElementById('map').getAttribute('data-longitude');
+        }
+
+        const url = lat && lat.length > 0 && long && long.length > 0
+            ? `https://maps.google.com/maps?t=m&q=loc:${lat}+${long}`
+            : "https://maps.google.com"
+
+        window.open(url, '_blank');
+    }
+
+    function input_lat_long() {
+        const text = document.getElementById('btn-latlng').getAttribute('data-text');
+        const latlng = prompt(text);
+        const parts = latlng.split(',');
+        if (parts.length === 2) {
+            const lat = parts[0].trim();
+            const long = parts[1].trim();
+            map_set_marker(lat, long, true);
+        } else {
+            document.error(latlng + ' is not a valid position');
+        }
+    }
+
 </script>
 </body>
 </html>

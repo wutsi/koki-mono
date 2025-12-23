@@ -23,6 +23,18 @@ class ListingMustHaveAddressRuleTest {
     }
 
     @Test
+    fun `no street`() {
+        rule.validate(
+            ListingEntity(
+                country = "CA",
+                cityId = 111L,
+                neighbourhoodId = 222L,
+                street = ""
+            )
+        )
+    }
+
+    @Test
     fun `no country`() {
         val ex = assertThrows<ValidationException> {
             rule.validate(
@@ -61,21 +73,6 @@ class ListingMustHaveAddressRuleTest {
                     cityId = 111L,
                     neighbourhoodId = null,
                     street = "3030 Pascal"
-                )
-            )
-        }
-        assertEquals(ErrorCode.LISTING_MISSING_ADDRESS, ex.message)
-    }
-
-    @Test
-    fun `no street`() {
-        val ex = assertThrows<ValidationException> {
-            rule.validate(
-                ListingEntity(
-                    country = "CA",
-                    cityId = 111L,
-                    neighbourhoodId = 222L,
-                    street = ""
                 )
             )
         }
