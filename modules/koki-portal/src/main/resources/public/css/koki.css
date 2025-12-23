@@ -600,7 +600,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .user-photo {
     width: 64px;
     height: 64px;
-    border-radius: 1em;
+    border-radius: 50%;
 }
 
 .user-photo-empty {
@@ -611,7 +611,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .user-photo-small {
     width: 32px;
     height: 32px;
-    border-radius: .5em;
+    border-radius: 50%;
 }
 
 /* ============================= */
@@ -621,7 +621,6 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border-radius: 1em;
 }
 
-x
 .border {
     border: 1px solid gray !important;
 }

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.refdata.mapper
 
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
+import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.refdata.dto.Location
 import org.springframework.stereotype.Service
@@ -15,9 +16,19 @@ class LocationMapper : TenantAwareMapper() {
             parentId = entity.parentId,
             type = entity.type,
             country = entity.country,
-            longitude = entity.longitude,
-            latitude = entity.latitude,
+            geoLocation = toGeoLocationModel(entity),
             url = StringUtils.toSlug("/l/${entity.id}", entity.name)
         )
+    }
+
+    private fun toGeoLocationModel(entity: Location): GeoLocationModel? {
+        return if (entity.latitude != null && entity.longitude != null) {
+            GeoLocationModel(
+                latitude = entity.latitude!!,
+                longitude = entity.longitude!!,
+            )
+        } else {
+            null
+        }
     }
 }

@@ -133,12 +133,11 @@
             <div th:replace="~{__components/listing :: listing-carousel(${activeListings})}"></div>
             <div class="margin-top-2x" id="map-container">
                 <div data-component-id="map"
-                     data-show-marker="false"
                      id="map"
-                     th:data-city-id="${mapCenterPoint.id}"
-                     th:data-latitude="${mapCenterPoint.latitude}"
-                     th:data-longitude="${mapCenterPoint.longitude}"
+                     th:data-latitude="${mapCenterPoint?.latitude}"
+                     th:data-longitude="${mapCenterPoint?.longitude}"
                      th:data-on-ready="on_map_ready"
+                     th:data-show-marker="${mapCenterPoint} ? true : false"
                      th:data-zoom="14"
                 >
                 </div>
