@@ -11,6 +11,10 @@
     margin-bottom: 10em;
 }
 
+.agent-info-details h1 {
+    margin-bottom: 0;
+}
+
 .agent-info a img {
     text-decoration: none;
 }
@@ -87,6 +91,10 @@
 @media only screen and (max-width: 768px) and (orientation: portrait) {
     .agent-info-container {
         display: block;
+    }
+
+    .agent-info-details {
+        width: 100%;
     }
 
     #map-container #map {

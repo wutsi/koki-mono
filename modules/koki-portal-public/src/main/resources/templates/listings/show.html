@@ -175,11 +175,11 @@
              th:if="${listing.furnitureType} OR !${listing.amenities.isEmpty()}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="flex flex-wrap">
-                <div class="col-12 col-lg-4 col-md-6" th:if="${listing.furnitureType.name() == 'FULLY_FURNISHED'}">
+                <div class="col-12 col-lg-4 col-md-6" th:if="${listing.furnitureType?.name() == 'FULLY_FURNISHED'}">
                     <i class="fa-solid fa-couch"></i>
                     <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 " th:if="${listing.furnitureType.name() == 'SEMI_FURNISHED'}">
+                <div class="col-12 col-lg-4 col-md-6 " th:if="${listing.furnitureType?.name() == 'SEMI_FURNISHED'}">
                     <i class="fa-solid fa-chair"></i>
                     <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
                 </div>

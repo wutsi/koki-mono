@@ -12,8 +12,8 @@
     <div class="agent-info-details">
         <div class="margin-top">&nbsp;</div>
 
-        <!-- PICTURE + PKI -->
-        <div class="flex flex-wrap">
+        <!-- PICTURE -->
+        <div class="flex">
             <img class="user-photo"
                  th:alt="${agent.user.displayName}"
                  th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"
@@ -22,56 +22,6 @@
                 <h1 th:text="${agent.user.displayName}">NAME</h1>
                 <div th:text="${agent.user.employer}">EMPLOYER</div>
                 <div class="text-small gray" th:if="${agent.user.city}" th:text="${agent.user.city.name}">CITY</div>
-            </div>
-            <div class="margin-left flex-grow">
-                <table class="w-100">
-                    <tr th:if="${agent.totalSalesMetric}">
-                        <td class="text-center padding-bottom">
-                            <b class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</b>
-                            <div class="text-small" th:text="#{page.agent.sales_py}">SALES_12</div>
-                        </td>
-                        <td class="text-center padding-bottom">
-                            <b class="text-larger" th:text="${agent.totalSalesMetric.total}">000</b>
-                            <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
-                        </td>
-                        <td class="text-center padding-bottom">
-                            <div class="text-larger"
-                                 th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
-                                <b th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</b>
-                                -
-                                <b th:text="${agent.totalSalesMetric.maxPrice.shortText}">$$</b>
-                            </div>
-                            <div class="text-larger"
-                                 th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
-                                <b th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</b>
-                            </div>
-                            <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
-                        </td>
-                    </tr>
-                    <tr th:if="${agent.totalRentalsMetric}">
-                        <td class="text-center">
-                            <b class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000</b>
-                            <div class="text-small" th:text="#{page.agent.rentals_py}">RENTALS_12</div>
-                        </td>
-                        <td class="text-center">
-                            <b class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</b>
-                            <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
-                        </td>
-                        <td class="text-center">
-                            <div class="text-larger"
-                                 th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
-                                <b th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</b>
-                                -
-                                <b th:text="${agent.totalRentalsMetric.maxPrice.shortText}">$$</b>
-                            </div>
-                            <div class="text-larger"
-                                 th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
-                                <b th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</b>
-                            </div>
-                            <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
 
@@ -123,13 +73,64 @@
             </div>
         </div>
 
+        <!-- METRICS -->
+        <div class="margin-top" th:if="${agent.totalSalesMetric} OR ${agent.totalRentalsMetric}">
+            <hr/>
+            <table class="w-100">
+                <tr th:if="${agent.totalSalesMetric}">
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${agent.totalSalesMetric.total}">000</b>
+                        <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</b>
+                        <div class="text-small" th:text="#{page.agent.past-year}">SALES_12</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <div class="text-larger"
+                             th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
+                            <b th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</b>
+                            -
+                            <b th:text="${agent.totalSalesMetric.maxPrice.shortText}">$$</b>
+                        </div>
+                        <div class="text-larger"
+                             th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
+                            <b th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</b>
+                        </div>
+                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
+                    </td>
+                </tr>
+                <tr th:if="${agent.totalRentalsMetric}">
+                    <td class="text-center text-top">
+                        <b class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</b>
+                        <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
+                    </td>
+                    <td class="text-center text-top">
+                        <b class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000</b>
+                        <div class="text-small" th:text="#{page.agent.past-year}">RENTALS_12</div>
+                    </td>
+                    <td class="text-center text-top">
+                        <div class="text-larger"
+                             th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
+                            <b th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</b>
+                            -
+                            <b th:text="${agent.totalRentalsMetric.maxPrice.shortText}">$$</b>
+                        </div>
+                        <div class="text-larger"
+                             th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
+                            <b th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</b>
+                        </div>
+                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <!-- ACTIVE LISTINGS -->
-        <div class="row" th:if="${activeListings}">
-            <div>
-                <hr/>
-                <h2 th:text="#{page.agent.show.listings(${agent.user.firstName})}">ACTIVE</h2>
-                <div th:replace="~{__components/listing :: listing-carousel(${activeListings})}"></div>
-            </div>
+        <div class="margin-top" th:if="${activeListings}">
+            <hr/>
+            <h2 th:text="#{page.agent.show.listings(${agent.user.firstName})}">ACTIVE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${activeListings})}"></div>
             <div class="margin-top-2x" id="map-container">
                 <div data-component-id="map"
                      data-show-marker="false"

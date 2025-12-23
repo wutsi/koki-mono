@@ -78,6 +78,10 @@ b, strong {
     text-align: right;
 }
 
+.text-top {
+    vertical-align: top;
+}
+
 .text-small {
     font-size: small;
 }

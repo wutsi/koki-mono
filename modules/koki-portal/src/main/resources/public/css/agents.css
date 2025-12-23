@@ -78,6 +78,10 @@
         width: 100%;
         height: 300px;
     }
+
+    .agent-metrics {
+        margin-top: 1em;
+    }
 }
 
 

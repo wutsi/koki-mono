@@ -31,18 +31,18 @@
                                  th:text="${agent.user.city.name}">CITY
                             </div>
                         </div>
-                        <div class="flex-grow">
+                        <div class="flex-grow agent-metrics">
                             <table class="w-100">
                                 <tr th:if="${agent.totalSalesMetric}">
-                                    <td class="text-center padding-bottom">
-                                        <div class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</div>
-                                        <div class="text-small" th:text="#{page.agent.sales_py}">SALES_12</div>
-                                    </td>
-                                    <td class="text-center padding-bottom">
+                                    <td class="text-center text-top padding-bottom">
                                         <div class="text-larger" th:text="${agent.totalSalesMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
                                     </td>
-                                    <td class="text-center padding-bottom">
+                                    <td class="text-center text-top padding-bottom">
+                                        <div class="text-larger" th:text="${agent.past12mSalesMetric.total}">000</div>
+                                        <div class="text-small" th:text="#{page.agent.past-year}">SALES_12</div>
+                                    </td>
+                                    <td class="text-center text-top padding-bottom">
                                         <div class="text-larger"
                                              th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
@@ -57,16 +57,16 @@
                                     </td>
                                 </tr>
                                 <tr th:if="${agent.totalRentalsMetric}">
-                                    <td class="text-center">
-                                        <div class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000
-                                        </div>
-                                        <div class="text-small" th:text="#{page.agent.rentals_py}">RENTALS_12</div>
-                                    </td>
-                                    <td class="text-center">
+                                    <td class="text-center text-top">
                                         <div class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center text-top">
+                                        <div class="text-larger" th:text="${agent.past12mRentalsMetric.total}">000
+                                        </div>
+                                        <div class="text-small" th:text="#{page.agent.past-year}">RENTALS_12</div>
+                                    </td>
+                                    <td class="text-center text-top">
                                         <div class="text-larger"
                                              th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
                                             <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>

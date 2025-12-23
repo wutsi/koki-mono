@@ -28,7 +28,8 @@
 
                     <hr/>
 
-                    <div data-component-id="ajax-fragment"
+                    <div data-callback="on_details_loaded" data-component-id="ajax-fragment"
+                         id="listing-details-container"
                          th:data-url="'/listings/tab/details?id=' + ${listing.id} "></div>
                 </div>
             </div>
@@ -77,6 +78,11 @@
         const elt = document.getElementById("chk-confirm");
         const btn = document.getElementById('btn-publish');
         btn.disabled = !elt.checked;
+    }
+
+    function on_details_loaded() {
+        console.log('on_details_loaded()');
+        koki.w.map.init(); // Initialize the map
     }
 </script>
 
