@@ -6,6 +6,7 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.tenant.dto.GetUserResponse
 import com.wutsi.koki.tenant.dto.UserStatus
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -36,6 +37,8 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(10, user.roleIds[0])
         assertEquals(11, user.roleIds[1])
         assertEquals(12, user.roleIds[2])
+
+        assertNotNull(user.profileStrength)
     }
 
     @Test
