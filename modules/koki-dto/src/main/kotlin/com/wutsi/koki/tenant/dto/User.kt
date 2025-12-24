@@ -25,6 +25,7 @@ data class User(
     val twitterUrl: String? = null,
     val youtubeUrl: String? = null,
     val tiktokUrl: String? = null,
+    val profileStrength: ProfileStrength? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
 )
