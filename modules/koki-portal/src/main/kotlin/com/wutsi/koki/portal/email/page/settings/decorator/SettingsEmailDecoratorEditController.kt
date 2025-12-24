@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(["email:admin"])
@@ -41,7 +41,7 @@ class SettingsEmailDecoratorEditController(
         try {
             service.save(form)
             return "redirect:/settings/email/decorator?_toast=1&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(form, model)

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -64,7 +64,7 @@ class CreateOfferController(
         try {
             val id = offerService.create(form)
             return "redirect:/offers/create/done?id=$id"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return create(form, model)
         }

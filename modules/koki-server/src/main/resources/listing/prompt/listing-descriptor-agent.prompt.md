@@ -58,12 +58,14 @@ Property Information:
 - Type of property: {{propertyType}}
 - Bedrooms: {{bedrooms}}
 - Bathrooms: {{bathrooms}}
+- Lot area: {{lotArea}}
+- Property area: {{propertyArea}}
 - Furnished: {{furnished}}
 - Country code: {{country}}
 - Street: {{street}}
 - City: {{city}}
 - Neighbourhood: {{neighbourhood}}
-- Lot area: {{lotArea}}
+- Additional information: {{additionalInfo}}
 - Amenities: {{amenities}}
 
 Images Description:

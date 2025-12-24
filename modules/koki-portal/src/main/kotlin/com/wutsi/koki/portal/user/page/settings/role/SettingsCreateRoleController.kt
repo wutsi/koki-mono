@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/settings/roles")
@@ -45,7 +45,7 @@ class SettingsCreateRoleController(
         try {
             val roleId = service.create(form)
             return "redirect:/settings/roles?_toast=$roleId&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
             return create(form, model)

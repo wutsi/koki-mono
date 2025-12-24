@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.common.page
 
+import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
@@ -21,7 +22,7 @@ import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientResponseException
 import tools.jackson.databind.json.JsonMapper
 import java.util.Locale
 
@@ -75,8 +76,17 @@ abstract class AbstractPageController {
         return togglesHolder.get()
     }
 
-    protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
-        return jsonMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+    protected fun toErrorResponse(ex: Throwable): ErrorResponse {
+        if (ex is RestClientResponseException) {
+            return jsonMapper.readValue(ex.responseBodyAsString, ErrorResponse::class.java)
+        } else {
+            return ErrorResponse(
+                error = Error(
+                    code = ErrorCode.HTTP_INTERNAL,
+                    message = ex.message,
+                )
+            )
+        }
     }
 
     protected fun canShowToasts(
@@ -156,7 +166,7 @@ abstract class AbstractPageController {
         return city?.parentId?.let { id -> locationService.get(id) }
     }
 
-    protected fun loadError(ex: HttpClientErrorException, model: Model) {
+    protected fun loadError(ex: Throwable, model: Model) {
         val response = toErrorResponse(ex)
         logger.add("backend_error", response.error.code)
         loadError(response, model)

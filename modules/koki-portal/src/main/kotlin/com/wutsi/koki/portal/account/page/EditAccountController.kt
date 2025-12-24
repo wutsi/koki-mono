@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(permissions = ["account:manage", "account:full_access"])
@@ -118,14 +119,12 @@ class EditAccountController(
             service.update(
                 id,
                 form.copy(
-                    attributes = attributes
-                        .map { attr -> attr.id to request.getParameter("attribute-${attr.id}") }
-                        .toMap()
+                    attributes = attributes.associate { attr -> attr.id to request.getParameter("attribute-${attr.id}") }
                 )
             )
 
             return "redirect:/accounts/$id?_toast=$id&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(model, form, account)

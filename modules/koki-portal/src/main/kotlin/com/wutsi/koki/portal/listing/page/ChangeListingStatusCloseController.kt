@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/listings/status/close")
@@ -45,7 +45,7 @@ class ChangeListingStatusCloseController : AbstractEditListingController() {
         try {
             listingService.close(form)
             return "redirect:/listings/status/done?id=${form.id}"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return close(form, model, null)
         }

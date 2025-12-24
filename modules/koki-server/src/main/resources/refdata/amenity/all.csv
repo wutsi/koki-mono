@@ -63,8 +63,8 @@ id,category,amenity,fr,top
 1630,Outdoor & Recreational,Gym,Salle de sport,1
 1631,Outdoor & Recreational,Outbuilding,Dépendance,1
 1130,Basic Essentials,Generator set,Groupe électrogène,1
-1131,Basic Essentials,Elevator,Ascenseur,1
+1131,Basic Essentials,Elevator,Ascenseur,0
 1230,Kitchen & Dining,American kitchen,Cuisine americaine,1
-1730,Safety & Security,Video Intercom,Interphone vidéo, 0
+1730,Safety & Security,Video Intercom,Interphone vidéo, 1
 1731,Safety & Security,Alarm System,Système d'alarme, 1
-1732,Safety & Security,Concierge,Conciergerie, 0
+1732,Safety & Security,Concierge,Conciergerie, 1

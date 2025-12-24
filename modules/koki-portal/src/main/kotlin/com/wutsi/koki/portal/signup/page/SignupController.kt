@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import java.nio.charset.Charset
 
 @Controller
@@ -62,7 +63,7 @@ class SignupController(private val invitationService: InvitationService) : Abstr
         try {
             val id = signupService.create(form)
             return "redirect:/signup/profile?id=$id"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return index(form, model)
         }

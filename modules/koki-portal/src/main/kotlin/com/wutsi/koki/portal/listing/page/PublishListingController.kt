@@ -3,7 +3,6 @@ package com.wutsi.koki.portal.listing.page
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/listings/publish")
@@ -38,7 +37,7 @@ class PublishListingController : AbstractEditListingController() {
         try {
             listingService.publish(form.id)
             return "redirect:/listings/publish/done?id=${form.id}"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return publish(form.id, model)
         }

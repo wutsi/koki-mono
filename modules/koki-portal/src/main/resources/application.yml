@@ -55,7 +55,7 @@ koki:
         asset-url: ""
     rest:
         connection-timeout: 15000
-        read-timeout: 15000
+        read-timeout: 30000
     sdk:
         base-url: http://localhost:8080
     toggles:

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import java.io.IOException
 
 @Controller
@@ -68,7 +68,7 @@ class SettingsSMTPEditController(
             LOGGER.error("Bad SMTP configuration", ex)
             model.addAttribute("error", ErrorCode.EMAIL_INVALID_SMTP_CONFIGURATION)
             return edit(form, model)
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(form, model)

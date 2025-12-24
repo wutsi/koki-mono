@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/forgot/username")
@@ -43,7 +43,7 @@ class ForgotUsernameController(
             service.sendUsername(form)
             val encodedEmail = Base64().encodeAsString(form.email.toByteArray())
             return "redirect:/forgot/username/done?e=$encodedEmail"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return index(form, model)
         }
