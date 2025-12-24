@@ -70,6 +70,13 @@ object ListingFixtures {
             RefDataFixtures.amenities[1].id,
             RefDataFixtures.amenities[2].id,
             RefDataFixtures.amenities[3].id,
+            RefDataFixtures.amenities[4].id,
+            RefDataFixtures.amenities[5].id,
+            RefDataFixtures.amenities[6].id,
+            RefDataFixtures.amenities[7].id,
+            RefDataFixtures.amenities[8].id,
+            RefDataFixtures.amenities[9].id,
+            RefDataFixtures.amenities[10].id,
         ),
 
         address = Address(

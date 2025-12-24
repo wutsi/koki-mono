@@ -5,7 +5,6 @@ import com.wutsi.koki.refdata.dto.Category
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.dto.Location
 import com.wutsi.koki.refdata.dto.LocationType
-import kotlin.collections.flatMap
 
 object RefDataFixtures {
     // Location
@@ -158,25 +157,25 @@ object RefDataFixtures {
             ),
             Amenity(
                 id = amenityIdCounter++,
-                categoryId = categories[1].id,
+                categoryId = category.id,
                 name = "Ocean view",
                 top = false
             ),
             Amenity(
                 id = amenityIdCounter++,
-                categoryId = categories[1].id,
+                categoryId = category.id,
                 name = "Beach access",
                 top = true
             ),
             Amenity(
                 id = amenityIdCounter++,
-                categoryId = categories[2].id,
+                categoryId = category.id,
                 name = "Security Guard",
                 top = true
             ),
             Amenity(
                 id = amenityIdCounter++,
-                categoryId = categories[2].id,
+                categoryId = category.id,
                 name = "Camera",
                 top = false
             ),
