@@ -3,10 +3,13 @@ package com.wutsi.koki.tenant.server.mapper
 import com.wutsi.koki.tenant.dto.User
 import com.wutsi.koki.tenant.dto.UserSummary
 import com.wutsi.koki.tenant.server.domain.UserEntity
+import com.wutsi.koki.tenant.server.service.ProfileStrengthCalculator
 import org.springframework.stereotype.Service
 
 @Service
-class UserMapper {
+class UserMapper(
+    private val profileStrengthCalculator: ProfileStrengthCalculator,
+) {
     fun toUser(entity: UserEntity) = User(
         id = entity.id!!,
         deviceId = entity.deviceId,
@@ -32,6 +35,7 @@ class UserMapper {
         biography = entity.biography?.ifEmpty { null },
         youtubeUrl = entity.youtubeUrl?.ifEmpty { null },
         tiktokUrl = entity.tiktokUrl?.ifEmpty { null },
+        profileStrength = profileStrengthCalculator.calculate(entity),
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(
