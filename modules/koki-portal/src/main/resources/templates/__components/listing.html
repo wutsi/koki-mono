@@ -293,17 +293,21 @@
     <div class="listing-details padding-small">
         <a target="_new" th:href="'/listings/' + ${listing.id}">
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
-            <b class="listing-price" th:if="${listing.statusSold}"
-               th:text="${listing.salePrice.displayText}">$$$</b>
+            <b class="listing-price" th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$</b>
+
             <div class="text-small">
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
+
             <div class="text-small address" th:if="${listing.address}" th:text="${listing.address?.street}">STREET</div>
+            <div class="text-small address" th:if="!${listing.address}">&nbsp;</div>
+
             <div class="text-small" th:if="${listing.address}">
                 <span th:text="${listing.address?.neighbourhood?.name}">XXX</span>
                 <span>-</span>
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
+            
             <div class="margin-top-small" th:if="${listing.sellerAgentUser}">
                 <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
             </div>
