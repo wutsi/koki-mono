@@ -175,9 +175,10 @@ abstract class AbstractPageController {
             ErrorCode.INVITATION_ALREADY_INVITED -> getMessage("error.invitation-already-invited")
             ErrorCode.INVITATION_ALREADY_USER -> getMessage("error.invitation-already-user")
 
+            ErrorCode.LISTING_IMAGE_UNDER_REVIEW -> getMessage("error.listing-image-under-review")
             ErrorCode.LISTING_INVALID_TEXT -> getMessage("error.listing-invalid-text")
             ErrorCode.LISTING_MISSING_ADDRESS -> getMessage("error.listing-missing-address")
-            ErrorCode.LISTING_MISSING_APPROVED_IMAGE -> getMessage("error.listing-missing-approved-image")
+            ErrorCode.LISTING_MISSING_APPROVED_IMAGE -> getMessage("error.listing-missing-image")
             ErrorCode.LISTING_MISSING_GEOLOCATION -> getMessage("error.listing-missing-geolocation")
             ErrorCode.LISTING_MISSING_PRICE -> getMessage("error.listing-missing-price")
             ErrorCode.LISTING_MISSING_SELLER -> getMessage("error.listing-missing-seller")

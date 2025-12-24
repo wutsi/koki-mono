@@ -436,7 +436,7 @@ class ListingService(
                 listingType = request.listingType,
                 propertyType = request.propertyType,
                 bedrooms = request.bedrooms,
-                bathrooms = request.bedrooms,
+                bathrooms = request.bathrooms,
                 halfBathrooms = request.halfBathrooms,
                 floors = request.floors,
                 basementType = request.basementType,
@@ -474,6 +474,7 @@ class ListingService(
 
                 publicRemarks = request.publicRemarks,
 
+                furnitureType = request.furnitureType,
                 amenities = if (request.amenityIds.isNotEmpty()) {
                     amenityService.search(
                         ids = request.amenityIds,
