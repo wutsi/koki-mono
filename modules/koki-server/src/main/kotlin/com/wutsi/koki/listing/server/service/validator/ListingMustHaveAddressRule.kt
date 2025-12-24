@@ -10,8 +10,7 @@ class ListingMustHaveAddressRule : ListingPublishRule {
         if (
             listing.country.isNullOrEmpty() ||
             listing.cityId == null ||
-            listing.neighbourhoodId == null ||
-            listing.street.isNullOrEmpty()
+            listing.neighbourhoodId == null
         ) {
             throw ValidationException(ErrorCode.LISTING_MISSING_ADDRESS)
         }
