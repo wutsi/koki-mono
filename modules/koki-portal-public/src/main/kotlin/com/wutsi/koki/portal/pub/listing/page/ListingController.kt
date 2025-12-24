@@ -61,8 +61,12 @@ class ListingController(
         model.addAttribute("categories", categories)
 
         /* Top Amenities */
-        val topAmenities = listing.amenities.filter { amenity -> amenity.top }.toMutableList()
-        model.addAttribute("topAmenities", topAmenities)
+        if (listing.amenities.size > 9) {
+            val topAmenities = listing.amenities.filter { amenity -> amenity.top }.toMutableList()
+            model.addAttribute("topAmenities", topAmenities)
+        } else {
+            model.addAttribute("topAmenities", listing.amenities)
+        }
 
         /* Images */
         val heroImages = listing.images
