@@ -1,5 +1,6 @@
 package com.wutsi.koki.listing.server.service
 
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.server.domain.ListingEntity
@@ -103,10 +104,14 @@ class ListingSimilarityService(
             reference.neighbourhoodId?.let { locationIds.add(it) }
         }
 
+        // Furniture types
+        val furnitureTypes = determineFurnitureTypes(reference)
+
         // Use ListingService.search() with all calculated parameters
         return listingService.search(
             tenantId = tenantId,
             propertyTypes = propertyTypes,
+            furnitureTypes = furnitureTypes,
             statuses = statuses,
             minBedrooms = minBedrooms,
             maxBedrooms = maxBedrooms,
@@ -119,6 +124,18 @@ class ListingSimilarityService(
             limit = 200, // Get more candidates for scoring
             offset = 0
         )
+    }
+
+    /**
+     * Determine the furniture types to search for based on the reference listing.
+     */
+    private fun determineFurnitureTypes(reference: ListingEntity): List<FurnitureType> {
+        val refFurnitureType = reference.furnitureType
+        return when (refFurnitureType) {
+            FurnitureType.FULLY_FURNISHED -> listOf(FurnitureType.FULLY_FURNISHED)
+            FurnitureType.SEMI_FURNISHED -> listOf(FurnitureType.SEMI_FURNISHED, FurnitureType.SEMI_FURNISHED)
+            else -> emptyList()
+        }
     }
 
     /**

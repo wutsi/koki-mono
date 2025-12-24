@@ -166,7 +166,7 @@ class ListingService(
         }
 
         // ORDER BY
-        when (sortBy) {
+        val orderBy = when (sortBy) {
             ListingSort.NEWEST -> "ORDER BY L.publishedAt DESC, L.createdAt DESC"
             ListingSort.OLDEST -> "ORDER BY L.publishedAt ASC, L.createdAt ASC"
             ListingSort.PRICE_HIGH_LOW -> "ORDER BY L.price DESC"
@@ -175,6 +175,7 @@ class ListingService(
             ListingSort.MODIFIED_DATE -> "ORDER BY L.modifiedAt DESC"
             else -> "ORDER BY L.price ASC"
         }
+        jql.append(" $orderBy")
 
         // PARAMETERS
         val query = em.createQuery(jql.toString(), ListingEntity::class.java)

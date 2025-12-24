@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.listing.page
 
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.refdata.dto.CategoryType
@@ -102,11 +103,7 @@ class ListingController(
         @RequestParam id: Long,
         model: Model,
     ): String {
-        val listings = service.getSimilar(
-            id,
-            sameNeighborhood = true,
-            limit = 10,
-        )
+        val listings = findSimilarListings(id, 10)
         if (listings.isNotEmpty()) {
             model.addAttribute("listings", listings)
 
@@ -115,6 +112,27 @@ class ListingController(
             model.addAttribute("neighborhood", neighborhood)
         }
         return "listings/show-similar"
+    }
+
+    private fun findSimilarListings(id: Long, limit: Int): List<ListingModel> {
+        // Get similar listing from neighborhood
+        val neighborhood = service.getSimilar(
+            id,
+            sameNeighborhood = true,
+            limit = limit,
+        )
+        if (neighborhood.size >= limit) {
+            return neighborhood
+        }
+
+        // Supplement with city similar listings
+        val excludeIds = neighborhood.map { listing -> listing.id }.toMutableSet()
+        val city = service.getSimilar(
+            id,
+            sameCity = true,
+            limit = 2 * limit,
+        )
+        return neighborhood + city.filter { listing -> !excludeIds.contains(listing.id) }
     }
 
     private fun loadToast(
