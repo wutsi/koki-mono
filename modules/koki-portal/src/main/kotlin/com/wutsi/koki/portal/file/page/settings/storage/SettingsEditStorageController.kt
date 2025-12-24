@@ -17,7 +17,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(["file:admin"])
@@ -92,7 +92,7 @@ class SettingsEditStorageController(
             LOGGER.error("Bad S3 configuration", ex)
             model.addAttribute("error", ErrorCode.FILE_INVALID_S3_CONFIGURATION)
             return edit(form, model)
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(form, model)

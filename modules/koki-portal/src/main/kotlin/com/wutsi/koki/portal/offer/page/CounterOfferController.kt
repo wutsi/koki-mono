@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/offers/counter")
@@ -64,7 +65,7 @@ class CounterOfferController : AbstractEditOfferController() {
         try {
             offerVersionService.create(form)
             return "redirect:/offers/counter/done?id=${form.id}"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return counter(form, model, null)
         }

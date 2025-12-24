@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/settings/users")
@@ -68,7 +68,7 @@ class SettingsEditUserController(
         try {
             service.update(id, form)
             return "redirect:/settings/users/$id?_toast=$id&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
             return edit(UserModel(id = id), form, model)

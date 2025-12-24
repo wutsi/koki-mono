@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(["contact:manage", "contact:full_access"])
@@ -115,7 +116,7 @@ class EditContactController(
         try {
             service.update(id, form)
             return "redirect:/contacts/$id?_toast=$id&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return edit(contact, form, model)

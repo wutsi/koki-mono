@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(["contact", "contact:full_access"])
@@ -59,7 +60,7 @@ class ContactController : AbstractContactDetailsController() {
         try {
             contactService.delete(id)
             return "redirect:/contacts?_op=del&_toast=$id&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return show(contact, model)

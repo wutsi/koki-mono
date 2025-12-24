@@ -15,7 +15,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequiresPermission(permissions = ["account:manage", "account:full_access"])
@@ -81,14 +81,12 @@ class CreateAccountController(
             )
             val accountId = service.create(
                 form.copy(
-                    attributes = attributes
-                        .map { attr -> attr.id to request.getParameter("attribute-${attr.id}") }
-                        .toMap()
+                    attributes = attributes.associate { attr -> attr.id to request.getParameter("attribute-${attr.id}") }
                 )
             )
 
             return "redirect:/accounts?_toast=$accountId&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", errorResponse.error.code)
             return create(model, form)

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -76,7 +77,7 @@ class ChangeOfferStatusController : AbstractEditOfferController() {
         try {
             offerService.updateStatus(form)
             return "redirect:/offers/status/done?id=${form.id}"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return status(form, model)
         }

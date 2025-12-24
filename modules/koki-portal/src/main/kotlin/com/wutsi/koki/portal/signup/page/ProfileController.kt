@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import java.util.Locale
 
 @Controller
@@ -60,7 +60,7 @@ class ProfileController(
         try {
             signupService.updateProfile(form)
             return "redirect:/signup/photo?id=${form.id}"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return index(form, model, null)
         }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/settings/users")
@@ -58,7 +58,7 @@ class SettingsCreateUserController(
         try {
             val userId = service.create(form)
             return "redirect:/settings/users?_toast=$userId&_ts=" + System.currentTimeMillis()
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val response = toErrorResponse(ex)
             model.addAttribute("error", response.error.code)
             return create(form, model)

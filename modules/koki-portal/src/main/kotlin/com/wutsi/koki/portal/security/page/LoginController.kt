@@ -13,7 +13,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 class LoginController(
@@ -47,7 +47,7 @@ class LoginController(
             } else {
                 return "redirect:/"
             }
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val response = toErrorResponse(ex)
             if (response.error.code == ErrorCode.AUTHENTICATION_USER_NOT_ACTIVE) {
                 model.addAttribute("error", getMessage("error.account-not-active"))

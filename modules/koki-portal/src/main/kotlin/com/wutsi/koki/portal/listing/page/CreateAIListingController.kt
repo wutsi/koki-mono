@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/listings/create/ai")
@@ -39,7 +39,7 @@ class CreateAIListingController : AbstractListingController() {
         try {
             val id = listingService.create(form)
             return "redirect:/listings/$id"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", toErrorMessage(errorResponse))
             return create(form, model)

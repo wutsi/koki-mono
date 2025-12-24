@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Controller
 @RequestMapping("/forgot/password/reset")
@@ -38,7 +38,7 @@ class ResetPasswordController(private val service: ForgotService) : AbstractPage
         try {
             service.resetPassword(form)
             return "redirect:/forgot/password/reset/done"
-        } catch (ex: HttpClientErrorException) {
+        } catch (ex: RestClientException) {
             loadError(ex, model)
             return index(form, model)
         }

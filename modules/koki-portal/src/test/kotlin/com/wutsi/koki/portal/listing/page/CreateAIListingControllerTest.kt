@@ -6,11 +6,11 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.portal.AbstractPageControllerTest
 import com.wutsi.koki.portal.common.page.PageName
+import org.springframework.web.client.RestClientException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -39,7 +39,7 @@ class CreateAIListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun error() {
-        doThrow(createHttpClientErrorException(409, ErrorCode.LISTING_INVALID_TEXT))
+        doThrow(RestClientException("Failed"))
             .whenever(rest)
             .postForEntity(
                 eq("$sdkBaseUrl/v1/listings/ai"),
