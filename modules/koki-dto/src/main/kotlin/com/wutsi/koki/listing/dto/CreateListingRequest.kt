@@ -41,5 +41,6 @@ data class CreateListingRequest(
 
     val publicRemarks: String? = null,
 
+    val furnitureType: FurnitureType? = null,
     val amenityIds: List<Long> = emptyList(),
 )
