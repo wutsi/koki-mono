@@ -39,13 +39,16 @@ The listing information must be structured in the following JSON format:
 - distanceFromMainRoad: Distance from the main road in meters (integer)
 - roadPavement: Type of road pavement. Values can be ASPHALT, CONCRETE, COBBLESTONE, GRAVEL, DIRT
 - amenityIds: IDs of the amenities (array of integers)
+- amenityReason: Explain the decision you made to select those amenities (string)
 - street: Address - Name of the street
-- neighbourhood: Address - Name of the district/neighborhood
+- neighbourhood: Address - Name of the district or neighborhood
 - city: Address - Name of the city
 - country: Address - 2 letter country code
-- phone: Agent phone number
+- phone: Agent phone number in E.164 format (string)
 - hasLandTitle: true if the land has a title, false otherwise (boolean)
-- publicRemarks: Any additional remarks about the property that was not captured in other fields
+- publicRemarks: Any additional remarks about the property that was not captured in other fields. Keep it under 1000
+  characters, in the same language as the input.
+- commission: Commission percentage compared to price (float). Only include if explicitly mentioned.
 
 # Amenities IDs Reference
 
@@ -58,23 +61,19 @@ id,name
 
 - Assume that the property is located in {{city}} unless specified otherwise
 - Consider all fields are optional, including price, except those marked as REQUIRED
-- Never include in the result JSON null or empty fields
-- If an integer field is not provided, do not include it in the result JSON
-- If an enumerated field is not provided or does not match the expected values, do not include it in the result JSON
 - The furnitureType field should be determined based on the description of the property:
     - If the description include specifically "fully furnished" or similar, set it to FULLY_FURNISHED
     - If the description include specifically "semi furnished" or similar, set it to SEMI_FURNISHED
-    - If the description include specifically "unfurnished" or similar, ignore furnitureType field
-    - It the description indicate that the property is equipped with all essential furniture (beds, sofas,
-      tables), major appliances (fridge, stove, microwave, washer/dryer), and often kitchenware, linens, and decor, set
-      it to FULLY_FURNISHED.
-    - If the description indicate the property is equipped only with any major kitchen appliances (fridge, stove,
-      sometimes dishwasher), set it to SEMI_FURNISHED.
+    - If the description include specifically "unfurnished" or similar, set it to UNFURNISHED
+    - Otherwise, do not include the furnitureType field in the JSON
 - If description indicate that the the property has parking, but does not include information about the type of parking,
   you can assume it's PRIVATE.
-- Refer to the `Amenities IDs Reference` section for resolving the IDs of amenities.
-- Do not imply the date of availability, unless explicitly mentioned.
-- When the phone number is provided, make sure to format it in E.164.
+- Refer to the `Amenities IDs Reference` section for resolving the IDs of amenities. DO NOT include amenities mentioned
+  in the description but not in the list. It should be added into `publicRemarks`
+- Optimize the JSON size by not including null, empty fields or enumerated fields with values outside the expected ones.
+- DO NOT assume the number of parkings if not explicitly mentioned.
+- DO NOT imply the date of availability, unless explicitly mentioned.
+- DO NOT include in the JSON any numeric field that was not provided or with zero value.
 
 # Ask:
 

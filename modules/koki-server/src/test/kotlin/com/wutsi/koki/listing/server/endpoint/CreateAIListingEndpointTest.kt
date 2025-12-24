@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FenceType
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
@@ -86,7 +87,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
             parkingType = ParkingType.UNDERGROUND,
             parkings = 2,
             halfBathrooms = 1,
-            bedrooms = 3,
+            bedrooms = 4,
             bathrooms = 3,
             fenceType = FenceType.CONCRETE,
             floors = 3,
@@ -111,6 +112,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
             phone = "+2370987654321",
 
+            furnitureType = FurnitureType.FULLY_FURNISHED,
             amenityIds = listOf(1103L, 1202L),
 
             publicRemarks = "A beautiful apartment located in the heart of the city.",
@@ -153,6 +155,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.securityDeposit, listing.securityDeposit)
         assertEquals(result.noticePeriod, listing.noticePeriod)
         assertEquals(result.advanceRent, listing.advanceRent)
+        assertEquals(result.furnitureType, listing.furnitureType)
         assertEquals(result.amenityIds, getAmenityIds(id))
         assertEquals(result.publicRemarks, listing.publicRemarks)
         assertEquals(USER_ID, listing.createdById)

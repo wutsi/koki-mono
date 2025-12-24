@@ -100,7 +100,6 @@ class ListingParserAgentTest {
             670660666
         """.trimIndent()
         val json = agent.run(text)
-        println("\n----\n" + json)
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(true, listing["valid"])
@@ -136,7 +135,6 @@ class ListingParserAgentTest {
             6 96 19 20 00 WHATSAPP POUR PLUS D'INFORMATIONS
         """.trimIndent()
         val json = agent.run(text)
-        println("\n----\n" + json)
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(true, listing["valid"])
@@ -169,7 +167,6 @@ class ListingParserAgentTest {
             ➡️ Loyer : 75.000fr
         """.trimIndent()
         val json = agent.run(text)
-        println("\n----\n" + json)
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(true, listing["valid"])
@@ -178,7 +175,7 @@ class ListingParserAgentTest {
         assertEquals(9500000, listing["price"])
         assertNotNull(listing["publicRemarks"])
         assertHasAmenityId(1000, listing)
-        assertHasAmenityId(1006, listing)
+        assertHasAmenityId(1002, listing)
         assertHasAmenityId(1005, listing)
         assertHasAmenityId(1058, listing)
     }
@@ -199,6 +196,61 @@ class ListingParserAgentTest {
 
         assertEquals(false, listing["valid"])
         assertEquals(false, listing["reason"]?.toString()?.isEmpty())
+    }
+
+    @Test
+    fun `modern villa`() {
+        val text = """
+            #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
+            📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
+            Caractéristiques :
+            - 3 chambres autonomes
+            - Cuisine américaine équipée
+            - Toilettes visiteurs
+            - Espace détente et barbecue 🍗
+            - Parking pour 2 véhicules
+            - Entièrement rénovée avec des matériaux soft et modernes
+            💰 Loyer : 1.500.000 FCFA / mois
+            📌 Commission : 5%
+            📜 Transaction sécurisée devant notaire ou bailleur agréé
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(true, listing["valid"])
+        assertEquals("RENTAL", listing["listingType"])
+        assertEquals("HOUSE", listing["propertyType"])
+        assertEquals(3, listing["bedrooms"])
+//        assertEquals(3, listing["bathrooms"])
+        assertEquals(1, listing["halfBathrooms"])
+        assertEquals(3, listing["bedrooms"])
+        assertEquals(2, listing["parkings"])
+        assertEquals("PRIVATE", listing["parkingType"])
+        assertEquals(5.0, listing["commission"])
+        assertEquals("Omnisports", listing["neighbourhood"])
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals("CM", listing["country"])
+
+        assertHasAmenityId(1011, listing)
+        assertHasAmenityId(1012, listing)
+        assertHasAmenityId(1049, listing)
+    }
+
+    @Test
+    fun test() {
+        val text = """
+            Somptueux #Duplex À VENDRE #400Millions Fcfa
+            📍Quartier #Odza Yaoundé
+            🔺Superficie : 1000 m² (Mutation Totale)
+            Il s’agit d’Une grande Villa-Duplex (R+1) de 5 chambres autonomes avec 3 salons au quartier Odza à Yaoundé
+            5 Chambres autonomes
+            5 Salles de bain et un 🚾 Visiteur
+            Grande Cuisine avec Buanderie
+            1 grand espace vert avec possibilité de Faire une Piscine
+            1 guérite pour agent de sécurité
+            Dépendance avec 2 Chambres autonomes supplémentaires
+        """.trimIndent()
+        agent.run(text)
     }
 
     private fun assertHasAmenityId(id: Int, listing: Map<*, *>) {

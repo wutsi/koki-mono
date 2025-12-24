@@ -2,6 +2,7 @@ package com.wutsi.koki.listing.server.service.ai
 
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
@@ -69,6 +70,7 @@ data class ListingParserAgentResult(
     val advanceRent: Int? = null,
     val securityDeposit: Int? = null,
     val phone: String? = null,
+    val furnitureType: FurnitureType? = null,
     val amenityIds: List<Long> = emptyList(),
     val street: String? = null,
     val neighbourhood: String? = null,
@@ -78,4 +80,5 @@ data class ListingParserAgentResult(
     val reason: String? = null,
     val hasLandTitle: Boolean? = null,
     val publicRemarks: String? = null,
+    val commission: Double? = null,
 )
