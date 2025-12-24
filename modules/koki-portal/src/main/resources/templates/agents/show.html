@@ -35,44 +35,40 @@
                             <table class="w-100">
                                 <tr th:if="${agent.totalSalesMetric}">
                                     <td class="text-center text-top padding-bottom">
-                                        <div th:text="${agent.totalSalesMetric.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.totalSalesMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.sales}">SALES</div>
                                     </td>
                                     <td class="text-center text-top padding-bottom">
-                                        <div th:text="${agent.past12mSalesMetric.averagePrice.shortText}">000</div>
+                                        <div class="text-larger"
+                                             th:text="${agent.totalSalesMetric.averagePrice.shortText}">$$$
+                                        </div>
                                         <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
                                         </div>
                                     </td>
                                     <td class="text-center text-top padding-bottom">
-                                        <div
-                                            th:if="${agent.totalSalesMetric.minPrice.amount} != ${agent.totalSalesMetric.maxPrice.amount}">
-                                            <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
-                                            -
-                                            <span th:text="${agent.totalSalesMetric.maxPrice.shortText}">$$</span>
-                                        </div>
-                                        <div
-                                            th:if="${agent.totalSalesMetric.minPrice.amount} == ${agent.totalSalesMetric.maxPrice.amount}">
-                                            <span th:text="${agent.totalSalesMetric.minPrice.shortText}">$$</span>
+                                        <div class="text-larger"
+                                             th:text="${agent.priceRangeText(agent.totalSalesMetric.minPrice, agent.totalSalesMetric.maxPrice)}">
+                                            $$$
                                         </div>
                                         <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
                                     </td>
                                 </tr>
                                 <tr th:if="${agent.totalRentalsMetric}">
                                     <td class="text-center text-top">
-                                        <div th:text="${agent.totalRentalsMetric.total}">000</div>
+                                        <div class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</div>
                                         <div class="text-small" th:text="#{page.agent.rentals}">RENTALS</div>
                                     </td>
                                     <td class="text-center text-top">
-                                        <div th:text="${agent.past12mRentalsMetric.averagePrice.shortText}">000</div>
+                                        <div class="text-larger"
+                                             th:text="${agent.totalRentalsMetric.averagePrice.shortText}">$$$
+                                        </div>
                                         <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
                                         </div>
                                     </td>
                                     <td class="text-center text-top">
-                                        <div
-                                            th:if="${agent.totalRentalsMetric.minPrice.amount} != ${agent.totalRentalsMetric.maxPrice.amount}">
-                                            <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
-                                            -
-                                            <span th:text="${agent.totalRentalsMetric.maxPrice.shortText}">$$</span>
+                                        <div class="text-larger"
+                                             th:text="${agent.priceRangeText(agent.totalRentalsMetric.minPrice, agent.totalRentalsMetric.maxPrice)}">
+                                            $$$
                                         </div>
                                         <div
                                             th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
