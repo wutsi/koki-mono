@@ -5,31 +5,33 @@
 </head>
 
 <body>
+<div th:replace="~{__components/layout :: navbar}"></div>
 
 <div class="container">
     <div class="row">
-        <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-            <h1 class="section-title text-center">
-                <a href="/">
-                    <img class="align-right" height="50" th:if="${tenant.logoUrl}" th:src="${tenant.logoUrl}"/>
-                    <span th:if="!${tenant.logoUrl}" th:text="${tenant.name}"/>
-                </a>
-            </h1>
+        <div class="col-12">
+            <div class="widget agent-summary">
+                <div class="widget-body">
+                    <div th:replace="~{__components/user :: user-summary(${user}, false)}"></div>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="row padding-bottom-8x">
         <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
             <div class="form-body">
                 <div class="section">
                     <div class="section-body">
                         <div class="section-item text-center">
-                            <h1 class="text-center" th:text="#{page.signup-photo.title}">TITLE</h1>
-                            <div class="text-center" th:utext="#{page.signup-photo.description}">TITLE</div>
+                            <h1 class="text-center" th:text="#{page.profile.photo.title}">TITLE</h1>
+                            <div class="text-center" th:utext="#{page.profile.photo.description}">TITLE</div>
                         </div>
                         <div class="section-item text-center">
                             <div>
                                 <img class="border" height="128" id="my-photo"
-                                     th:src="${page.assetUrl} + '/image/no-photo.png'" width="128"/>
+                                     th:src="${user.photoUrl} ? ${user.photoUrl} : ${page.assetUrl} + '/image/no-photo.png'"
+                                     width="128"/>
                             </div>
                             <div class="margin-top">
                                 <input accept="image/*"
@@ -39,32 +41,6 @@
                                        type="file"
                                 />
                             </div>
-                            <div class="margin-top">
-                                <div class="alert alert-info flex">
-                                    <div>
-                                        <div class="alert-icon-container">
-                                            <i class="fa-solid fa-circle-info fa-2x"></i>
-                                        </div>
-                                    </div>
-                                    <div class="margin-left text-left" th:utext="#{page.signup.photo.help}">HELP</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="section-item text-center">
-                            <form class="form" method="post" th:action="@{/signup/photo}"
-                                  th:object="${form}">
-                                <input th:field="*{id}" type="hidden"/>
-                                <input th:field="*{photoUrl}" type="hidden"/>
-                                <div class="flex flex-space-between">
-                                    <a class="btn btn-light w-49" href="/signup/profile" th:text="#{button.previous}">
-                                        PREV
-                                    </a>
-                                    <button class="btn btn-primary w-49" disabled id="btn-next"
-                                            th:text="#{button.next}"
-                                            type="submit">NEXT
-                                    </button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -72,6 +48,11 @@
         </div>
     </div>
 </div>
+
+<form class="form" id="form" method="post" th:action="@{/users/photo}"
+      th:object="${form}">
+    <input th:field="*{photoUrl}" type="hidden"/>
+</form>
 
 <script>
     document.addEventListener(
@@ -106,13 +87,13 @@
         }).then(response => {
             response.json().then(json => {
                 console.log("File uploaded", json);
-                fetch("/signup/photo/file?id=" + json.id)
+                fetch("/users/photo/file?id=" + json.id)
                     .then(response => {
                         response.json().then(json => {
                             console.log("File Data", json);
                             document.getElementById("my-photo").setAttribute("src", json.url);
                             document.getElementById("photoUrl").value = json.url;
-                            document.getElementById("btn-next").disabled = false;
+                            document.getElementById("form").submit();
                         });
                     });
             });

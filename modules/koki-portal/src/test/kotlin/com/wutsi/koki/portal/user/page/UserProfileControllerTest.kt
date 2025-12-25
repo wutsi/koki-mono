@@ -63,4 +63,12 @@ class UserProfileControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.HOME)
     }
+
+    @Test
+    fun `login required`() {
+        setUpAnonymousUser()
+        navigateTo("/users/profile")
+
+        assertCurrentPageIs(PageName.LOGIN)
+    }
 }

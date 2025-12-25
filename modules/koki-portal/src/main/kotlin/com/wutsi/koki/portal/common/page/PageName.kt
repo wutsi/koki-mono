@@ -114,4 +114,5 @@ object PageName {
     const val SIGNUP_DONE = "page.signup.done"
 
     const val USER_PROFILE = "page.user.profile"
+    const val USER_PHOTO = "page.user.photo"
 }

@@ -72,6 +72,11 @@
                 <i class="fa-solid fa-pencil"></i>
                 <span th:text="#{button.update_profile}">Update Profile</span>
             </a>
+            <br/>
+            <a class="text-small" href="/users/photo" th:if="${user.id} == ${me.id}">
+                <i class="fa-solid fa-camera"></i>
+                <span th:text="#{button.update_photo}">Update Photo</span>
+            </a>
         </div>
     </div>
 </div>

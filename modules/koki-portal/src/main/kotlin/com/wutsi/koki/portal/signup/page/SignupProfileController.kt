@@ -17,7 +17,7 @@ import java.util.Locale
 
 @Controller
 @RequestMapping("/signup/profile")
-class ProfileController(
+class SignupProfileController(
     private val categoryService: CategoryService,
 ) : AbstractSignupController() {
     @GetMapping

@@ -8,6 +8,7 @@ import com.wutsi.koki.portal.user.model.UserForm
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.tenant.dto.CreateUserRequest
+import com.wutsi.koki.tenant.dto.UpdateUserPhotoRequest
 import com.wutsi.koki.tenant.dto.UpdateUserProfileRequest
 import com.wutsi.koki.tenant.dto.UpdateUserRequest
 import com.wutsi.koki.tenant.dto.UserStatus
@@ -128,6 +129,13 @@ class UserService(
                 youtubeUrl = form.youtubeUrl,
                 tiktokUrl = form.tiktokUrl,
             )
+        )
+    }
+
+    fun updatePhoto(id: Long, form: UserForm) {
+        koki.photo(
+            id,
+            UpdateUserPhotoRequest(photoUrl = form.photoUrl),
         )
     }
 }
