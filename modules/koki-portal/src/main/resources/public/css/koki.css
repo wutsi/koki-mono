@@ -614,6 +614,22 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
     border-radius: 50%;
 }
 
+.profile-strength-poor {
+    color: darkred;
+}
+
+.profile-strength-medium {
+    color: darkorange;
+}
+
+.profile-strength-good {
+    color: green;
+}
+
+.profile-strength-excellent {
+    color: darkgreen; /*#06402B;*/
+}
+
 /* ============================= */
 /* bootstrap                     */
 /* ============================= */

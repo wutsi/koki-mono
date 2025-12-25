@@ -29,5 +29,7 @@ The profile strength should be calculated based on the following criteria:
 - In koki-server:
     - Create a service (and unit tests) to calculate the profile strength based on the criteria mentioned above.
     - Ensure that the profile strength is calculated and included whenever a user profile is retrieved.
-
+- In koki-portal:
+    - Update the home page to display the profile strength as a progress bar.
+    - Include a tooltip or information icon that explains how the profile strength is calculated based on the criteria.
 

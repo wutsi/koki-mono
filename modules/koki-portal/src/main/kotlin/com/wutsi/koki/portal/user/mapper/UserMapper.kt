@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service
 import java.util.Locale
 
 @Service
-class UserMapper : TenantAwareMapper() {
+class UserMapper(
+    private val profileStrengthMapper: ProfileStrengthMapper,
+) : TenantAwareMapper() {
     fun toUserModel(
         entity: User,
         roles: List<RoleModel>,
@@ -55,6 +57,7 @@ class UserMapper : TenantAwareMapper() {
             tiktokUrl = entity.tiktokUrl,
             youtubeUrl = entity.youtubeUrl,
             twitterUrl = entity.twitterUrl,
+            profileStrength = profileStrengthMapper.toProfileStrengthModel(entity.profileStrength),
         )
     }
 

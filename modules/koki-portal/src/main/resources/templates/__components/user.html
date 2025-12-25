@@ -47,6 +47,35 @@
     });
 </script>
 
+<div class="flex flex-wrap" th:fragment="user-summary(me, editable)">
+    <div>
+        <img class="user-photo"
+             th:alt="${me.displayName}"
+             th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"
+        />
+    </div>
+    <div class="margin-left margin-right">
+        <h1 class="entity-title text-center" th:text="${me.displayName}">NAME</h1>
+        <div th:text="${me.employer}">EMPLOYER</div>
+        <div class="text-small gray" th:if="${me.city}" th:text="${me.city.name}">CITY</div>
+    </div>
+    <div class="flex-grow text-right">
+        <div th:if="${me.profileStrength}">
+            <span th:text="#{page.home.profile_strength}">STRENGTH</span>:
+            <b th:class="'profile-strength-' + ${me.profileStrength.rating}"
+               th:text="#{'profile-strength.' + ${me.profileStrength.rating}}">
+                MODERATE
+            </b>
+        </div>
+        <div th:if="${editable}">
+            <a class="text-small" href="/users/profile" th:if="${user.id} == ${me.id}">
+                <i class="fa-solid fa-pencil"></i>
+                <span th:text="#{button.update_profile}">Update Profile</span>
+            </a>
+        </div>
+    </div>
+</div>
+
 <div class="text-small flex user-card-small" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
     <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
     <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">

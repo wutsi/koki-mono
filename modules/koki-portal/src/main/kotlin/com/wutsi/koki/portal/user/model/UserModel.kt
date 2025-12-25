@@ -38,6 +38,7 @@ data class UserModel(
     val twitterUrl: String? = null,
     val tiktokUrl: String? = null,
     val youtubeUrl: String? = null,
+    val profileStrength: ProfileStrengthModel? = null,
 ) {
     fun hasRole(roleId: Long): Boolean {
         return roles.find { role -> role.id == roleId } != null
