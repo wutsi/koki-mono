@@ -1,9 +1,11 @@
-package com.wutsi.koki.portal.signup.page
+package com.wutsi.koki.portal.user.page
 
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.file.service.FileService
-import com.wutsi.koki.portal.signup.form.SignupForm
+import com.wutsi.koki.portal.user.model.UserForm
+import com.wutsi.koki.portal.user.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
-@RequestMapping("/signup/photo")
-class PhotoController(
+@RequestMapping("/users/photo")
+class UserPhotoController(
     private val fileService: FileService,
-) : AbstractSignupController() {
+    private val userService: UserService,
+) : AbstractPageController() {
     @GetMapping
-    fun index(@RequestParam id: Long, model: Model): String {
-        val user = resolveUser(id)
+    fun index(model: Model): String {
+        val user = userHolder.get()
 
         model.addAttribute(
             "uploadUrl",
@@ -28,19 +31,18 @@ class PhotoController(
         )
         model.addAttribute(
             "form",
-            SignupForm(
-                id = user.id,
-                photoUrl = user.photoUrl,
+            UserForm(
+                photoUrl = user?.photoUrl,
             ),
         )
         model.addAttribute(
             "page",
             createPageModel(
-                name = PageName.SIGNUP_PHOTO,
-                title = getMessage("page.signup.meta.title"),
+                name = PageName.USER_PHOTO,
+                title = user?.displayName ?: "",
             )
         )
-        return "signup/photo"
+        return "users/photo"
     }
 
     @GetMapping("/file")
@@ -51,8 +53,9 @@ class PhotoController(
     }
 
     @PostMapping
-    fun submit(@ModelAttribute form: SignupForm): String {
-        signupService.updatePhoto(form)
-        return "redirect:/signup/done?id=${form.id}"
+    fun submit(@ModelAttribute form: UserForm): String {
+        val id = userHolder.get()?.id ?: -1
+        userService.updatePhoto(id, form)
+        return "redirect:/"
     }
 }

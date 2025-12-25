@@ -38,10 +38,10 @@ class SecurityConfiguration(
                     .requestMatchers("/listings/**").authenticated()
                     .requestMatchers("/offers").authenticated()
                     .requestMatchers("/offers/**").authenticated()
-                    .requestMatchers("/profile").authenticated()
-                    .requestMatchers("/profile/**").authenticated()
                     .requestMatchers("/settings").authenticated()
                     .requestMatchers("/settings/**").authenticated()
+                    .requestMatchers("/users").authenticated()
+                    .requestMatchers("/users/**").authenticated()
                     .anyRequest().permitAll()
             }
             .addFilterBefore(authorizationFilter(), AnonymousAuthenticationFilter::class.java)

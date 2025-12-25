@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/signup/done")
-class DoneController : AbstractSignupController() {
+class SignupDoneController : AbstractSignupController() {
     @GetMapping
     fun index(id: Long, model: Model): String {
         val user = resolveUser(id)
