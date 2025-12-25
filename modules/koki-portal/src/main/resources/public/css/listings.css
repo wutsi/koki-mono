@@ -97,7 +97,7 @@ ul.amenities li {
     color: #040404;
 }
 
-.listing-card .address-street {
+.listing-card .address {
     overflow: hidden;
     height: 1.25em;
 }

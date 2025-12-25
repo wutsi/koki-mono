@@ -38,12 +38,10 @@
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
 
-            <div class="text-small address" th:if="${listing.address}" th:text="${listing.address?.street}">STREET</div>
-            <div class="text-small address" th:if="!${listing.address}">&nbsp;</div>
-
-            <div class="text-small" th:if="${listing.address}">
+            <div class="text-small address margin-top" th:text="${listing.address.street}">STREET</div>
+            <div class="text-small address" th:if="${listing.address}">
                 <span th:text="${listing.address?.neighbourhood?.name}">XXX</span>
-                <span>-</span>
+                <span th:if="${listing.address?.neighbourhood} AND ${listing.address?.city}">-</span>
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
         </a>
