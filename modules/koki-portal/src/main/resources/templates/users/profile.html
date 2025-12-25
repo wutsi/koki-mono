@@ -10,7 +10,16 @@
 <div class="container padding-bottom-8x">
     <div class="row">
         <div class="col-12">
+            <div class="widget agent-summary">
+                <div class="widget-body">
+                    <div th:replace="~{__components/user :: user-summary(${user}, false)}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-12">
             <form class="form" id="profile-form" method="post" th:action="@{'/users/profile'}" th:object="${form}">
                 <input th:field="*{backUrl}" type="hidden"/>
                 <div class="form-body">
