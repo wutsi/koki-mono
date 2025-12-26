@@ -348,7 +348,11 @@
     document.addEventListener(
         'DOMContentLoaded',
         function () {
-            koki.w.track.track('VIEW', /*[[${listing.id}]]*/'0');
+            const productId = /*[[${listing.id}]]*/ '0';
+            koki.w.track.track('VIEW', productId);
+            window.addEventListener('beforeunload', function () {
+                koki.w.track.track('EXIT', productId);
+            });
 
             const elt = document.getElementById('toast-message');
             if (elt) {
