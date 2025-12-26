@@ -11,8 +11,6 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingParserAgentResult
 import com.wutsi.koki.refdata.dto.Address
-import com.wutsi.koki.refdata.dto.LocationType
-import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import jakarta.transaction.Transactional
@@ -22,7 +20,6 @@ import tools.jackson.databind.json.JsonMapper
 @Service
 class AIListingService(
     private val agentFactory: ListingAgentFactory,
-    private val amenityService: AmenityService,
     private val locationService: LocationService,
     private val jsonMapper: JsonMapper,
     private val listingService: ListingService,
@@ -32,14 +29,14 @@ class AIListingService(
     @Transactional
     fun create(request: CreateAIListingRequest, tenantId: Long): ListingEntity {
         val result = parse(request)
-        val listing = createListing(result, tenantId)
+        val listing = createListing(request, result, tenantId)
         storePrompt(request, result, listing)
         return listing
     }
 
     private fun parse(request: CreateAIListingRequest): ListingParserAgentResult {
         val defaultCity = locationService.get(request.cityId)
-        val agent = agentFactory.createParserAgent(defaultCity, amenityService)
+        val agent = agentFactory.createParserAgent(defaultCity)
         val json = agent.run(request.text)
 
         val result = jsonMapper.readValue(json, ListingParserAgentResult::class.java)
@@ -55,25 +52,11 @@ class AIListingService(
     }
 
     private fun createListing(
+        request: CreateAIListingRequest,
         result: ListingParserAgentResult,
         tenantId: Long,
     ): ListingEntity {
         val tenant = tenantService.get(tenantId)
-        val city = result.city?.let { name ->
-            locationService.search(
-                keyword = name,
-                types = listOf(LocationType.CITY),
-                country = tenant.country,
-            ).firstOrNull()
-        }
-        val neighbourhood = result.neighbourhood?.let { name ->
-            locationService.search(
-                keyword = name,
-                types = listOf(LocationType.NEIGHBORHOOD),
-                parentId = city?.id ?: -1,
-                country = tenant.country,
-            ).firstOrNull()
-        }
 
         return listingService.create(
             request = CreateListingRequest(
@@ -106,9 +89,9 @@ class AIListingService(
 
                 address = Address(
                     street = result.street,
-                    neighborhoodId = neighbourhood?.id,
-                    cityId = city?.id,
-                    country = city?.country
+                    neighborhoodId = result.neighbourhoodId,
+                    cityId = request.cityId,
+                    country = result.country,
                 ),
 
                 publicRemarks = result.publicRemarks,

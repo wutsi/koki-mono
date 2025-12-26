@@ -25,6 +25,7 @@ class CreateAIListingControllerTest : AbstractPageControllerTest() {
 
         assertElementNotPresent(".alert-danger")
         input("#text", text)
+        scrollToBottom()
         click("#btn-submit")
         val req0 = argumentCaptor<CreateAIListingRequest>()
         verify(rest).postForEntity(

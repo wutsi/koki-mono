@@ -10,37 +10,52 @@ import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
+import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.http.MediaType
 import java.util.Date
 import java.util.Locale
 
 class ListingParserAgent(
     private val amenityService: AmenityService,
+    private val locationService: LocationService,
     private val city: LocationEntity,
     llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
-    override fun systemInstructions(): String? {
-        return null
-    }
+    override fun systemInstructions(): String? = null
 
     override fun buildPrompt(query: String, memory: List<String>): String {
+        val country = Locale("en", city.country).displayCountry
+        val tools =
+            tools().joinToString(separator = "\n") { tool -> "- ${tool.function().name}: ${tool.function().description}" }
+
         val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-parser-agent.prompt.md")!!
             .reader()
             .readText()
-
-        val country = Locale("en", city.country).displayCountry
-        return prompt.replace("{{query}}", query)
+            .replace("{{query}}", query)
             .replace("{{amenities}}", loadAmenities())
+            .replace("{{neighbourhoods}}", loadNeighbourhoods())
             .replace("{{city}}", city.name + "," + country)
+            .replace("{{tools}}", tools)
+
+        return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
     }
 
-    override fun tools(): List<Tool> = emptyList<Tool>()
+    override fun tools(): List<Tool> = emptyList()
 
     private fun loadAmenities(): String {
         return amenityService.search(limit = 200)
             .joinToString(separator = "\n") { amenity -> "${amenity.id},${amenity.name}" }
+    }
+
+    private fun loadNeighbourhoods(): String {
+        return locationService.search(
+            parentId = city.id,
+            types = listOf(LocationType.NEIGHBORHOOD),
+            limit = 200
+        ).joinToString(separator = "\n") { neighbourhood -> "${neighbourhood.id},${neighbourhood.name}" }
     }
 }
 
@@ -74,6 +89,7 @@ data class ListingParserAgentResult(
     val amenityIds: List<Long> = emptyList(),
     val street: String? = null,
     val neighbourhood: String? = null,
+    val neighbourhoodId: Long? = null,
     val city: String? = null,
     val country: String? = null,
     val valid: Boolean = false,

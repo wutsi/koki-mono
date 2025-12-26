@@ -6,10 +6,15 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
+import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.stereotype.Service
 
 @Service
-class ListingAgentFactory(private val llmProvider: LLMProvider) {
+class ListingAgentFactory(
+    private val amenityService: AmenityService,
+    private val locationService: LocationService,
+    private val llmProvider: LLMProvider
+) {
     fun createImageReviewerAgent(): Agent {
         return ListingImageReviewerAgent(llm = llmProvider.visionLLM)
     }
@@ -31,10 +36,10 @@ class ListingAgentFactory(private val llmProvider: LLMProvider) {
 
     fun createParserAgent(
         city: LocationEntity,
-        amenityService: AmenityService
     ): Agent {
         return ListingParserAgent(
             amenityService = amenityService,
+            locationService = locationService,
             city = city,
             llm = llmProvider.visionLLM,
         )

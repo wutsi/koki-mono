@@ -71,7 +71,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         super.setUp()
 
         df.timeZone = TimeZone.getTimeZone("UTC")
-        doReturn(agent).whenever(agentFactory).createParserAgent(any(), any())
+        doReturn(agent).whenever(agentFactory).createParserAgent(any())
     }
 
     @Test
@@ -99,6 +99,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
             street = "Derriere ambassade de chine",
             city = "yaounde",
             neighbourhood = "bastos",
+            neighbourhoodId = 5555L,
             country = "CM",
 
             price = 350000,
@@ -145,9 +146,9 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.distanceFromMainRoad, listing.distanceFromMainRoad)
         assertEquals(df.format(result.availableAt), df.format(listing.availableAt))
         assertEquals(result.street, listing.street)
-        assertEquals(1110L, listing.cityId)
-        assertEquals(1111L, listing.neighbourhoodId)
-        assertEquals("CM", listing.country?.uppercase())
+        assertEquals(request.cityId, listing.cityId)
+        assertEquals(result.neighbourhoodId, listing.neighbourhoodId)
+        assertEquals(result.country, listing.country?.uppercase())
         assertEquals(result.price, listing.price)
         assertEquals(result.visitFees, listing.visitFees)
         assertEquals(result.currency, listing.currency)

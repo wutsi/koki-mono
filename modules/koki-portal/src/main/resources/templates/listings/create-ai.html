@@ -26,9 +26,41 @@
                                 <div th:replace="~{__components/layout :: error-message(${error})}"></div>
                             </div>
 
+                            <div class="section-item"
+                                 data-city-id="cityId"
+                                 data-component-id=address
+                                 data-country-id="country"
+                            >
+                                <label class="title">
+                                    <span th:text="#{page.listing.city}">CITY</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <select required th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                                <div class="margin-top-small">
+                                    <select required th:field="*{cityId}">
+                                        <option selected
+                                                th:if="${city}"
+                                                th:text="${cityName}"
+                                                th:value="${city.id}">
+                                            CITY
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="section-item">
-                                <label class="title" th:text="#{page.listing.ai-text}">TYPE</label>
-                                <div class="form-text" th:utext="#{page.listing.ai-text.help}">HELP</div>
+                                <label class="title" th:text="#{page.listing.ai-text}">
+                                    <span th:text="#{page.listing.description}">CITY</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="form-text" th:utext="#{page.listing.ai-tex t.help}">HELP</div>
                                 <textarea class="form-control margin-top-small" maxlength="1000" required rows="10"
                                           th:field="*{text}"></textarea>
                             </div>

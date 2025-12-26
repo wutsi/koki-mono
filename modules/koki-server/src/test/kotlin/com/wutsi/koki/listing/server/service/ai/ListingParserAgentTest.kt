@@ -2,15 +2,18 @@ package com.wutsi.koki.listing.server.service.ai
 
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
+import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
@@ -24,12 +27,14 @@ class ListingParserAgentTest {
         model = "deepseek-chat",
     )
     private val amenityService = mock<AmenityService>()
+    private val locationService = mock<LocationService>()
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val agent = ListingParserAgent(amenityService, city, llm)
+    private val agent = ListingParserAgent(amenityService, locationService, city, llm)
 
     @BeforeEach
     fun setUp() {
-        setupAmenities()
+        setupAmenityService()
+        setupLocationService()
     }
 
     @Test
@@ -45,7 +50,7 @@ class ListingParserAgentTest {
     @Test
     fun apartment() {
         val text = """
-            Ce magnifique appartement moderne au Stading !
+            Ce magnifique appartement moderne haut Standing !
 
             📍Situé à simbok ( Batibo)📍
             250 du rond point damas !
@@ -73,14 +78,15 @@ class ListingParserAgentTest {
         assertEquals("XAF", listing["currency"])
         assertEquals("+237658653143", listing["phone"])
         assertHasAmenityId(1001, listing)
-        assertHasAmenityId(1003, listing)
         assertHasAmenityId(1004, listing)
         assertHasAmenityId(1006, listing)
         assertHasAmenityId(1052, listing)
         assertHasAmenityId(1059, listing)
 
         assertEquals(true, listing["street"]?.toString()?.contains("rond point damas"))
-        assertEquals("simbok", listing["neighbourhood"])
+        assertEquals("Simbock", listing["neighbourhood"])
+        assertEquals(237049, listing["neighbourhoodId"])
+        237049
         assertEquals("CM", listing["country"])
     }
 
@@ -116,8 +122,9 @@ class ListingParserAgentTest {
         assertHasAmenityId(1011, listing)
         assertHasAmenityId(1059, listing)
 
-//        assertEquals("Ahala Barrière", listing["city"])
-//        assertEquals("Barrière Eau Forages", listing["neighbourhood"])
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals("Ahala", listing["neighbourhood"])
+        assertEquals(237094, listing["neighbourhoodId"])
         assertEquals("Yaoundé", listing["city"])
         assertEquals("CM", listing["country"])
     }
@@ -148,6 +155,8 @@ class ListingParserAgentTest {
 
         assertEquals("montée collège mvogt", listing["street"])
         assertEquals("Yaoundé", listing["city"])
+        assertEquals(null, listing["neighbourhood"])
+        assertEquals(null, listing["neighbourhoodId"])
         assertEquals("CM", listing["country"])
     }
 
@@ -174,10 +183,9 @@ class ListingParserAgentTest {
         assertEquals(PropertyType.COMMERCIAL.name, listing["propertyType"])
         assertEquals(9500000, listing["price"])
         assertNotNull(listing["publicRemarks"])
-        assertHasAmenityId(1000, listing)
-        assertHasAmenityId(1002, listing)
-        assertHasAmenityId(1005, listing)
-        assertHasAmenityId(1058, listing)
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals("Jouvence", listing["neighbourhood"])
+        assertEquals(237096, listing["neighbourhoodId"])
     }
 
     @Test
@@ -228,6 +236,7 @@ class ListingParserAgentTest {
         assertEquals("PRIVATE", listing["parkingType"])
         assertEquals(5.0, listing["commission"])
         assertEquals("Omnisports", listing["neighbourhood"])
+        assertEquals(237097, listing["neighbourhoodId"])
         assertEquals("Yaoundé", listing["city"])
         assertEquals("CM", listing["country"])
 
@@ -258,9 +267,8 @@ class ListingParserAgentTest {
         assertEquals(true, amenityIds.contains(id))
     }
 
-    private fun setupAmenities() {
+    private fun setupAmenityService() {
         val amenities = """
-            id,amenity
             1000,Electricity
             1001,Prepaid electricity meter
             1002,Running Water
@@ -322,13 +330,120 @@ class ListingParserAgentTest {
             1058,Security Cameras
             1059,Security guard
         """.trimIndent().split("\n")
-            .drop(1)
             .map { line -> line.split(",") }
             .map { pair -> AmenityEntity(id = pair[0].toLong(), name = pair[1]) }
 
         doReturn(amenities).whenever(amenityService).search(
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+    }
+
+    private fun setupLocationService() {
+        configureCity()
+        configureNeighbourhoods()
+    }
+
+    private fun configureCity() {
+        val city = LocationEntity(id = 3333, name = "Yaoundé", type = LocationType.CITY, country = "CM")
+        doReturn(listOf(city)).whenever(locationService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            eq(listOf(LocationType.CITY)),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+    }
+
+    private fun configureNeighbourhoods() {
+        val neighbourhoods = """
+            237000,Centre Ville,Yaoundé,3.8692921999551375, 11.518550404521816
+            237001,Nlongkak,Yaoundé,3.879225806692496, 11.5203528488888
+            237002,Bastos,Yaoundé,3.8925339696406587, 11.511400038328873
+            237003,Mvog-Mbi,Yaoundé,3.8505983099639973, 11.520835565315775
+            237004,Messa,Yaoundé,3.8889192886555275, 11.490254143404025
+            237005,Nkol Bikok,Yaoundé,3.867194138795373, 11.48353148539188
+            237006,Obili,Yaoundé,3.8610223711151064, 11.490102484631674
+            237007,Mvog-Ada,Yaoundé,3.8646694021601893, 11.528544711796718
+            237008,Mokolo,Yaoundé,3.876712498953334, 11.498279702722225
+            237009,Cité Verte,Yaoundé,3.8745694436432334, 11.48908925925084
+            237010,Etoa-Meki,Yaoundé,3.8814522887439127, 11.529107578671285
+            237011,Nsimeyong,Yaoundé,3.8354965823797196, 11.49478741806351
+            237012,Mimboman,Yaoundé,3.8695939924143374, 11.554617894151319
+            237013,Melen,Yaoundé,3.8668944153485434, 11.500740537562356
+            237014,Odza,Yaoundé,3.8061519579544085, 11.530026769573444
+            237015,Tsinga,Yaoundé,3.884192566286806, 11.506577024084004
+            237016,Kondengui,Yaoundé,3.852664327526627, 11.526702987404587
+            237017,Essos,Yaoundé,3.8706011576190646, 11.542179106021013
+            237018,Ekounou,Yaoundé,3.844070467036341, 11.534578444489384
+            237019,Elig-Essono,Yaoundé,3.8741682967954127, 11.525634137862982
+            237020,Nkolndongo,Yaoundé,3.85841452321584, 11.527079109493366
+            237021,Biyem-Assi,Yaoundé,3.8409252554355082, 11.48740552328444
+            237022,Etoudi,Yaoundé,3.850382870033124, 11.524779567164344
+            237023,Olezoa,Yaoundé,3.8684843663646578, 11.479348238328864
+            237024,Ngousso,Yaoundé,3.8343850925488248, 11.574487755519542
+            237025,Efoulan,Yaoundé,3.8357093517749785, 11.505732516047082
+            237026,Nkolmesseng,Yaoundé,3.8806045485951848, 11.553448378442988
+            237027,Anguissa,Yaoundé,3.86177548167101, 11.53496387813675
+            237029,Nkoabang,Yaoundé,3.860173090541269, 11.591600380657903
+            237030,Titi-Gare,Yaoundé,3.883709688468779, 11.55293241134199
+            237033,Nkoléwé,Yaoundé,3.861441943259163, 11.534146515100572
+            237034,Ekoudou,Yaoundé,3.8789970169290022, 11.512152516211234
+            237035,Briquetterie,Yaoundé,3.8742162006313277, 11.509109029266194
+            237036,Carrière,Yaoundé,3.8749663736688214, 11.480777609493382
+            237037,Fouda,Yaoundé,3.880109042772849, 11.48114291134201
+            237039,Mbankolo,Yaoundé,3.89833153015749, 11.494446916216232
+            237040,Nkol-Eton,Yaoundé,3.8964619733881256, 11.510616175497084
+            237041,Nkolbisson,Yaoundé,3.8715978026955717, 11.454169718757758
+            237043,Nkozoa,Yaoundé,3.86193685126322, 11.520191645075593
+            237049,Simbock,Yaoundé,3.817442071855248, 11.466151818062976
+            237050,Mont-Fébé,Yaoundé,3.9128975572913878, 11.491551711341954
+            237053,Ekoumdoum,Yaoundé,3.822049270861789, 11.537224002721045
+            237054,Mbankomo,Yaoundé,3.79022739543727, 11.39985751754894
+            237057,Nsimalen,Yaoundé,3.714851690661909, 11.547785538328853
+            237061,Nkom Kana,Yaoundé,3.8893496852212657, 11.495014951356179
+            237062,Ngoa-Ekélé,Yaoundé,3.8558127937728455, 11.499003929918695
+            237063,Elig-Edzoa,Yaoundé,3.8487398324650655, 11.501658549239048
+            237064,Olembé,Yaoundé,3.949564163592176, 11.537187383239027
+            237065,Mvolyé,Yaoundé,3.83494509428093, 11.500688568651837
+            237066,Mendong,Yaoundé,3.8453855704955826, 11.519096945050551
+            237067,Mballa II,Yaoundé,3.8979032623760954, 11.523958960393882
+            237069,Etam-Bafia,Yaoundé,3.851104056052318, 11.525681151822313
+            237071,Tongolo,Yaoundé,3.908969006138005, 11.526837762576633
+            237072,Hippodrome,Yaoundé,3.8720832599970314, 11.51542349163051
+            237074,Nkomo,Yaoundé,3.8439009619381577, 11.534775497848502
+            237078,Biteng,Yaoundé,3.8511143559696825, 11.557325892782528
+            237079,Quartier du Lac,Yaoundé,3.8605105869338567, 11.51170337371814
+            237080,Madagascar,Yaoundé,3.88213735896351, 11.487350950836198
+            237081,Oyom Abang,Yaoundé,3.8797590550308114, 11.469105903464179
+            237083,Etoug-Ebe,Yaoundé,3.8621611703010164, 11.520257083243541
+            237084,Soa,Yaoundé,3.975649238605864, 11.593469560423955
+            237087,Obobogo,Yaoundé,3.824980036487706, 11.502124108819377
+            237088,Mefou,Yaoundé,3.8507337514971725, 11.521817682506454
+            237089,Mvan,Yaoundé,3.8121649503152484, 11.522317901055626
+            237090,Damas,Yaoundé,3.825833760195713, 11.505503282506421
+            237091,Messassi,Yaoundé,3.9033646491835947, 11.546101818064955
+            237092,Santa Barbara,Yaoundé,3.9155418074281303, 11.530948253671024
+            237093,Emana,Yaoundé,3.9216, 11.5375
+            237094,Ahala,Yaoundé,3.794539959971708, 11.495552753670934
+            237095,Nkolfoulou,Yaoundé,3.916956241351669, 11.576112211342009
+            237096,Jouvence,Yaoundé,3.8241033731300993, 11.480716891881322
+            237097,Omnisports,Yaoundé,3.8823422424592544, 11.540692411341988
+        """.trimIndent().split("\n")
+            .drop(1)
+            .map { line -> line.split(",") }
+            .map { pair -> LocationEntity(id = pair[0].toLong(), name = pair[1]) }
+
+        doReturn(neighbourhoods).whenever(locationService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            eq(listOf(LocationType.NEIGHBORHOOD)),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),

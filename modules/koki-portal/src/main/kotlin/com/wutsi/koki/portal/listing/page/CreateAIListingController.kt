@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.listing.page
 
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.form.AIListingForm
+import com.wutsi.koki.portal.refdata.model.LocationModel
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -18,11 +19,21 @@ class CreateAIListingController : AbstractListingController() {
     @GetMapping
     fun create(model: Model): String {
         val city = userHolder.get()?.city ?: resolveCity()
-        val form = AIListingForm(cityId = city?.id ?: -1)
-        return create(form, model)
+        val form = AIListingForm(
+            cityId = city?.id ?: -1,
+            country = city?.country ?: tenantHolder.get().country,
+        )
+        return create(form, model, city)
     }
 
-    private fun create(form: AIListingForm, model: Model): String {
+    private fun create(form: AIListingForm, model: Model, city: LocationModel?): String {
+        val xcity = city ?: locationService.get(form.cityId)
+        val parent = resolveParent(xcity)
+        model.addAttribute("city", xcity)
+        model.addAttribute("cityName", parent?.let { "${xcity.name}, ${parent.name}" } ?: xcity.name)
+
+        loadCountries(model)
+
         model.addAttribute("form", form)
         model.addAttribute(
             "page",
@@ -42,7 +53,7 @@ class CreateAIListingController : AbstractListingController() {
         } catch (ex: RestClientException) {
             val errorResponse = toErrorResponse(ex)
             model.addAttribute("error", toErrorMessage(errorResponse))
-            return create(form, model)
+            return create(form, model, null)
         }
     }
 }
