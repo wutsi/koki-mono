@@ -25,8 +25,12 @@ class ChangeListingStatusController : AbstractEditListingController() {
 
         model.addAttribute(
             "statuses",
-            mutableListOf(
-                if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD,
+            listOfNotNull(
+                if (listing.status != ListingStatus.DRAFT) {
+                    if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD
+                } else {
+                    null
+                },
                 ListingStatus.EXPIRED,
                 ListingStatus.WITHDRAWN,
                 ListingStatus.CANCELLED,

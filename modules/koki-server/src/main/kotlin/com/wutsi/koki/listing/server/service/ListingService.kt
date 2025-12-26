@@ -657,11 +657,16 @@ class ListingService(
         val listing = get(id, tenantId)
         when (request.status) {
             ListingStatus.SOLD,
-            ListingStatus.RENTED,
+            ListingStatus.RENTED -> {
+                if (listing.status != ListingStatus.ACTIVE) {
+                    throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
+                }
+            }
+
             ListingStatus.WITHDRAWN,
             ListingStatus.EXPIRED,
             ListingStatus.CANCELLED -> {
-                if (listing.status != ListingStatus.ACTIVE) {
+                if (listing.status != ListingStatus.ACTIVE && listing.status != ListingStatus.DRAFT) {
                     throwInvalidStatus("Cannot close a listing in status: ${listing.status}")
                 }
             }

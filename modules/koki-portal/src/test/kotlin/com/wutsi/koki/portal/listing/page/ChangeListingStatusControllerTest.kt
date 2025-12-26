@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
     @Test
@@ -93,6 +92,41 @@ class ChangeListingStatusControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
         assertElementPresent("#script-confetti")
+        click("#btn-continue")
+        assertCurrentPageIs(PageName.LISTING_LIST)
+    }
+
+    @Test
+    fun draft() {
+        setupListing(status = ListingStatus.DRAFT)
+
+        navigateTo("/listings/status?id=${listing.id}")
+        assertCurrentPageIs(PageName.LISTING_STATUS)
+        assertElementHasAttribute("#btn-next", "disabled")
+        click("#chk-status-CANCELLED")
+        click("#btn-next")
+
+        setupListing(status = ListingStatus.CANCELLED)
+        assertCurrentPageIs(PageName.LISTING_STATUS_CLOSE)
+        assertElementNotPresent(".alert-danger")
+        assertElementHasAttribute("#btn-next", "disabled")
+        input("#comment", "Im done with this shit")
+        scrollToBottom()
+        click("#chk-confirm")
+        click("#btn-next")
+        val req = argumentCaptor<CloseListingRequest>()
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/listings/${listing.id}/close"),
+            req.capture(),
+            eq(Any::class.java),
+        )
+        assertEquals(ListingStatus.CANCELLED, req.firstValue.status)
+        assertEquals(null, req.firstValue.salePrice)
+        assertEquals(null, req.firstValue.soldAt)
+        assertEquals("Im done with this shit", req.firstValue.comment)
+
+        assertCurrentPageIs(PageName.LISTING_STATUS_DONE)
+        assertElementNotPresent("#script-confetti")
         click("#btn-continue")
         assertCurrentPageIs(PageName.LISTING_LIST)
     }
