@@ -71,7 +71,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         super.setUp()
 
         df.timeZone = TimeZone.getTimeZone("UTC")
-        doReturn(agent).whenever(agentFactory).createParserAgent(any(), any())
+        doReturn(agent).whenever(agentFactory).createParserAgent(any())
     }
 
     @Test

@@ -163,9 +163,27 @@
         >EDIT</a>
     </h4>
     <div class="row">
-        <b class="text-small" th:text="#{page.listing.address}">ADDRESS</b>
+        <b class="text-small" th:text="#{page.listing.street}">STREET</b>
         <div class="col-12 padding-bottom-small"
-             th:utext="${listing.address} ? ${listing.address.toHtml(true)} : '-'">COUNTRY
+             th:text="${listing.address?.street} ? ${listing.address.street} : '-'">COUNTRY
+        </div>
+        <div class="col-12 col-md-4 col-lg-3  padding-top-small">
+            <b class="text-small" th:text="#{page.listing.city}">STREET</b>
+            <div class="col-12 padding-bottom-small"
+                 th:text="${listing.address?.city} ? ${listing.address.city.name} : '-'">CITY
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-3  padding-top-small">
+            <b class="text-small" th:text="#{page.listing.neighbourhood}">NEIGHBOURHOOD</b>
+            <div class="col-12 padding-bottom-small"
+                 th:text="${listing.address?.neighbourhood} ? ${listing.address.neighbourhood.name} : '-'">CITY
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-3  padding-top-small">
+            <b class="text-small" th:text="#{page.listing.country}">COUNTRY</b>
+            <div class="col-12 padding-bottom-small"
+                 th:text="${listing.address?.countryName} ? ${listing.address.countryName} : '-'">CITY
+            </div>
         </div>
     </div>
     <hr/>

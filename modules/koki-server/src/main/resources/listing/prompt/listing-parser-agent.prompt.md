@@ -42,6 +42,8 @@ The listing information must be structured in the following JSON format:
 - amenityReason: Explain the decision you made to select those amenities (string)
 - street: Address - Name of the street
 - neighbourhood: Address - Name of the district or neighborhood
+- neighbourhoodId: ID of the neighborhood (integer)
+- neighbourhoodIdReason: Explain the decision you made to select the neighbourhoodId (string)
 - city: Address - Name of the city
 - country: Address - 2 letter country code
 - phone: Agent phone number in E.164 format (string)
@@ -57,9 +59,16 @@ Here are all the amenities supported by the platform in CSV format:
 id,name
 {{amenities}}
 
+# Neighbourhood in {{city}}
+
+Here are all the neighbourhoods {{city}} in CSV format:
+
+id,name
+{{neighbourhoods}}
+
 # Instructions
 
-- Assume that the property is located in {{city}} unless specified otherwise
+- Assume that the property is located in {{city}}
 - Consider all fields are optional, including price, except those marked as REQUIRED
 - The furnitureType field should be determined based on the description of the property:
     - If the description include specifically "fully furnished" or similar, set it to FULLY_FURNISHED
