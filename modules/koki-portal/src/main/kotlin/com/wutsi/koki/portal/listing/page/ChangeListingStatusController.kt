@@ -26,7 +26,7 @@ class ChangeListingStatusController : AbstractEditListingController() {
         model.addAttribute(
             "statuses",
             listOfNotNull(
-                if (listing.status == ListingStatus.DRAFT) {
+                if (listing.status != ListingStatus.DRAFT) {
                     if (listing.listingType == ListingType.RENTAL) ListingStatus.RENTED else ListingStatus.SOLD
                 } else {
                     null
