@@ -167,8 +167,7 @@
         </div>
 
         <!-- AMENITIES -->
-        <div class="margin-top border-top padding-top amenity-container"
-             th:if="${listing.furnitureType} OR !${listing.amenities.isEmpty()}">
+        <div class="margin-top border-top padding-top amenity-container" th:if="${listing.hasAmenities}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="flex flex-wrap">
                 <div class="col-12 col-lg-4 col-md-6" th:if="${listing.furnitureType?.name() == 'FULLY_FURNISHED'}">
@@ -223,7 +222,7 @@
         </div>
 
         <!-- TERMS & CONDITION -->
-        <div class="margin-top border-top padding-top terms-container" th:if="${listing.listingTypeRental}">
+        <div class="margin-top border-top padding-top terms-container" th:if="${listing.hasTermsAndConditions}">
             <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
             <div class="flex flex-wrap">
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">

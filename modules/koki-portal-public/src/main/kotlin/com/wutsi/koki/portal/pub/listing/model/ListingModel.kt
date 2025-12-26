@@ -81,6 +81,13 @@ data class ListingModel(
 
     val images: List<FileModel> = emptyList()
 ) {
+    val hasTermsAndConditions: Boolean
+        get() = listingType == ListingType.RENTAL &&
+            (leaseTerm != null || securityDeposit != null || advanceRent != null || noticePeriod != null)
+
+    val hasAmenities: Boolean
+        get() = amenities.isNotEmpty() || (furnitureType != null && furnitureType != FurnitureType.UNFURNISHED)
+
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
 
