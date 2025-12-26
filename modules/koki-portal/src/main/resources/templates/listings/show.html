@@ -39,7 +39,7 @@
 
                             <a class="btn btn-danger btn-sm" id="btn-status"
                                th:href="'/listings/status?id=' + ${listing.id}"
-                               th:if="!${listing.statusOffMarket}"
+                               th:if="${listing.statusOnMarket} OR ${listing.statusDraft}"
                                th:text="#{button.close}"
                             >STATUS</a>
                         </div>
