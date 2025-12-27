@@ -38,7 +38,9 @@ The listing information must be structured in the following JSON format:
 - noticePeriod: Notice period in months (integer)
 - distanceFromMainRoad: Distance from the main road in meters (integer)
 - roadPavement: Type of road pavement. Values can be ASPHALT, CONCRETE, COBBLESTONE, GRAVEL, DIRT
-- amenityIds: IDs of the amenities (array of integers)
+- amenities: List of amenities of the property. Each amenity having
+    - id: ID of the amenity (integers)
+    - name: Name of the amenity (string)
 - amenityReason: Explain the decision you made to select those amenities (string)
 - street: Address - Name of the street
 - neighbourhood: Address - Name of the district or neighborhood
@@ -78,7 +80,7 @@ id,name
 - If description indicate that the the property has parking, but does not include information about the type of parking,
   you can assume it's PRIVATE.
 - Refer to the `Amenities IDs Reference` section for resolving the IDs of amenities. DO NOT include amenities mentioned
-  in the description but not in the list. It should be added into `publicRemarks`
+  in the description but not in the list. They should be added into `publicRemarks`
 - Optimize the JSON size by not including null, empty fields or enumerated fields with values outside the expected ones.
 - DO NOT assume the number of parkings if not explicitly mentioned.
 - DO NOT imply the date of availability, unless explicitly mentioned.

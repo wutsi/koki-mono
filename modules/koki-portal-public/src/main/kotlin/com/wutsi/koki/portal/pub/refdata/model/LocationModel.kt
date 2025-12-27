@@ -9,5 +9,5 @@ data class LocationModel(
     val type: LocationType = LocationType.UNKNOWN,
     val country: String = "",
     val geoLocation: GeoLocationModel? = null,
-    val url: String = "",
+    val publicUrl: String = "",
 )

@@ -1,7 +1,10 @@
 package com.wutsi.koki.portal.pub.common.page
 
 import com.wutsi.koki.error.dto.ErrorResponse
+import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.pub.common.model.PageModel
+import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.tenant.model.TenantModel
 import com.wutsi.koki.portal.pub.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.pub.user.model.UserModel
@@ -75,5 +78,35 @@ abstract class AbstractPageController {
         } catch (ex: Exception) {
             return key
         }
+    }
+
+    protected fun toMapMarkersJson(listings: List<ListingModel>): String {
+        val beds = getMessage("page.listing.bedrooms-abbreviation")
+        val markers = listings
+            .filter { listing -> listing.geoLocation != null }
+            .map { listing ->
+                mapOf(
+                    "id" to listing.id,
+                    "rental" to (listing.listingType == ListingType.RENTAL),
+                    "sold" to (listing.status == ListingStatus.RENTED || listing.status == ListingStatus.SOLD),
+                    "latitude" to listing.geoLocation?.latitude,
+                    "longitude" to listing.geoLocation?.longitude,
+                    "location" to listOfNotNull(listing.address?.neighbourhood?.name, listing.address?.city?.name)
+                        .joinToString(", "),
+                    "price" to if (listing.statusSold) listing.salePrice?.displayText else listing.price?.displayText,
+                    "heroImageUrl" to listing.heroImageUrl,
+                    "bedrooms" to (listing.bedrooms?.toString() ?: "--") + " " + beds,
+                    "area" to ((listing.lotArea?.let { listing.propertyArea }?.toString() ?: "--") + "m2"),
+                    "url" to listing.publicUrl,
+                    "status" to if (listing.status == ListingStatus.RENTED) {
+                        getMessage("listing-status.RENTED") + " " + listing.soldAtText
+                    } else if (listing.status == ListingStatus.SOLD) {
+                        getMessage("listing-status.SOLD") + " " + listing.soldAtText
+                    } else {
+                        ""
+                    }
+                )
+            }
+        return jsonMapper.writeValueAsString(markers)
     }
 }

@@ -246,7 +246,7 @@ class ListingService(
         return koki.create(
             CreateAIListingRequest(
                 text = form.text,
-                cityId = form.cityId,
+                cityId = form.cityId!!,
             )
         ).listingId
     }

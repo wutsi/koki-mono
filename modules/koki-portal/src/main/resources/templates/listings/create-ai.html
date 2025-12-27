@@ -28,7 +28,7 @@
 
                             <div class="section-item"
                                  data-city-id="cityId"
-                                 data-component-id=address
+                                 data-component-id="address"
                                  data-country-id="country"
                             >
                                 <label class="title">
@@ -60,7 +60,7 @@
                                     <span th:text="#{page.listing.description}">CITY</span>
                                     <span class="required">*</span>
                                 </label>
-                                <div class="form-text" th:utext="#{page.listing.ai-tex t.help}">HELP</div>
+                                <div class="form-text" th:utext="#{page.listing.ai-text.help}">HELP</div>
                                 <textarea class="form-control margin-top-small" maxlength="1000" required rows="10"
                                           th:field="*{text}"></textarea>
                             </div>

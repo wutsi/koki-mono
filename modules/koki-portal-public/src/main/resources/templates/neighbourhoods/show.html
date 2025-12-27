@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+
+<div class="agent-info-container">
+    <div class="agent-info-details">
+        <div class="margin-top">&nbsp;</div>
+
+        <!-- PICTURE -->
+        <div class="flex">
+            <h1 th:text="${neighbourhood.name}">NAME</h1>
+        </div>
+
+        <!-- METRICS -->
+        <div class="margin-top" th:if="${saleCount} OR ${rentalCount}">
+            <hr/>
+            <table class="w-100">
+                <tr th:if="${saleCount}">
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${saleCount}">000</b>
+                        <div th:text="#{page.neighborhood.for_sale}">Sales</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${saleAveragePrice}">$$$</b>
+                        <div th:text="#{page.neighborhood.average_price}">Average Price</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${salePriceRange}">$$$</b>
+                        <div th:text="#{page.neighborhood.price}">Price Range</div>
+                    </td>
+                </tr>
+                <tr th:if="${rentalCount}">
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${rentalCount}">000</b>
+                        <div th:text="#{page.neighborhood.for_rent}">Rentals</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${rentalAveragePrice}">$$$</b>
+                        <div th:text="#{page.neighborhood.average_price}">Average Price</div>
+                    </td>
+                    <td class="text-center text-top padding-bottom">
+                        <b class="text-larger" th:text="${rentalPriceRange}">$$$</b>
+                        <div th:text="#{page.neighborhood.price}">Price Range</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- AGENTS -->
+        <div class="margin-top" id="agent-container" th:if="${agents}">
+            <hr/>
+            <h2 th:text="#{page.neighborhood.section.agents(${neighbourhood.name})}">TITLE</h2>
+            <div class="row">
+                <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
+                    <a th:href="${agent.publicUrl}" th:title="${agent.user.displayName}">
+                        <div class="flex border padding border-rounded margin-bottom background-white">
+                            <img class="user-photo"
+                                 th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"/>
+
+                            <div class="margin-left">
+                                <b class="text-larger" th:text="${agent.user.displayName}">NAME</b><br/>
+                                <div class="flex">
+                                    <div th:text="${agent.user.employer}">EMPLOYER</div>
+                                </div>
+
+                                <div class="flex"
+                                     th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
+                                    <div class="flex margin-right-2x" th:if="${agent.totalSales > 0}">
+                                        <span th:text="${agent.totalSales}">000</span>
+                                        <span class="margin-left-small" th:text="#{page.agent.sales}">SALES</span>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="margin-right"
+                                             th:if="${agent.totalRentals > 0}"
+                                             th:utext="#{page.agent.n_total_rentals(${agent.totalRentals})}">00
+                                        </div>
+                                        <div th:if="${agent.totalSales > 0}"
+                                             th:utext="#{page.agent.n_total_rentals(${agent.totalSales})}">00
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVE LISTINGS -->
+        <div class="margin-top" id="rental-listing-container" th:if="${rentalListings}">
+            <hr/>
+            <h2 th:text="#{page.neighborhood.section.for_rent(${neighbourhood.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${rentalListings})}"></div>
+        </div>
+        <div class="margin-top" id="sale-listing-container" th:if="${saleListings}">
+            <hr/>
+            <h2 th:text="#{page.neighborhood.section.for_sale(${neighbourhood.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${saleListings})}"></div>
+        </div>
+
+        <!-- SOLD -->
+        <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
+            <hr/>
+            <h2 th:text="#{page.neighborhood.section.sold(${neighbourhood.name})}">TITLE</h2>
+            <div class="margin-bottom" id="map-container">
+                <div data-component-id="map"
+                     id="map"
+                     th:data-latitude="${mapCenterPoint?.latitude}"
+                     th:data-longitude="${mapCenterPoint?.longitude}"
+                     th:data-on-ready="on_map_ready"
+                     th:data-show-marker="${mapCenterPoint} ? true : false"
+                     th:data-zoom="14"
+                >
+                </div>
+            </div>
+            <div th:replace="~{__components/listing :: listing-carousel(${soldListings})}"></div>
+        </div>
+    </div>
+
+    <!-- CONTACT AGENT -->
+    <div class="listing-contact-details" th:if="${topAgent}">
+        <div class="listing-contact-details-inner">
+            <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
+                <div class="agent-info">
+                    <img th:if="${topAgent.user.photoUrl}" th:src="${topAgent.user.photoUrl}"/>
+                    <div>
+                        <h2 th:text="${topAgent.user.displayName}">AGENT</h2>
+                        <div th:text="${topAgent.user.employer}">EMPLOYER</div>
+                    </div>
+                </div>
+            </a>
+
+            <!--
+            <div class="message" th:text="#{page.lead.agent-message-default}">
+                MESSAGE
+            </div>
+
+            <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
+                    th:data-modal-body-url="'/leads/create?agent-id=' + ${agent.id}"
+                    th:data-modal-title="#{page.lead.modal.title}"
+                    th:text="#{button.send_message}">
+                Send Message
+            </button>
+            -->
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
+
+    function on_map_ready(id, map) {
+        console.log(json);
+
+        for (var i = 0; i < json.length; i++) {
+            let item = json[i];
+            const icon = L.AwesomeMarkers.icon({
+                icon: 'home',
+                markerColor: item.sold ? 'gray' : '#1d7edf',
+                prefix: 'fa'
+            })
+
+            let marker = L.marker([item.latitude, item.longitude], {icon: icon});
+            marker.on('mouseover', () => {
+                const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
+                    <a href="${item.url}" target="_blank">
+                        <div class="flex">
+                            <div class="listing-image">
+                                <img src="${item.heroImageUrl}" />
+                            </div>
+                            <div class="listing-details">
+                                <b class="listing-price">${item.price}</b>
+                                <div class="flex">
+                                   <div>${item.bedrooms}</div>
+                                   <div class="margin-left-small">${item.area}</div>
+                                </div>
+                                <div class="gray">${item.location}</div>
+                                <div class="text-danger margin-top-small"><b>${item.status}</b></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>`;
+                marker.bindPopup(html);
+                marker.openPopup();
+            });
+            map.addLayer(marker);
+        }
+    }
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            const elt = document.getElementById('toast-message');
+            if (elt) {
+                const toast = new bootstrap.Toast(elt);
+                toast.show();
+            }
+        },
+        false
+    );
+
+</script>
+</body>
+</html>

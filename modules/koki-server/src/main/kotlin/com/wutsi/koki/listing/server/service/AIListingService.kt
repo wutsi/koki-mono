@@ -97,7 +97,7 @@ class AIListingService(
                 publicRemarks = result.publicRemarks,
 
                 furnitureType = result.furnitureType,
-                amenityIds = result.amenityIds,
+                amenityIds = result.amenities.map { amenity -> amenity.id },
             ),
             tenantId = tenantId,
         )

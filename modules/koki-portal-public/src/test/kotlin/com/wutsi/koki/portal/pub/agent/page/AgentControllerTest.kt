@@ -12,11 +12,13 @@ import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.platform.geoip.GeoIp
 import com.wutsi.koki.platform.geoip.GeoIpService
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.ListingFixtures.listings
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
+import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
@@ -57,6 +59,20 @@ class AgentControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/agents/${agent.id}")
         assertCurrentPageIs(PageName.AGENT)
+
+        // Meta
+        assertElementAttribute("html", "lang", "fr")
+        assertElementAttribute("head meta[name='description']", "content", user.biography)
+
+        // Opengraph
+        assertElementAttributeContains("head meta[property='og:title']", "content", (user.displayName ?: ""))
+        assertElementAttribute("head meta[property='og:description']", "content", user.biography)
+        assertElementAttribute("head meta[property='og:type']", "content", "website")
+        assertElementAttributeEndsWith(
+            "head meta[property='og:url']",
+            "content",
+            "/agents/${agent.id}" + StringUtils.toSlug("", user.displayName)
+        )
 
         assertCurrentPageIs(PageName.AGENT)
         assertElementPresent("#map-container")

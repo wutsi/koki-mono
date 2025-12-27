@@ -257,7 +257,7 @@
         </div>
 
         <!-- NEIGHBORHOOD -->
-        <div class="margin-top border-top padding-top map-container">
+        <div class="margin-top border-top padding-top map-container" th:if="${listing.address}">
             <h2 th:text="#{page.listing.section.map.title}">Map &amp; Neighborhood</h2>
             <ul class="breadcrumb">
                 <li>
@@ -265,7 +265,10 @@
                 </li>
                 <li th:if="${listing.address.neighbourhood}">
                     <span>&#x2022;</span>
-                    <span th:text="${listing.address.neighbourhood.name}">NEIGHBORHOOD</span>
+                    <a th:href="${listing.address.neighbourhood.publicUrl}"
+                       th:text="${listing.address.neighbourhood.name}">
+                        NEIGHBORHOOD
+                    </a>
                 </li>
                 <li th:if="${listing.address.street}">
                     <span>&#x2022;</span>
