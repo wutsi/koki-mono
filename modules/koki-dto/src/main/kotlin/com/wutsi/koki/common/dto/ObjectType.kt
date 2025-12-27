@@ -39,4 +39,5 @@ enum class ObjectType {
     OFFER,
     AGENT,
     LEAD,
+    PLACE,
 }
