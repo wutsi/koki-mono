@@ -120,6 +120,7 @@ a.listing-item {
 .listing-carousel {
     display: flex;
     overflow-y: auto;
+    padding-bottom: 1em;
 }
 
 .listing-carousel .listing-card {

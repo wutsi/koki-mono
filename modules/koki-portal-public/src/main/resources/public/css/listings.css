@@ -156,6 +156,7 @@
 .listing-carousel {
     display: flex;
     overflow-y: auto;
+    padding-bottom: 1em;
 }
 
 
