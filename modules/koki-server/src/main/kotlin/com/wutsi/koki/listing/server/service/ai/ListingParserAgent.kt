@@ -59,6 +59,11 @@ class ListingParserAgent(
     }
 }
 
+data class AmenityResult(
+    val id: Long = -1,
+    val name: String = ""
+)
+
 data class ListingParserAgentResult(
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
@@ -86,7 +91,7 @@ data class ListingParserAgentResult(
     val securityDeposit: Int? = null,
     val phone: String? = null,
     val furnitureType: FurnitureType? = null,
-    val amenityIds: List<Long> = emptyList(),
+    val amenities: List<AmenityResult> = emptyList(),
     val street: String? = null,
     val neighbourhood: String? = null,
     val neighbourhoodId: Long? = null,

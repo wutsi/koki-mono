@@ -263,7 +263,8 @@ class ListingParserAgentTest {
     }
 
     private fun assertHasAmenityId(id: Int, listing: Map<*, *>) {
-        val amenityIds = listing["amenityIds"] as List<Int>
+        val amenities = listing["amenities"] as List<Map<String, Any>>
+        val amenityIds = amenities.mapNotNull { amenity -> amenity["id"] }
         assertEquals(true, amenityIds.contains(id))
     }
 

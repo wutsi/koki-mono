@@ -35,13 +35,13 @@
 
         <div class="margin-top flex" th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
             <div class="flex margin-right-2x" th:if="${agent.totalSales > 0}">
-                <span th:text="${agent.totalSales}">000</span>
-                <span th:text="#{page.agent.sales}">SALES</span>
+                <b th:text="${agent.totalSales}">000</b>
+                <span th:text="#{page.agent.sold}">SALES</span>
             </div>
 
             <div th:if="${agent.totalRentals > 0}">
-                <span th:text="${agent.totalRentals}">000</span>
-                <span th:text="#{page.agent.rentals}">RENTALS</span>
+                <b th:text="${agent.totalRentals}">000</b>
+                <span th:text="#{page.agent.rented}">RENTALS</span>
             </div>
         </div>
     </div>

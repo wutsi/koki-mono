@@ -1,7 +1,7 @@
 package com.wutsi.koki.portal.pub.agent.model
 
-import com.wutsi.koki.platform.util.NumberUtils
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.portal.pub.common.util.MoneyUtil
 import com.wutsi.koki.portal.pub.user.model.UserModel
 
 data class AgentModel(
@@ -18,13 +18,6 @@ data class AgentModel(
     val publicUrl: String = "",
 ) {
     fun priceRangeText(min: MoneyModel, max: MoneyModel): String {
-        if (min.amount == max.amount) {
-            return min.shortText
-        } else {
-            val currency = min.shortText.split(" ").firstOrNull() ?: ""
-            return currency + " " +
-                NumberUtils.shortText(min.amount.toLong()) + " - " +
-                NumberUtils.shortText(max.amount.toLong())
-        }
+        return MoneyUtil.priceRangeText(min, max)
     }
 }

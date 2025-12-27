@@ -20,18 +20,19 @@ class CreateAIListingController : AbstractListingController() {
     fun create(model: Model): String {
         val city = userHolder.get()?.city ?: resolveCity()
         val form = AIListingForm(
-            cityId = city?.id ?: -1,
+            cityId = city?.id,
             country = city?.country ?: tenantHolder.get().country,
         )
         return create(form, model, city)
     }
 
     private fun create(form: AIListingForm, model: Model, city: LocationModel?): String {
-        val xcity = city ?: locationService.get(form.cityId)
-        val parent = resolveParent(xcity)
-        model.addAttribute("city", xcity)
-        model.addAttribute("cityName", parent?.let { "${xcity.name}, ${parent.name}" } ?: xcity.name)
-
+        val xcity = city ?: form.cityId?.let { id -> locationService.get(id) }
+        if (xcity != null) {
+            val parent = resolveParent(xcity)
+            model.addAttribute("city", xcity)
+            model.addAttribute("cityName", parent?.let { "${xcity.name}, ${parent.name}" } ?: xcity.name)
+        }
         loadCountries(model)
 
         model.addAttribute("form", form)

@@ -2,7 +2,6 @@ package com.wutsi.koki.portal.pub.agent.page
 
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
@@ -97,36 +96,6 @@ class AgentController(
             sortBy = ListingSort.TRANSACTION_DATE,
             limit = 100,
         ).items
-    }
-
-    private fun toMapMarkersJson(listings: List<ListingModel>): String? {
-        val beds = getMessage("page.listing.bedrooms-abbreviation")
-        val markers = listings
-            .filter { listing -> listing.geoLocation != null }
-            .map { listing ->
-                mapOf(
-                    "id" to listing.id,
-                    "rental" to (listing.listingType == ListingType.RENTAL),
-                    "sold" to (listing.status == ListingStatus.RENTED || listing.status == ListingStatus.SOLD),
-                    "latitude" to listing.geoLocation?.latitude,
-                    "longitude" to listing.geoLocation?.longitude,
-                    "location" to listOfNotNull(listing.address?.neighbourhood?.name, listing.address?.city?.name)
-                        .joinToString(", "),
-                    "price" to if (listing.statusSold) listing.salePrice?.displayText else listing.price?.displayText,
-                    "heroImageUrl" to listing.heroImageUrl,
-                    "bedrooms" to (listing.bedrooms?.toString() ?: "--") + " " + beds,
-                    "area" to ((listing.lotArea?.let { listing.propertyArea }?.toString() ?: "--") + "m2"),
-                    "url" to listing.publicUrl,
-                    "status" to if (listing.status == ListingStatus.RENTED) {
-                        getMessage("listing-status.RENTED") + " " + listing.soldAtText
-                    } else if (listing.status == ListingStatus.SOLD) {
-                        getMessage("listing-status.SOLD") + " " + listing.soldAtText
-                    } else {
-                        ""
-                    }
-                )
-            }
-        return jsonMapper.writeValueAsString(markers)
     }
 
     fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {

@@ -19,6 +19,7 @@ import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.server.dao.AIListingRepository
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
+import com.wutsi.koki.listing.server.service.ai.AmenityResult
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingParserAgentResult
 import com.wutsi.koki.platform.ai.agent.Agent
@@ -114,8 +115,10 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
             phone = "+2370987654321",
 
             furnitureType = FurnitureType.FULLY_FURNISHED,
-            amenityIds = listOf(1103L, 1202L),
-
+            amenities = listOf(
+                AmenityResult(id = 1103L, name = "foo"),
+                AmenityResult(id = 1202L, name = "bar"),
+            ),
             publicRemarks = "A beautiful apartment located in the heart of the city.",
         )
         val json = jsonMapper.writeValueAsString(result)
@@ -157,7 +160,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.noticePeriod, listing.noticePeriod)
         assertEquals(result.advanceRent, listing.advanceRent)
         assertEquals(result.furnitureType, listing.furnitureType)
-        assertEquals(result.amenityIds, getAmenityIds(id))
+        assertEquals(result.amenities.map { it.id }, getAmenityIds(id))
         assertEquals(result.publicRemarks, listing.publicRemarks)
         assertEquals(USER_ID, listing.createdById)
         assertEquals(USER_ID, listing.modifiedById)

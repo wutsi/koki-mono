@@ -69,28 +69,5 @@
     </div>
 </div>
 
-<div th:fragment="listing-status-badge(listing)" th:remove="tag">
-    <span class="listing-status badge text-bg-secondary"
-          th:if="${listing.status.name() == 'DRAFT'}"
-          th:text="#{'listing-status.' + ${listing.status}}">DRAFT</span>
-
-    <span class="listing-status badge text-bg-warning"
-          th:if="${listing.status.name() == 'PUBLISHING'} OR ${listing.status.name() == 'PENDING'}"
-          th:text="#{'listing-status.' + ${listing.status}}">PUBLISHING</span>
-
-    <span class="listing-status badge text-bg-primary"
-          th:if="${listing.status.name() == 'ACTIVE'} OR ${listing.status.name() == 'ACTIVE_WITH_CONTINGENCIES'}"
-          th:text="#{'listing-status.' + ${listing.status}}">ACTIVE</span>
-
-    <span class="listing-status badge text-bg-success"
-          th:if="${listing.status.name() == 'RENTED'} OR ${listing.status.name() == 'SOLD'}"
-          th:text="#{'listing-status.' + ${listing.status}} + ' ' + ${listing.soldAtText}">SOLD</span>
-
-    <span class="listing-status badge text-bg-danger"
-          th:if="${listing.status == 'EXPIRED'} OR ${listing.status.name() == 'WITHDRAWN'} OR ${listing.status.name() == 'CANCELLED'}"
-          th:text="#{'listing-status.' + ${listing.status}}">CANCELLED</span>
-</div>
-
-
 </body>
 </html>

@@ -5,11 +5,13 @@ import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.refdata.dto.Location
+import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Service
 
 @Service
 class LocationMapper : TenantAwareMapper() {
     fun toLocationModel(entity: Location): LocationModel {
+        val tenant = currentTenant.get()
         return LocationModel(
             id = entity.id,
             name = entity.name,
@@ -17,7 +19,11 @@ class LocationMapper : TenantAwareMapper() {
             type = entity.type,
             country = entity.country,
             geoLocation = toGeoLocationModel(entity),
-            url = StringUtils.toSlug("/l/${entity.id}", entity.name)
+            publicUrl = if (entity.type == LocationType.NEIGHBORHOOD) {
+                StringUtils.toSlug("${tenant.clientPortalUrl}/neighbourhoods/${entity.id}", entity.name)
+            } else {
+                "/"
+            },
         )
     }
 
