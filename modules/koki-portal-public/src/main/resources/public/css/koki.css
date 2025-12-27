@@ -567,7 +567,7 @@ ul.breadcrumb li:first-child {
 }
 
 .border-rounded {
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 1em;
 }
 
 .border-light {

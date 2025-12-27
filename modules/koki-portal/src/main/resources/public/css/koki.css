@@ -650,7 +650,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .border-rounded {
-    border-radius: 0.5em;
+    border-radius: 1em;
 }
 
 .border-right {
