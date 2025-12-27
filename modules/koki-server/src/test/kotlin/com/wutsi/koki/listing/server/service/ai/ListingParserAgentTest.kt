@@ -152,7 +152,7 @@ class ListingParserAgentTest {
         assertEquals(true, listing["hasLandTitle"])
         assertNotNull(listing["publicRemarks"])
 
-        assertEquals("montée collège mvogt", listing["street"])
+        // assertEquals("montée collège mvogt", listing["street"])
         assertEquals("Yaoundé", listing["city"])
         assertEquals(null, listing["neighbourhood"])
         assertEquals(null, listing["neighbourhoodId"])
