@@ -16,18 +16,12 @@
 
                 <div class="flex"
                      th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
-                    <div class="flex margin-right-2x" th:if="${agent.totalSales > 0}">
-                        <span th:text="${agent.totalSales}">000</span>
-                        <span class="margin-left-small" th:text="#{page.agent.sales}">SALES</span>
+                    <div class="margin-right"
+                         th:if="${agent.totalRentals > 0}"
+                         th:utext="#{page.agent.n_total_rentals(${agent.totalRentals})}">00
                     </div>
-                    <div class="flex">
-                        <div class="margin-right"
-                             th:if="${agent.totalRentals > 0}"
-                             th:utext="#{page.agent.n_total_rentals(${agent.totalRentals})}">00
-                        </div>
-                        <div th:if="${agent.totalSales > 0}"
-                             th:utext="#{page.agent.n_total_rentals(${agent.totalSales})}">00
-                        </div>
+                    <div th:if="${agent.totalSales > 0}"
+                         th:utext="#{page.agent.n_total_rentals(${agent.totalSales})}">00
                     </div>
                 </div>
             </div>
