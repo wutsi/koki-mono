@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
  * AI Agent used for generating listing title/description based on listing details and images.
  * This agent is invoked when a listing is published.
  */
-class ListingDescriptorAgent(
+class ListingContentGeneratorAgent(
     val listing: ListingEntity,
     val images: List<FileEntity>,
     val city: LocationEntity?,
@@ -20,7 +20,7 @@ class ListingDescriptorAgent(
     val llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
-        const val QUERY = "Extract the information from the images provided for this property"
+        const val QUERY = ""
     }
 
     override fun systemInstructions(): String? {
@@ -28,7 +28,7 @@ class ListingDescriptorAgent(
     }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
-        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-descriptor-agent.prompt.md")!!
+        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-content-generator.prompt.md")!!
             .reader()
             .readText()
         val amenities = listing.amenities.joinToString(separator = ",") { amenity -> amenity.name }
@@ -37,8 +37,7 @@ class ListingDescriptorAgent(
             "- Image ${i++}: ${image.description ?: "No description available"}"
         }
 
-        return prompt.replace("{{query}}", query)
-            .replace("{{listingType}}", listing.listingType?.name ?: "Unknown")
+        return prompt.replace("{{listingType}}", listing.listingType?.name ?: "Unknown")
             .replace("{{propertyType}}", listing.propertyType?.name ?: "Unknown")
             .replace("{{bedrooms}}", listing.bedrooms?.toString() ?: "Unknown")
             .replace("{{bathrooms}}", listing.bathrooms?.toString() ?: "Unknown")
@@ -58,7 +57,7 @@ class ListingDescriptorAgent(
     override fun tools(): List<Tool> = emptyList<Tool>()
 }
 
-data class ListingDescriptorAgentResult(
+data class ListingContentGeneratorResult(
     val title: String? = null,
     val summary: String? = null,
     val description: String? = null,

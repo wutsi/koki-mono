@@ -18,7 +18,7 @@ import org.springframework.http.MediaType
 import java.util.Date
 import java.util.Locale
 
-class ListingParserAgent(
+class ListingContentParserAgent(
     private val amenityService: AmenityService,
     private val locationService: LocationService,
     private val city: LocationEntity,
@@ -31,7 +31,7 @@ class ListingParserAgent(
         val tools =
             tools().joinToString(separator = "\n") { tool -> "- ${tool.function().name}: ${tool.function().description}" }
 
-        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-parser-agent.prompt.md")!!
+        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-content-parser.prompt.md")!!
             .reader()
             .readText()
             .replace("{{query}}", query)
@@ -64,7 +64,7 @@ data class AmenityResult(
     val name: String = ""
 )
 
-data class ListingParserAgentResult(
+data class ListingContentParserResult(
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,

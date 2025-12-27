@@ -1,6 +1,5 @@
 package com.wutsi.koki.listing.server.service.ai
 
-import com.amazonaws.util.IOUtils
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.file.server.domain.FileEntity
@@ -16,11 +15,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
-import java.io.File
-import java.io.FileOutputStream
 import kotlin.test.Test
 
-class ListingDescriptorAgentTest {
+class ListingContentGeneratorAgentTest {
     private val llm = Deepseek(
         apiKey = System.getenv("DEEPSEEK_API_KEY"),
         model = "deepseek-chat",
@@ -55,7 +52,7 @@ class ListingDescriptorAgentTest {
         FileEntity(id = 5, description = "Bathroom with shower and bathtub"),
     )
     private val locationService = mock<LocationService>()
-    private val agent = ListingDescriptorAgent(listing, images, city, neighbourhood, llm)
+    private val agent = ListingContentGeneratorAgent(listing, images, city, neighbourhood, llm)
 
     @BeforeEach
     fun setUp() {
@@ -75,14 +72,14 @@ class ListingDescriptorAgentTest {
 
     @Test
     fun apartment() {
-        val json = agent.run(ListingDescriptorAgent.QUERY)
-        val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+        val json = agent.run(ListingContentGeneratorAgent.QUERY)
+        val result = JsonMapper().readValue(json, ListingContentGeneratorResult::class.java)
         assertEquals(true, result.heroImageIndex >= 0)
     }
 
     @Test
     fun land() {
-        val json = ListingDescriptorAgent(
+        val json = ListingContentGeneratorAgent(
             listing.copy(
                 propertyType = PropertyType.LAND,
                 listingType = ListingType.SALE,
@@ -95,18 +92,8 @@ class ListingDescriptorAgentTest {
             city = city,
             neighbourhood = neighbourhood,
             llm = llm,
-        ).run(ListingDescriptorAgent.QUERY)
-        val result = JsonMapper().readValue(json, ListingDescriptorAgentResult::class.java)
+        ).run(ListingContentGeneratorAgent.QUERY)
+        val result = JsonMapper().readValue(json, ListingContentGeneratorResult::class.java)
 //        assertEquals(true, result.heroImageIndex >= 0)
-    }
-
-    private fun getFile(path: String): File {
-        val file = File.createTempFile("test", ".jpg")
-        val fin = ListingDescriptorAgentTest::class.java.getResourceAsStream(path)
-        val fout = FileOutputStream(file)
-        fout.use {
-            IOUtils.copy(fin, fout)
-        }
-        return file
     }
 }

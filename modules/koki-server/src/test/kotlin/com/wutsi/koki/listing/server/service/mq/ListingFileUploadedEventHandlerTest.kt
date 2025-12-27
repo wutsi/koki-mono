@@ -19,8 +19,8 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgent
-import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorAgent
+import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorResult
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -76,7 +76,7 @@ class ListingFileUploadedEventHandlerTest {
         createdById = 777L,
     )
 
-    private val agent = mock<ListingImageReviewerAgent>()
+    private val agent = mock<ListingImageContentGeneratorAgent>()
 
     @BeforeEach
     fun setUp() {
@@ -88,7 +88,7 @@ class ListingFileUploadedEventHandlerTest {
         doReturn(totalImages).whenever(fileService)
             .countByTypeAndOwnerIdAndOwnerType(eq(FileType.IMAGE), any(), any())
         doReturn(listing).whenever(listingService).get(any(), any())
-        doReturn(agent).whenever(agentFactory).createImageReviewerAgent()
+        doReturn(agent).whenever(agentFactory).createImageContentGenerator()
     }
 
     @AfterEach
@@ -219,8 +219,8 @@ class ListingFileUploadedEventHandlerTest {
         )
     }
 
-    private fun createImageReviewerResult(valid: Boolean): ListingImageReviewerAgentResult {
-        return ListingImageReviewerAgentResult(
+    private fun createImageReviewerResult(valid: Boolean): ListingImageContentGeneratorResult {
+        return ListingImageContentGeneratorResult(
             title = "Bonjour",
             titleFr = "Hello",
             description = "Bonjour le monde",

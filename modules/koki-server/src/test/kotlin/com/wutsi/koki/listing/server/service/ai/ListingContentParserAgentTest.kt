@@ -21,7 +21,7 @@ import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
 
-class ListingParserAgentTest {
+class ListingContentParserAgentTest {
     private val llm = Deepseek(
         apiKey = System.getenv("DEEPSEEK_API_KEY"),
         model = "deepseek-chat",
@@ -29,7 +29,7 @@ class ListingParserAgentTest {
     private val amenityService = mock<AmenityService>()
     private val locationService = mock<LocationService>()
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val agent = ListingParserAgent(amenityService, locationService, city, llm)
+    private val agent = ListingContentParserAgent(amenityService, locationService, city, llm)
 
     @BeforeEach
     fun setUp() {

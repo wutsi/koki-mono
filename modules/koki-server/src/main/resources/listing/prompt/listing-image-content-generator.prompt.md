@@ -5,9 +5,9 @@ like AirBnB, VRBO or Bookings.com.
 
 You must return the image information in JSON having the following information:
 
-- title: Title of the picture
+- title: Title of the picture - in english
 - titleFr: Title translated in french
-- description: Description of the picture in less than 200 characters
+- description: Description of the picture in less than 200 characters - in english
 - descriptionFr: Description translated in french
 - quality: quality of the image, with the values POOR, LOW, MEDIUM or HIGH
 - valid: (true|false) "true" when the image is valid for an online property listing
@@ -16,10 +16,10 @@ You must return the image information in JSON having the following information:
 If you cannot extract the information from the provide image, you should return valid as "false", and all the other
 fields as "null"
 
-#Goal:
+# Goal:
+
 Extract information from the provided image.
 
-Query: {{query}}
+## Observations:
 
-Observations:
 {{observations}}

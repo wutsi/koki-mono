@@ -9,7 +9,7 @@ import com.wutsi.koki.listing.server.dao.AIListingRepository
 import com.wutsi.koki.listing.server.domain.AIListingEntity
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingParserAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
@@ -34,12 +34,12 @@ class AIListingService(
         return listing
     }
 
-    private fun parse(request: CreateAIListingRequest): ListingParserAgentResult {
+    private fun parse(request: CreateAIListingRequest): ListingContentParserResult {
         val defaultCity = locationService.get(request.cityId)
-        val agent = agentFactory.createParserAgent(defaultCity)
+        val agent = agentFactory.createListingContentParserAgent(defaultCity)
         val json = agent.run(request.text)
 
-        val result = jsonMapper.readValue(json, ListingParserAgentResult::class.java)
+        val result = jsonMapper.readValue(json, ListingContentParserResult::class.java)
         if (!result.valid) {
             throw BadRequestException(
                 error = Error(
@@ -53,7 +53,7 @@ class AIListingService(
 
     private fun createListing(
         request: CreateAIListingRequest,
-        result: ListingParserAgentResult,
+        result: ListingContentParserResult,
         tenantId: Long,
     ): ListingEntity {
         val tenant = tenantService.get(tenantId)
@@ -105,7 +105,7 @@ class AIListingService(
 
     private fun storePrompt(
         request: CreateAIListingRequest,
-        result: ListingParserAgentResult,
+        result: ListingContentParserResult,
         listing: ListingEntity,
     ) {
         dao.save(
