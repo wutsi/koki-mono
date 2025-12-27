@@ -63,8 +63,15 @@ class AgentController(
             createPageModel(
                 name = PageName.AGENT,
                 title = agent.user.displayName ?: "",
-                description = agent.user.biography,
                 url = agent.publicUrl,
+                description = getMessage(
+                    key = "page.agent.show.meta.description",
+                    args = arrayOf(
+                        (agent.user.displayName ?: ""),
+                        (agent.user.city?.name ?: ""),
+                        (agent.user.city?.countryName ?: "")
+                    )
+                )
             )
         )
         return "agents/show"

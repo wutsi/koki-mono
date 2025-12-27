@@ -62,14 +62,14 @@
 </div>
 
 <nav class="navbar navbar-expand navbar-light fixed-top" id="navbar" th:fragment="navbar">
-    <a class="navbar-brand" href="/">
+    <div class="navbar-brand" href="/">
         <span class="brand-name" th:if="!${tenant?.logoUrl}">KOKI</span>
         <img class="brand-logo" th:alt="${tenant.name}"
              th:if="${tenant?.logoUrl}"
              th:src="${tenant.logoUrl}"
              th:title="${tenant.name}"
         />
-    </a>
+    </div>
 
     <ul class="navbar-nav ms-auto" th:if="${listing} AND ${page.name == 'page.listing'}">
         <li class="margin-right-small" th:if="${listing.publicUrl}">

@@ -13,8 +13,12 @@
         <div class="margin-top">&nbsp;</div>
 
         <!-- PICTURE -->
-        <div class="flex">
+        <div>
             <h1 th:text="${neighbourhood.name}">NAME</h1>
+            <div class="text-larger"
+                 th:text="#{page.neighbourhood.sub_title(${neighbourhood.name},${neighbourhood.countryName})}">
+                DESCRIPTION
+            </div>
         </div>
 
         <!-- METRICS -->
@@ -24,29 +28,29 @@
                 <tr th:if="${saleCount}">
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${saleCount}">000</b>
-                        <div th:text="#{page.neighborhood.for_sale}">Sales</div>
+                        <div th:text="#{page.neighbourhood.for_sale}">Sales</div>
                     </td>
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${saleAveragePrice}">$$$</b>
-                        <div th:text="#{page.neighborhood.average_price}">Average Price</div>
+                        <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
                     </td>
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${salePriceRange}">$$$</b>
-                        <div th:text="#{page.neighborhood.price}">Price Range</div>
+                        <div th:text="#{page.neighbourhood.price}">Price Range</div>
                     </td>
                 </tr>
                 <tr th:if="${rentalCount}">
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${rentalCount}">000</b>
-                        <div th:text="#{page.neighborhood.for_rent}">Rentals</div>
+                        <div th:text="#{page.neighbourhood.for_rent}">Rentals</div>
                     </td>
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${rentalAveragePrice}">$$$</b>
-                        <div th:text="#{page.neighborhood.average_price}">Average Price</div>
+                        <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
                     </td>
                     <td class="text-center text-top padding-bottom">
                         <b class="text-larger" th:text="${rentalPriceRange}">$$$</b>
-                        <div th:text="#{page.neighborhood.price}">Price Range</div>
+                        <div th:text="#{page.neighbourhood.price}">Price Range</div>
                     </td>
                 </tr>
             </table>
@@ -55,7 +59,7 @@
         <!-- AGENTS -->
         <div class="margin-top" id="agent-container" th:if="${agents}">
             <hr/>
-            <h2 th:text="#{page.neighborhood.section.agents(${neighbourhood.name})}">TITLE</h2>
+            <h2 th:text="#{page.neighbourhood.section.agents(${neighbourhood.name})}">TITLE</h2>
             <div class="row">
                 <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
                     <a th:href="${agent.publicUrl}" th:title="${agent.user.displayName}">
@@ -95,19 +99,19 @@
         <!-- ACTIVE LISTINGS -->
         <div class="margin-top" id="rental-listing-container" th:if="${rentalListings}">
             <hr/>
-            <h2 th:text="#{page.neighborhood.section.for_rent(${neighbourhood.name})}">TITLE</h2>
-            <div th:replace="~{__components/listing :: listing-carousel(${rentalListings})}"></div>
+            <h2 th:text="#{page.neighbourhood.section.for_rent(${neighbourhood.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${rentalListings}, true)}"></div>
         </div>
         <div class="margin-top" id="sale-listing-container" th:if="${saleListings}">
             <hr/>
-            <h2 th:text="#{page.neighborhood.section.for_sale(${neighbourhood.name})}">TITLE</h2>
-            <div th:replace="~{__components/listing :: listing-carousel(${saleListings})}"></div>
+            <h2 th:text="#{page.neighbourhood.section.for_sale(${neighbourhood.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
         </div>
 
         <!-- SOLD -->
         <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
             <hr/>
-            <h2 th:text="#{page.neighborhood.section.sold(${neighbourhood.name})}">TITLE</h2>
+            <h2 th:text="#{page.neighbourhood.section.sold(${neighbourhood.name})}">TITLE</h2>
             <div class="margin-bottom" id="map-container">
                 <div data-component-id="map"
                      id="map"
@@ -119,7 +123,7 @@
                 >
                 </div>
             </div>
-            <div th:replace="~{__components/listing :: listing-carousel(${soldListings})}"></div>
+            <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
         </div>
     </div>
 

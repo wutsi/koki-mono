@@ -114,7 +114,7 @@
         <div class="margin-top" th:if="${activeListings}">
             <hr/>
             <h2 th:text="#{page.agent.show.listings(${agent.user.firstName})}">ACTIVE</h2>
-            <div th:replace="~{__components/listing :: listing-carousel(${activeListings})}"></div>
+            <div th:replace="~{__components/listing :: listing-carousel(${activeListings}, true)}"></div>
             <div class="margin-top-2x" id="map-container">
                 <div data-component-id="map"
                      id="map"

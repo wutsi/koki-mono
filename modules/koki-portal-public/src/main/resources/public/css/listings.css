@@ -69,7 +69,6 @@
     color: #444;
 }
 
-/** ===== LISTING DETAILS STYLES ===== */
 .listing-info-container {
     width: 1200px;
     margin: 1em auto 0 auto;
@@ -203,6 +202,13 @@
 .listing-card .listing-details {
     border: 1px solid lightgray;
     border-radius: 0 0 .5em .5em;
+    width: 302px;
+}
+
+.listing-card .summary {
+    height: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .listing-card .listing-details a {
@@ -215,6 +221,21 @@
     height: 1.25em;
 }
 
+
+/** ===== LISTING IMAGES ===== */
+.modal-body .image-container {
+    margin: 0 -1em;
+    padding: 0.5em;
+    border-bottom: 1px solid lightgray;
+}
+
+.modal-body .image-container:first-child {
+    margin-top: -1em;
+}
+
+.modal-body .image-container:last-child {
+    border-bottom: none;
+}
 
 /* ======================================================================== */
 /*                                                                          */

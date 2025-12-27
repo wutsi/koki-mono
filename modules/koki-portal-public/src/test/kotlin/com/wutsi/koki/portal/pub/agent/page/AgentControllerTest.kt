@@ -62,12 +62,20 @@ class AgentControllerTest : AbstractPageControllerTest() {
 
         // Meta
         assertElementAttribute("html", "lang", "fr")
-        assertElementAttribute("head meta[name='description']", "content", user.biography)
+        assertElementAttribute(
+            "head meta[name='description']",
+            "content",
+            "Agent immobilier Ray Sponsible de Quebec,Canada. Consultez les listings de l'agent et contactez-le pour tous vos besoins immobiliers."
+        )
 
         // Opengraph
         assertElementAttributeContains("head meta[property='og:title']", "content", (user.displayName ?: ""))
-        assertElementAttribute("head meta[property='og:description']", "content", user.biography)
         assertElementAttribute("head meta[property='og:type']", "content", "website")
+        assertElementAttribute(
+            "head meta[property='og:description']",
+            "content",
+            "Agent immobilier Ray Sponsible de Quebec,Canada. Consultez les listings de l'agent et contactez-le pour tous vos besoins immobiliers."
+        )
         assertElementAttributeEndsWith(
             "head meta[property='og:url']",
             "content",

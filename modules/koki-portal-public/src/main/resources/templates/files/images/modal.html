@@ -1,4 +1,4 @@
-<div class="margin-bottom-small text-center" th:each="img : ${images}">
+<div class="text-center image-container" th:each="img : ${images}">
     <img loading="lazy" th:alt="${img.title}" th:src="${img.contentUrl}" th:title="${img.title}"/>
     <div th:if="${img.title}" th:text="${img.title}">TITLE</DIV>
 </div>
