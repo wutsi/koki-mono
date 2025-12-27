@@ -36,6 +36,6 @@ data class Place(
     val rating: Double? = null,
     val ratingCriteria: List<PlaceRating> = emptyList(),
 
-    val createdAt: Date? = null,
-    val modifiedAt: Date? = null,
+    val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
 )
