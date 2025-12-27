@@ -110,12 +110,25 @@
             </div>
         </div>
 
-        <!-- ACTIVE LISTINGS -->
-        <div class="margin-top" th:if="${activeListings}">
+        <!-- FOR RENT -->
+        <div class="margin-top" th:if="${rentalListings}">
             <hr/>
-            <h2 th:text="#{page.agent.show.listings(${agent.user.firstName})}">ACTIVE</h2>
-            <div th:replace="~{__components/listing :: listing-carousel(${activeListings}, true)}"></div>
-            <div class="margin-top-2x" id="map-container">
+            <h2 th:text="#{page.agent.section.for_rent(${agent.user.firstName})}">ACTIVE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${rentalListings}, true)}"></div>
+        </div>
+
+        <!-- FOR SALE -->
+        <div class="margin-top" th:if="${saleListings}">
+            <hr/>
+            <h2 th:text="#{page.agent.section.for_sale(${agent.user.firstName})}">ACTIVE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
+        </div>
+
+        <!-- SOLD -->
+        <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
+            <hr/>
+            <h2 th:text="#{page.agent.section.sold(${agent.user.firstName})}">TITLE</h2>
+            <div class="margin-bottom" id="map-container">
                 <div data-component-id="map"
                      id="map"
                      th:data-latitude="${mapCenterPoint?.latitude}"
@@ -126,6 +139,7 @@
                 >
                 </div>
             </div>
+            <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
         </div>
     </div>
 

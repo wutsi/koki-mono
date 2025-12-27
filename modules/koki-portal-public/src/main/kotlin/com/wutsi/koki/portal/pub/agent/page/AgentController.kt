@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.agent.page
 
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
@@ -48,14 +49,9 @@ class AgentController(
         val agent = agentService.get(id)
         model.addAttribute("agent", agent)
 
-        val activeListings = loadActiveListings(agent, model)
-        val soldListings = findSoldListings(agent)
-        val listings = activeListings + soldListings
-        if (listings.isNotEmpty()) {
-            model.addAttribute("listings", listings)
-            model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
-            model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
-        }
+        loadActiveListings("rental", ListingType.RENTAL, agent, model)
+        loadActiveListings("sale", ListingType.SALE, agent, model)
+        loadSoldListings(agent, model)
 
         loadToast(toast, timestamp, model)
         model.addAttribute(
@@ -77,24 +73,30 @@ class AgentController(
         return "agents/show"
     }
 
-    private fun loadActiveListings(agent: AgentModel, model: Model): List<ListingModel> {
+    private fun loadActiveListings(
+        prefix: String,
+        listingType: ListingType,
+        agent: AgentModel,
+        model: Model
+    ): List<ListingModel> {
         val listings = listingService.search(
-            agentUserId = agent.user.id,
+            sellerAgentUserId = agent.user.id,
+            listingType = listingType,
             statuses = listOf(
                 ListingStatus.ACTIVE,
                 ListingStatus.ACTIVE_WITH_CONTINGENCIES,
             ),
             sortBy = ListingSort.NEWEST,
-            limit = 20,
+            limit = 100,
         ).items
         if (listings.isNotEmpty()) {
-            model.addAttribute("activeListings", listings)
+            model.addAttribute("${prefix}Listings", listings.take(20))
         }
         return listings
     }
 
-    private fun findSoldListings(agent: AgentModel): List<ListingModel> {
-        return listingService.search(
+    private fun loadSoldListings(agent: AgentModel, model: Model): List<ListingModel> {
+        val listings = listingService.search(
             agentUserId = agent.user.id,
             statuses = listOf(
                 ListingStatus.RENTED,
@@ -103,6 +105,11 @@ class AgentController(
             sortBy = ListingSort.TRANSACTION_DATE,
             limit = 100,
         ).items
+
+        model.addAttribute("soldListings", listings.take(20))
+        model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
+        model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
+        return listings
     }
 
     fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {

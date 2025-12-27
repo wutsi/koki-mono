@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="agent-card(agent)">
+    <a th:href="${agent.publicUrl}" th:title="${agent.user.displayName}">
+        <div class="flex border padding border-rounded margin-bottom background-white">
+            <img class="user-photo"
+                 th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"/>
+
+            <div class="margin-left">
+                <b class="text-larger" th:text="${agent.user.displayName}">NAME</b><br/>
+                <div class="flex">
+                    <div th:text="${agent.user.employer}">EMPLOYER</div>
+                </div>
+
+                <div class="flex"
+                     th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
+                    <div class="flex margin-right-2x" th:if="${agent.totalSales > 0}">
+                        <span th:text="${agent.totalSales}">000</span>
+                        <span class="margin-left-small" th:text="#{page.agent.sales}">SALES</span>
+                    </div>
+                    <div class="flex">
+                        <div class="margin-right"
+                             th:if="${agent.totalRentals > 0}"
+                             th:utext="#{page.agent.n_total_rentals(${agent.totalRentals})}">00
+                        </div>
+                        <div th:if="${agent.totalSales > 0}"
+                             th:utext="#{page.agent.n_total_rentals(${agent.totalSales})}">00
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+</body>
+</html>
