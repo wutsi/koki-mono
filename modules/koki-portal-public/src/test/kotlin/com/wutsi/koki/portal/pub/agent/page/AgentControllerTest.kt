@@ -16,7 +16,6 @@ import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
-import com.wutsi.koki.portal.pub.ListingFixtures.listings
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
@@ -83,8 +82,10 @@ class AgentControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.AGENT)
+        assertElementPresent("#sale-listing-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sold-listing-container")
         assertElementPresent("#map-container")
-        assertElementCount(".listing-card", listings.size)
     }
 
     @Test

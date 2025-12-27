@@ -111,14 +111,14 @@
         </div>
 
         <!-- FOR RENT -->
-        <div class="margin-top" th:if="${rentalListings}">
+        <div class="margin-top" id="rental-listing-container" th:if="${rentalListings}">
             <hr/>
             <h2 th:text="#{page.agent.section.for_rent(${agent.user.firstName})}">ACTIVE</h2>
             <div th:replace="~{__components/listing :: listing-carousel(${rentalListings}, true)}"></div>
         </div>
 
         <!-- FOR SALE -->
-        <div class="margin-top" th:if="${saleListings}">
+        <div class="margin-top" id="sale-listing-container" th:if="${saleListings}">
             <hr/>
             <h2 th:text="#{page.agent.section.for_sale(${agent.user.firstName})}">ACTIVE</h2>
             <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
