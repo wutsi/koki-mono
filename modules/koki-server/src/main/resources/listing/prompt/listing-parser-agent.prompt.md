@@ -39,8 +39,8 @@ The listing information must be structured in the following JSON format:
 - distanceFromMainRoad: Distance from the main road in meters (integer)
 - roadPavement: Type of road pavement. Values can be ASPHALT, CONCRETE, COBBLESTONE, GRAVEL, DIRT
 - amenities: List of amenities of the property. Each amenity having
-    - ID of the amenity (integers)
-    - The name of the amenity (string)
+    - id: ID of the amenity (integers)
+    - name: Name of the amenity (string)
 - amenityReason: Explain the decision you made to select those amenities (string)
 - street: Address - Name of the street
 - neighbourhood: Address - Name of the district or neighborhood
