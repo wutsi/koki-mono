@@ -10,7 +10,7 @@ import com.wutsi.koki.offer.dto.UpdateOfferStatusRequest
 import org.springframework.web.client.RestTemplate
 import java.util.Collections.emptyList
 
-class KokiOffer(
+class KokiOffers(
     private val urlBuilder: URLBuilder,
     private val rest: RestTemplate,
 ) {

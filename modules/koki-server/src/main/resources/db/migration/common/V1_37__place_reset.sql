@@ -61,3 +61,18 @@ CREATE TABLE T_PLACE_RATING(
   UNIQUE(place_fk, criteria),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
+
+
+-- Re-Register module
+DELETE FROM T_PERMISSION where module_fk=302;
+DELETE FROM T_MODULE where id=302;
+
+INSERT INTO T_MODULE(id, object_type, name, title, home_url, tab_url, settings_url, js_url, css_url)
+    VALUES (310, 19, 'place', 'Places', '/places', null, null, null, '/css/places.css');
+
+-- Re-Register permissions
+INSERT INTO T_PERMISSION(id, module_fk, name, description)
+    VALUES (3100, 310, 'place:read',        'View Places'),
+           (3101, 310, 'place:manage',      'Add/Edit Place'),
+           (3102, 310, 'place:delete',      'Delete Place'),
+           (3103, 310, 'place:full_access', 'Full access on all Places');
