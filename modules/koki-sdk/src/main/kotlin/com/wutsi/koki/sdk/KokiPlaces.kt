@@ -44,7 +44,7 @@ class KokiPlaces(
             PATH_PREFIX,
             mapOf(
                 "neighbourhood-id" to neighbourhoodIds,
-                "city-id" to neighbourhoodIds,
+                "city-id" to cityIds,
                 "type" to types,
                 "status" to statuses,
                 "q" to keyword,
