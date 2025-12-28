@@ -4,6 +4,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
@@ -68,7 +70,7 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         // WHEN
         val request = CreatePlaceRequest(
-            name = "Foo",
+            name = "Côte-des-Neiges",
             type = PlaceType.NEIGHBORHOOD,
             neighbourhoodId = 222L,
         )
@@ -82,13 +84,14 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(request.type, place.type)
         assertEquals(request.neighbourhoodId, place.neighbourhoodId)
+        assertEquals(111L, place.cityId)
         assertEquals(PlaceStatus.PUBLISHED, place.status)
         assertEquals(TENANT_ID, place.tenantId)
         assertEquals("Côte-des-Neiges", place.name)
         assertEquals(result.introduction, place.introduction)
         assertEquals(result.summary, place.summary)
         assertEquals(result.description, place.description)
-        assertEquals("Cote-des-Neiges", place.asciiName)
+        assertEquals("cote-des-neiges", place.asciiName)
         assertEquals(result.introductionFr, place.introductionFr)
         assertEquals(result.summaryFr, place.summaryFr)
         assertEquals(result.descriptionFr, place.descriptionFr)
@@ -105,6 +108,21 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertRating(placeId, RatingCriteria.AMENITIES, result.ratings.amenities.value)
         assertRating(placeId, RatingCriteria.LIFESTYLE, result.ratings.lifestyle.value)
         assertRating(placeId, RatingCriteria.COMMUTE, result.ratings.commute.value)
+    }
+
+    @Test
+    fun duplicate() {
+        // WHEN
+        val request = CreatePlaceRequest(
+            name = "Westmount",
+            type = PlaceType.NEIGHBORHOOD,
+            neighbourhoodId = 333L,
+        )
+        val response = rest.postForEntity("/v1/places", request, ErrorResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.PLACE_DUPLICATE_NAME, response.body?.error?.code)
     }
 
     private fun assertRating(placeId: Long, criteria: RatingCriteria, expected: Int) {

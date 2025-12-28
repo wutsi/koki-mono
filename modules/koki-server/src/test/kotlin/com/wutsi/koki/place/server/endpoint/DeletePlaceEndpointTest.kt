@@ -24,6 +24,8 @@ class DeletePlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         // THEN
         val place = dao.findById(100L).get()
+        assertEquals(true, place.name.startsWith("deleted-place-100-"))
+        assertEquals(true, place.asciiName.startsWith("deleted-place-100-"))
         assertNotNull(place.deletedAt)
         assertTrue(place.deleted)
         assertEquals(USER_ID, place.modifiedById)

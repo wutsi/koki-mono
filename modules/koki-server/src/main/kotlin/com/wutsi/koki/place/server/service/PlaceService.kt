@@ -2,18 +2,22 @@ package com.wutsi.koki.place.server.service
 
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.server.dao.PlaceRepository
 import com.wutsi.koki.place.server.domain.PlaceEntity
-import com.wutsi.koki.platform.util.StringUtils.toAscii
+import com.wutsi.koki.platform.util.StringUtils
+import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.util.UUID
 
 @Service
 class PlaceService(
@@ -21,6 +25,7 @@ class PlaceService(
     private val securityService: SecurityService,
     private val contentGeneratorFactory: ContentGeneratorAgentFactory,
     private val em: EntityManager,
+    private val locationService: LocationService,
 ) {
     fun get(id: Long, tenantId: Long): PlaceEntity {
         return dao.findByIdAndTenantIdAndDeleted(id, tenantId, false)
@@ -36,6 +41,7 @@ class PlaceService(
     fun search(
         tenantId: Long,
         neighbourhoodIds: List<Long>? = null,
+        cityIds: List<Long>? = null,
         types: List<PlaceType>? = null,
         statuses: List<PlaceStatus>? = null,
         keyword: String? = null,
@@ -46,6 +52,9 @@ class PlaceService(
 
         if (!neighbourhoodIds.isNullOrEmpty()) {
             jql.append(" AND P.neighbourhoodId IN :neighbourhoodIds")
+        }
+        if (!cityIds.isNullOrEmpty()) {
+            jql.append(" AND P.cityId IN :cityIds")
         }
         if (!types.isNullOrEmpty()) {
             jql.append(" AND P.type IN :types")
@@ -65,6 +74,9 @@ class PlaceService(
         if (!neighbourhoodIds.isNullOrEmpty()) {
             query.setParameter("neighbourhoodIds", neighbourhoodIds)
         }
+        if (!cityIds.isNullOrEmpty()) {
+            query.setParameter("cityIds", cityIds)
+        }
         if (!types.isNullOrEmpty()) {
             query.setParameter("types", types)
         }
@@ -82,6 +94,24 @@ class PlaceService(
 
     @Transactional
     fun create(request: CreatePlaceRequest, tenantId: Long): PlaceEntity {
+        // Ensure its unique
+        val neighbourhood = locationService.get(request.neighbourhoodId, LocationType.NEIGHBORHOOD)
+        val asciiName = toAscii(request.name)
+        val duplicate = dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndTenantIdAndDeleted(
+            asciiName = asciiName,
+            type = request.type,
+            cityId = neighbourhood.parentId ?: -1,
+            tenantId = tenantId,
+            deleted = false,
+        )
+        if (duplicate != null) {
+            throw ConflictException(
+                error = Error(code = ErrorCode.PLACE_DUPLICATE_NAME)
+            )
+        }
+
+        // Create
+        val city = locationService.get(neighbourhood.parentId ?: -1, LocationType.CITY)
         val userId = securityService.getCurrentUserIdOrNull()
         val place = dao.save(
             PlaceEntity(
@@ -89,13 +119,15 @@ class PlaceService(
                 createdById = userId,
                 modifiedById = userId,
                 name = request.name,
+                asciiName = asciiName,
                 type = request.type,
                 neighbourhoodId = request.neighbourhoodId,
+                cityId = city.id ?: -1,
                 status = PlaceStatus.PUBLISHING,
             )
         )
         val generator = contentGeneratorFactory.get(request.type)
-        generator.generate(place)
+        generator.generate(place, neighbourhood, city)
 
         place.status = PlaceStatus.PUBLISHED
         return dao.save(place)
@@ -104,10 +136,12 @@ class PlaceService(
     @Transactional
     fun update(id: Long, tenantId: Long): PlaceEntity {
         val place = get(id, tenantId)
+        val neighbourhood = locationService.get(place.neighbourhoodId)
+        val city = locationService.get(place.cityId)
         place.modifiedById = securityService.getCurrentUserIdOrNull()
 
         val generator = contentGeneratorFactory.get(place.type)
-        generator.generate(place)
+        generator.generate(place, neighbourhood, city)
         return dao.save(place)
     }
 
@@ -122,10 +156,16 @@ class PlaceService(
                 )
             }
 
+        entity.name = "deleted-place-$id-" + UUID.randomUUID().toString()
+        entity.asciiName = toAscii(entity.name)
         entity.deleted = true
         entity.deletedAt = Date()
         entity.modifiedById = securityService.getCurrentUserIdOrNull()
         entity.modifiedAt = Date()
         dao.save(entity)
+    }
+
+    private fun toAscii(name: String): String {
+        return StringUtils.toAscii(name).lowercase()
     }
 }

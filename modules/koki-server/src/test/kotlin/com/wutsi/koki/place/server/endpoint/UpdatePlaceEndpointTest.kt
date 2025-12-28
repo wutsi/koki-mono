@@ -81,7 +81,7 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.introduction, place.introduction)
         assertEquals(result.summary, place.summary)
         assertEquals(result.description, place.description)
-        assertEquals("Cote-des-Neiges", place.asciiName)
+        assertEquals("cote-des-neiges", place.asciiName)
         assertEquals(result.introductionFr, place.introductionFr)
         assertEquals(result.summaryFr, place.summaryFr)
         assertEquals(result.descriptionFr, place.descriptionFr)

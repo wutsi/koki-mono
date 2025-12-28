@@ -27,6 +27,7 @@ class PlaceMapper {
             descriptionFr = entity.descriptionFr,
 
             neighbourhoodId = entity.neighbourhoodId,
+            cityId = entity.cityId,
             longitude = entity.longitude,
             latitude = entity.latitude,
             websiteURL = entity.websiteUrl,
@@ -55,6 +56,7 @@ class PlaceMapper {
             id = entity.id ?: -1,
             heroImageId = entity.heroImageId,
             neighbourhoodId = entity.neighbourhoodId,
+            cityId = entity.cityId,
             type = entity.type,
             name = entity.name,
             summary = entity.summary,

@@ -40,6 +40,7 @@ class PlaceService(
 
     fun search(
         neighbourhoodIds: List<Long> = emptyList(),
+        cityIds: List<Long> = emptyList(),
         types: List<PlaceType> = emptyList(),
         statuses: List<PlaceStatus> = emptyList(),
         keyword: String? = null,
@@ -49,6 +50,7 @@ class PlaceService(
     ): ResultSetModel<PlaceModel> {
         val response = koki.search(
             neighbourhoodIds = neighbourhoodIds,
+            cityIds = cityIds,
             types = types,
             statuses = statuses,
             keyword = keyword,

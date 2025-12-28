@@ -21,7 +21,7 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val places = response.body!!.places
         // Should return 5 places from tenant 1 (excluding deleted 300 and tenant 2's 200)
-        assertEquals(5, places.size)
+        assertEquals(6, places.size)
     }
 
     @Test
@@ -53,6 +53,21 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val places = response.body!!.places
         assertEquals(5, places.size) // All non-deleted places
+    }
+
+    @Test
+    fun `search by city`() {
+        // WHEN
+        val response = rest.getForEntity(
+            "/v1/places?city-id=2",
+            SearchPlaceResponse::class.java
+        )
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val places = response.body!!.places
+        assertEquals(1, places.size) // 200
     }
 
     @Test

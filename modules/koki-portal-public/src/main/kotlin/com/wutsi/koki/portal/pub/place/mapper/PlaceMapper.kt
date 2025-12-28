@@ -41,6 +41,7 @@ class PlaceMapper : TenantAwareMapper() {
                 entity.description
             },
             neighbourhoodId = entity.neighbourhoodId,
+            cityId = entity.cityId,
             geoLocation = toGeoLocation(entity),
             websiteURL = entity.websiteURL,
             phoneNumber = entity.phoneNumber,
@@ -75,6 +76,7 @@ class PlaceMapper : TenantAwareMapper() {
                 entity.summary
             },
             neighbourhoodId = entity.neighbourhoodId,
+            cityId = entity.cityId,
             rating = entity.rating,
         )
     }

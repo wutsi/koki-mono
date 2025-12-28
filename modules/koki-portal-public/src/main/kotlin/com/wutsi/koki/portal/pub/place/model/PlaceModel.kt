@@ -18,6 +18,7 @@ data class PlaceModel(
     val introduction: String? = null,
     val description: String? = null,
     val neighbourhoodId: Long = -1,
+    val cityId: Long = -1,
     val geoLocation: GeoLocation? = null,
     val websiteURL: String? = null,
     val phoneNumber: String? = null,
