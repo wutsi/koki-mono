@@ -57,6 +57,7 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
                 infrastructure = RatingCriteraResult(3, "Good infrastructure"),
                 lifestyle = RatingCriteraResult(4, "Vibrant lifestyle"),
                 commute = RatingCriteraResult(2, "Average commute"),
+                education = RatingCriteraResult(3, "Average commute"),
             ),
         )
         val json = jsonMapper.writeValueAsString(result)
@@ -85,7 +86,7 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.introductionFr, place.introductionFr)
         assertEquals(result.summaryFr, place.summaryFr)
         assertEquals(result.descriptionFr, place.descriptionFr)
-        assertEquals(3.6, place.rating)
+        assertEquals(3.5, place.rating)
         assertEquals(45.4972159, place.latitude)
         assertEquals(-73.6390246, place.longitude)
         assertEquals(USER_ID, place.createdById)

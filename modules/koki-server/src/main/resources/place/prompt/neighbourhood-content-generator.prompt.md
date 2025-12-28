@@ -20,6 +20,9 @@ Generate the content in JSON formant with the following fields:
     - security
         - value: from 1 to 5
         - reason: Explanation of the rating
+    - education
+        - value: from 1 to 5
+        - reason: Explanation of the rating
     - amenities
         - value: from 1 to 5
         - reason: Explanation of the rating
@@ -44,10 +47,16 @@ Generate the content in JSON formant with the following fields:
         - Area relying on community policing should have a lower rating: (1 or 2)
         - Area relying on professional security services, proximity to embassies or military should have a higher
           rating (4 or 5)
+    - Education Rating:
+        - Area with offering private and international schools higher rating (4 to 5), depending of the number of
+          schools.
+        - Area with offering private non international schools will have a score of (3 to 4), depending of the number of
+          schools.
+        - Area with offering of public shools will have average rating.
+        - Area with low school offering will have low rating (1 to 2).
     - Amenities Rating:
         - Area with limited access to shops, markets, schools or hospitals should have a lower rating (1 or 2)
-        - Area with easy access to luxury shops/markets, international schools or private hospitals should have a
-          higher rating (4 or 5).
+        - Area with easy access to luxury shops/markets or private hospitals should have a higher rating (4 or 5).
         - traditional markets/shops, public school and hospital should be considered as average amenities (2 to 3).
     - Infrastructure Rating:
         - Area with frequent power outages, poor road conditions, limited water supply or poor internet connectivity

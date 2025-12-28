@@ -60,6 +60,10 @@
         <div class="margin-top" id="introduction-container" th:if="${place?.introduction}">
             <hr/>
             <div th:utext="${place.introductionHtml}">INTRODUCTION</div>
+
+            <div class="margin-top-2x" id="rating-container" th:if="${place.rating}">
+                <div th:replace="~{__components/place :: place-rating(${place}, true)}"></div>
+            </div>
         </div>
 
         <!-- AGENTS -->

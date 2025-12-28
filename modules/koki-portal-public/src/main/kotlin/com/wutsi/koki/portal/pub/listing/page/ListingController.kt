@@ -1,9 +1,13 @@
 package com.wutsi.koki.portal.pub.listing.page
 
+import com.wutsi.koki.place.dto.PlaceStatus
+import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
+import com.wutsi.koki.portal.pub.place.model.PlaceModel
+import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.refdata.dto.CategoryType
 import org.springframework.http.HttpStatusCode
@@ -20,6 +24,7 @@ import org.springframework.web.client.HttpClientErrorException
 class ListingController(
     private val service: ListingService,
     private val categoryService: CategoryService,
+    private val placeService: PlaceService,
 ) : AbstractPageController() {
     companion object {
         const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
@@ -76,6 +81,11 @@ class ListingController(
         model.addAttribute("heroImages21", heroImages.take(2))
         if (heroImages.size >= 4) {
             model.addAttribute("heroImages22", heroImages.subList(2, 4))
+        }
+
+        /* Place */
+        if (listing.address?.neighbourhood?.id != null) {
+            loadPlace(listing.address.neighbourhood.id, model)
         }
 
         /* Page */
@@ -152,5 +162,17 @@ class ListingController(
             else -> null
         }
         model.addAttribute("toastMessage", message)
+    }
+
+    private fun loadPlace(neighbourhoodId: Long, model: Model): PlaceModel? {
+        val place = placeService.search(
+            neighbourhoodIds = listOf(neighbourhoodId),
+            types = listOf(PlaceType.NEIGHBORHOOD),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            limit = 1,
+        ).items.firstOrNull() ?: return null
+
+        model.addAttribute("place", place)
+        return place
     }
 }
