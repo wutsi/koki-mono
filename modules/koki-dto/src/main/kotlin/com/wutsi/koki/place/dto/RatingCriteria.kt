@@ -7,4 +7,5 @@ enum class RatingCriteria {
     INFRASTRUCTURE,
     LIFESTYLE,
     COMMUTE,
+    EDUCATION,
 }
