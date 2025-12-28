@@ -157,7 +157,7 @@ koki:
 
     ai:
         rest:
-            read-timeout-millis: 60000 # 1 minute
+            read-timeout-millis: 120000 # 2 minute
             connect-timeout-millis: 60000 # 1 minute
         chat:
             type: deepseek

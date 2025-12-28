@@ -17,19 +17,19 @@ Generate the content in JSON formant with the following fields:
 - introductionFr: The introduction translated in french
 - descriptionFr: The description translated in french
 - ratings: Rating of the neighbourhood containing:
-    - securityRating
+    - security
         - value: from 1 to 5
         - reason: Explanation of the rating
-    - amenitiesRating
+    - amenities
         - value: from 1 to 5
         - reason: Explanation of the rating
-    - infrastructureRating
+    - infrastructure
         - value: from 1 to 5
         - reason: Explanation of the rating
-    - lifestyleRating
+    - lifestyle
         - value: from 1 to 5
         - reason: Explanation of the rating
-    - commuteRating
+    - commute
         - value: from 1 to 5
         - reason: Explanation of the rating
 

@@ -7,7 +7,7 @@ import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.http.MediaType
 
 class NeighbourhoodContentGeneratorAgent(
-    val city: LocationEntity,
+    val city: LocationEntity?,
     val neighbourhood: LocationEntity,
     val llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
@@ -21,7 +21,7 @@ class NeighbourhoodContentGeneratorAgent(
             .readText()
 
         return prompt.replace("{{country}}", neighbourhood.country)
-            .replace("{{city}}", city.name)
+            .replace("{{city}}", city?.name ?: "Unknown")
             .replace("{{neighbourhood}}", neighbourhood.name)
             .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
@@ -36,15 +36,15 @@ data class NeighbourhoodContentGeneratorResult(
     val summaryFr: String? = null,
     val introductionFr: String? = null,
     val descriptionFr: String? = null,
-    val ratings: NeighborhoodRatingResult? = null,
+    val ratings: NeighborhoodRatingResult = NeighborhoodRatingResult(),
 )
 
 data class NeighborhoodRatingResult(
-    val securityRating: RatingCriteraResult? = null,
-    val amenitiesRating: RatingCriteraResult? = null,
-    val infrastructureRating: RatingCriteraResult? = null,
-    val lifestyleRating: RatingCriteraResult? = null,
-    val commuteRating: RatingCriteraResult? = null,
+    val security: RatingCriteraResult = RatingCriteraResult(),
+    val amenities: RatingCriteraResult = RatingCriteraResult(),
+    val infrastructure: RatingCriteraResult = RatingCriteraResult(),
+    val lifestyle: RatingCriteraResult = RatingCriteraResult(),
+    val commute: RatingCriteraResult = RatingCriteraResult(),
 )
 
 data class RatingCriteraResult(

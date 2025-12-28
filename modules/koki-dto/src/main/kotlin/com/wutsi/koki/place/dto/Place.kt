@@ -6,17 +6,14 @@ data class Place(
     val id: Long = -1,
     val heroImageId: Long? = null,
     val name: String = "",
-    val nameFr: String? = null,
     val type: PlaceType = PlaceType.UNKNOWN,
     val status: PlaceStatus = PlaceStatus.UNKNOWN,
-
     val summary: String? = null,
     val summaryFr: String? = null,
     val introduction: String? = null,
     val introductionFr: String? = null,
     val description: String? = null,
     val descriptionFr: String? = null,
-
     val neighbourhoodId: Long? = null,
     val longitude: Double? = null,
     val latitude: Double? = null,

@@ -15,9 +15,10 @@ The content for each Place will have the following informations:
 - id: Unique identifier of the place content (long)
 - heroImageId: Unique identifier of the hero image (long)
 - name: Name of the place (max 100 char)
+- ascii_name: Name of the place with ascii characters only. Used for keyword search (max 100 char) - This is not
+  serialized to the DTO.
 - type: Type of the place. One of the following enum values: NEIGHBORHOOD, SCHOOL, PARK,
 - status: Status of the place. One of the following enum values: DRAFT, PUBLISHING, PUBLISHED, ARCHIVED
-- name_fr: Name of the place translated in french
 - summary: Short summary of the neighbourhood that is SEO friendly(max 160 char) - in english
 - summary_fr: The summary translated in french
 - introduction: High level introduction of the neighbourhood in 1 paragraph of less than 100 words - in english.
@@ -80,7 +81,9 @@ The following errors should be defined for the Place domain:
 
 We want to create a REST API to manage the Place content. This API will have the following endpoints:
 
-- POST /v1/places: Create the content of a place using AI agent. The content will be generated based on the place type
+- POST /v1/places: Create the content of a place. The content will be generated based on the place type
+  and name and neighborhoodId.
+- POST /v1/places/{id}: Regenerate the content of a place The content will be generated based on the place type
   and name and neighborhoodId.
 - GET /v1/places/{id}: Retrieve a place by its ID.
 - GET /v1/places: Retrieve a list of places with optional filters:

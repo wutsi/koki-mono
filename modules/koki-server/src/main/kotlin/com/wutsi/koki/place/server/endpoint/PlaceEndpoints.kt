@@ -6,6 +6,7 @@ import com.wutsi.koki.place.dto.GetPlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
+import com.wutsi.koki.place.server.mapper.PlaceMapper
 import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.logger.KVLogger
 import jakarta.validation.Valid
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/places")
 class PlaceEndpoints(
     private val service: PlaceService,
+    private val mapper: PlaceMapper,
     private val logger: KVLogger,
 ) {
     @PostMapping
@@ -40,13 +42,21 @@ class PlaceEndpoints(
         return CreatePlaceResponse(placeId = place.id!!)
     }
 
+    @PostMapping("/{id}")
+    fun update(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        service.update(id, tenantId)
+    }
+
     @GetMapping("/{id}")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): GetPlaceResponse {
         val place = service.get(id, tenantId)
-        return GetPlaceResponse(place = place)
+        return GetPlaceResponse(place = mapper.toPlace(place))
     }
 
     @GetMapping
@@ -68,7 +78,7 @@ class PlaceEndpoints(
             limit = limit,
             offset = offset,
         )
-        return SearchPlaceResponse(places = places)
+        return SearchPlaceResponse(places = places.map { mapper.toPlaceSummary(it) })
     }
 
     @DeleteMapping("/{id}")

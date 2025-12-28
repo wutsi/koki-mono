@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class PlaceMapper {
-    fun toPlace(entity: PlaceEntity, ratings: List<PlaceRatingEntity>): Place {
+    fun toPlace(entity: PlaceEntity): Place {
         return Place(
             id = entity.id ?: -1,
             heroImageId = entity.heroImageId,
             name = entity.name,
-            nameFr = entity.nameFr,
             type = entity.type,
             status = entity.status,
 
@@ -30,7 +29,7 @@ class PlaceMapper {
             neighbourhoodId = entity.neighbourhoodId,
             longitude = entity.longitude,
             latitude = entity.latitude,
-            websiteURL = entity.websiteURL,
+            websiteURL = entity.websiteUrl,
             phoneNumber = entity.phoneNumber,
 
             // School-specific fields
@@ -44,7 +43,7 @@ class PlaceMapper {
 
             // Rating
             rating = entity.rating,
-            ratingCriteria = ratings.map { toPlaceRating(it) },
+            ratingCriteria = entity.ratings.map { toPlaceRating(it) },
 
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -58,7 +57,6 @@ class PlaceMapper {
             neighbourhoodId = entity.neighbourhoodId,
             type = entity.type,
             name = entity.name,
-            nameFr = entity.nameFr,
             summary = entity.summary,
             summaryFr = entity.summaryFr,
             rating = entity.rating,

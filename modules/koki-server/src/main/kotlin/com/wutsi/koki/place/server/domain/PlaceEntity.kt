@@ -8,6 +8,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -31,62 +33,36 @@ data class PlaceEntity(
     var heroImageId: Long? = null,
 
     @Column(name = "neighbourhood_fk")
-    var neighbourhoodId: Long? = null,
+    var neighbourhoodId: Long = -1,
 
     var name: String = "",
-
-    @Column(name = "name_fr")
-    var nameFr: String? = null,
-
-    var type: PlaceType = PlaceType.UNKNOWN,
+    var asciiName: String = "",
+    val type: PlaceType = PlaceType.UNKNOWN,
     var status: PlaceStatus = PlaceStatus.UNKNOWN,
-
     var summary: String? = null,
-
-    @Column(name = "summary_fr")
     var summaryFr: String? = null,
-
     var introduction: String? = null,
-
-    @Column(name = "introduction_fr")
     var introductionFr: String? = null,
-
     var description: String? = null,
-
-    @Column(name = "description_fr")
     var descriptionFr: String? = null,
-
     var longitude: Double? = null,
     var latitude: Double? = null,
-
-    @Column(name = "website_url")
-    var websiteURL: String? = null,
-
-    @Column(name = "phone_number")
+    var websiteUrl: String? = null,
     var phoneNumber: String? = null,
-
-    // School-specific fields
     var private: Boolean? = null,
     var international: Boolean? = null,
     var diplomas: String? = null,
     var languages: String? = null,
-
-    @Column(name = "academic_systems")
     var academicSystems: String? = null,
-
     var faith: Faith? = null,
     var levels: String? = null,
-
     var rating: Double? = null,
-
-    @Column(name = "created_at")
     val createdAt: Date = Date(),
-
-    @Column(name = "modified_at")
     var modifiedAt: Date = Date(),
-
-    @Column(name = "deleted_at")
     var deletedAt: Date? = null,
-
     var deleted: Boolean = false,
+
+    @OneToMany
+    @JoinColumn(name = "place_fk")
+    val ratings: List<PlaceRatingEntity> = emptyList()
 )
