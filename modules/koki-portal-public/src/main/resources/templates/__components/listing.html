@@ -32,7 +32,6 @@
     <div class="listing-details padding-small">
         <a th:href="${listing.publicUrl}">
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
-            <b class="listing-price" th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$</b>
 
             <div class="text-small">
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>

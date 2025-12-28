@@ -290,7 +290,7 @@
         </div>
 
         <!-- NEIGHBORHOOD -->
-        <div class="margin-top border-top padding-top place-container"
+        <div class="margin-top border border-rounded background-white padding place-container"
              th:if="${place} AND ${listing.address?.neighbourhood}">
             <h2 th:text="#{page.listing.section.neighbourhood.title(${place.name})}">Explore</h2>
             <div th:text="${place.introduction}">INTRO</div>
