@@ -4,12 +4,12 @@ import com.wutsi.koki.portal.pub.agent.mapper.AgentMapper
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.user.model.UserModel
 import com.wutsi.koki.portal.pub.user.service.UserService
-import com.wutsi.koki.sdk.KokiAgent
+import com.wutsi.koki.sdk.KokiAgents
 import org.springframework.stereotype.Service
 
 @Service
 class AgentService(
-    private val koki: KokiAgent,
+    private val koki: KokiAgents,
     private val mapper: AgentMapper,
     private val userService: UserService,
 ) {
