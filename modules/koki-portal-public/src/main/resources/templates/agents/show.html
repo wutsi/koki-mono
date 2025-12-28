@@ -130,8 +130,8 @@
             <h2 th:text="#{page.agent.section.sold(${agent.user.firstName})}">TITLE</h2>
             <div class="margin-bottom" id="map-container">
                 <div data-component-id="map"
-                     id="map"
-                     th:data-latitude="${mapCenterPoint?.latitude}"
+                     data-disable-scroll-wheel-zoom="true"
+                     id="map" th:data-latitude="${mapCenterPoint?.latitude}"
                      th:data-longitude="${mapCenterPoint?.longitude}"
                      th:data-on-ready="on_map_ready"
                      th:data-show-marker="${mapCenterPoint} ? true : false"

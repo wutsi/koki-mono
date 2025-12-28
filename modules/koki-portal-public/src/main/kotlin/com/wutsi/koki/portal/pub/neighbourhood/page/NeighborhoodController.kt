@@ -3,6 +3,8 @@ package com.wutsi.koki.portal.pub.neighbourhood.page
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.place.dto.PlaceStatus
+import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
@@ -11,6 +13,8 @@ import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.common.util.MoneyUtil
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
+import com.wutsi.koki.portal.pub.place.model.PlaceModel
+import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -24,6 +28,7 @@ class NeighborhoodController(
     private val locationService: LocationService,
     private val listingService: ListingService,
     private val agentService: AgentService,
+    private val placeService: PlaceService,
     private val moneyMapper: MoneyMapper,
 ) : AbstractPageController() {
 
@@ -49,12 +54,16 @@ class NeighborhoodController(
             loadMap(sold, model)
         }
 
+        val place = loadPlace(neighbourhood.id, model)
+
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.NEIGHBOURHOOD,
                 title = neighbourhood.name,
                 url = neighbourhood.publicUrl,
+                description = place?.summary,
+                image = place?.heroImageUrl,
             ),
         )
         return "neighbourhoods/show"
@@ -135,5 +144,18 @@ class NeighborhoodController(
         model.addAttribute("mapMarkersJson", markersJson)
         val centerPoint = listings.firstNotNullOfOrNull { listing -> listing.geoLocation }
         model.addAttribute("mapCenterPoint", centerPoint)
+    }
+
+    private fun loadPlace(neighbourhoodId: Long, model: Model): PlaceModel? {
+        val item = placeService.search(
+            neighbourhoodIds = listOf(neighbourhoodId),
+            types = listOf(PlaceType.NEIGHBORHOOD),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            limit = 1,
+        ).items.firstOrNull() ?: return null
+
+        val place = placeService.get(item.id)
+        model.addAttribute("place", place)
+        return place
     }
 }

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.place.mapper
 
 import com.wutsi.koki.place.dto.Place
 import com.wutsi.koki.place.dto.PlaceRating
+import com.wutsi.koki.place.dto.PlaceSummary
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
@@ -54,6 +55,27 @@ class PlaceMapper : TenantAwareMapper() {
             ratingCriteria = entity.ratingCriteria.map { toPlaceRatingModel(it) },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
+        )
+    }
+
+    fun toPlaceModel(
+        entity: PlaceSummary,
+        images: Map<Long, FileModel> = emptyMap()
+    ): PlaceModel {
+        val lang = LocaleContextHolder.getLocale().language
+
+        return PlaceModel(
+            id = entity.id,
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            name = entity.name,
+            type = entity.type,
+            summary = if (lang == "fr") {
+                entity.summaryFr ?: entity.summary
+            } else {
+                entity.summary
+            },
+            neighbourhoodId = entity.neighbourhoodId,
+            rating = entity.rating,
         )
     }
 
