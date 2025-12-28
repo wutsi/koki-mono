@@ -16,7 +16,7 @@
         <div>
             <h1 th:text="${neighbourhood.name}">NAME</h1>
             <div class="text-larger"
-                 th:text="#{page.neighbourhood.sub_title(${neighbourhood.name},${neighbourhood.countryName})}">
+                 th:text="#{page.neighbourhood.sub_title(${neighbourhood.name},${city?.name})}">
                 DESCRIPTION
             </div>
         </div>
@@ -26,29 +26,29 @@
             <hr/>
             <table class="w-100">
                 <tr th:if="${saleCount}">
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${saleCount}">000</b>
                         <div th:text="#{page.neighbourhood.for_sale}">Sales</div>
                     </td>
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${saleAveragePrice}">$$$</b>
                         <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
                     </td>
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${salePriceRange}">$$$</b>
                         <div th:text="#{page.neighbourhood.price}">Price Range</div>
                     </td>
                 </tr>
                 <tr th:if="${rentalCount}">
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalCount}">000</b>
                         <div th:text="#{page.neighbourhood.for_rent}">Rentals</div>
                     </td>
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalAveragePrice}">$$$</b>
                         <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
                     </td>
-                    <td class="text-center text-top padding-bottom">
+                    <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalPriceRange}">$$$</b>
                         <div th:text="#{page.neighbourhood.price}">Price Range</div>
                     </td>

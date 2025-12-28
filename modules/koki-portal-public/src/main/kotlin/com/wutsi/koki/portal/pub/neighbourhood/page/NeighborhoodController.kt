@@ -42,6 +42,9 @@ class NeighborhoodController(
         val neighbourhood = locationService.get(id)
         model.addAttribute("neighbourhood", neighbourhood)
 
+        val city = neighbourhood.parentId?.let { id -> locationService.get(id) }
+        model.addAttribute("city", city)
+
         val rentals = loadActiveListings("rental", neighbourhood.id, ListingType.RENTAL, model)
         val sales = loadActiveListings("sale", neighbourhood.id, ListingType.SALE, model)
         val all = rentals + sales
