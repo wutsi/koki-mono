@@ -22,7 +22,7 @@
         <tr th:each="ratingCriterion : ${place.ratingCriteria}">
             <td th:text="#{'rating-criteria.' + ${ratingCriterion.criteria}}">Security</td>
             <td class="margin-left">
-                <span th:class="'text-' + ${ratingCriterion.ratingCode}" th:text="${ratingCriterion.value}">0</span>
+                <b th:class="'text-' + ${ratingCriterion.ratingCode}" th:text="${ratingCriterion.value}">0</b>
                 <span>/ 5</span>
             </td>
         </tr>
