@@ -8,28 +8,23 @@ import com.wutsi.koki.place.server.service.ai.NeighborhoodRatingResult
 import com.wutsi.koki.place.server.service.ai.NeighbourhoodContentGeneratorResult
 import com.wutsi.koki.place.server.service.ai.PlaceAgentFactory
 import com.wutsi.koki.place.server.service.ai.RatingCriteraResult
-import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
 import java.util.Date
 
 @Service
 class NeighbourhoodContentGenerator(
-    private val locationService: LocationService,
     private val factory: PlaceAgentFactory,
     private val jsonMapper: JsonMapper,
     private val ratingDao: PlaceRatingRepository,
 ) : PlaceContentGenerator {
-    override fun generate(place: PlaceEntity) {
-        val neighbourhood = locationService.get(place.neighbourhoodId)
-        val city = neighbourhood.parentId?.let { id -> locationService.get(id) }
+    override fun generate(place: PlaceEntity, neighbourhood: LocationEntity, city: LocationEntity) {
         val agent = factory.createNeighborhoodContentGeneratorAgent(neighbourhood, city)
         val json = agent.run("")
         val result = jsonMapper.readValue(json, NeighbourhoodContentGeneratorResult::class.java)
 
         // Update place content
-        place.name = neighbourhood.name
-        place.asciiName = neighbourhood.asciiName
         place.latitude = neighbourhood.latitude
         place.longitude = neighbourhood.longitude
         place.summary = result.summary

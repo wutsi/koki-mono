@@ -63,6 +63,7 @@ class PlaceEndpoints(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "neighbourhood-id") neighbourhoodIds: List<Long>? = null,
+        @RequestParam(required = false, name = "city-id") cityIds: List<Long>? = null,
         @RequestParam(required = false, name = "type") types: List<PlaceType>? = null,
         @RequestParam(required = false, name = "status") statuses: List<PlaceStatus>? = null,
         @RequestParam(required = false, name = "q") keyword: String? = null,
@@ -72,6 +73,7 @@ class PlaceEndpoints(
         val places = service.search(
             tenantId = tenantId,
             neighbourhoodIds = neighbourhoodIds,
+            cityIds = cityIds,
             types = types,
             statuses = statuses,
             keyword = keyword,

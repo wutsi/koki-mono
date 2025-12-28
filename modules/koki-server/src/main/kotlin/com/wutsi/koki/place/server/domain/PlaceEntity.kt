@@ -35,6 +35,9 @@ data class PlaceEntity(
     @Column(name = "neighbourhood_fk")
     var neighbourhoodId: Long = -1,
 
+    @Column(name = "city_fk")
+    var cityId: Long = -1,
+
     var name: String = "",
     var asciiName: String = "",
     val type: PlaceType = PlaceType.UNKNOWN,
