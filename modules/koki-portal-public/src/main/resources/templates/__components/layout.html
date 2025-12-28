@@ -14,9 +14,9 @@
     <meta name="wutsi:hit_id" th:content="${page.hitId}"/>
     <meta property="og:site_name" th:content="${tenant.name}"/>
     <meta property="og:type" th:content="${page.type}"/>
-    <meta property="og:url" th:content="${page.url}"/>
     <meta property="og:title" th:content="${page.title}"/>
-    <meta property="og:description" th:content="${page.description}"/>
+    <meta property="og:url" th:content="${page.url}" th:if="${page.url}"/>
+    <meta property="og:description" th:content="${page.description}" th:if="${page.description}"/>
     <meta itemprop="image" property="og:image" th:content="${page.image}" th:if="${page.image}"/>
     <meta property="og:updated_time" th:content="${page.updatedTime}" th:if="${page.updatedTime}"/>
 

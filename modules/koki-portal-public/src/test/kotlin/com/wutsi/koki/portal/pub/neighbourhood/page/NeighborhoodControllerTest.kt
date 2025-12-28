@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.PlaceFixtures.place
@@ -66,5 +67,44 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#map-container")
         assertElementPresent("#about-container")
         assertElementPresent("#introduction-container")
+    }
+
+    @Test
+    fun `no content`() {
+        doReturn(
+            ResponseEntity(
+                SearchPlaceResponse(emptyList()),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPlaceResponse::class.java)
+            )
+
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // Meta
+        assertElementAttribute("html", "lang", "fr")
+        assertElementNotPresent("head meta[name='description']")
+
+        // Opengraph
+        assertElementAttribute("head meta[property='og:title']", "content", neighborhoods[0].name)
+        assertElementAttribute("head meta[property='og:type']", "content", "website")
+        assertElementNotPresent("head meta[property='og:description']")
+        assertElementAttributeEndsWith(
+            "head meta[property='og:url']",
+            "content",
+            "/neighbourhoods/${neighborhoods[0].id}" + StringUtils.toSlug("", neighborhoods[0].name)
+        )
+
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
+        assertElementPresent("#sold-listing-container")
+        assertElementPresent("#map-container")
+        assertElementNotPresent("#about-container")
+        assertElementNotPresent("#introduction-container")
     }
 }

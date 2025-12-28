@@ -106,7 +106,7 @@
         </div>
 
         <!-- ABOUT -->
-        <div class="margin-top" id="about-container" th:if="${place.description}">
+        <div class="margin-top" id="about-container" th:if="${place?.description}">
             <hr/>
             <h2 th:text="#{page.neighbourhood.section.abount(${neighbourhood.name})}">TITLE</h2>
             <div class="margin-bottom" th:text="${place.description}">DESCRIPTION</div>
