@@ -90,6 +90,7 @@ object ErrorCode {
     val PASSWORD_RESET_TOKEN_NOT_FOUND = "$PREFIX:password-reset-token:not-found"
     val PASSWORD_RESET_TOKEN_EXPIRED = "$PREFIX:password-reset-token:expired"
 
+    val PLACE_DUPLICATE_NAME: String = "$PREFIX:place:duplicate-name"
     val PLACE_NOT_FOUND: String = "$PREFIX:place:not-found"
 
     val ROLE_DUPLICATE_NAME: String = "$PREFIX:role:duplicate-name"

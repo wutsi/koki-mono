@@ -4,6 +4,8 @@ import java.util.Date
 
 data class Place(
     val id: Long = -1,
+    val neighbourhoodId: Long = -1,
+    val cityId: Long = -1,
     val heroImageId: Long? = null,
     val name: String = "",
     val type: PlaceType = PlaceType.UNKNOWN,
@@ -14,7 +16,6 @@ data class Place(
     val introductionFr: String? = null,
     val description: String? = null,
     val descriptionFr: String? = null,
-    val neighbourhoodId: Long = -1,
     val longitude: Double? = null,
     val latitude: Double? = null,
     val websiteURL: String? = null,
