@@ -20,6 +20,9 @@ Generate the content in JSON formant with the following fields:
     - security
         - value: from 1 to 5
         - reason: Explanation of the rating
+    - education
+        - value: from 1 to 5
+        - reason: Explanation of the rating
     - amenities
         - value: from 1 to 5
         - reason: Explanation of the rating

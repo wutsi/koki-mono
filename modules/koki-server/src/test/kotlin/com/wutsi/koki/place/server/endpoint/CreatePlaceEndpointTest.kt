@@ -96,7 +96,7 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.introductionFr, place.introductionFr)
         assertEquals(result.summaryFr, place.summaryFr)
         assertEquals(result.descriptionFr, place.descriptionFr)
-        assertEquals(3.3, place.rating)
+        assertEquals(3.5, place.rating)
         assertEquals(45.4972159, place.latitude)
         assertEquals(-73.6390246, place.longitude)
         assertEquals(USER_ID, place.createdById)
