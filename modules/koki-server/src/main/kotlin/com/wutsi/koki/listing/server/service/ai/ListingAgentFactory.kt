@@ -15,17 +15,17 @@ class ListingAgentFactory(
     private val locationService: LocationService,
     private val llmProvider: LLMProvider
 ) {
-    fun createImageReviewerAgent(): Agent {
-        return ListingImageReviewerAgent(llm = llmProvider.visionLLM)
+    fun createImageContentGenerator(): Agent {
+        return ListingImageContentGeneratorAgent(llm = llmProvider.visionLLM)
     }
 
-    fun createDescriptorAgent(
+    fun createListingContentGenerator(
         listing: ListingEntity,
         images: List<FileEntity>,
         city: LocationEntity?,
         neighbourhood: LocationEntity?,
     ): Agent {
-        return ListingDescriptorAgent(
+        return ListingContentGeneratorAgent(
             llm = llmProvider.visionLLM,
             listing = listing,
             images = images,
@@ -34,10 +34,8 @@ class ListingAgentFactory(
         )
     }
 
-    fun createParserAgent(
-        city: LocationEntity,
-    ): Agent {
-        return ListingParserAgent(
+    fun createListingContentParserAgent(city: LocationEntity): Agent {
+        return ListingContentParserAgent(
             amenityService = amenityService,
             locationService = locationService,
             city = city,

@@ -24,11 +24,12 @@ class GetPlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val place = response.body!!.place
         assertEquals(100L, place.id)
-        assertEquals("Downtown Park", place.name)
         assertEquals(PlaceType.SCHOOL, place.type)
         assertEquals(PlaceStatus.DRAFT, place.status)
         assertEquals(111L, place.neighbourhoodId)
+        assertEquals("Downtown Park", place.name)
         assertEquals("A beautiful park", place.summary)
+        assertEquals(4.5, place.rating)
 
         // Should include ratings
         assertEquals(2, place.ratingCriteria.size)

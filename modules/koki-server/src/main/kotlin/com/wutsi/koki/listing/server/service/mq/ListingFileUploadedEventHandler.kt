@@ -8,8 +8,8 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgent
-import com.wutsi.koki.listing.server.service.ai.ListingImageReviewerAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorAgent
+import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorResult
 import com.wutsi.koki.platform.logger.KVLogger
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
@@ -56,10 +56,10 @@ class ListingFileUploadedEventHandler(
             return image
         }
 
-        val agent = agentFactory.createImageReviewerAgent()
+        val agent = agentFactory.createImageContentGenerator()
         val f = fileService.download(image)
-        val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(f))
-        val result = jsonMapper.readValue(json, ListingImageReviewerAgentResult::class.java)
+        val json = agent.run(ListingImageContentGeneratorAgent.QUERY, listOf(f))
+        val result = jsonMapper.readValue(json, ListingImageContentGeneratorResult::class.java)
         image.status = if (result.valid) FileStatus.APPROVED else FileStatus.REJECTED
         image.rejectionReason = if (result.valid) null else result.reason
         image.title = result.title

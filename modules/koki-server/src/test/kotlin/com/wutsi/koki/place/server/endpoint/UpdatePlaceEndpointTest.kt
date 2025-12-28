@@ -4,8 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.place.dto.CreatePlaceRequest
-import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.RatingCriteria
@@ -27,8 +25,8 @@ import tools.jackson.databind.json.JsonMapper
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/place/CreatePlaceEndpoint.sql"])
-class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
+@Sql(value = ["/db/test/clean.sql", "/db/test/place/UpdatePlaceEndpoint.sql"])
+class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: PlaceRepository
 
@@ -67,22 +65,17 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         doReturn(agent).whenever(placeAgentFactory).createNeighborhoodContentGeneratorAgent(any(), any())
 
         // WHEN
-        val request = CreatePlaceRequest(
-            name = "Foo",
-            type = PlaceType.NEIGHBORHOOD,
-            neighbourhoodId = 222L,
-        )
-        val response = rest.postForEntity("/v1/places", request, CreatePlaceResponse::class.java)
+        val response = rest.postForEntity("/v1/places/100", emptyMap<String, String>(), Any::class.java)
 
         // THEN
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val placeId = response.body!!.placeId
+        val placeId = 100L
         val place = dao.findById(placeId).get()
 
-        assertEquals(request.type, place.type)
-        assertEquals(request.neighbourhoodId, place.neighbourhoodId)
-        assertEquals(PlaceStatus.PUBLISHED, place.status)
+        assertEquals(PlaceType.NEIGHBORHOOD, place.type)
+        assertEquals(222L, place.neighbourhoodId)
+        assertEquals(PlaceStatus.DRAFT, place.status)
         assertEquals(TENANT_ID, place.tenantId)
         assertEquals("Côte-des-Neiges", place.name)
         assertEquals(result.introduction, place.introduction)

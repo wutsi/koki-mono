@@ -9,11 +9,11 @@ import org.springframework.http.MediaType
 /**
  * This API agent review images uploaded
  */
-class ListingImageReviewerAgent(
+class ListingImageContentGeneratorAgent(
     val llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
-        const val QUERY = "Extract the information from the image provided"
+        const val QUERY = ""
     }
 
     override fun systemInstructions(): String? {
@@ -21,18 +21,16 @@ class ListingImageReviewerAgent(
     }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
-        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-image-reviewer-agent.prompt.md")!!
+        val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-image-content-generator.prompt.md")!!
             .reader()
             .readText()
-        return prompt
-            .replace("{{query}}", query)
-            .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
+        return prompt.replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
 
     override fun tools(): List<Tool> = emptyList<Tool>()
 }
 
-data class ListingImageReviewerAgentResult(
+data class ListingImageContentGeneratorResult(
     val title: String? = null,
     val description: String? = null,
     val titleFr: String? = null,

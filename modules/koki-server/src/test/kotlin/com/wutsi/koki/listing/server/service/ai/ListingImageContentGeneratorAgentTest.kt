@@ -16,7 +16,7 @@ import kotlin.test.Test
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ListingImageReviewerAgentTest {
+class ListingImageContentGeneratorAgentTest {
     @Autowired
     private lateinit var provider: LLMProvider
 
@@ -34,8 +34,8 @@ class ListingImageReviewerAgentTest {
     fun run() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/room.jpg")
-        val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
-        val result = JsonMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
+        val json = agent.run(ListingImageContentGeneratorAgent.QUERY, listOf(file))
+        val result = JsonMapper().readValue(json, ListingImageContentGeneratorResult::class.java)
         assertEquals(ImageQuality.HIGH, result.quality)
         assertEquals(true, result.valid)
         assertEquals(null, result.reason)
@@ -45,9 +45,9 @@ class ListingImageReviewerAgentTest {
     fun `invalid file`() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/bad-image.jpg")
-        val json = agent.run(ListingImageReviewerAgent.QUERY, listOf(file))
+        val json = agent.run(ListingImageContentGeneratorAgent.QUERY, listOf(file))
         println(json)
-        val result = JsonMapper().readValue(json, ListingImageReviewerAgentResult::class.java)
+        val result = JsonMapper().readValue(json, ListingImageContentGeneratorResult::class.java)
         assertEquals(ImageQuality.POOR, result.quality)
         assertEquals(false, result.valid)
         assertNotNull(result.reason)
@@ -55,7 +55,7 @@ class ListingImageReviewerAgentTest {
 
     private fun getValidFile(path: String): File {
         val file = File.createTempFile("test", ".jpg")
-        val fin = ListingImageReviewerAgentTest::class.java.getResourceAsStream(path)
+        val fin = ListingImageContentGeneratorAgentTest::class.java.getResourceAsStream(path)
         val fout = FileOutputStream(file)
         fout.use {
             IOUtils.copy(fin, fout)
@@ -64,6 +64,6 @@ class ListingImageReviewerAgentTest {
     }
 
     private fun createAgent(): Agent {
-        return ListingImageReviewerAgent(provider.visionLLM)
+        return ListingImageContentGeneratorAgent(provider.visionLLM)
     }
 }

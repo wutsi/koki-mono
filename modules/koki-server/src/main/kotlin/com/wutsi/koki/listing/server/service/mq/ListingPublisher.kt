@@ -8,8 +8,8 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgent
-import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingContentGeneratorAgent
+import com.wutsi.koki.listing.server.service.ai.ListingContentGeneratorResult
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.service.LocationService
 import jakarta.transaction.Transactional
@@ -46,9 +46,9 @@ class ListingPublisher(
         )
         val city = listing.cityId?.let { id -> locationService.get(id) }
         val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
-        val agent = agentFactory.createDescriptorAgent(listing, images, city, neighbourhood)
-        val json = agent.run(ListingDescriptorAgent.QUERY)
-        val result = jsonMapper.readValue(json, ListingDescriptorAgentResult::class.java)
+        val agent = agentFactory.createListingContentGenerator(listing, images, city, neighbourhood)
+        val json = agent.run(ListingContentGeneratorAgent.QUERY)
+        val result = jsonMapper.readValue(json, ListingContentGeneratorResult::class.java)
         listing.status = ListingStatus.ACTIVE
         listing.title = result.title
         listing.summary = result.summary

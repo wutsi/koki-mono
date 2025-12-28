@@ -12,8 +12,8 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgent
-import com.wutsi.koki.listing.server.service.ai.ListingDescriptorAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingContentGeneratorAgent
+import com.wutsi.koki.listing.server.service.ai.ListingContentGeneratorResult
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.AfterEach
@@ -58,8 +58,8 @@ class ListingPublisherTest {
         FileEntity(id = 333L, tenantId = tenantId)
     )
 
-    private val agent = mock<ListingDescriptorAgent>()
-    private val result = ListingDescriptorAgentResult(
+    private val agent = mock<ListingContentGeneratorAgent>()
+    private val result = ListingContentGeneratorResult(
         heroImageIndex = 1,
         title = "Hello",
         summary = "Hello world",
@@ -74,7 +74,7 @@ class ListingPublisherTest {
         doReturn(listing).whenever(listingService).get(any(), any())
         doReturn(listing).whenever(listingService).save(any(), anyOrNull())
 
-        doReturn(agent).whenever(agentFactory).createDescriptorAgent(any(), any(), anyOrNull(), anyOrNull())
+        doReturn(agent).whenever(agentFactory).createListingContentGenerator(any(), any(), anyOrNull(), anyOrNull())
 
         doReturn(
             jsonMapper.writeValueAsString(result)

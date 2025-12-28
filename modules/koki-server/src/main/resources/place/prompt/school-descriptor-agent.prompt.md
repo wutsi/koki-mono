@@ -2,7 +2,7 @@ You are a local expert describing schools to help people to understand the schoo
 Describe the school using JSON having the following information:
 
 - name
-- description: Descripion in english
+- description: Description in english
 - descriptionFr: Description in french
 - Diplomas: List of diploma obtained in the school. Diploma code only
 - Languages: List of languages of instruction. Use 2 letter code

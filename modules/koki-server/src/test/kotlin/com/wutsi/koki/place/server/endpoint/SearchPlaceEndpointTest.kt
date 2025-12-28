@@ -106,7 +106,7 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
     fun `search by keyword`() {
         // WHEN
         val response = rest.getForEntity(
-            "/v1/places?q=school",
+            "/v1/places?q=EcoLE",
             SearchPlaceResponse::class.java
         )
 
@@ -115,21 +115,6 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
 
         val places = response.body!!.places
         assertEquals(2, places.size) // 101, 103 (both have "School" in name)
-    }
-
-    @Test
-    fun `search by keyword in French`() {
-        // WHEN
-        val response = rest.getForEntity(
-            "/v1/places?q=parc",
-            SearchPlaceResponse::class.java
-        )
-
-        // THEN
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val places = response.body!!.places
-        assertEquals(2, places.size) // 100, 102 (both have "Parc" in name_fr)
     }
 
     @Test

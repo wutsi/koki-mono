@@ -4,7 +4,7 @@ import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
 import org.springframework.web.client.RestTemplate
 
-class KokiAgent(
+class KokiAgents(
     private val urlBuilder: URLBuilder,
     rest: RestTemplate,
 ) : AbstractKokiModule(rest) {

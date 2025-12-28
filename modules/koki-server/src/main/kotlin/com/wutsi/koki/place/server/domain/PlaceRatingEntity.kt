@@ -18,7 +18,7 @@ data class PlaceRatingEntity(
     @Column(name = "place_fk")
     val placeId: Long = -1,
 
-    var criteria: RatingCriteria = RatingCriteria.UNKNOWN,
+    val criteria: RatingCriteria = RatingCriteria.UNKNOWN,
     var value: Int = 0,
     var reason: String? = null,
 )

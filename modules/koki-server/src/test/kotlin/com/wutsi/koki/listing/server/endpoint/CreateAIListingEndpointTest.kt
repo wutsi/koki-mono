@@ -21,7 +21,7 @@ import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.listing.server.service.ai.AmenityResult
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingParserAgentResult
+import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.platform.ai.agent.Agent
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
@@ -72,12 +72,12 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         super.setUp()
 
         df.timeZone = TimeZone.getTimeZone("UTC")
-        doReturn(agent).whenever(agentFactory).createParserAgent(any())
+        doReturn(agent).whenever(agentFactory).createListingContentParserAgent(any())
     }
 
     @Test
     fun create() {
-        val result = ListingParserAgentResult(
+        val result = ListingContentParserResult(
             valid = true,
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
@@ -169,7 +169,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         val ai = aiListingDao.findByListing(listing)
         assertEquals(request.text, ai?.text)
-        assertEquals(result, jsonMapper.readValue(ai?.result, ListingParserAgentResult::class.java))
+        assertEquals(result, jsonMapper.readValue(ai?.result, ListingContentParserResult::class.java))
         assertEquals(listing.createdAt, ai?.createdAt)
 
         val statuses = statusDao.findByListing(listing)
@@ -182,7 +182,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun invalid() {
-        val result = ListingParserAgentResult(
+        val result = ListingContentParserResult(
             valid = false,
             reason = "The description provided is too vague to extract listing details.",
         )
