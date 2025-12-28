@@ -61,6 +61,9 @@ class PlaceMapper {
             name = entity.name,
             summary = entity.summary,
             summaryFr = entity.summaryFr,
+            introduction = entity.introduction,
+            introductionFr = entity.introductionFr,
+            status = entity.status,
             rating = entity.rating,
         )
     }

@@ -75,6 +75,12 @@ class PlaceMapper : TenantAwareMapper() {
             } else {
                 entity.summary
             },
+            introduction = if (lang == "fr") {
+                entity.introductionFr ?: entity.introduction
+            } else {
+                entity.introduction
+            },
+            status = entity.status,
             neighbourhoodId = entity.neighbourhoodId,
             cityId = entity.cityId,
             rating = entity.rating,

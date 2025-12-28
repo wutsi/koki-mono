@@ -40,4 +40,23 @@ data class PlaceModel(
 
     val descriptionHtml: String?
         get() = description?.let { text -> HtmlUtils.toHtml(text) }
+
+    val ratingPercentage: Int?
+        get() = rating?.let { rating -> (100.0 * rating / 5.0).toInt() }
+
+    val ratingCode: String?
+        get() = rating?.let { rating ->
+            if (rating <= 2.0) {
+                "danger"
+            } else if (rating < 3.5) {
+                "warning"
+            } else if (rating < 4.0) {
+                "info"
+            } else {
+                "success"
+            }
+        }
+
+    val ratingText: String?
+        get() = rating?.let { "%.1f".format(rating) }
 }
