@@ -14,9 +14,9 @@ data class PlaceRatingModel(
     val ratingCode: String?
         get() = if (value < 2) {
             "danger"
-        } else if (value < 3) {
+        } else if (value <= 3) {
             "warning"
-        } else if (value < 4) {
+        } else if (value < 5) {
             "info"
         } else {
             "success"

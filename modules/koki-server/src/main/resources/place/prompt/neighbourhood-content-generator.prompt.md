@@ -11,8 +11,6 @@ Generate the content in JSON formant with the following fields:
     - Commute & Transit: Real talk on traffic patterns, public transport, tolls, and ease of access to major
       routes/work.
     - The quality of the infrastructure: roads, electricity, water supply, internet connectivity
-    - Local Stories & Secrets: The best restaurant gem, the friendly park, or a local festival – anything that would
-      build connection with whoever who may be interested by the area.
 - summaryFr: The summary translated in french
 - introductionFr: The introduction translated in french
 - descriptionFr: The description translated in french

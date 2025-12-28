@@ -47,14 +47,13 @@ class NeighborhoodController(
 
         val rentals = loadActiveListings("rental", neighbourhood.id, ListingType.RENTAL, model)
         val sales = loadActiveListings("sale", neighbourhood.id, ListingType.SALE, model)
-        val all = rentals + sales
-        if (all.isNotEmpty()) {
-            loadAgents(rentals + sales, model)
-        }
-
         val sold = loadSoldListings(neighbourhood.id, model)
         if (sold.isNotEmpty()) {
             loadMap(sold, model)
+        }
+        val all = rentals + sales + sold
+        if (all.isNotEmpty()) {
+            loadAgents(all, model)
         }
 
         val place = loadPlace(neighbourhood.id, model)
