@@ -33,6 +33,7 @@ class KokiPlaces(
 
     fun search(
         neighbourhoodIds: List<Long> = emptyList(),
+        cityIds: List<Long> = emptyList(),
         types: List<PlaceType> = emptyList(),
         statuses: List<PlaceStatus> = emptyList(),
         keyword: String? = null,
@@ -43,6 +44,7 @@ class KokiPlaces(
             PATH_PREFIX,
             mapOf(
                 "neighbourhood-id" to neighbourhoodIds,
+                "city-id" to neighbourhoodIds,
                 "type" to types,
                 "status" to statuses,
                 "q" to keyword,
