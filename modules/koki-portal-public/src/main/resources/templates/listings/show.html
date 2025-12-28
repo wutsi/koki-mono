@@ -256,7 +256,7 @@
             </div>
         </div>
 
-        <!-- NEIGHBORHOOD -->
+        <!-- MAP -->
         <div class="margin-top border-top padding-top map-container" th:if="${listing.address}">
             <h2 th:text="#{page.listing.section.map.title}">Map &amp; Neighborhood</h2>
             <ul class="breadcrumb">
@@ -287,6 +287,19 @@
                  th:if="${listing.geoLocation}"
             >
             </div>
+        </div>
+
+        <!-- NEIGHBORHOOD -->
+        <div class="margin-top border-top padding-top place-container"
+             th:if="${place} AND ${listing.address?.neighbourhood}">
+            <h2 th:text="#{page.listing.section.neighbourhood.title(${place.name})}">Explore</h2>
+            <div th:text="${place.introduction}">INTRO</div>
+            <div class="margin-top" id="rating-container" th:if="${place.rating}">
+                <div th:replace="~{__components/place :: place-rating(${place}, false)}"></div>
+            </div>
+            <a class="btn btn-sm btn-light margin-top"
+               th:href="${listing.address.neighbourhood.publicUrl}"
+               th:text="#{button.explore_neighborhood}">Explore</a>
         </div>
 
         <!-- SIMILAR LISTINGS -->
