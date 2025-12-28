@@ -14,7 +14,7 @@ data class Place(
     val introductionFr: String? = null,
     val description: String? = null,
     val descriptionFr: String? = null,
-    val neighbourhoodId: Long? = null,
+    val neighbourhoodId: Long = -1,
     val longitude: Double? = null,
     val latitude: Double? = null,
     val websiteURL: String? = null,
@@ -33,6 +33,6 @@ data class Place(
     val rating: Double? = null,
     val ratingCriteria: List<PlaceRating> = emptyList(),
 
-    val createdAt: Date? = null,
-    val modifiedAt: Date? = null,
+    val createdAt: Date = Date(),
+    val modifiedAt: Date = Date(),
 )

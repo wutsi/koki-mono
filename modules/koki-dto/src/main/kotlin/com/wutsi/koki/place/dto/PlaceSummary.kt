@@ -3,7 +3,7 @@ package com.wutsi.koki.place.dto
 data class PlaceSummary(
     val id: Long = -1,
     val heroImageId: Long? = null,
-    val neighbourhoodId: Long? = null,
+    val neighbourhoodId: Long = -1,
     val type: PlaceType = PlaceType.UNKNOWN,
     val name: String = "",
     val summary: String? = null,
