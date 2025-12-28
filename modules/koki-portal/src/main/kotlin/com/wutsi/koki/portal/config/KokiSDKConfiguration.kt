@@ -7,7 +7,7 @@ import com.wutsi.koki.platform.tenant.TenantProvider
 import com.wutsi.koki.platform.tenant.TenantRestInterceptor
 import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.sdk.KokiAccounts
-import com.wutsi.koki.sdk.KokiAgent
+import com.wutsi.koki.sdk.KokiAgents
 import com.wutsi.koki.sdk.KokiAuthentication
 import com.wutsi.koki.sdk.KokiConfiguration
 import com.wutsi.koki.sdk.KokiContacts
@@ -18,8 +18,8 @@ import com.wutsi.koki.sdk.KokiLeads
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiModules
 import com.wutsi.koki.sdk.KokiNotes
-import com.wutsi.koki.sdk.KokiOffer
 import com.wutsi.koki.sdk.KokiOfferVersion
+import com.wutsi.koki.sdk.KokiOffers
 import com.wutsi.koki.sdk.KokiRefData
 import com.wutsi.koki.sdk.KokiRoles
 import com.wutsi.koki.sdk.KokiTenants
@@ -64,8 +64,8 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiAgents(): KokiAgent {
-        return KokiAgent(urlBuilder(), rest())
+    fun kokiAgents(): KokiAgents {
+        return KokiAgents(urlBuilder(), rest())
     }
 
     @Bean
@@ -119,8 +119,8 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiOffer(): KokiOffer {
-        return KokiOffer(urlBuilder(), rest())
+    fun kokiOffer(): KokiOffers {
+        return KokiOffers(urlBuilder(), rest())
     }
 
     @Bean

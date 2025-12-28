@@ -56,6 +56,13 @@
             </table>
         </div>
 
+        <!-- SUMMARY -->
+        <div class="margin-top" id="introduction-container"
+             th:if="${place?.introduction}"
+             th:text="${place.introduction}">
+            INTRODUCTION
+        </div>
+
         <!-- ACTIVE LISTINGS -->
         <div class="margin-top" id="rental-listing-container" th:if="${rentalListings}">
             <hr/>
@@ -85,6 +92,7 @@
             <h2 th:text="#{page.neighbourhood.section.sold(${neighbourhood.name})}">TITLE</h2>
             <div class="margin-bottom" id="map-container">
                 <div data-component-id="map"
+                     data-disable-scroll-wheel-zoom="true"
                      id="map"
                      th:data-latitude="${mapCenterPoint?.latitude}"
                      th:data-longitude="${mapCenterPoint?.longitude}"
@@ -95,6 +103,13 @@
                 </div>
             </div>
             <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="margin-top" id="about-container" th:if="${place.description}">
+            <hr/>
+            <h2 th:text="#{page.neighbourhood.section.abount(${neighbourhood.name})}">TITLE</h2>
+            <div class="margin-bottom" th:text="${place.description}">DESCRIPTION</div>
         </div>
     </div>
 

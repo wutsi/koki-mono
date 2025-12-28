@@ -12,14 +12,14 @@ import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.offer.mapper.OfferMapper
 import com.wutsi.koki.portal.offer.model.OfferModel
 import com.wutsi.koki.portal.user.service.UserService
-import com.wutsi.koki.sdk.KokiOffer
 import com.wutsi.koki.sdk.KokiOfferVersion
+import com.wutsi.koki.sdk.KokiOffers
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
 
 @Service
 class OfferService(
-    private val koki: KokiOffer,
+    private val koki: KokiOffers,
     private val kokiVersion: KokiOfferVersion,
     private val mapper: OfferMapper,
     private val listingService: ListingService,

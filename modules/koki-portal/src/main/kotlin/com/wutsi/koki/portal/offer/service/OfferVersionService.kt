@@ -6,15 +6,15 @@ import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.offer.form.OfferForm
 import com.wutsi.koki.portal.offer.mapper.OfferMapper
 import com.wutsi.koki.portal.offer.model.OfferVersionModel
-import com.wutsi.koki.sdk.KokiOffer
 import com.wutsi.koki.sdk.KokiOfferVersion
+import com.wutsi.koki.sdk.KokiOffers
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
 
 @Service
 class OfferVersionService(
     private val koki: KokiOfferVersion,
-    private val kokiOffer: KokiOffer,
+    private val kokiOffer: KokiOffers,
     private val listingService: ListingService,
     private val mapper: OfferMapper,
 ) {

@@ -21,6 +21,8 @@ import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
+import com.wutsi.koki.place.dto.GetPlaceResponse
+import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
@@ -200,6 +202,7 @@ abstract class AbstractPageControllerTest {
         setupLeadModule()
         setupAgentModule()
         setupFileModule()
+        setupPlaceModule()
     }
 
     private fun setupRefDataModule() {
@@ -473,6 +476,30 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetFileResponse::class.java)
+            )
+    }
+
+    private fun setupPlaceModule() {
+        doReturn(
+            ResponseEntity(
+                GetPlaceResponse(PlaceFixtures.place),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetPlaceResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                SearchPlaceResponse(PlaceFixtures.placeSummaries),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPlaceResponse::class.java)
             )
     }
 

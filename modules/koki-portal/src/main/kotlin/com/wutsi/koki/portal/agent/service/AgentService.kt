@@ -4,13 +4,12 @@ import com.wutsi.koki.portal.agent.mapper.AgentMapper
 import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.user.service.UserService
-import com.wutsi.koki.sdk.KokiAgent
-import io.lettuce.core.KillArgs.Builder.user
+import com.wutsi.koki.sdk.KokiAgents
 import org.springframework.stereotype.Service
 
 @Service
 class AgentService(
-    private val koki: KokiAgent,
+    private val koki: KokiAgents,
     private val mapper: AgentMapper,
     private val userService: UserService,
 ) {
