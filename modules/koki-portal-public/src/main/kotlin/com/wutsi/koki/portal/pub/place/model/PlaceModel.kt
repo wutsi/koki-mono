@@ -5,6 +5,7 @@ import com.wutsi.koki.place.dto.Faith
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SchoolLevel
+import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.refdata.dto.GeoLocation
 import java.util.Date
 
@@ -33,4 +34,10 @@ data class PlaceModel(
     val ratingCriteria: List<PlaceRatingModel> = emptyList(),
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
-)
+) {
+    val introductionHtml: String?
+        get() = introduction?.let { text -> HtmlUtils.toHtml(text) }
+
+    val descriptionHtml: String?
+        get() = description?.let { text -> HtmlUtils.toHtml(text) }
+}

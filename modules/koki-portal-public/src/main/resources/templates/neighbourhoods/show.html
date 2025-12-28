@@ -57,10 +57,20 @@
         </div>
 
         <!-- SUMMARY -->
-        <div class="margin-top" id="introduction-container"
-             th:if="${place?.introduction}"
-             th:text="${place.introduction}">
-            INTRODUCTION
+        <div class="margin-top" id="introduction-container" th:if="${place?.introduction}">
+            <hr/>
+            <div th:utext="${place.introductionHtml}">INTRODUCTION</div>
+        </div>
+
+        <!-- AGENTS -->
+        <div class="margin-top" id="agent-container" th:if="${agents}">
+            <hr/>
+            <h2 th:text="#{page.neighbourhood.section.agents(${neighbourhood.name})}">TITLE</h2>
+            <div class="row">
+                <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
+                    <div th:replace="~{__components/agent :: agent-card(${agent})}"></div>
+                </div>
+            </div>
         </div>
 
         <!-- ACTIVE LISTINGS -->
@@ -73,17 +83,6 @@
             <hr/>
             <h2 th:text="#{page.neighbourhood.section.for_sale(${neighbourhood.name})}">TITLE</h2>
             <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
-        </div>
-
-        <!-- AGENTS -->
-        <div class="margin-top" id="agent-container" th:if="${agents}">
-            <hr/>
-            <h2 th:text="#{page.neighbourhood.section.agents(${neighbourhood.name})}">TITLE</h2>
-            <div class="row">
-                <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
-                    <div th:replace="~{__components/agent :: agent-card(${agent})}"></div>
-                </div>
-            </div>
         </div>
 
         <!-- SOLD -->
@@ -109,7 +108,7 @@
         <div class="margin-top" id="about-container" th:if="${place?.description}">
             <hr/>
             <h2 th:text="#{page.neighbourhood.section.abount(${neighbourhood.name})}">TITLE</h2>
-            <div class="margin-bottom" th:text="${place.description}">DESCRIPTION</div>
+            <div class="margin-bottom" th:utext="${place.descriptionHtml}">DESCRIPTION</div>
         </div>
     </div>
 
