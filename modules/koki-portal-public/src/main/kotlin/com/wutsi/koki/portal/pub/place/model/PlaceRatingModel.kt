@@ -12,11 +12,11 @@ data class PlaceRatingModel(
         get() = (100 * value) / 5
 
     val ratingCode: String?
-        get() = if (value < 1) {
+        get() = if (value < 2) {
             "danger"
-        } else if (value < 2) {
-            "warning"
         } else if (value < 3) {
+            "warning"
+        } else if (value < 4) {
             "info"
         } else {
             "success"

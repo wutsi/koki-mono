@@ -42,7 +42,6 @@ class NeighbourhoodContentGenerator(
         updateRating(place, RatingCriteria.INFRASTRUCTURE, result.ratings.infrastructure)
         updateRating(place, RatingCriteria.COMMUTE, result.ratings.commute)
         updateRating(place, RatingCriteria.AMENITIES, result.ratings.amenities)
-        updateRating(place, RatingCriteria.LIFESTYLE, result.ratings.lifestyle)
     }
 
     private fun computeRating(ratings: NeighborhoodRatingResult): Double {
@@ -50,7 +49,6 @@ class NeighbourhoodContentGenerator(
             ratings.security.value,
             ratings.amenities.value,
             ratings.infrastructure.value,
-            ratings.lifestyle.value,
             ratings.commute.value,
             ratings.education.value,
         ).average()

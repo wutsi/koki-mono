@@ -1,4 +1,4 @@
-You are a local expert who want to describe a neighbourhood for a rental platform like homes.com.
+You are a local expert who want to describe a neighbourhood area.
 
 Generate the content in JSON formant with the following fields:
 
@@ -29,9 +29,6 @@ Generate the content in JSON formant with the following fields:
     - infrastructure
         - value: from 1 to 5
         - reason: Explanation of the rating
-    - lifestyle
-        - value: from 1 to 5
-        - reason: Explanation of the rating
     - commute
         - value: from 1 to 5
         - reason: Explanation of the rating
@@ -44,29 +41,32 @@ Generate the content in JSON formant with the following fields:
 - Ensure the content is unique and not copied from other sources
 - Here are rating instructions:
     - Security Rating:
-        - Area relying on community policing should have a lower rating: (1 or 2)
-        - Area relying on professional security services, proximity to embassies or military should have a higher
-          rating (4 or 5)
+        - Proximity to multiple western embassies should have rating of 5
+        - Proximity to good police, government offices should have a rating around (3 to 4)
+        - Areas with regular petty crimes (theft, pickpocketing) should have low rating (1 or 2)
+        - Area relying on community policing should have low average rating (1 to 2)
+        - Areas with high crimes should have very low rating (1)
     - Education Rating:
-        - Area with offering private and international schools higher rating (4 to 5), depending of the number of
-          schools.
-        - Area with offering private non international schools will have a score of (3 to 4), depending of the number of
-          schools.
-        - Area with offering of public shools will have average rating.
+        - Proximity to private and international schools give higher rating (4 or 5). 5 being reserved for area with
+          multiple international schools of high repute offering multiple curriculums.
+        - Proximity to multiple high quality private schools give high rating (3 to 4).
+        - Proximity to with public schools only will have average rating of 3.
         - Area with low school offering will have low rating (1 to 2).
     - Amenities Rating:
-        - Area with limited access to shops, markets, schools or hospitals should have a lower rating (1 or 2)
-        - Area with easy access to luxury shops/markets or private hospitals should have a higher rating (4 or 5).
-        - traditional markets/shops, public school and hospital should be considered as average amenities (2 to 3).
+        - Area with easy access to luxury and international-standard shops/markets, private hospitals should have a
+          higher rating (4 or 5).
+        - Proximity to local markets/shops, public hospital should be considered as average amenities (2 to 3).
+        - Area with limited access to shops, markets, hospitals should have a lower rating (1 or 2)
     - Infrastructure Rating:
         - Area with frequent power outages, poor road conditions, limited water supply or poor internet connectivity
           should have a lower rating (1 or 2)
-        - If the area has power outages, even if infrequent, it should not get a 4+ rating.
-    - commute Rating:
+        - If the area has power outages, even if infrequent, should have a maximum rating of 3.
+    - Commute Rating:
+        - Area with smooth traffic, multiple public transport options, easy access to major routes and limited traffic
+          congestion (4 or 5)
         - Area with heavy traffic, limited public transport options, difficult access to major routes or frequent
           tolls should have a lower rating (1 or 2)
-        - Area with smooth traffic, multiple public transport options, easy access to major routes and limited tolls
-          should have a higher rating (4 or 5)
+        - Area with horrendous traffic congestion should not have more than 2, regardless of other factors.
 
 # ASK
 

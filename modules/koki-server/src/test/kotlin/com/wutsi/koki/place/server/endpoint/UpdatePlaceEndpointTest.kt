@@ -55,7 +55,6 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
                 security = RatingCriteraResult(4, "Safe area"),
                 amenities = RatingCriteraResult(5, "Many amenities"),
                 infrastructure = RatingCriteraResult(3, "Good infrastructure"),
-                lifestyle = RatingCriteraResult(4, "Vibrant lifestyle"),
                 commute = RatingCriteraResult(2, "Average commute"),
                 education = RatingCriteraResult(3, "Average commute"),
             ),
@@ -86,7 +85,7 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.introductionFr, place.introductionFr)
         assertEquals(result.summaryFr, place.summaryFr)
         assertEquals(result.descriptionFr, place.descriptionFr)
-        assertEquals(3.5, place.rating)
+        assertEquals(3.4, place.rating)
         assertEquals(45.4972159, place.latitude)
         assertEquals(-73.6390246, place.longitude)
         assertEquals(USER_ID, place.createdById)
@@ -97,7 +96,6 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertRating(placeId, RatingCriteria.SECURITY, result.ratings.security.value)
         assertRating(placeId, RatingCriteria.INFRASTRUCTURE, result.ratings.infrastructure.value)
         assertRating(placeId, RatingCriteria.AMENITIES, result.ratings.amenities.value)
-        assertRating(placeId, RatingCriteria.LIFESTYLE, result.ratings.lifestyle.value)
         assertRating(placeId, RatingCriteria.COMMUTE, result.ratings.commute.value)
     }
 

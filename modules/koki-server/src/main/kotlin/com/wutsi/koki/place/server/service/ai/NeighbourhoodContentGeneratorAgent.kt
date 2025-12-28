@@ -43,7 +43,6 @@ data class NeighborhoodRatingResult(
     val security: RatingCriteraResult = RatingCriteraResult(),
     val amenities: RatingCriteraResult = RatingCriteraResult(),
     val infrastructure: RatingCriteraResult = RatingCriteraResult(),
-    val lifestyle: RatingCriteraResult = RatingCriteraResult(),
     val commute: RatingCriteraResult = RatingCriteraResult(),
     val education: RatingCriteraResult = RatingCriteraResult(),
 )

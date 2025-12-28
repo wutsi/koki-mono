@@ -18,7 +18,7 @@
             <span>/ 5</span>
         </div>
     </div>
-    <table class="table-striped table" th:if="${showDetails}">
+    <table class="table-striped table text-small" th:if="${showDetails}">
         <tr th:each="ratingCriterion : ${place.ratingCriteria}">
             <td th:text="#{'rating-criteria.' + ${ratingCriterion.criteria}}">Security</td>
             <td class="margin-left">
