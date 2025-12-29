@@ -11,8 +11,9 @@ import org.mockito.Mockito.mock
 
 class PlaceAgentFactoryTest {
     private val chat = mock<LLM>()
+    private val chatWithTools = mock<LLM>()
     private val vision = mock<LLM>()
-    private val llmProvider = LLMProvider(chat, vision)
+    private val llmProvider = LLMProvider(chat, chatWithTools, vision)
 
     @Test
     fun createNeighborhoodContentGeneratorAgent() {

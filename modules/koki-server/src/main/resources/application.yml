@@ -156,17 +156,27 @@ koki:
         server-url: http://localhost:${server.port}
 
     ai:
-        rest:
-            read-timeout-millis: 120000 # 2 minute
-            connect-timeout-millis: 60000 # 1 minute
         chat:
             type: deepseek
             api-key: ${DEEPSEEK_API_KEY}
             model: deepseek-chat
+            rest:
+                read-timeout-millis: 600000 # 2 minute
+                connect-timeout-millis: 15000 # 15 second
+        chat-with-tools:
+            type: kimi
+            api-key: ${KIMI_API_KEY}
+            model: kimi-k2-turbo-preview
+            rest:
+                read-timeout-millis: 120000 # 2 minute
+                connect-timeout-millis: 15000  # 15 second
         vision:
             type: kimi
             api-key: ${KIMI_API_KEY}
             model: moonshot-v1-128k-vision-preview
+            rest:
+                read-timeout-millis: 60000 # 2 minute
+                connect-timeout-millis: 15000  # 15 second
 
     smtp:
         host: localhost

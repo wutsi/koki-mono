@@ -26,7 +26,7 @@ class ListingAgentFactory(
         neighbourhood: LocationEntity?,
     ): Agent {
         return ListingContentGeneratorAgent(
-            llm = llmProvider.visionLLM,
+            llm = llmProvider.chatLLM,
             listing = listing,
             images = images,
             city = city,
@@ -39,7 +39,7 @@ class ListingAgentFactory(
             amenityService = amenityService,
             locationService = locationService,
             city = city,
-            llm = llmProvider.visionLLM,
+            llm = llmProvider.chatLLM,
         )
     }
 }

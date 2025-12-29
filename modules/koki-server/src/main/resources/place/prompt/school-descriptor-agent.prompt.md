@@ -13,25 +13,31 @@ Describe the school using JSON having the following information:
 - address:
     - street
     - city
+    - neighbourhood
 - websiteURL: Website URL
-- phoneNumber: Contact phone number
+- heroImageURL: URL of a hero image representing the school
 - levels: List of level offered in the school. The values are
     - PRESCHOOL (0-5 yr)
     - PRIMARY
     - SECONDARY
     - UNIVERSITY
-- truitionFees: List of tuition fees
-    - level: Level code
-    - annualFees in XAF
-    - annualFees in USD
 - geoLocation
     - longitude
     - latitude
+    - sourceUrl: URL from where the geoLocation is obtained
+- tuitionFees:
+    - minFees
+        - amount
+        - currency
+    - maxFees
+        - amount
+        - currency
+    - sourceUrl: URL from where the fees are obtained
 
 # Instructions:
 
 - DO NOT makeup any information. If you cannot resolve it, set the field to null
-- Do NOT makeup googlePlaceId. Use the official google ID
+- DO NOT make up URLs. If you cannot find a real URL, set the field to null
 
 # Ask
 

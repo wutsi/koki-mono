@@ -8,7 +8,6 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.ai.agent.Agent
-import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
@@ -28,8 +27,6 @@ class ListingContentParserAgent(
 
     override fun buildPrompt(query: String, memory: List<String>): String {
         val country = Locale("en", city.country).displayCountry
-        val tools =
-            tools().joinToString(separator = "\n") { tool -> "- ${tool.function().name}: ${tool.function().description}" }
 
         val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-content-parser.prompt.md")!!
             .reader()
@@ -38,12 +35,9 @@ class ListingContentParserAgent(
             .replace("{{amenities}}", loadAmenities())
             .replace("{{neighbourhoods}}", loadNeighbourhoods())
             .replace("{{city}}", city.name + "," + country)
-            .replace("{{tools}}", tools)
 
         return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
     }
-
-    override fun tools(): List<Tool> = emptyList()
 
     private fun loadAmenities(): String {
         return amenityService.search(limit = 200)

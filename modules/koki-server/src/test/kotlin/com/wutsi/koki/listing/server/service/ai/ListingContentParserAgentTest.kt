@@ -38,16 +38,6 @@ class ListingContentParserAgentTest {
     }
 
     @Test
-    fun tools() {
-        assertEquals(0, agent.tools().size)
-    }
-
-    @Test
-    fun systemInstructions() {
-        assertEquals(null, agent.systemInstructions())
-    }
-
-    @Test
     fun apartment() {
         val text = """
             Ce magnifique appartement moderne haut Standing !

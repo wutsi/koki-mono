@@ -10,6 +10,9 @@ class LLMProvider(
     @param:Qualifier(AIConfiguration.CHAT_LLM_BEAN_NAME)
     val chatLLM: LLM,
 
+    @param:Qualifier(AIConfiguration.CHAT_TOOLS_LLM_BEAN_NAME)
+    val chatWithToolsLLM: LLM,
+
     @param:Qualifier(AIConfiguration.VISION_LLM_BEAN_NAME)
     val visionLLM: LLM,
 )

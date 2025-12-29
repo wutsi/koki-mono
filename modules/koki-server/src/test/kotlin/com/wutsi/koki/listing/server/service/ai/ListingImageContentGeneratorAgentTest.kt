@@ -21,16 +21,6 @@ class ListingImageContentGeneratorAgentTest {
     private lateinit var provider: LLMProvider
 
     @Test
-    fun tools() {
-        assertEquals(0, createAgent().tools().size)
-    }
-
-    @Test
-    fun systemInstructions() {
-        assertEquals(null, createAgent().systemInstructions())
-    }
-
-    @Test
     fun run() {
         val agent = createAgent()
         val file = getValidFile("/fs/listing/room.jpg")
