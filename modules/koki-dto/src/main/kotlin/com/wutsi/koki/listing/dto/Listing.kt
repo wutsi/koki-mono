@@ -71,6 +71,13 @@ data class Listing(
     val totalLeads: Int? = null,
     val sellerAgentUserId: Long? = null,
 
+    // Legal information
+    val landTitle: Boolean? = null,
+    val technicalFile: Boolean? = null,
+    val numberOfSigners: Int? = null,
+    val mutationType: MutationType? = null,
+    val transactionWithNotary: Boolean? = null,
+
     val createdById: Long? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
