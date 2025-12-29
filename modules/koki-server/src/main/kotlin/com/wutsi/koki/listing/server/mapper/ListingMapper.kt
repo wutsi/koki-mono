@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -43,6 +44,13 @@ class ListingMapper {
             distanceFromMainRoad = entity.distanceFromMainRoad,
             roadPavement = entity.roadPavement?.takeIf { type -> type != RoadPavement.UNKNOWN },
             availableAt = entity.availableAt,
+
+            // Legal information
+            landTitle = entity.landTitle,
+            technicalFile = entity.technicalFile,
+            numberOfSigners = entity.numberOfSigners,
+            mutationType = entity.mutationType?.takeIf { type -> type != MutationType.UNKNOWN },
+            transactionWithNotary = entity.transactionWithNotary,
 
             furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
             amenityIds = entity.amenities.map { amenity -> amenity.id },

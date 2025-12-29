@@ -93,6 +93,12 @@ class ListingMapper(
             soldAtText = entity.soldAt?.let { date -> mdf.format(date) },
             salePrice = toPrice(entity.salePrice, entity.listingType),
 
+            landTitle = entity.landTitle,
+            technicalFile = entity.technicalFile,
+            numberOfSigners = entity.numberOfSigners,
+            mutationType = entity.mutationType,
+            transactionWithNotary = entity.transactionWithNotary,
+
             title = if (lang == "fr") {
                 entity.titleFr ?: entity.title
             } else {

@@ -167,6 +167,13 @@ class ListingMapper(
             publishedAtMoment = entity.publishedAt?.let { date -> moment.format(date) },
             closedAt = entity.closedAt,
             closedAtMoment = entity.closedAt?.let { date -> moment.format(date) },
+
+            landTitle = entity.landTitle,
+            technicalFile = entity.technicalFile,
+            numberOfSigners = entity.numberOfSigners,
+            mutationType = entity.mutationType,
+            transactionWithNotary = entity.transactionWithNotary,
+
             transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
         )
     }

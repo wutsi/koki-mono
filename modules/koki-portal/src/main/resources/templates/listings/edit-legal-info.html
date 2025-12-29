@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+<div th:replace="~{__components/layout :: menubar('listing')}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:replace="~{__components/listing :: listing-breadcrumb(${listing})}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form class="form" method="post" th:action="@{/listings/edit/legal-info}" th:object="${form}">
+                <input th:field="*{id}" type="hidden"/>
+                <div class="form-body">
+                    <div class="section">
+                        <div class="section-body">
+                            <div class="section-item">
+                                <h2 th:text="#{page.listing.edit.legal-info.title}">Legal Information</h2>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.land-title}">Land Title</label>
+                                <select class="form-select" th:field="*{landTitle}">
+                                    <option value=""></option>
+                                    <option th:text="#{yes-no.true}" value="true">TRUE</option>
+                                    <option th:text="#{yes-no.false}" value="false">FALSE</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.technical-file}">Technical File</label>
+                                <select class="form-select" th:field="*{technicalFile}">
+                                    <option value=""></option>
+                                    <option th:text="#{yes-no.true}" value="true">TRUE</option>
+                                    <option th:text="#{yes-no.false}" value="false">FALSE</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.number-of-signers}">Signers</label>
+                                <select class="form-select" th:field="*{numberOfSigners}">
+                                    <option value=""></option>
+                                    <option th:text="1" value="1">1</option>
+                                    <option th:text="2" value="2">2</option>
+                                    <option th:text="3" value="3">2</option>
+                                    <option th:text="4" value="4">1</option>
+                                    <option th:text="5" value="5">2</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.mutation-type}">Mutation</label>
+                                <select class="form-select" th:field="*{mutationType}">
+                                    <option value=""></option>
+                                    <option th:text="#{mutation-type.TOTAL}" value="TOTAL">Total</option>
+                                    <option th:text="#{mutation-type.PARTIAL}" value="PARTIAL">Partial</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.transaction-with-notary}">Notary</label>
+                                <select class="form-select" th:field="*{transactionWithNotary}">
+                                    <option value=""></option>
+                                    <option th:text="#{yes-no.true}" value="true">TRUE</option>
+                                    <option th:text="#{yes-no.false}" value="false">FALSE</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item flex flex-space-between">
+                                <button class="btn btn-primary w-49-mobile" th:text="#{button.submit}"
+                                        type="submit">Submit
+                                </button>
+                                <a class="btn btn-light w-49-mobile" onclick="history.back()"
+                                   th:text="#{button.cancel}">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+

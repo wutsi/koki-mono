@@ -13,6 +13,7 @@ import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
 import com.wutsi.koki.listing.dto.UpdateListingLeasingRequest
+import com.wutsi.koki.listing.dto.UpdateListingLegalInfoRequest
 import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
@@ -358,6 +359,19 @@ class ListingService(
             form.id,
             UpdateListingSellerRequest(
                 sellerContactId = form.sellerContactId,
+            )
+        )
+    }
+
+    fun updateLegalInfo(form: ListingForm) {
+        koki.updateLegalInfo(
+            form.id,
+            UpdateListingLegalInfoRequest(
+                landTitle = form.landTitle,
+                technicalFile = form.technicalFile,
+                numberOfSigners = form.numberOfSigners,
+                mutationType = form.mutationType,
+                transactionWithNotary = form.transactionWithNotary,
             )
         )
     }

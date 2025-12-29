@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -119,6 +120,12 @@ object ListingFixtures {
         heroImageId = FileFixtures.images[0].id,
         totalFiles = 10,
         totalImages = 11,
+
+        landTitle = true,
+        technicalFile = false,
+        numberOfSigners = 1,
+        mutationType = MutationType.TOTAL,
+        transactionWithNotary = true,
 
         buyerAgentUserId = users[2].id,
         buyerContactId = contacts[1].id,

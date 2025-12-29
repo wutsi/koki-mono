@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -118,6 +119,12 @@ object ListingFixtures {
         soldAt = DateUtils.addDays(Date(), -10),
         finalSellerAgentCommissionMoney = Money(50000.0, "CAD"),
         finalBuyerAgentCommissionMoney = Money(22500.0, "CAD"),
+
+        landTitle = true,
+        technicalFile = false,
+        numberOfSigners = 1,
+        mutationType = MutationType.TOTAL,
+        transactionWithNotary = true,
     )
 
     val listings = listOf(

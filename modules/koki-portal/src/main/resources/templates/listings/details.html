@@ -39,12 +39,6 @@
             <b class="text-small" th:text="#{page.listing.level}">KEY</b>
             <div th:utext="${listing.level}? ${listing.levelHtml} : '-'">VALUE</div>
         </div>
-        <!--
-        <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
-            <b class="text-small" th:text="#{page.listing.unit}">KEY</b>
-            <div th:text="${listing.unit} ? ${listing.unit} : '-'">VALUE</div>
-        </div>
-        -->
         <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.basement}">KEY</b>
             <div th:if="${listing.basementType}" th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</div>
@@ -101,16 +95,44 @@
             <b class="text-small" th:text="#{page.listing.year}">KEY</b>
             <div th:text="${listing.year} ? ${listing.year} : '-'">VALUE</div>
         </div>
-        <!--
-        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small" th:if="${listing.daysInMarket}">
-            <b class="text-small" th:text="#{page.listing.days-in-market}">KEY</b>
-            <div th:if="${listing.daysInMarket <= 1}" th:text="#{page.listing.days-in-market-today}">VALUE</div>
-            <div th:if="${listing.daysInMarket > 1}">
-                <span th:text="${listing.daysInMarket}">00</span>
-                <span th:text="#{page.listing.days-in-market-suffix}">DAYS</span>
+    </div>
+    <hr/>
+</div>
+
+<a name="listing-legal-section" th:if="${listing.listingTypeSale}"></a>
+<div id="listing-legal-section" th:if="${listing.listingTypeSale}">
+    <h4>
+        <span th:text="#{page.listing.show.legal}">LEGAL</span>
+        <a class="text-small btn-section-edit"
+           th:href="'/listings/edit/legal-info?id=' + ${listing.id}"
+           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+           th:text="#{button.edit}"
+        >EDIT</a>
+    </h4>
+    <div class="flex flex-wrap">
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.land-title}">KEY</b>
+            <div th:text="${listing.landTitle != null} ? #{'yes-no.' + ${listing.landTitle}} : '-'">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.technical-file}">KEY</b>
+            <div th:text="${listing.technicalFile != null} ? #{'yes-no.' + ${listing.technicalFile}} : '-'">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.mutation-type}">KEY</b>
+            <div th:text="${listing.mutationType} ? #{'mutation-type.' + ${listing.mutationType}} : '-'">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.number-of-signers}">KEY</b>
+            <div th:text="${listing.numberOfSigners} ? ${listing.numberOfSigners} : '-'">VALUE</div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
+            <b class="text-small" th:text="#{page.listing.transaction-with-notary}">KEY</b>
+            <div
+                th:text="${listing.transactionWithNotary != null} ? #{'yes-no.' + ${listing.transactionWithNotary}} : '-'">
+                VALUE
             </div>
         </div>
-        -->
     </div>
     <hr/>
 </div>
@@ -283,7 +305,7 @@
     <hr/>
 </div>
 
-<a name="listing-leasing-section"></a>
+<a name="listing-leasing-section" th:if="${listing.listingTypeRental}"></a>
 <div id="listing-leasing-section" th:if="${listing.listingTypeRental}">
     <h4>
         <span th:text="#{page.listing.show.leasing}">LEASING</span>
@@ -330,7 +352,7 @@
     <hr/>
 </div>
 
-<a name="listing-seller-section"></a>
+<a name="listing-seller-section" th:if="${listing.canManage(user)}"></a>
 <div id="listing-seller-section" th:if="${listing.canManage(user)}">
     <h4>
         <span th:text="#{page.listing.show.seller}">SELLER</span>
@@ -350,7 +372,7 @@
     <hr th:if="${listing.statusSold}"/>
 </div>
 
-<a name="listing-sale-section"></a>
+<a name="listing-sale-section" th:if="${listing.statusSold}"></a>
 <div id="listing-sale-section" th:if="${listing.statusSold}">
     <h4 th:text="#{page.listing.show.sales-information}">SALES</h4>
 

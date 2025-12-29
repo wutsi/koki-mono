@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -52,6 +53,13 @@ data class ListingEntity(
     var availableAt: Date? = null,
     var roadPavement: RoadPavement? = null,
     var distanceFromMainRoad: Int? = null,
+
+    // Legal information
+    var landTitle: Boolean? = null,
+    var technicalFile: Boolean? = null,
+    var numberOfSigners: Int? = null,
+    var mutationType: MutationType? = null,
+    var transactionWithNotary: Boolean? = null,
 
     @ManyToMany
     @JoinTable(

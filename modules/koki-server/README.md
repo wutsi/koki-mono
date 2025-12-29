@@ -25,7 +25,8 @@ listing discovery, lead tracking, and analytics capabilities.
 
 - **Multi-Tenant REST API**: Complete tenant isolation with context propagation across all endpoints via X-Tenant-ID
   headers
-- **Comprehensive Domain Services**: Property listings, offers, leads, accounts, contacts, files, notes,
+- **Comprehensive Domain Services**: Property listings with legal information tracking, offers, leads, accounts,
+  contacts, files, notes,
   agents, roles, and reference data management
 - **Authentication & Authorization**: JWT-based authentication with Spring Security and role-based access control
 - **File Management**: Document upload, processing, and storage with support for local filesystem and AWS S3 backends
@@ -220,6 +221,7 @@ The Koki Server follows a layered architecture with clear separation of concerns
 | POST               | `/v1/listings/{id}/leasing`       | Update listing leasing terms                    |
 | POST               | `/v1/listings/{id}/seller`        | Update listing seller information               |
 | POST               | `/v1/listings/{id}/remarks`       | Update listing remarks                          |
+| POST               | `/v1/listings/{id}/legal-info`    | Update listing legal information                |
 | POST               | `/v1/listings/{id}/publish`       | Publish a listing                               |
 | POST               | `/v1/listings/{id}/close`         | Close a listing                                 |
 | GET                | `/v1/listings/{id}`               | Retrieve listing details by ID                  |

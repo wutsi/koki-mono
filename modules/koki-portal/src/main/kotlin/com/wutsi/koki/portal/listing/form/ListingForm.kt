@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -58,5 +59,13 @@ data class ListingForm(
     val buyerAgentUserId: Long? = null,
     val soldAt: String? = null,
     val salePrice: Long? = null,
+
+    // Legal information
+    val landTitle: Boolean? = null,
+    val technicalFile: Boolean? = null,
+    val numberOfSigners: Int? = null,
+    val mutationType: MutationType? = null,
+    val transactionWithNotary: Boolean? = null,
+
     val comment: String? = null,
 )
