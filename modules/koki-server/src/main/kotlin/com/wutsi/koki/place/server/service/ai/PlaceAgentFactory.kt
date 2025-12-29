@@ -11,7 +11,7 @@ class PlaceAgentFactory(private val llmProvider: LLMProvider) {
         return NeighbourhoodContentGeneratorAgent(
             neighbourhood = neighbourhood,
             city = city,
-            llm = llmProvider.chatLLM
+            llm = llmProvider.chatWithToolsLLM
         )
     }
 }

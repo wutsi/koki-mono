@@ -3,7 +3,6 @@ package com.wutsi.koki.listing.server.service.ai
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.platform.ai.agent.Agent
-import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.http.MediaType
@@ -21,10 +20,6 @@ class ListingContentGeneratorAgent(
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     companion object {
         const val QUERY = ""
-    }
-
-    override fun systemInstructions(): String? {
-        return null
     }
 
     override fun buildPrompt(query: String, memory: List<String>): String {
@@ -53,8 +48,6 @@ class ListingContentGeneratorAgent(
             .replace("{{images}}", imageText)
             .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
-
-    override fun tools(): List<Tool> = emptyList<Tool>()
 }
 
 data class ListingContentGeneratorResult(

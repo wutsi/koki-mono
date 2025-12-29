@@ -39,32 +39,38 @@ Generate the content in JSON formant with the following fields:
 - Ensure the content is unique and not copied from other sources
 - Here are rating instructions:
     - Security Rating:
-        - Proximity to multiple western embassies should have rating of 5
-        - Proximity to good police, government offices should have a rating around (3 to 4)
+        - If there are 10+ western embassies located in that neighborhood, the rating rating should 5. Western embassies
+          are defined as embassies from North America, Europe, Australia, and New Zealand.
+            - DO NOT consider embassies from non-western countries for the security rating.
+            - DO NOT consider embassies not in the neighborhood, even if they are close by.
+        - Area with multiple gated communities, private security firms, and low crime rates should have high security
+          rating (4).
+        - Area with police presence, government offices should have an average rating (2 to 3)
         - Areas with regular petty crimes (theft, pickpocketing) should have low rating (1 or 2)
         - Area relying on community policing should have low average rating (1 to 2)
         - Areas with high crimes should have very low rating (1)
     - Education Rating:
-        - Proximity to private and international schools give higher rating (4 or 5). 5 being reserved for area with
-          multiple international schools of high repute offering multiple curriculums.
-        - Proximity to multiple high quality private schools give high rating (3 to 4).
-        - Proximity to with public schools only will have average rating of 3.
-        - Area with low school offering will have low rating (1 to 2).
+        - Area with 5+ private and international schools should have a rating of 5.
+        - Area with less than 5 international schools should have a rating of 4.
+        - Area with multiple high quality private schools (non-international) should have a rating (3 to 4).
+        - Area with public schools only should have average rating of 3.
+        - Area with low school offering should have low rating (1 to 2).
     - Amenities Rating:
         - Area with easy access to luxury and international-standard shops/markets, private hospitals should have a
           higher rating (4 or 5).
         - Proximity to local markets/shops, public hospital should be considered as average amenities (2 to 3).
         - Area with limited access to shops, markets, hospitals should have a lower rating (1 or 2)
     - Infrastructure Rating:
-        - Area with frequent power outages, poor road conditions, limited water supply or poor internet connectivity
-          should have a lower rating (1 or 2)
-        - If the area has power outages, even if infrequent, should have a maximum rating of 3.
+        - Poor road conditions should remove 1 point from the maximum rating.
+        - Frequent power outages should remove 1 point from the maximum rating. No penalty for infrequent power outages.
+        - Chronic street flooding issues should remove 1 point from the maximum rating.
+        - Poor internet connectivity should remove 1 point from the maximum rating.
     - Commute Rating:
-        - Area with smooth traffic, multiple public transport options, easy access to major routes and limited traffic
-          congestion (4 or 5)
-        - Area with heavy traffic, limited public transport options, difficult access to major routes or frequent
-          tolls should have a lower rating (1 or 2)
-        - Area with horrendous traffic congestion should not have more than 2, regardless of other factors.
+        - Few transport options should remove 1 point from the maximum rating.
+        - Heavy traffic should remove 1 point from the maximum rating.
+        - Poor access to major routes/work should remove 1 point from the maximum rating.
+- DO NOT perform more than 9 web searches to gather information about the neighbourhood. After 5 searches, rely on your
+  knowledge base.
 
 # ASK
 
@@ -74,3 +80,6 @@ Generate the content for the neighborhood.
 - City: {{city}}
 - Country: {{country}}
 
+# Observations:
+
+{{observations}}

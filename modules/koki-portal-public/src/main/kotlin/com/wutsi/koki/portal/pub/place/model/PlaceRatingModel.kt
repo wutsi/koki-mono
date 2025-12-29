@@ -12,7 +12,7 @@ data class PlaceRatingModel(
         get() = (100 * value) / 5
 
     val ratingCode: String?
-        get() = if (value < 2) {
+        get() = if (value <= 2) {
             "danger"
         } else if (value <= 3) {
             "warning"

@@ -1,6 +1,6 @@
 package com.wutsi.koki.place.server.service.ai
 
-import com.wutsi.koki.platform.ai.llm.deepseek.Deepseek
+import com.wutsi.koki.platform.ai.llm.kimi.Kimi
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -8,23 +8,18 @@ import tools.jackson.databind.json.JsonMapper
 import kotlin.test.assertNotNull
 
 class NeighbourhoodContentGeneratorAgentTest {
-    private val llm = Deepseek(
-        apiKey = System.getenv("DEEPSEEK_API_KEY"),
-        model = "deepseek-chat",
+    private val llm = Kimi(
+        apiKey = System.getenv("KIMI_API_KEY"),
+        model = "kimi-k2-turbo-preview",
         readTimeoutMillis = 120000,
     )
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val neighbourhood = LocationEntity(name = "Bastos", country = "CM")
+    private val neighbourhood = LocationEntity(name = "Mvan", country = "CM")
     private val agent = NeighbourhoodContentGeneratorAgent(city, neighbourhood, llm)
 
     @Test
     fun tools() {
-        assertEquals(0, agent.tools().size)
-    }
-
-    @Test
-    fun systemInstructions() {
-        assertEquals(null, agent.systemInstructions())
+        assertEquals(llm.getBuiltInTools().size, agent.tools().size)
     }
 
     @Test

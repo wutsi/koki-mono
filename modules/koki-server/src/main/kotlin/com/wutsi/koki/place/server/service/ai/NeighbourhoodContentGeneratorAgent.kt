@@ -1,8 +1,8 @@
 package com.wutsi.koki.place.server.service.ai
 
 import com.wutsi.koki.platform.ai.agent.Agent
-import com.wutsi.koki.platform.ai.agent.Tool
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import org.springframework.http.MediaType
 
@@ -10,11 +10,7 @@ class NeighbourhoodContentGeneratorAgent(
     val city: LocationEntity?,
     val neighbourhood: LocationEntity,
     val llm: LLM,
-) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
-    override fun systemInstructions(): String? {
-        return null
-    }
-
+) : Agent(llm, maxIterations = 10, responseType = MediaType.APPLICATION_JSON) {
     override fun buildPrompt(query: String, memory: List<String>): String {
         val prompt = this::class.java.getResourceAsStream("/place/prompt/neighbourhood-content-generator.prompt.md")!!
             .reader()
@@ -26,7 +22,7 @@ class NeighbourhoodContentGeneratorAgent(
             .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
     }
 
-    override fun tools(): List<Tool> = emptyList()
+    override fun tools(): List<Tool> = llm.getBuiltInTools()
 }
 
 data class NeighbourhoodContentGeneratorResult(

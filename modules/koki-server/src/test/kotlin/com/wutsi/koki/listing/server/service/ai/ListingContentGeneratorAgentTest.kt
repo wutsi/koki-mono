@@ -61,16 +61,6 @@ class ListingContentGeneratorAgentTest {
     }
 
     @Test
-    fun tools() {
-        assertEquals(0, agent.tools().size)
-    }
-
-    @Test
-    fun systemInstructions() {
-        assertEquals(null, agent.systemInstructions())
-    }
-
-    @Test
     fun apartment() {
         val json = agent.run(ListingContentGeneratorAgent.QUERY)
         val result = JsonMapper().readValue(json, ListingContentGeneratorResult::class.java)
