@@ -7,13 +7,13 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.platform.ai.agent.Tool
-import com.wutsi.koki.platform.ai.llm.Content
-import com.wutsi.koki.platform.ai.llm.FunctionDeclaration
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMContent
+import com.wutsi.koki.platform.ai.llm.LLMFunctionDeclaration
+import com.wutsi.koki.platform.ai.llm.LLMMessage
 import com.wutsi.koki.platform.ai.llm.LLMResponse
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
+import com.wutsi.koki.platform.ai.llm.LLMRole
+import com.wutsi.koki.platform.ai.llm.Tool
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
@@ -28,7 +28,7 @@ class ReactAgentTest {
     fun `stops when final answer is provided`() {
         val response = """{"thought": "I have the answer", "answer": "The answer is 42"}"""
         doReturn(createLLMResponse(response)).whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val agent = createAgent()
 
@@ -45,7 +45,7 @@ class ReactAgentTest {
         doReturn(createLLMResponse(actionResponse))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
         doReturn("Search result data").whenever(tool).use(any())
 
         val memory = mutableListOf<String>()
@@ -63,7 +63,7 @@ class ReactAgentTest {
         val actionResponse =
             """{"thought": "Need to search", "action": {"name": "search", "reason": "To find data", "inputs": {}}}"""
         doReturn(createLLMResponse(actionResponse)).whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
         doReturn("Result").whenever(tool).use(any())
 
         val agent = createAgent(maxIterations = 3)
@@ -77,11 +77,11 @@ class ReactAgentTest {
     fun `handles tool not found`() {
         val actionResponse =
             """{"thought": "Need to search", "action": {"name": "unknown_tool", "reason": "To find data", "inputs": {}}}"""
-        val answerResponse = """{"thought": "Tool not available", "answer": "Cannot complete"}"""
+        val answerResponse = """{"thought": "LLMTool not available", "answer": "Cannot complete"}"""
         doReturn(createLLMResponse(actionResponse))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val memory = mutableListOf<String>()
         val agent = createAgent(memory = memory)
@@ -100,8 +100,8 @@ class ReactAgentTest {
         doReturn(createLLMResponse(actionResponse))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
-        doThrow(RuntimeException("Tool error")).whenever(tool).use(any())
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
+        doThrow(RuntimeException("LLMTool error")).whenever(tool).use(any())
 
         val memory = mutableListOf<String>()
         val agent = createAgent(memory = memory)
@@ -117,7 +117,7 @@ class ReactAgentTest {
         doThrow(RuntimeException("LLM error"))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val memory = mutableListOf<String>()
         val agent = createAgent(memory = memory)
@@ -135,7 +135,7 @@ class ReactAgentTest {
         doReturn(createLLMResponse(invalidResponse))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val agent = createAgent()
 
@@ -151,7 +151,7 @@ class ReactAgentTest {
         doReturn(createLLMResponse(invalidResponse))
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val agent = createAgent()
 
@@ -164,7 +164,8 @@ class ReactAgentTest {
     fun `builds prompt with query and history`() {
         val answerResponse = """{"thought": "Done", "answer": "Result"}"""
         doReturn(createLLMResponse(answerResponse)).whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search for information", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search for information")).whenever(tool)
+            .function()
 
         val memory = mutableListOf("Previous observation 1", "Previous observation 2")
         val agent = createAgent(query = "What is AI?", memory = memory)
@@ -181,7 +182,7 @@ class ReactAgentTest {
         doReturn(emptyResponse)
             .doReturn(createLLMResponse(answerResponse))
             .whenever(llm).generateContent(any())
-        doReturn(FunctionDeclaration("search", "Search tool", null)).whenever(tool).function()
+        doReturn(LLMFunctionDeclaration(name = "search", description = "Search tool")).whenever(tool).function()
 
         val agent = createAgent()
 
@@ -193,9 +194,9 @@ class ReactAgentTest {
     private fun createLLMResponse(text: String): LLMResponse {
         return LLMResponse(
             messages = listOf(
-                Message(
-                    role = Role.MODEL,
-                    content = listOf(Content(text = text))
+                LLMMessage(
+                    role = LLMRole.MODEL,
+                    content = listOf(LLMContent(text = text))
                 )
             )
         )

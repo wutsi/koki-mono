@@ -1,6 +1,6 @@
 package com.wutsi.koki.platform.ai.llm
 
-enum class FunctionCallingMode {
+enum class LLMFunctionCallingMode {
     AUTO,
     ANY,
     NONE

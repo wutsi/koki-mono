@@ -1,14 +1,15 @@
 package com.wutsi.koki.platform.ai.agent
 
-import com.wutsi.koki.platform.ai.llm.Config
-import com.wutsi.koki.platform.ai.llm.Content
-import com.wutsi.koki.platform.ai.llm.Document
-import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMConfig
+import com.wutsi.koki.platform.ai.llm.LLMContent
+import com.wutsi.koki.platform.ai.llm.LLMDocument
+import com.wutsi.koki.platform.ai.llm.LLMFunctionCall
+import com.wutsi.koki.platform.ai.llm.LLMMessage
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
+import com.wutsi.koki.platform.ai.llm.LLMRole
+import com.wutsi.koki.platform.ai.llm.Tool
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
@@ -21,11 +22,11 @@ abstract class Agent(
     private val maxIterations: Int = 5,
     private val responseType: MediaType = MediaType.TEXT_PLAIN,
 ) {
-    abstract fun systemInstructions(): String?
+    open fun systemInstructions(): String? = null
+
+    open fun tools(): List<Tool> = emptyList()
 
     abstract fun buildPrompt(query: String, memory: List<String>): String
-
-    abstract fun tools(): List<Tool>
 
     @Throws(AgentException::class)
     fun run(query: String): String {
@@ -105,17 +106,17 @@ abstract class Agent(
         return calls == 0
     }
 
-    private fun exec(call: FunctionCall): String? {
+    private fun exec(call: LLMFunctionCall): String? {
         return tools().find { tool -> tool.function().name == call.name }
             ?.use(call.args)
     }
 
     private fun ask(query: String, files: List<File>, memory: List<String>): LLMResponse {
         // System instruction
-        val messages = mutableListOf<Message>()
+        val messages = mutableListOf<LLMMessage>()
         systemInstructions()?.let { instructions ->
             messages.add(
-                Message(role = Role.SYSTEM, content = listOf(Content(text = instructions)))
+                LLMMessage(role = LLMRole.SYSTEM, content = listOf(LLMContent(text = instructions)))
             )
         }
 
@@ -124,13 +125,13 @@ abstract class Agent(
         val prompt = buildPrompt(query, memory)
         getLogger().info("> prompt: $prompt")
         messages.add(
-            Message(
-                role = Role.USER,
-                content = listOf(Content(text = buildPrompt(query, memory))) +
+            LLMMessage(
+                role = LLMRole.USER,
+                content = listOf(LLMContent(text = buildPrompt(query, memory))) +
                     inputs.map { input ->
                         val mimeType = URLConnection.guessContentTypeFromName(input.key.path)
-                        Content(
-                            document = Document(
+                        LLMContent(
+                            document = LLMDocument(
                                 content = input.value,
                                 contentType = MediaType.valueOf(mimeType)
                             )
@@ -143,11 +144,11 @@ abstract class Agent(
             val request = LLMRequest(
                 messages = messages,
                 tools = tools().map { tool ->
-                    com.wutsi.koki.platform.ai.llm.Tool(
+                    com.wutsi.koki.platform.ai.llm.LLMTool(
                         functionDeclarations = listOf(tool.function()),
                     )
                 },
-                config = Config(
+                config = LLMConfig(
                     responseType = responseType
                 ),
             )

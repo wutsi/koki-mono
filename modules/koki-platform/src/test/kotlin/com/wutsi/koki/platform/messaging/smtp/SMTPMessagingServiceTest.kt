@@ -80,8 +80,7 @@ class SMTPMessagingServiceTest {
 
         val headers = messages[0].allHeaders
             .toList()
-            .map { header -> header.name to header.value }
-            .toMap()
+            .associate { header -> header.name to header.value }
         assertEquals(message.language, headers["Content-Language"])
         assertEquals(true, headers["Content-Type"]?.startsWith(message.mimeType))
     }

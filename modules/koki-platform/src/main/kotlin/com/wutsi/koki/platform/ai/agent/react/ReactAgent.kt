@@ -1,12 +1,12 @@
 package com.wutsi.koki.platform.ai.agent.react
 
-import com.wutsi.koki.platform.ai.agent.Tool
-import com.wutsi.koki.platform.ai.llm.Config
-import com.wutsi.koki.platform.ai.llm.Content
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMConfig
+import com.wutsi.koki.platform.ai.llm.LLMContent
+import com.wutsi.koki.platform.ai.llm.LLMMessage
 import com.wutsi.koki.platform.ai.llm.LLMRequest
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
+import com.wutsi.koki.platform.ai.llm.LLMRole
+import com.wutsi.koki.platform.ai.llm.Tool
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
@@ -47,7 +47,7 @@ class ReactAgent(
             {{
                 "thought": "Your detailed reasoning about what to do next",
                 "action": {{
-                    "name": "Tool name, excluding the namespace (wikipedia, google, or none)",
+                    "name": "LLMTool name, excluding the namespace (wikipedia, google, or none)",
                     "reason": "Explanation of why you chose this tool",
                     "inputs": "Specific inputs for the tool, as array of key/pair values"
                 }}
@@ -80,17 +80,17 @@ class ReactAgent(
         try {
             val prompt = buildPrompt()
             val response = ask(prompt)
-            trace(Role.MODEL, "Thought: $response")
+            trace(LLMRole.MODEL, "Thought: $response")
             decide(response)
         } catch (ex: Exception) {
             getLogger().warn("An unexpected error has occured", ex)
-            trace(Role.SYSTEM, "An unexpected error has occured. The error message is: ${ex.message}")
+            trace(LLMRole.SYSTEM, "An unexpected error has occured. The error message is: ${ex.message}")
             think()
         }
     }
 
-    private fun trace(role: Role, content: String) {
-        if (role == Role.SYSTEM) {
+    private fun trace(role: LLMRole, content: String) {
+        if (role == LLMRole.SYSTEM) {
             memory.add(content)
         }
     }
@@ -109,7 +109,7 @@ class ReactAgent(
             if (resp.answer != null) {
                 logger.info("Final answer: ${resp.answer}")
 
-                trace(Role.MODEL, "  Final answer: ${resp.answer}")
+                trace(LLMRole.MODEL, "  Final answer: ${resp.answer}")
             } else if (resp.action != null) {
                 logger.info("> action.reason: ${resp.action.reason}")
                 logger.info("> action.name: ${resp.action.name}")
@@ -132,13 +132,13 @@ class ReactAgent(
                 val result = tool.use(action.inputs)
 
 //                getLogger().info("result: $result")
-                trace(Role.SYSTEM, "Observation from ${action.name}: $result")
+                trace(LLMRole.SYSTEM, "Observation from ${action.name}: $result")
             } catch (ex: Exception) {
                 getLogger().warn("An unexpected error has occured while using the tool ${action.name}", ex)
-                trace(Role.SYSTEM, "Unable to use the tool ${action.name}. The error message is: ${ex.message}")
+                trace(LLMRole.SYSTEM, "Unable to use the tool ${action.name}. The error message is: ${ex.message}")
             }
         } else {
-            trace(Role.SYSTEM, "The tool ${action.name} is not available")
+            trace(LLMRole.SYSTEM, "The tool ${action.name} is not available")
         }
         think()
     }
@@ -161,16 +161,16 @@ class ReactAgent(
         val response = llm.generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
-                        content = listOf(Content(text = prompt))
+                    LLMMessage(
+                        content = listOf(LLMContent(text = prompt))
                     )
                 ),
                 tools = toolMap.values.map { tool ->
-                    com.wutsi.koki.platform.ai.llm.Tool(
+                    com.wutsi.koki.platform.ai.llm.LLMTool(
                         functionDeclarations = listOf(tool.function())
                     )
                 },
-                config = Config(
+                config = LLMConfig(
                     responseType = MediaType.APPLICATION_JSON,
                 )
             )

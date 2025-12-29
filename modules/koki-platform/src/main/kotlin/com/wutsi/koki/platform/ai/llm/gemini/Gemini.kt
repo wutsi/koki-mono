@@ -1,15 +1,15 @@
 package com.wutsi.koki.platform.ai.llm.gemini
 
-import com.wutsi.koki.platform.ai.llm.Config
-import com.wutsi.koki.platform.ai.llm.Content
-import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMConfig
+import com.wutsi.koki.platform.ai.llm.LLMContent
 import com.wutsi.koki.platform.ai.llm.LLMException
+import com.wutsi.koki.platform.ai.llm.LLMFunctionCall
+import com.wutsi.koki.platform.ai.llm.LLMMessage
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
-import com.wutsi.koki.platform.ai.llm.Usage
+import com.wutsi.koki.platform.ai.llm.LLMRole
+import com.wutsi.koki.platform.ai.llm.LLMUsage
 import com.wutsi.koki.platform.ai.llm.gemini.model.GContent
 import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerateContentRequest
 import com.wutsi.koki.platform.ai.llm.gemini.model.GGenerateContentResponse
@@ -83,16 +83,16 @@ class Gemini(
                 messages = resp.candidates
                     .flatMap { candidate -> candidate.content.parts }
                     .map { part ->
-                        Message(
-                            role = Role.MODEL,
+                        LLMMessage(
+                            role = LLMRole.MODEL,
                             content = listOfNotNull(
                                 encodeResponse(
                                     request.config?.responseType,
                                     part.text
-                                )?.let { text -> Content(text = text) },
+                                )?.let { text -> LLMContent(text = text) },
                                 part.functionCall?.let { function ->
-                                    Content(
-                                        functionCall = FunctionCall(
+                                    LLMContent(
+                                        functionCall = LLMFunctionCall(
                                             name = if (function.name.startsWith("default_api.")) {
                                                 function.name.substring(12)
                                             } else {
@@ -107,7 +107,7 @@ class Gemini(
                     },
 
                 usage = resp.usageMetadata?.let { usage ->
-                    Usage(
+                    LLMUsage(
                         totalTokenCount = usage.totalTokenCount,
                         promptTokenCount = usage.promptTokenCount,
                         responseTokenCount = usage.promptTokenCount,
@@ -129,7 +129,7 @@ class Gemini(
         }
     }
 
-    private fun createConfig(config: Config?): GGenerationConfig? {
+    private fun createConfig(config: LLMConfig?): GGenerationConfig? {
         if (config == null) {
             if (supportsThinking()) {
                 return GGenerationConfig(
@@ -156,10 +156,10 @@ class Gemini(
         return null
     }
 
-    private fun toRole(role: Role): String {
+    private fun toRole(role: LLMRole): String {
         return when (role) {
-            Role.USER -> "user"
-            Role.MODEL, Role.SYSTEM -> "model"
+            LLMRole.USER -> "user"
+            LLMRole.MODEL, LLMRole.SYSTEM -> "model"
         }
     }
 

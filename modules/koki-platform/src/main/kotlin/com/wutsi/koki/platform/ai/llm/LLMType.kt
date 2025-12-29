@@ -1,6 +1,6 @@
 package com.wutsi.koki.platform.ai.llm
 
-enum class Type {
+enum class LLMType {
     ARRAY,
     BOOLEAN,
     INTEGER,

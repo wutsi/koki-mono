@@ -315,7 +315,7 @@ class ContentGenerationService(private val ai: AIProvider) {
     fun generatePropertyDescription(property: Property): String {
         val prompt = """
             Generate a compelling property description for:
-            - Type: ${property.type}
+            - LLMType: ${property.type}
             - Bedrooms: ${property.bedrooms}
             - Bathrooms: ${property.bathrooms}
             - Location: ${property.location}

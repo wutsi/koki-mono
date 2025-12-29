@@ -1,5 +1,6 @@
 package com.wutsi.koki.platform.ai.llm
 
-data class Tool(
-    val functionDeclarations: List<FunctionDeclaration> = emptyList(),
-)
+interface Tool {
+    fun function(): LLMFunctionDeclaration
+    fun use(args: Map<String, Any>): String
+}

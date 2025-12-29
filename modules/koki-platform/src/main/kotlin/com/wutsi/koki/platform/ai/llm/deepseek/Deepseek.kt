@@ -1,15 +1,16 @@
 package com.wutsi.koki.platform.ai.llm.deepseek
 
-import com.wutsi.koki.platform.ai.llm.Content
-import com.wutsi.koki.platform.ai.llm.FunctionCall
 import com.wutsi.koki.platform.ai.llm.LLM
+import com.wutsi.koki.platform.ai.llm.LLMContent
 import com.wutsi.koki.platform.ai.llm.LLMDocumentTypeNotSupportedException
 import com.wutsi.koki.platform.ai.llm.LLMException
+import com.wutsi.koki.platform.ai.llm.LLMFunctionCall
+import com.wutsi.koki.platform.ai.llm.LLMFunctionDeclaration
+import com.wutsi.koki.platform.ai.llm.LLMMessage
 import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
-import com.wutsi.koki.platform.ai.llm.Message
-import com.wutsi.koki.platform.ai.llm.Role
-import com.wutsi.koki.platform.ai.llm.Usage
+import com.wutsi.koki.platform.ai.llm.LLMRole
+import com.wutsi.koki.platform.ai.llm.LLMUsage
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSContent
@@ -68,7 +69,7 @@ open class Deepseek(
                 tools.flatMap { tool -> tool.functionDeclarations }
                     .map { function ->
                         DSTool(
-                            type = "function",
+                            type = getFunctionType(function),
                             function = DSFunction(
                                 name = function.name,
                                 description = function.description,
@@ -110,17 +111,17 @@ open class Deepseek(
 
             return LLMResponse(
                 messages = resp.choices.map { choice ->
-                    Message(
+                    LLMMessage(
                         role = when (choice.message.role) {
-                            "system" -> Role.SYSTEM
-                            "assistant", "model" -> Role.MODEL
-                            else -> Role.USER
+                            "system" -> LLMRole.SYSTEM
+                            "assistant", "model" -> LLMRole.MODEL
+                            else -> LLMRole.USER
                         },
                         content = listOfNotNull(
-                            choice.message.content?.let { text -> Content(text = text) },
+                            choice.message.content?.let { text -> LLMContent(text = text) },
                             choice.message.toolCalls.firstOrNull()?.let { call ->
-                                Content(
-                                    functionCall = FunctionCall(
+                                LLMContent(
+                                    functionCall = LLMFunctionCall(
                                         name = call.function.name,
                                         args = if (call.function.arguments.isEmpty()) {
                                             emptyMap()
@@ -138,7 +139,7 @@ open class Deepseek(
                     )
                 },
                 usage = resp.usage?.let { usage ->
-                    Usage(
+                    LLMUsage(
                         promptTokenCount = usage.promptTokens,
                         responseTokenCount = usage.completionTokens,
                         totalTokenCount = usage.totalTokens,
@@ -160,14 +161,18 @@ open class Deepseek(
         }
     }
 
+    protected open fun getFunctionType(function: LLMFunctionDeclaration): String {
+        return "function"
+    }
+
     protected open fun getEndpoint(): String {
         return DEEPSEEK_ENDPOINT
     }
 
-    private fun toDSMessage(message: Message): List<DSMessage> {
+    private fun toDSMessage(message: LLMMessage): List<DSMessage> {
         val role = when (message.role) {
-            Role.USER -> "user"
-            Role.SYSTEM, Role.MODEL -> "system"
+            LLMRole.USER -> "user"
+            LLMRole.SYSTEM, LLMRole.MODEL -> "system"
         }
 
         val content = message.content.mapNotNull { item ->

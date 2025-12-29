@@ -5,7 +5,7 @@ import java.util.Optional
 /**
  * Key-Value logging for structured logs.
  *
- * Usage:
+ * LLMUsage:
  * ```
  * val logger: KVLogger = ...
  * logger.add("key1", "value1")

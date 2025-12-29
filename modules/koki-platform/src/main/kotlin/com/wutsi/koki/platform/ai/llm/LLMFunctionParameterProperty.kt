@@ -1,7 +1,7 @@
 package com.wutsi.koki.platform.ai.llm
 
-data class FunctionParameterProperty(
-    val type: Type = Type.STRING,
+data class LLMFunctionParameterProperty(
+    val type: LLMType = LLMType.STRING,
     val description: String,
     val enum: List<String>? = null,
 )

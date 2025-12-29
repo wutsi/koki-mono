@@ -2,7 +2,7 @@ package com.wutsi.koki.platform.ai.llm
 
 import org.springframework.http.MediaType
 
-data class Config(
+data class LLMConfig(
     val responseType: MediaType? = null,
     val temperature: Double? = null,
     val topP: Double? = null,

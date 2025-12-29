@@ -333,7 +333,7 @@ wutsi:
             redis:
                 url: redis://:password@localhost:6379
 
-        # Message Queue
+        # LLMMessage Queue
         mq:
             type: rabbitmq
             rabbitmq:

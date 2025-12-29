@@ -22,8 +22,8 @@ abstract class AbstractLLMTest {
         val response = createLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
-                        content = listOf(Content(text = "What is an API")),
+                    LLMMessage(
+                        content = listOf(LLMContent(text = "What is an API")),
                     )
                 )
             )
@@ -36,15 +36,15 @@ abstract class AbstractLLMTest {
         val response = createLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
+                    LLMMessage(
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = "Can you share an example of json of the request from Gemini API. Only the JSON please"
                             )
                         ),
                     )
                 ),
-                config = Config(
+                config = LLMConfig(
                     responseType = MediaType.APPLICATION_JSON,
                 )
             )
@@ -58,10 +58,10 @@ abstract class AbstractLLMTest {
         val response = createLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
-                        role = Role.MODEL,
+                    LLMMessage(
+                        role = LLMRole.MODEL,
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = """
                                     You are a senior software developer, your name is Joe.
                                     You should just produce code, nothing else.
@@ -69,10 +69,10 @@ abstract class AbstractLLMTest {
                             )
                         ),
                     ),
-                    Message(
-                        role = Role.USER,
+                    LLMMessage(
+                        role = LLMRole.USER,
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = """
                                     Can you write code to count the number of words in a text in Kotlin.
                                     Add also unit tests en ensure that the code works as expected.
@@ -81,7 +81,7 @@ abstract class AbstractLLMTest {
                         )
                     )
                 ),
-                config = Config(
+                config = LLMConfig(
                     temperature = .9,
                     maxOutputTokens = 100
                 )
@@ -95,13 +95,13 @@ abstract class AbstractLLMTest {
         val response = createLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
+                    LLMMessage(
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = "Can you summarize in 500 word the content of this document",
                             ),
-                            Content(
-                                document = Document(
+                            LLMContent(
+                                document = LLMDocument(
                                     contentType = MediaType.APPLICATION_PDF,
                                     content = AbstractLLMTest::class.java.getResourceAsStream("/file/document-en.pdf")!!
                                 )
@@ -119,9 +119,9 @@ abstract class AbstractLLMTest {
         val response = createVisionLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
+                    LLMMessage(
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = """
                                     Can you extract the information of this image in JSON format having the following field:
                                     - Name
@@ -130,8 +130,8 @@ abstract class AbstractLLMTest {
                                     - Expiry Date
                                 """.trimIndent()
                             ),
-                            Content(
-                                document = Document(
+                            LLMContent(
+                                document = LLMDocument(
                                     contentType = MediaType.IMAGE_JPEG,
                                     content = AbstractLLMTest::class.java.getResourceAsStream("/file/document.jpg")!!
                                 )
@@ -139,7 +139,7 @@ abstract class AbstractLLMTest {
                         )
                     ),
                 ),
-                config = Config(
+                config = LLMConfig(
                     responseType = MediaType.APPLICATION_JSON,
                 )
             )
@@ -152,28 +152,28 @@ abstract class AbstractLLMTest {
         val response = createLLM().generateContent(
             request = LLMRequest(
                 messages = listOf(
-                    Message(
+                    LLMMessage(
                         content = listOf(
-                            Content(
+                            LLMContent(
                                 text = "What's the current weather like in Montreal?"
                             )
                         )
                     ),
                 ),
                 tools = listOf(
-                    Tool(
+                    LLMTool(
                         functionDeclarations = listOf(
-                            FunctionDeclaration(
+                            LLMFunctionDeclaration(
                                 name = "get_weather",
                                 description = "Get the current real-time weather conditions for a specified city.",
-                                parameters = FunctionParameters(
+                                parameters = LLMFunctionParameters(
                                     properties = mapOf(
-                                        "region" to FunctionParameterProperty(
-                                            type = Type.STRING,
+                                        "region" to LLMFunctionParameterProperty(
+                                            type = LLMType.STRING,
                                             description = "Region from where we want the weather"
                                         ),
-                                        "unit" to FunctionParameterProperty(
-                                            type = Type.STRING,
+                                        "unit" to LLMFunctionParameterProperty(
+                                            type = LLMType.STRING,
                                             description = "Optional. he temperature unit (Celsius or Fahrenheit). Defaults to Celsius if not specified.",
                                             enum = listOf("CELSIUS", "FAHRENHEIT")
                                         ),
@@ -191,7 +191,7 @@ abstract class AbstractLLMTest {
 
     protected fun print(response: LLMResponse) {
         println("---------")
-        println("Usage: ${response.usage}")
+        println("LLMUsage: ${response.usage}")
         println("${response.messages.size} message(s)")
         println()
         response.messages.forEach { message ->

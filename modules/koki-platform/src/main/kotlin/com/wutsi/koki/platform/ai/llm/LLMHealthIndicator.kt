@@ -17,7 +17,7 @@ class LLMHealthIndicator(
             llm.generateContent(
                 LLMRequest(
                     messages = listOf(
-                        Message(content = listOf(Content(text = "Say hi!")))
+                        LLMMessage(content = listOf(LLMContent(text = "Say hi!")))
                     )
                 )
             )
