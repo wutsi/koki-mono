@@ -73,6 +73,7 @@ object PageName {
     const val LISTING_EDIT_PRICE = "listing.edit.price"
     const val LISTING_EDIT_REMARK = "listing.edit.remark"
     const val LISTING_EDIT_SELLER = "listing.edit.seller"
+    const val LISTING_EDIT_LEGAL_INFO = "listing.edit.legal-info"
     const val LISTING_LIST = "page.listing.list"
     const val LISTING_PUBLISH = "page.listing.publish"
     const val LISTING_PUBLISH_DONE = "page.listing.publish.done"

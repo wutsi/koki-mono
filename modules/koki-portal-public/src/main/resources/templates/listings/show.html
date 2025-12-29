@@ -166,6 +166,33 @@
             </div>
         </div>
 
+        <!-- LEGAL -->
+        <div class="margin-top border-top padding-top legal-container" th:if="${listing.hasLegalInformation}">
+            <h2 th:text="#{page.listing.section.legal.title}">Legal</h2>
+            <div class="flex flex-wrap">
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.landTitle != null}">
+                    <b th:text="#{page.listing.land-title}">LandTitle</b>
+                    <span th:text="#{'yes-no.' + ${listing.landTitle}}">Y</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.technicalFile != null}">
+                    <b th:text="#{page.listing.technical-file}">Technical File</b>
+                    <span th:text="#{'yes-no.' + ${listing.technicalFile}}">Y</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.numberOfSigners}">
+                    <b th:text="#{page.listing.number-of-signers}">Signers</b>
+                    <span th:text="${listing.numberOfSigners}">00</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.mutationType}">
+                    <b th:text="#{page.listing.mutation-type}">Mutation</b>
+                    <span th:text="#{'mutation-type.' + ${listing.mutationType}}">00</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.transactionWithNotary}">
+                    <b th:text="#{page.listing.transaction-with-notary}">Mutation</b>
+                    <span th:text="#{'yes-no.' + ${listing.transactionWithNotary}}">Y</span>
+                </div>
+            </div>
+        </div>
+
         <!-- AMENITIES -->
         <div class="margin-top border-top padding-top amenity-container" th:if="${listing.hasAmenities}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>

@@ -15,6 +15,7 @@ import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
 import com.wutsi.koki.listing.dto.UpdateListingLeasingRequest
+import com.wutsi.koki.listing.dto.UpdateListingLegalInfoRequest
 import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
@@ -608,6 +609,25 @@ class ListingService(
         listing.publicRemarks = request.publicRemarks?.ifEmpty { null }
         listing.agentRemarks = request.agentRemarks?.ifEmpty { null }
         save(listing)
+    }
+
+    @Transactional
+    fun legalInfo(id: Long, request: UpdateListingLegalInfoRequest, tenantId: Long): ListingEntity {
+        val userId = securityService.getCurrentUserId()
+        val listing = get(id, tenantId)
+
+        listing.landTitle = request.landTitle
+        listing.technicalFile = request.technicalFile
+        listing.numberOfSigners = request.numberOfSigners
+        listing.mutationType = request.mutationType
+        listing.transactionWithNotary = request.transactionWithNotary
+        listing.modifiedAt = Date()
+        listing.modifiedById = userId
+
+        dao.save(listing)
+
+        LOGGER.info("Legal information updated for Listing#$id by User#$userId")
+        return listing
     }
 
     @Transactional

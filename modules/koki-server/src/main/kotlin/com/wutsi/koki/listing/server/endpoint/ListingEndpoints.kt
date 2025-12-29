@@ -16,6 +16,7 @@ import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
 import com.wutsi.koki.listing.dto.UpdateListingLeasingRequest
+import com.wutsi.koki.listing.dto.UpdateListingLegalInfoRequest
 import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
@@ -128,6 +129,15 @@ class ListingEndpoints(
         @Valid @RequestBody request: UpdateListingRemarksRequest,
     ) {
         service.remarks(id, request, tenantId)
+    }
+
+    @PostMapping("/{id}/legal-info")
+    fun updateLegalInfo(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: UpdateListingLegalInfoRequest,
+    ) {
+        service.legalInfo(id, request, tenantId)
     }
 
     @GetMapping("/{id}")

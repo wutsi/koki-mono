@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -78,6 +79,13 @@ data class ListingModel(
     var closedAt: Date? = null,
     var closedAtMoment: String? = null,
 
+    // Legal information
+    val landTitle: Boolean? = null,
+    val technicalFile: Boolean? = null,
+    val numberOfSigners: Int? = null,
+    val mutationType: MutationType? = null,
+    val transactionWithNotary: Boolean? = null,
+
     val title: String? = null,
     val summary: String? = null,
     val description: String? = null,
@@ -103,6 +111,12 @@ data class ListingModel(
 
     val listingTypeSale: Boolean
         get() = listingType == ListingType.SALE
+
+    val propertyTypeResidential: Boolean
+        get() = propertyType == PropertyType.APARTMENT ||
+            propertyType == PropertyType.STUDIO ||
+            propertyType == PropertyType.DUPLEX ||
+            propertyType == PropertyType.HOUSE
 
     val readOnly: Boolean
         get() = status != ListingStatus.DRAFT

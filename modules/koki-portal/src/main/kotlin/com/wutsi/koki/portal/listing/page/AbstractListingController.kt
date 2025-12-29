@@ -72,6 +72,12 @@ abstract class AbstractListingController : AbstractModulePageController() {
             leaseTerm = listing.leaseTerm,
             noticePeriod = listing.noticePeriod,
 
+            landTitle = listing.landTitle,
+            technicalFile = listing.technicalFile,
+            numberOfSigners = listing.numberOfSigners,
+            mutationType = listing.mutationType,
+            transactionWithNotary = listing.transactionWithNotary,
+
             sellerContactId = listing.sellerContact?.id,
 
             soldAt = listing.soldAt?.let { date -> df.format(date) },
