@@ -19,7 +19,8 @@ Describe the school using JSON having the following information:
 - levels: List of level offered in the school. The values are
     - PRESCHOOL (0-5 yr)
     - PRIMARY
-    - SECONDARY
+    - LOWER_SECONDARY
+    - UPPER_SECONDARY
     - UNIVERSITY
 - geoLocation
     - longitude

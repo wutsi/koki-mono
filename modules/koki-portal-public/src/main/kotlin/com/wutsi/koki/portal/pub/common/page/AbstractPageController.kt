@@ -93,7 +93,7 @@ abstract class AbstractPageController {
                     "longitude" to listing.geoLocation?.longitude,
                     "location" to listOfNotNull(listing.address?.neighbourhood?.name, listing.address?.city?.name)
                         .joinToString(", "),
-                    "price" to if (listing.statusSold) listing.salePrice?.displayText else listing.price?.displayText,
+                    "price" to if (listing.statusSold) "" else listing.price?.displayText, // Never display sale price
                     "heroImageUrl" to listing.heroImageUrl,
                     "bedrooms" to (listing.bedrooms?.toString() ?: "--") + " " + beds,
                     "area" to ((listing.lotArea?.let { listing.propertyArea }?.toString() ?: "--") + "m2"),
