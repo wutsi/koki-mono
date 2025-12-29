@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -93,7 +94,11 @@ data class ListingContentParserResult(
     val country: String? = null,
     val valid: Boolean = false,
     val reason: String? = null,
-    val hasLandTitle: Boolean? = null,
     val publicRemarks: String? = null,
     val commission: Double? = null,
+    var landTitle: Boolean? = null,
+    var technicalFile: Boolean? = null,
+    var numberOfSigners: Int? = null,
+    var mutationType: MutationType? = null,
+    var transactionWithNotary: Boolean? = null,
 )
