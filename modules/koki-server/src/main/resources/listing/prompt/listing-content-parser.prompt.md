@@ -49,10 +49,14 @@ The listing information must be structured in the following JSON format:
 - city: Address - Name of the city
 - country: Address - 2 letter country code
 - phone: Agent phone number in E.164 format (string)
-- hasLandTitle: true if the land has a title, false otherwise (boolean)
 - publicRemarks: Any additional remarks about the property that was not captured in other fields. Keep it under 1000
   characters, in the same language as the input.
 - commission: Commission percentage compared to price (float). Only include if explicitly mentioned.
+- landTitle: `true` when land title is available. (boolean)
+- technicalFile: `true` when technical file available (boolean)
+- numberOfSigners: Number of signers. If mentionned as `multiple`, ignore it (integer)
+- mutationType: Type of mutations. Values can be TOTAL or PARTIAL. If anyother value is mentioned, ignore it (string)
+- transactionWithNotary: `true` when transaction with a notary (boolean)
 
 # Amenities IDs Reference
 

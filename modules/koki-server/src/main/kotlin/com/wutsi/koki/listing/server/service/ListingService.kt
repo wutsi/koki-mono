@@ -486,6 +486,12 @@ class ListingService(
                     mutableListOf()
                 },
 
+                landTitle = request.landTitle,
+                technicalFile = request.technicalFile,
+                numberOfSigners = request.numberOfSigners,
+                mutationType = request.mutationType,
+                transactionWithNotary = request.transactionWithNotary,
+
                 sellerAgentUserId = userId,
                 createdAt = now,
                 modifiedAt = now,

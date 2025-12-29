@@ -13,6 +13,7 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
@@ -112,6 +113,12 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
             advanceRent = 2,
             securityDeposit = 3,
 
+            landTitle = true,
+            technicalFile = false,
+            numberOfSigners = 2,
+            mutationType = MutationType.PARTIAL,
+            transactionWithNotary = true,
+
             phone = "+2370987654321",
 
             furnitureType = FurnitureType.FULLY_FURNISHED,
@@ -166,6 +173,11 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, listing.modifiedById)
         assertEquals(TENANT_ID, listing.tenantId)
         assertEquals(ListingStatus.DRAFT, listing.status)
+        assertEquals(result.landTitle, listing.landTitle)
+        assertEquals(result.technicalFile, listing.technicalFile)
+        assertEquals(result.numberOfSigners, listing.numberOfSigners)
+        assertEquals(result.mutationType, listing.mutationType)
+        assertEquals(result.transactionWithNotary, listing.transactionWithNotary)
 
         val ai = aiListingDao.findByListing(listing)
         assertEquals(request.text, ai?.text)
