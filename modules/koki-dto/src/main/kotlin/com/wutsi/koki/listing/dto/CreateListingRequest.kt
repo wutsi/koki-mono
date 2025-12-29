@@ -2,6 +2,7 @@ package com.wutsi.koki.listing.dto
 
 import com.wutsi.koki.refdata.dto.Address
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import java.util.Date
@@ -43,4 +44,10 @@ data class CreateListingRequest(
 
     val furnitureType: FurnitureType? = null,
     val amenityIds: List<Long> = emptyList(),
+
+    val landTitle: Boolean? = null,
+    val technicalFile: Boolean? = null,
+    @get:Min(0) val numberOfSigners: Int? = null,
+    val mutationType: MutationType? = null,
+    val transactionWithNotary: Boolean? = null,
 )

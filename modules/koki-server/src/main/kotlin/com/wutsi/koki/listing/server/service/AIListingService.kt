@@ -98,6 +98,12 @@ class AIListingService(
 
                 furnitureType = result.furnitureType,
                 amenityIds = result.amenities.map { amenity -> amenity.id },
+
+                landTitle = result.landTitle,
+                technicalFile = result.technicalFile,
+                mutationType = result.mutationType,
+                numberOfSigners = result.numberOfSigners,
+                transactionWithNotary = result.transactionWithNotary,
             ),
             tenantId = tenantId,
         )
