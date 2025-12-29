@@ -201,7 +201,7 @@ type-safe methods.
 | **KokiFiles**          | File upload/download     | `upload()`, `file()`, `files()`, `delete()`, `uploadUrl()`                                                                                         |
 | **KokiInvitations**    | User invitations         | `create()`, `invitation()`, `invitations()`, `delete()`                                                                                            |
 | **KokiLead**           | Lead tracking            | `create()`, `update()`, `delete()`, `lead()`, `leads()`                                                                                            |
-| **KokiListings**       | Property listings        | `create()`, `update()`, `updateAmenities()`, `updateAddress()`, `updateGeoLocation()`, `listing()`, `listings()`, `close()`                        |
+| **KokiListings**       | Property listings        | `create()`, `update()`, `updateAmenities()`, `updateAddress()`, `updateGeoLocation()`, `updateLegalInfo()`, `listing()`, `listings()`, `close()`   |
 | **KokiMessages**       | Messaging system         | `create()`, `message()`, `messages()`                                                                                                              |
 | **KokiModules**        | Module management        | `modules()`, `permissions()`                                                                                                                       |
 | **KokiNotes**          | Note management          | `create()`, `update()`, `delete()`, `note()`, `notes()`                                                                                            |

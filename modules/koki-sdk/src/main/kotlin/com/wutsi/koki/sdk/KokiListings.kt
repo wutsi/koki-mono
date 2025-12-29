@@ -16,6 +16,7 @@ import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
 import com.wutsi.koki.listing.dto.UpdateListingGeoLocationRequest
 import com.wutsi.koki.listing.dto.UpdateListingLeasingRequest
+import com.wutsi.koki.listing.dto.UpdateListingLegalInfoRequest
 import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
@@ -77,6 +78,11 @@ class KokiListings(
 
     fun updateRemarks(id: Long, request: UpdateListingRemarksRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/remarks")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun updateLegalInfo(id: Long, request: UpdateListingLegalInfoRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/legal-info")
         rest.postForEntity(url, request, Any::class.java)
     }
 
