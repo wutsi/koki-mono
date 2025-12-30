@@ -38,7 +38,7 @@
                      th:text="#{'property-type.' + ${listing.propertyType}}">
                     APARTMENT
                 </div>
-                <div class="padding-left-small padding-right-small" th:if="!${listing.propertyTypeResidential}">-</div>
+                <div class="padding-left-small" th:if="!${listing.propertyTypeResidential}">-</div>
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
 

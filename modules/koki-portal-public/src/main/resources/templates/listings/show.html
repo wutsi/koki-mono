@@ -77,7 +77,11 @@
             </div>
         </div>
         <ul class="breadcrumb">
+            <li>
+                <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY</span>
+            </li>
             <li th:if="${listing.bedrooms}">
+                <span>&#x2022;</span>
                 <span th:text="${listing.bedrooms}">00</span>
                 <span th:if="${listing.bedrooms == 1}" th:text="#{page.listing.bedroom}">BEDROOM</span>
                 <span th:if="${listing.bedrooms > 1}" th:text="#{page.listing.bedrooms}">BEDROOMS</span>
