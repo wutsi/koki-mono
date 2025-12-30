@@ -66,6 +66,8 @@ data class ListingModel(
     val numberOfSigners: Int? = null,
     val mutationType: MutationType? = null,
     val transactionWithNotary: Boolean? = null,
+    val morcelable: Boolean? = null,
+    val subdivided: Boolean? = null,
 
     val title: String? = null,
     val summary: String? = null,

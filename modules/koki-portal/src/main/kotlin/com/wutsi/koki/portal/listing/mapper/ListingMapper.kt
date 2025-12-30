@@ -176,6 +176,8 @@ class ListingMapper(
             numberOfSigners = entity.numberOfSigners,
             mutationType = entity.mutationType,
             transactionWithNotary = entity.transactionWithNotary,
+            subdivided = entity.subdivided,
+            morcelable = entity.morcelable,
 
             transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
         )

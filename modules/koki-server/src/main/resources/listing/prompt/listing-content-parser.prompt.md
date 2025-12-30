@@ -15,21 +15,25 @@ The listing information must be structured in the following JSON format:
 - valid: Whether the listing is valid or not (boolean)
 - reason: If valid is false, reason for invalidity
 - listingType: (REQUIRED) Type of listing. Values can be SALE or RENTAL
-- propertyType: (REQUIRED) Type of property. Values can be HOUSE, DUPLEX, APARTMENT, STUDIO, LAND, COMMERCIAL,INDUSTRIAL
+- propertyType: (REQUIRED) Type of property. Values can be {{propertyTypes}}.
 - bedrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bedrooms (integer)
 - bathrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bathrooms (integer)
 - halfBathrooms: Number of half bathrooms (integer)
 - floors: Number of floors (integer)
-- parkingType: Type of parking available (when property has parking). Values can be PRIVATE, GARAGE, DRIVEWAY, STREET,
-  UNDERGROUND
+- parkingType: Type of parking available (when property has parking). Values can be {{parkingTypes}}.
 - parkings: Number of parking spaces (integer)
-- fenceType: Type of fence. Values can be NONE, CONCRETE, BRICK, WOOD, TREES
-- furnitureType: Type of furniture. Values can be FULLY_FURNISHED, SEMI_FURNISHED, UNFURNISHED
-- lotArea: (REQUIRED for LAND, LAND, COMMERCIAL,INDUSTRIAL) Area of the lot in square meters (integer)
+- fenceType: Type of fence. Values can be {{fenceTypes}}
+- furnitureType: Type of furniture. Values can be {{furnitureTypes}}
+- lotArea: Area of the lot in square meters (integer)
 - propertyArea: Area of the property in square meters (integer)
 - year: Year the property was built (integer)
 - availableAt: Date when the property is available in YYYY-MM-DD format (string)
-- price: Total sale or rental price (integer)
+- price: Total sale or rental price (integer).
+    - If the price is provided as a range, use the maximum value of the range.
+    - For rental properties:
+        - if the price is provided as a monthly amount, use that value
+        - if the price is provided as daily amount, multiply it by 30 to get the monthly price
+    - If the price is provided per square meter, multiply it by the lotArea to get the total price
 - currency: Currency of the price in 3 letter ISO 4217 format (string)
 - visitFees: Fees for visiting the property (integer)
 - securityDeposit: Security deposit amount in months (integer)
@@ -37,7 +41,7 @@ The listing information must be structured in the following JSON format:
 - leaseTerm: Minimal number of months for the lease (integer)
 - noticePeriod: Notice period in months (integer)
 - distanceFromMainRoad: Distance from the main road in meters (integer)
-- roadPavement: Type of road pavement. Values can be ASPHALT, CONCRETE, COBBLESTONE, GRAVEL, DIRT
+- roadPavement: Type of road pavement. Values can be {{roadPavements}}
 - amenities: List of amenities of the property. Each amenity having
     - id: ID of the amenity (integers)
     - name: Name of the amenity (string)
@@ -55,8 +59,10 @@ The listing information must be structured in the following JSON format:
 - landTitle: `true` when land title is available. (boolean)
 - technicalFile: `true` when technical file available (boolean)
 - numberOfSigners: Number of signers. If mentionned as `multiple`, ignore it (integer)
-- mutationType: Type of mutations. Values can be TOTAL or PARTIAL. If anyother value is mentioned, ignore it (string)
+- mutationType: Type of mutations. Values can be {{mutationTypes}}
 - transactionWithNotary: `true` when transaction with a notary (boolean)
+- subdivided: `true` when the property is subdivided (boolean) - This is usually for land properties
+- morcelable: `true` when the property is morcelable (boolean) - This is usually for land properties
 
 # Amenities IDs Reference
 
@@ -83,6 +89,10 @@ id,name
     - Otherwise, do not include the furnitureType field in the JSON
 - If description indicate that the the property has parking, but does not include information about the type of parking,
   you can assume it's PRIVATE.
+- For land listing
+    - the term "borne" can be used to refer to fence type "DEMARCATED".
+    - the term "cloture" can be used to refer to fence type "FENCED".
+    - the term "loti" or "lotissement" refer the subdivided field being true.
 - Refer to the `Amenities IDs Reference` section for resolving the IDs of amenities. DO NOT include amenities mentioned
   in the description but not in the list. They should be added into `publicRemarks`
 - Optimize the JSON size by not including null, empty fields or enumerated fields with values outside the expected ones.

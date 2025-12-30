@@ -372,6 +372,8 @@ class ListingService(
                 numberOfSigners = form.numberOfSigners,
                 mutationType = form.mutationType,
                 transactionWithNotary = form.transactionWithNotary,
+                subdivided = form.subdivided,
+                morcelable = form.morcelable,
             )
         )
     }

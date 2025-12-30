@@ -126,6 +126,8 @@ object ListingFixtures {
         numberOfSigners = 1,
         mutationType = MutationType.TOTAL,
         transactionWithNotary = true,
+        subdivided = true,
+        morcelable = false,
 
         buyerAgentUserId = users[2].id,
         buyerContactId = contacts[1].id,

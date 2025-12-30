@@ -178,6 +178,14 @@
                     <b th:text="#{page.listing.technical-file}">Technical File</b>
                     <span th:text="#{'yes-no.' + ${listing.technicalFile}}">Y</span>
                 </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.subdivided != null}">
+                    <b th:text="#{page.listing.subdivided}">Subdivided</b>
+                    <span th:text="#{'yes-no.' + ${listing.subdivided}}">Y</span>
+                </div>
+                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.morcelable != null}">
+                    <b th:text="#{page.listing.morcelable}">Morcelable</b>
+                    <span th:text="#{'yes-no.' + ${listing.morcelable}}">Y</span>
+                </div>
                 <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.numberOfSigners}">
                     <b th:text="#{page.listing.number-of-signers}">Signers</b>
                     <span th:text="${listing.numberOfSigners}">00</span>

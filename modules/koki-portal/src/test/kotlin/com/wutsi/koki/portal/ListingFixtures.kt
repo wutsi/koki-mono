@@ -125,6 +125,8 @@ object ListingFixtures {
         numberOfSigners = 1,
         mutationType = MutationType.TOTAL,
         transactionWithNotary = true,
+        morcelable = true,
+        subdivided = true,
     )
 
     val listings = listOf(

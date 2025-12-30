@@ -66,6 +66,8 @@ data class ListingForm(
     val numberOfSigners: Int? = null,
     val mutationType: MutationType? = null,
     val transactionWithNotary: Boolean? = null,
+    val morcelable: Boolean? = null,
+    val subdivided: Boolean? = null,
 
     val comment: String? = null,
 )

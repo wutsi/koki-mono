@@ -22,14 +22,17 @@ You must return the property content in JSON that looks like:
         - Type of property
         - Listing type,
         - Number of bedrooms (to include if the property is not a land)
-        - Lot area (to include only for land)
-        - If the property has land title (for land only)
+        - For land properties
+            - Include the Lot area
+            - Indicate if the property has land title
+            - Indicate if the property is subdivided
         - City
         - Neighbourhood in round brackets
     - Examples:
         - Apartment for rent, 3 bedrooms, Douala (Bonapriso)
         - Land for sale, 1200m2, Douala (Bonapriso)
         - Titled land for sale, 200m2, Yaounde (Bastos)
+        - Terrain titré et loti a vendre, 500m2, Yaounde (Bastos)
 
 - Instructions for crafting the description:
     - Start with Compelling Opening: Your first sentence or two should immediately grab attention and reinforce your
@@ -46,6 +49,7 @@ You must return the property content in JSON that looks like:
         - Only 1 signer
         - Total mutation type
         - Transaction with notary
+        - subdivided or morcelable land
     - When land title or technical file are available, DO NOT mention them as verified documents, just mention their
       availability (Unless its specified otherwise in the information provided).
     - Aim for around 300-400 words.
@@ -62,6 +66,7 @@ You must return the property content in JSON that looks like:
 - Instructions for French translation:
     - The french abbreviation for "bedroom" is CAC. Example: "1BR" should be translate to "1CAC"
     - The french translation for "bathroom" is CDB. Example: "2BA" should be translate to "2SDB"
+    - The best french translation for "subdivided" is "loti"
 
 # Goal:
 
@@ -87,6 +92,8 @@ Property Information:
 - Number of signers: {{numberOfSigners}}
 - Mutation Type: {{mutationType}}
 - transaction with notary: {{transactionWithNotary}}
+- subdivided: {{subdivided}}
+- morcelable: {{morcelable}}
 
 Images Description:
 {{images}}

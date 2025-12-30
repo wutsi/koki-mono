@@ -95,6 +95,8 @@ data class ListingEntity(
     var advanceRent: Int? = null,
     var leaseTerm: Int? = null,
     var noticePeriod: Int? = null,
+    var subdivided: Boolean? = null,
+    var morcelable: Boolean? = null,
 
     @Column("seller_contact_fk") var sellerContactId: Long? = null,
     @Column("seller_agent_user_fk") var sellerAgentUserId: Long? = null,

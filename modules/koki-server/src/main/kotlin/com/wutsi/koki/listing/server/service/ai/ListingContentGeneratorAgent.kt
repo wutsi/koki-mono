@@ -49,6 +49,8 @@ class ListingContentGeneratorAgent(
             .replace("{{transactionWithNotary}}", listing.transactionWithNotary?.toString() ?: "Unknown")
             .replace("{{numberOfSigners}}", listing.numberOfSigners?.toString() ?: "Unknown")
             .replace("{{mutationType}}", listing.mutationType?.name ?: "Unknown")
+            .replace("{{subdivided}}", listing.subdivided?.toString() ?: "Unknown")
+            .replace("{{morcelable}}", listing.morcelable?.toString() ?: "Unknown")
             .replace("{{amenities}}", amenities)
             .replace("{{images}}", imageText)
             .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })

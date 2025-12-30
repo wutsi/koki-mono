@@ -19,10 +19,12 @@ class EditListingLegalInfoControllerTest : AbstractPageControllerTest() {
 
         select("#landTitle", 1)
         select("#technicalFile", 1)
+        select("#subdivided", 1)
+        select("#morcelable", 2)
+        scrollToBottom()
         select("#numberOfSigners", 3)
         select("#mutationType", 1)
         select("#transactionWithNotary", 1)
-        scrollToBottom()
         click("button[type=submit]")
 
         val request = argumentCaptor<UpdateListingLegalInfoRequest>()
@@ -34,6 +36,8 @@ class EditListingLegalInfoControllerTest : AbstractPageControllerTest() {
 
         assertEquals(true, request.firstValue.landTitle)
         assertEquals(true, request.firstValue.technicalFile)
+        assertEquals(true, request.firstValue.subdivided)
+        assertEquals(false, request.firstValue.morcelable)
         assertEquals(3, request.firstValue.numberOfSigners)
         assertEquals(MutationType.TOTAL, request.firstValue.mutationType)
         assertEquals(true, request.firstValue.transactionWithNotary)

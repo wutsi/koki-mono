@@ -45,6 +45,24 @@
                             </div>
 
                             <div class="section-item">
+                                <label class="title" th:text="#{page.listing.subdivided}">Lotit</label>
+                                <select class="form-select" th:field="*{subdivided}">
+                                    <option value=""></option>
+                                    <option th:text="#{yes-no.true}" value="true">TRUE</option>
+                                    <option th:text="#{yes-no.false}" value="false">FALSE</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.morcelable}">Lotit</label>
+                                <select class="form-select" th:field="*{morcelable}">
+                                    <option value=""></option>
+                                    <option th:text="#{yes-no.true}" value="true">TRUE</option>
+                                    <option th:text="#{yes-no.false}" value="false">FALSE</option>
+                                </select>
+                            </div>
+
+                            <div class="section-item">
                                 <label class="title" th:text="#{page.listing.number-of-signers}">Signers</label>
                                 <select class="form-select" th:field="*{numberOfSigners}">
                                     <option value=""></option>
