@@ -247,7 +247,7 @@
 @media only screen and (max-width: 992px) and (orientation: portrait) {
     .listing-info-container {
         width: 100%;
-        padding: 0 1em;
+        padding: 0 0.5em;
     }
 
     .listing-info-details {
