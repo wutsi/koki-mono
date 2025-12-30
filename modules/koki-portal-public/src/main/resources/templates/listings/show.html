@@ -339,7 +339,7 @@
     </div>
 
     <!-- CONTACT AGENT -->
-    <div class="listing-contact-details">
+    <div class="listing-contact-details" th:if="${listing.sellerAgentUser.agentId}">
         <div class="listing-contact-details-inner">
             <div class="agent-info">
                 <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">

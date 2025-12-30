@@ -1,8 +1,11 @@
 package com.wutsi.koki.portal.pub.listing.mapper
 
+import com.wutsi.koki.listing.dto.FenceType
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
@@ -57,9 +60,9 @@ class ListingMapper(
             level = entity.level,
             levelHtml = toLevelText(entity.level),
             unit = entity.unit,
-            parkingType = entity.parkingType,
+            parkingType = entity.parkingType?.takeIf { type -> type != ParkingType.UNKNOWN },
             parkings = entity.parkings,
-            fenceType = entity.fenceType,
+            fenceType = entity.fenceType?.takeIf { type -> type != FenceType.UNKNOWN },
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             year = entity.year,
@@ -69,7 +72,7 @@ class ListingMapper(
             availableAt = entity.availableAt,
             availableAtText = entity.availableAt?.let { date -> mdf.format(date) },
 
-            furnitureType = entity.furnitureType,
+            furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
 
             address = address,

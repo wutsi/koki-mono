@@ -81,13 +81,13 @@
 <tr th:fragment="listing-row(listing, sold, showAgent, showCommission)" th:remove="tag">
     <td width="1%">
         <div class="hero-image text-center">
-            <a target="_blank" th:href="'/listings/' + ${listing.id}">
+            <a th:href="'/listings/' + ${listing.id}">
                 <img th:src="${listing.heroImageUrl} ? ${listing.heroImageUrl} : '/image/no-image.png'"/>
             </a>
         </div>
     </td>
     <td>
-        <a target="_blank" th:href="'/listings/' + ${listing.id}">
+        <a th:href="'/listings/' + ${listing.id}">
             <div th:utext="${listing.address?.toHtml(false)}">ADDRESS</div>
             <div class="text-small">
                 <div class="margin-top-small">
@@ -142,7 +142,7 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/listings/' + ${listing.id}">
+        <a th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
             <!--
                 <div th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
@@ -150,19 +150,19 @@
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${showAgent}">
-        <a target="_blank" th:href="'/listings/' + ${listing.id}">
+        <a th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
         </a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
-        <a class="text-nowrap listing-price" target="_blank"
+        <a class="text-nowrap listing-price"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.salePrice}">
             <b class="listing-price" th:text="${listing.salePrice.displayText}">$$</b>
         </a>
     </td>
     <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
-        <a class="text-nowrap listing-price" target="_blank"
+        <a class="text-nowrap listing-price"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.price}">
             <b class="listing-price" th:text="${listing.price.displayText}">$$</b>

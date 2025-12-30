@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a th:text="#{module.home}" href="/">Home</a>
+                    <a href="/" th:text="#{module.home}">Home</a>
                 </li>
                 <li class="breadcrumb-item" th:if="${contact}">
                     <a href="/contacts" th:text="#{module.contact}">MODULE</a>
@@ -23,7 +23,7 @@
 
 <tr th:fragment="columns(contact, showAccount, showType)" th:remove="tag">
     <td>
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}">
+        <a th:href="'/contacts/' + ${contact.id}">
             <div th:text="${contact.name}">NAME</div>
 
             <table border="0" class="d-block d-md-none text-small">
@@ -49,24 +49,24 @@
         </a>
     </td>
     <td class="d-none d-lg-table-cell" th:if="${showType}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.contactType?.title}">
             TYPE
         </a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.email}">EMAIL</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.mobileFormatted}">MOBILE</a>
     </td>
     <td class="d-none d-md-table-cell">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.phoneFormatted}">PHONE</a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${showAccount}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.account?.name}">ACCOUNT</a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${user?.hasFullAccess('contact')}">
-        <a target="_blank" th:href="'/contacts/' + ${contact.id}" th:text="${contact.createdBy?.displayName}">OWNER</a>
+        <a th:href="'/contacts/' + ${contact.id}" th:text="${contact.createdBy?.displayName}">OWNER</a>
     </td>
 </tr>
 

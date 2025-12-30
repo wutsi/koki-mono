@@ -48,8 +48,11 @@ Generate the content in JSON formant with the following fields:
             - DO NOT consider embassies not in the neighborhood, even if they are close by.
         - Area with multiple gated communities, private security firms, and low crime rates should have high security
           rating (4).
-        - Area with police presence, government offices should have an average rating (2 to 3)
-        - Areas with regular petty crimes (theft, pickpocketing) should have low rating (1 or 2)
+        - Area government offices should have an average rating (3 to 4) depending on the level of presence and the
+          sensitivity of the office. Examples of sensitive offices include presidency palace, police or military
+          headquarters, major courthouses.
+        - Areas with regular petty crimes (theft, pickpocketing) should have low do medium rating (2 or 3), depending on
+          frequency
         - Area relying on community policing should have low average rating (1 to 2)
         - Areas with high crimes should have very low rating (1)
     - Education Rating:
@@ -59,9 +62,9 @@ Generate the content in JSON formant with the following fields:
         - Area with public schools only should have average rating of 3.
         - Area with low school offering should have low rating (1 to 2).
     - Amenities Rating:
-        - Area with easy access to luxury and international-standard shops/markets, private hospitals should have a
-          higher rating (4 or 5).
-        - Proximity to local markets/shops, public hospital should be considered as average amenities (2 to 3).
+        - Area with easy access to luxury and international-standard shops/markets, private hospitals should have a 5.
+        - Area with easy access to multiple shops/markets, hospitals should have 3 to 4, depending on the quality and
+          variety.
         - Area with limited access to shops, markets, hospitals should have a lower rating (1 or 2)
     - Infrastructure Rating:
         - Poor road conditions should remove 1 point from the maximum rating.

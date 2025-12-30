@@ -33,7 +33,11 @@
         <a th:href="${listing.publicUrl}">
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
 
-            <div class="text-small">
+            <div class="text-small flex">
+                <div th:if="!${listing.propertyTypeResidential}"
+                     th:text="#{'property-type.' + ${listing.propertyType}}">APARTMENT
+                </div>
+                <div class="padding-left-small" th:if="!${listing.propertyTypeResidential}">-</div>
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
 
@@ -56,16 +60,16 @@
         <span th:text="${listing.bedrooms}">00</span>
         <span th:text="#{page.listing.bedrooms-short}">BED</span>
     </div>
-    <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
-    <div th:if="${listing.bathrooms}">
+    <div class="padding-left-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
+    <div class="padding-left-small" th:if="${listing.bathrooms}">
         <span th:text="${listing.bathrooms}">00</span>
         <span th:text="#{page.listing.bathrooms-short}">BATH</span>
     </div>
-    <div class="padding-left-small padding-right-small"
+    <div class="padding-left-small"
          th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">
         -
     </div>
-    <div th:if="${listing.lotArea} OR ${listing.propertyArea}">
+    <div class="padding-left-small" th:if="${listing.lotArea} OR ${listing.propertyArea}">
         <span th:if="${listing.lotArea}" th:text="${listing.lotArea}">00</span>
         <span th:if="!${listing.lotArea}" th:text="${listing.propertyArea}">00</span>
         m<sup>2</sup>

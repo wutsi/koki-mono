@@ -96,6 +96,12 @@ data class ListingModel(
                 mutationType != null ||
                 transactionWithNotary == true)
 
+    val propertyTypeResidential: Boolean
+        get() = propertyType == PropertyType.APARTMENT ||
+            propertyType == PropertyType.STUDIO ||
+            propertyType == PropertyType.DUPLEX ||
+            propertyType == PropertyType.HOUSE
+
     val hasTermsAndConditions: Boolean
         get() = listingType == ListingType.RENTAL &&
             (leaseTerm != null || securityDeposit != null || advanceRent != null || noticePeriod != null)

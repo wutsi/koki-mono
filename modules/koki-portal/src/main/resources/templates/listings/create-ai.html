@@ -83,8 +83,11 @@
 
 <script>
     function disableSubmit() {
-        const btn = document.getElementById('btn-submit');
-        btn.disabled = true;
+        const form = document.querySelector('form');
+        if (form.checkValidity()) {
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+        }
     }
 </script>
 </body>

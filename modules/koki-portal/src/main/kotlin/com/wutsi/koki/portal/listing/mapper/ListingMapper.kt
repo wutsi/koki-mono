@@ -1,9 +1,12 @@
 package com.wutsi.koki.portal.listing.mapper
 
+import com.wutsi.koki.listing.dto.FenceType
+import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.platform.util.Moment
@@ -51,8 +54,8 @@ class ListingMapper(
             id = entity.id,
             status = entity.status,
             listingNumber = entity.listingNumber.toString(),
-            listingType = entity.listingType,
-            propertyType = entity.propertyType,
+            listingType = entity.listingType?.takeIf { type -> type != ListingType.UNKNOWN },
+            propertyType = entity.propertyType?.takeIf { type -> type != PropertyType.UNKNOWN },
             bedrooms = entity.bedrooms,
             bathrooms = entity.bathrooms,
             halfBathrooms = entity.halfBathrooms,
@@ -61,9 +64,9 @@ class ListingMapper(
             level = entity.level,
             levelHtml = toLevelText(entity.level),
             unit = entity.unit,
-            parkingType = entity.parkingType,
+            parkingType = entity.parkingType?.takeIf { type -> type != ParkingType.UNKNOWN },
             parkings = entity.parkings,
-            fenceType = entity.fenceType,
+            fenceType = entity.fenceType?.takeIf { type -> type != FenceType.UNKNOWN },
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             year = entity.year,
@@ -73,7 +76,7 @@ class ListingMapper(
             availableAt = entity.availableAt,
             availableAtText = entity.availableAt?.let { date -> df.format(date) },
 
-            furnitureType = entity.furnitureType,
+            furnitureType = entity.furnitureType?.takeIf { type -> type != FurnitureType.UNKNOWN },
             amenities = entity.amenityIds.mapNotNull { id -> amenities[id] },
 
             address = address,
