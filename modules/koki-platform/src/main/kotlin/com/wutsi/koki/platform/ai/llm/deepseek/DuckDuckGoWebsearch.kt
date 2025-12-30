@@ -12,24 +12,28 @@ class DuckDuckGoWebsearch : Websearch {
 
     override fun search(query: String): String {
         val url = URL_PREFIX + URLEncoder.encode(query, "UTF-8")
-        val doc = Jsoup.connect(url)
-            .userAgent(USER_AGENT)
-            .followRedirects(true)
-            .get()
+        try {
+            val doc = Jsoup.connect(url)
+                .userAgent(USER_AGENT)
+                .followRedirects(true)
+                .get()
 
-        val sb = StringBuffer()
-        val results = doc.select(".result")
-        var i = 0
-        results.forEach { result ->
-            val title = result.select(".result__title").text()
-            val link = result.select(".result__a").attr("abs:href")
-            val snippet = result.select(".result__snippet").text()
+            val sb = StringBuffer()
+            val results = doc.select(".result")
+            var i = 0
+            results.forEach { result ->
+                val title = result.select(".result__title").text()
+                val link = result.select(".result__a").attr("abs:href")
+                val snippet = result.select(".result__snippet").text()
 
-            sb.append("- Result #${++i}\n")
-            sb.append("  - Title: ").append(title).append("\n")
-            sb.append("  - Link: ").append(link).append("\n")
-            sb.append("  - Snippet: ").append(snippet).append("\n")
+                sb.append("- Result #${++i}\n")
+                sb.append("  - Title: ").append(title).append("\n")
+                sb.append("  - Link: ").append(link).append("\n")
+                sb.append("  - Snippet: ").append(snippet).append("\n")
+            }
+            return sb.toString()
+        } catch (e: Exception) {
+            return "Failed to perform web search for query '$query' - ${e.message}"
         }
-        return sb.toString()
     }
 }
