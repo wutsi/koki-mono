@@ -32,4 +32,13 @@ class FetchTest {
 
         assertEquals("Failed to get the content from $url - The page doesn't exist or is inaccessible", content)
     }
+
+    @Test
+    fun image() {
+        val url = "https://picsum.photos/800/600"
+        val tools = Fetch()
+        val content = tools.fetch(url)
+
+        assertEquals(true, content.contains("Failed to get the content from $url"))
+    }
 }

@@ -23,17 +23,17 @@ class Fetch {
                 .userAgent(USER_AGENT)
                 .followRedirects(true)
                 .get()
-
-            // Content
             return toMarkdown(doc.html())
-        } catch (e: ConnectException) {
+        } catch (ex: ConnectException) {
             return "Failed to connect to $url"
-        } catch (e: HttpStatusException) {
-            if (e.statusCode == 404) {
+        } catch (ex: HttpStatusException) {
+            if (ex.statusCode == 404) {
                 return "Failed to get the content from $url - The page doesn't exist or is inaccessible"
             } else {
-                return "Failed to get the content from $url - HTTP status code ${e.statusCode}"
+                return "Failed to get the content from $url - HTTP status code ${ex.statusCode}"
             }
+        } catch (ex: Exception) {
+            return "Failed to get the content from $url -  ${ex.message}"
         }
     }
 
