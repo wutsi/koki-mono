@@ -90,9 +90,12 @@
         <a target="_blank" th:href="'/listings/' + ${listing.id}">
             <div th:utext="${listing.address?.toHtml(false)}">ADDRESS</div>
             <div class="text-small">
-                <div>
-                    <span th:text="#{page.listing.listing-number}"></span>:
-                    <span th:text="${listing.listingNumber}">000</span>
+                <div class="margin-top-small">
+                    <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY_TYPE</span>
+                    <span th:if="${listing.furnitureType}">-</span>
+                    <span th:if="${listing.furnitureType}" th:text="#{'furniture-type.' + ${listing.furnitureType}}">
+                        FURNITURE_TYPE
+                    </span>
                 </div>
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
@@ -106,12 +109,6 @@
                         <div>
                             <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
                         </div>
-                        <!--
-                        <div class="margin-right-small" th:if="${sold} AND ${listing.transactionParty}">
-                            <div
-                                th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
-                        </div>
-                        -->
                     </div>
                 </div>
             </div>
@@ -177,16 +174,16 @@
 </tr>
 
 <div class="flex" th:fragment="listing-bed-bath-area(listing)">
-    <div th:if="${listing.bedrooms}">
+    <div class="padding-right-small" th:if="${listing.bedrooms}">
         <span th:text="${listing.bedrooms}">00</span>
         <span th:text="#{page.listing.bedrooms-short}">BED</span>
     </div>
-    <div class="padding-left-small padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
-    <div th:if="${listing.bathrooms}">
+    <div class="padding-right-small" th:if="${listing.bedrooms} AND ${listing.bathrooms}">-</div>
+    <div class="padding-right-small" th:if="${listing.bathrooms}">
         <span th:text="${listing.bathrooms}">00</span>
         <span th:text="#{page.listing.bathrooms-short}">BATH</span>
     </div>
-    <div class="padding-left-small padding-right-small"
+    <div class="padding-right-small"
          th:if="(${listing.bedrooms} OR ${listing.bathrooms}) AND (${listing.lotArea} OR ${listing.propertyArea})">
         -
     </div>
