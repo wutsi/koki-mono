@@ -491,6 +491,8 @@ class ListingService(
                 numberOfSigners = request.numberOfSigners,
                 mutationType = request.mutationType,
                 transactionWithNotary = request.transactionWithNotary,
+                subdivided = request.subdivided,
+                morcelable = request.morcelable,
 
                 sellerAgentUserId = userId,
                 createdAt = now,
@@ -627,6 +629,8 @@ class ListingService(
         listing.numberOfSigners = request.numberOfSigners
         listing.mutationType = request.mutationType
         listing.transactionWithNotary = request.transactionWithNotary
+        listing.subdivided = request.subdivided
+        listing.morcelable = request.morcelable
         listing.modifiedAt = Date()
         listing.modifiedById = userId
 

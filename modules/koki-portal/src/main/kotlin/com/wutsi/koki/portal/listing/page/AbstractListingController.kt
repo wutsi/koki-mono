@@ -77,6 +77,8 @@ abstract class AbstractListingController : AbstractModulePageController() {
             numberOfSigners = listing.numberOfSigners,
             mutationType = listing.mutationType,
             transactionWithNotary = listing.transactionWithNotary,
+            subdivided = listing.subdivided,
+            morcelable = listing.morcelable,
 
             sellerContactId = listing.sellerContact?.id,
 

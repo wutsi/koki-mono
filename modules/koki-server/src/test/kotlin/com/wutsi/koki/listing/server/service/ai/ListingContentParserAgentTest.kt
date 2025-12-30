@@ -132,6 +132,7 @@ class ListingContentParserAgentTest {
             -ville de Yaoundé
             -superficie 2000m²
             -TITRE FONCIER
+            -Borné
             -prix: 120.000f/m²
             6 96 19 20 00 WHATSAPP POUR PLUS D'INFORMATIONS
             Transaction sécurisée devant notaire ou bailleur agréé
@@ -158,7 +159,31 @@ class ListingContentParserAgentTest {
         assertEquals(true, listing["technicalFile"])
         assertEquals(true, listing["transactionWithNotary"])
         assertEquals("TOTAL", listing["mutationType"])
+        assertEquals("DEMARCATED", listing["fenceType"])
         assertEquals(1, listing["numberOfSigners"])
+        assertEquals(null, listing["subdivided"])
+        assertEquals(null, listing["morcelable"])
+    }
+
+    @Test
+    fun `land subdivided`() {
+        val text = """
+            terrain de 2 hectares titré, loti et clôturé en vente a 1500f/m², situé a nkolbisson.
+            Possibilite de morceler le terrain selon les besoins de l'acheteur (minimum 500m2 par lot).
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(true, listing["valid"])
+        assertEquals(ListingType.SALE.name, listing["listingType"])
+        assertEquals(PropertyType.LAND.name, listing["propertyType"])
+        assertEquals(20000, listing["lotArea"])
+        assertEquals(30000000, listing["price"])
+
+        assertEquals(true, listing["landTitle"])
+        assertEquals(true, listing["subdivided"])
+        assertEquals(true, listing["morcelable"])
+        assertEquals("FENCED", listing["fenceType"])
     }
 
     @Test
@@ -228,7 +253,7 @@ class ListingContentParserAgentTest {
 
         assertEquals(true, listing["valid"])
         assertEquals("RENTAL", listing["listingType"])
-        assertEquals("HOUSE", listing["propertyType"])
+        assertEquals("VILLA", listing["propertyType"])
         assertEquals(3, listing["bedrooms"])
 //        assertEquals(3, listing["bathrooms"])
 //        assertEquals(1, listing["halfBathrooms"])

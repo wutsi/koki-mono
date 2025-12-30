@@ -24,18 +24,22 @@ class UpdateListingLegalInfoEndpointTest : AuthorizationAwareEndpointTest() {
             technicalFile = false,
             numberOfSigners = 2,
             mutationType = MutationType.TOTAL,
-            transactionWithNotary = true
+            transactionWithNotary = true,
+            subdivided = false,
+            morcelable = false,
         )
         val response = rest.postForEntity("/v1/listings/$id/legal-info", request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val listing = dao.findById(id).get()
-        assertEquals(true, listing.landTitle)
-        assertEquals(false, listing.technicalFile)
-        assertEquals(2, listing.numberOfSigners)
-        assertEquals(MutationType.TOTAL, listing.mutationType)
-        assertEquals(true, listing.transactionWithNotary)
+        assertEquals(request.landTitle, listing.landTitle)
+        assertEquals(request.technicalFile, listing.technicalFile)
+        assertEquals(request.numberOfSigners, listing.numberOfSigners)
+        assertEquals(request.mutationType, listing.mutationType)
+        assertEquals(request.transactionWithNotary, listing.transactionWithNotary)
+        assertEquals(request.subdivided, listing.subdivided)
+        assertEquals(request.morcelable, listing.morcelable)
     }
 
     @Test
@@ -92,6 +96,11 @@ class UpdateListingLegalInfoEndpointTest : AuthorizationAwareEndpointTest() {
         val listing = dao.findById(id).get()
         assertNull(listing.landTitle)
         assertNull(listing.numberOfSigners)
+        assertNull(listing.technicalFile)
+        assertNull(listing.mutationType)
+        assertNull(listing.transactionWithNotary)
+        assertNull(listing.subdivided)
+        assertNull(listing.morcelable)
     }
 
     @Test

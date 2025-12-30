@@ -36,6 +36,24 @@ class ListingContentParserAgent(
             .replace("{{amenities}}", loadAmenities())
             .replace("{{neighbourhoods}}", loadNeighbourhoods())
             .replace("{{city}}", city.name + "," + country)
+            .replace(
+                "{{propertyTypes}}",
+                PropertyType.entries.filter { it != PropertyType.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{parkingTypes}}",
+                ParkingType.entries.filter { it != ParkingType.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{fenceTypes}}",
+                FenceType.entries.filter { it != FenceType.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{furnitureTypes}}",
+                FurnitureType.entries.filter { it != FurnitureType.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{roadPavements}}",
+                RoadPavement.entries.filter { it != RoadPavement.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{mutationTypes}}",
+                MutationType.entries.filter { it != MutationType.UNKNOWN }.joinToString(",") { it.name })
 
         return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
     }
@@ -97,8 +115,10 @@ data class ListingContentParserResult(
     val publicRemarks: String? = null,
     val commission: Double? = null,
     var landTitle: Boolean? = null,
-    var technicalFile: Boolean? = null,
-    var numberOfSigners: Int? = null,
-    var mutationType: MutationType? = null,
-    var transactionWithNotary: Boolean? = null,
+    val technicalFile: Boolean? = null,
+    val numberOfSigners: Int? = null,
+    val mutationType: MutationType? = null,
+    val transactionWithNotary: Boolean? = null,
+    val subdivided: Boolean? = null,
+    val morcelable: Boolean? = null,
 )

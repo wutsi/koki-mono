@@ -104,6 +104,8 @@ class AIListingService(
                 mutationType = result.mutationType,
                 numberOfSigners = result.numberOfSigners,
                 transactionWithNotary = result.transactionWithNotary,
+                subdivided = result.subdivided,
+                morcelable = result.morcelable,
             ),
             tenantId = tenantId,
         )

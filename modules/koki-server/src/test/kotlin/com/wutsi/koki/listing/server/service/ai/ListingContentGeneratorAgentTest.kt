@@ -118,7 +118,9 @@ class ListingContentGeneratorAgentTest {
                 landTitle = true,
                 technicalFile = true,
                 transactionWithNotary = true,
-                mutationType = MutationType.TOTAL
+                mutationType = MutationType.TOTAL,
+                subdivided = true,
+                morcelable = true,
             ),
             images = landImages,
             city = city,
@@ -128,6 +130,7 @@ class ListingContentGeneratorAgentTest {
         val result = JsonMapper().readValue(json, ListingContentGeneratorResult::class.java)
         assertEquals(true, result.title?.contains("Titled", true))
         assertEquals(true, result.titleFr?.contains("titré", true))
+        assertEquals(true, result.titleFr?.contains("loti", true))
         assertNotNull(result.summary)
         assertNotNull(result.description)
         assertNotNull(result.summaryFr)

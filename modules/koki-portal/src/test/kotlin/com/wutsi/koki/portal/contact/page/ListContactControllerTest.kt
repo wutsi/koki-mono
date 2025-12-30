@@ -71,9 +71,6 @@ class ListContactControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/contacts")
         click("tr.contact a")
-
-        val windowHandles = driver.getWindowHandles().toList()
-        driver.switchTo().window(windowHandles[1])
         assertCurrentPageIs(PageName.CONTACT)
     }
 

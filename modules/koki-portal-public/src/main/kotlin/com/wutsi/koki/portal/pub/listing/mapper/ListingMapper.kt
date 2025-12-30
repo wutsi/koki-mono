@@ -101,6 +101,8 @@ class ListingMapper(
             numberOfSigners = entity.numberOfSigners,
             mutationType = entity.mutationType,
             transactionWithNotary = entity.transactionWithNotary,
+            subdivided = entity.subdivided,
+            morcelable = entity.morcelable,
 
             title = if (lang == "fr") {
                 entity.titleFr ?: entity.title
