@@ -11,6 +11,7 @@ import com.wutsi.koki.platform.ai.llm.LLMRequest
 import com.wutsi.koki.platform.ai.llm.LLMResponse
 import com.wutsi.koki.platform.ai.llm.LLMRole
 import com.wutsi.koki.platform.ai.llm.LLMUsage
+import com.wutsi.koki.platform.ai.llm.Tool
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionRequest
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSCompletionResponse
 import com.wutsi.koki.platform.ai.llm.deepseek.model.DSContent
@@ -160,6 +161,11 @@ open class Deepseek(
             )
         }
     }
+
+    override fun getBuiltInTools(): List<Tool> = listOf(
+        DeepseekFetchTool(Fetch()),
+        DeepseekWebsearchTool(DuckDuckGoWebsearch())
+    )
 
     protected open fun getFunctionType(function: LLMFunctionDeclaration): String {
         return "function"
