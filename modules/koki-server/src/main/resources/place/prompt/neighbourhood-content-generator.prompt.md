@@ -30,6 +30,9 @@ Generate the content in JSON formant with the following fields:
     - commute
         - value: from 1 to 5
         - reason: Explanation of the rating
+- overallRating:
+    - value: Average value of the ratings above, from 1..5 (doubled to one decimal place)
+    - reason: Explanation of the overall rating
 
 # Instructions:
 
@@ -69,8 +72,11 @@ Generate the content in JSON formant with the following fields:
         - Few transport options should remove 1 point from the maximum rating.
         - Heavy traffic should remove 1 point from the maximum rating.
         - Poor access to major routes/work should remove 1 point from the maximum rating.
-- DO NOT perform more than 9 web searches to gather information about the neighbourhood. After 5 searches, rely on your
-  knowledge base.
+
+# Available Tools:
+
+Here are the tools available to you to gather information about the neighborhood:
+{{tools}}
 
 # ASK
 

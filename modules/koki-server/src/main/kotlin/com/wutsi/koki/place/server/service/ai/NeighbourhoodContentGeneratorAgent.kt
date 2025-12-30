@@ -10,13 +10,20 @@ class NeighbourhoodContentGeneratorAgent(
     val city: LocationEntity?,
     val neighbourhood: LocationEntity,
     val llm: LLM,
-) : Agent(llm, maxIterations = 10, responseType = MediaType.APPLICATION_JSON) {
+    val maxIterations: Int = 20,
+) : Agent(llm, maxIterations = maxIterations, responseType = MediaType.APPLICATION_JSON) {
     override fun buildPrompt(query: String, memory: List<String>): String {
         val prompt = this::class.java.getResourceAsStream("/place/prompt/neighbourhood-content-generator.prompt.md")!!
             .reader()
             .readText()
 
         return prompt.replace("{{country}}", neighbourhood.country)
+            .replace(
+                "{{tools}}",
+                tools().joinToString("\n") { tool ->
+                    "- ${tool.function().name} - ${tool.function().description}"
+                }
+            )
             .replace("{{city}}", city?.name ?: "Unknown")
             .replace("{{neighbourhood}}", neighbourhood.name)
             .replace("{{observations}}", memory.joinToString("\n") { entry -> "- $entry" })
