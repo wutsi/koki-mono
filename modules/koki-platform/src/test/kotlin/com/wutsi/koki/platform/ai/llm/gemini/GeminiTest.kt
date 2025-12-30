@@ -19,4 +19,8 @@ class GeminiTest { // AbstractLLMTest()
     fun createVisionLLM(): LLM {
         return createLLM()
     }
+
+    fun delayMillis(): Long {
+        return 15000
+    }
 }

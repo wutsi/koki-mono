@@ -9,12 +9,15 @@ abstract class AbstractLLMTest {
     protected abstract fun createVisionLLM(): LLM
 
     protected open fun delayMillis(): Long {
-        return 30000L
+        return 0
     }
 
     @AfterEach
     fun tearDown() {
-        Thread.sleep(delayMillis())
+        val delay = delayMillis()
+        if (delay > 0) {
+            Thread.sleep(delayMillis())
+        }
     }
 
     @Test
@@ -186,7 +189,10 @@ abstract class AbstractLLMTest {
                 )
             )
         )
-        print(response)
+
+        println(response)
+//        val fc = response.messages.firstOrNull()?.content?.find { content -> content.functionCall != null }
+//        assertEquals("get_weather", fc?.functionCall?.name)
     }
 
     protected fun print(response: LLMResponse) {
