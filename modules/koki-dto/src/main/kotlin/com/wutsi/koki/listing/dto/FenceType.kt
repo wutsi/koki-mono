@@ -7,5 +7,7 @@ enum class FenceType {
     BRICK,
     WOOD,
     TREES,
-    SEE_REMARKS,
+    DEMARCATED,
+    FENCED,
+    OTHER
 }

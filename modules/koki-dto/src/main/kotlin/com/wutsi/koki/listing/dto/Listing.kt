@@ -77,6 +77,8 @@ data class Listing(
     val numberOfSigners: Int? = null,
     val mutationType: MutationType? = null,
     val transactionWithNotary: Boolean? = null,
+    val subdivided: Boolean? = null,
+    val morcelable: Boolean? = null,
 
     val createdById: Long? = null,
     val createdAt: Date = Date(),

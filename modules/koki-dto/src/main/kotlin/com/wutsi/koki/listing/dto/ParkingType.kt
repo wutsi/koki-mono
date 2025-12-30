@@ -8,5 +8,5 @@ enum class ParkingType {
     STREET,
     PRIVATE,
     UNDERGROUND,
-    SEE_REMARKS,
+    OTHER,
 }

@@ -50,4 +50,6 @@ data class CreateListingRequest(
     @get:Min(0) val numberOfSigners: Int? = null,
     val mutationType: MutationType? = null,
     val transactionWithNotary: Boolean? = null,
+    val subdivided: Boolean? = null,
+    val morcelable: Boolean? = null,
 )
