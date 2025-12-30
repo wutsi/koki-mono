@@ -118,6 +118,7 @@ data class ListingModel(
         get() = propertyType == PropertyType.APARTMENT ||
             propertyType == PropertyType.STUDIO ||
             propertyType == PropertyType.DUPLEX ||
+            propertyType == PropertyType.VILLA ||
             propertyType == PropertyType.HOUSE
 
     val readOnly: Boolean

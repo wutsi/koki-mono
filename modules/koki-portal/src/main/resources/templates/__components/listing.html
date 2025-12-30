@@ -292,7 +292,12 @@
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
             <b class="listing-price" th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$</b>
 
-            <div class="text-small">
+            <div class="text-small flex">
+                <div th:if="!${listing.propertyTypeResidential}"
+                     th:text="#{'property-type.' + ${listing.propertyType}}">
+                    APARTMENT
+                </div>
+                <div class="padding-left-small padding-right-small" th:if="!${listing.propertyTypeResidential}">-</div>
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
 

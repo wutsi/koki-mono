@@ -65,6 +65,8 @@ class ListingMapper {
             buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
             buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
+            morcelable = entity.morcelable,
+            subdivided = entity.subdivided,
 
             securityDeposit = entity.securityDeposit,
             advanceRent = entity.advanceRent,
