@@ -51,7 +51,7 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-platform.version>0.0.59</wutsi-platform.version>
+        <wutsi-platform.version>0.0.60</wutsi-platform.version>
         <wutsi-dto.version>0.0.304</wutsi-dto.version>
         <wutsi-sdk.version>0.0.64</wutsi-sdk.version>
 
@@ -83,6 +83,7 @@
         <commons-text.version>1.15.0</commons-text.version>
         <commons-validator.version>1.10.1</commons-validator.version>
         <epub4j.version>4.2.1</epub4j.version>
+        <flexmark.version>0.64.8</flexmark.version>
         <flyway.version>10.18.0</flyway.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <greenmail.version>2.1.8</greenmail.version>
