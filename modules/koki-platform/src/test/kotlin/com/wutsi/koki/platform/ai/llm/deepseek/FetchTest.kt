@@ -41,4 +41,12 @@ class FetchTest {
 
         assertEquals(true, content.contains("Failed to get the content from $url"))
     }
+
+    @Test
+    fun pdf() {
+        val url = "https://www.amicaall.org/publications/profiles/Profil_municipal%20Soa_finalise.pdf"
+        val tools = Fetch()
+        val content = tools.fetch(url)
+        assertEquals(true, content.contains("PROFIL MUNICIPAL"))
+    }
 }
