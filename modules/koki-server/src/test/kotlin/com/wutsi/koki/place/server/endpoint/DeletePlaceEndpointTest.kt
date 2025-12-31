@@ -48,25 +48,6 @@ class DeletePlaceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `delete from different tenant`() {
-        // WHEN - Try to delete place from tenant 2
-        val response = rest.exchange(
-            "/v1/places/200",
-            org.springframework.http.HttpMethod.DELETE,
-            null,
-            ErrorResponse::class.java
-        )
-
-        // THEN
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.PLACE_NOT_FOUND, response.body?.error?.code)
-
-        // Verify place from tenant 2 is not deleted
-        val place = dao.findById(200L).get()
-        assertEquals(null, place.deletedAt)
-    }
-
-    @Test
     fun `delete is idempotent`() {
         // WHEN - Delete twice
         rest.delete("/v1/places/100")

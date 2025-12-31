@@ -76,7 +76,6 @@ class UpdatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(PlaceType.NEIGHBORHOOD, place.type)
         assertEquals(222L, place.neighbourhoodId)
         assertEquals(PlaceStatus.DRAFT, place.status)
-        assertEquals(TENANT_ID, place.tenantId)
         assertEquals("Côte-des-Neiges", place.name)
         assertEquals(result.introduction, place.introduction)
         assertEquals(result.summary, place.summary)

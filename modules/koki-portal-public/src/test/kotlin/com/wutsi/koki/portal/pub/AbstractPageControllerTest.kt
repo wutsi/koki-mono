@@ -485,7 +485,7 @@ abstract class AbstractPageControllerTest {
                 GetPlaceResponse(PlaceFixtures.place),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(GetPlaceResponse::class.java)
@@ -496,7 +496,7 @@ abstract class AbstractPageControllerTest {
                 SearchPlaceResponse(PlaceFixtures.placeSummaries),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchPlaceResponse::class.java)

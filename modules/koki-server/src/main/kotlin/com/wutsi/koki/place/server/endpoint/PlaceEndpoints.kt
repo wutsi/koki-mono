@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -29,14 +28,13 @@ class PlaceEndpoints(
 ) {
     @PostMapping
     fun create(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreatePlaceRequest,
     ): CreatePlaceResponse {
         logger.add("request_name", request.name)
         logger.add("request_type", request.type)
         logger.add("request_neighbourhood_id", request.neighbourhoodId)
 
-        val place = service.create(request, tenantId)
+        val place = service.create(request)
 
         logger.add("response_place_id", place.id)
         return CreatePlaceResponse(placeId = place.id!!)
@@ -44,24 +42,21 @@ class PlaceEndpoints(
 
     @PostMapping("/{id}")
     fun update(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        service.update(id, tenantId)
+        service.update(id)
     }
 
     @GetMapping("/{id}")
     fun get(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): GetPlaceResponse {
-        val place = service.get(id, tenantId)
+        val place = service.get(id)
         return GetPlaceResponse(place = mapper.toPlace(place))
     }
 
     @GetMapping
     fun search(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "neighbourhood-id") neighbourhoodIds: List<Long>? = null,
         @RequestParam(required = false, name = "city-id") cityIds: List<Long>? = null,
         @RequestParam(required = false, name = "type") types: List<PlaceType>? = null,
@@ -71,7 +66,6 @@ class PlaceEndpoints(
         @RequestParam(required = false) offset: Int = 0,
     ): SearchPlaceResponse {
         val places = service.search(
-            tenantId = tenantId,
             neighbourhoodIds = neighbourhoodIds,
             cityIds = cityIds,
             types = types,
@@ -85,9 +79,8 @@ class PlaceEndpoints(
 
     @DeleteMapping("/{id}")
     fun delete(
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        service.delete(id, tenantId)
+        service.delete(id)
     }
 }
