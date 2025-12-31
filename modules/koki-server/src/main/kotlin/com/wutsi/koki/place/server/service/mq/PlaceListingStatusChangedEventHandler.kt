@@ -60,6 +60,9 @@ class PlaceListingStatusChangedEventHandler(
             LOGGER.info("Generating content for neighbourhood #${place.id} - ${place.name}")
             placeService.update(place.id ?: -1)
             logger.add("content_generated", true)
+        } else {
+            logger.add("content_generated", true)
+            logger.add("reason", "already_has_content")
         }
         return true
     }
