@@ -27,8 +27,8 @@ class PlaceService(
     private val em: EntityManager,
     private val locationService: LocationService,
 ) {
-    fun get(id: Long, tenantId: Long): PlaceEntity {
-        return dao.findByIdAndTenantIdAndDeleted(id, tenantId, false)
+    fun get(id: Long): PlaceEntity {
+        return dao.findByIdAndDeleted(id, false)
             .orElseThrow {
                 NotFoundException(
                     error = Error(
@@ -39,7 +39,6 @@ class PlaceService(
     }
 
     fun search(
-        tenantId: Long,
         neighbourhoodIds: List<Long>? = null,
         cityIds: List<Long>? = null,
         types: List<PlaceType>? = null,
@@ -48,7 +47,7 @@ class PlaceService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<PlaceEntity> {
-        val jql = StringBuilder("SELECT P FROM PlaceEntity P WHERE P.tenantId = :tenantId AND P.deleted=false")
+        val jql = StringBuilder("SELECT P FROM PlaceEntity P WHERE P.deleted=false")
 
         if (!neighbourhoodIds.isNullOrEmpty()) {
             jql.append(" AND P.neighbourhoodId IN :neighbourhoodIds")
@@ -69,7 +68,6 @@ class PlaceService(
         jql.append(" ORDER BY P.name")
 
         val query = em.createQuery(jql.toString(), PlaceEntity::class.java)
-        query.setParameter("tenantId", tenantId)
 
         if (!neighbourhoodIds.isNullOrEmpty()) {
             query.setParameter("neighbourhoodIds", neighbourhoodIds)
@@ -93,15 +91,14 @@ class PlaceService(
     }
 
     @Transactional
-    fun create(request: CreatePlaceRequest, tenantId: Long): PlaceEntity {
+    fun create(request: CreatePlaceRequest): PlaceEntity {
         // Ensure its unique
         val neighbourhood = locationService.get(request.neighbourhoodId, LocationType.NEIGHBORHOOD)
         val asciiName = toAscii(request.name)
-        val duplicate = dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndTenantIdAndDeleted(
+        val duplicate = dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
             asciiName = asciiName,
             type = request.type,
             cityId = neighbourhood.parentId ?: -1,
-            tenantId = tenantId,
             deleted = false,
         )
         if (duplicate != null) {
@@ -115,7 +112,6 @@ class PlaceService(
         val userId = securityService.getCurrentUserIdOrNull()
         val place = dao.save(
             PlaceEntity(
-                tenantId = tenantId,
                 createdById = userId,
                 modifiedById = userId,
                 name = request.name,
@@ -134,8 +130,8 @@ class PlaceService(
     }
 
     @Transactional
-    fun update(id: Long, tenantId: Long): PlaceEntity {
-        val place = get(id, tenantId)
+    fun update(id: Long): PlaceEntity {
+        val place = get(id)
         val neighbourhood = locationService.get(place.neighbourhoodId)
         val city = locationService.get(place.cityId)
         place.modifiedById = securityService.getCurrentUserIdOrNull()
@@ -146,8 +142,8 @@ class PlaceService(
     }
 
     @Transactional
-    fun delete(id: Long, tenantId: Long) {
-        val entity = dao.findByIdAndTenantIdAndDeleted(id, tenantId, false)
+    fun delete(id: Long) {
+        val entity = dao.findByIdAndDeleted(id, false)
             .orElseThrow {
                 NotFoundException(
                     error = Error(

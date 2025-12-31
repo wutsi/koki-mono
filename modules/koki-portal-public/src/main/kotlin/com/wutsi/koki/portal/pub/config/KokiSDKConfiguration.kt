@@ -78,7 +78,7 @@ class KokiSDKConfiguration(
 
     @Bean
     fun kokiPlaces(): KokiPlaces {
-        return KokiPlaces(urlBuilder(), rest())
+        return KokiPlaces(urlBuilder(), restWithoutTenantHeader())
     }
 
     @Bean

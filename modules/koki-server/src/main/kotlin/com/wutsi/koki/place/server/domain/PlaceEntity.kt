@@ -20,9 +20,6 @@ data class PlaceEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "tenant_fk")
-    val tenantId: Long = -1,
-
     @Column(name = "created_by_fk")
     val createdById: Long? = null,
 

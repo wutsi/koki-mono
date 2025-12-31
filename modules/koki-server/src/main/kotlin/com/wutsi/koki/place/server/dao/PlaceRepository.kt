@@ -8,13 +8,12 @@ import java.util.Optional
 
 @Repository
 interface PlaceRepository : CrudRepository<PlaceEntity, Long> {
-    fun findByIdAndTenantIdAndDeleted(id: Long, tenantId: Long, deleted: Boolean): Optional<PlaceEntity>
+    fun findByIdAndDeleted(id: Long, deleted: Boolean): Optional<PlaceEntity>
 
-    fun findByAsciiNameIgnoreCaseAndTypeAndCityIdAndTenantIdAndDeleted(
+    fun findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
         asciiName: String,
         type: PlaceType,
         cityId: Long,
-        tenantId: Long,
         deleted: Boolean,
     ): PlaceEntity?
 }

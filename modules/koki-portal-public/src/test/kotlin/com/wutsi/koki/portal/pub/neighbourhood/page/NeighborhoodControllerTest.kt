@@ -76,7 +76,7 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
                 SearchPlaceResponse(emptyList()),
                 HttpStatus.OK,
             )
-        ).whenever(rest)
+        ).whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(SearchPlaceResponse::class.java)

@@ -51,16 +51,6 @@ class GetPlaceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `get from different tenant`() {
-        // WHEN - Try to get place from tenant 2
-        val response = rest.getForEntity("/v1/places/200", ErrorResponse::class.java)
-
-        // THEN
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorCode.PLACE_NOT_FOUND, response.body?.error?.code)
-    }
-
-    @Test
     fun `get deleted place`() {
         // WHEN - Try to get deleted place
         val response = rest.getForEntity("/v1/places/300", ErrorResponse::class.java)
