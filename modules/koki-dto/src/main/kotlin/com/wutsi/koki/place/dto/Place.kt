@@ -6,7 +6,7 @@ data class Place(
     val id: Long = -1,
     val neighbourhoodId: Long = -1,
     val cityId: Long = -1,
-    val heroImageId: Long? = null,
+    val heroImageUrl: String? = null,
     val name: String = "",
     val type: PlaceType = PlaceType.UNKNOWN,
     val status: PlaceStatus = PlaceStatus.UNKNOWN,
