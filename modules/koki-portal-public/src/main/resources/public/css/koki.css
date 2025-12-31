@@ -562,6 +562,12 @@ ul.breadcrumb li:first-child {
     border-radius: 1em;
 }
 
+.bg-success a,
+.bg-danger a,
+.bg-primary a {
+    color: white;
+}
+
 .border {
     border: 1px solid gray !important;
 }
@@ -621,8 +627,10 @@ a.btn-back {
     padding: 0.5em;
 }
 
-.bg-success a,
-.bg-danger a,
-.bg-primary a {
-    color: white;
+.text-warning {
+    color: darkorange !important;
+}
+
+.text-info {
+    color: blue !important;
 }
