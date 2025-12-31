@@ -105,10 +105,11 @@ class AgentController(
             sortBy = ListingSort.TRANSACTION_DATE,
             limit = 100,
         ).items
-
-        model.addAttribute("soldListings", listings.take(20))
-        model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
-        model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
+        if (listings.isNotEmpty()) {
+            model.addAttribute("soldListings", listings.take(20))
+            model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
+            model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
+        }
         return listings
     }
 

@@ -80,29 +80,36 @@
 
         <table class="w-100 margin-top border-top">
             <tr th:if="${listing.propertyTypeResidential}">
-                <td class="text-center text-top padding-top" width="33%">
+                <td class="text-center text-top padding-top" width="25%">
                     <b class="text-larger" th:text="${listing.bedrooms} ? ${listing.bedrooms} : '-'">000</b>
                     <div class="text-small" th:text="#{page.listing.bedrooms}">SALES</div>
                 </td>
-                <td class="text-center text-top padding-top" width="33%">
+                <td class="text-center text-top padding-top" width="25%">
                     <b class="text-larger" th:text="${listing.bathrooms} ? ${listing.bathrooms} : '-'">000</b>
                     <div class="text-small" th:text="#{page.listing.bathrooms-short}">BATH</div>
                 </td>
-                <td class="text-center text-top padding-top" width="33%">
-                    <b class="text-larger"
-                       th:text="${listing.lotArea} ? ${listing.lotArea} : (${listing.propertyArea} ? ${listing.propertyArea} : '-') ">$$$</b>
-                    <div class="text-small">
-                        m<sup>2</sup>
-                    </div>
+                <td class="text-center text-top padding-top" width="25%">
+                    <b class="text-larger">
+                        <span th:text="${listing.lotArea} ? ${listing.lotArea} : '-'">00</span>
+                        <span class="text-small" th:if="${listing.lotArea}">m<sup>2</sup></span>
+                    </b>
+                    <div class="text-small" th:text="#{page.listing.lot}">m<sup>2</sup></div>
+                </td>
+                <td class="text-center text-top padding-top" with="25%">
+                    <b class="text-larger">
+                        <span th:text="${listing.propertyArea} ? ${listing.propertyArea} : '-'">00</span>
+                        <span class="text-small" th:if="${listing.propertyArea}">m<sup>2</sup></span>
+                    </b>
+                    <div class="text-small" th:text="#{page.listing.property}">m<sup>2</sup></div>
                 </td>
             </tr>
             <tr th:if="!${listing.propertyTypeResidential}">
-                <td class="text-center text-top padding-top" width="50%">
-                    <b class="text-larger"
-                       th:text="${listing.lotArea} ? ${listing.lotArea} : (${listing.propertyArea} ? ${listing.propertyArea} : '-') ">$$$</b>
-                    <div class="text-small">
-                        m<sup>2</sup>
-                    </div>
+                <td class="text-center margin-left-small" width="50%">
+                    <b>
+                        <span th:text="${listing.lotArea} ? ${listing.lotArea} : '-'">00</span>
+                        <span class="text-small">m<sup>2</sup></span>
+                    </b>
+                    <div class="text-small" th:text="#{page.listing.lot}">m<sup>2</sup></div>
                 </td>
                 <td class="text-center text-top padding-top" width="50%">
                     <b class="text-larger"

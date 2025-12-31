@@ -240,13 +240,8 @@
                     <b th:text="${listing.bathrooms}">00</b>
                     <div class="text-small" th:text="#{page.listing.bathrooms}">BATHROOMS</div>
                 </div>
-                <div class="text-center margin-left-small"
-                     th:if="${listing.lotArea} OR ${listing.propertyArea}">
-                    <b th:if="${listing.propertyArea}" th:text="${listing.propertyArea}">00</b>
-                    <b th:if="${listing.lotArea} AND !${listing.propertyArea}"
-                       th:text="${listing.lotArea}">
-                        00
-                    </b>
+                <div class="text-center margin-left-small" th:if="${listing.lotArea} OR ${listing.propertyArea}">
+                    <b th:text="${listing.lotArea} ? ${listing.lotArea} : ${listing.propertyArea}">00</b>
                     <div class="text-small">m<sup>2</sup></div>
                 </div>
             </div>
