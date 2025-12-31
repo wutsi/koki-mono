@@ -41,6 +41,17 @@ class ListingMapper(
         agents: Map<Long, AgentModel>,
     ): ListingModel {
         val price = toPrice(entity.price, entity.listingType)
+        val pricePerSquareMeter = entity.lotArea?.let { area ->
+            entity.price?.let { price ->
+                toPrice(
+                    Money(
+                        amount = price.amount / area,
+                        currency = price.currency
+                    ),
+                    entity.listingType
+                )
+            }
+        }
         val lang = LocaleContextHolder.getLocale().language
         createDateFormat()
         val mdf = createMediumDateFormat()
@@ -80,6 +91,7 @@ class ListingMapper(
             geoLocation = toGeoLocation(entity.geoLocation),
 
             price = price,
+            pricePerSquareMeter = pricePerSquareMeter,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,

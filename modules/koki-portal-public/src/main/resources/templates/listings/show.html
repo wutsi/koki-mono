@@ -70,35 +70,47 @@
         >$$$</h2>
 
         <h1 class="margin-none" id="listing-title" th:text="${listing.title}">TITLE</h1>
-        <div class="margin-bottom-small flex">
-            <div>
-                <span th:text="#{page.listing.listing-number} + ':'">LISTING_NUMBER</span>
-                <span th:text="${listing.listingNumber}">###</span>
+        <div class="flex text-larger">
+            <div th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY</div>
+            <div class="margin-left-small" th:if="${listing.furnitureType}">-</div>
+            <div class="margin-left-small" th:if="${listing.furnitureType}"
+                 th:text="#{'furniture-type.' + ${listing.furnitureType}}">FURNISHED
             </div>
         </div>
-        <ul class="breadcrumb">
-            <li>
-                <span th:text="#{'property-type.' + ${listing.propertyType}}">PROPERTY</span>
-            </li>
-            <li th:if="${listing.bedrooms}">
-                <span>&#x2022;</span>
-                <span th:text="${listing.bedrooms}">00</span>
-                <span th:if="${listing.bedrooms == 1}" th:text="#{page.listing.bedroom}">BEDROOM</span>
-                <span th:if="${listing.bedrooms > 1}" th:text="#{page.listing.bedrooms}">BEDROOMS</span>
-            </li>
-            <li th:if="${listing.bathrooms}">
-                <span>&#x2022;</span>
-                <span th:text="${listing.bathrooms}">00</span>
-                <span th:if="${listing.bathrooms == 1}" th:text="#{page.listing.bathroom}">BATHROOM</span>
-                <span th:if="${listing.bathrooms > 1}" th:text="#{page.listing.bathrooms}">BATHROOMS</span>
-            </li>
-            <li th:if="${listing.lotArea} OR ${listing.propertyArea}">
-                <span>&#x2022;</span>
-                <span th:if="${listing.lotArea}" th:text="${listing.lotArea}">00</span>
-                <span th:if="!${listing.lotArea}" th:text="${listing.propertyArea}">00</span>
-                <span>m<sup>2</sup></span>
-            </li>
-        </ul>
+
+        <table class="w-100 margin-top border-top">
+            <tr th:if="${listing.propertyTypeResidential}">
+                <td class="text-center text-top padding-top" width="33%">
+                    <b class="text-larger" th:text="${listing.bedrooms} ? ${listing.bedrooms} : '-'">000</b>
+                    <div class="text-small" th:text="#{page.listing.bedrooms}">SALES</div>
+                </td>
+                <td class="text-center text-top padding-top" width="33%">
+                    <b class="text-larger" th:text="${listing.bathrooms} ? ${listing.bathrooms} : '-'">000</b>
+                    <div class="text-small" th:text="#{page.listing.bathrooms-short}">BATH</div>
+                </td>
+                <td class="text-center text-top padding-top" width="33%">
+                    <b class="text-larger"
+                       th:text="${listing.lotArea} ? ${listing.lotArea} : (${listing.propertyArea} ? ${listing.propertyArea} : '-') ">$$$</b>
+                    <div class="text-small">
+                        m<sup>2</sup>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="!${listing.propertyTypeResidential}">
+                <td class="text-center text-top padding-top" width="50%">
+                    <b class="text-larger"
+                       th:text="${listing.lotArea} ? ${listing.lotArea} : (${listing.propertyArea} ? ${listing.propertyArea} : '-') ">$$$</b>
+                    <div class="text-small">
+                        m<sup>2</sup>
+                    </div>
+                </td>
+                <td class="text-center text-top padding-top" width="50%">
+                    <b class="text-larger"
+                       th:text="${listing.pricePerSquareMeter} ? ${listing.pricePerSquareMeter.text} : '-'">$$$</b>
+                    <div class="text-small" th:utext="#{page.agent.price_per_m2}">PRICE</div>
+                </td>
+            </tr>
+        </table>
 
         <!-- DETAILS -->
         <div class="margin-top border-top padding-top description-container">
@@ -209,15 +221,6 @@
         <div class="margin-top border-top padding-top amenity-container" th:if="${listing.hasAmenities}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="flex flex-wrap">
-                <div class="col-12 col-lg-4 col-md-6" th:if="${listing.furnitureType?.name() == 'FULLY_FURNISHED'}">
-                    <i class="fa-solid fa-couch"></i>
-                    <span th:text="#{furnished-type.FULLY_FURNISHED}">Fully Furnished</span>
-                </div>
-                <div class="col-12 col-lg-4 col-md-6 " th:if="${listing.furnitureType?.name() == 'SEMI_FURNISHED'}">
-                    <i class="fa-solid fa-chair"></i>
-                    <span th:text="#{furnished-type.SEMI_FURNISHED}">Semi Furnished</span>
-                </div>
-
                 <div class="col-12 col-lg-4 col-md-6 " th:each="amenity:${topAmenities}">
                     <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
                     <span th:text="${amenity.name}">AMENITY</span>

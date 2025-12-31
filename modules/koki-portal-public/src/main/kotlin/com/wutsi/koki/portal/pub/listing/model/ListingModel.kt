@@ -49,6 +49,7 @@ data class ListingModel(
     val geoLocation: GeoLocationModel? = null,
     val publicRemarks: String? = null,
     val price: MoneyModel? = null,
+    val pricePerSquareMeter: MoneyModel? = null,
     var visitFees: MoneyModel? = null,
     val leaseTerm: Int? = null,
     val securityDeposit: Int? = null,
@@ -110,7 +111,7 @@ data class ListingModel(
             (leaseTerm != null || securityDeposit != null || advanceRent != null || noticePeriod != null)
 
     val hasAmenities: Boolean
-        get() = amenities.isNotEmpty() || (furnitureType != null && furnitureType != FurnitureType.UNFURNISHED)
+        get() = amenities.isNotEmpty()
 
     val descriptionHtml: String?
         get() = description?.let { str -> HtmlUtils.toHtml(str) }
