@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
@@ -17,6 +18,7 @@ import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.server.domain.PlaceEntity
 import com.wutsi.koki.place.server.service.PlaceService
+import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
@@ -95,6 +97,33 @@ class PlaceListingStatusChangedEventHandlerTest {
     @AfterEach
     fun tearDown() {
         logger.log()
+    }
+
+    @Test
+    fun `should return false when LLMException is thrown`() {
+        // Given
+        doThrow(LLMException::class).whenever(placeService).update(any())
+        doReturn(listOf(place)).whenever(placeService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
+
+        val event = ListingStatusChangedEvent(
+            listingId = listingId,
+            tenantId = tenantId,
+            status = ListingStatus.ACTIVE
+        )
+
+        // When
+        val result = handler.handle(event)
+
+        // Then
+        assertFalse(result)
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.server.domain.PlaceEntity
 import com.wutsi.koki.place.server.service.PlaceService
+import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.LocationService
@@ -30,7 +31,13 @@ class PlaceListingStatusChangedEventHandler(
         logger.add("event_tenant_id", event.tenantId)
 
         if (event.status == ListingStatus.ACTIVE) {
-            return createNeighbourhoodContent(event)
+            try {
+                return createNeighbourhoodContent(event)
+            } catch (ex: LLMException) {
+                logger.add("llm_error", true)
+                logger.add("llm_error_message", ex.message)
+                return false
+            }
         } else {
             return false
         }
