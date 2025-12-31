@@ -236,6 +236,13 @@ koki:
             cron:
                 expire: "0 0 1 * * *"     # Every date at 1AM
 
+        place:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-place-queue
+                dlq: koki-place-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         ref-data:
             geonames:
                 connect-timeout: 30000

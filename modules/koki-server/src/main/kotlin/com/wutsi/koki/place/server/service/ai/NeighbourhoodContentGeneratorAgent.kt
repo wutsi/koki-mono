@@ -10,7 +10,7 @@ class NeighbourhoodContentGeneratorAgent(
     val city: LocationEntity?,
     val neighbourhood: LocationEntity,
     val llm: LLM,
-    val maxIterations: Int = 20,
+    val maxIterations: Int = 40,
 ) : Agent(llm, maxIterations = maxIterations, responseType = MediaType.APPLICATION_JSON) {
     override fun buildPrompt(query: String, memory: List<String>): String {
         val prompt = this::class.java.getResourceAsStream("/place/prompt/neighbourhood-content-generator.prompt.md")!!

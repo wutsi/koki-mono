@@ -119,14 +119,20 @@ class PlaceService(
                 type = request.type,
                 neighbourhoodId = request.neighbourhoodId,
                 cityId = city.id ?: -1,
-                status = PlaceStatus.PUBLISHING,
+                status = if (request.generateContent) PlaceStatus.PUBLISHING else PlaceStatus.PUBLISHED,
             )
         )
-        val generator = contentGeneratorFactory.get(request.type)
-        generator.generate(place, neighbourhood, city)
 
-        place.status = PlaceStatus.PUBLISHED
-        return dao.save(place)
+        // Content
+        if (request.generateContent) {
+            val generator = contentGeneratorFactory.get(request.type)
+            generator.generate(place, neighbourhood, city)
+
+            place.status = PlaceStatus.PUBLISHED
+            dao.save(place)
+        }
+
+        return place
     }
 
     @Transactional
