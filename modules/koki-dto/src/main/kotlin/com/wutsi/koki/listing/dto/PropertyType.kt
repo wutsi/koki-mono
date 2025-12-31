@@ -7,6 +7,8 @@ enum class PropertyType {
     VILLA,
     DUPLEX,
     HOUSE,
+    ROOM,
+    BUILDING,
     LAND,
     COMMERCIAL,
     INDUSTRIAL,
