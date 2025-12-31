@@ -2,6 +2,8 @@ package com.wutsi.koki.place.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -106,6 +108,47 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertRating(placeId, RatingCriteria.INFRASTRUCTURE, result.ratings.infrastructure.value)
         assertRating(placeId, RatingCriteria.AMENITIES, result.ratings.amenities.value)
         assertRating(placeId, RatingCriteria.COMMUTE, result.ratings.commute.value)
+    }
+
+    @Test
+    fun `do not generate content`() {
+        // GIVEN
+
+        // WHEN
+        val request = CreatePlaceRequest(
+            name = "Auteuil",
+            type = PlaceType.NEIGHBORHOOD,
+            neighbourhoodId = 444L,
+            generateContent = false,
+        )
+        val response = rest.postForEntity("/v1/places", request, CreatePlaceResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        verify(placeAgentFactory, never()).createNeighborhoodContentGeneratorAgent(any(), any())
+
+        val placeId = response.body!!.placeId
+        val place = dao.findById(placeId).get()
+        assertEquals(request.type, place.type)
+        assertEquals(request.neighbourhoodId, place.neighbourhoodId)
+        assertEquals(111L, place.cityId)
+        assertEquals(PlaceStatus.PUBLISHED, place.status)
+        assertEquals("Auteuil", place.name)
+        assertEquals(null, place.introduction)
+        assertEquals(null, place.summary)
+        assertEquals(null, place.description)
+        assertEquals("auteuil", place.asciiName)
+        assertEquals(null, place.introductionFr)
+        assertEquals(null, place.summaryFr)
+        assertEquals(null, place.descriptionFr)
+        assertEquals(null, place.rating)
+        assertEquals(null, place.latitude)
+        assertEquals(null, place.longitude)
+        assertEquals(USER_ID, place.createdById)
+        assertEquals(USER_ID, place.modifiedById)
+        assertFalse(place.deleted)
+        assertNull(place.deletedAt)
     }
 
     @Test

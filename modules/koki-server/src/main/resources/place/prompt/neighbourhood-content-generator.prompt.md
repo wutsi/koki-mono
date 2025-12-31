@@ -62,9 +62,11 @@ Generate the content in JSON formant with the following fields:
         - Area with public schools only should have average rating of 3.
         - Area with low school offering should have low rating (1 to 2).
     - Amenities Rating:
-        - Area with easy access to luxury and international-standard shops/markets, private hospitals should have a 5.
-        - Area with easy access to multiple shops/markets, hospitals should have 3 to 4, depending on the quality and
-          variety.
+        - Area with easy access to luxury and international-standard shops/markets, private hospitals/clinics, pharmacy
+          should have a 5.
+        - Area with easy access to shops/markets, hospitals, clinics and pharmacy should have at a rating 3 to 4. You
+          should assign 4 to areas
+          with multiple options in each category or large complex shopping center.
         - Area with limited access to shops, markets, hospitals should have a lower rating (1 or 2)
     - Infrastructure Rating:
         - Poor road conditions should remove 1 point from the maximum rating.
