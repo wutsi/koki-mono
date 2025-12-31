@@ -26,8 +26,8 @@ data class PlaceEntity(
     @Column(name = "modified_by_fk")
     var modifiedById: Long? = null,
 
-    @Column(name = "hero_image_fk")
-    var heroImageId: Long? = null,
+    @Column(name = "hero_image_url")
+    var heroImageUrl: String? = null,
 
     @Column(name = "neighbourhood_fk")
     var neighbourhoodId: Long = -1,

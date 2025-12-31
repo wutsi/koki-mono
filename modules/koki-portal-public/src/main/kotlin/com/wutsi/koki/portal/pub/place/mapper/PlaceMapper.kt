@@ -21,7 +21,7 @@ class PlaceMapper : TenantAwareMapper() {
 
         return PlaceModel(
             id = entity.id,
-            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            heroImageUrl = entity.heroImageUrl,
             name = entity.name,
             type = entity.type,
             status = entity.status,
@@ -67,7 +67,7 @@ class PlaceMapper : TenantAwareMapper() {
 
         return PlaceModel(
             id = entity.id,
-            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            heroImageUrl = entity.heroImageUrl,
             name = entity.name,
             type = entity.type,
             summary = if (lang == "fr") {
