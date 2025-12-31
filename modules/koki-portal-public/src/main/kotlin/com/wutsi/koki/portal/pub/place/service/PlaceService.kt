@@ -59,22 +59,12 @@ class PlaceService(
         )
         val places = response.places
 
-        val imageIds = places.mapNotNull { place -> place.heroImageId }
-        val images = if (!fullGraph || imageIds.isEmpty()) {
-            emptyMap<Long, FileModel>()
-        } else {
-            fileService.search(
-                ids = imageIds,
-                limit = imageIds.size
-            ).associateBy { image -> image.id }
-        }
-
         return ResultSetModel(
             total = places.size.toLong(),
             items = places.map { place ->
                 mapper.toPlaceModel(
                     entity = place,
-                    images = images
+                    images = emptyMap()
                 )
             }
         )

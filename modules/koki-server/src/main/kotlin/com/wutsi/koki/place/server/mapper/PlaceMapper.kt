@@ -14,7 +14,7 @@ class PlaceMapper {
     fun toPlace(entity: PlaceEntity): Place {
         return Place(
             id = entity.id ?: -1,
-            heroImageId = entity.heroImageId,
+            heroImageUrl = entity.heroImageUrl,
             name = entity.name,
             type = entity.type,
             status = entity.status,
@@ -54,7 +54,7 @@ class PlaceMapper {
     fun toPlaceSummary(entity: PlaceEntity): PlaceSummary {
         return PlaceSummary(
             id = entity.id ?: -1,
-            heroImageId = entity.heroImageId,
+            heroImageUrl = entity.heroImageUrl,
             neighbourhoodId = entity.neighbourhoodId,
             cityId = entity.cityId,
             type = entity.type,

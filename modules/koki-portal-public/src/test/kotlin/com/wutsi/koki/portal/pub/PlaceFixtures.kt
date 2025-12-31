@@ -16,7 +16,7 @@ object PlaceFixtures {
     // Schools
     val place = Place(
         id = 1000,
-        heroImageId = FileFixtures.images[0].id,
+        heroImageUrl = "https://picsum.photos/800/600",
         name = "International School of Montreal",
         type = PlaceType.NEIGHBORHOOD,
         status = PlaceStatus.PUBLISHED,
@@ -83,7 +83,7 @@ object PlaceFixtures {
 
     val catholicSchool = Place(
         id = 1001,
-        heroImageId = FileFixtures.images[1].id,
+        heroImageUrl = "https://picsum.photos/800/600",
         name = "St. Mary's Catholic School",
         type = PlaceType.SCHOOL,
         status = PlaceStatus.PUBLISHED,
@@ -121,7 +121,7 @@ object PlaceFixtures {
     // Parks
     val park = Place(
         id = 2000,
-        heroImageId = FileFixtures.images[2].id,
+        heroImageUrl = "https://picsum.photos/800/600",
         name = "Mount Royal Park",
         type = PlaceType.PARK,
         status = PlaceStatus.PUBLISHED,
@@ -179,7 +179,7 @@ object PlaceFixtures {
 
     val communityPark = Place(
         id = 2001,
-        heroImageId = FileFixtures.images[3].id,
+        heroImageUrl = FileFixtures.images[3].url,
         name = "Jarry Park",
         type = PlaceType.PARK,
         status = PlaceStatus.PUBLISHED,
@@ -213,7 +213,7 @@ object PlaceFixtures {
     val placeSummaries = listOf(
         PlaceSummary(
             id = place.id,
-            heroImageId = place.heroImageId,
+            heroImageUrl = place.heroImageUrl,
             neighbourhoodId = place.neighbourhoodId,
             type = place.type,
             name = place.name,
@@ -223,7 +223,7 @@ object PlaceFixtures {
         ),
         PlaceSummary(
             id = catholicSchool.id,
-            heroImageId = catholicSchool.heroImageId,
+            heroImageUrl = catholicSchool.heroImageUrl,
             neighbourhoodId = catholicSchool.neighbourhoodId,
             type = catholicSchool.type,
             name = catholicSchool.name,
@@ -233,7 +233,7 @@ object PlaceFixtures {
         ),
         PlaceSummary(
             id = park.id,
-            heroImageId = park.heroImageId,
+            heroImageUrl = park.heroImageUrl,
             neighbourhoodId = park.neighbourhoodId,
             type = park.type,
             name = park.name,
@@ -243,7 +243,7 @@ object PlaceFixtures {
         ),
         PlaceSummary(
             id = communityPark.id,
-            heroImageId = communityPark.heroImageId,
+            heroImageUrl = communityPark.heroImageUrl,
             neighbourhoodId = communityPark.neighbourhoodId,
             type = communityPark.type,
             name = communityPark.name,
