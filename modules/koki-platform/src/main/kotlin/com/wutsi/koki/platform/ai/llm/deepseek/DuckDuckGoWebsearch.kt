@@ -1,16 +1,19 @@
 package com.wutsi.koki.platform.ai.llm.deepseek
 
 import org.jsoup.Jsoup
+import org.slf4j.LoggerFactory
 import java.net.URLEncoder
 
 class DuckDuckGoWebsearch : Websearch {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(DuckDuckGoWebsearch::class.java)
         const val USER_AGENT =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
         const val URL_PREFIX = "https://duckduckgo.com/html/?q="
     }
 
     override fun search(query: String): String {
+        LOGGER.debug("searching $query")
         val url = URL_PREFIX + URLEncoder.encode(query, "UTF-8")
         try {
             val doc = Jsoup.connect(url)

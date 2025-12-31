@@ -6,6 +6,7 @@ import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
+import org.slf4j.LoggerFactory
 import java.net.ConnectException
 import java.net.URL
 
@@ -14,6 +15,7 @@ import java.net.URL
  */
 class Fetch {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(Fetch::class.java)
         const val USER_AGENT =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
     }
@@ -21,6 +23,7 @@ class Fetch {
     private val extractor = HtmlContentExtractor()
 
     fun fetch(url: String): String {
+        LOGGER.info("Fetching $url")
         try {
             if (isPdf(url)) {
                 return fetchPdf(url)
