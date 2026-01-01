@@ -6,6 +6,7 @@ enum class Diploma {
     BEPC,
     BACCALAUREAT,
     IB,
+    IGCSE,
     A_LEVEL,
     HIGH_SCHOOL_DIPLOMA,
     GCE,
@@ -16,4 +17,5 @@ enum class Diploma {
     MASTER,
     MBA,
     PHD,
+    DIPLOMA,
 }
