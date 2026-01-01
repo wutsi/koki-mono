@@ -4,7 +4,10 @@ import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 import java.net.URLEncoder
 
-class DuckDuckGoWebsearch : Websearch {
+class DuckDuckGoWebsearch(
+    val minDelayMillis: Long = 2000L,
+    val maxDelayMillis: Long = 5000L
+) : Websearch {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DuckDuckGoWebsearch::class.java)
         const val USER_AGENT =
@@ -14,6 +17,8 @@ class DuckDuckGoWebsearch : Websearch {
 
     override fun search(query: String): String {
         LOGGER.debug("searching $query")
+        delay()
+
         val url = URL_PREFIX + URLEncoder.encode(query, "UTF-8")
         try {
             val doc = Jsoup.connect(url)
@@ -24,19 +29,29 @@ class DuckDuckGoWebsearch : Websearch {
             val sb = StringBuffer()
             val results = doc.select(".result")
             var i = 0
-            results.forEach { result ->
-                val title = result.select(".result__title").text()
-                val link = result.select(".result__a").attr("abs:href")
-                val snippet = result.select(".result__snippet").text()
+            if (results.isEmpty()) {
+                sb.append("No results found for the query")
+            } else {
+                results.forEach { result ->
+                    val title = result.select(".result__title").text()
+                    val link = result.select(".result__a").attr("abs:href")
+                    val snippet = result.select(".result__snippet").text()
 
-                sb.append("- Result #${++i}\n")
-                sb.append("  - Title: ").append(title).append("\n")
-                sb.append("  - Link: ").append(link).append("\n")
-                sb.append("  - Snippet: ").append(snippet).append("\n")
+                    sb.append("- Result #${++i}\n")
+                    sb.append("  - Title: ").append(title).append("\n")
+                    sb.append("  - Link: ").append(link).append("\n")
+                    sb.append("  - Snippet: ").append(snippet).append("\n")
+                }
             }
             return sb.toString()
         } catch (e: Exception) {
             return "Failed to perform web search for query '$query' - ${e.message}"
         }
+    }
+
+    private fun delay(): Long {
+        val delay = (minDelayMillis..maxDelayMillis).random()
+        Thread.sleep(delay)
+        return delay
     }
 }

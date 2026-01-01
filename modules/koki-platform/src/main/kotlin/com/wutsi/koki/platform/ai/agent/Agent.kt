@@ -43,17 +43,14 @@ abstract class Agent(
             iteration++
 
             if (logger.isInfoEnabled) {
-                logger.info("-----------------------------")
-                logger.info("Iteration: #$iteration")
-                logger.info("> agent: " + this::class.java.name)
-                logger.info("> model: " + llm::class.java.name)
+                logger.info("llm=${llm::class.java.simpleName} iteration=$iteration")
             }
             if (iteration > maxIterations) {
                 throw TooManyIterationsException("Too many iteration. iteration=$iteration")
             }
 
             try {
-                if (run(query, memory, files)) {
+                if (run(iteration, query, memory, files)) {
                     break
                 }
             } catch (ex: Exception) {
@@ -63,12 +60,13 @@ abstract class Agent(
         return memory.lastOrNull() ?: ""
     }
 
-    internal fun run(prompt: String, memory: MutableList<String>, files: List<File>): Boolean {
-        val response = ask(prompt, files, memory)
-        return decide(response, memory)
+    internal fun run(iteration: Int, prompt: String, memory: MutableList<String>, files: List<File>): Boolean {
+        val response = ask(iteration, prompt, files, memory)
+        return decide(iteration, response, memory)
     }
 
     private fun decide(
+        iteration: Int,
         response: LLMResponse,
         memory: MutableList<String>
     ): Boolean {
@@ -79,8 +77,8 @@ abstract class Agent(
         response.messages.flatMap { message -> message.content }
             .forEach { content ->
                 if (content.text != null) {
-                    if (logger.isInfoEnabled) {
-                        logger.info("> ${content.text}")
+                    if (logger.isInfoEnabled()) {
+                        logger.info("llm=${llm::class.java.simpleName} iteration=$iteration step=decide text\n${content.text}")
                     }
                     memory.add(content.text)
                 }
@@ -91,15 +89,14 @@ abstract class Agent(
             .forEach { content ->
                 val call = content.functionCall
                 if (call != null) {
-                    if (logger.isInfoEnabled) {
-                        logger.info("> function: " + call.name)
-                        logger.info("> args: " + call.args)
-                        val result = exec(call)
-                        if (result != null) {
-                            memory.add(result)
-                        }
-                        calls++
+                    logger.info("llm=${llm::class.java.simpleName} iteration=$iteration step=decide function=${call.name} args=${call.args}")
+                    val result = exec(call)
+                    logger.info(result)
+
+                    if (result != null) {
+                        memory.add(result)
                     }
+                    calls++
                 }
             }
 
@@ -111,7 +108,7 @@ abstract class Agent(
             ?.use(call.args)
     }
 
-    private fun ask(query: String, files: List<File>, memory: List<String>): LLMResponse {
+    private fun ask(iteration: Int, query: String, files: List<File>, memory: List<String>): LLMResponse {
         // System instruction
         val messages = mutableListOf<LLMMessage>()
         systemInstructions()?.let { instructions ->
@@ -123,7 +120,9 @@ abstract class Agent(
         // prompts
         val inputs = files.associate { file -> file to FileInputStream(file) }
         val prompt = buildPrompt(query, memory)
-        getLogger().info("> prompt: $prompt")
+        if (getLogger().isDebugEnabled) {
+            getLogger().debug("llm=${llm::class.java.simpleName} iteration=$iteration step=ask prompt: $prompt")
+        }
         messages.add(
             LLMMessage(
                 role = LLMRole.USER,

@@ -45,6 +45,7 @@ open class Deepseek(
     private val model: String,
     private val readTimeoutMillis: Long = 60000,
     private val connectTimeoutMillis: Long = 30000,
+    private val websearchDelayMillis: Long = 50000,
 ) : LLM {
     companion object {
         const val DEEPSEEK_ENDPOINT = "https://api.deepseek.com/chat/completions"
@@ -164,7 +165,12 @@ open class Deepseek(
 
     override fun getBuiltInTools(): List<Tool> = listOf(
         DeepseekFetchTool(Fetch()),
-        DeepseekWebsearchTool(DuckDuckGoWebsearch())
+        DeepseekWebsearchTool(
+            DuckDuckGoWebsearch(
+                minDelayMillis = (.75 * websearchDelayMillis).toLong(),
+                maxDelayMillis = (1.25 * websearchDelayMillis).toLong(),
+            )
+        )
     )
 
     protected open fun getFunctionType(function: LLMFunctionDeclaration): String {
