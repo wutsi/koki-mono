@@ -1,11 +1,13 @@
 package com.wutsi.koki.place.server.endpoint
 
+import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.GetPlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
+import com.wutsi.koki.place.server.io.SchoolImporter
 import com.wutsi.koki.place.server.mapper.PlaceMapper
 import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.logger.KVLogger
@@ -25,6 +27,7 @@ class PlaceEndpoints(
     private val service: PlaceService,
     private val mapper: PlaceMapper,
     private val logger: KVLogger,
+    private val schoolImporter: SchoolImporter,
 ) {
     @PostMapping
     fun create(
@@ -82,5 +85,11 @@ class PlaceEndpoints(
         @PathVariable id: Long,
     ) {
         service.delete(id)
+    }
+
+    @GetMapping("/import/schools")
+    fun importSchools(): ImportResponse {
+        logger.add("import_type", "schools")
+        return schoolImporter.import()
     }
 }

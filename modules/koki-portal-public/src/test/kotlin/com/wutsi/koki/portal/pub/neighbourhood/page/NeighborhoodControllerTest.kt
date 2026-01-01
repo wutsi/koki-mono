@@ -60,13 +60,14 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementPresent("#introduction-container")
         assertElementPresent("#agent-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#sold-listing-container")
         assertElementPresent("#map-container")
         assertElementPresent("#about-container")
-        assertElementPresent("#introduction-container")
+        assertElementPresent("#school-container")
     }
 
     @Test

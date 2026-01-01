@@ -3,16 +3,21 @@ package com.wutsi.koki.portal.pub.place.mapper
 import com.wutsi.koki.place.dto.Place
 import com.wutsi.koki.place.dto.PlaceRating
 import com.wutsi.koki.place.dto.PlaceSummary
+import com.wutsi.koki.place.dto.SchoolLevel
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.model.PlaceRatingModel
 import com.wutsi.koki.refdata.dto.GeoLocation
+import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import java.util.Locale
 
 @Service
-class PlaceMapper : TenantAwareMapper() {
+class PlaceMapper(
+    private val messages: MessageSource,
+) : TenantAwareMapper() {
     fun toPlaceModel(
         entity: Place,
         images: Map<Long, FileModel> = emptyMap()
@@ -43,15 +48,17 @@ class PlaceMapper : TenantAwareMapper() {
             neighbourhoodId = entity.neighbourhoodId,
             cityId = entity.cityId,
             geoLocation = toGeoLocation(entity),
-            websiteURL = entity.websiteURL,
+            websiteUrl = entity.websiteUrl,
             phoneNumber = entity.phoneNumber,
             private = entity.private,
             international = entity.international,
             diplomas = entity.diplomas,
             languages = entity.languages,
             academicSystems = entity.academicSystems,
+            academicSystemsText = toCountriesText(entity.academicSystems),
             faith = entity.faith,
             levels = entity.levels,
+            levelsText = toLevelText(entity.levels),
             rating = entity.rating,
             ratingCriteria = entity.ratingCriteria.map { toPlaceRatingModel(it) },
             createdAt = entity.createdAt,
@@ -84,6 +91,16 @@ class PlaceMapper : TenantAwareMapper() {
             neighbourhoodId = entity.neighbourhoodId,
             cityId = entity.cityId,
             rating = entity.rating,
+            private = entity.private,
+            international = entity.international,
+            diplomas = entity.diplomas,
+            languages = entity.languages,
+            academicSystems = entity.academicSystems,
+            academicSystemsText = toCountriesText(entity.academicSystems),
+            faith = entity.faith,
+            levels = entity.levels,
+            levelsText = toLevelText(entity.levels),
+            websiteUrl = entity.websiteUrl,
         )
     }
 
@@ -104,5 +121,15 @@ class PlaceMapper : TenantAwareMapper() {
             value = entity.value,
             reason = entity.reason,
         )
+    }
+
+    private fun toLevelText(levels: List<SchoolLevel>): String {
+        val locale = LocaleContextHolder.getLocale()
+        return levels.joinToString(", ") { level -> messages.getMessage("school-level.$level", emptyArray(), locale) }
+    }
+
+    private fun toCountriesText(levels: List<String>): String {
+        val locale = LocaleContextHolder.getLocale()
+        return levels.joinToString(", ") { country -> Locale(locale.language, country).displayCountry }
     }
 }

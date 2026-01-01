@@ -111,8 +111,47 @@
         <!-- ABOUT -->
         <div class="margin-top" id="about-container" th:if="${place?.description}">
             <hr/>
-            <h2 th:text="#{page.neighbourhood.section.abount(${neighbourhood.name})}">TITLE</h2>
+            <h2 th:text="#{page.neighbourhood.section.about(${neighbourhood.name})}">TITLE</h2>
             <div class="margin-bottom" th:utext="${place.descriptionHtml}">DESCRIPTION</div>
+        </div>
+
+        <!-- SCHOOLS -->
+        <div class="margin-top" id="school-container" th:if="${schools}">
+            <hr/>
+            <h2 th:text="#{page.neighbourhood.section.schools(${neighbourhood.name})}">TITLE</h2>
+            <table class="table table-striped">
+                <tr class="d-none d-md-table-row">
+                    <th></th>
+                    <th th:text="#{page.neighbourhood.academic-systems}">System</th>
+                    <th th:text="#{page.neighbourhood.levels}">Level</th>
+                </tr>
+                <tr th:each="school : ${schools}">
+                    <td>
+                        <a target="_blank" th:href="${school.websiteUrl}" th:if="${school.websiteUrl}"
+                           th:text="${school.name}">
+                            SCHOOL NAME
+                        </a>
+                        <div th:if="!${school.websiteUrl}" th:text="${school.name}">SCHOOL NAME</div>
+                        <div class="text-small">
+                            <span th:if="${school.private}" th:text="#{page.neighbourhood.private}">PRIVATE</span>
+                            <span th:if="${school.international} AND ${school.private}">-</span>
+                            <span th:if="${school.international}" th:text="#{page.neighbourhood.international}">INTERNATIONAL</span>
+                        </div>
+                        <table class="d-block d-md-none text-small w-100 margin-top-small">
+                            <tr th:if="!${school.academicSystems.isEmpty()}">
+                                <th class="text-top" th:text="#{page.neighbourhood.academic-systems}">System</th>
+                                <td class="padding-left" th:text="${school.academicSystemsText}">SYSTEM</td>
+                            </tr>
+                            <tr th:if="!${school.levels.isEmpty()}">
+                                <th th:text="#{page.neighbourhood.levels}">System</th>
+                                <td class="padding-left" th:text="${school.levelsText}">SYSTEM</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="d-none d-md-table-cell" th:text="${school.academicSystemsText}">SYSTEM</td>
+                    <td class="d-none d-md-table-cell" th:text="${school.levelsText}">LEVELS</td>
+                </tr>
+            </table>
         </div>
     </div>
 

@@ -19,7 +19,7 @@ class NeighbourhoodContentGeneratorAgentTest {
         readTimeoutMillis = 120000,
     )
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val neighbourhood = LocationEntity(name = "Odza", country = "CM")
+    private val neighbourhood = LocationEntity(name = "Bastos", country = "CM")
     private val agent = NeighbourhoodContentGeneratorAgent(city, neighbourhood, llm)
 
     @Test

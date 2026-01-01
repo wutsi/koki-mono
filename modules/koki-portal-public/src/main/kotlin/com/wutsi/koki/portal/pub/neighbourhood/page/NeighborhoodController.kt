@@ -56,6 +56,8 @@ class NeighborhoodController(
             loadAgents(all, model)
         }
 
+        loadSchools(neighbourhood.id, model)
+
         val place = loadPlace(neighbourhood.id, model)
 
         model.addAttribute(
@@ -159,5 +161,19 @@ class NeighborhoodController(
         val place = placeService.get(item.id)
         model.addAttribute("place", place)
         return place
+    }
+
+    private fun loadSchools(neighbourhoodId: Long, model: Model): List<PlaceModel> {
+        val schools = placeService.search(
+            neighbourhoodIds = listOf(neighbourhoodId),
+            types = listOf(PlaceType.SCHOOL),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            limit = 10,
+        ).items
+
+        if (schools.isNotEmpty()) {
+            model.addAttribute("schools", schools)
+        }
+        return schools
     }
 }

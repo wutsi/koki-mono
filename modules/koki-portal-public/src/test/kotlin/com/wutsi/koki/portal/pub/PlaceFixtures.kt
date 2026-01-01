@@ -45,15 +45,15 @@ object PlaceFixtures {
         neighbourhoodId = RefDataFixtures.neighborhoods[0].id, // Centre-Ville
         longitude = -73.5878,
         latitude = 45.5234,
-        websiteURL = "https://www.internationalmontreal.com",
+        websiteUrl = "https://www.internationalmontreal.com",
         phoneNumber = "+1 514-555-1234",
         private = true,
         international = true,
         diplomas = listOf(Diploma.IB, Diploma.HIGH_SCHOOL_DIPLOMA, Diploma.BACHELOR),
-        languages = listOf("English", "French", "Spanish"),
-        academicSystems = listOf("International Baccalaureate", "Canadian Curriculum"),
+        languages = listOf("en", "fr"),
+        academicSystems = listOf("CA", "US", "IB"),
+        levels = listOf(SchoolLevel.PRESCHOOL, SchoolLevel.PRIMARY, SchoolLevel.LOWER_SECONDARY),
         faith = null,
-        levels = listOf(SchoolLevel.PRESCHOOL, SchoolLevel.PRIMARY, SchoolLevel.SECONDARY),
         rating = 4.5,
         ratingCriteria = listOf(
             PlaceRating(
@@ -92,15 +92,15 @@ object PlaceFixtures {
         neighbourhoodId = RefDataFixtures.neighborhoods[1].id, // Ahunsic
         longitude = -73.7150,
         latitude = 45.5320,
-        websiteURL = "https://www.stmarys-school.ca",
+        websiteUrl = "https://www.stmarys-school.ca",
         phoneNumber = "+1 514-555-5678",
         private = false,
         international = false,
         diplomas = listOf(Diploma.HIGH_SCHOOL_DIPLOMA),
-        languages = listOf("English", "French"),
-        academicSystems = listOf("Quebec Education Program"),
+        languages = listOf("en", "fr"),
+        academicSystems = listOf("CM"),
         faith = Faith.CATHOLIC,
-        levels = listOf(SchoolLevel.PRIMARY, SchoolLevel.SECONDARY),
+        levels = listOf(SchoolLevel.PRESCHOOL, SchoolLevel.PRIMARY),
         rating = 4.2,
         ratingCriteria = listOf(
             PlaceRating(
@@ -148,7 +148,7 @@ object PlaceFixtures {
         neighbourhoodId = RefDataFixtures.neighborhoods[2].id, // Mont-Royal
         longitude = -73.5878,
         latitude = 45.5088,
-        websiteURL = "https://www.lemontroyal.qc.ca",
+        websiteUrl = "https://www.lemontroyal.qc.ca",
         phoneNumber = null,
         rating = 4.8,
         ratingCriteria = listOf(
@@ -188,7 +188,7 @@ object PlaceFixtures {
         neighbourhoodId = RefDataFixtures.neighborhoods[1].id, // Ahunsic
         longitude = -73.6289,
         latitude = 45.5347,
-        websiteURL = null,
+        websiteUrl = null,
         phoneNumber = null,
         rating = 4.3,
         ratingCriteria = listOf(
@@ -220,6 +220,14 @@ object PlaceFixtures {
             summary = place.summary,
             summaryFr = place.summaryFr,
             rating = place.rating,
+            status = place.status,
+            academicSystems = place.academicSystems,
+            diplomas = place.diplomas,
+            faith = place.faith,
+            levels = place.levels,
+            websiteUrl = place.websiteUrl,
+            international = true,
+            private = true
         ),
         PlaceSummary(
             id = catholicSchool.id,
@@ -230,6 +238,12 @@ object PlaceFixtures {
             summary = catholicSchool.summary,
             summaryFr = catholicSchool.summaryFr,
             rating = catholicSchool.rating,
+            status = catholicSchool.status,
+            academicSystems = catholicSchool.academicSystems,
+            diplomas = catholicSchool.diplomas,
+            faith = catholicSchool.faith,
+            levels = catholicSchool.levels,
+            websiteUrl = catholicSchool.websiteUrl,
         ),
         PlaceSummary(
             id = park.id,
@@ -240,6 +254,11 @@ object PlaceFixtures {
             summary = park.summary,
             summaryFr = park.summaryFr,
             rating = park.rating,
+            status = catholicSchool.status,
+            academicSystems = catholicSchool.academicSystems,
+            diplomas = catholicSchool.diplomas,
+            faith = catholicSchool.faith,
+            levels = catholicSchool.levels,
         ),
         PlaceSummary(
             id = communityPark.id,
@@ -250,6 +269,14 @@ object PlaceFixtures {
             summary = communityPark.summary,
             summaryFr = communityPark.summaryFr,
             rating = communityPark.rating,
+            status = catholicSchool.status,
+            academicSystems = catholicSchool.academicSystems,
+            diplomas = catholicSchool.diplomas,
+            faith = catholicSchool.faith,
+            levels = catholicSchool.levels,
+            websiteUrl = communityPark.websiteUrl,
+            international = true,
+            private = true
         ),
     )
 }
