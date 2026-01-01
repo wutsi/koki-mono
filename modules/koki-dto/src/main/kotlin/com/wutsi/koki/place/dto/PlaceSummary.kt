@@ -13,4 +13,12 @@ data class PlaceSummary(
     val introduction: String? = null,
     val introductionFr: String? = null,
     val rating: Double? = null,
+    val diplomas: List<Diploma> = emptyList(),
+    val languages: List<String> = emptyList(),
+    val academicSystems: List<String> = emptyList(),
+    val levels: List<SchoolLevel> = emptyList(),
+    val faith: Faith? = null,
+    val websiteUrl: String? = null,
+    val private: Boolean? = null,
+    val international: Boolean? = null,
 )
