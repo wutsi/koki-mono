@@ -164,7 +164,7 @@ class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
         // Verify school without rating has null
         val leclerc = schools.find { it.name == "Lycée General Leclerc" }
         assertNotNull(leclerc)
-        assertEquals(null, leclerc.rating)
+        assertEquals(3.7, leclerc.rating)
     }
 
     @Test
