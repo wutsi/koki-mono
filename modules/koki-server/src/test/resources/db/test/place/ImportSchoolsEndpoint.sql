@@ -33,7 +33,12 @@ INSERT INTO T_LOCATION (id, parent_fk, type, country, name, ascii_name)
         (100015, 6297005, 4, 'CM', 'Soa', 'Soa'),
         (100016, 6297005, 4, 'CM', 'Essos', 'Essos'),
         (100017, 6297005, 4, 'CM', 'Mendong', 'Mendong'),
-        (100018, 6297005, 4, 'CM', 'Djoungolo', 'Djoungolo');
+        (100018, 6297005, 4, 'CM', 'Djoungolo', 'Djoungolo'),
+        (100019, 6297005, 4, 'CM', 'Biteng', 'Biteng'),
+        (100020, 6297005, 4, 'CM', 'Biyem-Assi', 'Biyem-Assi'),
+        (100021, 6297005, 4, 'CM', 'Melen', 'Melen'),
+        (100022, 6297005, 4, 'CM', 'Mimboman', 'Mimboman'),
+        (100024, 6297005, 4, 'CM', 'Tsinga', 'Tsinga');
 
 -- Insert an existing school to test update scenario
 INSERT INTO T_PLACE(id, created_by_fk, name, ascii_name, type, status, neighbourhood_fk, city_fk, deleted, private, international, website_url)
