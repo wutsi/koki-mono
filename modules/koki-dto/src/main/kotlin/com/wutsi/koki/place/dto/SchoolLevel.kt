@@ -4,7 +4,7 @@ enum class SchoolLevel {
     UNKNOWN,
     PRESCHOOL,
     PRIMARY,
-    SECONDARY,
-    HIGHER_EDUCATION,
-    OTHER,
+    LOWER_SECONDARY,
+    HIGHER_SECONDARY,
+    UNIVERSITY,
 }

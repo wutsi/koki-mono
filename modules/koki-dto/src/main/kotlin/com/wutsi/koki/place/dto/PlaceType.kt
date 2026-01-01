@@ -5,4 +5,5 @@ enum class PlaceType {
     NEIGHBORHOOD,
     SCHOOL,
     PARK,
+    MARKET
 }

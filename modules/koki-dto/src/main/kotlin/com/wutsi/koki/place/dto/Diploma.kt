@@ -16,5 +16,4 @@ enum class Diploma {
     MASTER,
     MBA,
     PHD,
-    OTHER,
 }
