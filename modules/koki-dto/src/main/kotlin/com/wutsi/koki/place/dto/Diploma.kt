@@ -12,6 +12,7 @@ enum class Diploma {
     GCE,
     ABI,
     CAP,
+    DIPLOMA,
     BTS,
     BACHELOR,
     MASTER,
