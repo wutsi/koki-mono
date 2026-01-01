@@ -8,5 +8,4 @@ enum class Faith {
     JEWISH,
     ISLAMIC,
     ORTHODOX,
-    OTHER,
 }
