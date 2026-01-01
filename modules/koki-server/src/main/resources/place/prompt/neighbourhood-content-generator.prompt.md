@@ -1,3 +1,6 @@
+<!--
+Prompt used by the class NeighbourhoodContentGenerator to generate neighbourhood content.
+-->
 You are a local expert who want to describe a neighbourhood area.
 
 Generate the content in JSON formant with the following fields:
