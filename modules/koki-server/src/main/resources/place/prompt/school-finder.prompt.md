@@ -9,6 +9,7 @@ The school information should be represented in a CSV having the following struc
 
 - name: Official school name.
 - neighbourhood: Neighbourhood of the campus.
+- city: City of the campus.
 - private: Boolean (true/false).
 - international: Boolean (true/false).
 - levels: List of level offered (e.g., PRESCHOOL, PRIMARY, LOWER_SECONDARY, HIGHER_SECONDARY, UNIVERSITY) - Separated by
@@ -18,6 +19,8 @@ The school information should be represented in a CSV having the following struc
 - diplomas: List of specific qualifications (CEPE, BEPC, BACCALAUREAT, IB, A_LEVEL, GCE, HIGH_SCHOOL_DIPLOMA, BACHELOR,
   MASTER, PHD) - Separated by semi-colons.
 - websiteUrl: Validated URL or null.
+- rating: Rating of the school. Float between 0.0 and 5.0 or null.
+- ratingSource: Source of the rating (e.g., Google, Facebook) or null.
 
 # Instructions:
 

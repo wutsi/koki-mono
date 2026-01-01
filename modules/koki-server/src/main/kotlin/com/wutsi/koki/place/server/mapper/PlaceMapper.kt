@@ -28,7 +28,7 @@ class PlaceMapper {
             cityId = entity.cityId,
             longitude = entity.longitude,
             latitude = entity.latitude,
-            websiteURL = entity.websiteUrl,
+            websiteUrl = entity.websiteUrl,
             phoneNumber = entity.phoneNumber,
 
             // School-specific fields
@@ -55,6 +55,7 @@ class PlaceMapper {
             heroImageUrl = entity.heroImageUrl,
             neighbourhoodId = entity.neighbourhoodId,
             cityId = entity.cityId,
+            websiteUrl = entity.websiteUrl,
             type = entity.type,
             name = entity.name,
             summary = entity.summary,
@@ -63,6 +64,15 @@ class PlaceMapper {
             introductionFr = entity.introductionFr,
             status = entity.status,
             rating = entity.rating,
+
+            // School-specific fields
+            international = entity.international,
+            private = entity.private,
+            diplomas = entity.diplomas ?: emptyList(),
+            languages = entity.languages ?: emptyList(),
+            academicSystems = entity.academicSystems ?: emptyList(),
+            faith = entity.faith,
+            levels = entity.levels ?: emptyList(),
         )
     }
 

@@ -55,6 +55,7 @@ class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(true, aisoy.private)
         assertEquals(true, aisoy.international)
         assertEquals("https://www.aisoy.org/", aisoy.websiteUrl)
+        assertEquals(4.6, aisoy.rating) // Rating from CSV
 
         // Verify semicolon-separated lists are parsed correctly
         assertEquals(4, aisoy.levels?.size)
@@ -135,6 +136,35 @@ class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(false, leclerc.private) // Public school
         assertEquals(false, leclerc.international)
         assertEquals(null, leclerc.websiteUrl) // No website
+    }
+
+    @Test
+    fun `verify school ratings are imported`() {
+        // WHEN
+        rest.getForEntity("/v1/places/import/schools", ImportResponse::class.java)
+
+        // THEN - Verify schools with ratings
+        val schools = dao.findAll().filter { it.type == PlaceType.SCHOOL && !it.deleted }
+
+        // Lycée Français Fustel de Coulanges - rating 4.5
+        val fustel = schools.find { it.name == "Lycée Français Fustel de Coulanges" }
+        assertNotNull(fustel)
+        assertEquals(4.5, fustel.rating)
+
+        // British Isles International School - rating 4.4
+        val biis = schools.find { it.name == "British Isles International School (BIIS)" }
+        assertNotNull(biis)
+        assertEquals(4.4, biis.rating)
+
+        // American International School - rating 4.6
+        val aisoy = schools.find { it.name == "American International School of Yaounde (AISOY)" }
+        assertNotNull(aisoy)
+        assertEquals(4.6, aisoy.rating)
+
+        // Verify school without rating has null
+        val leclerc = schools.find { it.name == "Lycée General Leclerc" }
+        assertNotNull(leclerc)
+        assertEquals(null, leclerc.rating)
     }
 
     @Test
@@ -246,7 +276,7 @@ class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
             assertEquals(null, school.introductionFr, "School ${school.name} has introductionFr (should be null)")
             assertEquals(null, school.description, "School ${school.name} has description (should be null)")
             assertEquals(null, school.descriptionFr, "School ${school.name} has descriptionFr (should be null)")
-            assertEquals(null, school.rating, "School ${school.name} has rating (should be null)")
+            // Note: rating is now imported from CSV, not AI-generated
         }
     }
 }

@@ -36,6 +36,8 @@ class SchoolImporter(
         private const val RECORD_CURRICULUM = 7
         private const val RECORD_DIPLOMAS = 8
         private const val RECORD_WEBSITE_URL = 9
+        private const val RECORD_RATING = 10
+        private const val RECORD_RATING_SOURCE = 11
     }
 
     fun import(): ImportResponse {
@@ -160,6 +162,8 @@ class SchoolImporter(
         school.academicSystems = toStringList(record, RECORD_CURRICULUM)
         school.diplomas = toDiplomaList(record, RECORD_DIPLOMAS)
         school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
+        school.rating = toDouble(record, RECORD_RATING)
+        // Note: ratingSource (column 11) is not persisted to PlaceEntity
 
         return placeService.save(school)
     }
@@ -181,6 +185,8 @@ class SchoolImporter(
         school.academicSystems = toStringList(record, RECORD_CURRICULUM)
         school.diplomas = toDiplomaList(record, RECORD_DIPLOMAS)
         school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
+        school.rating = toDouble(record, RECORD_RATING)
+        // Note: ratingSource (column 11) is not persisted to PlaceEntity
         school.status = PlaceStatus.PUBLISHED
         placeService.save(school)
     }
@@ -206,6 +212,15 @@ class SchoolImporter(
         return try {
             val value = record.get(column)?.trim()
             if (value.isNullOrBlank()) null else value
+        } catch (ex: Exception) {
+            null
+        }
+    }
+
+    private fun toDouble(record: CSVRecord, column: Int): Double? {
+        return try {
+            val value = record.get(column)?.trim()
+            if (value.isNullOrBlank()) null else value.toDouble()
         } catch (ex: Exception) {
             null
         }

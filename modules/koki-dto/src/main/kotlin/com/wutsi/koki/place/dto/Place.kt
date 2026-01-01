@@ -18,7 +18,7 @@ data class Place(
     val descriptionFr: String? = null,
     val longitude: Double? = null,
     val latitude: Double? = null,
-    val websiteURL: String? = null,
+    val websiteUrl: String? = null,
     val phoneNumber: String? = null,
 
     // School-specific fields
