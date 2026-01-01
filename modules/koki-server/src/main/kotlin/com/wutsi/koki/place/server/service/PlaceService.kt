@@ -167,6 +167,55 @@ class PlaceService(
         dao.save(entity)
     }
 
+    @Transactional
+    fun save(place: PlaceEntity): PlaceEntity {
+        place.modifiedAt = Date()
+        return dao.save(place)
+    }
+
+    /**
+     * Find existing school by name and city, or return null if not found.
+     * Used by SchoolImporter for idempotent school creation/updates.
+     * Schools are uniquely identified by name + cityId + type=SCHOOL.
+     *
+     * @param name The school name (will be normalized to ASCII)
+     * @param cityId The ID of the city where the school is located
+     * @return Existing school entity or null if not found
+     */
+    fun findSchool(name: String, cityId: Long): PlaceEntity? {
+        val asciiName = toAscii(name)
+        return dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
+            asciiName = asciiName,
+            type = PlaceType.SCHOOL,
+            cityId = cityId,
+            deleted = false
+        )
+    }
+
+    /**
+     * Create a new school entity without triggering content generation.
+     * Used by SchoolImporter for bulk imports from CSV.
+     * Schools are created with status=PUBLISHED and no AI content generation.
+     *
+     * @param name The school name
+     * @param neighbourhoodId The ID of the neighbourhood where the school is located
+     * @param cityId The ID of the city where the school is located
+     * @return The created school entity
+     */
+    @Transactional
+    fun createSchool(name: String, neighbourhoodId: Long, cityId: Long): PlaceEntity {
+        return dao.save(
+            PlaceEntity(
+                name = name,
+                asciiName = toAscii(name),
+                type = PlaceType.SCHOOL,
+                status = PlaceStatus.PUBLISHED,
+                neighbourhoodId = neighbourhoodId,
+                cityId = cityId,
+            )
+        )
+    }
+
     private fun toAscii(name: String): String {
         return StringUtils.toAscii(name).lowercase()
     }

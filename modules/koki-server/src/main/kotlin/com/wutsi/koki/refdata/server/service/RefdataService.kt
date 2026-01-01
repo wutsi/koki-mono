@@ -1,5 +1,6 @@
 package com.wutsi.koki.refdata.server.service
 
+import com.wutsi.koki.place.server.io.SchoolImporter
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.server.io.AmenityImporter
 import com.wutsi.koki.refdata.server.io.CategoryImporter
@@ -14,6 +15,7 @@ class RefdataService(
     private val amenityImporter: AmenityImporter,
     private val geonamesImporter: GeonamesImporter,
     private val neighbourhoodImporter: NeighbourhoodImporter,
+    private val schoolImporter: SchoolImporter,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RefdataService::class.java)
@@ -53,6 +55,13 @@ class RefdataService(
 
             LOGGER.info("$country - Loading neighborhoods")
             neighbourhoodImporter.import(country)
+
+            LOGGER.info("$country - Loading schools")
+            importSchools()
         }
+    }
+
+    private fun importSchools() {
+        schoolImporter.import()
     }
 }

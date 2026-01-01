@@ -4,10 +4,9 @@ import com.wutsi.koki.common.dto.ImportMessage
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.place.dto.Diploma
 import com.wutsi.koki.place.dto.PlaceStatus
-import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SchoolLevel
-import com.wutsi.koki.place.server.dao.PlaceRepository
 import com.wutsi.koki.place.server.domain.PlaceEntity
+import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
@@ -21,7 +20,7 @@ import java.io.InputStream
 
 @Service
 class SchoolImporter(
-    private val placeRepository: PlaceRepository,
+    private val placeService: PlaceService,
     private val locationService: LocationService,
 ) {
     companion object {
@@ -142,34 +141,27 @@ class SchoolImporter(
     }
 
     private fun findSchool(schoolName: String, city: LocationEntity): PlaceEntity? {
-        val asciiName = toAscii(schoolName)
-        return placeRepository.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
-            asciiName = asciiName,
-            type = PlaceType.SCHOOL,
-            cityId = city.id ?: -1,
-            deleted = false
-        )
+        return placeService.findSchool(schoolName, city.id ?: -1)
     }
 
     private fun add(record: CSVRecord, neighbourhood: LocationEntity, city: LocationEntity): PlaceEntity {
         val name = record.get(RECORD_NAME)
-        return placeRepository.save(
-            PlaceEntity(
-                name = name,
-                asciiName = toAscii(name),
-                type = PlaceType.SCHOOL,
-                status = PlaceStatus.PUBLISHED,
-                neighbourhoodId = neighbourhood.id ?: -1,
-                cityId = city.id ?: -1,
-                private = toBoolean(record, RECORD_PRIVATE),
-                international = toBoolean(record, RECORD_INTERNATIONAL),
-                levels = toSchoolLevelList(record, RECORD_LEVELS),
-                languages = toStringList(record, RECORD_LANGUAGE),
-                academicSystems = toStringList(record, RECORD_CURRICULUM),
-                diplomas = toDiplomaList(record, RECORD_DIPLOMAS),
-                websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL),
-            )
+        val school = placeService.createSchool(
+            name = name,
+            neighbourhoodId = neighbourhood.id ?: -1,
+            cityId = city.id ?: -1
         )
+
+        // Update school with additional fields from CSV
+        school.private = toBoolean(record, RECORD_PRIVATE)
+        school.international = toBoolean(record, RECORD_INTERNATIONAL)
+        school.levels = toSchoolLevelList(record, RECORD_LEVELS)
+        school.languages = toStringList(record, RECORD_LANGUAGE)
+        school.academicSystems = toStringList(record, RECORD_CURRICULUM)
+        school.diplomas = toDiplomaList(record, RECORD_DIPLOMAS)
+        school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
+
+        return placeService.save(school)
     }
 
     private fun update(
@@ -189,7 +181,8 @@ class SchoolImporter(
         school.academicSystems = toStringList(record, RECORD_CURRICULUM)
         school.diplomas = toDiplomaList(record, RECORD_DIPLOMAS)
         school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
-        placeRepository.save(school)
+        school.status = PlaceStatus.PUBLISHED
+        placeService.save(school)
     }
 
     private fun toAscii(str: String): String {
