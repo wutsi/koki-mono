@@ -1,86 +1,101 @@
-name,neighbourhood,city,private,international,levels,language,curriculum,diplomas,websiteUrl,rating,ratingSource
-International Bilingual Academic School (IBAS),Ahala,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr,CM;GB,CEPE;GCE,,4.0,Google Maps
-Lycée Français Fustel de Coulanges (Primary),Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,fr,FR,CEPE,https://www.fustel-yaounde.fr/,4.5,Google Maps
-British Isles International School (BIIS),Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,GB,A_LEVEL;IGCSE;IB,https://britishschoolyaounde.com/,4.4,Google Maps
-Ecole Internationale Le Flamboyant,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,fr;en,FR,CEPE,https://ecoleleflamboyant.com/,4.4,Google Maps
-Enko La Gaieté International School,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,GB,IB;IGCSE,https://enkoeducation.com/la-gaiete/,4.3,Google Maps
-Amity International College,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr;tr,GB;CM,IGCSE;GCE;BACCALAUREAT,,4.3,Google Maps
-Maarif Schools of Cameroon,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr;tr,TR;CM,CEPE,https://cm.maarifschools.org,4.2,Google Maps
-Collège Bilingue International La Fierté,Biteng,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,BEPC;BACCALAUREAT;GCE;A_LEVEL,https://lafierte-education.com/,4.4,Google Maps
-Complexe Scolaire Bilingue de Biteng,Biteng,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.1,Google Maps
-Agenla Academy,Biteng,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;DIPLOMA,https://agenlaacademy.com/,4.0,Google Maps
-Collège Bilingue Jeunesse Lumière,Biteng,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps
-Collège Bilingue La Gaîté,Biyem-Assi,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,https://csilagaiete-edu.cm/,4.8,Academic Reputation
-Nazareth English Nursery & Primary School,Biyem-Assi,Yaoundé,True,False,PRESCHOOL;PRIMARY,en,GB;CM,CEPE,https://nazarethenglishschool.cm/,4.3,Google Maps
-Promote Bilingue,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,GCE;A_LEVEL;BACCALAUREAT,,4.2,Google Maps
-Franky Comprehensive Secondary School,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,GCE;A_LEVEL;BACCALAUREAT,,4.1,Google Maps
-Manna Group College,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,http://www.manna-group-college.com/,4.0,Google Maps
-Lycée de Biyem-Assi,Biyem-Assi,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.9,Google Maps
-Lycée Français Fustel de Coulanges (Secondary),Centre Ville,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,fr,FR,BACCALAUREAT;BEPC,https://www.fustel-yaounde.fr/,4.5,Google Maps
-Collège Catholique Bilingue de la Retraite,Centre Ville,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,https://www.laretraitecatholicbilingualcollege.org/,4.5,Google Maps
-National School of Public Works (ENSTP),Centre Ville,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://enstp.cm,4.1,Google Maps
-Ecole Nationale d'Administration et de Magistrature (ENAM),Centre Ville,Yaoundé,False,False,UNIVERSITY,fr;en,CM,DIPLOMA,https://enam-cm.org,3.9,Uniranks
-Collège de la Retraite (Annex),Cité Verte,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,4.2,Academic Reputation
-Collège Bilingue La Rosière,Damas,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.2,Google Maps
-Université Protestante d'Afrique Centrale,Djoungolo,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://www.upac.cm/,3.8,Uniranks
-Lycée d'Efoulan,Efoulan,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.7,Google Maps
-GSB Les Tamariniers,Ekounou,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.3,Google Maps
-PKFokam Institute of Excellence,Emana,Yaoundé,True,True,UNIVERSITY,en;fr,DE;US;CM,BACHELOR;MASTER,https://www.pkfinstitute.com,4.5,Google Maps
-Cameroon School of Excellence,Essos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,CEPE;GCE;A_LEVEL,https://www.cse-yde.com/,4.3,Google Maps
-Lycée Bilingue d'Essos,Essos,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.6,Google Maps
-Family Bilingual School,Etoa-Meki,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.0,Yaounde Zoom
-Collège Jean-Tabi,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,4.6,Academic Reputation
-Fapo Lay Private Bilingual College,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Google Maps
-Institut Bilingue d’Etoudi,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,3.7,Google Maps
-Holy Cross International College,Etoug-Ebe,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en,GB,GCE;A_LEVEL,https://holycrossinternationalcollege.cm/,4.2,Google Maps
-Tankeu Bilingual College,Etoug-Ebe,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.0,Google Maps
-GBHS Etoug-Ebe,Etoug-Ebe,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.9,Google Maps
-Quality International School (QIS),Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,GB;US,GCE;HIGH_SCHOOL_DIPLOMA,https://qiseduc.org/,4.3,Google Maps
-Green Hills Academy Complex,Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,CEPE;GCE;A_LEVEL,https://greenhills-academy-complex.com/,4.2,Google Maps
-Academic School of Excellence (ASE),Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,IB;FR;CM,IB;BACCALAUREAT;CEPE,https://acdemic-school-ofexcellence.com,4.1,Google Maps
-Groupe Scolaire Bilingue Les Papillons,Golf,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,https://www.gsblespapillons.fr/,4.0,Google Maps
-Faculty of Medicine and Biomedical Sciences (FMSB),Melen,Yaoundé,False,False,UNIVERSITY,fr;en,CM,PHD;MASTER,,4.6,Academic Reputation
-Mevick Bilingual Grammar School,Mendong,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,GCE;A_LEVEL;BACCALAUREAT,https://mevick.com,4.2,Google Maps
-St Mary Bilingual School,Mendong,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,,4.1,Google Maps
-Lycée Bilingue de Mendong,Mendong,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Wikipedia
-The ICT University,Messassi,Yaoundé,True,True,UNIVERSITY,en,US;CM,BACHELOR;MASTER;PHD,https://ictuniversity.org/,3.8,Google Maps
-Don Bosco Vocational Center,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,DIPLOMA,,4.5,Google Maps
-Collège Catholique Bilingue Père Monti,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.4,Academic Reputation
-Prestige Bilingual School Complex,Mimboman,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,https://prestige-bilingual-school.com,4.3,Google Maps
-Lycée Bilingue de Mimboman,Mimboman,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Google Maps
-Institut Zang Mebenga,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,3.9,Google Maps
-Institut de Management Mvog-Ada,Mvog-Ada,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,,3.9,Minesup
-Siantou University Institute (CUS),Mvog-Mbi,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://siantou-univ.com/,3.5,Google Maps
-Collège François-Xavier Vogt,Mvolyé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,https://college-vogt.org/,4.7,Academic Reputation
-Saint Benedict College,Mvolyé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.2,Google Maps
-Ecole Nationale Superieure Polytechnique (ENSPY),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://polytechnique.cm,4.5,Academic Reputation
-ESSTIC,Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://esstic.cm,4.2,Academic Reputation
-National Advanced School of Post and Telecommunications (ENSPT),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://enspt.cm,4.1,Google Maps
-Ecole Normale Superieure (ENS),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,http://www.ens.cm,4.0,Academic Reputation
-Lycée General Leclerc,Ngoa-Ekélé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM;FR,BEPC;BACCALAUREAT,,3.7,Google Maps
-Lycée Bilingue d'Application (LBA),Ngoa-Ekélé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.6,Google Maps
-Université de Yaounde I,Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://www.uy1.uninet.cm,3.3,EDUopinions
-GSB Emilie Québec,Ngousso,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,https://groupescolaireemiliequebec.com/,4.1,Google Maps
-Lycée Bilingue de Nkol-Eton,Nkol-Eton,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps
-Université de Catholique d'Afrique Centrale,Nkolbisson,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://ucac-icy.net/,4.2,Uniranks
-Government Bilingual Technical High School,Nkolbisson,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CAP;BACCALAUREAT;GCE,,3.8,Google Maps
-GSB La Gaîté Nlongkak,Nlongkak,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.2,Google Maps
-Lycée de Nsam Efoulan,Nsam,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,4.6,InovEdu
-GTHS Nsam,Nsam,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CAP;BACCALAUREAT;GCE,,4.4,The Guardian Post
-International Relations Institute of Cameroon (IRIC),Obili,Yaoundé,False,False,UNIVERSITY,fr;en,CM,MASTER;PHD,https://www.iricuy2.com,4.4,Academic Reputation
-Rain Forest International School,Odza,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en,US,HIGH_SCHOOL_DIPLOMA;GCE,https://rfis.org,4.8,Google Maps
-Hardford International School,Odza,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,CM;GB,CEPE;GCE;A_LEVEL,https://www.hardfordedu.com/,4.3,Google Maps
-Ladybird Group of Schools,Odza,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,CM,CEPE;GCE,https://ladybirdschools.com/,4.1,Google Maps
-Complexe Scolaire Adventiste d'Odza,Odza,Yaoundé,True,False,PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,,4.0,Google Maps
-Maarif College Nkolfoulou,Olembé,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr;tr,TR;CM,BACCALAUREAT;GCE,https://cm.maarifschools.org,4.5,Google Maps
-American International School of Yaounde (AISOY),Quartier Lac,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr,US;IB,HIGH_SCHOOL_DIPLOMA;IB,https://www.aisoy.org/,4.6,Google Maps
-SUP'PTIC,Quartier Lac,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://e-supptic.cm,4.1,Google Maps
-Complexe Scolaire La Solidarité,Santa Barbara,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT,,4.4,Academic Reputation
-Wague Bilingual Comprehensive Institute,Soa,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.5,Office du Bac Ranking
-Institut Supérieur Azimut (INSA),Soa,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR,,4.0,Google Maps
-Lycée Bilingue de Soa,Soa,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.9,Google Maps
-Collège Bilingue de l'Unité,Soa,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.8,Google Maps
-Université de Yaounde II,Soa,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://univ-yaounde2.org,3.0,Uniranks
-Institut Universitaire Matamfen (ISMAT),Tsinga,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY;UNIVERSITY,fr;en,CM,BTS;LICENCE;MASTER;BEPC;BACCALAUREAT,https://matamfensup.com/,4.6,InovEdu
-Lycée de Tsinga,Tsinga,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps
-Institut Polyvalent de Tsinga,Tsinga,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,3.7,Google Maps
+name,neighbourhood,city,private,international,levels,language,curriculum,diplomas,websiteUrl,rating,ratingSource,latitude,longitude
+International Bilingual Academic School (IBAS),Ahala,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr,CM;GB,CEPE;GCE,,4.0,Google Maps,3.8055,11.5008
+Lycée Français Fustel de Coulanges (Primary),Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,fr,FR,CEPE,https://www.fustel-yaounde.fr/,4.5,Google Maps,3.8962,11.5115
+British Isles International School (BIIS),Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,GB,A_LEVEL;IGCSE;IB,https://britishschoolyaounde.com/,4.4,Google Maps,3.8961,11.5106
+Ecole Internationale Le Flamboyant,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,fr;en,FR,CEPE,https://ecoleleflamboyant.com/,4.4,Google Maps,3.8935,11.5135
+Enko La Gaieté International School,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,GB,IB;IGCSE,https://enkoeducation.com/la-gaiete/,4.3,Google Maps,3.8815,11.5109
+Amity International College,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr;tr,GB;CM,IGCSE;GCE;BACCALAUREAT,,4.3,Google Maps,3.8999,11.5038
+Maarif Schools of Cameroon,Bastos,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr;tr,TR;CM,CEPE,https://cm.maarifschools.org,4.2,Google Maps,3.8894,11.5147
+Collège Bilingue International La Fierté,Biteng,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,BEPC;BACCALAUREAT;GCE;A_LEVEL,https://lafierte-education.com/,4.4,Google Maps,3.8214,11.5852
+Complexe Scolaire Bilingue de Biteng,Biteng,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.1,Google Maps,3.8235,11.5830
+Agenla Academy,Biteng,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;DIPLOMA,https://agenlaacademy.com/,4.0,Google Maps,3.8642,11.5781
+Collège Bilingue Jeunesse Lumière,Biteng,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps,3.8202,11.5875
+Collège Bilingue La Gaîté,Biyem-Assi,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,https://csilagaiete-edu.cm/,4.8,Academic Reputation,3.8421,11.4885
+Nazareth English Nursery & Primary School,Biyem-Assi,Yaoundé,True,False,PRESCHOOL;PRIMARY,en,GB;CM,CEPE,https://nazarethenglishschool.cm/,4.3,Google Maps,3.8455,11.4832
+Promote Bilingue,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,GCE;A_LEVEL;BACCALAUREAT,,4.2,Google Maps,3.8390,11.4815
+Franky Comprehensive Secondary School,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,GCE;A_LEVEL;BACCALAUREAT,,4.1,Google Maps,3.8412,11.4850
+Manna Group College,Biyem-Assi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,http://www.manna-group-college.com/,4.0,Google Maps,3.8405,11.4892
+Lycée de Biyem-Assi,Biyem-Assi,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.9,Google Maps,3.8378,11.4841
+Lycée Français Fustel de Coulanges (Secondary),Centre Ville,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,fr,FR,BACCALAUREAT;BEPC,https://www.fustel-yaounde.fr/,4.5,Google Maps,3.8767,11.5164
+Collège Catholique Bilingue de la Retraite,Centre Ville,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,https://www.laretraitecatholicbilingualcollege.org/,4.5,Google Maps,3.8685,11.5192
+National School of Public Works (ENSTP),Centre Ville,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://enstp.cm,4.1,Google Maps,3.8615,11.5150
+Ecole Nationale d'Administration et de Magistrature (ENAM),Centre Ville,Yaoundé,False,False,UNIVERSITY,fr;en,CM,DIPLOMA,https://enam-cm.org,3.9,Uniranks,3.8602,11.5135
+Collège de la Retraite (Annex),Cité Verte,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,4.2,Academic Reputation,3.8752,11.4921
+Université Protestante d'Afrique Centrale,Djoungolo,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://www.upac.cm/,3.8,Uniranks,3.8821,11.5285
+Lycée de Nsam Efoulan,Efoulan,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,4.6,InovEdu,3.8210,11.4985
+GTHS Nsam,Efoulan,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CAP;BACCALAUREAT;GCE,,4.4,The Guardian Post,3.8185,11.4960
+Lycée d'Efoulan,Efoulan,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.7,Google Maps,3.8285,11.5012
+GSB Les Tamariniers,Ekounou,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.3,Google Maps,3.8425,11.5432
+PKFokam Institute of Excellence,Emana,Yaoundé,True,True,UNIVERSITY,en;fr,DE;US;CM,BACHELOR;MASTER,https://www.pkfinstitute.com,4.5,Google Maps,3.9312,11.5245
+Cameroon School of Excellence,Essos,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,CEPE;GCE;A_LEVEL,https://www.cse-yde.com/,4.3,Google Maps,3.8745,11.5402
+Lycée Bilingue d'Essos,Essos,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.6,Google Maps,3.8720,11.5385
+Family Bilingual School,Etoa-Meki,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.0,Yaounde Zoom,3.8812,11.5215
+Collège Jean-Tabi,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,4.6,Academic Reputation,3.9181,11.5256
+Fapo Lay Private Bilingual College,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Google Maps,3.9150,11.5140
+Institut Bilingue d’Etoudi,Etoudi,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,3.7,Google Maps,3.9102,11.5165
+Holy Cross International College,Etoug-Ebe,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en,GB,GCE;A_LEVEL,https://holycrossinternationalcollege.cm/,4.2,Google Maps,3.8561,11.4886
+Tankeu Bilingual College,Etoug-Ebe,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.0,Google Maps,3.8560,11.4720
+GBHS Etoug-Ebe,Etoug-Ebe,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.9,Google Maps,3.8595,11.4762
+Quality International School (QIS),Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,GB;US,GCE;HIGH_SCHOOL_DIPLOMA,https://qiseduc.org/,4.3,Google Maps,3.9052,11.5245
+Green Hills Academy Complex,Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,CEPE;GCE;A_LEVEL,https://greenhills-academy-complex.com/,4.2,Google Maps,3.9035,11.5220
+Academic School of Excellence (ASE),Golf,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,IB;FR;CM,IB;BACCALAUREAT;CEPE,https://acdemic-school-ofexcellence.com,4.1,Google Maps,3.9070,11.5280
+Groupe Scolaire Bilingue Les Papillons,Golf,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,https://www.gsblespapillons.fr/,4.0,Google Maps,3.9020,11.5255
+Faculty of Medicine and Biomedical Sciences (FMSB),Melen,Yaoundé,False,False,UNIVERSITY,fr;en,CM,PHD;MASTER,,4.6,Academic Reputation,3.8645,11.4982
+Mevick Bilingual Grammar School,Mendong,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM;GB,GCE;A_LEVEL;BACCALAUREAT,https://mevick.com,4.2,Google Maps,3.8315,11.4652
+St Mary Bilingual School,Mendong,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,,4.1,Google Maps,3.8340,11.4680
+Lycée Bilingue de Mendong,Mendong,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Wikipedia,3.8295,11.4630
+The ICT University,Messassi,Yaoundé,True,True,UNIVERSITY,en,US;CM,BACHELOR;MASTER;PHD,https://ictuniversity.org/,3.8,Google Maps,3.9527,11.5166
+Don Bosco Vocational Center,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,DIPLOMA,,4.5,Google Maps,3.8612,11.5545
+Collège Catholique Bilingue Père Monti,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.4,Academic Reputation,3.8635,11.5580
+Prestige Bilingual School Complex,Mimboman,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,https://prestige-bilingual-school.com,4.3,Google Maps,3.8655,11.5520
+Lycée Bilingue de Mimboman,Mimboman,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.1,Google Maps,3.8605,11.5562
+Institut Zang Mebenga,Mimboman,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,3.9,Google Maps,3.8585,11.5510
+Collège Bilingue Protestant de Yaoundé,Mokolo,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,4.2,Academic Reputation,3.8712,11.5025
+Government Bilingual High School (GBHS) Mokolo,Mokolo,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.0,Google Maps,3.8735,11.5005
+Lycée Technique de Yaoundé II (Madagascar),Mokolo,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,CAP;BACCALAUREAT;GCE,,3.8,Google Maps,3.8760,11.5040
+Complexe Scolaire Bilingue La Citadelle,Mvan,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.2,InovEdu,3.8152,11.5185
+Lycée de Mvan,Mvan,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.7,Google Maps,3.8125,11.5150
+Institut de Management Mvog-Ada,Mvog-Ada,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,,3.9,Minesup,3.8665,11.5312
+Siantou University Institute (CUS),Mvog-Mbi,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://siantou-univ.com/,3.5,Google Maps,3.8485,11.5195
+Collège François-Xavier Vogt,Mvolyé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,https://college-vogt.org/,4.7,Academic Reputation,3.8435,11.5082
+Saint Benedict College,Mvolyé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.2,Google Maps,3.8430,11.5052
+Ecole Nationale Superieure Polytechnique (ENSPY),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://polytechnique.cm,4.5,Academic Reputation,3.8595,11.5020
+ESSTIC,Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://esstic.cm,4.2,Academic Reputation,3.8572,11.5035
+National Advanced School of Post and Telecommunications (ENSPT),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://enspt.cm,4.1,Google Maps,3.8580,11.5045
+Ecole Normale Superieure (ENS),Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,http://www.ens.cm,4.0,Academic Reputation,3.8565,11.5010
+Lycée General Leclerc,Ngoa-Ekélé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM;FR,BEPC;BACCALAUREAT,,3.7,Google Maps,3.8610,11.5055
+Lycée Bilingue d'Application (LBA),Ngoa-Ekélé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.6,Google Maps,3.8545,11.5025
+Université de Yaounde I,Ngoa-Ekélé,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://www.uy1.uninet.cm,3.3,EDUopinions,3.8550,11.5002
+GSB Emilie Québec,Ngousso,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,https://groupescolaireemiliequebec.com/,4.1,Google Maps,3.8952,11.5515
+Lycée Bilingue de Nkol-Eton,Nkol-Eton,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps,3.8845,11.5125
+Université de Catholique d'Afrique Centrale,Nkolbisson,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://ucac-icy.net/,4.2,Uniranks,3.8725,11.4512
+Government Bilingual Technical High School,Nkolbisson,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CAP;BACCALAUREAT;GCE,,3.8,Google Maps,3.8685,11.4485
+GSB La Gaîté Nlongkak,Nlongkak,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.2,Google Maps,3.8815,11.5175
+Yaoundé School of Economics and Management (YSEM),Nsimeyong,Yaoundé,True,True,UNIVERSITY,en;fr,CM,BTS;BACHELOR;MASTER,https://www.ysem.education/,4.6,InovEdu,3.8322,11.4925
+Kelden University Institute,Nsimeyong,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR,https://keldenuniversity.org,4.3,Local Info,3.8392,11.4965
+Collège Bilingue La Rosière,Nsimeyong,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;BACCALAUREAT;GCE,,4.2,Google Maps,3.8415,11.5002
+International Relations Institute of Cameroon (IRIC),Obili,Yaoundé,False,False,UNIVERSITY,fr;en,CM,MASTER;PHD,https://www.iricuy2.com,4.4,Academic Reputation,3.8625,11.4925
+Rain Forest International School,Odza,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en,US,HIGH_SCHOOL_DIPLOMA;GCE,https://rfis.org,4.8,Google Maps,3.8122,11.5214
+Hardford International School,Odza,Yaoundé,True,True,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,CM;GB,CEPE;GCE;A_LEVEL,https://www.hardfordedu.com/,4.3,Google Maps,3.7950,11.5310
+Ladybird Group of Schools,Odza,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en,CM,CEPE;GCE,https://ladybirdschools.com/,4.1,Google Maps,3.7912,11.5265
+Complexe Scolaire Adventiste d'Odza,Odza,Yaoundé,True,False,PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT;GCE,,4.0,Google Maps,3.7895,11.5302
+Maarif College Nkolfoulou,Olembé,Yaoundé,True,True,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr;tr,TR;CM,BACCALAUREAT;GCE,https://cm.maarifschools.org,4.5,Google Maps,3.9685,11.5412
+Kelden University Institute (Campus B),Olembé,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR,https://keldenuniversity.org,4.3,Local Info,3.9512,11.5285
+Groupe Scolaire Bilingue Les Oisillons,Olembé,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE,,4.2,Local Info,3.9535,11.5260
+Complex Scolaire Olembé,Olembé,Yaoundé,True,False,PRESCHOOL;PRIMARY,fr;en,CM,CEPE,,4.1,Local Info,3.9550,11.5305
+College Oliveraie de Nyom,Olembé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,4.0,Local Info,3.9725,11.5212
+Lycée d'Olembé,Olembé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,3.8,Local Info,3.9585,11.5335
+University Institute of Science and Technology of Yaoundé (IUSTY),Omnisports,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR;MASTER,http://issty.net/,4.3,Google Maps,3.8825,11.5415
+Martin Luther King Memorial School,Omnisports,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE;GCE,,4.1,Google Maps,3.8845,11.5435
+Lycée de Mballa II,Omnisports,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.9,Google Maps,3.8895,11.5395
+American International School of Yaounde (AISOY),Quartier du Lac,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr,US;IB,HIGH_SCHOOL_DIPLOMA;IB,https://www.aisoy.org/,4.6,Google Maps,3.8625,11.5105
+SUP'PTIC,Quartier du Lac,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://e-supptic.cm,4.1,Google Maps,3.8645,11.5085
+Complexe Scolaire La Solidarité,Santa Barbara,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT,,4.4,Academic Reputation,3.9085,11.5385
+Wague Bilingual Comprehensive Institute,Soa,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,4.5,Office du Bac Ranking,3.9852,11.6015
+Institut Supérieur Azimut (INSA),Soa,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR,,4.0,Google Maps,3.9825,11.5985
+Lycée Bilingue de Soa,Soa,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.9,Google Maps,3.9810,11.6052
+Collège Bilingue de l'Unité,Soa,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,BEPC;GCE;BACCALAUREAT,,3.8,Google Maps,3.9835,11.6030
+Université de Yaounde II,Soa,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER;PHD,https://univ-yaounde2.org,3.0,Uniranks,3.9637,11.5866
+Institut Universitaire Matamfen (ISMAT),Tsinga,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY;UNIVERSITY,fr;en,CM,BTS;MASTER;BEPC;BACCALAUREAT,https://matamfensup.com/,4.6,InovEdu,3.8825,11.5005
+Lycée de Tsinga,Tsinga,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.8,Google Maps,3.8850,11.4985
+Institut Polyvalent de Tsinga,Tsinga,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT,,3.7,Google Maps,3.8805,11.5020

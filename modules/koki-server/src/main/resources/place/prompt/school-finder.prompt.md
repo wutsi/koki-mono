@@ -21,6 +21,8 @@ The school information should be represented in a CSV having the following struc
 - websiteUrl: Validated URL or null.
 - rating: Rating of the school. Float between 0.0 and 5.0 or null.
 - ratingSource: Source of the rating (e.g., Google, Facebook) or null.
+- latitude: Latitude coordinate or null.
+- longitude: Longitude coordinate or null.
 
 # Instructions:
 

@@ -169,7 +169,7 @@ class NeighborhoodController(
             types = listOf(PlaceType.SCHOOL),
             statuses = listOf(PlaceStatus.PUBLISHED),
             limit = 10,
-        ).items
+        ).items.sortedByDescending { school -> school.rating ?: 0.0 }
 
         if (schools.isNotEmpty()) {
             model.addAttribute("schools", schools)

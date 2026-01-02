@@ -38,6 +38,8 @@ class SchoolImporter(
         private const val RECORD_WEBSITE_URL = 9
         private const val RECORD_RATING = 10
         private const val RECORD_RATING_SOURCE = 11
+        private const val RECORD_LATITUDE = 12
+        private const val RECORD_LONGITUDE = 13
     }
 
     fun import(): ImportResponse {
@@ -164,7 +166,8 @@ class SchoolImporter(
         school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
         school.rating = toDouble(record, RECORD_RATING)
         // Note: ratingSource (column 11) is not persisted to PlaceEntity
-
+        school.latitude = toDouble(record, RECORD_LATITUDE)
+        school.longitude = toDouble(record, RECORD_LONGITUDE)
         return placeService.save(school)
     }
 
@@ -187,6 +190,9 @@ class SchoolImporter(
         school.websiteUrl = toStringOrNull(record, RECORD_WEBSITE_URL)
         school.rating = toDouble(record, RECORD_RATING)
         // Note: ratingSource (column 11) is not persisted to PlaceEntity
+        school.latitude = toDouble(record, RECORD_LATITUDE)
+        school.longitude = toDouble(record, RECORD_LONGITUDE)
+
         school.status = PlaceStatus.PUBLISHED
         placeService.save(school)
     }
