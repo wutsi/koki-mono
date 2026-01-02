@@ -130,6 +130,7 @@ class PlaceMapper(
 
     private fun toCountriesText(levels: List<String>): String {
         val locale = LocaleContextHolder.getLocale()
-        return levels.joinToString(", ") { country -> Locale(locale.language, country).displayCountry }
+        val language = Locale(locale.language)
+        return levels.joinToString(", ") { country -> Locale(locale.language, country).getDisplayCountry(language) }
     }
 }
