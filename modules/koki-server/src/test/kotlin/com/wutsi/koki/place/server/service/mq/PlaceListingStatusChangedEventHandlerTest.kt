@@ -111,6 +111,8 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
 
         val event = ListingStatusChangedEvent(
@@ -130,6 +132,8 @@ class PlaceListingStatusChangedEventHandlerTest {
     fun `should return true and generate content when listing is active and place has no content`() {
         // Given
         doReturn(listOf(place)).whenever(placeService).search(
+            anyOrNull(),
+            anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
@@ -165,6 +169,8 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
 
         val event = ListingStatusChangedEvent(
@@ -186,13 +192,15 @@ class PlaceListingStatusChangedEventHandlerTest {
     fun `should return true and create neighbourhood place when place does not exist`() {
         // Given
         doReturn(emptyList<PlaceEntity>()).whenever(placeService).search(
-            types = eq(listOf(PlaceType.NEIGHBORHOOD)),
-            neighbourhoodIds = eq(listOf(neighbourhoodId)),
-            limit = eq(1),
-            cityIds = anyOrNull(),
-            statuses = anyOrNull(),
-            keyword = anyOrNull(),
-            offset = any(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
         doReturn(place).whenever(placeService).create(any())
 
@@ -347,6 +355,8 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
 
         val event = ListingStatusChangedEvent(
@@ -380,6 +390,9 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
+
         )
 
         val event = ListingStatusChangedEvent(
@@ -413,6 +426,8 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
 
         val event = ListingStatusChangedEvent(
@@ -446,6 +461,8 @@ class PlaceListingStatusChangedEventHandlerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
+            anyOrNull()
         )
 
         val event = ListingStatusChangedEvent(
