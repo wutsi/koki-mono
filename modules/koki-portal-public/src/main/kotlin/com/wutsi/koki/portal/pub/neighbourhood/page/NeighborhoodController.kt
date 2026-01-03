@@ -56,9 +56,9 @@ class NeighborhoodController(
             loadAgents(all, model)
         }
 
-        loadSchools(neighbourhood.id, model)
-
-        val place = loadPlace(neighbourhood.id, model)
+        val places = loadPlaces(neighbourhood.id, model)
+        val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
+        place?.let { loadNeighbourhoodPlace(place.id, model) }
 
         model.addAttribute(
             "page",
@@ -150,30 +150,46 @@ class NeighborhoodController(
         model.addAttribute("mapCenterPoint", centerPoint)
     }
 
-    private fun loadPlace(neighbourhoodId: Long, model: Model): PlaceModel? {
-        val item = placeService.search(
-            neighbourhoodIds = listOf(neighbourhoodId),
-            types = listOf(PlaceType.NEIGHBORHOOD),
-            statuses = listOf(PlaceStatus.PUBLISHED),
-            limit = 1,
-        ).items.firstOrNull() ?: return null
-
-        val place = placeService.get(item.id)
+    private fun loadNeighbourhoodPlace(placeId: Long, model: Model): PlaceModel? {
+        val place = placeService.get(placeId)
         model.addAttribute("place", place)
         return place
     }
 
-    private fun loadSchools(neighbourhoodId: Long, model: Model): List<PlaceModel> {
-        val schools = placeService.search(
+    private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {
+        val places = placeService.search(
             neighbourhoodIds = listOf(neighbourhoodId),
-            types = listOf(PlaceType.SCHOOL),
             statuses = listOf(PlaceStatus.PUBLISHED),
-            limit = 10,
+            types = listOf(
+                PlaceType.NEIGHBORHOOD,
+                PlaceType.SCHOOL,
+                PlaceType.PARK,
+                PlaceType.MUSEUM,
+                PlaceType.HOSPITAL,
+                PlaceType.MARKET,
+                PlaceType.SUPERMARKET,
+            ),
+            limit = 50,
         ).items.sortedByDescending { school -> school.rating ?: 0.0 }
 
-        if (schools.isNotEmpty()) {
-            model.addAttribute("schools", schools)
+        val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
+        if (place != null) {
+            model.addAttribute("place", place)
         }
-        return schools
+
+        loadPlaces("schools", listOf(PlaceType.SCHOOL), places, model)
+        loadPlaces("hospitals", listOf(PlaceType.HOSPITAL), places, model)
+        loadPlaces("markets", listOf(PlaceType.MARKET, PlaceType.SUPERMARKET), places, model)
+        loadPlaces("todos", listOf(PlaceType.PARK, PlaceType.MUSEUM), places, model)
+        return places
+    }
+
+    private fun loadPlaces(name: String, types: List<PlaceType>, places: List<PlaceModel>, model: Model) {
+        val items = places.filter { types.contains(it.type) }
+            .sortedByDescending { (it.websiteUrl?.let { 10.0 } ?: 0.0) + (it.rating ?: 0.0) }
+
+        if (items.isNotEmpty()) {
+            model.addAttribute(name, items)
+        }
     }
 }

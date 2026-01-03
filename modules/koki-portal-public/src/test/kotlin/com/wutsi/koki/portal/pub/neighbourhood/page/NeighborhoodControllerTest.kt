@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
-import com.wutsi.koki.portal.pub.PlaceFixtures.place
+import com.wutsi.koki.portal.pub.PlaceFixtures.neighborhood
 import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.refdata.dto.GetLocationResponse
@@ -42,7 +42,7 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[name='description']",
             "content",
-            place.summaryFr
+            neighborhood.summaryFr
         )
 
         // Opengraph
@@ -51,7 +51,7 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[property='og:description']",
             "content",
-            place.summaryFr
+            neighborhood.summaryFr
         )
         assertElementAttributeEndsWith(
             "head meta[property='og:url']",
@@ -68,6 +68,9 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#map-container")
         assertElementPresent("#about-container")
         assertElementPresent("#school-container")
+        assertElementPresent("#hospital-container")
+        assertElementPresent("#market-container")
+        assertElementPresent("#todo-container")
     }
 
     @Test
@@ -100,12 +103,16 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#introduction-container")
         assertElementPresent("#agent-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#sold-listing-container")
         assertElementPresent("#map-container")
         assertElementNotPresent("#about-container")
-        assertElementNotPresent("#introduction-container")
+        assertElementNotPresent("#school-container")
+        assertElementNotPresent("#hospital-container")
+        assertElementNotPresent("#market-container")
+        assertElementNotPresent("#todo-container")
     }
 }
