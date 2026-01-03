@@ -4,6 +4,9 @@ enum class PlaceType {
     UNKNOWN,
     NEIGHBORHOOD,
     SCHOOL,
+    HOSPITAL,
     PARK,
-    MARKET
+    MARKET,
+    SUPERMARKET,
+    MUSEUM,
 }
