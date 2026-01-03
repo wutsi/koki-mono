@@ -35,7 +35,7 @@ class ImportMarketsEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val result = response.body!!
-        assertEquals(30, result.added) // 31 markets - 1 existing = 30 new
+        assertEquals(52, result.added) // 53 markets - 1 existing = 30 new
         assertEquals(1, result.updated) // 1 existing market should be updated
         assertEquals(0, result.errors)
         assertTrue(result.errorMessages.isEmpty())

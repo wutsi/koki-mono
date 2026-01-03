@@ -1,43 +1,54 @@
 name,neighborhood,city,type,international,websiteUrl,rating,ratingSource,latitude,longitude
+Santa Lucia Ahala,Ahala,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.8,Google Reviews,3.8115,11.4955
+DOVV Awae,Awae,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.0,Google Reviews,3.845,11.558
 Spar Yaoundé,Bastos,Yaoundé,SUPERMARKET,True,https://www.sparcameroon.com,4.3,Google Reviews,3.895,11.518
-Casino Bastos,Bastos,Yaoundé,SUPERMARKET,True,https://www.groupe-casino.fr,4.2,Google Reviews,3.8866,11.5034
 DOVV Bastos,Bastos,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.1,Google Reviews,3.8927,11.5101
 Super U Bastos,Bastos,Yaoundé,SUPERMARKET,True,,4.0,Google Reviews,3.8928,11.5102
+Santa Lucia Biyem-Assi,Biyem-Assi,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.1,Google Reviews,3.8375,11.4882
 Marché Acacia,Biyem-Assi,Yaoundé,MARKET,False,,3.7,Google Reviews,3.8347,11.4878
 Marché de la Briqueterie,Briqueterie,Yaoundé,MARKET,False,,3.9,TripAdvisor,3.875,11.512
+DOVV Carrière,Carrière,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.8,Google Reviews,3.892,11.518
 Carrefour Hypermarket (PlaYce),Centre Ville,Yaoundé,SUPERMARKET,True,https://playce-yaounde.cm/,4.5,Google Reviews,3.8681,11.5165
-ORCA Yaoundé,Centre Ville,Yaoundé,DEPARTMENT STORE,True,"",4.4,Google Reviews,3.8665,11.5145
 Marché des Artisans,Centre Ville,Yaoundé,MARKET,False,,4.2,TripAdvisor,3.8672,11.5204
-BAO Cash & Carry,Centre Ville,Yaoundé,SUPERMARKET,True,,4.1,Google Reviews,3.8645,11.5215
 Marché Central,Centre Ville,Yaoundé,MARKET,False,,4.1,Google Reviews,3.8641,11.5212
 Marché Mfoundi,Centre Ville,Yaoundé,MARKET,False,,3.9,Google Reviews,3.8649,11.5239
-Casino Centre Ville,Centre Ville,Yaoundé,SUPERMARKET,True,https://www.groupe-casino.fr,3.8,Google Reviews,3.8593,11.5123
+DOVV Damas,Damas,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.0,Google Reviews,3.8235,11.4825
+Santa Lucia Damase,Damas,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.9,Google Reviews,3.8225,11.4815
 Marché de Nsam,Efoulan,Yaoundé,MARKET,False,,3.5,Google Reviews,3.8214,11.5056
 Carrefour Market Ekie,Ekie,Yaoundé,SUPERMARKET,True,,4.2,Google Reviews,3.8415,11.5435
 Mahima Elig-Essono,Elig-Essono,Yaoundé,SUPERMARKET,False,,3.9,Maps.me,3.8772,11.5249
+Santa Lucia Emana,Emana,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.7,Google Reviews,3.921,11.5315
 DOVV Essos,Essos,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.0,Google Reviews,3.8737,11.5377
 Mahima Essos,Essos,Yaoundé,SUPERMARKET,False,,4.0,Google Reviews,3.8718,11.5422
 Marché Essos,Essos,Yaoundé,MARKET,False,,3.8,Google Reviews,3.8715,11.5432
 Marché Etoudi,Etoudi,Yaoundé,MARKET,False,,3.5,Google Reviews,3.9112,11.5275
+Santa Lucia Kondengui,Kondengui,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.1,Google Reviews,3.848,11.532
 Marché de Madagascar,Madagascar,Yaoundé,MARKET,False,,3.4,Google Reviews,3.8791,11.4922
+Santa Lucia Melen,Melen,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.8,Google Reviews,3.8615,11.499
 Marché Melen,Melen,Yaoundé,MARKET,False,,3.4,Google Reviews,3.864,11.498
 DOVV Mendong,Mendong,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.834,11.47
 DOVV Messassi,Messassi,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.8,Google Reviews,3.945,11.53
+DOVV Mimboman,Mimboman,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.7,Google Reviews,3.872,11.552
 Santa Lucia Mokolo,Mokolo,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.9,Google Reviews,3.874,11.501
 DOVV Mokolo,Mokolo,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.8,Google Reviews,3.8734,11.5014
 Marché Mokolo,Mokolo,Yaoundé,MARKET,False,,3.8,Google Reviews,3.8745,11.5004
-Santa Lucia Mvan (24/7),Mvan,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.0,Google Reviews,3.821,11.512
+Santa Lucia Mvan,Mvan,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.0,Google Reviews,3.821,11.512
 Marché Mvog-Ada,Mvog-Ada,Yaoundé,MARKET,False,,3.7,Google Reviews,3.8633,11.5267
 Supermarché Niki,Mvog-Mbi,Yaoundé,SUPERMARKET,False,,3.7,Google Reviews,3.843,11.524
 Marché Mvog-Mbi,Mvog-Mbi,Yaoundé,MARKET,False,,3.6,Google Reviews,3.8433,11.5241
-Santa Lucia Ngousso (24/7),Ngousso,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.0,Google Reviews,3.9012,11.545
+DOVV Ngousso,Ngousso,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.2,Google Reviews,3.9015,11.5455
+Santa Lucia Ngousso,Ngousso,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.0,Google Reviews,3.9012,11.545
+Santa Lucia Nkoabang,Nkoabang,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,3.7,Google Reviews,3.855,11.595
 Marché de Nkol-Eton,Nkol-Eton,Yaoundé,MARKET,False,,3.6,Google Reviews,3.885,11.521
 DOVV Nkolbisson,Nkolbisson,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.7,Google Reviews,3.8755,11.455
-Marché du Huitième (8e),Nkom Kana,Yaoundé,MARKET,False,,3.2,Google Reviews,3.881,11.529
-DOVV Messamendongo (Odza),Odza,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.815,11.525
+Marché du Huitième ,Nkom Kana,Yaoundé,MARKET,False,,3.2,Google Reviews,3.881,11.529
+DOVV Nkomkana,Nkom Kana,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.882,11.512
+DOVV Nsimeyong,Nsimeyong,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.1,Google Reviews,3.832,11.495
+DOVV Messamendongo,Odza,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.815,11.525
+DOVV Olezoa,Olezoa,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,4.1,Google Reviews,3.848,11.509
 Santa Lucia Omnisports,Omnisports,Yaoundé,SUPERMARKET,False,http://complexesantalucia.com/,4.2,Google Reviews,3.8825,11.5398
-DOVV Soa,Soa,Soa,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.985,11.601
-Santa Lucia Soa,Soa,Soa,SUPERMARKET,False,http://complexesantalucia.com/,3.8,Google Reviews,3.9845,11.6021
-Ecomarché Soa,Soa,Soa,SUPERMARKET,False,,3.7,Google Reviews,3.983,11.5995
-Marché de Soa,Soa,Soa,MARKET,False,,3.6,Google Reviews,3.9812,11.5985
+DOVV Simbock,Simbock,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.815,11.465
+DOVV Soa,Soa,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.9,Google Reviews,3.985,11.601
+Marché de Soa,Soa,Yaoundé,MARKET,False,,3.6,Google Reviews,3.9812,11.5985
+DOVV Tongolo,Tongolo,Yaoundé,SUPERMARKET,False,https://dovv-distribution.com/,3.7,Google Reviews,3.905,11.525
 Marché de Tsinga,Tsinga,Yaoundé,MARKET,False,,3.8,Google Reviews,3.8844,11.5037
