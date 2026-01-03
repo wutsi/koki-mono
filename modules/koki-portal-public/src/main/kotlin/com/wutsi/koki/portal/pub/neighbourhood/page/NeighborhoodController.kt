@@ -16,6 +16,7 @@ import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
+import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -58,7 +59,10 @@ class NeighborhoodController(
 
         val places = loadPlaces(neighbourhood.id, model)
         val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
-        place?.let { loadNeighbourhoodPlace(place.id, model) }
+        if (place != null) {
+            loadNeighbourhoodPlace(place.id, model)
+            loadSimilarNeighborhoods(place, model)
+        }
 
         model.addAttribute(
             "page",
@@ -191,5 +195,30 @@ class NeighborhoodController(
         if (items.isNotEmpty()) {
             model.addAttribute(name, items)
         }
+    }
+
+    private fun loadSimilarNeighborhoods(place: PlaceModel, model: Model): List<PlaceModel> {
+        val minRating = place.rating?.toInt()?.toDouble() ?: 0.0
+        val maxRating = if (minRating >= 4) null else minRating + .9
+        val places = placeService.search(
+            cityIds = listOf(place.cityId),
+            types = listOf(PlaceType.NEIGHBORHOOD),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            minRating = minRating,
+            maxRating = maxRating,
+            limit = 10
+        ).items.filter { it.id != place.id }
+        if (places.isNotEmpty()) {
+            val neighbourhoodIds = places.map { place -> place.neighbourhoodId }
+            val neighbourhoods = locationService.search(
+                ids = neighbourhoodIds,
+                types = listOf(LocationType.NEIGHBORHOOD),
+                limit = neighbourhoodIds.size,
+            )
+            if (neighbourhoods.isNotEmpty()) {
+                model.addAttribute("similarNeighbourhoods", neighbourhoods)
+            }
+        }
+        return places
     }
 }
