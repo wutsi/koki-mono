@@ -85,9 +85,9 @@ Groupe Scolaire Bilingue Les Oisillons,Olembé,Yaoundé,True,False,PRESCHOOL;PRI
 Complex Scolaire Olembé,Olembé,Yaoundé,True,False,PRESCHOOL;PRIMARY,fr;en,CM,CEPE,,4.1,Local Info,3.9550,11.5305
 College Oliveraie de Nyom,Olembé,Yaoundé,True,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,4.0,Local Info,3.9725,11.5212
 Lycée d'Olembé,Olembé,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr,CM,BEPC;BACCALAUREAT,,3.8,Local Info,3.9585,11.5335
-University Institute of Science and Technology of Yaoundé,Omnisport,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR;MASTER,http://issty.net/,4.3,Google Maps,3.8825,11.5415
-Martin Luther King Memorial School,Omnisport,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE;GCE,,4.1,Google Maps,3.8845,11.5435
-Lycée de Mballa II,Omnisport,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.9,Google Maps,3.8895,11.5395
+University Institute of Science and Technology of Yaoundé,Omnisports,Yaoundé,True,False,UNIVERSITY,fr;en,CM,BTS;BACHELOR;MASTER,http://issty.net/,4.3,Google Maps,3.8825,11.5415
+Martin Luther King Memorial School,Omnisports,Yaoundé,True,False,PRESCHOOL;PRIMARY,en;fr,CM,CEPE;GCE,,4.1,Google Maps,3.8845,11.5435
+Lycée de Mballa II,Omnisports,Yaoundé,False,False,LOWER_SECONDARY;HIGHER_SECONDARY,fr;en,CM,BEPC;BACCALAUREAT;GCE,,3.9,Google Maps,3.8895,11.5395
 American International School of Yaounde,Quartier du Lac,Yaoundé,True,True,PRESCHOOL;PRIMARY,en;fr,US;IB,HIGH_SCHOOL_DIPLOMA;IB,https://www.aisoy.org/,4.6,Google Maps,3.8625,11.5105
 SUP'PTIC,Quartier du Lac,Yaoundé,False,False,UNIVERSITY,fr;en,CM,BACHELOR;MASTER,https://e-supptic.cm,4.1,Google Maps,3.8645,11.5085
 Complexe Scolaire La Solidarité,Santa Barbara,Yaoundé,True,False,PRESCHOOL;PRIMARY;LOWER_SECONDARY;HIGHER_SECONDARY,en;fr,CM,CEPE;BEPC;BACCALAUREAT,,4.4,Academic Reputation,3.9085,11.5385
