@@ -28,29 +28,29 @@
                 <tr th:if="${saleCount}">
                     <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${saleCount}">000</b>
-                        <div th:text="#{page.neighbourhood.for_sale}">Sales</div>
+                        <div th:text="#{page.place.for_sale}">Sales</div>
                     </td>
                     <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${saleAveragePrice}">$$$</b>
-                        <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
+                        <div th:text="#{page.place.average_price}">Average Price</div>
                     </td>
                     <td class="text-center text-top" th:classappend="${rentalCount} ? 'padding-bottom'">
                         <b class="text-larger" th:text="${salePriceRange}">$$$</b>
-                        <div th:text="#{page.neighbourhood.price}">Price Range</div>
+                        <div th:text="#{page.place.price}">Price Range</div>
                     </td>
                 </tr>
                 <tr th:if="${rentalCount}">
                     <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalCount}">000</b>
-                        <div th:text="#{page.neighbourhood.for_rent}">Rentals</div>
+                        <div th:text="#{page.place.for_rent}">Rentals</div>
                     </td>
                     <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalAveragePrice}">$$$</b>
-                        <div th:text="#{page.neighbourhood.average_price}">Average Price</div>
+                        <div th:text="#{page.place.average_price}">Average Price</div>
                     </td>
                     <td class="text-center text-top">
                         <b class="text-larger" th:text="${rentalPriceRange}">$$$</b>
-                        <div th:text="#{page.neighbourhood.price}">Price Range</div>
+                        <div th:text="#{page.place.price}">Price Range</div>
                     </td>
                 </tr>
             </table>
@@ -112,46 +112,98 @@
         <div class="margin-top" id="about-container" th:if="${place?.description}">
             <hr/>
             <h2 th:text="#{page.neighbourhood.section.about(${neighbourhood.name})}">TITLE</h2>
-            <div class="margin-bottom" th:utext="${place.descriptionHtml}">DESCRIPTION</div>
-        </div>
+            <div th:utext="${place.descriptionHtml}">DESCRIPTION</div>
 
-        <!-- SCHOOLS -->
-        <div class="margin-top" id="school-container" th:if="${schools}">
-            <hr/>
-            <h2 th:text="#{page.neighbourhood.section.schools(${neighbourhood.name})}">TITLE</h2>
-            <table class="table table-striped">
-                <tr class="d-none d-md-table-row">
-                    <th></th>
-                    <th th:text="#{page.neighbourhood.academic-systems}" width="25%">System</th>
-                    <th th:text="#{page.neighbourhood.levels}" width="30%">Level</th>
-                </tr>
-                <tr th:each="school : ${schools}">
-                    <td>
-                        <a target="_blank" th:href="${school.websiteUrl}" th:if="${school.websiteUrl}"
-                           th:text="${school.name}">
-                            SCHOOL NAME
-                        </a>
-                        <div th:if="!${school.websiteUrl}" th:text="${school.name}">SCHOOL NAME</div>
-                        <div class="text-small">
-                            <span th:if="${school.private}" th:text="#{page.neighbourhood.private}">PRIVATE</span>
-                            <span th:if="${school.international} AND ${school.private}">-</span>
-                            <span th:if="${school.international}" th:text="#{page.neighbourhood.international}">INTERNATIONAL</span>
-                        </div>
-                        <table class="d-block d-md-none text-small w-100 margin-top-small">
-                            <tr th:if="!${school.academicSystems.isEmpty()}">
-                                <th class="text-top" th:text="#{page.neighbourhood.academic-systems}">System</th>
-                                <td class="padding-left" th:text="${school.academicSystemsText}">SYSTEM</td>
-                            </tr>
-                            <tr th:if="!${school.levels.isEmpty()}">
-                                <th th:text="#{page.neighbourhood.levels}">System</th>
-                                <td class="padding-left" th:text="${school.levelsText}">SYSTEM</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td class="d-none d-md-table-cell" th:text="${school.academicSystemsText}">SYSTEM</td>
-                    <td class="d-none d-md-table-cell" th:text="${school.levelsText}">LEVELS</td>
-                </tr>
-            </table>
+            <!-- SCHOOLS -->
+            <div class="margin-top-2x" id="school-container" th:if="${schools}">
+                <h3 th:text="#{page.neighbourhood.section.schools}">TITLE</h3>
+                <table class="table table-striped">
+                    <tr class="d-none d-md-table-row">
+                        <th></th>
+                        <th th:text="#{page.place.academic-systems}" width="25%">System</th>
+                        <th th:text="#{page.place.levels}" width="30%">Level</th>
+                        <th width="1%"></th>
+                    </tr>
+                    <tr th:each="school : ${schools}">
+                        <td>
+                            <div>
+                                <a target="_blank" th:href="${school.websiteUrl}"
+                                   th:if="${school.websiteUrl}"
+                                   th:text="${school.name}">NAME</a>
+                                <span th:if="!${school.websiteUrl}" th:text="${school.name}">NAME</span>
+                            </div>
+                            <table class="d-block d-md-none text-small w-100 margin-top-small">
+                                <tr th:if="!${school.academicSystems.isEmpty()}">
+                                    <th class="text-top" th:text="#{page.place.academic-systems}">System</th>
+                                    <td class="padding-left" th:text="${school.academicSystemsText}">SYSTEM</td>
+                                </tr>
+                                <tr th:if="!${school.levels.isEmpty()}">
+                                    <th th:text="#{page.place.levels}">System</th>
+                                    <td class="padding-left" th:text="${school.levelsText}">SYSTEM</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="d-none d-md-table-cell" th:text="${school.academicSystemsText}">SYSTEM</td>
+                        <td class="d-none d-md-table-cell" th:text="${school.levelsText}">LEVELS</td>
+                        <td width="1%">
+                            <span th:if="${school.private}" th:text="#{page.place.private}">PRIVATE</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- HOSPITAL -->
+            <div class="margin-top-2x" id="hospital-container" th:if="${hospitals}">
+                <h3 th:text="#{page.neighbourhood.section.hospitals}">TITLE</h3>
+                <table class="table table-striped">
+                    <tr th:each="hospital : ${hospitals}">
+                        <td>
+                            <a target="_blank" th:href="${hospital.websiteUrl}"
+                               th:if="${hospital.websiteUrl}"
+                               th:text="${hospital.name}">NAME</a>
+                            <span th:if="!${hospital.websiteUrl}" th:text="${hospital.name}">NAME</span>
+                        </td>
+                        <td width="1%">
+                            <span th:if="${hospital.private}" th:text="#{page.place.private}">PRIVATE</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- MARKETS -->
+            <div class="margin-top-2x" id="market-container" th:if="${markets}">
+                <h3 th:text="#{page.neighbourhood.section.markets}">TITLE</h3>
+                <table class="table table-striped">
+                    <tr th:each="market : ${markets}">
+                        <td>
+                            <a target="_blank" th:href="${market.websiteUrl}"
+                               th:if="${market.websiteUrl}"
+                               th:text="${market.name}">NAME</a>
+                            <span th:if="!${market.websiteUrl}" th:text="${market.name}">NAME</span>
+                        </td>
+                        <td width="1%">
+                        <span th:if="${market.type.name == 'SUPERMARKET'}" th:text="#{page.place.supermarket}">
+                            SUPERMARKET
+                        </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- TODO -->
+            <div class="margin-top-2x" id="todo-container" th:if="${todos}">
+                <h3 th:text="#{page.neighbourhood.section.todo}">TITLE</h3>
+                <table class="table table-striped">
+                    <tr th:each="todo : ${todos}">
+                        <td>
+                            <a target="_blank" th:href="${todo.websiteUrl}"
+                               th:if="${todo.websiteUrl}"
+                               th:text="${todo.name}">NAME</a>
+                            <span th:if="!${todo.websiteUrl}" th:text="${todo.name}">NAME</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 

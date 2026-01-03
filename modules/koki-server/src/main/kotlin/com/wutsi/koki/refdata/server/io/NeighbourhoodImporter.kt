@@ -12,7 +12,6 @@ import org.apache.commons.csv.CSVRecord
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.InputStream
-import java.text.Normalizer
 
 @Service
 class NeighbourhoodImporter(
@@ -58,7 +57,7 @@ class NeighbourhoodImporter(
                 }
                 val id = record.get(RECORD_ID).toLong()
                 val cityName = record.get(RECORD_CITY)
-                val city = cities[toAscii(cityName.lowercase())]
+                val city = cities[locationService.toAscii(cityName.lowercase())]
                 if (city == null) {
                     errors.add(ImportMessage(row.toString(), "Invalid city: $city"))
                     continue
@@ -124,17 +123,11 @@ class NeighbourhoodImporter(
 
     private fun update(neighbourhood: LocationEntity, record: CSVRecord, city: LocationEntity) {
         neighbourhood.name = record.get(RECORD_NAME)
-        neighbourhood.asciiName = toAscii(record.get(RECORD_NAME))
         neighbourhood.parentId = city.id
         neighbourhood.country = city.country
         neighbourhood.latitude = toDouble(record, RECORD_LATITUDE)
         neighbourhood.longitude = toDouble(record, RECORD_LONGITUDE)
         locationService.save(neighbourhood)
-    }
-
-    private fun toAscii(str: String): String {
-        val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
-        return REGEX_UNACCENT.replace(temp, "")
     }
 
     private fun toDouble(record: CSVRecord, colum: Int): Double? {

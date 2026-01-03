@@ -14,7 +14,7 @@ import java.util.Date
 
 object PlaceFixtures {
     // Schools
-    val place = Place(
+    val neighborhood = Place(
         id = 1000,
         heroImageUrl = "https://picsum.photos/800/600",
         name = "International School of Montreal",
@@ -208,24 +208,24 @@ object PlaceFixtures {
     )
 
     // Place Summaries for search results
-    val places = listOf(place, catholicSchool, park, communityPark)
+    val places = listOf(neighborhood, catholicSchool, park, communityPark)
 
     val placeSummaries = listOf(
         PlaceSummary(
-            id = place.id,
-            heroImageUrl = place.heroImageUrl,
-            neighbourhoodId = place.neighbourhoodId,
-            type = place.type,
-            name = place.name,
-            summary = place.summary,
-            summaryFr = place.summaryFr,
-            rating = place.rating,
-            status = place.status,
-            academicSystems = place.academicSystems,
-            diplomas = place.diplomas,
-            faith = place.faith,
-            levels = place.levels,
-            websiteUrl = place.websiteUrl,
+            id = neighborhood.id,
+            heroImageUrl = neighborhood.heroImageUrl,
+            neighbourhoodId = neighborhood.neighbourhoodId,
+            type = neighborhood.type,
+            name = neighborhood.name,
+            summary = neighborhood.summary,
+            summaryFr = neighborhood.summaryFr,
+            rating = neighborhood.rating,
+            status = neighborhood.status,
+            academicSystems = neighborhood.academicSystems,
+            diplomas = neighborhood.diplomas,
+            faith = neighborhood.faith,
+            levels = neighborhood.levels,
+            websiteUrl = neighborhood.websiteUrl,
             international = true,
             private = true
         ),
@@ -244,39 +244,88 @@ object PlaceFixtures {
             faith = catholicSchool.faith,
             levels = catholicSchool.levels,
             websiteUrl = catholicSchool.websiteUrl,
-        ),
-        PlaceSummary(
-            id = park.id,
-            heroImageUrl = park.heroImageUrl,
-            neighbourhoodId = park.neighbourhoodId,
-            type = park.type,
-            name = park.name,
-            summary = park.summary,
-            summaryFr = park.summaryFr,
-            rating = park.rating,
-            status = catholicSchool.status,
-            academicSystems = catholicSchool.academicSystems,
-            diplomas = catholicSchool.diplomas,
-            faith = catholicSchool.faith,
-            levels = catholicSchool.levels,
-        ),
-        PlaceSummary(
-            id = communityPark.id,
-            heroImageUrl = communityPark.heroImageUrl,
-            neighbourhoodId = communityPark.neighbourhoodId,
-            type = communityPark.type,
-            name = communityPark.name,
-            summary = communityPark.summary,
-            summaryFr = communityPark.summaryFr,
-            rating = communityPark.rating,
-            status = catholicSchool.status,
-            academicSystems = catholicSchool.academicSystems,
-            diplomas = catholicSchool.diplomas,
-            faith = catholicSchool.faith,
-            levels = catholicSchool.levels,
-            websiteUrl = communityPark.websiteUrl,
-            international = true,
             private = true
+        ),
+        PlaceSummary(
+            id = 3333,
+            neighbourhoodId = catholicSchool.neighbourhoodId,
+            type = PlaceType.SCHOOL,
+            name = "Ecole du Centre",
+            academicSystems = listOf("CM", "FR"),
+            diplomas = listOf(Diploma.DIPLOMA, Diploma.IB),
+            levels = listOf(SchoolLevel.PRESCHOOL),
+        ),
+        PlaceSummary(
+            id = 3334,
+            neighbourhoodId = catholicSchool.neighbourhoodId,
+            type = PlaceType.SCHOOL,
+            name = "University Academy",
+            academicSystems = listOf("CM", "FR"),
+            diplomas = listOf(Diploma.DIPLOMA, Diploma.MASTER, Diploma.BACHELOR, Diploma.PHD),
+            levels = listOf(SchoolLevel.UNIVERSITY),
+        ),
+
+        PlaceSummary(
+            id = 5555,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.HOSPITAL,
+            name = "Clinique Sainte-Marie",
+            private = true,
+            international = true,
+        ),
+        PlaceSummary(
+            id = 5556,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.HOSPITAL,
+            name = "Hopital Général du Lac",
+            private = false,
+            international = false,
+            websiteUrl = "https://www.hopitalgeneraldulac.qc.ca"
+        ),
+
+        PlaceSummary(
+            id = 6666,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.MARKET,
+            name = "Marche Mokolo",
+            international = false,
+        ),
+        PlaceSummary(
+            id = 6667,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.MARKET,
+            name = "Marche Central",
+            international = false,
+        ),
+        PlaceSummary(
+            id = 6668,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.SUPERMARKET,
+            name = "DOVV",
+            international = true,
+            websiteUrl = "https://www.dovv.com"
+        ),
+
+        PlaceSummary(
+            id = 7777,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.MUSEUM,
+            name = "Musée des Beaux-Arts",
+            websiteUrl = "https://www.mbam.qc.ca"
+        ),
+        PlaceSummary(
+            id = 7777,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.PARK,
+            name = "Parcours Vita",
+            websiteUrl = "https://www.facebook.com/ParcoursVitaDeYaounde/"
+        ),
+        PlaceSummary(
+            id = 7777,
+            neighbourhoodId = communityPark.neighbourhoodId,
+            type = PlaceType.MUSEUM,
+            name = "Musée d'Art Contemporain",
+            websiteUrl = "https://macm.org/"
         ),
     )
 }

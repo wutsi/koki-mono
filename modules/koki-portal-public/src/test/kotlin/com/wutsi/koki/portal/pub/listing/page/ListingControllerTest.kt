@@ -99,6 +99,13 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-share-navbar")
         assertElementNotPresent(".listing-status") // Status badge - only for sold listings
         assertElementCount("#similar-listings .listing-card", similar.size) // Similar listings
+        assertElementPresent("#description-container")
+        assertElementPresent("#legal-container")
+        assertElementPresent("#amenity-container")
+        assertElementPresent("#school-container")
+        assertElementPresent("#hospital-container")
+        assertElementPresent("#market-container")
+        assertElementPresent("#todo-container")
     }
 
     @Test

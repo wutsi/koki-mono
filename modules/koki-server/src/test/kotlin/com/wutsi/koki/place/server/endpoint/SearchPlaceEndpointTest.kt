@@ -90,7 +90,7 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
     fun `search by multiple types`() {
         // WHEN
         val response = rest.getForEntity(
-            "/v1/places?type=SCHOOL&type=PARK",
+            "/v1/places?type=SCHOOL&type=HOSPITAL",
             SearchPlaceResponse::class.java
         )
 

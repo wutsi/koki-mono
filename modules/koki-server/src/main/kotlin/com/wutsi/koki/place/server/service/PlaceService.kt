@@ -82,7 +82,8 @@ class PlaceService(
             query.setParameter("statuses", statuses)
         }
         if (!keyword.isNullOrBlank()) {
-            query.setParameter("keyword", "%${toAscii(keyword).uppercase()}%")
+            val ascii = toAscii(keyword).uppercase()
+            query.setParameter("keyword", "%$ascii%")
         }
 
         query.firstResult = offset
@@ -95,11 +96,10 @@ class PlaceService(
         // Ensure its unique
         val neighbourhood = locationService.get(request.neighbourhoodId, LocationType.NEIGHBORHOOD)
         val asciiName = toAscii(request.name)
-        val duplicate = dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
-            asciiName = asciiName,
-            type = request.type,
+        val duplicate = findPlace(
+            name = request.name,
             cityId = neighbourhood.parentId ?: -1,
-            deleted = false,
+            type = request.type,
         )
         if (duplicate != null) {
             throw ConflictException(
@@ -169,6 +169,7 @@ class PlaceService(
 
     @Transactional
     fun save(place: PlaceEntity): PlaceEntity {
+        place.asciiName = toAscii(place.name)
         place.modifiedAt = Date()
         return dao.save(place)
     }
@@ -183,13 +184,26 @@ class PlaceService(
      * @return Existing school entity or null if not found
      */
     fun findSchool(name: String, cityId: Long): PlaceEntity? {
-        val asciiName = toAscii(name)
-        return dao.findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
-            asciiName = asciiName,
-            type = PlaceType.SCHOOL,
-            cityId = cityId,
-            deleted = false
-        )
+        return findPlace(name, cityId, PlaceType.SCHOOL)
+    }
+
+    /**
+     * Find existing place by name, city, and type, or return null if not found.
+     * Used by importers for idempotent place creation/updates.
+     * Places are uniquely identified by name + cityId + type.
+     *
+     * @param name The place name (will be normalized to ASCII)
+     * @param cityId The ID of the city where the place is located
+     * @param type The type of place
+     * @return Existing place entity or null if not found
+     */
+    fun findPlace(name: String, cityId: Long, type: PlaceType): PlaceEntity? {
+        return search(
+            keyword = name,
+            cityIds = listOf(cityId),
+            types = listOf(type),
+            limit = 1,
+        ).firstOrNull()
     }
 
     /**
@@ -216,7 +230,34 @@ class PlaceService(
         )
     }
 
-    private fun toAscii(name: String): String {
-        return StringUtils.toAscii(name).lowercase()
+    /**
+     * Create a new place entity without triggering content generation.
+     * Used by importers for bulk imports from CSV.
+     * Places are created with status=PUBLISHED and no AI content generation.
+     *
+     * @param name The place name
+     * @param type The type of place
+     * @param neighbourhoodId The ID of the neighbourhood where the place is located
+     * @param cityId The ID of the city where the place is located
+     * @return The created place entity
+     */
+    @Transactional
+    fun createPlace(name: String, type: PlaceType, neighbourhoodId: Long, cityId: Long): PlaceEntity {
+        return dao.save(
+            PlaceEntity(
+                name = name,
+                asciiName = toAscii(name),
+                type = type,
+                status = PlaceStatus.PUBLISHED,
+                neighbourhoodId = neighbourhoodId,
+                cityId = cityId,
+            )
+        )
+    }
+
+    fun toAscii(name: String): String {
+        return StringUtils.toAscii(name)
+            .replace(" ", "-")
+            .lowercase()
     }
 }

@@ -85,7 +85,7 @@ class ListingController(
 
         /* Place */
         if (listing.address?.neighbourhood?.id != null) {
-            loadPlace(listing.address.neighbourhood.id, model)
+            loadPlaces(listing.address.neighbourhood.id, model)
         }
 
         /* Page */
@@ -164,15 +164,40 @@ class ListingController(
         model.addAttribute("toastMessage", message)
     }
 
-    private fun loadPlace(neighbourhoodId: Long, model: Model): PlaceModel? {
-        val place = placeService.search(
+    private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {
+        val places = placeService.search(
             neighbourhoodIds = listOf(neighbourhoodId),
-            types = listOf(PlaceType.NEIGHBORHOOD),
             statuses = listOf(PlaceStatus.PUBLISHED),
-            limit = 1,
-        ).items.firstOrNull() ?: return null
+            types = listOf(
+                PlaceType.NEIGHBORHOOD,
+                PlaceType.SCHOOL,
+                PlaceType.PARK,
+                PlaceType.MUSEUM,
+                PlaceType.HOSPITAL,
+                PlaceType.MARKET,
+                PlaceType.SUPERMARKET,
+            ),
+            limit = 50,
+        ).items.sortedByDescending { school -> school.rating ?: 0.0 }
 
-        model.addAttribute("place", place)
-        return place
+        val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
+        if (place != null) {
+            model.addAttribute("place", place)
+        }
+
+        loadPlaces("schools", listOf(PlaceType.SCHOOL), places, model)
+        loadPlaces("hospitals", listOf(PlaceType.HOSPITAL), places, model)
+        loadPlaces("markets", listOf(PlaceType.MARKET, PlaceType.SUPERMARKET), places, model)
+        loadPlaces("todos", listOf(PlaceType.PARK, PlaceType.MUSEUM), places, model)
+        return places
+    }
+
+    private fun loadPlaces(name: String, types: List<PlaceType>, places: List<PlaceModel>, model: Model) {
+        val items = places.filter { types.contains(it.type) }
+            .sortedByDescending { (it.websiteUrl?.let { 10.0 } ?: 0.0) + (it.rating ?: 0.0) }
+
+        if (items.isNotEmpty()) {
+            model.addAttribute(name, items)
+        }
     }
 }

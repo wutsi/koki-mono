@@ -1,0 +1,44 @@
+name,neighbourhood,city,private,international,websiteUrl,rating,ratingSource,latitude,longitude
+Premier Health Centre,Bastos,Yaoundé,True,True,https://www.premierhealthcentrescameroon.com,4.5,Google Maps,3.896,11.5095
+Polyclinique du Palais,Bastos,Yaoundé,True,True,,4.4,Google Maps,3.8943,11.5036
+Cabinet Médical International,Bastos,Yaoundé,True,True,,4.2,Patient Reviews,3.8912,11.513
+Clinique Frantz Fanon,Bastos,Yaoundé,True,True,,4.2,Patient Reviews,3.8895,11.512
+Polyclinique Groupe Médical St-Hilaire,Bastos,Yaoundé,True,True,,4.1,Google Maps,3.8944,11.5087
+Fondation Ad Lucem (Direction),Bastos,Yaoundé,True,False,https://fondationadlucem-cm.org,3.8,Official Site,3.886,11.511
+Hôpital de District de Biyem-Assi,Biyem-Assi,Yaoundé,False,False,,3.2,Public Record,3.8263,11.4874
+Clinique du Mfoundi,Centre Ville,Yaoundé,True,True,,4.3,Local Reputation,3.868,11.515
+Clinique du Parc,Centre Ville,Yaoundé,True,True,,4.2,Patient Reviews,3.865,11.512
+Centre Pasteur du Cameroun,Centre Ville,Yaoundé,False,True,https://www.pasteur-yaounde.org,4.0,Official Site,3.8737,11.5111
+Centre des Urgences de Yaoundé (CURY),Centre Ville,Yaoundé,False,True,,4.0,InovEdu,3.8705,11.511
+Hope Services Clinic and Maternity,Centre Ville,Yaoundé,True,False,https://yaounde.hopeserviceshospital.com,4.0,Patient Testimonials,3.87,11.515
+Hôpital Central de Yaoundé,Centre Ville,Yaoundé,False,False,https://www.hopitalcentral.org,3.4,Google Maps,3.8714,11.5104
+Hôpital de District de la Cité Verte,Cité Verte,Yaoundé,False,False,,3.3,Public Record,3.8707,11.4926
+Hôpital de District de Djoungolo,Djoungolo,Yaoundé,False,False,,3.2,Public Record,3.8851,11.5331
+Hôpital de District d'Efoulan,Efoulan,Yaoundé,False,False,,3.1,Public Record,3.8295,11.511
+Hôpital Militaire de Yaoundé,Ekounou,Yaoundé,False,True,,4.1,Local Patient Reviews,3.8431,11.5362
+Centre Médical de la Renaissance,Emana,Yaoundé,True,True,https://renaissance-medical.com,4.1,Google Maps,3.9215,11.5182
+Centre Hospitalier d'Essos (CNPS),Essos,Yaoundé,False,False,,3.7,Google Maps,3.874,11.5409
+Polyclinique Innov'a,Etoa-Meki,Yaoundé,True,True,,4.1,Patient Reviews,3.8812,11.5215
+Etoug-Ebe Baptist Hospital,Etoug-Ebe,Yaoundé,True,False,https://cbchealthservices.org,4.2,Google Maps,3.8565,11.4875
+CNRPH (Handicap Center),Etoug-Ebe,Yaoundé,False,True,,4.1,Academic Review,3.852,11.489
+Clinique Fouda,Fouda,Yaoundé,True,True,,4.0,Local Reputation,3.869,11.527
+Hôpital Jamot,Mballa II,Yaoundé,False,False,,3.4,Google Maps,3.889,11.5312
+Chantal Biya Foundation (CIRCB),Melen,Yaoundé,False,True,http://www.circb.cm,4.4,Official Site,3.864,11.498
+Centre Hospitalier Universitaire (CHU),Melen,Yaoundé,False,True,,3.5,Academic Review,3.8627,11.4966
+Hôpital de District de Mendong,Mendong,Yaoundé,False,False,,3.2,Public Record,3.818,11.478
+CH Dominicain St. Martin de Porres,Mvog-Betsi,Yaoundé,True,True,https://www.centrehospitalierdominicain.org,4.3,Patient Reviews,3.858,11.484
+Ad Lucem Mvolyé,Mvolyé,Yaoundé,True,False,https://fondationadlucem-cm.org,3.8,Google Maps,3.845,11.508
+CS Ad Lucem Okoui,Mvolyé,Yaoundé,True,False,https://fondationadlucem-cm.org,3.5,Official Site,3.842,11.505
+CHRACERH,Ngousso,Yaoundé,False,True,http://www.chracerh.cm,4.3,Google Maps,3.9015,11.539
+Hôpital Gynéco-Obstétrique (HGOPY),Ngousso,Yaoundé,False,True,https://www.hgopy.cm,3.9,Google Maps,3.8752,11.5299
+Hôpital Général de Yaoundé (HGY),Ngousso,Yaoundé,False,True,https://hopitalgeneraldeyaounde.cm,3.8,Google Maps,3.9066,11.5414
+Hôpital de District de Nkolbisson,Nkolbisson,Yaoundé,False,False,,3.1,Public Record,3.871,11.464
+Hôpital de District de Nkolndongo,Nkolndongo,Yaoundé,False,False,,3.3,Public Record,3.8554,11.5346
+CMA de Nkomo,Nkomo,Yaoundé,False,False,,3.1,Public Record,3.832,11.558
+Centre Médical Le Jourdain,Nlongkak,Yaoundé,True,True,,4.0,Google Maps,3.8821,11.5137
+Hôpital Ad Lucem Obobogo,Obobogo,Yaoundé,True,False,https://fondationadlucem-cm.org,3.9,Google Maps,3.821,11.495
+Magrabi ICO Cameroon Eye Institute,Olembe,Yaoundé,True,True,http://www.micei.org,4.6,Google Maps,3.955,11.52
+Ad Lucem Olembe,Olembe,Yaoundé,True,True,https://fondationadlucem-cm.org,4.0,Official Site,3.952,11.518
+Centre Médical la Cathédrale (CMC),Omnisport,Yaoundé,True,True,https://www.cmc-yaounde.com,4.3,Google Maps,3.8841,11.5348
+Polyclinique de Tsinga,Tsinga,Yaoundé,True,True,,4.0,Google Maps,3.8821,11.5015
+Hôpital de Référence Zalom,Zalom,Yaoundé,True,True,https://fondationadlucem-cm.org,4.4,Official Site,3.84,11.59
