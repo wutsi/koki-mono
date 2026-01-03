@@ -38,7 +38,7 @@ abstract class Agent(
         var iteration = 0
         val logger = getLogger()
         val memory: MutableList<String> = mutableListOf()
-
+        val start = System.currentTimeMillis()
         while (true) {
             iteration++
 
@@ -51,9 +51,11 @@ abstract class Agent(
 
             try {
                 if (run(iteration, query, memory, files)) {
+                    logger.info("llm=${llm::class.java.simpleName} iteration=$iteration duration=" + duration(start) + "s success=true")
                     break
                 }
             } catch (ex: Exception) {
+                logger.info("llm=${llm::class.java.simpleName} iteration=$iteration duration=" + duration(start) + "s success=false error=${ex.javaClass.simpleName}")
                 throw AgentException("Failure", ex)
             }
         }
@@ -63,6 +65,10 @@ abstract class Agent(
     internal fun run(iteration: Int, prompt: String, memory: MutableList<String>, files: List<File>): Boolean {
         val response = ask(iteration, prompt, files, memory)
         return decide(iteration, response, memory)
+    }
+
+    private fun duration(start: Long): Long {
+        return (System.currentTimeMillis() - start) / 1000
     }
 
     private fun decide(
@@ -76,7 +82,7 @@ abstract class Agent(
         // Text
         response.messages.flatMap { message -> message.content }
             .forEach { content ->
-                if (content.text != null) {
+                if (!content.text.isNullOrEmpty()) {
                     if (logger.isInfoEnabled()) {
                         logger.info("llm=${llm::class.java.simpleName} iteration=$iteration step=decide text\n${content.text}")
                     }
