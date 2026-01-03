@@ -19,7 +19,11 @@ class NeighbourhoodContentGenerator(
     private val jsonMapper: JsonMapper,
     private val ratingDao: PlaceRatingRepository,
 ) : PlaceContentGenerator {
-    override fun generate(place: PlaceEntity, neighbourhood: LocationEntity, city: LocationEntity) {
+    override fun generate(
+        place: PlaceEntity,
+        neighbourhood: LocationEntity,
+        city: LocationEntity
+    ) {
         val agent = factory.createNeighborhoodContentGeneratorAgent(neighbourhood, city)
         val json = agent.run("")
         val result = jsonMapper.readValue(json, NeighbourhoodContentGeneratorResult::class.java)

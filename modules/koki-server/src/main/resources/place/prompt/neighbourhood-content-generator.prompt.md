@@ -44,42 +44,34 @@ Generate the content in JSON formant with the following fields:
 - DO NOT makeup links to points of interest, only include them if they are real and relevant to the description
 - Ensure the content is unique and not copied from other sources
 - Here are rating instructions:
-    - Security Rating:
-        - If there are 10+ western embassies located in that neighborhood, the rating rating should 5. Western embassies
-          are defined as embassies from North America, Europe, Australia, and New Zealand.
-            - DO NOT consider embassies from non-western countries for the security rating.
-            - DO NOT consider embassies not in the neighborhood, even if they are close by.
-        - Area with multiple gated communities, private security firms, and low crime rates should have high security
-          rating (4).
-        - Area government offices should have an average rating (3 to 4) depending on the level of presence and the
-          sensitivity of the office. Examples of sensitive offices include presidency palace, police or military
-          headquarters, major courthouses.
-        - Areas with regular petty crimes (theft, pickpocketing) should have low do medium rating (2 or 3), depending on
-          frequency
-        - Area relying on community policing should have low average rating (1 to 2)
-        - Areas with high crimes should have very low rating (1)
+    - Security Rating: Security rating depends on crime rate, police presence, and presence of government or sensitive
+      offices and presence of embassies.
+        - Give 5 for area having multiple (5+) western embassies (from North America, Europe, Australia, and
+          New Zealand).
+        - Give 4 for area having gated communities with private security.
+        - Give 4 for area having multiple (5+) government or sensitive offices (presidency palace, police or
+          military headquarters)
+        - Give 3 for area with regular police presence and security patrols.
+        - Otherwise, give a 2
     - Education Rating:
-        - Area with 5+ private and international schools should have a rating of 5.
-        - Area with less than 5 international schools should have a rating of 4.
-        - Area with multiple high quality private schools (non-international) should have a rating (3 to 4).
-        - Area with public schools only should have average rating of 3.
-        - Area with low school offering should have low rating (1 to 2).
+        - Give 5 for area having private AND international schools offering multiple curriculum.
+        - Give 4 for area having private schools (non-international) OR few international schools.
+        - Give 3 for area having multiple public schools.
+        - Otherwise, give a 2
     - Amenities Rating:
-        - Area with easy access to luxury and international-standard shops/markets, private hospitals/clinics, pharmacy
-          should have a 5.
-        - Area with easy access to shops/markets, hospitals, clinics and pharmacy should have at a rating 3 to 4. You
-          should assign 4 to areas
-          with multiple options in each category or large complex shopping center.
-        - Area with limited access to shops, markets, hospitals should have a lower rating (1 or 2)
+        - Give 5 for area having international-standard markets AND private hospitals.
+        - Give 4 for area having international-standard markets OR private hospitals.
+        - Give 3 for area with local markets and public hospitals.
+        - Otherwise, give a 2
     - Infrastructure Rating:
-        - Poor road conditions should remove 1 point from the maximum rating.
-        - Frequent power outages should remove 1 point from the maximum rating. No penalty for infrequent power outages.
-        - Chronic street flooding issues should remove 1 point from the maximum rating.
-        - Poor internet connectivity should remove 1 point from the maximum rating.
+        - Give a 5 for area with good roads, stable water and electricity supply, and no flooding issues.
+        - Remove 1 point for poor road conditions
+        - Remove 1 point for poor water or electricity supply. Do not remove 2 points for both.
+        - Remove 1 point for chronic street flooding issues.
     - Commute Rating:
-        - Few transport options should remove 1 point from the maximum rating.
-        - Heavy traffic should remove 1 point from the maximum rating.
-        - Poor access to major routes/work should remove 1 point from the maximum rating.
+        - Few transport options should remove 1 point from the maximum rating. Do not remove point for high income area
+          since people have private cars.
+        - Chronic traffic jam should remove 1 point from the maximum rating.
 
 # Available Tools:
 

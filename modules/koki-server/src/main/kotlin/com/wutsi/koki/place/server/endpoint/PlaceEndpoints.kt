@@ -71,6 +71,8 @@ class PlaceEndpoints(
         @RequestParam(required = false, name = "type") types: List<PlaceType>? = null,
         @RequestParam(required = false, name = "status") statuses: List<PlaceStatus>? = null,
         @RequestParam(required = false, name = "q") keyword: String? = null,
+        @RequestParam(required = false, name = "min-rating") minRating: Double? = null,
+        @RequestParam(required = false, name = "max-rating") maxRating: Double? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchPlaceResponse {
@@ -80,6 +82,8 @@ class PlaceEndpoints(
             types = types,
             statuses = statuses,
             keyword = keyword,
+            minRating = minRating,
+            maxRating = maxRating,
             limit = limit,
             offset = offset,
         )

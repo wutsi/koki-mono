@@ -44,6 +44,8 @@ class PlaceService(
         types: List<PlaceType>? = null,
         statuses: List<PlaceStatus>? = null,
         keyword: String? = null,
+        minRating: Double? = null,
+        maxRating: Double? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<PlaceEntity> {
@@ -63,6 +65,12 @@ class PlaceService(
         }
         if (!keyword.isNullOrBlank()) {
             jql.append(" AND UPPER(P.asciiName) LIKE :keyword")
+        }
+        if (minRating != null) {
+            jql.append(" AND P.rating >= :minRating")
+        }
+        if (maxRating != null) {
+            jql.append(" AND P.rating <= :maxRating")
         }
 
         jql.append(" ORDER BY P.name")
@@ -84,6 +92,12 @@ class PlaceService(
         if (!keyword.isNullOrBlank()) {
             val ascii = toAscii(keyword).uppercase()
             query.setParameter("keyword", "%$ascii%")
+        }
+        if (minRating != null) {
+            query.setParameter("minRating", minRating)
+        }
+        if (maxRating != null) {
+            query.setParameter("maxRating", maxRating)
         }
 
         query.firstResult = offset

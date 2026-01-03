@@ -201,4 +201,68 @@ class SearchPlaceEndpointTest : AuthorizationAwareEndpointTest() {
         // Should not include tenant 2 place (200)
         assertTrue(places.none { it.id == 200L })
     }
+
+    @Test
+    fun `search by minimum rating`() {
+        // WHEN
+        val response = rest.getForEntity(
+            "/v1/places?min-rating=4.0",
+            SearchPlaceResponse::class.java
+        )
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val places = response.body!!.places
+        assertEquals(3, places.size) // 100 (4.5), 101 (4.8), 103 (4.2)
+        assertTrue(places.all { it.rating != null && it.rating!! >= 4.0 })
+    }
+
+    @Test
+    fun `search by maximum rating`() {
+        // WHEN
+        val response = rest.getForEntity(
+            "/v1/places?max-rating=3.5",
+            SearchPlaceResponse::class.java
+        )
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val places = response.body!!.places
+        assertEquals(3, places.size) // 102 (3.5), 104 (3.0), 105 (2.5)
+        assertTrue(places.all { it.rating != null && it.rating!! <= 3.5 })
+    }
+
+    @Test
+    fun `search by rating range`() {
+        // WHEN
+        val response = rest.getForEntity(
+            "/v1/places?min-rating=3.0&max-rating=4.5",
+            SearchPlaceResponse::class.java
+        )
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val places = response.body!!.places
+        assertEquals(4, places.size) // 100 (4.5), 102 (3.5), 103 (4.2), 104 (3.0)
+        assertTrue(places.all { it.rating != null && it.rating!! >= 3.0 && it.rating!! <= 4.5 })
+    }
+
+    @Test
+    fun `search by rating with other filters`() {
+        // WHEN
+        val response = rest.getForEntity(
+            "/v1/places?type=SCHOOL&min-rating=4.0",
+            SearchPlaceResponse::class.java
+        )
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val places = response.body!!.places
+        assertEquals(2, places.size) // 101 (4.8), 103 (4.2)
+        assertTrue(places.all { it.type == PlaceType.SCHOOL && it.rating != null && it.rating!! >= 4.0 })
+    }
 }

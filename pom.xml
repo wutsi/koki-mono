@@ -51,9 +51,9 @@
 
     <properties>
         <wutsi-chatbot.version>0.0.5</wutsi-chatbot.version>
-        <wutsi-platform.version>0.0.65</wutsi-platform.version>
+        <wutsi-platform.version>0.0.66</wutsi-platform.version>
         <wutsi-dto.version>0.0.312</wutsi-dto.version>
-        <wutsi-sdk.version>0.0.64</wutsi-sdk.version>
+        <wutsi-sdk.version>0.0.65</wutsi-sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 

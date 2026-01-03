@@ -71,6 +71,7 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#hospital-container")
         assertElementPresent("#market-container")
         assertElementPresent("#todo-container")
+        assertElementPresent("#similar-neighbourhood-container")
     }
 
     @Test
@@ -114,5 +115,6 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#hospital-container")
         assertElementNotPresent("#market-container")
         assertElementNotPresent("#todo-container")
+        assertElementNotPresent("#similar-neighbourhood-container")
     }
 }

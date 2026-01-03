@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class PlaceAgentFactory(private val llmProvider: LLMProvider) {
-    fun createNeighborhoodContentGeneratorAgent(neighbourhood: LocationEntity, city: LocationEntity?): Agent {
+    fun createNeighborhoodContentGeneratorAgent(
+        neighbourhood: LocationEntity,
+        city: LocationEntity?
+    ): Agent {
         return NeighbourhoodContentGeneratorAgent(
             neighbourhood = neighbourhood,
             city = city,
-            llm = llmProvider.chatWithToolsLLM
+            llm = llmProvider.chatWithToolsLLM,
         )
     }
 }

@@ -44,9 +44,10 @@ class PlaceService(
         types: List<PlaceType> = emptyList(),
         statuses: List<PlaceStatus> = emptyList(),
         keyword: String? = null,
+        minRating: Double? = null,
+        maxRating: Double? = null,
         limit: Int = 20,
         offset: Int = 0,
-        fullGraph: Boolean = true,
     ): ResultSetModel<PlaceModel> {
         val response = koki.search(
             neighbourhoodIds = neighbourhoodIds,
@@ -54,6 +55,8 @@ class PlaceService(
             types = types,
             statuses = statuses,
             keyword = keyword,
+            minRating = minRating,
+            maxRating = maxRating,
             limit = limit,
             offset = offset,
         )

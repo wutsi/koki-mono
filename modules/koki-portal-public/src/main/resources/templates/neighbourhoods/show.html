@@ -190,7 +190,7 @@
                 </table>
             </div>
 
-            <!-- TODO -->
+            <!-- TODOS -->
             <div class="margin-top-2x" id="todo-container" th:if="${todos}">
                 <h3 th:text="#{page.neighbourhood.section.todo}">TITLE</h3>
                 <table class="table table-striped">
@@ -203,6 +203,17 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+
+            <!-- SIMILAR NEIGHBOURHOODS -->
+            <div class="margin-right-2x" id="similar-neighbourhood-container" th:if="${similarNeighbourhoods}">
+                <hr/>
+                <h2 th:text="#{page.neighbourhood.section.similar_neighbourhoods}">TITLE</h2>
+                <div class="flex flex-wrap">
+                    <div class="col-12 col-lg-4 col-md-6 " th:each="neighbourhood:${similarNeighbourhoods}">
+                        <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
