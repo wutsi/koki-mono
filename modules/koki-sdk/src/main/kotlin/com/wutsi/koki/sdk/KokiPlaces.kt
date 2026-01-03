@@ -37,6 +37,8 @@ class KokiPlaces(
         types: List<PlaceType> = emptyList(),
         statuses: List<PlaceStatus> = emptyList(),
         keyword: String? = null,
+        minRating: Double? = null,
+        maxRating: Double? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): SearchPlaceResponse {
@@ -48,6 +50,8 @@ class KokiPlaces(
                 "type" to types,
                 "status" to statuses,
                 "q" to keyword,
+                "min-rating" to minRating,
+                "max-rating" to maxRating,
                 "limit" to limit,
                 "offset" to offset,
             )
