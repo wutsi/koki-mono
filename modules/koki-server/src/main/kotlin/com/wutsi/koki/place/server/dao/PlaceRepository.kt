@@ -10,6 +10,7 @@ import java.util.Optional
 interface PlaceRepository : CrudRepository<PlaceEntity, Long> {
     fun findByIdAndDeleted(id: Long, deleted: Boolean): Optional<PlaceEntity>
 
+    @Deprecated("")
     fun findByAsciiNameIgnoreCaseAndTypeAndCityIdAndDeleted(
         asciiName: String,
         type: PlaceType,

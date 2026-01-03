@@ -44,6 +44,7 @@ class LocationService(
 
     @Transactional
     fun save(location: LocationEntity): LocationEntity {
+        location.asciiName = toAscii(location.name)
         return dao.save(location)
     }
 
@@ -110,5 +111,6 @@ class LocationService(
     fun toAscii(str: String): String {
         val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
         return REGEX_UNACCENT.replace(temp, "")
+            .replace(" ", "-")
     }
 }

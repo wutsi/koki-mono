@@ -7,7 +7,10 @@ import com.wutsi.koki.place.dto.GetPlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
+import com.wutsi.koki.place.server.io.HospitalImporter
+import com.wutsi.koki.place.server.io.MarketImporter
 import com.wutsi.koki.place.server.io.SchoolImporter
+import com.wutsi.koki.place.server.io.ToDoImporter
 import com.wutsi.koki.place.server.mapper.PlaceMapper
 import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.logger.KVLogger
@@ -28,6 +31,9 @@ class PlaceEndpoints(
     private val mapper: PlaceMapper,
     private val logger: KVLogger,
     private val schoolImporter: SchoolImporter,
+    private val hospitalImporter: HospitalImporter,
+    private val marketImporter: MarketImporter,
+    private val parkImporter: ToDoImporter,
 ) {
     @PostMapping
     fun create(
@@ -88,8 +94,22 @@ class PlaceEndpoints(
     }
 
     @GetMapping("/import/schools")
-    fun importSchools(): ImportResponse {
-        logger.add("import_type", "schools")
-        return schoolImporter.import()
+    fun importSchools(@RequestParam country: String): ImportResponse {
+        return schoolImporter.import(country)
+    }
+
+    @GetMapping("/import/hospitals")
+    fun importHospitals(@RequestParam country: String): ImportResponse {
+        return hospitalImporter.import(country)
+    }
+
+    @GetMapping("/import/markets")
+    fun importMarkets(@RequestParam country: String): ImportResponse {
+        return marketImporter.import(country)
+    }
+
+    @GetMapping("/import/todos")
+    fun importTodos(@RequestParam country: String): ImportResponse {
+        return parkImporter.import(country)
     }
 }

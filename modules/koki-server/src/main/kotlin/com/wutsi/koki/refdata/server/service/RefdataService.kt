@@ -1,6 +1,9 @@
 package com.wutsi.koki.refdata.server.service
 
+import com.wutsi.koki.place.server.io.HospitalImporter
+import com.wutsi.koki.place.server.io.MarketImporter
 import com.wutsi.koki.place.server.io.SchoolImporter
+import com.wutsi.koki.place.server.io.ToDoImporter
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.refdata.server.io.AmenityImporter
 import com.wutsi.koki.refdata.server.io.CategoryImporter
@@ -16,6 +19,9 @@ class RefdataService(
     private val geonamesImporter: GeonamesImporter,
     private val neighbourhoodImporter: NeighbourhoodImporter,
     private val schoolImporter: SchoolImporter,
+    private val hospitalImporter: HospitalImporter,
+    private val marketImporter: MarketImporter,
+    private val toDoImporter: ToDoImporter
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RefdataService::class.java)
@@ -57,11 +63,16 @@ class RefdataService(
             neighbourhoodImporter.import(country)
 
             LOGGER.info("$country - Loading schools")
-            importSchools()
-        }
-    }
+            schoolImporter.import(country)
 
-    private fun importSchools() {
-        schoolImporter.import()
+            LOGGER.info("$country - Loading hospitals")
+            hospitalImporter.import(country)
+
+            LOGGER.info("$country - Loading markets")
+            marketImporter.import(country)
+
+            LOGGER.info("$country - Loading todos")
+            toDoImporter.import(country)
+        }
     }
 }

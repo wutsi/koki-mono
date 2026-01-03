@@ -1,0 +1,21 @@
+-- Import Parks Endpoint Test Fixture
+-- Creates necessary locations (cities and neighbourhoods) for park import testing
+
+-- Insert Cameroon as country
+INSERT INTO T_LOCATION (id, parent_fk, type, country, name, ascii_name)
+    VALUES (2233387, null, 1, 'CM', 'Cameroon', 'Cameroon');
+
+-- Insert Centre state
+INSERT INTO T_LOCATION (id, parent_fk, type, country, name, ascii_name)
+    VALUES (2233376, 2233387, 2, 'CM', 'Centre', 'Centre');
+
+-- Insert Yaoundé city
+INSERT INTO T_LOCATION (id, parent_fk, type, country, name, ascii_name)
+    VALUES (6297005, 2233376, 3, 'CM', 'Yaoundé', 'Yaounde');
+
+
+-- Insert an existing park to test update scenario
+INSERT INTO T_PLACE(id, created_by_fk, name, ascii_name, type, status, neighbourhood_fk, city_fk, deleted, website_url, rating)
+    VALUES (600001, null, 'Eco-Park (Ahala)', 'Eco-Park-(Ahala)',
+            4, 0, 500001, 6297005, false, 'https://old-url.com', 3.0);
+

@@ -31,7 +31,7 @@ The school information should be represented in a CSV having the following struc
 
 # Ask
 
-Generate the school information for the up to 5 most relevant schools in the following area:
+Generate the school information for the following area:
 
 - Neighborhood: Quartier Lac
 - City: Yaounde
