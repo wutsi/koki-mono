@@ -8,18 +8,20 @@ import tools.jackson.databind.json.JsonMapper
 import kotlin.test.assertNotNull
 
 class NeighbourhoodContentGeneratorAgentTest {
-    //    private val llm = Kimi(
+//    private val llm = Kimi(
 //        apiKey = System.getenv("KIMI_API_KEY"),
 //        model = "kimi-k2-turbo-preview",
 //        readTimeoutMillis = 120000,
 //    )
+
     private val llm = Deepseek(
         apiKey = System.getenv("DEEPSEEK_API_KEY"),
         model = "deepseek-chat",
         readTimeoutMillis = 120000,
+        websearchDelayMillis = 500,
     )
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val neighbourhood = LocationEntity(name = "Bastos", country = "CM")
+    private val neighbourhood = LocationEntity(name = "Odza", country = "CM")
     private val agent = NeighbourhoodContentGeneratorAgent(city, neighbourhood, llm)
 
     @Test
