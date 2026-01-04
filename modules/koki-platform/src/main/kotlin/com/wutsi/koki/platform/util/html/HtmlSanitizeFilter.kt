@@ -2,12 +2,13 @@ package com.wutsi.koki.platform.util.html
 
 import com.wutsi.koki.platform.util.JsoupHelper
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.util.Locale
 
 class HtmlSanitizeFilter : HtmlFilter {
     companion object {
-        val ID_CSS_BLACKLIST: MutableList<String?> = mutableListOf<String?>(
+        val ID_CSS_BLACKLIST = listOf<String>(
             "footer",
             "comments",
             "menu-ay-side-menu-mine",
@@ -35,10 +36,34 @@ class HtmlSanitizeFilter : HtmlFilter {
             "jnews_inline_related_post_wrapper",
             "ads-wrapper",
 
-            "td-post-sharing"
+            "td-post-sharing",
+
+            "banner",
+            "link-cloud",
+            "newsletter",
+            "trending",
+
+            // wikipedia
+            "vector-page-toolbar-container",
+            "vector-page-toolbar",
+            "vector-column-start",
+            "vector-column-end",
+            "vector-body-before-content",
+            "mw-editsection",
+            "mw-references-wrap",
+            "catlinks",
+            "navigation",
+            "navbox-styles",
+            "infobox"
         )
 
-        val TAG_BLACKLIST: MutableList<String?> = mutableListOf<String?>(
+        val CSS_SELECTOR = listOf(
+            // wiki
+            "[typeof=\"mw:File\"]",
+            "[typeof=\"mw:File/Thumb\"]"
+        )
+
+        val TAG_BLACKLIST = listOf(
             "head",
             "style",
             "script",
@@ -48,7 +73,10 @@ class HtmlSanitizeFilter : HtmlFilter {
             "header",
             "footer",
             "aside",
-            "form"
+            "form",
+            "img",
+            "svg",
+            "figure"
         )
     }
 
@@ -57,6 +85,7 @@ class HtmlSanitizeFilter : HtmlFilter {
         val doc = Jsoup.parse(html)
 
         JsoupHelper.removeComments(doc.body())
+        removeByCssSelector(doc)
 
         JsoupHelper.remove(doc, object : JsoupHelper.Visitor {
             override fun visit(elt: Element): Boolean {
@@ -78,6 +107,12 @@ class HtmlSanitizeFilter : HtmlFilter {
         return doc.html()
     }
 
+    private fun removeByCssSelector(doc: Document) {
+        for (selector in CSS_SELECTOR) {
+            doc.select(selector).remove()
+        }
+    }
+
     private fun cleanup(elt: Element): Boolean {
         elt.removeAttr("id")
         elt.removeAttr("class")
@@ -92,7 +127,6 @@ class HtmlSanitizeFilter : HtmlFilter {
             isSocialLink(elt) ||
             isTagLink(elt) ||
             isBlacklistedClassOrId(elt)
-        //                || isMenu(elt)
     }
 
     private fun isSocialLink(elt: Element): Boolean {
@@ -109,11 +143,6 @@ class HtmlSanitizeFilter : HtmlFilter {
             href.contains("linkedin.com/shareArticle") ||
             href.contains("linkedin.com/cws/share") ||
             href.contains("pinterest.com/pin/create/button")
-    }
-
-    private fun isImage(elt: Element): Boolean {
-        val tagName = elt.tagName()
-        return "figure".equals(tagName, ignoreCase = true) || "img".equals(tagName, ignoreCase = true)
     }
 
     private fun isTagLink(elt: Element): Boolean {
@@ -152,7 +181,7 @@ class HtmlSanitizeFilter : HtmlFilter {
     }
 
     private fun empty(elt: Element): Boolean {
-        if (elt.tag().isBlock() && !elt.hasText() && elt.children().isEmpty()) {
+        if ((elt.tag().isBlock() || elt.tag().isInline()) && elt.text().trim().isEmpty() && elt.children().isEmpty()) {
             elt.remove()
             return true
         }

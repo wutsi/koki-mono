@@ -6,7 +6,8 @@ import java.net.URLEncoder
 
 class DuckDuckGoWebsearch(
     val minDelayMillis: Long = 2000L,
-    val maxDelayMillis: Long = 5000L
+    val maxDelayMillis: Long = 5000L,
+    val maxResults: Int = 10
 ) : Websearch {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DuckDuckGoWebsearch::class.java)
@@ -27,7 +28,7 @@ class DuckDuckGoWebsearch(
                 .get()
 
             val sb = StringBuffer()
-            val results = doc.select(".result")
+            val results = doc.select(".result").take(maxResults)
             var i = 0
             if (results.isEmpty()) {
                 sb.append("No results found for the query")
@@ -37,10 +38,10 @@ class DuckDuckGoWebsearch(
                     val link = result.select(".result__a").attr("abs:href")
                     val snippet = result.select(".result__snippet").text()
 
-                    sb.append("- Result #${++i}\n")
+                    sb.append("Result #${++i}\n")
                     sb.append("  - Title: ").append(title).append("\n")
                     sb.append("  - Link: ").append(link).append("\n")
-                    sb.append("  - Snippet: ").append(snippet).append("\n")
+                    sb.append("  - Snippet: ").append(snippet).append("\n\n")
                 }
             }
             return sb.toString()

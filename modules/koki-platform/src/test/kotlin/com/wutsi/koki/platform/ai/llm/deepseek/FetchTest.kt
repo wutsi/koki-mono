@@ -16,6 +16,14 @@ class FetchTest {
     }
 
     @Test
+    fun test2() {
+        val url = "https://evendo.com/locations/cameroon/yaounde/odza"
+        val tools = Fetch(20)
+        val content = tools.fetch(url)
+        println(content)
+    }
+
+    @Test
     fun `connect error`() {
         val url = "https://www.reoirxxfdkfdlk.com"
         val tools = Fetch()

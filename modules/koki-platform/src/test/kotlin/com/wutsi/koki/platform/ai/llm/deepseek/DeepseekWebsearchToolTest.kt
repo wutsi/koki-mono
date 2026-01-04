@@ -52,6 +52,7 @@ class DeepseekWebsearchToolTest {
         val result = tool.use(args)
 
         // Then
+        println(result)
         verify(websearch).search(query)
         assertEquals(true, result.contains(expectedResult))
     }

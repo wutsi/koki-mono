@@ -13,14 +13,14 @@ import java.net.URL
 /**
  * Fetches the content of a web page and converts it to markdown.
  */
-class Fetch {
+class Fetch(val blockLen: Int = 20) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(Fetch::class.java)
         const val USER_AGENT =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
     }
 
-    private val extractor = HtmlContentExtractor()
+    private val extractor = HtmlContentExtractor(blockLen)
 
     fun fetch(url: String): String {
         LOGGER.info("Fetching $url")

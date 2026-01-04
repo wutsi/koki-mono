@@ -26,8 +26,7 @@ class DeepseekFetchTool(private val fetch: Fetch) : Tool {
 
     override fun use(args: Map<String, Any>): String {
         val url = args["url"] as String
-        return "BEGIN CONTENT of: `$url`:\n" +
-            fetch.fetch(args["url"] as String) + "\n" +
-            "END CONTENT of $url\n\n"
+        return "Content of the link: `$url`:\n" +
+            fetch.fetch(args["url"] as String) + "\n\n"
     }
 }

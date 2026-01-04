@@ -3,7 +3,7 @@ package com.wutsi.koki.platform.util.html
 import org.junit.jupiter.api.Test
 
 class HtmlContentExtractorTest : AbstractFilterTest() {
-    var extractor = HtmlContentExtractor()
+    var extractor = HtmlContentExtractor(20)
 
     @Test
     fun camfoot() {

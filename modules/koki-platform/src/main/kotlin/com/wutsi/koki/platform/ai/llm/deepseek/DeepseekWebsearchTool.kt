@@ -26,8 +26,7 @@ class DeepseekWebsearchTool(private val websearch: Websearch) : Tool {
 
     override fun use(args: Map<String, Any>): String {
         val query = args["q"] as String
-        return "BEGIN SEARCH RESULT for: `$query`\n" +
-            websearch.search(query) + "\n" +
-            "END SEARCH RESULT for: `$query`\n\n"
+        return "Results for the web search of: `$query`\n" +
+            websearch.search(query) + "\n\n"
     }
 }
