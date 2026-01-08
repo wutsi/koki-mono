@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class NoteMapper {
     fun toNote(entity: NoteEntity): Note {
         return Note(
-            id = entity.id!!,
+            id = entity.id ?: -1,
             subject = entity.subject,
             body = entity.body,
             summary = entity.summary,

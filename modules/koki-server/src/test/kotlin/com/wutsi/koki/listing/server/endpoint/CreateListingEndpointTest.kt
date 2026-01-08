@@ -73,6 +73,7 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listing = dao.findById(id).get()
         assertEquals(request.listingType, listing.listingType)
         assertEquals(request.propertyType, listing.propertyType)
+        assertEquals(listing.propertyType?.category, listing.propertyCategory)
         assertEquals(request.propertyArea, listing.propertyArea)
         assertEquals(request.lotArea, listing.lotArea)
         assertEquals(request.level, listing.level)

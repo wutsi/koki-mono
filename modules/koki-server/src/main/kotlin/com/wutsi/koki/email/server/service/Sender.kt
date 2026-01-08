@@ -88,7 +88,7 @@ class Sender(
             recipient = recipient,
             sender = Party(
                 email = config[ConfigurationName.SMTP_FROM_ADDRESS]?.ifEmpty { null } ?: "",
-                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: tenant?.name
+                displayName = config[ConfigurationName.SMTP_FROM_PERSONAL]?.ifEmpty { null } ?: tenant.name
             ),
             attachments = attachments
         )

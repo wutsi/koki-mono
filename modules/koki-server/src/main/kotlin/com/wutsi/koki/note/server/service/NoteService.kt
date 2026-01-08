@@ -98,7 +98,7 @@ class NoteService(
             val ref = request.owner!!
             ownerDao.save(
                 NoteOwnerEntity(
-                    noteId = note.id,
+                    noteId = note.id!!,
                     ownerId = ref.id,
                     ownerType = ref.type,
                     createdAt = now,

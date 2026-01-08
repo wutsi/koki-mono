@@ -76,9 +76,9 @@ class GeonamesImporter(
                         updated++
                     }
 
-                    if (location?.type == LocationType.COUNTRY) {
+                    if (location.type == LocationType.COUNTRY) {
                         countryId = id
-                    } else if (location?.type == LocationType.STATE) {
+                    } else if (location.type == LocationType.STATE) {
                         stateIds.add(id)
                     }
                 } catch (ex: Exception) {

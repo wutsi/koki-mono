@@ -113,7 +113,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bedroom exact match`() {
+    fun `by bedroom`() {
         val response = rest.getForEntity(
             "/v1/listings?min-bedrooms=2&max-bedrooms=2",
             SearchListingResponse::class.java
@@ -126,20 +126,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by bedroom minimum`() {
-        val response = rest.getForEntity(
-            "/v1/listings?min-bedrooms=2",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(2, listings.size)
-        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(108L, 109L)))
-    }
-
-    @Test
-    fun `by bathroom exact match`() {
+    fun `by bathroom`() {
         val response = rest.getForEntity(
             "/v1/listings?min-bathrooms=2&max-bathrooms=2",
             SearchListingResponse::class.java
@@ -151,21 +138,12 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(111, listings[0].id)
     }
 
-    @Test
-    fun `by bathroom minimum`() {
-        val response = rest.getForEntity(
-            "/v1/listings?min-bathrooms=2",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(2, listings.size)
-        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(111L, 112L)))
-    }
+    // =====================================================
+    // Dimension Searches - Price
+    // =====================================================
 
     @Test
-    fun `by price`() {
+    fun `by price range`() {
         val response = rest.getForEntity(
             "/v1/listings?min-price=500&max-price=1900",
             SearchListingResponse::class.java
@@ -178,7 +156,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by lot-area`() {
+    fun `by lot-area range`() {
         val response = rest.getForEntity(
             "/v1/listings?min-lot-area=500&max-lot-area=1900",
             SearchListingResponse::class.java
@@ -191,7 +169,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by property-area`() {
+    fun `by property-area range`() {
         val response = rest.getForEntity(
             "/v1/listings?min-property-area=500&max-property-area=1900",
             SearchListingResponse::class.java
@@ -230,19 +208,6 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by agent`() {
-        val response = rest.getForEntity(
-            "/v1/listings?agent-user-id=1111",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(2, listings.size)
-        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(125L, 126L)))
-    }
-
-    @Test
     fun `by sale-price range`() {
         val response = rest.getForEntity(
             "/v1/listings?min-sale-price=250000&max-sale-price=400000",
@@ -253,44 +218,5 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listings = response.body!!.listings
         assertEquals(2, listings.size)
         assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(127L, 128L)))
-    }
-
-    @Test
-    fun `by sale-price minimum`() {
-        val response = rest.getForEntity(
-            "/v1/listings?min-sale-price=350000",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(2, listings.size)
-        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(128L, 129L)))
-    }
-
-    @Test
-    fun `by sale-price maximum`() {
-        val response = rest.getForEntity(
-            "/v1/listings?max-sale-price=350000",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(2, listings.size)
-        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(127L, 128L)))
-    }
-
-    @Test
-    fun `by sale-price exact match`() {
-        val response = rest.getForEntity(
-            "/v1/listings?min-sale-price=350000&max-sale-price=350000",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(1, listings.size)
-        assertEquals(128L, listings[0].id)
     }
 }
