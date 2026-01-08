@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
@@ -37,6 +38,7 @@ data class ListingEntity(
     val listingNumber: Long = -1,
     var listingType: ListingType? = null,
     var propertyType: PropertyType? = null,
+    var propertyCategory: PropertyCategory? = null,
     var bedrooms: Int? = null,
     var bathrooms: Int? = null,
     var halfBathrooms: Int? = null,

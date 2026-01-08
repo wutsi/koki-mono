@@ -1,14 +1,17 @@
 package com.wutsi.koki.listing.server.mapper
 
-import com.wutsi.koki.listing.dto.NeighbourhoodMetricSummary
-import com.wutsi.koki.listing.server.domain.NeighbourhoodMetricEntity
+import com.wutsi.koki.listing.dto.ListingMetricSummary
+import com.wutsi.koki.listing.server.domain.ListingMetricEntity
 import org.springframework.stereotype.Service
 
 @Service
-class NeighbourhoodMetricMapper {
-    fun toNeighbourhoodMetricSummary(entity: NeighbourhoodMetricEntity): NeighbourhoodMetricSummary {
-        return NeighbourhoodMetricSummary(
+class ListingMetricMapper {
+    fun toListingLocationMetricSummary(entity: ListingMetricEntity): ListingMetricSummary {
+        return ListingMetricSummary(
             neighborhoodId = entity.neighborhoodId,
+            sellerAgentUserId = entity.sellerAgentUserId,
+            cityId = entity.cityId,
+            bedrooms = entity.bedrooms,
             propertyCategory = entity.propertyCategory,
             listingStatus = entity.listingStatus,
             listingType = entity.listingType,

@@ -187,7 +187,7 @@ class FileService(
             toPath(filename, fileId, tenantId)
         }
         return getStorageService(tenantId).store(
-            path = path.toString(),
+            path = path,
             content = content,
             contentType = contentType,
             contentLength = contentLength,

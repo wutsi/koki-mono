@@ -437,6 +437,7 @@ class ListingService(
                 status = ListingStatus.DRAFT,
                 listingType = request.listingType,
                 propertyType = request.propertyType,
+                propertyCategory = request.propertyType?.category,
                 bedrooms = request.bedrooms,
                 bathrooms = request.bathrooms,
                 halfBathrooms = request.halfBathrooms,
@@ -519,6 +520,7 @@ class ListingService(
 
         listing.listingType = request.listingType
         listing.propertyType = request.propertyType
+        listing.propertyCategory = request.propertyType?.category
         listing.bedrooms = request.bedrooms
         listing.bathrooms = request.bedrooms
         listing.halfBathrooms = request.halfBathrooms

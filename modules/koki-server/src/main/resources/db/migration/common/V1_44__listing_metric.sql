@@ -7,6 +7,7 @@ CREATE TABLE T_LISTING_METRIC(
   seller_agent_user_fk      BIGINT,
   city_fk                   BIGINT,
 
+  bedrooms                  INT,
   property_category         INT,
   listing_status            INT,
   listing_type              INT,
@@ -17,13 +18,13 @@ CREATE TABLE T_LISTING_METRIC(
   total_price               BIGINT NOT NULL DEFAULT 0,
   average_price             BIGINT NOT NULL DEFAULT 0,
   average_lot_area          INT,
-  price_per_square_meter    DOUBLE NOT NULL DEFAULT 0,
+  price_per_square_meter    BIGINT,
   currency                  VARCHAR(3),
 
   created_at                DATETIME DEFAULT NOW(),
   modified_at               DATETIME DEFAULT NOW(),
 
-  UNIQUE(tenant_fk, neighbourhood_fk, seller_agent_user_fk, city_fk, property_category, listing_status, listing_type),
+  UNIQUE(tenant_fk, neighbourhood_fk, seller_agent_user_fk, city_fk, bedrooms, property_category, listing_status, listing_type),
   PRIMARY KEY(id)
 ) ENGINE = InnoDB;
 

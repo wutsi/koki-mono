@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class CategoryMapper {
     fun toCategory(entity: CategoryEntity): Category {
         return Category(
-            id = entity.id!!,
+            id = entity.id,
             name = entity.name,
             longName = entity.longName,
             nameFr = entity.nameFr,
