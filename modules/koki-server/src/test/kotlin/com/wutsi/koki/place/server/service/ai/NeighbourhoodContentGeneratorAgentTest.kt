@@ -21,7 +21,7 @@ class NeighbourhoodContentGeneratorAgentTest {
         websearchDelayMillis = 500,
     )
     private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val neighbourhood = LocationEntity(name = "Melen", country = "CM")
+    private val neighbourhood = LocationEntity(name = "Bastos", country = "CM")
     private val agent = NeighbourhoodContentGeneratorAgent(city, neighbourhood, llm)
 
     @Test
