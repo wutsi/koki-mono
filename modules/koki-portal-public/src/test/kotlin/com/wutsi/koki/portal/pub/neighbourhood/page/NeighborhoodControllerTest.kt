@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.listing.dto.SearchListingMetricResponse
+import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
@@ -125,7 +126,7 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
     }
 
     @Test
-    fun `exception when fetching metrics`() {
+    fun `error when fetching metrics`() {
         // GIVEN
         doThrow(IllegalStateException::class).whenever(rest)
             .getForEntity(
@@ -142,5 +143,45 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#metrics-land-sale-table")
         assertElementNotPresent("#metrics-residential-sale-table")
         assertElementNotPresent("#metrics-residential-rental-table")
+    }
+
+    @Test
+    fun `error when fetching places`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPlaceResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#school-container")
+        assertElementNotPresent("#hospital-container")
+        assertElementNotPresent("#market-container")
+        assertElementNotPresent("#todo-container")
+    }
+
+    @Test
+    fun `error when fetching listings`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#rental-listing-container")
+        assertElementNotPresent("#sale-listing-container")
+        assertElementNotPresent("#sold-listing-container")
+        assertElementNotPresent("#map-container")
     }
 }

@@ -90,35 +90,45 @@ class NeighborhoodController(
         listingType: ListingType,
         model: Model,
     ): List<ListingModel> {
-        val listings = listingService.search(
-            locationIds = listOf(neighbourhoodId),
-            statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
-            listingType = listingType,
-            sortBy = ListingSort.NEWEST,
-            limit = 20,
-        )
-        if (!listings.isEmpty()) {
-            model.addAttribute("${name}Listings", listings.items)
+        try {
+            val listings = listingService.search(
+                locationIds = listOf(neighbourhoodId),
+                statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
+                listingType = listingType,
+                sortBy = ListingSort.NEWEST,
+                limit = 20,
+            )
+            if (!listings.isEmpty()) {
+                model.addAttribute("${name}Listings", listings.items)
+            }
+            return listings.items
+        } catch (ex: Throwable) {
+            LOGGER.warn("Failed to load ACTIVE listings", ex)
+            return emptyList()
         }
-        return listings.items
     }
 
     private fun loadSoldListings(
         neighbourhoodId: Long,
         model: Model,
     ): List<ListingModel> {
-        val listings = listingService.search(
-            locationIds = listOf(neighbourhoodId),
-            statuses = listOf(ListingStatus.RENTED, ListingStatus.SOLD),
-            sortBy = ListingSort.TRANSACTION_DATE,
-            limit = 100,
-        )
-        if (listings.isEmpty()) {
+        try {
+            val listings = listingService.search(
+                locationIds = listOf(neighbourhoodId),
+                statuses = listOf(ListingStatus.RENTED, ListingStatus.SOLD),
+                sortBy = ListingSort.TRANSACTION_DATE,
+                limit = 100,
+            )
+            if (listings.isEmpty()) {
+                return emptyList()
+            }
+
+            model.addAttribute("soldListings", listings.items.take(20))
+            return listings.items
+        } catch (ex: Throwable) {
+            LOGGER.warn("Failed to load SOLD listings", ex)
             return emptyList()
         }
-
-        model.addAttribute("soldListings", listings.items.take(20))
-        return listings.items
     }
 
     private fun loadAgents(listings: List<ListingModel>, model: Model): List<AgentModel> {
@@ -171,7 +181,7 @@ class NeighborhoodController(
                     PlaceType.SUPERMARKET,
                 ),
                 limit = 50,
-            ).items.sortedByDescending { school -> school.rating ?: 0.0 }
+            ).sortedByDescending { school -> school.rating ?: 0.0 }
 
             val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
             if (place != null) {
@@ -209,7 +219,7 @@ class NeighborhoodController(
                 minRating = minRating,
                 maxRating = maxRating,
                 limit = 10
-            ).items.filter { it.id != place.id }
+            ).filter { it.id != place.id }
             if (places.isNotEmpty()) {
                 val neighbourhoodIds = places.map { place -> place.neighbourhoodId }
                 val neighbourhoods = locationService.search(
@@ -255,9 +265,10 @@ class NeighborhoodController(
             if (rentalCount > 0) {
                 val totalPrice = metrics.filter { metric -> metric.listingType == ListingType.RENTAL }
                     .sumOf { metric -> metric.totalPrice.amount }
-                val totalPriceMoney = moneyMapper.toMoneyModel(totalPrice.toDouble(), metrics[0].totalPrice.currency)
+                val averagePriceMoney =
+                    moneyMapper.toMoneyModel(totalPrice / rentalCount, metrics[0].totalPrice.currency)
                 model.addAttribute("rentalCount", rentalCount)
-                model.addAttribute("rentalAveragePrice", totalPriceMoney)
+                model.addAttribute("rentalAveragePrice", averagePriceMoney)
             }
 
             val salesCount = metrics.filter { metric -> metric.listingType == ListingType.SALE }
@@ -265,9 +276,10 @@ class NeighborhoodController(
             if (salesCount > 0) {
                 val totalPrice = metrics.filter { metric -> metric.listingType == ListingType.SALE }
                     .sumOf { metric -> metric.totalPrice.amount }
-                val totalPriceMoney = moneyMapper.toMoneyModel(totalPrice.toDouble(), metrics[0].totalPrice.currency)
+                val averagePriceMoney =
+                    moneyMapper.toMoneyModel(totalPrice / salesCount, metrics[0].totalPrice.currency)
                 model.addAttribute("saleCount", salesCount)
-                model.addAttribute("saleAveragePrice", totalPriceMoney)
+                model.addAttribute("saleAveragePrice", averagePriceMoney)
             }
 
             // Per room

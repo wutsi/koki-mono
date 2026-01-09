@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.pub.listing.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
@@ -13,6 +14,8 @@ import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
+import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.geoip.GeoIp
 import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
@@ -24,6 +27,8 @@ import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.user.service.UserIdProvider
+import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.GeoLocation
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.TrackEvent
 import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
@@ -90,18 +95,21 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-price")
 
         // Property Map
-        assertElementAttribute("#listing-map", "data-longitude", listing.geoLocation?.longitude?.toString())
-        assertElementAttribute("#listing-map", "data-latitude", listing.geoLocation?.latitude?.toString())
-        assertElementAttribute("#listing-map", "data-show-marker", "true")
-        assertElementAttribute("#listing-map", "data-zoom", "18")
+        assertElementAttribute("[data-component-id=map]", "data-longitude", listing.geoLocation?.longitude?.toString())
+        assertElementAttribute("[data-component-id=map]", "data-latitude", listing.geoLocation?.latitude?.toString())
+        assertElementAttribute("[data-component-id=map]", "data-show-marker", "true")
+        assertElementAttribute("[data-component-id=map]", "data-zoom", "18")
 
         // Content
         assertElementPresent("#btn-share-navbar")
         assertElementNotPresent(".listing-status") // Status badge - only for sold listings
-        assertElementCount("#similar-listings .listing-card", similar.size) // Similar listings
+        assertElementCount("#similar-listing-container .listing-card", similar.size) // Similar listings
         assertElementPresent("#description-container")
         assertElementPresent("#legal-container")
         assertElementPresent("#amenity-container")
+        assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#neighbourhood-container .neighbourhood-card")
+        assertElementPresent("#neighbourhood-container [data-component-id=map]")
         assertElementPresent("#school-container")
         assertElementPresent("#hospital-container")
         assertElementPresent("#market-container")
@@ -363,10 +371,80 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.rank)
     }
 
-    private fun setupListing(status: ListingStatus) {
+    @Test
+    fun `error when fetching places`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPlaceResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/listings/${listing.id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementPresent("#neighbourhood-container")
+        assertElementNotPresent("#neighbourhood-container .neighbourhood-card")
+        assertElementNotPresent("#school-container")
+        assertElementNotPresent("#hospital-container")
+        assertElementNotPresent("#market-container")
+        assertElementNotPresent("#todo-container")
+    }
+
+    @Test
+    fun `listing with no geo-location`() {
+        // GIVEN
+        setupListing(geoLocation = null)
+
+        // WHEN
+        navigateTo("/listings/${listing.id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementPresent("#neighbourhood-container")
+        assertElementNotPresent("#neighbourhood-container [data-component-id=map]")
+    }
+
+    @Test
+    fun `listing with no address`() {
+        // GIVEN
+        setupListing(address = null)
+
+        // WHEN
+        navigateTo("/listings/${listing.id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementNotPresent("#neighbourhood-container")
+    }
+
+    @Test
+    fun `error when fetching similar listings`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchSimilarListingResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/listings/${listing.id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.LISTING)
+        assertElementNotPresent("#similar-listing-container")
+    }
+
+    private fun setupListing(
+        status: ListingStatus = ListingStatus.ACTIVE,
+        geoLocation: GeoLocation? = listing.geoLocation,
+        address: Address? = listing.address,
+    ) {
         doReturn(
             ResponseEntity(
-                GetListingResponse(listing.copy(status = status)),
+                GetListingResponse(listing.copy(status = status, geoLocation = geoLocation, address = address)),
                 HttpStatus.OK,
             )
         ).whenever(rest)

@@ -307,15 +307,16 @@
 
         <!-- SIMILAR LISTINGS -->
         <div data-component-id="ajax-fragment"
-             id="similar-listings"
+             id="similar-listings-fragment"
              th:data-url="'/listings/similar?id=' + ${listing.id}"
         >
         </div>
 
-        <!-- MAP -->
-        <div class="margin-top border-top padding-top" id="map-container" th:if="${listing.address}">
-            <h2 th:text="#{page.listing.section.map.title}">Map &amp; Neighborhood</h2>
-            <ul class="breadcrumb">
+        <!-- NEIGHBORHOOD -->
+        <div class="margin-top border-top padding-top" id="neighbourhood-container"
+             th:if="${listing.address} AND (${place} OR ${listing.geoLocation})">
+            <h2 th:text="#{page.listing.section.neighbourhood.title}">Map &amp; Neighborhood</h2>
+            <ul class="breadcrumb" th:if="${listing.address}">
                 <li>
                     <span th:text="${listing.address.city.name}">CITY</span>
                 </li>
@@ -331,11 +332,11 @@
                     <span th:text="${listing.address.street}">NEIGHBORHOOD</span>
                 </li>
             </ul>
+
             <div class="margin-top"
                  data-component-id="map"
                  data-disable-scroll-wheel-zoom="true"
                  data-disable-touch-zoom="true"
-                 id="listing-map"
                  th:data-latitude="${listing.geoLocation.latitude}"
                  th:data-longitude="${listing.geoLocation.longitude}"
                  th:data-show-marker="true"
@@ -343,22 +344,19 @@
                  th:if="${listing.geoLocation}"
             >
             </div>
-        </div>
 
-        <!-- NEIGHBORHOOD -->
-        <div class="margin-top border border-rounded background-white padding neighborhood-card" id="place-container"
-             th:if="${place} AND ${listing.address?.neighbourhood}">
-
-            <a th:href="${listing.address.neighbourhood.publicUrl}">
-                <h2 th:text="#{page.listing.section.neighbourhood.title(${place.name})}">Explore</h2>
-                <div th:text="${place.introduction}">INTRO</div>
-                <div class="margin-top" id="rating-container" th:if="${place.rating}">
-                    <div th:replace="~{__components/place :: place-rating(${place}, false)}"></div>
-                </div>
-            </a>
-            <a class="btn btn-sm btn-light margin-top"
-               th:href="${listing.address.neighbourhood.publicUrl}"
-               th:text="#{button.explore_neighborhood}">Explore</a>
+            <div class="margin-top border border-rounded background-white padding neighbourhood-card" th:if="${place}">
+                <a th:href="${listing.address.neighbourhood.publicUrl}">
+                    <h2 th:text="${place.name}">NAME</h2>
+                    <div th:text="${place.introduction}">INTRO</div>
+                    <div class="margin-top" id="rating-container" th:if="${place.rating}">
+                        <div th:replace="~{__components/place :: place-rating(${place}, false)}"></div>
+                    </div>
+                </a>
+                <a class="btn btn-sm btn-light margin-top"
+                   th:href="${listing.address.neighbourhood.publicUrl}"
+                   th:text="#{button.explore_neighborhood}">Explore</a>
+            </div>
         </div>
 
         <!-- SCHOOLS -->
