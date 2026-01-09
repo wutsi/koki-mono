@@ -226,6 +226,9 @@ koki:
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
         listing:
+            metrics:
+                jobs:
+                    daily: "0 0 1 * * *"     # Every day at 1:00AM
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-listing-queue
