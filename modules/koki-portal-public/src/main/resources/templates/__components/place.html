@@ -13,7 +13,7 @@
             <div th:class="'progress-bar bg-' + ${place.ratingCode}"
                  th:style="'width:' + ${place.ratingPercentage} +'%'"></div>
         </div>
-        <div>
+        <div class="margin-left-small">
             <b th:class="'text-' + ${place.ratingCode}" th:text="${place.ratingText}">0</b>
             <span>/ 5</span>
         </div>

@@ -287,15 +287,18 @@
     <!-- CONTACT AGENT -->
     <div class="listing-contact-details" th:if="${topAgent}">
         <div class="listing-contact-details-inner">
-            <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
-                <div class="agent-info">
+            <div class="agent-info">
+                <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
                     <img th:if="${topAgent.user.photoUrl}" th:src="${topAgent.user.photoUrl}"/>
-                    <div>
+                </a>
+                <div>
+                    <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
                         <h2 th:text="${topAgent.user.displayName}">AGENT</h2>
                         <div th:text="${topAgent.user.employer}">EMPLOYER</div>
-                    </div>
+                    </a>
                 </div>
-            </a>
+            </div>
+
 
             <!--
             <div class="message" th:text="#{page.lead.agent-message-default}">
