@@ -16,7 +16,7 @@ import java.util.Date
 data class NoteEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = -1,
+    val id: Long? = null,
 
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,

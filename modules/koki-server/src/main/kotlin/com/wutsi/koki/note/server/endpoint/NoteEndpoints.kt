@@ -36,10 +36,10 @@ class NoteEndpoints(
         @Valid @RequestBody request: CreateNoteRequest,
     ): CreateNoteResponse {
         val note = service.create(request, tenantId)
-        val response = CreateNoteResponse(note.id!!)
+        val response = CreateNoteResponse(note.id ?: -1)
         publisher.publish(
             NoteCreatedEvent(
-                noteId = note.id,
+                noteId = note.id ?: -1,
                 tenantId = tenantId,
             )
         )
