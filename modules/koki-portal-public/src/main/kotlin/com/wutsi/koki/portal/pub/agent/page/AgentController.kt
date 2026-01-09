@@ -10,6 +10,9 @@ import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
+import com.wutsi.koki.portal.pub.refdata.service.LocationService
+import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class AgentController(
     private val agentService: AgentService,
     private val listingService: ListingService,
+    private val locationService: LocationService,
 ) : AbstractPageController() {
     companion object {
         const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
@@ -49,9 +53,10 @@ class AgentController(
         val agent = agentService.get(id)
         model.addAttribute("agent", agent)
 
-        loadActiveListings("rental", ListingType.RENTAL, agent, model)
-        loadActiveListings("sale", ListingType.SALE, agent, model)
+        val rental = loadActiveListings("rental", ListingType.RENTAL, agent, model)
+        val sold = loadActiveListings("sale", ListingType.SALE, agent, model)
         loadSoldListings(agent, model)
+        loadNeighborhoods(rental + sold, model)
 
         loadToast(toast, timestamp, model)
         model.addAttribute(
@@ -113,7 +118,21 @@ class AgentController(
         return listings
     }
 
-    fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
+    private fun loadNeighborhoods(listings: List<ListingModel>, model: Model): List<LocationModel> {
+        val neighbourhoodIds = listings.mapNotNull { listing -> listing.address?.neighbourhood?.id }
+            .distinct()
+            .take(12)
+
+        val neighbourhoods = locationService.search(
+            ids = neighbourhoodIds,
+            types = listOf(LocationType.NEIGHBORHOOD),
+            limit = neighbourhoodIds.size,
+        )
+        model.addAttribute("neighbourhoods", neighbourhoods)
+        return neighbourhoods
+    }
+
+    private fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
         // Listings by neighborhoods
         val listingsByNeighborhood = listings
             .filter { listing -> listing.address?.neighbourhood?.id != null && listing.geoLocation != null }

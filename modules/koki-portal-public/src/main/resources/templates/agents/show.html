@@ -141,6 +141,17 @@
             </div>
             <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
         </div>
+
+        <!-- NEIGHBOURHOODS -->
+        <div class="margin-top" id="neighbourhood-container" th:if="${neighbourhoods}">
+            <hr/>
+            <h2 th:text="#{page.agent.section.neighbourhood(${agent.user.firstName})}">TITLE</h2>
+            <div class="flex flex-wrap">
+                <div class="col-6 col-lg-4" th:each="neighbourhood : ${neighbourhoods}">
+                    <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- CONTACT AGENT -->

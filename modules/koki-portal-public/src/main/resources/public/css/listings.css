@@ -121,11 +121,14 @@
     color: inherit;
 }
 
+.listing-contact-details-inner .agent-info a h2 {
+    background: #1D7EDF;
+    color: white;
+    padding: 0.2em 0.5em;
+}
+
 .listing-contact-details-inner .agent-info h2 {
     margin-bottom: 0;
-    color: white;
-    background: #1D7EDF;
-    padding: 0.2em 0.5em;
 }
 
 .listing-contact-details-inner .agent-info img {
