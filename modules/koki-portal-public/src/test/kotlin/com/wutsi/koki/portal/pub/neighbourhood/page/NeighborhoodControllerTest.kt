@@ -2,8 +2,11 @@ package com.wutsi.koki.portal.pub.neighbourhood.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.listing.dto.SearchListingMetricResponse
+import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
@@ -72,6 +75,10 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#market-container")
         assertElementPresent("#todo-container")
         assertElementPresent("#similar-neighbourhood-container")
+        assertElementPresent("#metrics-container")
+        assertElementPresent("#metrics-land-sale-table")
+        assertElementPresent("#metrics-residential-sale-table")
+        assertElementPresent("#metrics-residential-rental-table")
     }
 
     @Test
@@ -116,5 +123,65 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#market-container")
         assertElementNotPresent("#todo-container")
         assertElementNotPresent("#similar-neighbourhood-container")
+    }
+
+    @Test
+    fun `error when fetching metrics`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingMetricResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#metrics-container")
+        assertElementNotPresent("#metrics-land-sale-table")
+        assertElementNotPresent("#metrics-residential-sale-table")
+        assertElementNotPresent("#metrics-residential-rental-table")
+    }
+
+    @Test
+    fun `error when fetching places`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(restWithoutTenantHeader)
+            .getForEntity(
+                any<String>(),
+                eq(SearchPlaceResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#school-container")
+        assertElementNotPresent("#hospital-container")
+        assertElementNotPresent("#market-container")
+        assertElementNotPresent("#todo-container")
+    }
+
+    @Test
+    fun `error when fetching listings`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#rental-listing-container")
+        assertElementNotPresent("#sale-listing-container")
+        assertElementNotPresent("#sold-listing-container")
+        assertElementNotPresent("#map-container")
     }
 }

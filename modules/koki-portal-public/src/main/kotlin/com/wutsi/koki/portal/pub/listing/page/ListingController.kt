@@ -10,6 +10,7 @@ import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.refdata.dto.CategoryType
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -27,6 +28,8 @@ class ListingController(
     private val placeService: PlaceService,
 ) : AbstractPageController() {
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
+
         const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
         const val TOAST_MESSAGE_SENT = "msg-sent"
     }
@@ -113,19 +116,21 @@ class ListingController(
         @RequestParam id: Long,
         model: Model,
     ): String {
-        val listings = findSimilarListings(id, 10)
+        val listings = findSimilarListings(id)
         if (listings.isNotEmpty()) {
             model.addAttribute("listings", listings)
 
-            val neighborhood =
-                listings.find { listing -> listing.address?.neighbourhood != null }?.address?.neighbourhood
+            val neighborhood = listings.find { listing ->
+                listing.address?.neighbourhood != null
+            }?.address?.neighbourhood
             model.addAttribute("neighborhood", neighborhood)
         }
         return "listings/show-similar"
     }
 
-    private fun findSimilarListings(id: Long, limit: Int): List<ListingModel> {
+    private fun findSimilarListings(id: Long): List<ListingModel> {
         // Get similar listing from neighborhood
+        val limit = 10
         val neighborhood = service.getSimilar(
             id,
             sameNeighborhood = true,
@@ -145,6 +150,48 @@ class ListingController(
         return neighborhood + city.filter { listing -> !excludeIds.contains(listing.id) }
     }
 
+    private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {
+        try {
+            val places = placeService.search(
+                neighbourhoodIds = listOf(neighbourhoodId),
+                statuses = listOf(PlaceStatus.PUBLISHED),
+                types = listOf(
+                    PlaceType.NEIGHBORHOOD,
+                    PlaceType.SCHOOL,
+                    PlaceType.PARK,
+                    PlaceType.MUSEUM,
+                    PlaceType.HOSPITAL,
+                    PlaceType.MARKET,
+                    PlaceType.SUPERMARKET,
+                ),
+                limit = 50,
+            ).sortedByDescending { school -> school.rating ?: 0.0 }
+
+            val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
+            if (place != null) {
+                model.addAttribute("place", place)
+            }
+
+            loadPlaces("schools", listOf(PlaceType.SCHOOL), places, model)
+            loadPlaces("hospitals", listOf(PlaceType.HOSPITAL), places, model)
+            loadPlaces("markets", listOf(PlaceType.MARKET, PlaceType.SUPERMARKET), places, model)
+            loadPlaces("todos", listOf(PlaceType.PARK, PlaceType.MUSEUM), places, model)
+            return places
+        } catch (ex: Throwable) {
+            LOGGER.warn("Unable to load places for neighborhood $neighbourhoodId", ex)
+            return emptyList()
+        }
+    }
+
+    private fun loadPlaces(name: String, types: List<PlaceType>, places: List<PlaceModel>, model: Model) {
+        val items = places.filter { types.contains(it.type) }
+            .sortedByDescending { (it.websiteUrl?.let { 10.0 } ?: 0.0) + (it.rating ?: 0.0) }
+
+        if (items.isNotEmpty()) {
+            model.addAttribute(name, items)
+        }
+    }
+
     private fun loadToast(
         toast: String? = null,
         timestamp: Long? = null,
@@ -162,42 +209,5 @@ class ListingController(
             else -> null
         }
         model.addAttribute("toastMessage", message)
-    }
-
-    private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {
-        val places = placeService.search(
-            neighbourhoodIds = listOf(neighbourhoodId),
-            statuses = listOf(PlaceStatus.PUBLISHED),
-            types = listOf(
-                PlaceType.NEIGHBORHOOD,
-                PlaceType.SCHOOL,
-                PlaceType.PARK,
-                PlaceType.MUSEUM,
-                PlaceType.HOSPITAL,
-                PlaceType.MARKET,
-                PlaceType.SUPERMARKET,
-            ),
-            limit = 50,
-        ).items.sortedByDescending { school -> school.rating ?: 0.0 }
-
-        val place = places.find { it.type == PlaceType.NEIGHBORHOOD }
-        if (place != null) {
-            model.addAttribute("place", place)
-        }
-
-        loadPlaces("schools", listOf(PlaceType.SCHOOL), places, model)
-        loadPlaces("hospitals", listOf(PlaceType.HOSPITAL), places, model)
-        loadPlaces("markets", listOf(PlaceType.MARKET, PlaceType.SUPERMARKET), places, model)
-        loadPlaces("todos", listOf(PlaceType.PARK, PlaceType.MUSEUM), places, model)
-        return places
-    }
-
-    private fun loadPlaces(name: String, types: List<PlaceType>, places: List<PlaceModel>, model: Model) {
-        val items = places.filter { types.contains(it.type) }
-            .sortedByDescending { (it.websiteUrl?.let { 10.0 } ?: 0.0) + (it.rating ?: 0.0) }
-
-        if (items.isNotEmpty()) {
-            model.addAttribute(name, items)
-        }
     }
 }

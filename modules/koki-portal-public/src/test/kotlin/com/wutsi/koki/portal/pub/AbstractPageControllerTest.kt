@@ -19,6 +19,7 @@ import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.lead.dto.GetLeadResponse
 import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.SearchListingMetricResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
 import com.wutsi.koki.place.dto.GetPlaceResponse
@@ -28,6 +29,7 @@ import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
+import com.wutsi.koki.portal.pub.ListingFixtures.listingMetrics
 import com.wutsi.koki.portal.pub.ListingFixtures.similar
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.refdata.dto.GetLocationResponse
@@ -358,6 +360,17 @@ abstract class AbstractPageControllerTest {
     }
 
     fun setupListingModule() {
+        doReturn(
+            ResponseEntity(
+                SearchListingMetricResponse(listingMetrics),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingMetricResponse::class.java)
+            )
+
         doReturn(
             ResponseEntity(
                 SearchSimilarListingResponse(similar),
