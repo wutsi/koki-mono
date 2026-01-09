@@ -25,6 +25,7 @@ import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import org.springframework.web.client.RestTemplate
+import kotlin.jvm.java
 
 class KokiListings(
     private val urlBuilder: URLBuilder,
