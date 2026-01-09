@@ -6,10 +6,13 @@ import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
+import com.wutsi.koki.listing.dto.SearchListingMetricResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
@@ -185,5 +188,31 @@ class KokiListings(
     fun close(id: Long, request: CloseListingRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/close")
         rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun metrics(
+        neighbourhoodId: Long? = null,
+        sellerAgentUserId: Long? = null,
+        cityId: Long? = null,
+        bedrooms: Int? = null,
+        propertyCategory: PropertyCategory? = null,
+        listingType: ListingType? = null,
+        listingStatus: ListingStatus? = null,
+        dimension: ListingMetricDimension? = null,
+    ): SearchListingMetricResponse {
+        val url = urlBuilder.build(
+            "$PATH_PREFIX/metrics",
+            mapOf(
+                "neighbourhood-id" to neighbourhoodId,
+                "seller-agent-user-id" to sellerAgentUserId,
+                "city-id" to cityId,
+                "bedrooms" to bedrooms,
+                "property-category" to propertyCategory,
+                "listing-type" to listingType,
+                "listing-status" to listingStatus,
+                "dimension" to dimension,
+            ),
+        )
+        return rest.getForEntity(url, SearchListingMetricResponse::class.java).body!!
     }
 }

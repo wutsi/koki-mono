@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.pub.listing.mapper
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingMetricSummary
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
@@ -12,6 +13,7 @@ import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.file.model.FileModel
+import com.wutsi.koki.portal.pub.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.refdata.model.AddressModel
 import com.wutsi.koki.portal.pub.refdata.model.AmenityModel
@@ -200,6 +202,27 @@ class ListingMapper(
                 toPublicUrl(entity.publicUrl)
             },
             geoLocation = toGeoLocation(entity.geoLocation),
+        )
+    }
+
+    fun toListingMetricModel(
+        entity: ListingMetricSummary,
+    ): ListingMetricModel {
+        return ListingMetricModel(
+            neighborhoodId = entity.neighborhoodId,
+            sellerAgentUserId = entity.sellerAgentUserId,
+            cityId = entity.cityId,
+            bedrooms = entity.bedrooms,
+            propertyCategory = entity.propertyCategory,
+            listingStatus = entity.listingStatus,
+            listingType = entity.listingType,
+            total = entity.total,
+            averageLotArea = entity.averageLotArea,
+            minPrice = moneyMapper.toMoneyModel(entity.minPrice, entity.currency),
+            maxPrice = moneyMapper.toMoneyModel(entity.maxPrice, entity.currency),
+            averagePrice = moneyMapper.toMoneyModel(entity.averagePrice, entity.currency),
+            pricePerSquareMeter = entity.pricePerSquareMeter?.let { moneyMapper.toMoneyModel(it, entity.currency) },
+            totalPrice = moneyMapper.toMoneyModel(entity.totalPrice, entity.currency),
         )
     }
 

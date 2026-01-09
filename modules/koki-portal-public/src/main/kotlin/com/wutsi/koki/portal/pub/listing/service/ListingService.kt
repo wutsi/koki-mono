@@ -3,15 +3,18 @@ package com.wutsi.koki.portal.pub.listing.service
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.model.ResultSetModel
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.file.service.FileService
 import com.wutsi.koki.portal.pub.listing.mapper.ListingMapper
+import com.wutsi.koki.portal.pub.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.refdata.model.AmenityModel
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
@@ -227,5 +230,28 @@ class ListingService(
                 )
             }
         )
+    }
+
+    fun metrics(
+        neighbourhoodId: Long? = null,
+        sellerAgentUserId: Long? = null,
+        cityId: Long? = null,
+        bedrooms: Int? = null,
+        propertyCategory: PropertyCategory? = null,
+        listingType: ListingType? = null,
+        listingStatus: ListingStatus? = null,
+        dimension: ListingMetricDimension? = null,
+    ): List<ListingMetricModel> {
+        val response = koki.metrics(
+            neighbourhoodId = neighbourhoodId,
+            sellerAgentUserId = sellerAgentUserId,
+            cityId = cityId,
+            bedrooms = bedrooms,
+            propertyCategory = propertyCategory,
+            listingType = listingType,
+            listingStatus = listingStatus,
+            dimension = dimension,
+        )
+        return response.metrics.map { metric -> mapper.toListingMetricModel(metric) }
     }
 }

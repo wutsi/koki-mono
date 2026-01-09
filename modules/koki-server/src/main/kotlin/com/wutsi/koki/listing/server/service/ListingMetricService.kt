@@ -75,7 +75,7 @@ class ListingMetricService(
         }
 
         val metrics = query.resultList
-        if (metrics.size <= 1 || dimension == null) {
+        if (metrics.size < 1 || dimension == null) {
             return metrics
         }
 
