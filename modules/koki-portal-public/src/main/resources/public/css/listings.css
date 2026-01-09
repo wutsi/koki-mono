@@ -116,9 +116,16 @@
     margin-bottom: 1em;
 }
 
+.listing-contact-details-inner .agent-info a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .listing-contact-details-inner .agent-info h2 {
     margin-bottom: 0;
-    color: inherit;
+    color: white;
+    background: #1D7EDF;
+    padding: 0.2em 0.5em;
 }
 
 .listing-contact-details-inner .agent-info img {
