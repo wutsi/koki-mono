@@ -8,16 +8,12 @@ import com.wutsi.koki.listing.server.service.ListingMetricService
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.junit.jupiter.api.BeforeEach
-import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.mockito.Mockito.mock
 import kotlin.test.Test
 
 class ListingMetricJobsTest {
-    @MockitoBean
-    private lateinit var listingMetricService: ListingMetricService
-
-    @MockitoBean
-    private lateinit var tenantService: TenantService
-
+    private val listingMetricService = mock<ListingMetricService>()
+    private val tenantService = mock<TenantService>()
     private val job = ListingMetricJobs(listingMetricService, tenantService)
 
     private val tenants = listOf(
