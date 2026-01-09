@@ -214,7 +214,7 @@
 
 .listing-card .listing-details a {
     text-decoration: none;
-    color: #040404;
+    color: inherit;
 }
 
 .listing-card .address {
@@ -222,6 +222,10 @@
     height: 1.25em;
 }
 
+.neighborhood-card a {
+    color: #040404;
+    text-decoration: none;
+}
 
 /** ===== LISTING IMAGES ===== */
 .modal-body .image-container {

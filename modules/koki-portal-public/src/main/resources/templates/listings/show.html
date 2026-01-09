@@ -346,13 +346,16 @@
         </div>
 
         <!-- NEIGHBORHOOD -->
-        <div class="margin-top border border-rounded background-white padding" id="place-container"
+        <div class="margin-top border border-rounded background-white padding neighborhood-card" id="place-container"
              th:if="${place} AND ${listing.address?.neighbourhood}">
-            <h2 th:text="#{page.listing.section.neighbourhood.title(${place.name})}">Explore</h2>
-            <div th:text="${place.introduction}">INTRO</div>
-            <div class="margin-top" id="rating-container" th:if="${place.rating}">
-                <div th:replace="~{__components/place :: place-rating(${place}, false)}"></div>
-            </div>
+
+            <a th:href="${listing.address.neighbourhood.publicUrl}">
+                <h2 th:text="#{page.listing.section.neighbourhood.title(${place.name})}">Explore</h2>
+                <div th:text="${place.introduction}">INTRO</div>
+                <div class="margin-top" id="rating-container" th:if="${place.rating}">
+                    <div th:replace="~{__components/place :: place-rating(${place}, false)}"></div>
+                </div>
+            </a>
             <a class="btn btn-sm btn-light margin-top"
                th:href="${listing.address.neighbourhood.publicUrl}"
                th:text="#{button.explore_neighborhood}">Explore</a>
