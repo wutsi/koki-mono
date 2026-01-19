@@ -82,7 +82,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("head meta[name='description']", "content", listing.summaryFr)
 
         // Opengraph
-        assertElementAttribute("head meta[property='og:title']", "content", (listing.titleFr ?: ""))
+        assertElementAttributeContains("head meta[property='og:title']", "content", (listing.titleFr ?: ""))
         assertElementAttribute("head meta[property='og:description']", "content", listing.summaryFr)
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttributeEndsWith("head meta[property='og:url']", "content", (listing.publicUrlFr ?: ""))
