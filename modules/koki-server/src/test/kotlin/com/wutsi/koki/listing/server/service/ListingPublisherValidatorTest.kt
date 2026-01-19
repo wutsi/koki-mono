@@ -3,7 +3,6 @@ package com.wutsi.koki.listing.server.service
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveAddressRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralInformationRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
@@ -23,16 +22,12 @@ class ListingPublisherValidatorTest {
 
     @Test
     fun rules() {
-        assertEquals(6, validator.rules.size)
+        assertEquals(5, validator.rules.size)
         assertEquals(ListingMustHaveGeneralInformationRule::class, validator.rules[0]::class)
         assertEquals(ListingMustHaveAddressRule::class, validator.rules[1]::class)
-        assertEquals(ListingMustHaveGeolocationRule::class, validator.rules[2]::class)
-        assertEquals(ListingMustHavePriceRule::class, validator.rules[3]::class)
-//        assertEquals(ListingMustHaveSellerAgentCommissionRule::class, validator.rules[4]::class)
-//        assertEquals(ListingMustHaveValidBuyerAgentCommissionRule::class, validator.rules[5]::class)
-//        assertEquals(ListingMustHaveSellerRule::class, validator.rules[6]::class)
-        assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[4]::class)
-        assertEquals(ListingMustNotHaveImageUnderReviewRule::class, validator.rules[5]::class)
+        assertEquals(ListingMustHavePriceRule::class, validator.rules[2]::class)
+        assertEquals(ListingMustHaveImageApprovedRule::class, validator.rules[3]::class)
+        assertEquals(ListingMustNotHaveImageUnderReviewRule::class, validator.rules[4]::class)
     }
 
     @Test
