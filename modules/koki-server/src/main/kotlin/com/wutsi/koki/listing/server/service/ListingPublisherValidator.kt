@@ -4,7 +4,6 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveAddressRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeneralInformationRule
-import com.wutsi.koki.listing.server.service.validation.ListingMustHaveGeolocationRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHaveImageApprovedRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustHavePriceRule
 import com.wutsi.koki.listing.server.service.validation.ListingMustNotHaveImageUnderReviewRule
@@ -18,7 +17,7 @@ class ListingPublisherValidator(
     val rules = listOf(
         ListingMustHaveGeneralInformationRule(),
         ListingMustHaveAddressRule(),
-        ListingMustHaveGeolocationRule(),
+//        ListingMustHaveGeolocationRule(),
         ListingMustHavePriceRule(),
 //        ListingMustHaveSellerAgentCommissionRule(),
 //        ListingMustHaveValidBuyerAgentCommissionRule(),
