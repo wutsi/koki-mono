@@ -11,7 +11,9 @@ import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.PlaceFixtures.neighborhood
+import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
+import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import org.junit.jupiter.api.BeforeEach
@@ -29,7 +31,13 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
                 GetLocationResponse(neighborhoods[0]),
                 HttpStatus.OK,
             )
-        ).whenever(restWithoutTenantHeader)
+        ).doReturn(
+            ResponseEntity(
+                GetLocationResponse(cities[0]),
+                HttpStatus.OK,
+            )
+        )
+            .whenever(restWithoutTenantHeader)
             .getForEntity(
                 any<String>(),
                 eq(GetLocationResponse::class.java)
@@ -49,7 +57,11 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         )
 
         // Opengraph
-        assertElementAttribute("head meta[property='og:title']", "content", neighborhoods[0].name)
+        assertElementAttribute(
+            "head meta[property='og:title']",
+            "content",
+            "Guide du quartier ${neighborhoods[0].name},${cities[0].name} | Vivre à ${neighborhoods[0].name},${cities[0].name} | ${tenants[0].name}"
+        )
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttribute(
             "head meta[property='og:description']",

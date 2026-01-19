@@ -92,12 +92,12 @@ class ListingController(
         }
 
         /* Page */
+        val titleAndPrice = listOf(listing.title, listing.price?.displayText).joinToString(" - ")
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.LISTING,
-                title = listOf(listing.title, listing.price?.displayText)
-                    .joinToString(" - "),
+                title = titleAndPrice,
                 description = listing.summary,
                 image = listing.heroImageUrl,
                 url = listing.publicUrl,

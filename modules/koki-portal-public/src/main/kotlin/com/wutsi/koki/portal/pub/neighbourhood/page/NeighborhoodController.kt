@@ -71,11 +71,15 @@ class NeighborhoodController(
 
         loadMetrics(id, model)
 
+        val tenant = tenantHolder.get()
         model.addAttribute(
             "page",
             createPageModel(
                 name = PageName.NEIGHBOURHOOD,
-                title = neighbourhood.name,
+                title = getMessage(
+                    "page.neighbourhood.show.meta.title",
+                    arrayOf(neighbourhood.name, city?.name ?: "", tenant.name),
+                ),
                 url = neighbourhood.publicUrl,
                 description = place?.summary,
                 image = place?.heroImageUrl,

@@ -23,16 +23,22 @@ data class AgentEntity(
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
 
+    @Deprecated("")
     var totalRentals: Long? = null,
+    @Deprecated("")
     var totalSales: Long? = null,
+    @Deprecated("")
     var totalTransactions: Long? = null,
 
+    @Deprecated("")
     @Column(name = "past_12m_sales")
     var past12mSales: Long? = null,
 
+    @Deprecated("")
     @Column(name = "past_12m_rentals")
     var past12mRentals: Long? = null,
 
+    @Deprecated("")
     @Column(name = "past_12m_transactions")
     var past12mTransactions: Long? = null,
 
@@ -40,6 +46,7 @@ data class AgentEntity(
     var modifiedAt: Date = Date(),
     var lastSoldAt: Date? = null,
 
+    @Deprecated("")
     @OneToMany()
     @JoinColumn("agent_fk")
     val metrics: List<AgentMetricEntity> = listOf(),

@@ -51,6 +51,19 @@ class SearchListingMetricEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `by multiple agent-id`() {
+        val response = rest.getForEntity(
+            "/v1/listings/metrics?seller-agent-user-id=100&seller-agent-user-id=101",
+            SearchListingMetricResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val metrics = response.body!!.metrics
+        assertEquals(3, metrics.size)
+        assertTrue(metrics.all { it.sellerAgentUserId == 100L || it.sellerAgentUserId == 101L })
+    }
+
+    @Test
     fun `by city-id`() {
         val response = rest.getForEntity(
             "/v1/listings/metrics?city-id=10",

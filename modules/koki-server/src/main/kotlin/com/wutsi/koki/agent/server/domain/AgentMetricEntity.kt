@@ -10,6 +10,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.util.Date
 
+@Deprecated("")
 @Entity
 @Table(name = "T_AGENT_METRIC")
 data class AgentMetricEntity(

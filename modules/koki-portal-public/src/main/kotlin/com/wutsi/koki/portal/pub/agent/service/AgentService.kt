@@ -1,10 +1,12 @@
 package com.wutsi.koki.portal.pub.agent.service
 
+import com.wutsi.koki.listing.dto.ListingMetricDimension
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.pub.agent.mapper.AgentMapper
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
-import com.wutsi.koki.portal.pub.user.model.UserModel
 import com.wutsi.koki.portal.pub.user.service.UserService
 import com.wutsi.koki.sdk.KokiAgents
+import com.wutsi.koki.sdk.KokiListings
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,18 +14,30 @@ class AgentService(
     private val koki: KokiAgents,
     private val mapper: AgentMapper,
     private val userService: UserService,
+    private val kokiListings: KokiListings,
 ) {
     fun get(
         id: Long,
         fullGraph: Boolean = true,
     ): AgentModel {
         val agent = koki.get(id).agent
-        val user = if (fullGraph) {
-            userService.get(agent.userId)
+        val user = userService.get(agent.userId)
+
+        val metrics = if (fullGraph) {
+            kokiListings.metrics(
+                sellerAgentUserIds = listOf(user.id),
+                listingStatus = ListingStatus.ACTIVE,
+                dimension = ListingMetricDimension.SELLER_AGENT,
+            ).metrics
         } else {
-            UserModel(id = agent.userId)
+            emptyList()
         }
-        return mapper.toAgentModel(agent, user)
+
+        return mapper.toAgentModel(
+            entity = agent,
+            user = user,
+            metrics = metrics
+        )
     }
 
     fun search(
@@ -41,7 +55,7 @@ class AgentService(
         ).agents
 
         val userIds = agents.map { agent -> agent.userId }
-        val users = if (userIds.isEmpty() || !fullGraph) {
+        val users = if (userIds.isEmpty()) {
             emptyMap()
         } else {
             userService.search(
@@ -50,10 +64,21 @@ class AgentService(
             ).associateBy { user -> user.id }
         }
 
+        val metrics = if (userIds.isEmpty() || !fullGraph) {
+            emptyList()
+        } else {
+            kokiListings.metrics(
+                sellerAgentUserIds = userIds,
+                listingStatus = ListingStatus.ACTIVE,
+                dimension = ListingMetricDimension.SELLER_AGENT,
+            ).metrics
+        }
+
         return agents.map { agent ->
             mapper.toAgentModel(
                 entity = agent,
                 users = users,
+                metrics = metrics,
             )
         }
     }
