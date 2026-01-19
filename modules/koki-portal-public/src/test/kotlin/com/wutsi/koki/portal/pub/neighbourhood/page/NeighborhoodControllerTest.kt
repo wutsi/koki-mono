@@ -113,7 +113,11 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("head meta[name='description']")
 
         // Opengraph
-        assertElementAttribute("head meta[property='og:title']", "content", neighborhoods[0].name)
+        assertElementAttribute(
+            "head meta[property='og:title']",
+            "content",
+            "Guide du quartier ${neighborhoods[0].name},${cities[0].name} | Vivre à ${neighborhoods[0].name},${cities[0].name} | ${tenants[0].name}"
+        )
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementNotPresent("head meta[property='og:description']")
         assertElementAttributeEndsWith(
