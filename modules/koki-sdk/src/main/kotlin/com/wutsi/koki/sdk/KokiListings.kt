@@ -25,7 +25,6 @@ import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import org.springframework.web.client.RestTemplate
-import kotlin.jvm.java
 
 class KokiListings(
     private val urlBuilder: URLBuilder,
@@ -193,7 +192,7 @@ class KokiListings(
 
     fun metrics(
         neighbourhoodId: Long? = null,
-        sellerAgentUserId: Long? = null,
+        sellerAgentUserIds: List<Long> = emptyList(),
         cityId: Long? = null,
         bedrooms: Int? = null,
         propertyCategory: PropertyCategory? = null,
@@ -205,7 +204,7 @@ class KokiListings(
             "$PATH_PREFIX/metrics",
             mapOf(
                 "neighbourhood-id" to neighbourhoodId,
-                "seller-agent-user-id" to sellerAgentUserId,
+                "seller-agent-user-id" to sellerAgentUserIds,
                 "city-id" to cityId,
                 "bedrooms" to bedrooms,
                 "property-category" to propertyCategory,
