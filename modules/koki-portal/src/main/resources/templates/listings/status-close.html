@@ -46,8 +46,10 @@
                         </div>
                         <div class="section-item" th:if="${closing}">
                             <label class="title">
-                                <span th:if="!${listing.listingTypeRental}" th:text="#{page.listing.sale-price}">SALE_PRICE</span>
-                                <span th:if="${listing.listingTypeRental}" th:text="#{page.listing.rental-price}">SALE_PRICE</span>
+                                <span th:if="${form.status.name() == 'SOLD'}"
+                                      th:text="#{page.listing.sale-price}">SALE</span>
+                                <span th:if="${form.status.name() != 'SOLD'}"
+                                      th:text="#{page.listing.rental-price}">RENTAL</span>
                                 <span class="required">*</span>
                             </label>
                             <div class="input-group">
