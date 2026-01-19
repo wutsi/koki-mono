@@ -189,10 +189,6 @@ koki:
         consumer-delay-seconds: 1
 
         agent:
-            metrics:
-                jobs:
-                    daily: "0 0 1 * * *"     # Every day at 1:00AM
-                    monthly: "0 0 7 2 * *"   # Every 2nd of each month at 7:00AM
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-agent-queue

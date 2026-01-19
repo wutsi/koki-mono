@@ -269,7 +269,7 @@
 </div>
 
 <div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
-    <a target="_new" th:href="'/listings/' + ${listing.id}">
+    <a th:href="'/listings/' + ${listing.id}">
         <div class="listing-status-container">
             <div th:if="!${listing.statusSold}" th:remove="tag">
                 <div th:replace="~{__components/listing :: listing-type-badge(${listing})}"></div>
@@ -283,7 +283,7 @@
         </div>
     </a>
     <div class="listing-details padding-small">
-        <a target="_new" th:href="'/listings/' + ${listing.id}">
+        <a th:href="'/listings/' + ${listing.id}">
             <b class="listing-price" th:if="!${listing.statusSold}" th:text="${listing.price.displayText}">$$$</b>
             <b class="listing-price" th:if="${listing.statusSold}" th:text="${listing.salePrice.displayText}">$$$</b>
 
