@@ -65,7 +65,7 @@ koki:
         modules:
             agent: false
             account: false
-            contact: true
+            contact: false
             image: true
             file: false
             lead: true

@@ -29,7 +29,7 @@
                         <span th:text="#{button.listing}">CREATE</span>
                     </a>
                     <a class="btn btn-light btn-sm" href="/contacts/create" id="btn-create-contact"
-                       th:if="${user?.canManage('contact')} OR ${user.hasFullAccess('contact')}">
+                       th:if="${toggles.isModuleEnabled('contact')} AND ${user?.canManage('contact')} OR ${user.hasFullAccess('contact')}">
                         <i class="fa-solid fa-plus"></i>
                         <span th:text="#{button.contact}">CREATE</span>
                     </a>

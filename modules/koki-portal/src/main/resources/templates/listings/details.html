@@ -361,7 +361,7 @@
 </div>
 
 <a name="listing-seller-section" th:if="${listing.canManage(user)}"></a>
-<div id="listing-seller-section" th:if="${listing.canManage(user)}">
+<div id="listing-seller-section" th:if="${listing.canManage(user)} AND ${toggles.isModuleEnabled('contact')}">
     <h4>
         <span th:text="#{page.listing.show.seller}">SELLER</span>
         <a class="text-small btn-section-edit"
