@@ -47,51 +47,128 @@
     });
 </script>
 
-<div class="flex flex-wrap" th:fragment="user-summary(me, editable)">
-    <div>
-        <img class="user-photo"
-             th:alt="${me.displayName}"
-             th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"
-        />
-    </div>
-    <div class="margin-left margin-right">
-        <h1 class="entity-title text-center" th:text="${me.displayName}">NAME</h1>
-        <div th:text="${me.employer}">EMPLOYER</div>
-        <div class="text-small gray" th:if="${me.city}" th:text="${me.city.name}">CITY</div>
-    </div>
-    <div class="flex-grow text-right">
-        <div th:if="${me.profileStrength}">
-            <span th:text="#{page.home.profile_strength}">STRENGTH</span>:
-            <b th:class="'profile-strength-' + ${me.profileStrength.rating}"
-               th:text="#{'profile-strength.' + ${me.profileStrength.rating}}">
-                MODERATE
-            </b>
+<div th:fragment="user-summary(me, editable)">
+    <div class="flex flex-wrap">
+        <div>
+            <img class="user-photo"
+                 th:alt="${me.displayName}"
+                 th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"
+            />
         </div>
-        <div th:if="${editable}">
-            <a class="text-small" href="/users/profile" th:if="${user.id} == ${me.id}">
-                <i class="fa-solid fa-pencil"></i>
-                <span th:text="#{button.update_profile}">Update Profile</span>
-            </a>
-            <br/>
-            <a class="text-small" href="/users/photo" th:if="${user.id} == ${me.id}">
-                <i class="fa-solid fa-camera"></i>
-                <span th:text="#{button.update_photo}">Update Photo</span>
+        <div class="margin-left margin-right">
+            <h1 class="entity-title text-center" th:text="${me.displayName}">NAME</h1>
+            <div th:text="${me.employer}">EMPLOYER</div>
+            <div class="text-small gray" th:if="${me.city}" th:text="${me.city.name}">CITY</div>
+        </div>
+        <div class="flex-grow text-right">
+            <div th:if="${me.profileStrength}">
+                <span th:text="#{page.home.profile_strength}">STRENGTH</span>:
+                <b th:class="'profile-strength-' + ${me.profileStrength.rating}"
+                   th:text="#{'profile-strength.' + ${me.profileStrength.rating}}">
+                    MODERATE
+                </b>
+            </div>
+            <div th:if="${editable}">
+                <a class="text-small" href="/users/profile" th:if="${user.id} == ${me.id}">
+                    <i class="fa-solid fa-pencil"></i>
+                    <span th:text="#{button.update_profile}">Update Profile</span>
+                </a>
+                <br/>
+                <a class="text-small" href="/users/photo" th:if="${user.id} == ${me.id}">
+                    <i class="fa-solid fa-camera"></i>
+                    <span th:text="#{button.update_photo}">Update Photo</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="margin-top" th:if="${me.biography}">
+        <div>
+            <b th:text="#{page.profile.biography}">ABOUT</b>
+            <span>-</span>
+            <a aria-controls="user-bio" aria-expanded="false" class="text-small" data-bs-toggle="collapse"
+               href="#user-bio" id="user-bio-link"
+               role="button" th:text="#{button.show}">
+                Show Biography
             </a>
         </div>
+        <div class="collapse" id="user-bio">
+            <div class="margin-bottom-small" th:utext="${me.biographyHtml}">BIO</div>
+        </div>
+
+        <script th:inline="javascript">
+            document.addEventListener("DOMContentLoaded", function () {
+                const bioLink = document.getElementById("user-bio-link");
+                const bioCollapse = document.getElementById("user-bio");
+
+                bioCollapse.addEventListener('shown.bs.collapse', function () {
+                    bioLink.setAttribute("aria-expanded", "true");
+                    bioLink.textContent = /*[[#{button.hide}]]*/ 'Hide Biography';
+                });
+
+                bioCollapse.addEventListener('hidden.bs.collapse', function () {
+                    bioLink.setAttribute("aria-expanded", "false");
+                    bioLink.textContent = /*[[#{button.show}]]*/ 'Show Biography';
+                });
+            });
+        </script>
+    </div>
+
+    <div class="margin-top" th:if="${me.mobile} OR ${me.email} OR ${me.websiteUrl}">
+        <div class="margin-top-small" th:if="${me.mobile}">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span th:text="${me.mobileText}">MOBILE</span>
+            <a class="btn btn-whatsapp btn-sm margin-left-small" target="_blank"
+               th:href="${me.whatsappUrl}"
+               th:if="${me.id} != ${user.id} AND ${me.whatsappUrl}">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.whatsapp}">Whatsapp</span>
+            </a>
+            <a class="btn btn-light btn-sm margin-left-small"
+               th:href="${me.mobileUrl}"
+               th:if="${me.id} != ${user.id} AND ${me.mobileUrl}"
+            >
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <span th:text="#{button.call}">XXXX</span>
+            </a>
+        </div>
+        <div th:if="${me.email}">
+            <i class="fa-solid fa-envelope"></i>
+            <a th:href="'mailto:' + ${me.email}" th:text="${me.email}">EMAIL</a>
+        </div>
+        <div class="margin-top-small" th:if="${me.websiteUrl}">
+            <i class="fa-solid fa-link"></i>
+            <a target="_blank" th:href="${me.websiteUrl}" th:text="#{page.agent.website}">WEBSITE</a>
+        </div>
+    </div>
+
+    <div class="margin-top flex" th:if="${me.facebookUrl} OR ${me.instagramUrl} OR ${me.twitterUrl} OR ${me.tiktokUrl}">
+        <a class="margin-right" target="_blank"
+           th:href="${me.facebookUrl}"
+           th:if="${me.facebookUrl}">
+            <img height="36" th:src="${page.assetUrl} + '/image/social/facebook.png'" width="36"/></a>
+
+        <a class="margin-right" target="_blank"
+           th:href="${me.instagramUrl}"
+           th:if="${me.instagramUrl}">
+            <img height="36" th:src="${page.assetUrl} + '/image/social/instagram.png'" width="36"/></a>
+
+        <a class="margin-right" target="_blank"
+           th:href="${me.twitterUrl}"
+           th:if="${me.twitterUrl}">
+            <img height="36" th:src="${page.assetUrl} + '/image/social/twitter.png'" width="36"/></a>
+
+        <a target="_blank" th:href="${me.tiktokUrl}"
+           th:if="${me.tiktokUrl}">
+            <img height="36" th:src="${page.assetUrl} + '/image/social/tiktok.png'" width="36"/></a>
     </div>
 </div>
 
 <div class="text-small flex user-card-small" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
     <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
-    <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
-        <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
-    </a>
 
     <div class="margin-left-small">
-        <b th:if="!${me.agentId}" th:text="${me.displayName}">NAME</b><br/>
-        <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
-            <b th:text="${me.displayName}">NAME</b><br/>
-        </a>
+        <b th:text="${me.displayName}">NAME</b><br/>
 
         <div class="text-small" th:text="${me.employer}">EMPLOYER</div>
         <div class="flex margin-top-small" th:if="${sendMessage} AND (${user?.id} != ${me.id})">
@@ -112,17 +189,10 @@
 </div>
 
 <div class="flex user-card" th:fragment="user-card(me, sendMessage)" th:if="${me}">
-    <img class="user-photo" th:if="!${me.agentId}" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
-    <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
-        <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
-    </a>
+    <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
 
     <div class="margin-left-small w-100">
-        <h5 class="margin-none" th:if="!${me.agentId}" th:text="${me.displayName}">NAME</h5>
-        <a th:href="'/agents/' + ${me.agentId}" th:if="${me.agentId}">
-            <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
-        </a>
-
+        <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
         <div th:text="${me.employer}">EMPLOYER</div>
         <div th:if="${sendMessage} AND (${user?.id} != ${me.id})">
             <div class="margin-top-small" th:if="${me.whatsappUrl}">

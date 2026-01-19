@@ -26,7 +26,7 @@ class ListingMetricEndpoints(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "neighbourhood-id") neighbourhoodId: Long? = null,
-        @RequestParam(required = false, name = "seller-agent-user-id") sellerAgentUserId: Long? = null,
+        @RequestParam(required = false, name = "seller-agent-user-id") sellerAgentUserIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "city-id") cityId: Long? = null,
         @RequestParam(required = false, name = "bedrooms") bedrooms: Int? = null,
         @RequestParam(required = false, name = "property-category") propertyCategory: PropertyCategory? = null,
@@ -37,7 +37,7 @@ class ListingMetricEndpoints(
         val metrics = service.search(
             tenantId = tenantId,
             neighbourhoodId = neighbourhoodId,
-            sellerAgentUserId = sellerAgentUserId,
+            sellerAgentUserIds = sellerAgentUserIds,
             cityId = cityId,
             bedrooms = bedrooms,
             propertyCategory = propertyCategory,

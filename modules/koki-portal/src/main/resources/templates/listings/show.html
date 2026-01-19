@@ -51,12 +51,14 @@
 
     <div class="row">
         <div class="col-12 col-md-8">
+            <!-- SUMMARY -->
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
                 </div>
             </div>
 
+            <!-- PUBLIC URL -->
             <div class="widget margin-top-small" th:if="${listing.publicUrl} AND !${listing.statusDraft}">
                 <div class="widget-body">
                     <div class="flex flex-wrap w-100 text-small">
@@ -92,6 +94,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- AGENT CARD -->
         <div class="col-12 col-md-4" th:if="${listing.sellerAgentUser}">
             <div class="widget">
                 <div class="widget-body">

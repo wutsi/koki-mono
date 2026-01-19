@@ -17,6 +17,8 @@ import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
+import com.wutsi.koki.portal.pub.RefDataFixtures.locations
+import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
 import org.junit.jupiter.api.BeforeEach
@@ -68,7 +70,11 @@ class AgentControllerTest : AbstractPageControllerTest() {
         )
 
         // Opengraph
-        assertElementAttributeContains("head meta[property='og:title']", "content", (user.displayName ?: ""))
+        assertElementAttribute(
+            "head meta[property='og:title']",
+            "content",
+            "${user.displayName} | Agent Immobilier à ${locations[0].name} | ${tenants[0].name}"
+        )
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttribute(
             "head meta[property='og:description']",
@@ -82,6 +88,7 @@ class AgentControllerTest : AbstractPageControllerTest() {
         )
 
         assertCurrentPageIs(PageName.AGENT)
+        assertElementPresent("#metric-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sold-listing-container")
