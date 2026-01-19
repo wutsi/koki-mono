@@ -274,7 +274,7 @@
             <!-- SIMILAR NEIGHBOURHOODS -->
             <div class="margin-top-2x" id="similar-neighbourhood-container" th:if="${similarNeighbourhoods}">
                 <hr/>
-                <h2 th:text="#{page.neighbourhood.section.similar_neighbourhoods(${neighbourhood.name})}">TITLE</h2>
+                <h2 th:text="#{page.neighbourhood.section.similar_neighbourhoods(${city?.name})}">TITLE</h2>
                 <div class="flex flex-wrap">
                     <div class="col-6 col-lg-4" th:each="neighbourhood:${similarNeighbourhoods}">
                         <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
