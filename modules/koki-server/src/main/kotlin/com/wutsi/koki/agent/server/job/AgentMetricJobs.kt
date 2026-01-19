@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 
+@Deprecated("")
 @Service
 class AgentMetricJobs(
     private val agentService: AgentService,

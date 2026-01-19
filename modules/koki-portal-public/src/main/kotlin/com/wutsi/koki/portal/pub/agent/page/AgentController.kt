@@ -50,6 +50,7 @@ class AgentController(
         @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
         model: Model,
     ): String {
+        val tenant = tenantHolder.get()
         val agent = agentService.get(id)
         model.addAttribute("agent", agent)
 
@@ -63,7 +64,10 @@ class AgentController(
             "page",
             createPageModel(
                 name = PageName.AGENT,
-                title = agent.user.displayName ?: "",
+                title = getMessage(
+                    key = "page.agent.show.meta.title",
+                    args = arrayOf(agent.user.displayName ?: "", agent.user.city?.name ?: "-", tenant.name)
+                ),
                 url = agent.publicUrl,
                 description = getMessage(
                     key = "page.agent.show.meta.description",

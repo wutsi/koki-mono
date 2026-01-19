@@ -18,7 +18,6 @@ class AgentControllerTest : AbstractPageControllerTest() {
     fun show() {
         navigateTo("/agents/${agent.id}")
         assertCurrentPageIs(PageName.AGENT)
-        assertElementPresent("#map-container")
         assertElementCount("#active-listings .listing", listings.size)
         assertElementCount("#sold-listings .listing", listings.size)
     }
@@ -39,7 +38,6 @@ class AgentControllerTest : AbstractPageControllerTest() {
         navigateTo("/agents/${agent.id}")
         Thread.sleep(2000)
         assertCurrentPageIs(PageName.AGENT)
-        assertElementNotPresent("#map-container")
         assertElementNotPresent("#active-listings")
         assertElementNotPresent("#sold-listings")
     }

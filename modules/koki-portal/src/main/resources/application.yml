@@ -63,7 +63,7 @@ koki:
         mobile-money: true
         co-brokering: false
         modules:
-            agent: true
+            agent: false
             account: false
             contact: false
             image: true

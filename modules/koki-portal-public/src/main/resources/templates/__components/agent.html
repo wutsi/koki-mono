@@ -14,14 +14,14 @@
                     <div th:text="${agent.user.employer}">EMPLOYER</div>
                 </div>
 
-                <div class="flex"
-                     th:if="${agent.totalSales > 0} OR ${agent.totalRentals > 0}">
-                    <div class="margin-right"
-                         th:if="${agent.totalRentals > 0}"
-                         th:utext="#{page.agent.n_total_rentals(${agent.totalRentals})}">00
+                <div class="flex" th:if="${agent.activeSaleMetric} OR ${agent.activeRentalMetric}">
+                    <div class="margin-right" th:if="${agent.activeSaleMetric}">
+                        <span th:text="#{page.place.for_sale}">SALE</span>:
+                        <b class="margin-right-small" th:text="${agent.activeSaleMetric.total}">000</b>
                     </div>
-                    <div th:if="${agent.totalSales > 0}"
-                         th:utext="#{page.agent.n_total_sales(${agent.totalSales})}">00
+                    <div th:if="${agent.activeRentalMetric}">
+                        <span th:text="#{page.place.for_rent}">RENTAL</span>:
+                        <b class="margin-right-small" th:text="${agent.activeRentalMetric.total}">000</b>
                     </div>
                 </div>
             </div>

@@ -26,41 +26,33 @@
         </div>
 
         <!-- METRICS -->
-        <div class="margin-top" th:if="${agent.totalSalesMetric} OR ${agent.totalRentalsMetric}">
+        <div class="margin-top" id="metric-container" th:if="${agent.activeSaleMetric} OR ${agent.activeRentalMetric}">
             <hr/>
             <table class="w-100">
-                <tr th:if="${agent.totalSalesMetric}">
-                    <td class="text-center text-top padding-bottom">
-                        <b class="text-larger" th:text="${agent.totalSalesMetric.total}">000</b>
-                        <div class="text-small" th:text="#{page.agent.sold}">SALES</div>
+                <tr th:if="${agent.activeSaleMetric}">
+                    <td class="text-center" th:classappend="${agent.activeRentalMetric} ? 'padding-bottom'">
+                        <span th:text="#{page.place.for_sale}">Sales</span>:
+                        <b class="margin-right-small" th:text="${agent.activeSaleMetric.total}">000</b>
                     </td>
-                    <td class="text-center text-top padding-bottom">
-                        <b class="text-larger" th:text="${agent.past12mSalesMetric.averagePrice.shortText}">$$$</b>
-                        <div class="text-small" th:text="#{page.agent.average-price}">AVERAGE PRICE</div>
-                    </td>
-                    <td class="text-center text-top padding-bottom">
-                        <b class="text-larger"
-                           th:text="${agent.priceRangeText(agent.totalSalesMetric.minPrice, agent.totalSalesMetric.maxPrice)}">$$$</b>
-                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
+                    <td class="text-center" th:classappend="${agent.activeRentalMetric} ? 'padding-bottom'">
+                        <span th:text="#{page.place.average_price}">Average Price</span>:
+                        <b class="margin-right-small" th:text="${agent.activeSaleMetric.averagePrice.shortText}">$$$</b>
                     </td>
                 </tr>
-                <tr th:if="${agent.totalRentalsMetric}">
-                    <td class="text-center text-top">
-                        <b class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</b>
-                        <div class="text-small" th:text="#{page.agent.rented}">RENTALS</div>
+                <tr th:if="${agent.activeRentalMetric}">
+                    <td class="text-center">
+                        <span th:text="#{page.place.for_rent}">Rentals</span>:
+                        <b class="margin-right-small" th:text="${agent.activeRentalMetric.total}">000</b>
                     </td>
-                    <td class="text-center text-top">
-                        <b class="text-larger" th:text="${agent.past12mRentalsMetric.averagePrice.shortText}">$$$</b>
-                        <div class="text-small" th:text="#{page.agent.average-price}">AVERAGE_PRICE</div>
-                    </td>
-                    <td class="text-center text-top">
-                        <b class="text-larger"
-                           th:text="${agent.priceRangeText(agent.totalRentalsMetric.minPrice, agent.totalRentalsMetric.maxPrice)}">$$$</b>
-                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
+                    <td class="text-center">
+                        <span th:text="#{page.place.average_price}">Average Price</span>:
+                        <b class="margin-right-small"
+                           th:text="${agent.activeRentalMetric.averagePrice.shortText}">$$$</b>
                     </td>
                 </tr>
             </table>
         </div>
+
 
         <!-- ABOUT -->
         <div class="margin-top">

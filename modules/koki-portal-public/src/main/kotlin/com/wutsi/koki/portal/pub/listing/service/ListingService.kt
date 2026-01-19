@@ -85,7 +85,8 @@ class ListingService(
         } else {
             agentService.search(
                 userIds = agentUserIds,
-                limit = agentUserIds.size
+                limit = agentUserIds.size,
+                fullGraph = false,
             ).associateBy { agent -> agent.id }
         }
 
@@ -234,7 +235,7 @@ class ListingService(
 
     fun metrics(
         neighbourhoodId: Long? = null,
-        sellerAgentUserId: Long? = null,
+        sellerAgentUserIds: List<Long> = emptyList(),
         cityId: Long? = null,
         bedrooms: Int? = null,
         propertyCategory: PropertyCategory? = null,
@@ -244,7 +245,7 @@ class ListingService(
     ): List<ListingMetricModel> {
         val response = koki.metrics(
             neighbourhoodId = neighbourhoodId,
-            sellerAgentUserId = sellerAgentUserId,
+            sellerAgentUserIds = sellerAgentUserIds,
             cityId = cityId,
             bedrooms = bedrooms,
             propertyCategory = propertyCategory,

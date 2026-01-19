@@ -16,7 +16,7 @@ class ListingMetricService(
     fun search(
         tenantId: Long,
         neighbourhoodId: Long? = null,
-        sellerAgentUserId: Long? = null,
+        sellerAgentUserIds: List<Long> = emptyList(),
         cityId: Long? = null,
         bedrooms: Int? = null,
         propertyCategory: PropertyCategory? = null,
@@ -30,8 +30,8 @@ class ListingMetricService(
         if (neighbourhoodId != null) {
             jql.append(" AND NM.neighborhoodId = :neighbourhoodId")
         }
-        if (sellerAgentUserId != null) {
-            jql.append(" AND NM.sellerAgentUserId = :sellerAgentUserId")
+        if (sellerAgentUserIds.isNotEmpty()) {
+            jql.append(" AND NM.sellerAgentUserId IN :sellerAgentUserIds")
         }
         if (cityId != null) {
             jql.append(" AND NM.cityId = :cityId")
@@ -55,8 +55,8 @@ class ListingMetricService(
         if (neighbourhoodId != null) {
             query.setParameter("neighbourhoodId", neighbourhoodId)
         }
-        if (sellerAgentUserId != null) {
-            query.setParameter("sellerAgentUserId", sellerAgentUserId)
+        if (sellerAgentUserIds.isNotEmpty()) {
+            query.setParameter("sellerAgentUserIds", sellerAgentUserIds)
         }
         if (cityId != null) {
             query.setParameter("cityId", cityId)

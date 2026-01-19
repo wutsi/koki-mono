@@ -31,54 +31,6 @@
                                  th:text="${agent.user.city.name}">CITY
                             </div>
                         </div>
-                        <div class="flex-grow agent-metrics">
-                            <table class="w-100">
-                                <tr th:if="${agent.totalSalesMetric}">
-                                    <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger" th:text="${agent.totalSalesMetric.total}">000</div>
-                                        <div class="text-small" th:text="#{page.agent.sold}">SALES</div>
-                                    </td>
-                                    <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger"
-                                             th:text="${agent.totalSalesMetric.averagePrice.shortText}">$$$
-                                        </div>
-                                        <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
-                                        </div>
-                                    </td>
-                                    <td class="text-center text-top padding-bottom">
-                                        <div class="text-larger"
-                                             th:text="${agent.priceRangeText(agent.totalSalesMetric.minPrice, agent.totalSalesMetric.maxPrice)}">
-                                            $$$
-                                        </div>
-                                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
-                                    </td>
-                                </tr>
-                                <tr th:if="${agent.totalRentalsMetric}">
-                                    <td class="text-center text-top">
-                                        <div class="text-larger" th:text="${agent.totalRentalsMetric.total}">000</div>
-                                        <div class="text-small" th:text="#{page.agent.rented}">RENTALS</div>
-                                    </td>
-                                    <td class="text-center text-top">
-                                        <div class="text-larger"
-                                             th:text="${agent.totalRentalsMetric.averagePrice.shortText}">$$$
-                                        </div>
-                                        <div class="text-small" th:text="#{page.agent.average_price}">AVERAGE_PRICE
-                                        </div>
-                                    </td>
-                                    <td class="text-center text-top">
-                                        <div class="text-larger"
-                                             th:text="${agent.priceRangeText(agent.totalRentalsMetric.minPrice, agent.totalRentalsMetric.maxPrice)}">
-                                            $$$
-                                        </div>
-                                        <div
-                                            th:if="${agent.totalRentalsMetric.minPrice.amount} == ${agent.totalRentalsMetric.maxPrice.amount}">
-                                            <span th:text="${agent.totalRentalsMetric.minPrice.shortText}">$$</span>
-                                        </div>
-                                        <div class="text-small" th:text="#{page.agent.price}">PRICE</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -139,79 +91,30 @@
         </div>
     </div>
 
-    <div class="row" th:if="!${listings.isEmpty()}">
+    <div class="row" id="active-listings" th:if="!${activeListings.isEmpty()}">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <h2 th:text="#{page.agent.show.listings}">LISTINGS</h2>
-                    <div id="map-container">
-                        <div data-component-id="map"
-                             id="map"
-                             th:data-latitude="${mapCenterPoint?.latitude}"
-                             th:data-longitude="${mapCenterPoint?.longitude}"
-                             th:data-on-ready="on_map_ready"
-                             th:data-show-marker="${mapCenterPoint} ? true : false"
-                             th:data-zoom="14"
-                        >
-                        </div>
-                    </div>
-                    <div class="margin-top-2x" id="active-listings" th:if="!${activeListings.isEmpty()}">
-                        <h3 class="margin-none" th:text="#{page.agent.show.listings.active}">TITLE</h3>
-                        <div
-                            th:replace="~{__components/listing :: listing-table(${activeListings}, false, false, false, null)}"></div>
-                    </div>
+                    <h2 class="margin-none" th:text="#{page.agent.show.listings.active}">TITLE</h2>
+                    <div
+                        th:replace="~{__components/listing :: listing-table(${activeListings}, false, false, false, null)}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <div class="margin-top-2x" id="sold-listings" th:if="!${soldListings.isEmpty()}">
-                        <h3 class="margin-none" th:text="#{page.agent.show.listings.recent-transactions}">TITLE</h3>
-                        <div
-                            th:replace="~{__components/listing :: listing-table(${soldListings}, true, false, false, null)}"></div>
-                    </div>
+    <div class="row" id="sold-listings" th:if="!${soldListings.isEmpty()}">
+        <div class="col-12">
+            <div class="widget">
+                <div class="widget-body">
+                    <h2 class="margin-none" th:text="#{page.agent.show.listings.recent-transactions}">TITLE</h2>
+                    <div
+                        th:replace="~{__components/listing :: listing-table(${soldListings}, true, false, false, null)}"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script th:inline="javascript">
-    const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
-
-    function on_map_ready(id, map) {
-        console.log(json);
-
-        for (var i = 0; i < json.length; i++) {
-            let item = json[i];
-            const icon = L.AwesomeMarkers.icon({
-                icon: 'home',
-                markerColor: item.sold ? 'gray' : '#1d7edf',
-                prefix: 'fa'
-            });
-
-            let marker = L.marker([item.latitude, item.longitude], {icon: icon});
-            marker.on('mouseover', () => {
-                const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
-                    <a href="${item.url}" target="_blank">
-                        <div class="flex">
-                            <div class="listing-image">
-                                <img src="${item.heroImageUrl}" />
-                            </div>
-                            <div class="listing-details">
-                                <b class="listing-price">${item.price}</b>
-                                <div class="flex">
-                                   <div>${item.bedrooms}</div>
-                                   <div class="margin-left-small">${item.area}</div>
-                                </div>
-                                <div class="gray">${item.location}</div>
-                                <div class="text-danger"><b>${item.status}</b></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>`;
-                marker.bindPopup(html);
-                marker.openPopup();
-            });
-            map.addLayer(marker);
-        }
-    }
-</script>
 </body>
 </html>
