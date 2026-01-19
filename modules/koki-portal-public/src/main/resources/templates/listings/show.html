@@ -333,16 +333,18 @@
                 </li>
             </ul>
 
-            <div class="margin-top"
-                 data-component-id="map"
-                 data-disable-scroll-wheel-zoom="true"
-                 data-disable-touch-zoom="true"
-                 th:data-latitude="${listing.geoLocation.latitude}"
-                 th:data-longitude="${listing.geoLocation.longitude}"
-                 th:data-show-marker="true"
-                 th:data-zoom="18"
-                 th:if="${listing.geoLocation}"
-            >
+            <div id="map-container" th:if="${listing.geoLocation}">
+                <div class="margin-top"
+                     data-component-id="map"
+                     data-disable-scroll-wheel-zoom="true"
+                     data-disable-touch-zoom="true"
+                     id="map"
+                     th:data-latitude="${listing.geoLocation.latitude}"
+                     th:data-longitude="${listing.geoLocation.longitude}"
+                     th:data-show-marker="true"
+                     th:data-zoom="18"
+                >
+                </div>
             </div>
 
             <div class="margin-top border border-rounded background-white padding neighbourhood-card" th:if="${place}">

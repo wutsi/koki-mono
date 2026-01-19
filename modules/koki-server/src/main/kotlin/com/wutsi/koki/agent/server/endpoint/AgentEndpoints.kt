@@ -2,7 +2,6 @@ package com.wutsi.koki.agent.server.endpoint
 
 import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
-import com.wutsi.koki.agent.server.job.AgentMetricJobs
 import com.wutsi.koki.agent.server.mapper.AgentMapper
 import com.wutsi.koki.agent.server.service.AgentService
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 class AgentEndpoints(
     private val service: AgentService,
     private val mapper: AgentMapper,
-    private val jobs: AgentMetricJobs
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -48,15 +46,5 @@ class AgentEndpoints(
         return SearchAgentResponse(
             agents = agents.map { agent -> mapper.toAgentSummary(agent) }
         )
-    }
-
-    @GetMapping("/jobs/metrics/daily")
-    fun jobDailyMetrics() {
-        jobs.daily()
-    }
-
-    @GetMapping("/jobs/metrics/monthly")
-    fun jobMonthlyMetrics() {
-        jobs.monthly()
     }
 }
