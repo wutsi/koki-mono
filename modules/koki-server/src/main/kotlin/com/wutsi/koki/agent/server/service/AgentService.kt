@@ -33,10 +33,6 @@ class AgentService(
         return agent
     }
 
-    fun getByLastSoldAtIsAfter(date: Date): List<AgentEntity> {
-        return dao.findByLastSoldAtIsGreaterThanEqual(date)
-    }
-
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),
@@ -51,7 +47,6 @@ class AgentService(
         if (userIds.isNotEmpty()) {
             jql.append(" AND A.userId IN :userIds")
         }
-        jql.append(" ORDER BY A.past12mTransactions DESC")
 
         val query = em.createQuery(jql.toString(), AgentEntity::class.java)
         query.setParameter("tenantId", tenantId)
