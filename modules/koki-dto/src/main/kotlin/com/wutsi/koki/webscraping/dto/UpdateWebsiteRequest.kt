@@ -9,4 +9,5 @@ data class UpdateWebsiteRequest(
     val contentSelector: String? = null,
     val imageSelector: String? = null,
     val active: Boolean = true,
+    val homeUrls: List<String> = emptyList(),
 )

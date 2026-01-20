@@ -110,4 +110,8 @@ object ErrorCode {
     val USER_NOT_FOUND: String = "$PREFIX:user:not-found"
     val USER_DUPLICATE_EMAIL: String = "$PREFIX:user:duplicate-email"
     val USER_DUPLICATE_USERNAME: String = "$PREFIX:user:duplicate-username"
+
+    val WEBPAGE_NOT_FOUND: String = "$PREFIX:webpage:not-found"
+    val WEBSITE_NOT_FOUND: String = "$PREFIX:website:not-found"
+    val WEBSITE_DUPLICATE_BASE_URL: String = "$PREFIX:website:duplicate-base-url"
 }
