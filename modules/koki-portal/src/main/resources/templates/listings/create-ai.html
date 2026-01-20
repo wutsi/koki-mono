@@ -54,14 +54,20 @@
                                 </div>
                             </div>
 
-                            <div class="section-item">
+                            <div class="section-item row">
                                 <label class="title" th:text="#{page.listing.ai-text}">
                                     <span th:text="#{page.listing.description}">CITY</span>
                                     <span class="required">*</span>
                                 </label>
-                                <div class="form-text" th:utext="#{page.listing.ai-text.help}">HELP</div>
-                                <textarea class="form-control margin-top-small" maxlength="1000" required rows="10"
-                                          th:field="*{text}"></textarea>
+                                <div class="col-12 col-lg-7 col-md-6">
+                                    <textarea class="form-control margin-top-small" maxlength="5000" required rows="10"
+                                              th:field="*{text}"></textarea>
+                                </div>
+                                <div class="col-12 col-lg-5 col-md-6">
+                                    <div class="form-text background-lightgray border-rounded padding"
+                                         th:utext="#{page.listing.ai-text.help}">HELP
+                                    </div>
+                                </div>
                             </div>
                             <div class="section-item flex flex-space-between">
                                 <button class="btn btn-primary w-49-mobile" id="btn-submit"

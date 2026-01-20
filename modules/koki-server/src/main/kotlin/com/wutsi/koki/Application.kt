@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.place.server.domain",
         "com.wutsi.koki.refdata.server.domain",
         "com.wutsi.koki.tenant.server.domain",
+        "com.wutsi.koki.webscraping.server.domain",
     ],
 )
 @EnableJpaRepositories(
@@ -47,6 +48,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
         "com.wutsi.koki.place.server.dao",
         "com.wutsi.koki.refdata.server.dao",
         "com.wutsi.koki.tenant.server.dao",
+        "com.wutsi.koki.webscraping.server.dao",
     ],
 )
 class Application

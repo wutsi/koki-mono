@@ -1,0 +1,43 @@
+{
+  "websites": [
+    {
+      "userId": 1,
+      "baseUrl": "https://www.ereshomes.com",
+      "listingUrlPrefix": "/property-details",
+      "homeUrls": [
+        "https://www.ereshomes.com/property-type/apartments",
+        "https://www.ereshomes.com/property-type/apartments?page=2",
+        "https://www.ereshomes.com/property-type/villas",
+        "https://www.ereshomes.com/property-type/offices"
+      ],
+      "contentSelector": ".sp-lg-title, .price, .ps-widget h4, .ps-widget p.text, .ps-widget p.justify",
+      "imageSelector": ".sp-img-content img",
+      "active": true
+    },
+    {
+      "userId": 1,
+      "baseUrl": "https://codecis.com",
+      "listingUrlPrefix": "/property",
+      "homeUrls": [
+        "https://codecis.com/status/a-louer/",
+        "https://codecis.com/status/a-louer/page/2/",
+        "https://codecis.com/status/a-vendre/",
+        "https://codecis.com/status/a-vendre/page/2/"
+      ],
+      "contentSelector": ".property-title-price-wrap, .property-description-wrap, .property-features-wrap, property-address-wrap",
+      "imageSelector": "#property-gallery-js img",
+      "active": true
+    },
+    {
+      "userId": 1,
+      "baseUrl": "https://mav-sarl.com",
+      "listingUrlPrefix": "/properties",
+      "homeUrls": [
+        "https://mav-sarl.com/featured"
+      ],
+      "contentSelector": "h1, .mh-estate__section h3, .mh-estate__section p, .mh-estate__section .mh-estate__list",
+      "imageSelector": ".swiper-wrapper img",
+      "active": true
+    }
+  ]
+}
