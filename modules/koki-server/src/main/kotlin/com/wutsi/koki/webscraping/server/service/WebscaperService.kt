@@ -1,154 +1,148 @@
 package com.wutsi.koki.webscraping.server.service
 
-import com.wutsi.koki.error.dto.Error
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.error.exception.NotFoundException
-import com.wutsi.koki.webscraping.dto.CreateWebsiteRequest
-import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
-import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
-import com.wutsi.koki.webscraping.server.dao.WebsiteRepository
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
+import com.wutsi.koki.platform.util.html.HtmlSanitizeFilter
+import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.domain.WebsiteEntity
-import jakarta.persistence.EntityManager
-import org.apache.commons.codec.digest.DigestUtils
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
+import org.jsoup.nodes.TextNode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import java.util.Date
 
 @Service
-class WebsiteService(
-    private val dao: WebsiteRepository,
+class WebscaperService(
     private val webpageService: WebpageService,
-    private val em: EntityManager,
+    private val http: Http,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(WebsiteService::class.java)
-        const val USER_AGENT =
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        private val LOGGER = LoggerFactory.getLogger(WebscaperService::class.java)
+        private val MULTIPLE_CR_REGEX = Regex("\\n{2,}")
+        private val MULTIPLE_SP_REGEX = Regex("\\s{2,}")
+        private val CR = "\n"
+        private val SP = " "
     }
 
-    @Transactional
-    fun create(request: CreateWebsiteRequest, tenantId: Long): Long {
-        val baseUrlHash = generateHash(request.baseUrl)
+    private val sanitizerFilter = HtmlSanitizeFilter()
 
-        // Check if website already exists
-        val existing = dao.findByBaseUrlHashAndTenantId(baseUrlHash, tenantId)
-        if (existing != null) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorCode.WEBSITE_DUPLICATE_BASE_URL,
-                    message = "A website with this base URL already exists"
-                )
-            )
+    fun scrape(website: WebsiteEntity, request: ScrapeWebsiteRequest): List<WebpageEntity> {
+        val homeUrls = website.homeUrls.ifEmpty { listOf(website.baseUrl) }
+        val result = mutableListOf<WebpageEntity?>()
+        val listingUrlPrefix = if (website.listingUrlPrefix.startsWith(website.baseUrl)) {
+            website.listingUrlPrefix
+        } else {
+            website.baseUrl.trimEnd('/') + "/" + website.listingUrlPrefix.trimStart('/')
         }
 
-        // Create website
-        val website = dao.save(
-            WebsiteEntity(
-                tenantId = tenantId,
-                userId = request.userId,
-                baseUrl = request.baseUrl,
-                baseUrlHash = baseUrlHash,
-                listingUrlPrefix = request.listingUrlPrefix,
-                contentSelector = request.contentSelector,
-                imageSelector = request.imageSelector,
-                active = request.active,
-                createdAt = Date(),
-            )
-        )
-        return website.id!!
-    }
-
-    @Transactional
-    fun update(id: Long, request: UpdateWebsiteRequest, tenantId: Long) {
-        val website = get(id, tenantId)
-
-        website.listingUrlPrefix = request.listingUrlPrefix
-        website.contentSelector = request.contentSelector
-        website.imageSelector = request.imageSelector
-        website.active = request.active
-
-        dao.save(website)
-    }
-
-    fun get(id: Long, tenantId: Long): WebsiteEntity {
-        val website = dao.findByIdAndTenantId(id, tenantId)
-            ?: throw NotFoundException(
-                error = Error(
-                    code = ErrorCode.WEBSITE_NOT_FOUND,
-                    message = "Website not found"
-                )
-            )
-        return website
-    }
-
-    fun scrape(websiteId: Long, tenantId: Long): ScrapeWebsiteResponse {
-        val website = get(websiteId, tenantId)
-
-        val doc = Jsoup.connect(website.baseUrl)
-            .userAgent(USER_AGENT)
-            .followRedirects(true)
-            .get()
-
-        val urls = doc.select("a[href]")
-            .map { elt -> elt.absUrl("href") }
-            .filter { href -> href.startsWith(website.listingUrlPrefix) }
-            .distinct()
-
-        val websites = urls.map { url ->
+        homeUrls.forEach { homeUrl ->
             try {
-                scrape(url, website)
+                LOGGER.info("Scraping home URL: $homeUrl")
+                val doc = get(homeUrl, website.baseUrl)
+                val urls = doc.select("a[href]")
+                    .map { elt -> elt.absUrl("href") }
+                    .filter { href -> href.startsWith(listingUrlPrefix, ignoreCase = true) }
+                    .distinct()
+                LOGGER.info("${urls.size} URLs with prefix $listingUrlPrefix")
+
+                result.addAll(urls.mapNotNull { url ->
+                    try {
+                        LOGGER.info("Scraping webpage: $url")
+                        scrape(url, website, request)
+                    } catch (e: Exception) {
+                        LOGGER.warn("Could not scrape $url", e)
+                        null
+                    }
+                }
+                )
             } catch (e: Exception) {
-                LOGGER.warn("Could not scrape $url", e)
-                null
+                LOGGER.warn("Could not scrape $homeUrl", e)
             }
         }
-
-        return ScrapeWebsiteResponse(
-            webpageImported = websites.size
-        )
+        return result.filterNotNull()
     }
 
-    private fun scrape(url: String, website: WebsiteEntity): WebpageEntity? {
-        val urlHash = generateHash(url)
+    private fun scrape(url: String, website: WebsiteEntity, request: ScrapeWebsiteRequest): WebpageEntity? {
+        val urlHash = http.hash(url)
         if (webpageService.getByUrlHash(urlHash, website.tenantId) != null) {
             return null
         }
 
-        val doc = Jsoup.connect(url)
-            .userAgent(USER_AGENT)
-            .followRedirects(true)
-            .get()
-
-        val images = website.imageSelector?.let { selector ->
-            doc.select("img")
-                .map { elt -> elt.absUrl("src") }
-                .filter { src -> src.startsWith(selector) }
-                .distinct()
-        } ?: emptyList()
-
-        val content = website.contentSelector?.let { selector ->
-            doc.select(selector)
-                .joinToString("\n") { elt -> elt.text() }
-        } ?: ""
-
-        return webpageService.save(
+        val doc = get(url, website.baseUrl)
+        val webpage = webpageService.new(
             website = website,
             url = url,
-            images = images,
-            content = content,
+            images = extractImages(doc, website),
+            content = extractContent(doc, website),
         )
+        return if (request.testMode) {
+            webpage
+        } else {
+            webpageService.save(webpage)
+        }
     }
 
-    private fun generateHash(value: String): String {
-        val xvalue = if (value.endsWith("/")) {
-            value.substring(0, value.length - 1)
-        } else {
-            value
+    private fun extractImages(doc: Document, website: WebsiteEntity): List<String> {
+        if (website.imageSelector.isNullOrEmpty()) {
+            return emptyList()
         }
-        return DigestUtils.md5Hex(xvalue.lowercase().trim())
+
+        return doc.select(website.imageSelector!!)
+            .map { elt -> elt.absUrl("src") }
+            .distinct()
+    }
+
+    private fun extractContent(doc: Document, website: WebsiteEntity): String? {
+        if (website.contentSelector.isNullOrEmpty()) {
+            return null
+        } else {
+            return doc.select(website.contentSelector!!)
+                .joinToString("\n") { elt -> html2markdown(elt) }
+        }
+    }
+
+    private fun html2markdown(elt: Element): String {
+        val content = sanitizerFilter.filter(elt.html())
+        return FlexmarkHtmlConverter.builder().build().convert(content)
+    }
+
+    private fun toText(element: Element): String {
+        val sb = StringBuilder()
+
+        for (node in element.childNodes()) {
+            when (node) {
+                is TextNode -> {
+                    sb.append(node.text().trim())
+                }
+
+                is Element -> {
+                    val tag = node.tagName()
+                    when {
+                        tag == "br" -> sb.append(CR)
+                        tag == "hr" -> sb.append("$CR-----------$CR")
+                        tag == "li" -> sb.append("- ")
+                        !node.isBlock -> sb.append(SP)
+                    }
+
+                    // Append text of the child element recursively
+                    sb.append(toText(node))
+
+                    // Add carriage returns for specific tags
+
+                    when {
+                        node.isBlock -> sb.append(CR)
+                        else -> {}
+                    }
+                }
+            }
+        }
+        return sb.toString().replace(MULTIPLE_CR_REGEX, CR)
+            .replace(MULTIPLE_SP_REGEX, SP)
+    }
+
+    private fun get(url: String, baseUrl: String): Document {
+        val html = http.get(url)
+        return Jsoup.parse(html, baseUrl)
     }
 }

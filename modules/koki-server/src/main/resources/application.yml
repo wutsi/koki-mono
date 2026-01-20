@@ -122,6 +122,10 @@ springdoc:
             display-name: User API
             paths-to-match: /v1/users, /v1/users/**, /v1/roles, /v1/roles/**, /v1/invitations, /v1/invitations/**
 
+        -   group: webscraping
+            display-name: Web Scraping API
+            paths-to-match: /v1/websites, /v1/websites/**, /v1/webpages, /v1/webpages/**
+
 management:
     endpoint:
         health:

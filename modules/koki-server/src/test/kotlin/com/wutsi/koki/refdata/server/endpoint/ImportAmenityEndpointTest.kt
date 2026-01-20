@@ -22,7 +22,7 @@ class ImportAmenityEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        assertEquals(69, dao.findAll().toList().size)
+        assertEquals(74, dao.findAll().toList().size)
 
         var amenity = dao.findById(1000).get()
         assertEquals(40000, amenity.categoryId)
