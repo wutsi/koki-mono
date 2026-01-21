@@ -522,7 +522,7 @@ class ListingService(
         listing.propertyType = request.propertyType
         listing.propertyCategory = request.propertyType?.category
         listing.bedrooms = request.bedrooms
-        listing.bathrooms = request.bedrooms
+        listing.bathrooms = request.bathrooms
         listing.halfBathrooms = request.halfBathrooms
         listing.floors = request.floors
         listing.basementType = request.basementType
