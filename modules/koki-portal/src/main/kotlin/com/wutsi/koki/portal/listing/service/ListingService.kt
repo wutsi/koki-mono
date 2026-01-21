@@ -26,6 +26,7 @@ import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.listing.form.AIListingForm
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.mapper.ListingMapper
+import com.wutsi.koki.portal.listing.model.AIListingModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -121,6 +122,10 @@ class ListingService(
             contacts = contacts,
             agents = agents,
         )
+    }
+
+    fun getAIListing(id: Long): AIListingModel {
+        return mapper.toAIListingModel(koki.getAIListing(id).aiListing)
     }
 
     fun search(

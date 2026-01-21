@@ -172,6 +172,7 @@ object ModuleFixtures {
         Permission(id = 1601, moduleId = 160, name = "security:admin", description = "Configure system security"),
 
         Permission(id = 1801, moduleId = 180, name = "tenant:admin", description = "Manage Tenant"),
+        Permission(id = 1802, moduleId = 180, name = "tenant:debug", description = "Access Debug information"),
 
         Permission(id = 2700, moduleId = 270, name = "listing", description = "View Listings"),
         Permission(id = 2701, moduleId = 270, name = "listing:manage", description = "Manage Listings"),

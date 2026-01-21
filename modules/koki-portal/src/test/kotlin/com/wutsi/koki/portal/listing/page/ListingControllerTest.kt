@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.portal.AbstractPageControllerTest
+import com.wutsi.koki.portal.WebscrapingFixtures.webpage
 import com.wutsi.koki.portal.common.page.PageName
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -36,6 +37,9 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#seller-agent-commission")
         assertElementPresent("#listing-seller-section")
         assertElementNotPresent("#listing-sale-section")
+
+        assertElementPresent("#debug-container")
+        assertElementAttribute("#debug-container a.webpage-source", "href", webpage.url)
     }
 
     @Test
@@ -58,6 +62,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#seller-agent-commission")
         assertElementPresent("#listing-seller-section")
         assertElementNotPresent("#listing-sale-section")
+
+        assertElementPresent("#debug-container")
     }
 
     @Test
@@ -250,11 +256,18 @@ class ListingControllerTest : AbstractPageControllerTest() {
         setupListing(status = ListingStatus.DRAFT, sellerAgentUserId = 9999L)
 
         navigateTo("/listings/${listing.id}")
-        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
-    fun `without listing AND full_access`() {
+    fun `without tenant_debug permission`() {
+        setupUserWithoutPermissions(listOf("tenant:debug"))
+
+        navigateTo("/listings/${listing.id}")
+        assertElementNotPresent("#debug-container")
+    }
+
+    @Test
+    fun `without listing AND full_access permissions`() {
         setupUserWithoutPermissions(listOf("listing", "listing:full_access"))
 
         navigateTo("/listings/${listing.id}")

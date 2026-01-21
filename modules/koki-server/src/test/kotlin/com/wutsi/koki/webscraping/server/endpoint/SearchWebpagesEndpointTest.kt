@@ -1,7 +1,7 @@
 package com.wutsi.koki.webscraping.server.endpoint
 
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.webscraping.dto.SearchWebpagesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
@@ -15,7 +15,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -29,7 +29,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?website-id=100",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -45,7 +45,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?listing-id=1201",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -61,7 +61,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?active=true",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -77,7 +77,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?website-id=100&active=true",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -93,7 +93,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?limit=2",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -107,7 +107,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?limit=2&offset=2",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then
@@ -121,7 +121,7 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
         // When
         val response = rest.getForEntity(
             "/v1/webpages?active=false",
-            SearchWebpagesResponse::class.java
+            SearchWebpageResponse::class.java
         )
 
         // Then

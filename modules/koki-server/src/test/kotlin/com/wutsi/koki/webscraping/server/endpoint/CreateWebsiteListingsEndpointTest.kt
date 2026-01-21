@@ -9,7 +9,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
-import com.wutsi.koki.webscraping.dto.SearchWebpagesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
 import com.wutsi.koki.webscraping.dto.WebpageSummary
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
@@ -31,7 +31,7 @@ class CreateWebsiteListingsEndpointTest : AuthorizationAwareEndpointTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(SearchWebpagesResponse(webpages)).whenever(webpageEndpoint).search(
+        doReturn(SearchWebpageResponse(webpages)).whenever(webpageEndpoint).search(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),

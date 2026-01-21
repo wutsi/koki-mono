@@ -25,6 +25,8 @@ import com.wutsi.koki.sdk.KokiRoles
 import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
+import com.wutsi.koki.sdk.KokiWebpages
+import com.wutsi.koki.sdk.KokiWebsites
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.restclient.RestTemplateBuilder
@@ -119,7 +121,7 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiOffer(): KokiOffers {
+    fun kokiOffers(): KokiOffers {
         return KokiOffers(urlBuilder(), rest())
     }
 
@@ -134,12 +136,12 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiRole(): KokiRoles {
+    fun kokiRoles(): KokiRoles {
         return KokiRoles(urlBuilder(), rest())
     }
 
     @Bean
-    fun kokiTenant(): KokiTenants {
+    fun kokiTenants(): KokiTenants {
         return KokiTenants(urlBuilder(), restWithoutTenantHeader())
     }
 
@@ -149,8 +151,18 @@ class KokiSDKConfiguration(
     }
 
     @Bean
-    fun kokiUser(): KokiUsers {
+    fun kokiUsesr(): KokiUsers {
         return KokiUsers(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiWebpages(): KokiWebpages {
+        return KokiWebpages(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiWebsites(): KokiWebsites {
+        return KokiWebsites(urlBuilder(), rest())
     }
 
     @Bean
@@ -167,7 +179,6 @@ class KokiSDKConfiguration(
         RestTemplateBuilder().connectTimeout(Duration.ofMillis(connectionTimeout))
             .readTimeout(Duration.ofMillis(readTimeout)).interceptors(
                 debugRestInterceptor,
-//                authorizationRestInterceptor,
             ).build()
 
     @Bean("RestForAuthentication")

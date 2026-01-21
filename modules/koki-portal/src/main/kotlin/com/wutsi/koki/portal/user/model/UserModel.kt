@@ -72,6 +72,10 @@ data class UserModel(
         return hasPermission("${module.name}:admin")
     }
 
+    fun canDebug(): Boolean {
+        return hasPermission("tenant:debug")
+    }
+
     fun canAdmin(): Boolean {
         return permissionNames.find { permission -> permission.endsWith(":admin") } != null
     }
