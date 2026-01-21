@@ -52,4 +52,5 @@ data class CreateListingRequest(
     val transactionWithNotary: Boolean? = null,
     val subdivided: Boolean? = null,
     val morcelable: Boolean? = null,
+    val sellerAgentUserId: Long? = null,
 )

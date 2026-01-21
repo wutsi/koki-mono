@@ -6,7 +6,6 @@ data class Website(
     val id: Long? = null,
     val userId: Long = -1,
     var baseUrl: String = "",
-    val baseUrlHash: String = "",
     var listingUrlPrefix: String = "",
     var homeUrls: List<String> = emptyList(),
     var contentSelector: String? = null,

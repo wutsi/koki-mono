@@ -58,6 +58,7 @@ object ErrorCode {
     val LEAD_NOT_FOUND: String = "$PREFIX:lead:not-found"
     val LEAD_LISTING_OR_AGENT_MISSING: String = "$PREFIX:lead:listing-or-agent-missing"
 
+    val LISTING_ALREADY_CREATED: String = "$PREFIX:listing:already-created"
     val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
     val LISTING_INVALID_BUYER_COMMISSION: String = "$PREFIX:listing:invalid-buyer-commission"
     val LISTING_INVALID_TEXT: String = "$PREFIX:listing:invalid-text"
@@ -98,9 +99,6 @@ object ErrorCode {
     val ROLE_NAME_MISSING: String = "$PREFIX:role:name-missing"
     val ROLE_IN_USE: String = "$PREFIX:role:in-use"
 
-    val SALES_TAX_COUNTRY_NOT_SUPPORTED: String = "$PREFIX:sales-tax:country-not-supported"
-    val SALES_TAX_STATE_NOT_FOUND: String = "$PREFIX:sales-tax:state-not-found"
-
     val TENANT_NOT_FOUND: String = "$PREFIX:tenant:not-found"
     val TENANT_MISSING_FROM_HEADER: String = "$PREFIX:tenant:missing-from-header"
 
@@ -112,6 +110,9 @@ object ErrorCode {
     val USER_DUPLICATE_USERNAME: String = "$PREFIX:user:duplicate-username"
 
     val WEBPAGE_NOT_FOUND: String = "$PREFIX:webpage:not-found"
+    val WEBPAGE_NO_CONTENT: String = "$PREFIX:webpage:no-content"
+    val WEBPAGE_LISTING_NOT_FOUND: String = "$PREFIX:webpage:listing-not-found"
+
     val WEBSITE_NOT_FOUND: String = "$PREFIX:website:not-found"
     val WEBSITE_DUPLICATE_BASE_URL: String = "$PREFIX:website:duplicate-base-url"
 }
