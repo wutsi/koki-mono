@@ -44,7 +44,6 @@ class ScrapeWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         // Then
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
-        // Note: Currently returns 0 since scraping logic is not implemented
         assertEquals(3, response.body!!.webpageImported)
     }
 

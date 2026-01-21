@@ -5,6 +5,8 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
+import com.wutsi.koki.file.dto.CreateFileRequest
+import com.wutsi.koki.file.dto.CreateFileResponse
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.GetFileResponse
@@ -14,15 +16,17 @@ import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.mapper.FileMapper
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.http.HttpServletResponse
-import org.apache.poi.hssf.usermodel.HeaderFooter.file
+import jakarta.validation.Valid
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -36,6 +40,7 @@ class FileEndpoints(
     private val service: FileService,
     private val mapper: FileMapper,
     private val response: HttpServletResponse,
+    private val logger: KVLogger,
     private val publisher: Publisher,
 ) {
     @GetMapping("/{id}")
@@ -133,6 +138,29 @@ class FileEndpoints(
             id = file.id,
             name = file.name,
         )
+    }
+
+    @PostMapping
+    fun create(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @Valid @RequestBody request: CreateFileRequest,
+    ): CreateFileResponse {
+        logger.add("request_url", request.url)
+        logger.add("request_owner_id", request.owner?.id)
+        logger.add("request_owner_type", request.owner?.type)
+
+        val file = service.create(request, tenantId)
+        logger.add("response_file_id", file.id)
+
+        publisher.publish(
+            FileUploadedEvent(
+                fileId = file.id!!,
+                tenantId = tenantId,
+                fileType = file.type,
+                owner = request.owner
+            )
+        )
+        return CreateFileResponse(fileId = file.id)
     }
 
     private fun validate(file: MultipartFile, type: FileType?) {

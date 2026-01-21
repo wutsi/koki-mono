@@ -99,6 +99,7 @@ id,name
 - DO NOT assume the number of parkings if not explicitly mentioned.
 - DO NOT imply the date of availability, unless explicitly mentioned.
 - DO NOT include in the JSON any numeric field that was not provided or with zero value.
+- DO NOT imply the property or lot area if not explicitly mentioned.
 
 # Ask:
 

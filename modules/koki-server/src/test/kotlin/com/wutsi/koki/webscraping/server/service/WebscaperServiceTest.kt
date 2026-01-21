@@ -14,7 +14,9 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.domain.WebsiteEntity
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertNotNull
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,11 +28,22 @@ class WebscaperServiceTest {
 
     private var id = System.currentTimeMillis()
     private val hash = "b32e5c02a626c9505a0f6ad797b92a3f"
-    private val request = ScrapeWebsiteRequest(testMode = false)
+    private val request = ScrapeWebsiteRequest(testMode = false, limit = 100)
+
+    private val website = setupWebsite(
+        name = "codecis",
+        baseUrl = "https://codecis.com",
+        homeUrl = "https://codecis.com/status/a-louer/",
+        listingUrlPrefix = "/property",
+        contentSelector = ".property-description-wrap, .property-features-wrap, property-address-wrap",
+        imageSelector = "#property-gallery-js img",
+    )
 
     @BeforeEach
     fun setUp() {
         doReturn(hash).whenever(http).hash(any())
+
+        doReturn(null).whenever(webpageService).getByUrlHash(any(), any())
 
         doReturn(WebpageEntity(id = ++id))
             .whenever(webpageService)
@@ -43,24 +56,40 @@ class WebscaperServiceTest {
 
     @Test
     fun `test mode`() {
-        // GIVEN
-        val website = setupWebsite(
-            name = "codecis",
-            baseUrl = "https://codecis.com",
-            homeUrl = "https://codecis.com/status/a-louer/",
-            listingUrlPrefix = "/property",
-            contentSelector = ".property-description-wrap, .property-features-wrap, property-address-wrap",
-            imageSelector = "#property-gallery-js img",
-        )
-
         // WHEN
         service.scrape(website, ScrapeWebsiteRequest(testMode = true))
 
         // THEN
-        verify(webpageService, atLeast(1))
-            .new(any(), any(), any(), anyOrNull())
+        verify(webpageService, atLeast(1)).new(any(), any(), any(), anyOrNull())
 
         verify(webpageService, never()).save(any())
+    }
+
+    @Test
+    fun `scrage again`() {
+        val webpage = WebpageEntity()
+        doReturn(webpage).whenever(webpageService).getByUrlHash(any(), any())
+
+        // WHEN
+        val webpages = service.scrape(website, request)
+
+        // THEN
+        assertEquals(12, webpages.size)
+
+        verify(webpageService, never()).new(any(), any(), any(), anyOrNull())
+
+        verify(webpageService, atLeast(1)).save(any())
+        assertFalse(webpage.imageUrls.isEmpty())
+        assertNotNull(webpage.content)
+    }
+
+    @Test
+    fun limit() {
+        // WHEN
+        val webpages = service.scrape(website, request.copy(limit = 2))
+
+        // THEN
+        assertEquals(2, webpages.size)
     }
 
     @Test
@@ -284,7 +313,7 @@ Appartement haut standing à louer au quartier Bastos dans une zone résidentiel
             baseUrl = "https://www.ereshomes.com/",
             homeUrl = "https://www.ereshomes.com/property-type/apartments",
             listingUrlPrefix = "/property-details",
-            contentSelector = ".sp-lg-title, .price, .ps-widget h4, .ps-widget p.text, .ps-widget p.justify",
+            contentSelector = ".sp-lg-title, .price, .ps-widget:nth-child(2) h4:first-child, .ps-widget:nth-child(2) p.text-justify, .ps-widget:nth-child(3) h4, .ps-widget:nth-child(3) p.text, .ps-widget:nth-child(4) h4, .ps-widget:nth-child(4) p.text",
             imageSelector = ".sp-img-content img",
         )
 
@@ -315,39 +344,9 @@ luxury pente house for rent
 
 5 000 000 XAF /month
 
-Overview
-
-Apartments
-
-For Rent
-
-Residential
-
-3
-
-3
-
-sqft
-
 Property Description
 
 -01 fully equipped living and dining room -01 fully equipped kitchen -03 fully equipped bedrooms -03 bathrooms -half bathroom... -01 fully equipped living and dining room -01 fully equipped kitchen -03 fully equipped bedrooms -03 bathrooms -half bathroom
-
-Property details
-
-PO-6L9OIWN2
-
-5 000 000 XAF /month
-
-3
-
-3
-
-Apartments
-
-For Rent
-
-Residential
 
 Location
 

@@ -5,12 +5,12 @@
       "baseUrl": "https://www.ereshomes.com",
       "listingUrlPrefix": "/property-details",
       "homeUrls": [
-        "https://www.ereshomes.com/property-type/apartments",
-        "https://www.ereshomes.com/property-type/apartments?page=2",
-        "https://www.ereshomes.com/property-type/villas",
-        "https://www.ereshomes.com/property-type/offices"
+        "https://www.ereshomes.com/realestateforrent",
+        "https://www.ereshomes.com/realestateforrent?page=2",
+        "https://www.ereshomes.com/realestateforrent?page=3",
+        "https://www.ereshomes.com/realestateforsale"
       ],
-      "contentSelector": ".sp-lg-title, .price, .ps-widget h4, .ps-widget p.text, .ps-widget p.justify",
+      "contentSelector": ".sp-lg-title, .price, .ps-widget:nth-child(2) h4:first-child, .ps-widget:nth-child(2) p.text-justify, .ps-widget:nth-child(3) h4, .ps-widget:nth-child(3) p.text, .ps-widget:nth-child(4) h4, .ps-widget:nth-child(4) p.text",
       "imageSelector": ".sp-img-content img",
       "active": true
     },

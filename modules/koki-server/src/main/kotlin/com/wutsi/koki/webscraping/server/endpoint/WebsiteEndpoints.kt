@@ -8,9 +8,13 @@ import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
 import com.wutsi.koki.webscraping.dto.SearchWebsitesResponse
 import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
+import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.mapper.WebsiteMapper
 import com.wutsi.koki.webscraping.server.service.WebsiteService
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,7 +30,13 @@ class WebsiteEndpoints(
     private val service: WebsiteService,
     private val logger: KVLogger,
     private val mapper: WebsiteMapper,
+    private val webpageEndpoints: WebpageEndpoints,
+    private val webpageMapper: WebpageMapper,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(WebsiteEndpoints::class.java)
+    }
+
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
@@ -46,17 +56,15 @@ class WebsiteEndpoints(
         )
         logger.add("count", websites.size)
         return SearchWebsitesResponse(
-            websites = websites.map { entity -> mapper.toWebsite(entity) }
+            websites = websites.map { entity -> mapper.toWebsiteSummary(entity) }
         )
     }
 
     @GetMapping("/{id}")
     fun get(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long
     ): GetWebsiteResponse {
-        logger.add("website_id", id)
-
         val website = service.get(id, tenantId)
         return GetWebsiteResponse(website = mapper.toWebsite(website))
     }
@@ -82,11 +90,10 @@ class WebsiteEndpoints(
 
     @PostMapping("/{id}")
     fun update(
-        @PathVariable id: Long,
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
         @Valid @RequestBody request: UpdateWebsiteRequest
     ) {
-        logger.add("website_id", id)
         logger.add("request_active", request.active)
         logger.add("request_listing_url_prefix", request.listingUrlPrefix)
         logger.add("request_content_selector", request.contentSelector)
@@ -96,18 +103,42 @@ class WebsiteEndpoints(
     }
 
     @PostMapping("/{id}/scrape")
+    @Operation(summary = "Scrape a website to extract its webpages")
     fun scrape(
-        @PathVariable id: Long,
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
         @Valid @RequestBody request: ScrapeWebsiteRequest,
     ): ScrapeWebsiteResponse {
-        logger.add("website_id", id)
+        logger.add("request_test_mode", request.testMode)
 
         val webpages = service.scrape(id, request, tenantId)
         logger.add("webpages_imported", webpages.size)
 
         return ScrapeWebsiteResponse(
             webpageImported = webpages.size,
+            webpages = webpages.map { webpage -> webpageMapper.toWebpage(webpage) }
         )
+    }
+
+    @Async
+    @PostMapping("/{id}/listings")
+    @Operation(summary = "Create the listings of all the webpages of the website")
+    fun listings(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        webpageEndpoints.search(
+            websiteId = id,
+            active = true,
+            limit = Integer.MAX_VALUE,
+            offset = 0,
+            tenantId = tenantId
+        ).webpages.forEach { webpage ->
+            try {
+                webpageEndpoints.listing(tenantId, webpage.id)
+            } catch (ex: Exception) {
+                LOGGER.warn("Unable to create listing for webpage: ${webpage.id}", ex)
+            }
+        }
     }
 }

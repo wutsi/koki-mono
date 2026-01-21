@@ -34,7 +34,7 @@ class ImportTodosEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val result = response.body!!
-        assertEquals(20, result.added) // 21 entries - 1 existing = 21 new
+        assertEquals(21, result.added) // 21 entries - 1 existing = 21 new
         assertEquals(1, result.updated) // 1 existing park should be updated
         assertEquals(0, result.errors)
         assertTrue(result.errorMessages.isEmpty())

@@ -41,16 +41,17 @@ class MoneyMapper : TenantAwareMapper() {
     }
 
     private fun getCurrencyFormatter(currency: String): NumberFormat {
-        if (currentTenant.get()?.currency == currency) {
+        val tenant = currentTenant.get()
+        if (tenant.currency == currency) {
             return createMoneyFormat()
         }
 
-        NumberFormat.getAvailableLocales().forEach { locale ->
-            val fmt = NumberFormat.getCurrencyInstance(locale)
-            if (fmt.getCurrency().getCurrencyCode() == currency) {
+        NumberFormat.getAvailableLocales().forEach { loc ->
+            val fmt = NumberFormat.getCurrencyInstance(loc)
+            if (fmt.getCurrency().getCurrencyCode() == currency && (tenant.locale.startsWith("${loc.language}_"))) {
                 return fmt
             }
         }
-        throw IllegalStateException("Currency not supported: $currency")
+        return NumberFormat.getNumberInstance()
     }
 }

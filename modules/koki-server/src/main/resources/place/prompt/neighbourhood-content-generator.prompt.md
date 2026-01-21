@@ -69,9 +69,11 @@ Generate the content in JSON formant with the following fields:
         - Remove 1 point for poor water or electricity supply. Do not remove 2 points for both.
         - Remove 1 point for chronic street flooding issues.
     - Commute Rating:
-        - Few transport options should remove 1 point from the maximum rating. Do not remove point for high income area
-          since people have private cars.
-        - Chronic traffic jam should remove 1 point from the maximum rating.
+        - Give a 5 for area with paved roads, multiple exit routes, easy access to taxis/Yango..
+        - Give a 4 for area with mostly paved roads, but subject to peak-hour slowdowns at specific junctions.
+        - Give a 3 for area reliant on a single major road; high traffic during rush hour.
+        - Give a 2 for area with unpaved internal roads; heavy reliance on motos to reach taxi hubs.
+        - Give a 1 for area with extreme congestion; poor road conditions; very long wait times.
 
 # Available Tools:
 

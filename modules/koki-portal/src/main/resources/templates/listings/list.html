@@ -49,13 +49,16 @@
                     <form action="/listings" id="filter-form">
                         <select class="btn btn-sm btn-light" name="filter" onchange="this.form.submit()">
                             <option th:selected="${filter == 0}" th:text="#{page.listing.list.filter.0}" value="0">
-                                A Vendre / A Louer
+                                DRAFT
                             </option>
                             <option th:selected="${filter == 1}" th:text="#{page.listing.list.filter.1}" value="1">
-                                Vendu
+                                ACTIVE
                             </option>
                             <option th:selected="${filter == 2}" th:text="#{page.listing.list.filter.2}" value="2">
-                                Ferme
+                                SOLD
+                            </option>
+                            <option th:selected="${filter == 3}" th:text="#{page.listing.list.filter.3}" value="3">
+                                CLOSED
                             </option>
                         </select>
                     </form>
@@ -67,7 +70,7 @@
                                   th:text="#{page.listing.list.n_listing(${listings.total})}">n</span>
                         </div>
                         <div
-                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 1}, ${filter == 1}, true, ${moreUrl})}"></div>
+                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 2}, ${filter == 2}, false, ${moreUrl})}"></div>
                     </div>
                 </div>
             </div>

@@ -106,6 +106,8 @@ class AIListingService(
                 transactionWithNotary = result.transactionWithNotary,
                 subdivided = result.subdivided,
                 morcelable = result.morcelable,
+
+                sellerAgentUserId = request.sellerAgentUserId,
             ),
             tenantId = tenantId,
         )

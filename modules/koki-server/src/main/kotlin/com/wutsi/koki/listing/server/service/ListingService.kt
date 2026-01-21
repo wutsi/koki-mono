@@ -495,7 +495,7 @@ class ListingService(
                 subdivided = request.subdivided,
                 morcelable = request.morcelable,
 
-                sellerAgentUserId = userId,
+                sellerAgentUserId = request.sellerAgentUserId ?: userId,
                 createdAt = now,
                 modifiedAt = now,
                 createdById = userId,

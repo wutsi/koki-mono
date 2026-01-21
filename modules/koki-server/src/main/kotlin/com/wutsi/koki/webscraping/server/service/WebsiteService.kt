@@ -10,7 +10,6 @@ import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
 import com.wutsi.koki.webscraping.server.dao.WebsiteRepository
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.domain.WebsiteEntity
-import com.wutsi.koki.webscraping.server.mapper.WebsiteMapper
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +20,6 @@ class WebsiteService(
     private val dao: WebsiteRepository,
     private val webscraper: WebscaperService,
     private val http: Http,
-    private val mapper: WebsiteMapper,
     private val em: EntityManager,
 ) {
     @Transactional
