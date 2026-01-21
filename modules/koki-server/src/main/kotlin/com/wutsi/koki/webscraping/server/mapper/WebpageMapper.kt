@@ -10,22 +10,27 @@ class WebpageMapper {
     fun toWebpageSummary(entity: WebpageEntity): WebpageSummary {
         return WebpageSummary(
             id = entity.id ?: -1,
-            websiteId = entity.websiteId,
+            websiteId = entity.website.id ?: -1,
+            listingId = entity.listingId,
             url = entity.url,
+            imageUrl = entity.imageUrls.firstOrNull(),
             active = entity.active,
             createdAt = entity.createdAt,
+            updatedAt = entity.updatedAt,
         )
     }
 
     fun toWebpage(entity: WebpageEntity): Webpage {
         return Webpage(
             id = entity.id ?: -1,
-            websiteId = entity.websiteId,
+            websiteId = entity.website.id ?: -1,
+            listingId = entity.listingId,
             url = entity.url,
-            content = entity.content,
             imageUrls = entity.imageUrls,
+            content = entity.content,
             active = entity.active,
             createdAt = entity.createdAt,
+            updatedAt = entity.updatedAt,
         )
     }
 }

@@ -32,7 +32,6 @@ class GetWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(100L, website.id)
         assertEquals(11L, website.userId)
         assertEquals("https://example.com", website.baseUrl)
-        assertEquals("5d41402abc4b2a76b9719d911017c592", website.baseUrlHash)
         assertEquals("https://example.com/listings/", website.listingUrlPrefix)
         assertEquals(listOf("https://example.com?page=1"), website.homeUrls)
         assertEquals(".content", website.contentSelector)

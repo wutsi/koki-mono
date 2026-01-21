@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/listings")
 @RequiresPermission(["listing", "listing:full_access"])
 class ListListingController : AbstractListingController() {
+    companion object {
+        const val FILTER_STATUS_DRAFT = 0
+        const val FILTER_STATUS_ACTIVE = 1
+        const val FILTER_STATUS_SOLD = 2
+        const val FILTER_STATUS_CLOSED = 3
+    }
+
     @GetMapping
     fun list(@RequestParam(required = false) filter: Int = 0, model: Model): String {
         model.addAttribute(
@@ -50,16 +57,28 @@ class ListListingController : AbstractListingController() {
                 )
             }
         }
-        model.addAttribute("sold", filter == 1)
+        model.addAttribute("sold", filter == FILTER_STATUS_SOLD)
         model.addAttribute("showAgent", false)
-        model.addAttribute("showCommission", true)
+        model.addAttribute("showCommission", false)
         return "listings/more"
     }
 
     private fun findListings(filter: Int?, limit: Int, offset: Int): ResultSetModel<ListingModel> {
         val userId = userHolder.get()?.id
         val listings = when (filter) {
-            1 -> listingService.search(
+            FILTER_STATUS_ACTIVE -> listingService.search(
+                statuses = listOf(
+                    ListingStatus.ACTIVE,
+                    ListingStatus.ACTIVE_WITH_CONTINGENCIES,
+                    ListingStatus.PENDING,
+                ),
+                sellerAgentUserId = userId,
+                limit = limit,
+                offset = offset,
+                sortBy = ListingSort.NEWEST,
+            )
+
+            FILTER_STATUS_SOLD -> listingService.search(
                 statuses = listOf(ListingStatus.SOLD, ListingStatus.RENTED),
                 agentUserId = userId,
                 limit = limit,
@@ -67,7 +86,7 @@ class ListListingController : AbstractListingController() {
                 sortBy = ListingSort.TRANSACTION_DATE,
             )
 
-            2 -> listingService.search(
+            FILTER_STATUS_CLOSED -> listingService.search(
                 statuses = listOf(
                     ListingStatus.WITHDRAWN,
                     ListingStatus.CANCELLED,
@@ -83,11 +102,8 @@ class ListListingController : AbstractListingController() {
                 statuses = listOf(
                     ListingStatus.DRAFT,
                     ListingStatus.PUBLISHING,
-                    ListingStatus.ACTIVE,
-                    ListingStatus.ACTIVE_WITH_CONTINGENCIES,
-                    ListingStatus.PENDING,
                 ),
-                sellerAgentUserId = userId,
+                agentUserId = userId,
                 limit = limit,
                 offset = offset,
                 sortBy = ListingSort.NEWEST,

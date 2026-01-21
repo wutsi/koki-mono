@@ -4,14 +4,17 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.util.MimeUtils
 import jakarta.persistence.EntityManager
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
@@ -19,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
 import java.util.Date
@@ -32,6 +37,7 @@ class FileService(
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
     private val storageProvider: StorageProvider,
+    private val logger: KVLogger,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -170,6 +176,38 @@ class FileService(
     }
 
     @Transactional
+    fun create(request: CreateFileRequest, tenantId: Long): FileEntity {
+        val file = download(request.url)
+        val extension = FilenameUtils.getExtension(file.name)
+        val contentType = MimeUtils.getMimeTypeFromExtension(extension)
+        val url = file.inputStream().use { inputStream ->
+            store(
+                filename = file.name,
+                contentType = contentType,
+                contentLength = file.length(),
+                content = inputStream,
+                ownerId = request.owner?.id,
+                ownerType = request.owner?.type,
+                tenantId = tenantId,
+            )
+        }
+        return dao.save(
+            FileEntity(
+                createdById = securityService.getCurrentUserIdOrNull(),
+                tenantId = tenantId,
+                name = file.name,
+                url = url.toString(),
+                contentType = contentType,
+                contentLength = file.length(),
+                type = if (contentType.startsWith("image/")) FileType.IMAGE else FileType.FILE,
+                ownerId = request.owner?.id,
+                ownerType = request.owner?.type,
+                status = FileStatus.UNDER_REVIEW,
+            )
+        )
+    }
+
+    @Transactional
     fun store(
         filename: String,
         contentType: String?,
@@ -219,6 +257,31 @@ class FileService(
         return f
     }
 
+    private fun download(urlPath: String): File {
+        val url = URL(urlPath)
+        val connection = url.openConnection() as HttpURLConnection
+
+        try {
+            connection.requestMethod = "GET"
+            connection.connect()
+            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                val contentType = connection.contentType
+                val extension = MimeUtils.getExtensionFromMimeType(contentType)
+                val file = File.createTempFile(UUID.randomUUID().toString(), extension)
+                connection.inputStream.use { input ->
+                    file.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+                return file
+            } else {
+                throw IOException("status: " + connection.responseCode)
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
     private fun toPath(
         filename: String,
         fileId: String,
@@ -248,7 +311,7 @@ class FileService(
     private fun getStorageService(tenantId: Long): StorageService {
         val configs = configurationService.search(
             tenantId = tenantId, keyword = "storage."
-        ).map { config -> config.name to config.value }.toMap()
+        ).associate { config -> config.name to config.value }
         return storageBuilder.build(configs)
     }
 }

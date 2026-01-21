@@ -41,6 +41,22 @@ class SearchWebpagesEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `search by listing id`() {
+        // When
+        val response = rest.getForEntity(
+            "/v1/webpages?listing-id=1201",
+            SearchWebpagesResponse::class.java
+        )
+
+        // Then
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertNotNull(response.body)
+        val webpages = response.body!!.webpages
+        assertEquals(1, webpages.size)
+        assert(webpages.all { it.listingId == 1201L })
+    }
+
+    @Test
     fun `search by active status`() {
         // When
         val response = rest.getForEntity(

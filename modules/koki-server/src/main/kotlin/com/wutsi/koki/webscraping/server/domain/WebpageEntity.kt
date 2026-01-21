@@ -7,6 +7,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.util.Date
 
@@ -18,7 +20,11 @@ data class WebpageEntity(
     val id: Long? = null,
 
     @Column(name = "tenant_fk") val tenantId: Long = -1,
-    @Column(name = "website_fk") val websiteId: Long = -1,
+    @Column(name = "listing_fk") var listingId: Long? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "website_fk")
+    val website: WebsiteEntity = WebsiteEntity(),
 
     var url: String = "",
     val urlHash: String = "",
@@ -29,4 +35,5 @@ data class WebpageEntity(
 
     var active: Boolean = true,
     val createdAt: Date = Date(),
+    var updatedAt: Date = Date(),
 )

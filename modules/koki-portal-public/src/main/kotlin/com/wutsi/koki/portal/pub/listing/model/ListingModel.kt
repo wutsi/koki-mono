@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.util.HtmlUtils
@@ -100,11 +101,7 @@ data class ListingModel(
                 transactionWithNotary == true)
 
     val propertyTypeResidential: Boolean
-        get() = propertyType == PropertyType.APARTMENT ||
-            propertyType == PropertyType.STUDIO ||
-            propertyType == PropertyType.DUPLEX ||
-            propertyType == PropertyType.VILLA ||
-            propertyType == PropertyType.HOUSE
+        get() = propertyType?.category == PropertyCategory.RESIDENTIAL
 
     val hasTermsAndConditions: Boolean
         get() = listingType == ListingType.RENTAL &&

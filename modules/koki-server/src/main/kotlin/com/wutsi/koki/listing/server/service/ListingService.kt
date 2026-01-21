@@ -495,7 +495,7 @@ class ListingService(
                 subdivided = request.subdivided,
                 morcelable = request.morcelable,
 
-                sellerAgentUserId = userId,
+                sellerAgentUserId = request.sellerAgentUserId ?: userId,
                 createdAt = now,
                 modifiedAt = now,
                 createdById = userId,
@@ -522,7 +522,7 @@ class ListingService(
         listing.propertyType = request.propertyType
         listing.propertyCategory = request.propertyType?.category
         listing.bedrooms = request.bedrooms
-        listing.bathrooms = request.bedrooms
+        listing.bathrooms = request.bathrooms
         listing.halfBathrooms = request.halfBathrooms
         listing.floors = request.floors
         listing.basementType = request.basementType

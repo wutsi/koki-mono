@@ -24,18 +24,15 @@ INSERT INTO T_WEBSITE(id, tenant_fk, user_fk, base_url, base_url_hash, listing_u
     VALUES
         (100, 1, 11, 'https://example.com', '5d41402abc4b2a76b9719d911017c592', 'https://example.com/listings/', '.content', 'img.gallery', true, now());
 
-INSERT INTO T_WEBPAGE(id, tenant_fk, website_fk, url, url_hash, content, image_urls, active, created_at)
+INSERT INTO T_WEBPAGE(id, tenant_fk, website_fk, listing_fk, url, url_hash, content, image_urls, active, created_at)
     VALUES
-        (100, 1, 100, 'https://example.com/listings/1', 'c4ca4238a0b923820dcc509a6f75849b', 'Webpage Content', 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
-        (101, 1, 100, 'https://example.com/listings/2', 'c4ca4238a0b923820dcc509a6f75849c', null, 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
-        (102, 1, 100, 'https://example.com/listings/3', 'c4ca4238a0b923820dcc509a6f7584ff', '', 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
-        (103, 1, 100, 'https://example.com/listings/4', 'c4ca4238a0b923820dcc509a6f758433', ' ', 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
-        (104, 1, 100, 'https://example.com/listings/5', 'c4ca4238a0b923820dcc509a6f758444', 'invalid image', 'https://xxx.com/134/invalid-image,https://picsum.photos/100', true, now()),
-        (105, 1, 100, 'https://example.com/listings/6', 'c4ca4238a0b923820dcc509a6f758477', 'invalid city', null, true, now()),
-        (106, 1, 100, 'https://example.com/listings/7', 'c4ca4238a0b923820dcc509a6f758488', 'invalid city', null, true, now());
+        (100, 1, 100, null, 'https://example.com/listings/1', 'c4ca4238a0b923820dcc509a6f75849b', 'Webpage Content', 'https://picsum.photos/100/300,https://picsum.photos/100', true, now()),
+        (101, 1, 100, null, 'https://example.com/listings/2', 'c4ca4238a0b923820dcc509a6f75849c', null, 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
+        (102, 1, 100, null, 'https://example.com/listings/3', 'c4ca4238a0b923820dcc509a6f7584ff', '', 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
+        (103, 1, 100, null, 'https://example.com/listings/4', 'c4ca4238a0b923820dcc509a6f758433', ' ', 'https://picsum.photos/200/300,https://picsum.photos/100', true, now()),
+        (104, 1, 100, null, 'https://example.com/listings/5', 'c4ca4238a0b923820dcc509a6f758444', 'invalid image', 'https://picsum.photos/104/300,https://picsum.photos/104', true, now()),
+        (105, 1, 100, null, 'https://example.com/listings/6', 'c4ca4238a0b923820dcc509a6f758477', 'invalid city', null, true, now()),
+        (106, 1, 100, 106, 'https://example.com/listings/7', 'c4ca4238a0b923820dcc509a6f758488', 'invalid city', null, true, now());
 
 INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listing_number)
     VALUES (106, 1, 3, 1, 2, 1000000);
-
-
-INSERT INTO T_WEBPAGE_LISTING(tenant_fk, webpage_fk, listing_fk) VALUES(1, 106, 106);

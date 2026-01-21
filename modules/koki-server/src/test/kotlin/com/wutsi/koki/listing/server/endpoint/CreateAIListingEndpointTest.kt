@@ -64,9 +64,61 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
     private val request = CreateAIListingRequest(
         text = "Beautiful 3-bedroom apartment for sale in downtown.",
         cityId = 1110L,
+        sellerAgentUserId = 333L
     )
 
     private val df = SimpleDateFormat("yyyy-MM-dd")
+
+    private val result = ListingContentParserResult(
+        valid = true,
+        listingType = ListingType.SALE,
+        propertyType = PropertyType.APARTMENT,
+        propertyArea = 1000,
+        lotArea = 2000,
+        level = 1,
+        basementType = BasementType.FULL,
+        parkingType = ParkingType.UNDERGROUND,
+        parkings = 2,
+        halfBathrooms = 1,
+        bedrooms = 4,
+        bathrooms = 3,
+        fenceType = FenceType.CONCRETE,
+        floors = 3,
+        year = 1990,
+        roadPavement = RoadPavement.CONCRETE,
+        availableAt = DateUtils.addMonths(Date(), 3),
+        distanceFromMainRoad = 150,
+
+        street = "Derriere ambassade de chine",
+        city = "yaounde",
+        neighbourhood = "bastos",
+        neighbourhoodId = 5555L,
+        country = "CM",
+
+        price = 350000,
+        visitFees = 5000,
+        currency = "XAF",
+
+        leaseTerm = 12,
+        noticePeriod = 3,
+        advanceRent = 2,
+        securityDeposit = 3,
+
+        landTitle = true,
+        technicalFile = false,
+        numberOfSigners = 2,
+        mutationType = MutationType.PARTIAL,
+        transactionWithNotary = true,
+
+        phone = "+2370987654321",
+
+        furnitureType = FurnitureType.FULLY_FURNISHED,
+        amenities = listOf(
+            AmenityResult(id = 1103L, name = "foo"),
+            AmenityResult(id = 1202L, name = "bar"),
+        ),
+        publicRemarks = "A beautiful apartment located in the heart of the city.",
+    )
 
     @BeforeEach
     override fun setUp() {
@@ -78,56 +130,6 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
     @Test
     fun create() {
-        val result = ListingContentParserResult(
-            valid = true,
-            listingType = ListingType.SALE,
-            propertyType = PropertyType.APARTMENT,
-            propertyArea = 1000,
-            lotArea = 2000,
-            level = 1,
-            basementType = BasementType.FULL,
-            parkingType = ParkingType.UNDERGROUND,
-            parkings = 2,
-            halfBathrooms = 1,
-            bedrooms = 4,
-            bathrooms = 3,
-            fenceType = FenceType.CONCRETE,
-            floors = 3,
-            year = 1990,
-            roadPavement = RoadPavement.CONCRETE,
-            availableAt = DateUtils.addMonths(Date(), 3),
-            distanceFromMainRoad = 150,
-
-            street = "Derriere ambassade de chine",
-            city = "yaounde",
-            neighbourhood = "bastos",
-            neighbourhoodId = 5555L,
-            country = "CM",
-
-            price = 350000,
-            visitFees = 5000,
-            currency = "XAF",
-
-            leaseTerm = 12,
-            noticePeriod = 3,
-            advanceRent = 2,
-            securityDeposit = 3,
-
-            landTitle = true,
-            technicalFile = false,
-            numberOfSigners = 2,
-            mutationType = MutationType.PARTIAL,
-            transactionWithNotary = true,
-
-            phone = "+2370987654321",
-
-            furnitureType = FurnitureType.FULLY_FURNISHED,
-            amenities = listOf(
-                AmenityResult(id = 1103L, name = "foo"),
-                AmenityResult(id = 1202L, name = "bar"),
-            ),
-            publicRemarks = "A beautiful apartment located in the heart of the city.",
-        )
         val json = jsonMapper.writeValueAsString(result)
         doReturn(json).whenever(agent).run(any())
 
@@ -172,6 +174,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.publicRemarks, listing.publicRemarks)
         assertEquals(USER_ID, listing.createdById)
         assertEquals(USER_ID, listing.modifiedById)
+        assertEquals(request.sellerAgentUserId, listing.sellerAgentUserId)
         assertEquals(TENANT_ID, listing.tenantId)
         assertEquals(ListingStatus.DRAFT, listing.status)
         assertEquals(result.landTitle, listing.landTitle)
@@ -191,6 +194,24 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(null, statuses[0].comment)
         assertEquals(listing.createdAt, statuses[0].createdAt)
         assertEquals(listing.createdById, statuses[0].createdById)
+    }
+
+    @Test
+    fun `create with no seller agent`() {
+        val json = jsonMapper.writeValueAsString(result)
+        doReturn(json).whenever(agent).run(any())
+
+        val response = rest.postForEntity(
+            "/v1/listings/ai",
+            request.copy(sellerAgentUserId = null),
+            CreateListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val id = response.body!!.listingId
+        val listing = dao.findById(id).get()
+        assertEquals(USER_ID, listing.sellerAgentUserId)
     }
 
     @Test

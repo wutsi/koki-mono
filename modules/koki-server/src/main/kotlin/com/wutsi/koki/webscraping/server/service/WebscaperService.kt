@@ -29,7 +29,7 @@ class WebscaperService(
 
     fun scrape(website: WebsiteEntity, request: ScrapeWebsiteRequest): List<WebpageEntity> {
         val homeUrls = website.homeUrls.ifEmpty { listOf(website.baseUrl) }
-        val result = mutableListOf<WebpageEntity?>()
+        val result = mutableListOf<WebpageEntity>()
         val listingUrlPrefix = if (website.listingUrlPrefix.startsWith(website.baseUrl)) {
             website.listingUrlPrefix
         } else {
@@ -46,36 +46,41 @@ class WebscaperService(
                     .distinct()
                 LOGGER.info("${urls.size} URLs with prefix $listingUrlPrefix")
 
-                result.addAll(urls.mapNotNull { url ->
-                    try {
-                        LOGGER.info("Scraping webpage: $url")
-                        scrape(url, website, request)
-                    } catch (e: Exception) {
-                        LOGGER.warn("Could not scrape $url", e)
-                        null
+                urls.forEach { url ->
+                    if (result.size < request.limit) {
+                        try {
+                            LOGGER.info("Scraping webpage: $url")
+                            val webpage = scrape(url, website, request)
+                            if (webpage != null) {
+                                result.add(webpage)
+                            }
+                        } catch (e: Exception) {
+                            LOGGER.warn("Could not scrape $url", e)
+                        }
                     }
                 }
-                )
             } catch (e: Exception) {
                 LOGGER.warn("Could not scrape $homeUrl", e)
             }
         }
-        return result.filterNotNull()
+        return result
     }
 
     private fun scrape(url: String, website: WebsiteEntity, request: ScrapeWebsiteRequest): WebpageEntity? {
-        val urlHash = http.hash(url)
-        if (webpageService.getByUrlHash(urlHash, website.tenantId) != null) {
-            return null
-        }
-
         val doc = get(url, website.baseUrl)
-        val webpage = webpageService.new(
-            website = website,
-            url = url,
-            images = extractImages(doc, website),
-            content = extractContent(doc, website),
-        )
+        val urlHash = http.hash(url)
+        var webpage = webpageService.getByUrlHash(urlHash, website.tenantId)
+        if (webpage == null) {
+            webpage = webpageService.new(
+                website = website,
+                url = url,
+                images = extractImages(doc, website),
+                content = extractContent(doc, website),
+            )
+        } else {
+            webpage.imageUrls = extractImages(doc, website)
+            webpage.content = extractContent(doc, website)
+        }
         return if (request.testMode) {
             webpage
         } else {

@@ -91,14 +91,14 @@
                 <td class="text-center text-top padding-top" width="25%">
                     <b class="text-larger">
                         <span th:text="${listing.lotArea} ? ${listing.lotArea} : '-'">00</span>
-                        <span class="text-small" th:if="${listing.lotArea}">m<sup>2</sup></span>
+                        <span class="text-small">m<sup>2</sup></span>
                     </b>
                     <div class="text-small" th:text="#{page.listing.lot}">m<sup>2</sup></div>
                 </td>
                 <td class="text-center text-top padding-top" with="25%">
                     <b class="text-larger">
                         <span th:text="${listing.propertyArea} ? ${listing.propertyArea} : '-'">00</span>
-                        <span class="text-small" th:if="${listing.propertyArea}">m<sup>2</sup></span>
+                        <span class="text-small">m<sup>2</sup></span>
                     </b>
                     <div class="text-small" th:text="#{page.listing.property}">m<sup>2</sup></div>
                 </td>
