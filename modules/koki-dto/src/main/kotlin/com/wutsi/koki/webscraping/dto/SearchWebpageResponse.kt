@@ -1,5 +1,5 @@
 package com.wutsi.koki.webscraping.dto
 
-data class SearchWebpagesResponse(
+data class SearchWebpageResponse(
     val webpages: List<WebpageSummary> = emptyList(),
 )

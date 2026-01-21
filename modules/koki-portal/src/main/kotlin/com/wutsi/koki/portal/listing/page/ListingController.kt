@@ -10,7 +10,9 @@ import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserModel
+import com.wutsi.koki.portal.webscaping.service.WebpageService
 import com.wutsi.koki.refdata.dto.CategoryType
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,7 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam
 class ListingController(
     private val categoryService: CategoryService,
     private val offerService: OfferService,
+    private val websiteService: WebpageService,
 ) : AbstractListingDetailsController() {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
+    }
+
     @GetMapping("/{id}")
     fun show(@PathVariable id: Long, model: Model): String {
         val listing = findListing(id)
@@ -32,6 +39,9 @@ class ListingController(
 
         // Offers
         loadOfferCount(listing, model)
+
+        // Webpage info
+        loadWebpage(listing, model)
 
         // Message URL
         val user = getUser()
@@ -71,6 +81,19 @@ class ListingController(
         model.addAttribute("listing", listing)
         model.addAttribute("amenityCategories", findAmenityCategories())
         return "listings/details"
+    }
+
+    private fun loadWebpage(listing: ListingModel, model: Model) {
+        try {
+            val webpage = websiteService.search(
+                listingId = listing.id,
+                limit = 1,
+            ).firstOrNull()
+
+            model.addAttribute("webpage", webpage)
+        } catch (e: Exception) {
+            LOGGER.warn("Unable to load webpage for listing=${listing.id}", e)
+        }
     }
 
     private fun loadOfferCount(listing: ListingModel, model: Model) {

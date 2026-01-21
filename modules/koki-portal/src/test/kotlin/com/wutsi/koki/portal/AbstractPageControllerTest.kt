@@ -60,6 +60,8 @@ import com.wutsi.koki.offer.dto.GetOfferVersionResponse
 import com.wutsi.koki.offer.dto.SearchOfferResponse
 import com.wutsi.koki.offer.dto.SearchOfferVersionResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
+import com.wutsi.koki.portal.WebscrapingFixtures.webpage
+import com.wutsi.koki.portal.WebscrapingFixtures.webpages
 import com.wutsi.koki.portal.file.service.FileUploadUrlProvider
 import com.wutsi.koki.refdata.dto.GetLocationResponse
 import com.wutsi.koki.refdata.dto.SearchAmenityResponse
@@ -86,6 +88,8 @@ import com.wutsi.koki.tenant.dto.SearchTypeResponse
 import com.wutsi.koki.tenant.dto.SearchUserResponse
 import com.wutsi.koki.tenant.dto.SendPasswordRequest
 import com.wutsi.koki.tenant.dto.SendPasswordResponse
+import com.wutsi.koki.webscraping.dto.GetWebpageResponse
+import com.wutsi.koki.webscraping.dto.SearchWebpagesResponse
 import io.eotsevych.select2.Select2
 import org.apache.commons.io.IOUtils
 import org.junit.jupiter.api.AfterEach
@@ -227,6 +231,7 @@ abstract class AbstractPageControllerTest {
         setupListingModule()
         setupLeadModule()
         setupOfferModule()
+        setupWebscapingModule()
 
         setupAccountModule()
     }
@@ -728,7 +733,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    fun setupListingModule() {
+    private fun setupListingModule() {
         // Listing
         doReturn(
             ResponseEntity(
@@ -765,7 +770,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    fun setupLeadModule() {
+    private fun setupLeadModule() {
         // Lead
         doReturn(
             ResponseEntity(
@@ -825,7 +830,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    fun setupOfferModule() {
+    private fun setupOfferModule() {
         // Offer
         doReturn(
             ResponseEntity(
@@ -894,6 +899,31 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any<CreateOfferVersionRequest>(),
                 eq(CreateOfferVersionResponse::class.java)
+            )
+    }
+
+    private fun setupWebscapingModule() {
+        // Offer
+        doReturn(
+            ResponseEntity(
+                SearchWebpagesResponse(webpages),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchWebpagesResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                GetWebpageResponse(webpage),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(GetWebpageResponse::class.java)
             )
     }
 

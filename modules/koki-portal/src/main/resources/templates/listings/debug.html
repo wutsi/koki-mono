@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container-fluid padding-bottom-8x">
+
+    <div class="row">
+        <div class="col-12">
+            <!-- SUMMARY -->
+            <div class="widget">
+                <div class="widget-body">
+                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+
+            <!-- PUBLIC URL -->
+            <div class="widget margin-top-small" id="public-url" th:if="${listing.publicUrl}">
+                <div class="widget-header">
+                    <h3 class="widget-title">Public Address</h3>
+                </div>
+                <div class="widget-body">
+                    <table class="table-striped table">
+                        <tr>
+                            <th>Public URL</th>
+                            <td>
+                                <a class="text-small" target="_blank" th:href="${listing.publicUrl}"
+                                   th:text="${listing.publicUrl}">
+                                    URL
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- WEBPAGE -->
+            <div class="widget margin-top-small" id="webpage-container" th:if="${webpage}">
+                <div class="widget-header">
+                    <h3 class="widget-title">Source Webpage</h3>
+                </div>
+                <div class="widget-body">
+                    <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="${webpage.id}">000</td>
+                        </tr>
+                        <tr>
+                            <th>Source</th>
+                            <td><a target="_blank" th:href="${webpage.url}" th:text="${webpage.url}">URL</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <a aria-controls="collapse-content" aria-expanded="false"
+                                           data-bs-toggle="collapse" href="#collapse-content" role="button">
+                                            Content
+                                        </a>
+                                    </div>
+                                    <div class="collapse" id="collapse-content">
+                                        <div class="card-body">
+                                            <pre th:text="${webpage.content}"></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <a aria-controls="collapse-content" aria-expanded="false"
+                                           data-bs-toggle="collapse" href="#collapse-image" role="button">
+                                            Images
+                                            <span th:text="'(' + ${webpage.imageUrls.size()} + ')'">00</span>
+                                        </a>
+                                    </div>
+                                    <div class="collapse" id="collapse-image">
+                                        <div class="card-body flex flex-wrap">
+                                            <a target="_blank" th:each="url : ${webpage.imageUrls}" th:href="${url}">
+                                                <img class="margin-right-small margin-bottom-small"
+                                                     style="max-width: 150px; max-height: 150px"
+                                                     th:src="${url}"
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI -->
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

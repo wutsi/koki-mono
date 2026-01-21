@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/listings/ai")
+@RequestMapping("/v1/listings")
 class AIListingEndpoints(
     private val service: AIListingService
 ) {
-    @PostMapping
+    @PostMapping("/ai")
     fun create(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateAIListingRequest,
