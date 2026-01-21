@@ -7,7 +7,7 @@ import com.wutsi.koki.file.server.endpoint.FileEndpoints
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.webscraping.dto.CreateWebpageListingResponse
 import com.wutsi.koki.webscraping.dto.GetWebpageResponse
-import com.wutsi.koki.webscraping.dto.SearchWebpagesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.service.WebpageService
@@ -41,7 +41,7 @@ class WebpageEndpoints(
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(defaultValue = "20") limit: Int = 20,
         @RequestParam(defaultValue = "0") offset: Int = 0
-    ): SearchWebpagesResponse {
+    ): SearchWebpageResponse {
         val webpages = service.search(
             websiteId = websiteId,
             listingId = listingId,
@@ -52,7 +52,7 @@ class WebpageEndpoints(
         )
         logger.add("count", webpages.size)
 
-        return SearchWebpagesResponse(
+        return SearchWebpageResponse(
             webpages = webpages.map { mapper.toWebpageSummary(it) }
         )
     }

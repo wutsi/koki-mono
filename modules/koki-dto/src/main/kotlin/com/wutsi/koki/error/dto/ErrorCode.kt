@@ -58,6 +58,7 @@ object ErrorCode {
     val LEAD_NOT_FOUND: String = "$PREFIX:lead:not-found"
     val LEAD_LISTING_OR_AGENT_MISSING: String = "$PREFIX:lead:listing-or-agent-missing"
 
+    val LISTING_AI_NOT_FOUND: String = "$PREFIX:listing:ai-not-found"
     val LISTING_ALREADY_CREATED: String = "$PREFIX:listing:already-created"
     val LISTING_NOT_FOUND: String = "$PREFIX:listing:not-found"
     val LISTING_INVALID_BUYER_COMMISSION: String = "$PREFIX:listing:invalid-buyer-commission"

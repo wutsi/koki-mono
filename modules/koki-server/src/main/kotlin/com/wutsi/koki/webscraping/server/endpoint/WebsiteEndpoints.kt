@@ -6,7 +6,7 @@ import com.wutsi.koki.webscraping.dto.CreateWebsiteResponse
 import com.wutsi.koki.webscraping.dto.GetWebsiteResponse
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
-import com.wutsi.koki.webscraping.dto.SearchWebsitesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebsiteResponse
 import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
 import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.mapper.WebsiteMapper
@@ -45,7 +45,7 @@ class WebsiteEndpoints(
         @RequestParam(required = false) active: Boolean? = null,
         @RequestParam(defaultValue = "20", required = false) limit: Int = 20,
         @RequestParam(defaultValue = "0", required = false) offset: Int = 0
-    ): SearchWebsitesResponse {
+    ): SearchWebsiteResponse {
         val websites = service.search(
             ids = ids,
             userIds = userIds,
@@ -55,7 +55,7 @@ class WebsiteEndpoints(
             tenantId = tenantId
         )
         logger.add("count", websites.size)
-        return SearchWebsitesResponse(
+        return SearchWebsiteResponse(
             websites = websites.map { entity -> mapper.toWebsiteSummary(entity) }
         )
     }

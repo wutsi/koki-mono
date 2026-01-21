@@ -38,12 +38,63 @@
                 </div>
             </div>
 
+            <!-- WEBSITE -->
+            <div class="widget margin-top-small" id="website-container" th:if="${website}">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <a aria-controls="collapse-website" aria-expanded="false"
+                           data-bs-toggle="collapse" href="#collapse-website" role="button">
+                            Website
+                        </a>
+                    </h3>
+                </div>
+                <div class="widget-body collapse" id="collapse-website">
+                    <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="${website.id}">000</td>
+                        </tr>
+                        <tr>
+                            <th>Base URL</th>
+                            <td>
+                                <a target="_blank" th:href="${website.baseUrl}" th:text="${website.baseUrl}">URL</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Home URLs</th>
+                            <td>
+                                <div th:each="url : ${website.homeUrls}">
+                                    <a target="_blank" th:href="${url}" th:text="${url}">URL</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Listing URL Prefix</th>
+                            <td><code th:text="${website.listingUrlPrefix}">XXX</code></td>
+                        </tr>
+                        <tr>
+                            <th>Content CSS Selector</th>
+                            <td><code th:text="${website.contentSelector}">XXX</code></td>
+                        </tr>
+                        <tr>
+                            <th>Image CSS Selector</th>
+                            <td><code th:text="${website.imageSelector}">XXX</code></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <!-- WEBPAGE -->
             <div class="widget margin-top-small" id="webpage-container" th:if="${webpage}">
                 <div class="widget-header">
-                    <h3 class="widget-title">Source Webpage</h3>
+                    <h3 class="widget-title">
+                        <a aria-controls="collapse-webpage" aria-expanded="false"
+                           data-bs-toggle="collapse" href="#collapse-webpage" role="button">
+                            Webpage
+                        </a>
+                    </h3>
                 </div>
-                <div class="widget-body">
+                <div class="collapse widget-body" id="collapse-webpage">
                     <table class="table">
                         <tr>
                             <th>ID</th>
@@ -52,23 +103,6 @@
                         <tr>
                             <th>Source</th>
                             <td><a target="_blank" th:href="${webpage.url}" th:text="${webpage.url}">URL</a></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a aria-controls="collapse-content" aria-expanded="false"
-                                           data-bs-toggle="collapse" href="#collapse-content" role="button">
-                                            Content
-                                        </a>
-                                    </div>
-                                    <div class="collapse" id="collapse-content">
-                                        <div class="card-body">
-                                            <pre th:text="${webpage.content}"></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -93,15 +127,87 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <a aria-controls="collapse-content" aria-expanded="false"
+                                           data-bs-toggle="collapse" href="#collapse-content" role="button">
+                                            Content
+                                        </a>
+                                    </div>
+                                    <div class="collapse" id="collapse-content">
+                                        <div class="card-body">
+                                            <pre>
+                                                <code class='language-json' th:text="${webpage.content}">TEXT</code>
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
 
             <!-- AI -->
+            <div class="widget margin-top-small" id="ai-listing-container" th:if="${aiListing}">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <a aria-controls="collapse-ai-listing" aria-expanded="false"
+                           data-bs-toggle="collapse" href="#collapse-ai-listing" role="button">
+                            AI
+                        </a>
+                    </h3>
+                </div>
+                <div class="collapse widget-body" id="collapse-ai-listing">
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <a aria-controls="collapse-ai-listing-text" aria-expanded="false"
+                                           data-bs-toggle="collapse" href="#collapse-ai-listing-text" role="button">
+                                            Input
+                                        </a>
+                                    </div>
+                                    <div class="collapse" id="collapse-ai-listing-text">
+                                        <div class="card-body">
+                                            <pre>
+                                                <code class='language-json' th:text="${aiListing.text}">TEXT</code>
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <a aria-controls="collapse-ai-listing-result" aria-expanded="false"
+                                           data-bs-toggle="collapse" href="#collapse-ai-listing-result" role="button">
+                                            Result
+                                        </a>
+                                    </div>
+                                    <div class="collapse" id="collapse-ai-listing-result">
+                                        <div class="card-body">
+                                            <pre>
+                                                <code class='language-json' th:text="${aiListing.result}">RESULT</code>
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
 
+<div th:replace="~{__components/highlightjs :: prettity('json')}"></div>
 </body>
 </html>

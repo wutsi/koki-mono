@@ -177,27 +177,18 @@
     </div>
 
     <!-- DEBUG INFO -->
-    <div class="row" id="debug-container">
-        <div class="col-12">
-            <div class="widget">
-                <div class="widget-body">
-                    <div>
-                        <a target="_blank" class="w-100 btn btn-secondary" th:href="'/listings/debug?id=' + ${listing.id}">
-                            <i class="fa-solid fa-bug"></i>
-                            <span>DEBUG INFO</span>
-                        </a>
-                    </div>
-                    <div class="col-12 text-small margin-top text-right" th:if="${webpage}">
-                        Source:
-                        <a class="webpage-source" target="_blank" th:href="${webpage.url}" th:text="${webpage.url}">
-                            URL
-                        </a>
-                    </div>
-                </div>
-            </div>
-        <div>
+    <div class="alert alert-warning margin-top" id="debug-container" th:if="${user.canDebug()}">
+        <a class="w-100 btn btn-secondary" target="_blank" th:href="'/listings/debug?id=' + ${listing.id}">
+            <i class="fa-solid fa-bug"></i>
+            <span>DEBUG INFO</span>
+        </a>
+        <div class="col-12 text-small margin-top text-right" th:if="${webpage}">
+            Source:
+            <a class="webpage-source" target="_blank" th:href="${webpage.url}" th:text="${webpage.url}">
+                URL
+            </a>
+        </div>
     </div>
-
 
     <!-- STICKY BAR -->
     <div class="d-block d-md-none border sticky-bar-bottom"

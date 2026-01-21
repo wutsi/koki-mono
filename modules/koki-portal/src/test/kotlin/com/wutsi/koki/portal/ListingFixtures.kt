@@ -3,6 +3,7 @@ package com.wutsi.koki
 import com.wutsi.koki.ContactFixtures.contacts
 import com.wutsi.koki.UserFixtures.USER_ID
 import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.listing.dto.AIListing
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -21,6 +22,59 @@ import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
 object ListingFixtures {
+    val aiListing = AIListing(
+        id = 111,
+        listingId = 1115,
+        text = """
+            -01 fully equipped living and dining room
+            -01 fully equipped kitchen
+            -03 fully equipped bedrooms
+            -03 bathrooms
+            -half bathroom...
+            -01 fully equipped living and dining room
+            -01 fully equipped kitchen
+            -03 fully equipped bedrooms
+            -03 bathrooms
+            -half bathroom
+
+        """.trimIndent(),
+        result = """
+            {
+              "city" : "Yaoundé",
+              "price" : 5000000,
+              "valid" : true,
+              "street" : "SHILOH SUITES",
+              "country" : "CM",
+              "bedrooms" : 3,
+              "currency" : "XAF",
+              "amenities" : [ {
+                "id" : 1046,
+                "name" : "Swimming pool"
+              }, {
+                "id" : 1006,
+                "name" : "Air conditioning"
+              }, {
+                "id" : 1052,
+                "name" : "Balcony"
+              }, {
+                "id" : 1008,
+                "name" : "Wi-Fi"
+              }, {
+                "id" : 1032,
+                "name" : "TV cable/satellite"
+              }],
+              "bathrooms" : 3,
+              "listingType" : "RENTAL",
+              "propertyType" : "HOUSE",
+              "furnitureType" : "FULLY_FURNISHED",
+              "halfBathrooms" : 1,
+              "neighbourhood" : "Elig Essono",
+              "publicRemarks" : "Luxury pente house for rent. Features include: fully equipped living and dining room, fully equipped kitchen, terrace/balcony, fence, audio video system, security system. Located in Centre area.",
+              "neighbourhoodId" : 237019
+            }
+        """.trimIndent()
+    )
+
     val listing = Listing(
         id = 1115,
         listingNumber = 243001,

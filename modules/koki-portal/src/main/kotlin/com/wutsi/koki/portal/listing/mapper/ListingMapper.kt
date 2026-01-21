@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.listing.mapper
 
+import com.wutsi.koki.listing.dto.AIListing
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
@@ -16,6 +17,7 @@ import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
 import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.file.model.FileModel
+import com.wutsi.koki.portal.listing.model.AIListingModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -28,6 +30,7 @@ import com.wutsi.koki.refdata.dto.Money
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
+import tools.jackson.databind.json.JsonMapper
 import java.net.URLEncoder
 import java.util.Locale
 
@@ -36,7 +39,27 @@ class ListingMapper(
     private val moneyMapper: MoneyMapper,
     private val messages: MessageSource,
     private val moment: Moment,
+    private val jsonMapper: JsonMapper,
 ) : TenantAwareMapper() {
+    fun toAIListingModel(entity: AIListing): AIListingModel {
+        return AIListingModel(
+            id = entity.id,
+            listingId = entity.listingId,
+            text = entity.text,
+            result = jsonPrettyPrint(entity.result),
+            createdAt = entity.createdAt,
+        )
+    }
+
+    private fun jsonPrettyPrint(text: String): String {
+        try {
+            val json = jsonMapper.readValue(text, Map::class.java)
+            return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+        } catch (ex: Exception) {
+            return text
+        }
+    }
+
     fun toListingModel(
         entity: Listing,
         locations: Map<Long, LocationModel>,

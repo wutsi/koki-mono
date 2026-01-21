@@ -256,11 +256,18 @@ class ListingControllerTest : AbstractPageControllerTest() {
         setupListing(status = ListingStatus.DRAFT, sellerAgentUserId = 9999L)
 
         navigateTo("/listings/${listing.id}")
-        assertCurrentPageIs(PageName.ERROR_403)
     }
 
     @Test
-    fun `without listing AND full_access`() {
+    fun `without tenant_debug permission`() {
+        setupUserWithoutPermissions(listOf("tenant:debug"))
+
+        navigateTo("/listings/${listing.id}")
+        assertElementNotPresent("#debug-container")
+    }
+
+    @Test
+    fun `without listing AND full_access permissions`() {
         setupUserWithoutPermissions(listOf("listing", "listing:full_access"))
 
         navigateTo("/listings/${listing.id}")

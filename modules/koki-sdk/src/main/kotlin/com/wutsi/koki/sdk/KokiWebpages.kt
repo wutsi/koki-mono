@@ -1,7 +1,7 @@
 package com.wutsi.koki.sdk
 
 import com.wutsi.koki.webscraping.dto.GetWebpageResponse
-import com.wutsi.koki.webscraping.dto.SearchWebpagesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
 import org.springframework.web.client.RestTemplate
 
 class KokiWebpages(
@@ -23,7 +23,7 @@ class KokiWebpages(
         active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
-    ): SearchWebpagesResponse {
+    ): SearchWebpageResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
@@ -34,6 +34,6 @@ class KokiWebpages(
                 "offset" to offset,
             ),
         )
-        return rest.getForEntity(url, SearchWebpagesResponse::class.java).body!!
+        return rest.getForEntity(url, SearchWebpageResponse::class.java).body!!
     }
 }

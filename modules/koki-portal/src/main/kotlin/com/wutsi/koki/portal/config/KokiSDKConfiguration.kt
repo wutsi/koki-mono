@@ -26,6 +26,7 @@ import com.wutsi.koki.sdk.KokiTenants
 import com.wutsi.koki.sdk.KokiTypes
 import com.wutsi.koki.sdk.KokiUsers
 import com.wutsi.koki.sdk.KokiWebpages
+import com.wutsi.koki.sdk.KokiWebsites
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.restclient.RestTemplateBuilder
@@ -157,6 +158,11 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiWebpages(): KokiWebpages {
         return KokiWebpages(urlBuilder(), rest())
+    }
+
+    @Bean
+    fun kokiWebsites(): KokiWebsites {
+        return KokiWebsites(urlBuilder(), rest())
     }
 
     @Bean

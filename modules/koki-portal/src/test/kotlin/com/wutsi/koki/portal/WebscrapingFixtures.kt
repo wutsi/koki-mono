@@ -3,8 +3,19 @@ package com.wutsi.koki.portal
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.webscraping.dto.Webpage
 import com.wutsi.koki.webscraping.dto.WebpageSummary
+import com.wutsi.koki.webscraping.dto.Website
 
 object WebscrapingFixtures {
+    val website = Website(
+        id = 1L,
+        baseUrl = "https://www.realtor.com",
+        listingUrlPrefix = "/property",
+        homeUrls = listOf("https://www.realtor.com/for-rent", "https://www.realtor.com/for-sale"),
+        contentSelector = ".property-description",
+        imageSelector = ".property-image-gallery img",
+        active = true,
+    )
+
     val webpage = Webpage(
         id = 111,
         listingId = ListingFixtures.listings[0].id,

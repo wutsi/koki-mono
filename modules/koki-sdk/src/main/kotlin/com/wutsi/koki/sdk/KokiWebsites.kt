@@ -5,7 +5,7 @@ import com.wutsi.koki.webscraping.dto.CreateWebsiteResponse
 import com.wutsi.koki.webscraping.dto.GetWebsiteResponse
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
-import com.wutsi.koki.webscraping.dto.SearchWebsitesResponse
+import com.wutsi.koki.webscraping.dto.SearchWebsiteResponse
 import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
 import org.springframework.web.client.RestTemplate
 
@@ -38,7 +38,7 @@ class KokiWebsites(
         active: Boolean? = null,
         limit: Int = 20,
         offset: Int = 0,
-    ): SearchWebsitesResponse {
+    ): SearchWebsiteResponse {
         val url = urlBuilder.build(
             PATH_PREFIX,
             mapOf(
@@ -49,7 +49,7 @@ class KokiWebsites(
                 "offset" to offset,
             ),
         )
-        return rest.getForEntity(url, SearchWebsitesResponse::class.java).body!!
+        return rest.getForEntity(url, SearchWebsiteResponse::class.java).body!!
     }
 
     fun scrape(id: Long, request: ScrapeWebsiteRequest): ScrapeWebsiteResponse {
