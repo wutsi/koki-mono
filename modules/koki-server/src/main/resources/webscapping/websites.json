@@ -24,7 +24,7 @@
         "https://codecis.com/status/a-vendre/",
         "https://codecis.com/status/a-vendre/page/2/"
       ],
-      "contentSelector": ".property-title-price-wrap, .property-description-wrap, .property-features-wrap, property-address-wrap",
+      "contentSelector": ".property-title-price-wrap, .page-title-wrap .item-address, .property-description-wrap, .property-features-wrap, property-address-wrap",
       "imageSelector": "#property-gallery-js img",
       "active": true
     },

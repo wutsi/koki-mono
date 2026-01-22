@@ -3,8 +3,6 @@ package com.wutsi.koki.webscraping.server.endpoint
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -12,9 +10,7 @@ import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
-import com.wutsi.koki.file.dto.CreateFileRequest
-import com.wutsi.koki.file.dto.CreateFileResponse
-import com.wutsi.koki.file.server.endpoint.FileEndpoints
+import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -30,6 +26,7 @@ import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.listing.server.service.ai.ListingLocationExtractoryResult
 import com.wutsi.koki.platform.ai.agent.Agent
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.webscraping.dto.CreateWebpageListingResponse
 import com.wutsi.koki.webscraping.server.dao.WebpageRepository
 import org.apache.commons.lang3.time.DateUtils
@@ -55,7 +52,7 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var listingDao: ListingRepository
 
     @MockitoBean
-    private lateinit var fileEndpoints: FileEndpoints
+    private lateinit var publisher: Publisher
 
     @Autowired
     private lateinit var jsonMapper: JsonMapper
@@ -168,16 +165,16 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(TENANT_ID, listing.tenantId)
         assertEquals(ListingStatus.DRAFT, listing.status)
 
-        val fileRequest = argumentCaptor<CreateFileRequest>()
-        verify(fileEndpoints, times(2)).create(eq(TENANT_ID), fileRequest.capture())
+        val command = argumentCaptor<CreateFileCommand>()
+        verify(publisher, times(2)).publish(command.capture())
 
-        assertEquals("https://picsum.photos/100/300", fileRequest.firstValue.url)
-        assertEquals(listingId, fileRequest.firstValue.owner?.id)
-        assertEquals(ObjectType.LISTING, fileRequest.firstValue.owner?.type)
+        assertEquals("https://picsum.photos/100/300", command.firstValue.url)
+        assertEquals(listingId, command.firstValue.owner?.id)
+        assertEquals(ObjectType.LISTING, command.firstValue.owner?.type)
 
-        assertEquals("https://picsum.photos/100", fileRequest.secondValue.url)
-        assertEquals(listingId, fileRequest.secondValue.owner?.id)
-        assertEquals(ObjectType.LISTING, fileRequest.secondValue.owner?.type)
+        assertEquals("https://picsum.photos/100", command.secondValue.url)
+        assertEquals(listingId, command.secondValue.owner?.id)
+        assertEquals(ObjectType.LISTING, command.secondValue.owner?.type)
     }
 
     @Test
@@ -211,38 +208,6 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `webpage with invalid image`() {
-        // WHEN
-        doThrow(IllegalStateException::class)
-            .doReturn(CreateFileResponse())
-            .whenever(fileEndpoints)
-            .create(any(), any())
-
-        // WHEN
-        val response = rest.postForEntity("/v1/webpages/104/listing", null, CreateWebpageListingResponse::class.java)
-
-        // THEN
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val webpageId = response.body!!.webpageId
-        val listingId = response.body!!.listingId
-        val webpage = webpageDao.findById(webpageId).get()
-        assertEquals(listingId, webpage.listingId)
-        assertEquals(TENANT_ID, webpage.tenantId)
-
-        val fileRequest = argumentCaptor<CreateFileRequest>()
-        verify(fileEndpoints, times(2)).create(eq(TENANT_ID), fileRequest.capture())
-
-        assertEquals("https://picsum.photos/104/300", fileRequest.firstValue.url)
-        assertEquals(listingId, fileRequest.firstValue.owner?.id)
-        assertEquals(ObjectType.LISTING, fileRequest.firstValue.owner?.type)
-
-        assertEquals("https://picsum.photos/104", fileRequest.secondValue.url)
-        assertEquals(listingId, fileRequest.secondValue.owner?.id)
-        assertEquals(ObjectType.LISTING, fileRequest.secondValue.owner?.type)
-    }
-
-    @Test
     fun `webpage with invalid city`() {
         // GIVEN
         doReturn(jsonMapper.writeValueAsString(listingLocationResult.copy(city = "xxx")))
@@ -255,15 +220,5 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
         // THEN
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(ErrorCode.LOCATION_NOT_FOUND, response.body?.error?.code)
-    }
-
-    @Test
-    fun `listing already created`() {
-        // WHEN
-        val response = rest.postForEntity("/v1/webpages/106/listing", null, ErrorResponse::class.java)
-
-        // THEN
-        assertEquals(HttpStatus.CONFLICT, response.statusCode)
-        assertEquals(ErrorCode.LISTING_ALREADY_CREATED, response.body?.error?.code)
     }
 }

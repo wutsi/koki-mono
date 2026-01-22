@@ -246,6 +246,13 @@ koki:
                 dlq: koki-place-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        webscraping:
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-webscraping-queue
+                dlq: koki-webscraping-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
         ref-data:
             geonames:
                 connect-timeout: 30000

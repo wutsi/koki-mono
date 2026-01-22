@@ -18,7 +18,6 @@ import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.domain.WebsiteEntity
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
-import org.apache.commons.codec.digest.DigestUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
@@ -33,6 +32,7 @@ class WebpageService(
     private val locationService: LocationService,
     private val aiListingService: AIListingService,
     private val jsonMapper: JsonMapper,
+    private val http: Http,
     private val logger: KVLogger,
 ) {
     companion object {
@@ -173,14 +173,10 @@ class WebpageService(
             website = website,
             tenantId = website.tenantId,
             url = url,
-            urlHash = generateHash(url),
+            urlHash = http.hash(url),
             imageUrls = images,
             content = content?.ifEmpty { null },
             active = true,
         )
-    }
-
-    private fun generateHash(value: String): String {
-        return DigestUtils.md5Hex(value.lowercase().trim())
     }
 }

@@ -1,6 +1,7 @@
 package com.wutsi.koki.webscraping.server.endpoint
 
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.webscraping.dto.CreateWebsiteRequest
 import com.wutsi.koki.webscraping.dto.CreateWebsiteResponse
 import com.wutsi.koki.webscraping.dto.GetWebsiteResponse
@@ -8,13 +9,13 @@ import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
 import com.wutsi.koki.webscraping.dto.SearchWebsiteResponse
 import com.wutsi.koki.webscraping.dto.UpdateWebsiteRequest
+import com.wutsi.koki.webscraping.server.command.CreateWebpageListingCommand
 import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.mapper.WebsiteMapper
+import com.wutsi.koki.webscraping.server.service.WebpageService
 import com.wutsi.koki.webscraping.server.service.WebsiteService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,13 +31,10 @@ class WebsiteEndpoints(
     private val service: WebsiteService,
     private val logger: KVLogger,
     private val mapper: WebsiteMapper,
-    private val webpageEndpoints: WebpageEndpoints,
+    private val publisher: Publisher,
+    private val webpageService: WebpageService,
     private val webpageMapper: WebpageMapper,
 ) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(WebsiteEndpoints::class.java)
-    }
-
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
@@ -120,25 +118,34 @@ class WebsiteEndpoints(
         )
     }
 
-    @Async
     @PostMapping("/{id}/listings")
     @Operation(summary = "Create the listings of all the webpages of the website")
     fun listings(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        webpageEndpoints.search(
+        val webpages = webpageService.search(
+            tenantId = tenantId,
             websiteId = id,
+            listingId = null,
             active = true,
             limit = Integer.MAX_VALUE,
             offset = 0,
-            tenantId = tenantId
-        ).webpages.forEach { webpage ->
-            try {
-                webpageEndpoints.listing(tenantId, webpage.id)
-            } catch (ex: Exception) {
-                LOGGER.warn("Unable to create listing for webpage: ${webpage.id}", ex)
+        )
+        logger.add("webpage_count", webpages.size)
+
+        var sumitted = 0
+        webpages.forEach { webpage ->
+            if (webpage.listingId == null) {
+                publisher.publish(
+                    CreateWebpageListingCommand(
+                        tenantId = tenantId,
+                        webpageId = webpage.id ?: -1,
+                    )
+                )
+                sumitted++
             }
         }
+        logger.add("webpage_submitted_count", sumitted)
     }
 }
