@@ -18,7 +18,7 @@ import java.util.Date
 @Service
 class WebsiteService(
     private val dao: WebsiteRepository,
-    private val webscraper: WebscaperService,
+    private val webscraper: WebscraperService,
     private val http: Http,
     private val em: EntityManager,
 ) {

@@ -130,6 +130,18 @@ class SearchListingMetricEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `by listing-status`() {
+        val response = rest.getForEntity(
+            "/v1/listings/metrics?listing-status=PENDING",
+            SearchListingMetricResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val metrics = response.body!!.metrics
+        assertEquals(3, metrics.size)
+    }
+
+    @Test
     fun `verify metric data structure`() {
         val response = rest.getForEntity(
             "/v1/listings/metrics?neighbourhood-id=1000&listing-type=SALE",

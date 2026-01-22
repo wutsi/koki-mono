@@ -38,11 +38,11 @@ class ListingSimilarityService(
     fun findSimilar(
         referenceId: Long,
         tenantId: Long,
-        statuses: List<ListingStatus> = emptyList(),
-        sameAgent: Boolean = false,
-        sameNeighborhood: Boolean = false,
-        sameCity: Boolean = false,
-        limit: Int = 10,
+        statuses: List<ListingStatus>,
+        sameAgent: Boolean,
+        sameNeighborhood: Boolean,
+        sameCity: Boolean,
+        limit: Int,
     ): List<Pair<Long, Double>> {
         // Get the reference listing
         val reference = listingService.get(referenceId, tenantId)

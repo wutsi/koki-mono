@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class WebscaperService(
+class WebscraperService(
     private val webpageService: WebpageService,
     private val http: Http,
 ) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(WebscaperService::class.java)
+        private val LOGGER = LoggerFactory.getLogger(WebscraperService::class.java)
         private val MULTIPLE_CR_REGEX = Regex("\\n{2,}")
         private val MULTIPLE_SP_REGEX = Regex("\\s{2,}")
         private val CR = "\n"
@@ -104,6 +104,7 @@ class WebscaperService(
         } else {
             return doc.select(website.contentSelector!!)
                 .joinToString("\n") { elt -> html2markdown(elt) }
+                .ifEmpty { null }
         }
     }
 

@@ -15,14 +15,14 @@ class ListingMetricService(
 ) {
     fun search(
         tenantId: Long,
-        neighbourhoodId: Long? = null,
-        sellerAgentUserIds: List<Long> = emptyList(),
-        cityId: Long? = null,
-        bedrooms: Int? = null,
-        propertyCategory: PropertyCategory? = null,
-        listingType: ListingType? = null,
-        listingStatus: ListingStatus? = null,
-        dimension: ListingMetricDimension? = null,
+        neighbourhoodId: Long?,
+        sellerAgentUserIds: List<Long>,
+        cityId: Long?,
+        bedrooms: Int?,
+        propertyCategory: PropertyCategory?,
+        listingType: ListingType?,
+        listingStatus: ListingStatus?,
+        dimension: ListingMetricDimension?,
     ): List<ListingMetricEntity> {
         val jql = StringBuilder("SELECT NM FROM ListingMetricEntity NM WHERE NM.tenantId = :tenantId")
 

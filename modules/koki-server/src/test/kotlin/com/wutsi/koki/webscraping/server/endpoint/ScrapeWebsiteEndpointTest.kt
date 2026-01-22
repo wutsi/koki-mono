@@ -9,7 +9,7 @@ import com.wutsi.koki.error.dto.ErrorResponse
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteRequest
 import com.wutsi.koki.webscraping.dto.ScrapeWebsiteResponse
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
-import com.wutsi.koki.webscraping.server.service.WebscaperService
+import com.wutsi.koki.webscraping.server.service.WebscraperService
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
@@ -20,7 +20,7 @@ import kotlin.test.assertNotNull
 @Sql(value = ["/db/test/clean.sql", "/db/test/webscraping/ScrapeWebsiteEndpoint.sql"])
 class ScrapeWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
     @MockitoBean
-    private lateinit var webscraper: WebscaperService
+    private lateinit var webscraper: WebscraperService
 
     @Test
     fun scrape() {

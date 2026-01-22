@@ -175,7 +175,7 @@ class WebpageService(
             url = url,
             urlHash = generateHash(url),
             imageUrls = images,
-            content = content,
+            content = content?.ifEmpty { null },
             active = true,
         )
     }
