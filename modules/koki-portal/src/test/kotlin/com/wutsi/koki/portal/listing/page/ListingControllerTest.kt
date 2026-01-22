@@ -52,7 +52,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#listing-description-section")
         assertElementPresent("#listing-general-section")
-        assertElementNotPresent("#listing-legal-section")
+        assertElementPresent("#listing-legal-section")
         assertElementPresent("#listing-amenity-section")
         assertElementPresent("#listing-address-section")
         assertElementPresent("#listing-geolocation-section")
