@@ -3,6 +3,7 @@ package com.wutsi.koki.file.server.service.mq
 import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.command.CreateFileCommand
+import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
@@ -14,7 +15,7 @@ class CreateFileCommandHandler(
     private val publisher: Publisher,
     private val logger: KVLogger,
 ) {
-    fun handle(command: CreateFileCommand) {
+    fun handle(command: CreateFileCommand): FileEntity {
         logger.add("command_url", command.url)
         logger.add("command_tenant_id", command.tenantId)
         logger.add("command_owner_id", command.owner?.id)
@@ -37,5 +38,6 @@ class CreateFileCommandHandler(
                 owner = command.owner,
             )
         )
+        return file
     }
 }

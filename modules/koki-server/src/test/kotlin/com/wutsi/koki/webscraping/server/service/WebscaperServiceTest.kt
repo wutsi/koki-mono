@@ -398,6 +398,81 @@ Security system
         verify(webpageService, times(webpages.size)).save(any())
     }
 
+    @Test
+    fun adpmrealestate() {
+        // GIVEN
+        val website = setupWebsite(
+            name = "adpmrealestate",
+            baseUrl = "https://adpmrealestate.com",
+            homeUrl = "https://adpmrealestate.com/city/yaounde/",
+            listingUrlPrefix = "/property",
+            contentSelector = ".property-description-wrap, .property-address-wrap, .property-detail-wrap",
+            imageSelector = "img.houzez-gallery-img",
+        )
+
+        // WHEN
+        val webpages = service.scrape(website, request)
+        assertEquals(17, webpages.size)
+
+        // THEN
+        val url = argumentCaptor<String>()
+        val images = argumentCaptor<List<String>>()
+        val content = argumentCaptor<String>()
+        verify(webpageService, times(webpages.size))
+            .new(
+                eq(website),
+                url.capture(),
+                images.capture(),
+                content.capture(),
+            )
+
+        assertEquals(
+            "https://adpmrealestate.com/property/villa-3/",
+            url.firstValue
+        )
+        assertEquals(7, images.firstValue.size)
+        assertEquals(
+            """
+Description
+-----------
+
+#RésidenceMeublée \& Luxueuse à Vendre \| #Nkoabang #Yaoundé #Cameroun Lieu-dit Danko -- non loin du Collège International Holy Cross \| terrain titré 500 m² \| mutation totale \| documents disponibles
+
+Composition : -- Penthouse de 120 m² avec vue panoramique urbaine -- 3 chambres spacieuses -- 2 salles de bain + 2 douches -- Salon et cuisine ouverts -- Rez-de-chaussée : 2 studios VIP de 50 m² chacun -- Parking sécurisé -- Piscine -- Jardin aménagé -- Terrasse conviviale -- Électricité et eau en abondance
+
+[Read More](#)
+Atouts : -- Résidence meublée haut standing -- Localisation stratégique à Nkoabang -- Idéal pour habitation premium ou investissement locatif meublé
+
+Frais de visite : 15.000 FCFA Commission : 5%
+
+Address
+-------
+
+[Open on Google Maps](http://maps.google.com/?q=Yaoundé,%20Mfoundi,%20Région%20du%20Centre,%20Cameroun)
+* **Address:** Yaoundé, Mfoundi, Région du Centre, Cameroun
+* **City:** Yaoundé
+* **State/county:** Mfoundi
+* **Area:** Nkoabang
+* **Country:** Cameroun
+
+Details
+-------
+
+Updated on December 26, 2025 at 8:40 pm
+* **Price** 170 000 000 FCFA
+* **Property Size** 120 m²
+* **Bedrooms** 3
+* **Bathrooms** 4
+* **Property Type** Residential
+* **Property Status** For Sale
+
+            """.trimIndent(),
+            content.firstValue.replace("  \n", "\n")
+        )
+
+        verify(webpageService, times(webpages.size)).save(any())
+    }
+
     private fun setupWebsite(
         name: String,
         baseUrl: String,

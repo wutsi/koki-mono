@@ -4,12 +4,15 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.ImageQuality
@@ -24,6 +27,7 @@ import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorResu
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
 import java.io.File
@@ -199,6 +203,16 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+    }
+
+    @Test
+    fun `when file not found, rethrow the event`() {
+        // GIVEN
+        doThrow(NotFoundException(Error()))
+            .whenever(fileService).get(any(), any())
+
+        // WHEN
+        assertThrows<NotFoundException> { handler.handle(createImageEvent()) }
     }
 
     private fun createFileEvent(ownerType: ObjectType = ObjectType.LISTING): FileUploadedEvent {

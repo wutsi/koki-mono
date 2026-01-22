@@ -66,16 +66,13 @@ class WebpageEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): CreateWebpageListingResponse {
-        // Execute the command
-        createWebpageListingCommandHandler.handle(
+        val webpage = createWebpageListingCommandHandler.handle(
             CreateWebpageListingCommand(
                 tenantId = tenantId,
                 webpageId = id,
             )
         )
 
-        // Get the webpage
-        val webpage = service.get(id, tenantId)
         return CreateWebpageListingResponse(
             listingId = webpage.listingId ?: -1,
             webpageId = id

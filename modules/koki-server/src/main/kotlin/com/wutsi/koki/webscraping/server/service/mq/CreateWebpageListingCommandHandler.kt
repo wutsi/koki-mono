@@ -2,8 +2,6 @@ package com.wutsi.koki.webscraping.server.service.mq
 
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
@@ -18,29 +16,22 @@ class CreateWebpageListingCommandHandler(
     private val publisher: Publisher,
     private val logger: KVLogger,
 ) {
-    fun handle(command: CreateWebpageListingCommand): Boolean {
+    fun handle(command: CreateWebpageListingCommand): WebpageEntity {
         logger.add("command_webpage_id", command.webpageId)
         logger.add("command_tenant_id", command.tenantId)
-        try {
-            // Create
-            val webpage = service.listing(command.webpageId, command.tenantId)
-            logger.add("listing_id", webpage.listingId)
 
-            // Import images
-            var imageSubmitted = 0
-            webpage.imageUrls.forEach { imageUrl ->
-                importImage(imageUrl, webpage)
-                imageSubmitted++
-            }
-            logger.add("image_submitted_count", imageSubmitted)
-            return true
-        } catch (ex: ConflictException) {
-            if (ex.error.code == ErrorCode.LISTING_ALREADY_CREATED) {
-                return false
-            } else {
-                throw ex
-            }
+        // Create
+        val webpage = service.listing(command.webpageId, command.tenantId)
+        logger.add("listing_id", webpage.listingId)
+
+        // Import images
+        var imageSubmitted = 0
+        webpage.imageUrls.forEach { imageUrl ->
+            importImage(imageUrl, webpage)
+            imageSubmitted++
         }
+        logger.add("image_submitted_count", imageSubmitted)
+        return webpage
     }
 
     private fun importImage(url: String, webpage: WebpageEntity) {

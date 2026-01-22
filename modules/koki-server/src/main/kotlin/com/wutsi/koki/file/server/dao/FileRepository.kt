@@ -14,4 +14,10 @@ interface FileRepository : CrudRepository<FileEntity, Long> {
         ownerType: ObjectType,
         deleted: Boolean,
     ): Long?
+
+    fun findBySourceUrlHashAndDeletedAndTenantId(
+        sourceUrlHash: String,
+        deleted: Boolean = false,
+        tenantId: Long
+    ): List<FileEntity>
 }
