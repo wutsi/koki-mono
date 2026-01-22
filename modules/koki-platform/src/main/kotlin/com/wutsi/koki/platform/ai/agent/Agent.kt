@@ -95,7 +95,7 @@ abstract class Agent(
                 if (call != null) {
                     logger.debug("llm=${llm::class.java.simpleName} iteration=$iteration step=decide function=${call.name} args=${call.args}")
                     val result = exec(call)
-                    logger.info(result)
+                    logger.debug(result)
 
                     if (result != null) {
                         memory.add(result)

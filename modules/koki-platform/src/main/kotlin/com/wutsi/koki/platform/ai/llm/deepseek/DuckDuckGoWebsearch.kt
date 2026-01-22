@@ -17,7 +17,7 @@ class DuckDuckGoWebsearch(
     }
 
     override fun search(query: String): String {
-        LOGGER.debug("searching $query")
+        LOGGER.info("Web Search: $query")
         delay()
 
         val url = URL_PREFIX + URLEncoder.encode(query, "UTF-8")
