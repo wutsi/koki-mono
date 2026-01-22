@@ -40,22 +40,20 @@ abstract class Agent(
         val memory: MutableList<String> = mutableListOf()
         val start = System.currentTimeMillis()
         while (true) {
+            // Increment iteration
             iteration++
-
-            if (logger.isInfoEnabled) {
-                logger.info("llm=${llm::class.java.simpleName} iteration=$iteration")
-            }
+            logger.info("llm=${llm::class.java.simpleName} iteration=$iteration")
             if (iteration > maxIterations) {
                 throw TooManyIterationsException("Too many iteration. iteration=$iteration")
             }
 
+            // Run
             try {
                 if (run(iteration, query, memory, files)) {
                     logger.info("llm=${llm::class.java.simpleName} iteration=$iteration duration=" + duration(start) + "s success=true")
                     break
                 }
             } catch (ex: Exception) {
-                logger.info("llm=${llm::class.java.simpleName} iteration=$iteration duration=" + duration(start) + "s success=false error=${ex.javaClass.simpleName}")
                 throw AgentException("Failure", ex)
             }
         }
@@ -84,7 +82,7 @@ abstract class Agent(
             .forEach { content ->
                 if (!content.text.isNullOrEmpty()) {
                     if (logger.isInfoEnabled()) {
-                        logger.info("llm=${llm::class.java.simpleName} iteration=$iteration step=decide text\n${content.text}")
+                        logger.debug("llm=${llm::class.java.simpleName} iteration=$iteration step=decide text\n${content.text}")
                     }
                     memory.add(content.text)
                 }
@@ -95,7 +93,7 @@ abstract class Agent(
             .forEach { content ->
                 val call = content.functionCall
                 if (call != null) {
-                    logger.info("llm=${llm::class.java.simpleName} iteration=$iteration step=decide function=${call.name} args=${call.args}")
+                    logger.debug("llm=${llm::class.java.simpleName} iteration=$iteration step=decide function=${call.name} args=${call.args}")
                     val result = exec(call)
                     logger.info(result)
 
