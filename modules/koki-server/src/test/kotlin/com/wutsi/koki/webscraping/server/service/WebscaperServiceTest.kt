@@ -466,7 +466,8 @@ Updated on December 26, 2025 at 8:40 pm
 * **Property Type** Residential
 * **Property Status** For Sale
 
-            """.trimIndent(), content.firstValue
+            """.trimIndent(),
+            content.firstValue.replace("  \n", "\n")
         )
 
         verify(webpageService, times(webpages.size)).save(any())
