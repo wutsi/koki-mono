@@ -1,18 +1,14 @@
 package com.wutsi.koki.webscraping.server.endpoint
 
-import com.wutsi.koki.common.dto.ObjectReference
-import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.file.dto.CreateFileRequest
-import com.wutsi.koki.file.server.endpoint.FileEndpoints
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.webscraping.dto.CreateWebpageListingResponse
 import com.wutsi.koki.webscraping.dto.GetWebpageResponse
 import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
-import com.wutsi.koki.webscraping.server.domain.WebpageEntity
+import com.wutsi.koki.webscraping.server.command.CreateWebpageListingCommand
 import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.service.WebpageService
+import com.wutsi.koki.webscraping.server.service.mq.CreateWebpageListingCommandHandler
 import io.swagger.v3.oas.annotations.Operation
-import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,12 +23,8 @@ class WebpageEndpoints(
     private val service: WebpageService,
     private val mapper: WebpageMapper,
     private val logger: KVLogger,
-    private val fileEndpoints: FileEndpoints,
+    private val createWebpageListingCommandHandler: CreateWebpageListingCommandHandler,
 ) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(WebpageEndpoints::class.java)
-    }
-
     @GetMapping
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
@@ -74,37 +66,19 @@ class WebpageEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): CreateWebpageListingResponse {
-        // Create
-        val webpage = service.listing(id, tenantId)
-
-        // Import images
-        webpage.imageUrls.forEach { imageUrl ->
-            try {
-                importImage(imageUrl, webpage)
-            } catch (ex: Exception) {
-                LOGGER.warn("webpage#${webpage.id} - Unable to import image: $imageUrl", ex)
-            }
-        }
-
-        return CreateWebpageListingResponse(
-            listingId = webpage.listingId!!,
-            webpageId = id
+        // Execute the command
+        createWebpageListingCommandHandler.handle(
+            CreateWebpageListingCommand(
+                tenantId = tenantId,
+                webpageId = id,
+            )
         )
-    }
 
-    private fun importImage(url: String, webpage: WebpageEntity) {
-        LOGGER.info("webpage#${webpage.id} - Importing image: $url")
-        fileEndpoints.create(
-            request = CreateFileRequest(
-                url = url,
-                owner = webpage.listingId?.let { id ->
-                    ObjectReference(
-                        id = id,
-                        type = ObjectType.LISTING
-                    )
-                },
-            ),
-            tenantId = webpage.tenantId
+        // Get the webpage
+        val webpage = service.get(id, tenantId)
+        return CreateWebpageListingResponse(
+            listingId = webpage.listingId ?: -1,
+            webpageId = id
         )
     }
 }
