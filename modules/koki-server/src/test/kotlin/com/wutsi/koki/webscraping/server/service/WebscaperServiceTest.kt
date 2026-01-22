@@ -47,7 +47,7 @@ class WebscaperServiceTest {
 
         doReturn(WebpageEntity(id = ++id))
             .whenever(webpageService)
-            .new(any(), any(), any(), any())
+            .new(any(), any(), any(), anyOrNull())
 
         doAnswer { invocation -> invocation.arguments[0] }
             .whenever(webpageService)
@@ -406,7 +406,7 @@ Security system
             baseUrl = "https://adpmrealestate.com",
             homeUrl = "https://adpmrealestate.com/city/yaounde/",
             listingUrlPrefix = "/property",
-            contentSelector = ".property-description-wrap, .property-address-wrap, .property-detail-wrap",
+            contentSelector = "h1, .property-description-wrap, .property-address-wrap, .property-detail-wrap",
             imageSelector = "img.houzez-gallery-img",
         )
 
@@ -433,6 +433,8 @@ Security system
         assertEquals(7, images.firstValue.size)
         assertEquals(
             """
+RÉSIDENCE MEUBLÉ
+
 Description
 -----------
 
@@ -468,6 +470,51 @@ Updated on December 26, 2025 at 8:40 pm
 
             """.trimIndent(),
             content.firstValue.replace("  \n", "\n")
+        )
+
+        verify(webpageService, times(webpages.size)).save(any())
+    }
+
+    @Test
+    fun cameroonMaison() {
+        // GIVEN
+        val website = setupWebsite(
+            name = "cameroon-maison",
+            baseUrl = "https://www.camerounmaison.com",
+            homeUrl = "https://www.camerounmaison.com/vip/1",
+            listingUrlPrefix = "/detail_maison",
+            contentSelector = ".gauche p span",
+            imageSelector = ".imgitems img",
+        )
+
+        // WHEN
+        val webpages = service.scrape(website, request)
+        assertEquals(11, webpages.size)
+
+        // THEN
+        val url = argumentCaptor<String>()
+        val images = argumentCaptor<List<String>>()
+        val content = argumentCaptor<String>()
+        verify(webpageService, times(webpages.size))
+            .new(
+                eq(website),
+                url.capture(),
+                images.capture(),
+                content.capture(),
+            )
+
+        assertEquals(
+            "https://www.camerounmaison.com/detail_maison/3005",
+            url.firstValue
+        )
+        assertEquals(10, images.firstValue.size)
+        assertEquals(
+            """
+Studio à louer : Ngousso (100 000 Fcfa/mois) Ville : Yaoundé Quartier : Ngousso Style de maison : Immeuble - 1 Salon - 1 Chambre - 1 Douche - 1 Cuisine Loyer : 100 000 Fcfa/mois Avance : 10 Mois CAMEROUN MAISON Jours : Lundi - Samedi Heures : 08h00 - 18h00 Bureau : Yaoundé, Carrefour Mvog-mbi. Immeuble carrelé noir et blanc en face UBA, "Centre Commercial EKOTTO". Porte N° 302 +237 694469420 (whatsapp) +237 673485325 +237 694222448 +237 653900927
+
+
+            """.trimIndent(),
+            content.firstValue
         )
 
         verify(webpageService, times(webpages.size)).save(any())
