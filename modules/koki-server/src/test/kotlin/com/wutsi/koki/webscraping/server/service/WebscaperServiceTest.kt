@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 class WebscaperServiceTest {
     private val webpageService = mock<WebpageService>()
     private val http = mock<Http>()
-    private val service: WebscaperService = WebscaperService(webpageService, http)
+    private val service: WebscraperService = WebscraperService(webpageService, http)
 
     private var id = System.currentTimeMillis()
     private val hash = "b32e5c02a626c9505a0f6ad797b92a3f"
