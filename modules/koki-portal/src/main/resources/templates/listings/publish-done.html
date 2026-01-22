@@ -22,7 +22,7 @@
                     </div>
                     <div class="margin-top-2x">
                         <a class="btn btn-primary w-100" id="btn-continue"
-                           th:href="'/listings/' + ${listing.id}"
+                           th:href="${continueUrl}"
                            th:text="#{button.continue}">
                             CONTINUE
                         </a>

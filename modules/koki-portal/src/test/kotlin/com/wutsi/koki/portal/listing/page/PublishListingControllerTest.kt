@@ -37,7 +37,7 @@ class PublishListingControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.LISTING_PUBLISH_DONE)
         click("#btn-continue")
 
-        assertCurrentPageIs(PageName.LISTING)
+        assertCurrentPageIs(PageName.LISTING_LIST)
     }
 
     @Test

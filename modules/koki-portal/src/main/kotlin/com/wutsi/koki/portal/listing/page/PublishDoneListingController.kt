@@ -16,7 +16,7 @@ class PublishDoneListingController : AbstractEditListingController() {
     fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-
+        model.addAttribute("continueUrl", "/listings?filter=" + ListListingController.FILTER_STATUS_DRAFT)
         model.addAttribute(
             "page",
             createPageModel(
