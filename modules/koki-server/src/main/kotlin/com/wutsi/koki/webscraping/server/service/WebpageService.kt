@@ -110,7 +110,10 @@ class WebpageService(
         logger.add("webpage_url", webpage.url)
         if (webpage.listingId != null) {
             throw ConflictException(
-                error = Error(ErrorCode.LISTING_ALREADY_CREATED)
+                error = Error(
+                    code = ErrorCode.LISTING_ALREADY_CREATED,
+                    data = mapOf("listing_id" to webpage.listingId.toString())
+                )
             )
         }
         if (webpage.content?.trim().isNullOrEmpty()) {
@@ -158,7 +161,8 @@ class WebpageService(
             ?: throw NotFoundException(
                 error = Error(
                     code = ErrorCode.LOCATION_NOT_FOUND,
-                    message = "City '${result.city}' not found"
+                    message = "City '${result.city}' not found",
+                    data = mapOf("city" to result.city.toString())
                 )
             )
     }

@@ -37,6 +37,8 @@ data class FileEntity(
     val contentType: String = "",
     val contentLength: Long = -1,
     val url: String = "",
+    val sourceUrl: String? = null,
+    val sourceUrlHash: String? = null,
     var deleted: Boolean = false,
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

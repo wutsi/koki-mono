@@ -1,6 +1,7 @@
 package com.wutsi.koki.listing.server.service.mq
 
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
@@ -11,6 +12,7 @@ import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorAgent
 import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorResult
 import com.wutsi.koki.platform.logger.KVLogger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
 
@@ -22,6 +24,10 @@ class ListingFileUploadedEventHandler(
     private val jsonMapper: JsonMapper,
     private val logger: KVLogger,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ListingFileUploadedEventHandler::class.java)
+    }
+
     fun handle(event: FileUploadedEvent): Boolean {
         logger.add("event_file_id", event.fileId)
         logger.add("event_file_type", event.fileType)
@@ -33,15 +39,21 @@ class ListingFileUploadedEventHandler(
             return false
         }
 
-        val file = fileService.get(event.fileId, event.tenantId)
-        if (event.fileType == FileType.IMAGE) {
-            reviewImage(file)
-        } else if (event.fileType == FileType.FILE) {
-            reviewFile(file)
-        }
+        try {
+            val file = fileService.get(event.fileId, event.tenantId)
+            if (event.fileType == FileType.IMAGE) {
+                reviewImage(file)
+            } else if (event.fileType == FileType.FILE) {
+                reviewFile(file)
+            }
 
-        updateListing(event.owner!!.id, file)
-        return true
+            updateListing(event.owner!!.id, file)
+            return true
+        } catch (ex: NotFoundException) {
+            logger.add("file_not_found", true)
+            LOGGER.warn("File not found: ${event.fileId} for tenant=${event.tenantId}", ex)
+            return false // Ignore the exception to prevent this even to be retried
+        }
     }
 
     private fun accept(event: FileUploadedEvent): Boolean {

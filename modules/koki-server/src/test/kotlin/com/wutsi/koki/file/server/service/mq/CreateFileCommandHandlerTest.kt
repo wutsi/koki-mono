@@ -3,11 +3,17 @@ package com.wutsi.koki.file.server.service.mq
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
@@ -19,6 +25,7 @@ import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 
 class CreateFileCommandHandlerTest {
@@ -62,5 +69,45 @@ class CreateFileCommandHandlerTest {
         assertEquals(file.type, event.firstValue.fileType)
         assertEquals(file.tenantId, event.firstValue.tenantId)
         assertEquals(cmd.owner, event.firstValue.owner)
+    }
+
+    @Test
+    fun `ignore duplicate file error`() {
+        // GIVEN
+        val ex = ConflictException(
+            error = Error(ErrorCode.FILE_ALREADY_EXISTS)
+        )
+        doThrow(ex).whenever(fileService).create(any(), any())
+
+        // WHEN
+        val cmd = CreateFileCommand(
+            url = "https://example.com/image.png",
+            tenantId = 1111,
+            owner = ObjectReference(type = ObjectType.LISTING, id = 456L)
+        )
+        handler.handle(cmd)
+
+        // THEN
+        verify(publisher, never()).publish(any())
+    }
+
+    @Test
+    fun `rethrow exceptions`() {
+        // GIVEN
+        val ex = NotFoundException(
+            error = Error(ErrorCode.FILE_NOT_FOUND)
+        )
+        doThrow(ex).whenever(fileService).create(any(), any())
+
+        // WHEN
+        val cmd = CreateFileCommand(
+            url = "https://example.com/image.png",
+            tenantId = 1111,
+            owner = ObjectReference(type = ObjectType.LISTING, id = 456L)
+        )
+        assertThrows<NotFoundException> { handler.handle(cmd) }
+
+        // THEN
+        verify(publisher, never()).publish(any())
     }
 }

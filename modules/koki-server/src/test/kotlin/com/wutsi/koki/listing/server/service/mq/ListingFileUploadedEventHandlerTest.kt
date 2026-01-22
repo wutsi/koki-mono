@@ -4,12 +4,15 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.ImageQuality
@@ -29,6 +32,7 @@ import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class ListingFileUploadedEventHandlerTest {
     private val agentFactory = mock<ListingAgentFactory>()
@@ -199,6 +203,22 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+    }
+
+    @Test
+    fun `file not found`() {
+        // GIVEN
+        doThrow(NotFoundException(Error()))
+            .whenever(fileService).get(any(), any())
+
+        // WHEN
+        val event = createImageEvent()
+        val result = handler.handle(event)
+
+        // THEN
+        assertFalse(result)
+        verify(fileService, never()).save(any())
+        verify(listingService, never()).save(any(), anyOrNull())
     }
 
     private fun createFileEvent(ownerType: ObjectType = ObjectType.LISTING): FileUploadedEvent {

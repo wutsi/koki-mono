@@ -1,8 +1,10 @@
 package com.wutsi.koki.file.server.service
 
+import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.file.dto.FileStatus
@@ -16,6 +18,7 @@ import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.util.MimeUtils
 import jakarta.persistence.EntityManager
+import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -177,6 +180,23 @@ class FileService(
 
     @Transactional
     fun create(request: CreateFileRequest, tenantId: Long): FileEntity {
+        // Check the file URL already exists
+        val sourceUrlHash = generateHash(request.url, request.owner)
+        if (dao.findBySourceUrlHashAndDeletedAndTenantId(sourceUrlHash, false, tenantId).isNotEmpty()) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorCode.FILE_ALREADY_EXISTS,
+                    message = "File already exists: ${request.url}",
+                    data = mapOf(
+                        "url" to request.url,
+                        "ownerId" to request.owner?.id.toString(),
+                        "ownerType" to request.owner?.type.toString(),
+                    )
+                )
+            )
+        }
+
+        // Create the file
         val file = download(request.url)
         val extension = FilenameUtils.getExtension(file.name)
         val contentType = MimeUtils.getMimeTypeFromExtension(extension)
@@ -197,6 +217,8 @@ class FileService(
                 tenantId = tenantId,
                 name = file.name,
                 url = url.toString(),
+                sourceUrl = request.url,
+                sourceUrlHash = sourceUrlHash,
                 contentType = contentType,
                 contentLength = file.length(),
                 type = if (contentType.startsWith("image/")) FileType.IMAGE else FileType.FILE,
@@ -205,6 +227,17 @@ class FileService(
                 status = FileStatus.UNDER_REVIEW,
             )
         )
+    }
+
+    private fun generateHash(url: String, owner: ObjectReference?): String {
+        val xurl = if (url.endsWith("/")) {
+            url.substring(0, url.length - 1)
+        } else {
+            url
+        }
+
+        val key = xurl.lowercase().trim() + (owner?.let { "-${owner.id}-${owner.type}" } ?: "")
+        return DigestUtils.md5Hex(key)
     }
 
     @Transactional

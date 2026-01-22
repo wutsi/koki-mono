@@ -3,7 +3,7 @@ package com.wutsi.koki.webscraping.server.service.mq
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.ErrorCode
-import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.error.exception.WutsiException
 import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
@@ -34,8 +34,12 @@ class CreateWebpageListingCommandHandler(
             }
             logger.add("image_submitted_count", imageSubmitted)
             return true
-        } catch (ex: ConflictException) {
+        } catch (ex: WutsiException) {
             if (ex.error.code == ErrorCode.LISTING_ALREADY_CREATED) {
+                logger.add("listing_already_exists", true)
+                return false
+            } else if (ex.error.code == ErrorCode.LOCATION_NOT_FOUND) {
+                logger.add("listing_already_exists", true)
                 return false
             } else {
                 throw ex

@@ -12,6 +12,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
@@ -68,11 +69,31 @@ class CreateWebpageListingCommandHandlerTest {
     }
 
     @Test
-    fun alreadyCreated() {
+    fun `ignore error when listing already created`() {
         // GIVEN
         val ex = ConflictException(
             error = Error(
                 code = ErrorCode.LISTING_ALREADY_CREATED,
+            )
+        )
+        doThrow(ex).whenever(service).listing(any(), any())
+
+        // WHEN
+        val cmd = CreateWebpageListingCommand(111L, 333L)
+        val result = handler.handle(cmd)
+
+        // THEN
+        assertFalse(result)
+
+        verify(publisher, never()).publish(any())
+    }
+
+    @Test
+    fun `ignore error when city not found`() {
+        // GIVEN
+        val ex = NotFoundException(
+            error = Error(
+                code = ErrorCode.LOCATION_NOT_FOUND,
             )
         )
         doThrow(ex).whenever(service).listing(any(), any())
