@@ -30,9 +30,8 @@ The listing information must be structured in the following JSON format:
 - availableAt: Date when the property is available in YYYY-MM-DD format (string)
 - price: Total sale or rental price (integer).
     - If the price is provided as a range, use the maximum value of the range.
-    - For rental properties:
-        - if the price is provided as a monthly amount, use that value
-        - if the price is provided as daily amount, multiply it by 30 to get the monthly price
+    - For rental properties, accept only monthly prices, reject daily or weekly prices as those are for short term
+      rentals.
     - If the price is provided per square meter, multiply it by the lotArea to get the total price
 - currency: Currency of the price in 3 letter ISO 4217 format (string)
 - visitFees: Fees for visiting the property (integer)

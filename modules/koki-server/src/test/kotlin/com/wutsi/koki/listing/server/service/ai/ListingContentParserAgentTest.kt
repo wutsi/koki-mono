@@ -272,6 +272,50 @@ class ListingContentParserAgentTest {
     }
 
     @Test
+    fun `daily rental`() {
+        val text = """
+            #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
+            📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
+            Caractéristiques :
+            - 3 chambres autonomes
+            - Cuisine américaine équipée
+            - Toilettes visiteurs
+            - Espace détente et barbecue 🍗
+            - Parking pour 2 véhicules
+            - Entièrement rénovée avec des matériaux soft et modernes
+            💰 Loyer : 50.000 FCFA / jour
+            📌 Commission : 5%
+            📜 Transaction sécurisée devant notaire ou bailleur agréé
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(false, listing["valid"])
+    }
+
+    @Test
+    fun `weekly rental`() {
+        val text = """
+            #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
+            📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
+            Caractéristiques :
+            - 3 chambres autonomes
+            - Cuisine américaine équipée
+            - Toilettes visiteurs
+            - Espace détente et barbecue 🍗
+            - Parking pour 2 véhicules
+            - Entièrement rénovée avec des matériaux soft et modernes
+            💰 Loyer : 300.000 FCFA / semaine
+            📌 Commission : 5%
+            📜 Transaction sécurisée devant notaire ou bailleur agréé
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(false, listing["valid"])
+    }
+
+    @Test
     fun test() {
         val text = """
             Somptueux #Duplex À VENDRE #400Millions Fcfa
