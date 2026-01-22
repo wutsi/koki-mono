@@ -14,9 +14,10 @@ import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.file.dto.UploadFileResponse
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
+import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.file.server.mapper.FileMapper
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.file.server.service.mq.CreateFileCommandHandler
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.security.dto.JWTDecoder
 import jakarta.servlet.http.HttpServletResponse
@@ -40,8 +41,8 @@ class FileEndpoints(
     private val service: FileService,
     private val mapper: FileMapper,
     private val response: HttpServletResponse,
-    private val logger: KVLogger,
     private val publisher: Publisher,
+    private val createFileCommandHandler: CreateFileCommandHandler,
 ) {
     @GetMapping("/{id}")
     fun get(
@@ -145,22 +146,14 @@ class FileEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @Valid @RequestBody request: CreateFileRequest,
     ): CreateFileResponse {
-        logger.add("request_url", request.url)
-        logger.add("request_owner_id", request.owner?.id)
-        logger.add("request_owner_type", request.owner?.type)
-
-        val file = service.create(request, tenantId)
-        logger.add("response_file_id", file.id)
-
-        publisher.publish(
-            FileUploadedEvent(
-                fileId = file.id!!,
+        val file = createFileCommandHandler.handle(
+            CreateFileCommand(
+                url = request.url,
                 tenantId = tenantId,
-                fileType = file.type,
-                owner = request.owner
+                owner = request.owner,
             )
         )
-        return CreateFileResponse(fileId = file.id)
+        return CreateFileResponse(fileId = file.id ?: -1)
     }
 
     private fun validate(file: MultipartFile, type: FileType?) {

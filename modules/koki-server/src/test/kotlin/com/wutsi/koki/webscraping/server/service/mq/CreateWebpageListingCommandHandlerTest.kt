@@ -21,11 +21,10 @@ import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.service.WebpageService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class CreateWebpageListingCommandHandlerTest {
     private val service = mock<WebpageService>()
@@ -54,7 +53,7 @@ class CreateWebpageListingCommandHandlerTest {
         val result = handler.handle(cmd)
 
         // THEN
-        assertTrue(result)
+        assertNotNull(result.listingId)
 
         val command = argumentCaptor<CreateFileCommand>()
         verify(publisher, times(2)).publish(command.capture())
@@ -69,7 +68,7 @@ class CreateWebpageListingCommandHandlerTest {
     }
 
     @Test
-    fun `ignore error when listing already created`() {
+    fun `when listing already created - dont publish event and rethrow error`() {
         // GIVEN
         val ex = ConflictException(
             error = Error(
@@ -80,16 +79,14 @@ class CreateWebpageListingCommandHandlerTest {
 
         // WHEN
         val cmd = CreateWebpageListingCommand(111L, 333L)
-        val result = handler.handle(cmd)
+        assertThrows<ConflictException> { handler.handle(cmd) }
 
         // THEN
-        assertFalse(result)
-
         verify(publisher, never()).publish(any())
     }
 
     @Test
-    fun `ignore error when city not found`() {
+    fun `when city not found - dont publish event and rethrow error`() {
         // GIVEN
         val ex = NotFoundException(
             error = Error(
@@ -100,11 +97,27 @@ class CreateWebpageListingCommandHandlerTest {
 
         // WHEN
         val cmd = CreateWebpageListingCommand(111L, 333L)
-        val result = handler.handle(cmd)
+        assertThrows<NotFoundException> { handler.handle(cmd) }
 
         // THEN
-        assertFalse(result)
+        verify(publisher, never()).publish(any())
+    }
 
+    @Test
+    fun `when webpage not found - dont publish event and rethrow error`() {
+        // GIVEN
+        val ex = NotFoundException(
+            error = Error(
+                code = ErrorCode.WEBPAGE_NOT_FOUND,
+            )
+        )
+        doThrow(ex).whenever(service).listing(any(), any())
+
+        // WHEN
+        val cmd = CreateWebpageListingCommand(111L, 333L)
+        assertThrows<NotFoundException> { handler.handle(cmd) }
+
+        // THEN
         verify(publisher, never()).publish(any())
     }
 

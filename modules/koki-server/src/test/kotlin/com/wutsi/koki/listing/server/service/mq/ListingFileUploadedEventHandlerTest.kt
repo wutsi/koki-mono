@@ -27,12 +27,12 @@ import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorResu
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 
 class ListingFileUploadedEventHandlerTest {
     private val agentFactory = mock<ListingAgentFactory>()
@@ -206,19 +206,13 @@ class ListingFileUploadedEventHandlerTest {
     }
 
     @Test
-    fun `file not found`() {
+    fun `when file not found, rethrow the event`() {
         // GIVEN
         doThrow(NotFoundException(Error()))
             .whenever(fileService).get(any(), any())
 
         // WHEN
-        val event = createImageEvent()
-        val result = handler.handle(event)
-
-        // THEN
-        assertFalse(result)
-        verify(fileService, never()).save(any())
-        verify(listingService, never()).save(any(), anyOrNull())
+        assertThrows<NotFoundException> { handler.handle(createImageEvent()) }
     }
 
     private fun createFileEvent(ownerType: ObjectType = ObjectType.LISTING): FileUploadedEvent {

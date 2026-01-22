@@ -13,7 +13,6 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.CreateFileRequest
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
@@ -72,7 +71,7 @@ class CreateFileCommandHandlerTest {
     }
 
     @Test
-    fun `ignore duplicate file error`() {
+    fun `on error when creating files, do not publish event`() {
         // GIVEN
         val ex = ConflictException(
             error = Error(ErrorCode.FILE_ALREADY_EXISTS)
@@ -85,27 +84,7 @@ class CreateFileCommandHandlerTest {
             tenantId = 1111,
             owner = ObjectReference(type = ObjectType.LISTING, id = 456L)
         )
-        handler.handle(cmd)
-
-        // THEN
-        verify(publisher, never()).publish(any())
-    }
-
-    @Test
-    fun `rethrow exceptions`() {
-        // GIVEN
-        val ex = NotFoundException(
-            error = Error(ErrorCode.FILE_NOT_FOUND)
-        )
-        doThrow(ex).whenever(fileService).create(any(), any())
-
-        // WHEN
-        val cmd = CreateFileCommand(
-            url = "https://example.com/image.png",
-            tenantId = 1111,
-            owner = ObjectReference(type = ObjectType.LISTING, id = 456L)
-        )
-        assertThrows<NotFoundException> { handler.handle(cmd) }
+        assertThrows<ConflictException> { handler.handle(cmd) }
 
         // THEN
         verify(publisher, never()).publish(any())

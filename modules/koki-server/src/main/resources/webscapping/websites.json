@@ -30,6 +30,19 @@
     },
     {
       "userId": 1,
+      "baseUrl": "https://adpmrealestate.com",
+      "listingUrlPrefix": "/property",
+      "homeUrls": [
+        "https://adpmrealestate.com/city/yaounde/",
+        "https://adpmrealestate.com/city/yaounde/page/2/",
+        "https://adpmrealestate.com/city/yaounde/page/3/"
+      ],
+      "contentSelector": ".property-description-wrap, .property-address-wrap, .property-detail-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": 1,
       "baseUrl": "https://mav-sarl.com",
       "listingUrlPrefix": "/properties",
       "homeUrls": [

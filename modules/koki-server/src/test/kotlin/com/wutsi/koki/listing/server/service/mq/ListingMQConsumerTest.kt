@@ -2,15 +2,21 @@ package com.wutsi.koki.listing.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
 import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
+import com.wutsi.koki.platform.logger.DefaultKVLogger
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
@@ -23,13 +29,15 @@ class ListingMQConsumerTest {
     private val offerSubmittedEventHandler = mock<ListingOfferSubmittedEventHandler>()
     private val offerStatusChangedEventHandler = mock<ListingOfferStatusChangedEventHandler>()
     private val leadMessageReceivedEventHandler = mock<ListingLeadMessageReceivedEventHandler>()
+    private val logger = DefaultKVLogger()
     private val consumer = ListingMQConsumer(
         fileUploadedEventHandler = fileUploadedEventHandler,
         fileDeletedEventHandler = fileDeletedEventHandler,
         listingStatusChangedEventHandler = listingStatusChangedEventHandler,
         offerSubmittedEventHandler = offerSubmittedEventHandler,
         offerStatusChangedEventHandler = offerStatusChangedEventHandler,
-        leadMessageReceivedEventHandler = leadMessageReceivedEventHandler
+        leadMessageReceivedEventHandler = leadMessageReceivedEventHandler,
+        logger = logger,
     )
 
     @BeforeEach
@@ -40,6 +48,11 @@ class ListingMQConsumerTest {
         doReturn(true).whenever(offerSubmittedEventHandler).handle(any())
         doReturn(true).whenever(offerStatusChangedEventHandler).handle(any())
         doReturn(true).whenever(leadMessageReceivedEventHandler).handle(any())
+    }
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
     }
 
     @Test
@@ -54,6 +67,19 @@ class ListingMQConsumerTest {
         verify(offerSubmittedEventHandler, never()).handle(any())
         verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
+    }
+
+    @Test
+    fun `fileUploaded - when File not found - ignore the error`() {
+        // GIVEN
+        val ex = NotFoundException(Error(code = ErrorCode.FILE_NOT_FOUND))
+        doThrow(ex).whenever(fileUploadedEventHandler).handle(any())
+
+        // THEN
+        val event = FileUploadedEvent()
+        val result = consumer.consume(event)
+
+        assertEquals(false, result)
     }
 
     @Test
