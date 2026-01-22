@@ -80,7 +80,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-status")
 
         Thread.sleep(1000)
-        assertElementCount(".btn-section-edit", 8)
+        assertElementCount(".btn-section-edit", 9)
 
         assertElementNotPresent("#btn-whatsapp")
         assertElementNotPresent("#btn-call")
