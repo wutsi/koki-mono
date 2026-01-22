@@ -45,7 +45,7 @@ The listing information must be structured in the following JSON format:
     - id: ID of the amenity (integers)
     - name: Name of the amenity (string)
 - amenityReason: Explain the decision you made to select those amenities (string)
-- street: Address - Name of the street
+- street: Address - Name of the street.
 - neighbourhood: Address - Name of the district or neighborhood
 - neighbourhoodId: ID of the neighborhood (integer)
 - neighbourhoodIdReason: Explain the decision you made to select the neighbourhoodId (string)
@@ -99,6 +99,7 @@ id,name
 - DO NOT imply the date of availability, unless explicitly mentioned.
 - DO NOT include in the JSON any numeric field that was not provided or with zero value.
 - DO NOT imply the property or lot area if not explicitly mentioned.
+- DO NOT use the real-estate contact information (street, neighbourhood, city, phone number) as the property address.
 
 # Ask:
 

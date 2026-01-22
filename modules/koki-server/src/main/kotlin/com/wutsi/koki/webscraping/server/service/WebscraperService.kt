@@ -105,7 +105,6 @@ class WebscraperService(
         } else {
             return doc.select(website.contentSelector!!)
                 .joinToString("\n") { elt -> html2markdown(elt) }
-                .ifEmpty { null }
         }
     }
 

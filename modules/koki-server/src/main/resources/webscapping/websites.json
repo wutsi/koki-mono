@@ -37,8 +37,28 @@
         "https://adpmrealestate.com/city/yaounde/page/2/",
         "https://adpmrealestate.com/city/yaounde/page/3/"
       ],
-      "contentSelector": ".property-description-wrap, .property-address-wrap, .property-detail-wrap",
+      "contentSelector": "h1, .property-description-wrap, .property-address-wrap, .property-detail-wrap",
       "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": 1,
+      "baseUrl": "https://www.camerounmaison.com",
+      "listingUrlPrefix": "/detail_maison",
+      "homeUrls": [
+        "https://www.camerounmaison.com/vip/1",
+        "https://www.camerounmaison.com/vip/2",
+        "https://www.camerounmaison.com/vip/3",
+        "https://www.camerounmaison.com/vip/4",
+        "https://www.camerounmaison.com/vip/5",
+        "https://www.camerounmaison.com/vip/6",
+        "https://www.camerounmaison.com/vip/7",
+        "https://www.camerounmaison.com/vip/8",
+        "https://www.camerounmaison.com/vip/9",
+        "https://www.camerounmaison.com/vip/10"
+      ],
+      "contentSelector": ".gauche p span p",
+      "imageSelector": ".imgitems img",
       "active": true
     },
     {

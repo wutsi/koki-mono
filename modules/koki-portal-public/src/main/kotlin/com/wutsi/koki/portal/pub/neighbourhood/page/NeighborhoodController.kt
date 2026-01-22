@@ -214,8 +214,10 @@ class NeighborhoodController(
 
     private fun loadSimilarNeighborhoods(place: PlaceModel, model: Model): List<PlaceModel> {
         try {
-            val minRating = place.rating?.toInt()?.toDouble() ?: 0.0
-            val maxRating = if (minRating >= 4) null else minRating + .9
+            val rating = place.rating ?: 0.0
+            val minRating = if (rating.toInt() >= 4) 4.0 else rating - .25
+            val maxRating = if (rating.toInt() >= 4) null else rating + .25
+
             val places = placeService.search(
                 cityIds = listOf(place.cityId),
                 types = listOf(PlaceType.NEIGHBORHOOD),
