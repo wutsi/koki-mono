@@ -25,8 +25,9 @@ class CreateWebsiteListingsEndpointTest : AuthorizationAwareEndpointTest() {
     private lateinit var webpageService: WebpageService
 
     val webpages = listOf(
-        WebpageEntity(id = 11L, tenantId = TENANT_ID),
-        WebpageEntity(id = 12L, tenantId = TENANT_ID),
+        WebpageEntity(id = 11L, tenantId = TENANT_ID, listingId = null),
+        WebpageEntity(id = 12L, tenantId = TENANT_ID, listingId = null),
+        WebpageEntity(id = 13L, tenantId = TENANT_ID, listingId = 333L),
     )
 
     @BeforeEach

@@ -124,20 +124,28 @@ class WebsiteEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ) {
-        webpageService.search(
+        val webpages = webpageService.search(
             tenantId = tenantId,
             websiteId = id,
             listingId = null,
             active = true,
             limit = Integer.MAX_VALUE,
             offset = 0,
-        ).forEach { webpage ->
-            publisher.publish(
-                CreateWebpageListingCommand(
-                    tenantId = tenantId,
-                    webpageId = webpage.id ?: -1,
+        )
+        logger.add("webpage_count", webpages.size)
+
+        var sumitted = 0
+        webpages.forEach { webpage ->
+            if (webpage.listingId == null) {
+                publisher.publish(
+                    CreateWebpageListingCommand(
+                        tenantId = tenantId,
+                        webpageId = webpage.id ?: -1,
+                    )
                 )
-            )
+                sumitted++
+            }
         }
+        logger.add("webpage_submitted_count", sumitted)
     }
 }

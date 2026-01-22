@@ -13,10 +13,12 @@ import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.file.server.command.CreateFileCommand
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.webscraping.server.command.CreateWebpageListingCommand
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import com.wutsi.koki.webscraping.server.service.WebpageService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
@@ -27,7 +29,13 @@ import kotlin.test.assertTrue
 class CreateWebpageListingCommandHandlerTest {
     private val service = mock<WebpageService>()
     private val publisher = mock<Publisher>()
-    private val handler = CreateWebpageListingCommandHandler(service, publisher)
+    private val logger = DefaultKVLogger()
+    private val handler = CreateWebpageListingCommandHandler(service, publisher, logger)
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
+    }
 
     @Test
     fun handle() {

@@ -51,8 +51,8 @@ class WebpageEndpoints(
 
     @GetMapping("/{id}")
     fun get(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @RequestHeader(name = "X-Tenant-ID") tenantId: Long
     ): GetWebpageResponse {
         logger.add("webpage_id", id)
 

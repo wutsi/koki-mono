@@ -9,11 +9,14 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectReference
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.CreateFileRequest
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.command.CreateFileCommand
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.mq.Publisher
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
@@ -21,15 +24,22 @@ import org.mockito.Mockito.mock
 class CreateFileCommandHandlerTest {
     private val fileService = mock<FileService>()
     private val publisher = mock<Publisher>()
+    private val logger = DefaultKVLogger()
     private val handler = CreateFileCommandHandler(
         fileService = fileService,
         publisher = publisher,
+        logger = logger
     )
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
+    }
 
     @Test
     fun handle() {
         // GIVEN
-        val file = FileEntity(id = 333L, tenantId = 123L)
+        val file = FileEntity(id = 333L, tenantId = 123L, type = FileType.IMAGE)
         doReturn(file).whenever(fileService).create(any(), any())
 
         // WHEN
@@ -49,6 +59,8 @@ class CreateFileCommandHandlerTest {
         val event = argumentCaptor<FileUploadedEvent>()
         verify(publisher).publish(event.capture())
         assertEquals(file.id, event.firstValue.fileId)
+        assertEquals(file.type, event.firstValue.fileType)
         assertEquals(file.tenantId, event.firstValue.tenantId)
+        assertEquals(cmd.owner, event.firstValue.owner)
     }
 }
