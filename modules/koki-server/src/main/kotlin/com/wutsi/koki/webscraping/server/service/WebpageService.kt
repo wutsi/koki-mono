@@ -8,7 +8,7 @@ import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.AIListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
-import com.wutsi.koki.listing.server.service.ai.ListingLocationExtractoryResult
+import com.wutsi.koki.listing.server.service.ai.ListingLocationExtractorResult
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.LocationService
@@ -152,7 +152,7 @@ class WebpageService(
         val tenant = tenantService.get(webpage.tenantId)
         val agent = listingAgentFactory.createListingLocationExtractoryAgent(tenant.country)
         val json = agent.run(webpage.content!!)
-        val result = jsonMapper.readValue(json, ListingLocationExtractoryResult::class.java)
+        val result = jsonMapper.readValue(json, ListingLocationExtractorResult::class.java)
         return locationService.search(
             keyword = result.city,
             country = result.country,

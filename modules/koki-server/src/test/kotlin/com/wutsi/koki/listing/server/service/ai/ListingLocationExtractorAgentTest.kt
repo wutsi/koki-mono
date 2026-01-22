@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
 
-class ListingLocationExtractoryAgentTest {
+class ListingLocationExtractorAgentTest {
     private val llm = Deepseek(
         apiKey = System.getenv("DEEPSEEK_API_KEY"),
         model = "deepseek-chat",
     )
-    private val agent = ListingLocationExtractoryAgent("CM", llm)
+    private val agent = ListingLocationExtractorAgent("CM", llm)
 
     @Test
     fun run() {
@@ -29,7 +29,7 @@ class ListingLocationExtractoryAgentTest {
             📜 Transaction sécurisée devant notaire ou bailleur agréé
         """.trimIndent()
         val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, ListingLocationExtractoryResult::class.java)
+        val listing = JsonMapper().readValue(json, ListingLocationExtractorResult::class.java)
 
         assertEquals("Yaoundé", listing.city)
         assertEquals("Omnisports", listing.neighbourhood)

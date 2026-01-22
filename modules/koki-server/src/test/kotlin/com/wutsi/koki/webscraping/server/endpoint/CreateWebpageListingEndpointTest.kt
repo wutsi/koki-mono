@@ -24,7 +24,7 @@ import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.service.ai.AmenityResult
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
-import com.wutsi.koki.listing.server.service.ai.ListingLocationExtractoryResult
+import com.wutsi.koki.listing.server.service.ai.ListingLocationExtractorResult
 import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.webscraping.dto.CreateWebpageListingResponse
@@ -115,7 +115,7 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
     )
 
     private val listingLocationAgent = Mockito.mock<Agent>()
-    private val listingLocationResult = ListingLocationExtractoryResult(
+    private val listingLocationResult = ListingLocationExtractorResult(
         street = "Derriere ambassade de chine",
         city = "yaounde",
         neighbourhood = "bastos",

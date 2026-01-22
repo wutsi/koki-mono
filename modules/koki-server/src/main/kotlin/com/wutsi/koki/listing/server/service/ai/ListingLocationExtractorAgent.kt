@@ -4,7 +4,7 @@ import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.platform.ai.llm.LLM
 import org.springframework.http.MediaType
 
-class ListingLocationExtractoryAgent(
+class ListingLocationExtractorAgent(
     private val country: String,
     llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
@@ -21,7 +21,7 @@ class ListingLocationExtractoryAgent(
     }
 }
 
-data class ListingLocationExtractoryResult(
+data class ListingLocationExtractorResult(
     val street: String? = null,
     val neighbourhood: String? = null,
     val city: String? = null,

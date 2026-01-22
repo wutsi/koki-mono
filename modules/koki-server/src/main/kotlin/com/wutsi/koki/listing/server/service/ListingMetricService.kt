@@ -210,7 +210,13 @@ class ListingMetricService(
         return result.copy(
             averagePrice = averagePrice,
             averageLotArea = averageLotArea,
-            pricePerSquareMeter = averageLotArea?.let { averagePrice / averageLotArea }
+            pricePerSquareMeter = averageLotArea?.let {
+                if (averageLotArea > 0) {
+                    averagePrice / averageLotArea
+                } else {
+                    null
+                }
+            }
         )
     }
 }

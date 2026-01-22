@@ -44,7 +44,7 @@ class ListingAgentFactory(
     }
 
     fun createListingLocationExtractoryAgent(country: String): Agent {
-        return ListingLocationExtractoryAgent(
+        return ListingLocationExtractorAgent(
             country = country,
             llm = llmProvider.chatLLM,
         )
