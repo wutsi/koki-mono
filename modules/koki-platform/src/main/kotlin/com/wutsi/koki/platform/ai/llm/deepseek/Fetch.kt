@@ -23,7 +23,7 @@ class Fetch(val blockLen: Int = 20) {
     private val extractor = HtmlContentExtractor(blockLen)
 
     fun fetch(url: String): String {
-        LOGGER.info("Fetching $url")
+        LOGGER.info("Web Fetch: $url")
         try {
             if (isPdf(url)) {
                 return fetchPdf(url)
