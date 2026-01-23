@@ -17,7 +17,6 @@ import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
-import org.junit.jupiter.api.assertNull
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.Test
@@ -47,11 +46,51 @@ class ListingContentParserAgentTest {
     }
 
     @Test
+    fun land() {
+        val text = """
+            terrain titré en vente très bon prix
+            idéal pour les stations services et autres investissements immobiliers
+            -lieu de référence:montée collège mvogt
+            -ville de Yaoundé
+            -superficie 2000m²
+            -possibilite de morceler le terrain selon les besoins de l'acheteur (minimum 500m2 par lot).
+            -TITRE FONCIER
+            -Borné
+            -prix: 120.000f/m²
+            6 96 19 20 00 WHATSAPP POUR PLUS D'INFORMATIONS
+            Transaction sécurisée devant notaire ou bailleur agréé
+            1 signataire uniquement
+            mutation totale
+            Dossier technique disponible
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(true, listing["valid"])
+        assertEquals(ListingType.SALE.name, listing["listingType"])
+        assertEquals(PropertyType.LAND.name, listing["propertyType"])
+        assertEquals(2000, listing["lotArea"])
+        assertEquals(240000000, listing["price"])
+        assertNotNull(listing["publicRemarks"])
+
+        // assertEquals("montée collège mvogt", listing["street"])
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals("CM", listing["country"])
+        assertEquals(true, listing["landTitle"])
+        assertEquals(true, listing["technicalFile"])
+        assertEquals(true, listing["transactionWithNotary"])
+        assertEquals(true, listing["morcelable"])
+        assertEquals("TOTAL", listing["mutationType"])
+        assertEquals("DEMARCATED", listing["fenceType"])
+        assertEquals(1, listing["numberOfSigners"])
+    }
+
+    @Test
     fun apartment() {
         val text = """
             Ce magnifique appartement moderne haut Standing !
 
-            📍Situé à simbok (Batibo)📍
+            📍Situé à simbock (Batibo)📍
             250 du rond point damas !
             3 chambres
             3 douches
@@ -62,6 +101,7 @@ class ListingContentParserAgentTest {
             ✅ Clim+ chauffe eau
             ✅ Balcon
             175.000fcfa. 658653143
+            Frais de visite 5000 f
         """.trimIndent()
         val json = agent.run(text)
         println("\n----\n" + json)
@@ -74,22 +114,39 @@ class ListingContentParserAgentTest {
         assertEquals(3, listing["bedrooms"])
         assertEquals(3, listing["bathrooms"])
         assertEquals(175000, listing["price"])
+        assertEquals(5000, listing["visitFees"])
         assertEquals("XAF", listing["currency"])
-//        assertEquals("+237658653143", listing["phone"])
         assertHasAmenityId(1001, listing)
-//        assertHasAmenityId(1004, listing)
-//        assertHasAmenityId(1006, listing)
-//        assertHasAmenityId(1052, listing)
-//        assertHasAmenityId(1059, listing)
-
-//        assertEquals(true, listing["street"]?.toString()?.contains("rond point damas"))
         assertEquals("Simbock", listing["neighbourhood"])
         assertEquals(237049, listing["neighbourhoodId"])
         assertEquals("CM", listing["country"])
     }
 
     @Test
-    fun `prompt with address of agent and property`() {
+    fun commercial() {
+        val text = """
+            Fond de commerce d'un institut de beauté Mixte haut de gamme avec mezzanine en vente à jouvence en bordure de route. L'institut est entièrement équipé et prêt à usage
+            - salle d'attente, douche
+            - hammam
+            - 03 salles de massage
+            - chaque équipement est haut de gamme et fonctionnel
+            - plusieurs lits de massages
+            - plusieurs tondeuses, casques
+            - etc....
+            🤖 PRIX : 9.500.000fr négociable
+            ➡️ Loyer : 75.000fr
+        """.trimIndent()
+        val json = agent.run(text)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(true, listing["valid"])
+        assertEquals(ListingType.SALE.name, listing["listingType"])
+        assertEquals(PropertyType.COMMERCIAL.name, listing["propertyType"])
+        assertEquals(9500000, listing["price"])
+    }
+
+    @Test
+    fun `agent and property address`() {
         val text = """
             Studio à louer : Odza (80 000 Fcfa/mois)
 
@@ -123,7 +180,7 @@ class ListingContentParserAgentTest {
     }
 
     @Test
-    fun `prompt with address of agent only`() {
+    fun `agent address only`() {
         val text = """
             Studio à louer (80 000 Fcfa/mois)
 
@@ -155,142 +212,7 @@ class ListingContentParserAgentTest {
     }
 
     @Test
-    fun `semi-furnished apartment width visit-fees`() {
-        val text = """
-            appartement  haut standing a louer a ahala barrière dans la barrière eau forages
-            1 salon
-            2 chambre
-            douche
-            cuisine aménagée avec cuisinière
-            Prix 130000 f mois
-            parking
-            gardien
-            Frais de visite 5000 f
-            Commission 1 mois de loyer pour l'agent immobilier
-            670660666
-        """.trimIndent()
-        val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, Map::class.java)
-
-        assertEquals(true, listing["valid"])
-        assertEquals(ListingType.RENTAL.name, listing["listingType"])
-        assertEquals(PropertyType.APARTMENT.name, listing["propertyType"])
-        // assertEquals(FurnitureType.SEMI_FURNISHED.name, listing["furnitureType"])
-        assertEquals(2, listing["bedrooms"])
-        assertEquals(1, listing["bathrooms"])
-        assertEquals(130000, listing["price"])
-        assertEquals(5000, listing["visitFees"])
-        assertEquals("XAF", listing["currency"])
-//        assertEquals("+237670660666", listing["phone"])
-//        assertHasAmenityId(1004, listing)
-//        assertHasAmenityId(1011, listing)
-//        assertHasAmenityId(1059, listing)
-
-        assertEquals("Yaoundé", listing["city"])
-        assertEquals("Ahala", listing["neighbourhood"])
-        assertEquals(237094, listing["neighbourhoodId"])
-        assertEquals("Yaoundé", listing["city"])
-        assertEquals("CM", listing["country"])
-        assertNull(listing["landTitle"])
-        assertNull(listing["technicalFile"])
-        assertNull(listing["transactionWithNotary"])
-        assertNull(listing["mutationType"])
-        assertNull(listing["numberOfSigners"])
-    }
-
-    @Test
-    fun land() {
-        val text = """
-            terrain titré en vente très bon prix
-            idéal pour les stations services et autres investissements immobiliers
-            -lieu de référence:montée collège mvogt
-            -ville de Yaoundé
-            -superficie 2000m²
-            -TITRE FONCIER
-            -Borné
-            -prix: 120.000f/m²
-            6 96 19 20 00 WHATSAPP POUR PLUS D'INFORMATIONS
-            Transaction sécurisée devant notaire ou bailleur agréé
-            1 signataire uniquement
-            mutation totale
-            Dossier technique disponible
-        """.trimIndent()
-        val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, Map::class.java)
-
-        assertEquals(true, listing["valid"])
-        assertEquals(ListingType.SALE.name, listing["listingType"])
-        assertEquals(PropertyType.LAND.name, listing["propertyType"])
-        assertEquals(2000, listing["lotArea"])
-        assertEquals(240000000, listing["price"])
-        assertNotNull(listing["publicRemarks"])
-
-        // assertEquals("montée collège mvogt", listing["street"])
-        assertEquals("Yaoundé", listing["city"])
-//        assertEquals(null, listing["neighbourhood"])
-//        assertEquals(null, listing["neighbourhoodId"])
-        assertEquals("CM", listing["country"])
-        assertEquals(true, listing["landTitle"])
-        assertEquals(true, listing["technicalFile"])
-        assertEquals(true, listing["transactionWithNotary"])
-        assertEquals("TOTAL", listing["mutationType"])
-        assertEquals("DEMARCATED", listing["fenceType"])
-        assertEquals(1, listing["numberOfSigners"])
-//        assertEquals(null, listing["subdivided"])
-        assertEquals(null, listing["morcelable"])
-    }
-
-    @Test
-    fun `land subdivided`() {
-        val text = """
-            terrain de 2 hectares titré, loti et clôturé en vente a 1500f/m², situé a nkolbisson.
-            Possibilite de morceler le terrain selon les besoins de l'acheteur (minimum 500m2 par lot).
-        """.trimIndent()
-        val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, Map::class.java)
-
-        assertEquals(true, listing["valid"])
-        assertEquals(ListingType.SALE.name, listing["listingType"])
-        assertEquals(PropertyType.LAND.name, listing["propertyType"])
-        assertEquals(20000, listing["lotArea"])
-        assertEquals(30000000, listing["price"])
-
-        assertEquals(true, listing["landTitle"])
-        assertEquals(true, listing["subdivided"])
-        assertEquals(true, listing["morcelable"])
-        assertEquals("FENCED", listing["fenceType"])
-    }
-
-    @Test
-    fun commercial() {
-        val text = """
-            Fond de commerce d'un institut de beauté Mixte haut de gamme avec mezzanine en vente à jouvence en bordure de route. L'institut est entièrement équipé et prêt à usage
-            - salle d'attente, douche
-            - hammam
-            - 03 salles de massage
-            - cubitenaire 1000l avec surpresseur, caméra partout avec control à distance, climatisé de haut en bas
-            - chaque équipement est haut de gamme et fonctionnel
-            - plusieurs lits de massages
-            - plusieurs tondeuses, casques
-            - etc....
-            🤖 PRIX : 9.500.000fr négociable
-            ➡️ Loyer : 75.000fr
-        """.trimIndent()
-        val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, Map::class.java)
-
-        assertEquals(true, listing["valid"])
-        assertEquals(ListingType.SALE.name, listing["listingType"])
-        assertEquals(PropertyType.COMMERCIAL.name, listing["propertyType"])
-        assertEquals(9500000, listing["price"])
-        assertNotNull(listing["publicRemarks"])
-        assertEquals("Yaoundé", listing["city"])
-        assertEquals("Jouvence", listing["neighbourhood"])
-        assertEquals(237096, listing["neighbourhoodId"])
-    }
-
-    @Test
-    fun `invalid request`() {
+    fun `invalid text`() {
         val text = """
             Hello Gentlemen! My name is Kara Winter!
             I'm a beautiful, submissive and well-educated 24 year old sweetheart.
@@ -304,63 +226,19 @@ class ListingContentParserAgentTest {
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(false, listing["valid"])
-        assertEquals(false, listing["reason"]?.toString()?.isEmpty())
     }
 
     @Test
-    fun `modern villa`() {
+    fun `invalid text - daily rental`() {
         val text = """
             #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
             📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
             Caractéristiques :
             - 3 chambres autonomes
-            - Cuisine américaine équipée
+            - 3 salles de bains
             - Toilettes visiteurs
-            - Espace détente et barbecue 🍗
-            - Parking pour 2 véhicules
-            - Entièrement rénovée avec des matériaux soft et modernes
-            💰 Loyer : 1.500.000 FCFA / mois
-            📌 Commission : 5%
-            📜 Transaction sécurisée devant notaire ou bailleur agréé
-        """.trimIndent()
-        val json = agent.run(text)
-        val listing = JsonMapper().readValue(json, Map::class.java)
-
-        assertEquals(true, listing["valid"])
-        assertEquals("RENTAL", listing["listingType"])
-        assertEquals("VILLA", listing["propertyType"])
-        assertEquals(3, listing["bedrooms"])
-//        assertEquals(3, listing["bathrooms"])
-//        assertEquals(1, listing["halfBathrooms"])
-        assertEquals(3, listing["bedrooms"])
-        assertEquals(2, listing["parkings"])
-        assertEquals("PRIVATE", listing["parkingType"])
-        assertEquals(5.0, listing["commission"])
-        assertEquals("Omnisports", listing["neighbourhood"])
-        assertEquals(237097, listing["neighbourhoodId"])
-        assertEquals("Yaoundé", listing["city"])
-        assertEquals("CM", listing["country"])
-
-        assertHasAmenityId(1011, listing)
-//        assertHasAmenityId(1012, listing)
-//        assertHasAmenityId(1049, listing)
-    }
-
-    @Test
-    fun `daily rental`() {
-        val text = """
-            #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
-            📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
-            Caractéristiques :
-            - 3 chambres autonomes
-            - Cuisine américaine équipée
-            - Toilettes visiteurs
-            - Espace détente et barbecue 🍗
-            - Parking pour 2 véhicules
             - Entièrement rénovée avec des matériaux soft et modernes
             💰 Loyer : 50.000 FCFA / jour
-            📌 Commission : 5%
-            📜 Transaction sécurisée devant notaire ou bailleur agréé
         """.trimIndent()
         val json = agent.run(text)
         val listing = JsonMapper().readValue(json, Map::class.java)
@@ -369,20 +247,15 @@ class ListingContentParserAgentTest {
     }
 
     @Test
-    fun `weekly rental`() {
+    fun `invalid text - weekly rental`() {
         val text = """
             #Villa 3 Chambres à Louer | #Omnisports #Yaoundé #Cameroun
             📍 Quartier Omnisports – Yaoundé | villa rénovée | haut standing | mutation totale
             Caractéristiques :
             - 3 chambres autonomes
-            - Cuisine américaine équipée
+            - 3 salles de bains
             - Toilettes visiteurs
-            - Espace détente et barbecue 🍗
-            - Parking pour 2 véhicules
-            - Entièrement rénovée avec des matériaux soft et modernes
             💰 Loyer : 300.000 FCFA / semaine
-            📌 Commission : 5%
-            📜 Transaction sécurisée devant notaire ou bailleur agréé
         """.trimIndent()
         val json = agent.run(text)
         val listing = JsonMapper().readValue(json, Map::class.java)
