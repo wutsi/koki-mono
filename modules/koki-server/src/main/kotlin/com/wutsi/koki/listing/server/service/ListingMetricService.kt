@@ -113,7 +113,7 @@ class ListingMetricService(
                 neighbourhood_fk,
                 seller_agent_user_fk,
                 city_fk,
-                bedrooms,
+                IF(bedrooms IS NULL, -1, bedrooms) AS bedrooms,
                 property_category,
                 status AS listing_status,
                 listing_type,
@@ -133,7 +133,7 @@ class ListingMetricService(
             FROM T_LISTING
             WHERE
                 tenant_fk = :tenantId
-                AND (status=${ListingStatus.ACTIVE.ordinal} OR status=${ListingStatus.SOLD.ordinal} OR status=${ListingStatus.RENTED.ordinal})
+                AND status=${ListingStatus.ACTIVE.ordinal}
                 AND neighbourhood_fk IS NOT NULL
                 AND city_fk IS NOT NULL
             GROUP BY

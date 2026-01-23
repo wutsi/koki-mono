@@ -11,7 +11,7 @@ class ListingMetricMapper {
             neighborhoodId = entity.neighborhoodId,
             sellerAgentUserId = entity.sellerAgentUserId,
             cityId = entity.cityId,
-            bedrooms = entity.bedrooms,
+            bedrooms = if (entity.bedrooms != null && entity.bedrooms < 0) null else entity.bedrooms,
             propertyCategory = entity.propertyCategory,
             listingStatus = entity.listingStatus,
             listingType = entity.listingType,
