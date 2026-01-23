@@ -81,14 +81,16 @@
                                 <span th:text="#{page.profile.location}">LOCATION</span>
                                 <span class="required">*</span>
                             </label>
-                            <select required th:field="*{country}">
-                                <option value=""></option>
-                                <option th:each="country : ${countries}"
-                                        th:text="${country.displayCountry}"
-                                        th:value="${country.country}"
-                                >COUNTRY
-                                </option>
-                            </select>
+                            <div>
+                                <select required th:field="*{country}">
+                                    <option value=""></option>
+                                    <option th:each="country : ${countries}"
+                                            th:text="${country.displayCountry}"
+                                            th:value="${country.country}"
+                                    >COUNTRY
+                                    </option>
+                                </select>
+                            </div>
                             <div class="margin-top-small">
                                 <select required th:field="*{cityId}">
                                     <option selected
@@ -98,6 +100,10 @@
                                         CITY
                                     </option>
                                 </select>
+                            </div>
+                            <div class="margin-top-small">
+                                <input class="form-control" maxlength="255" th:field="*{street}"
+                                       th:placeholder="#{page.profile.street}"/>
                             </div>
                         </div>
 

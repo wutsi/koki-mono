@@ -13,6 +13,7 @@ import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
@@ -28,8 +29,16 @@ class ListingContentParserAgentTest {
     )
     private val amenityService = mock<AmenityService>()
     private val locationService = mock<LocationService>()
-    private val city = LocationEntity(name = "Yaoundé", country = "CM")
-    private val agent = ListingContentParserAgent(amenityService, locationService, city, llm)
+    private val city = LocationEntity(id = 111, name = "Yaoundé", country = "CM")
+    private val agentUser = UserEntity(
+        id = 333,
+        displayName = "Ray Sponsible",
+        employer = "REIMAX",
+        street = "3030 Linton",
+        cityId = city.id,
+        mobile = "+237673485325"
+    )
+    private val agent = ListingContentParserAgent(amenityService, locationService, city, agentUser, llm)
 
     @BeforeEach
     fun setUp() {
@@ -42,7 +51,7 @@ class ListingContentParserAgentTest {
         val text = """
             Ce magnifique appartement moderne haut Standing !
 
-            📍Situé à simbok ( Batibo)📍
+            📍Situé à simbok (Batibo)📍
             250 du rond point damas !
             3 chambres
             3 douches
@@ -77,6 +86,72 @@ class ListingContentParserAgentTest {
         assertEquals("Simbock", listing["neighbourhood"])
         assertEquals(237049, listing["neighbourhoodId"])
         assertEquals("CM", listing["country"])
+    }
+
+    @Test
+    fun `prompt with address of agent and property`() {
+        val text = """
+            Studio à louer : Odza (80 000 Fcfa/mois)
+
+            Ville : Yaoundé
+            Quartier : Odza
+            Adresse: 333 Avenue de Gaule
+            Style de maison : Immeuble
+
+            -1 Salon
+            -1 Chambre
+            -1 Cuisine
+            -1 Douche
+
+            Loyer : 80 000 Fcfa
+            Avance  : 12 Mois
+
+
+            ${agentUser.displayName?.uppercase()}
+            Jours : Lundi - Samedi
+            Heures : 08h00 - 18h00
+            Bureau : ${city.name}, ${agentUser.street}. Immeuble carrelé noir et blanc en face UBA, "Centre Commercial EKOTTO". Porte N° 302
+            ${agentUser.mobile}
+        """.trimIndent()
+        val json = agent.run(text)
+        println("\n----\n" + json)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals("333 Avenue de Gaule", listing["street"])
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals("Odza", listing["neighbourhood"])
+    }
+
+    @Test
+    fun `prompt with address of agent only`() {
+        val text = """
+            Studio à louer (80 000 Fcfa/mois)
+
+            Ville : Yaoundé
+            Style de maison : Immeuble
+
+            -1 Salon
+            -1 Chambre
+            -1 Cuisine
+            -1 Douche
+
+            Loyer : 80 000 Fcfa
+            Avance  : 12 Mois
+
+
+            ${agentUser.displayName?.uppercase()}
+            Jours : Lundi - Samedi
+            Heures : 08h00 - 18h00
+            Bureau : ${city.name}, ${agentUser.street}. Immeuble carrelé noir et blanc en face UBA, "Centre Commercial EKOTTO". Porte N° 302
+            ${agentUser.mobile}
+        """.trimIndent()
+        val json = agent.run(text)
+        println("\n----\n" + json)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(null, listing["street"])
+        assertEquals("Yaoundé", listing["city"])
+        assertEquals(null, listing["neighbourhood"])
     }
 
     @Test

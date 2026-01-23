@@ -36,6 +36,7 @@ class UserMapper(
         youtubeUrl = entity.youtubeUrl?.ifEmpty { null },
         tiktokUrl = entity.tiktokUrl?.ifEmpty { null },
         profileStrength = profileStrengthCalculator.calculate(entity),
+        street = entity.street,
     )
 
     fun toUserSummary(entity: UserEntity) = UserSummary(

@@ -14,6 +14,7 @@ import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
+import com.wutsi.koki.tenant.server.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
@@ -22,6 +23,7 @@ import tools.jackson.databind.json.JsonMapper
 class AIListingService(
     private val agentFactory: ListingAgentFactory,
     private val locationService: LocationService,
+    private val userService: UserService,
     private val jsonMapper: JsonMapper,
     private val listingService: ListingService,
     private val tenantService: TenantService,
@@ -40,15 +42,16 @@ class AIListingService(
 
     @Transactional
     fun create(request: CreateAIListingRequest, tenantId: Long): ListingEntity {
-        val result = parse(request)
+        val result = parse(request, tenantId)
         val listing = createListing(request, result, tenantId)
         storePrompt(request, result, listing)
         return listing
     }
 
-    private fun parse(request: CreateAIListingRequest): ListingContentParserResult {
+    private fun parse(request: CreateAIListingRequest, tenantId: Long): ListingContentParserResult {
         val defaultCity = locationService.get(request.cityId)
-        val agent = agentFactory.createListingContentParserAgent(defaultCity)
+        val agentUser = request.sellerAgentUserId?.let { id -> userService.get(id, tenantId) }
+        val agent = agentFactory.createListingContentParserAgent(defaultCity, agentUser)
         val json = agent.run(request.text)
 
         val result = jsonMapper.readValue(json, ListingContentParserResult::class.java)

@@ -20,6 +20,9 @@ INSERT INTO T_AMENITY(id, category_fk, name, active)
            (1201, 1200, 'BB1', false),
            (1202, 1200, 'BB2', true);
 
+INSERT INTO T_USER(id, tenant_fk, username, email, display_name, street, city_fk, salt, password)
+    VALUES (11, 1, 'agent1', 'ray@gmail.com', 'Ray Sponsible', '3030 Linton', 1110, '--', '---');
+
 INSERT INTO T_WEBSITE(id, tenant_fk, user_fk, base_url, base_url_hash, listing_url_prefix, content_selector, image_selector, active, created_at)
     VALUES
         (100, 1, 11, 'https://example.com', '5d41402abc4b2a76b9719d911017c592', 'https://example.com/listings/', '.content', 'img.gallery', true, now());

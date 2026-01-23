@@ -1,6 +1,7 @@
 package com.wutsi.koki.listing.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
@@ -125,7 +126,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         super.setUp()
 
         df.timeZone = TimeZone.getTimeZone("UTC")
-        doReturn(agent).whenever(agentFactory).createListingContentParserAgent(any())
+        doReturn(agent).whenever(agentFactory).createListingContentParserAgent(any(), anyOrNull())
     }
 
     @Test
