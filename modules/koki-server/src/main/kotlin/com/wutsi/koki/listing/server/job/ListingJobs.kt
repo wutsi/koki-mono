@@ -2,27 +2,36 @@ package com.wutsi.koki.listing.server.job
 
 import com.wutsi.koki.listing.server.service.ListingMetricService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.tenant.dto.TenantStatus
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
+@RestController
+@RequestMapping("/v1/listings/jobs")
 @Service
-class ListingMetricJobs(
+class ListingJobs(
     private val listingMetricService: ListingMetricService,
     private val tenantService: TenantService,
 ) {
-    @Scheduled(cron = "\${koki.module.listing.metrics.jobs.daily}")
-    fun daily() {
+    @PostMapping("/aggregate-metrics")
+    @Scheduled(cron = "\${koki.module.listing.cron.aggregate-metrics}")
+    fun aggregateMetrics() {
         tenantService.all().forEach { tenant ->
-            aggregate(tenant)
+            if (tenant.status == TenantStatus.ACTIVE) {
+                aggregateMetrics(tenant)
+            }
         }
     }
 
-    private fun aggregate(tenant: TenantEntity) {
+    private fun aggregateMetrics(tenant: TenantEntity) {
         val logger = DefaultKVLogger()
         try {
-            logger.add("job", "ListingMetricJobs#daily")
+            logger.add("job", "ListingJobs#aggregateMetrics")
             logger.add("tenant_id", tenant.id)
             listingMetricService.aggregate(tenant.id ?: -1)
         } catch (ex: Exception) {

@@ -10,9 +10,9 @@ import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/test/clean.sql", "/db/test/tenant/ExpireInvitationJob.sql"])
-class InvitationCronJobsTest {
+class InvitationJobsTest {
     @Autowired
-    private lateinit var jobs: InvitationCronJobs
+    private lateinit var jobs: InvitationJobs
 
     @Autowired
     private lateinit var dao: InvitationRepository

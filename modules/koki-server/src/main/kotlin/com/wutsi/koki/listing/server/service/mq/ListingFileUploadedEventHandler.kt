@@ -34,12 +34,15 @@ class ListingFileUploadedEventHandler(
         }
 
         val file = fileService.get(event.fileId, event.tenantId)
-        if (event.fileType == FileType.IMAGE) {
-            reviewImage(file)
-        } else if (event.fileType == FileType.FILE) {
-            reviewFile(file)
-        }
+        logger.add("file_status", file.status)
 
+        if (file.status == FileStatus.UNDER_REVIEW) {
+            if (event.fileType == FileType.IMAGE) {
+                reviewImage(file)
+            } else if (event.fileType == FileType.FILE) {
+                reviewFile(file)
+            }
+        }
         updateListing(event.owner!!.id, file)
         return true
     }
@@ -48,18 +51,20 @@ class ListingFileUploadedEventHandler(
         return event.owner?.type == ObjectType.LISTING
     }
 
-    private fun reviewImage(image: FileEntity): FileEntity {
-        if (image.status != FileStatus.UNDER_REVIEW) {
-            logger.add("approved", false)
-            logger.add("error", "Invalid status")
-            logger.add("image_status", image.status)
-            return image
-        }
+    private fun reviewFile(file: FileEntity): FileEntity {
+        file.status = FileStatus.APPROVED
+        return fileService.save(file)
+    }
 
+    private fun reviewImage(image: FileEntity): FileEntity {
         val agent = agentFactory.createImageContentGenerator()
         val f = fileService.download(image)
         val json = agent.run(ListingImageContentGeneratorAgent.QUERY, listOf(f))
         val result = jsonMapper.readValue(json, ListingImageContentGeneratorResult::class.java)
+        logger.add("ai_agent", agent::class.java.simpleName)
+        logger.add("ai_result_valid", result.valid)
+        logger.add("ai_result_error", result.reason)
+
         image.status = if (result.valid) FileStatus.APPROVED else FileStatus.REJECTED
         image.rejectionReason = if (result.valid) null else result.reason
         image.title = result.title
@@ -67,10 +72,6 @@ class ListingFileUploadedEventHandler(
         image.description = result.description
         image.descriptionFr = result.descriptionFr
         image.imageQuality = result.quality
-
-        logger.add("approved", image.status == FileStatus.APPROVED)
-        logger.add("ai_agent", agent::class.java.simpleName)
-        logger.add("error", result.reason)
 
         return fileService.save(image)
     }
@@ -94,10 +95,5 @@ class ListingFileUploadedEventHandler(
             )?.toInt()
         }
         listingService.save(listing, file.createdById)
-    }
-
-    private fun reviewFile(file: FileEntity): FileEntity {
-        file.status = FileStatus.APPROVED
-        return fileService.save(file)
     }
 }
