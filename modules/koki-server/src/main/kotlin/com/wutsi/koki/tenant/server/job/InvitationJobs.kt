@@ -3,6 +3,7 @@ package com.wutsi.koki.tenant.server.job
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.tenant.server.domain.InvitationEntity
 import com.wutsi.koki.tenant.server.service.InvitationService
+import io.swagger.v3.oas.annotations.Operation
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -20,6 +21,7 @@ class InvitationJobs(private val service: InvitationService) {
     }
 
     @PostMapping("/expire")
+    @Operation(summary = "Run the job to expire invitations")
     @Scheduled(cron = "\${koki.module.invitation.cron.expire}")
     fun expire() {
         val now = Date()

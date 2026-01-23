@@ -10,11 +10,13 @@ import com.wutsi.koki.tenant.dto.TenantStatus
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.TenantService
 import io.swagger.v3.oas.annotations.Operation
+import org.apache.commons.lang3.time.DateUtils
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.Date
 
 @RestController
 @RequestMapping("/v1/files/jobs")
@@ -25,7 +27,7 @@ class FileJobs(
     private val tenantService: TenantService,
 ) {
     @PostMapping("/under-review")
-    @Operation(summary = "Process all files UNDER_REVIEW")
+    @Operation(summary = "Process all stalled files UNDER_REVIEW")
     @Scheduled(cron = "\${koki.module.file.cron.under-review}")
     fun underReview() {
         tenantService.all().forEach { tenant ->
@@ -37,6 +39,8 @@ class FileJobs(
 
     private fun underReview(tenant: TenantEntity) {
         val logger = DefaultKVLogger()
+        val threshold = DateUtils.addHours(Date(), -1)
+        var reviewCount = 0
         try {
             logger.add("job", "FileJobs#underReview")
             logger.add("tenant_id", tenant.id)
@@ -46,20 +50,24 @@ class FileJobs(
                 status = FileStatus.UNDER_REVIEW,
                 limit = Integer.MAX_VALUE,
             ).forEach { file ->
-                publisher.publish(
-                    FileUploadedEvent(
-                        fileId = file.id ?: -1,
-                        tenantId = file.tenantId,
-                        fileType = file.type,
-                        owner = file.ownerId?.let { id ->
-                            file.ownerType?.let { type -> ObjectReference(id, type) }
-                        },
+                if (file.modifiedAt.before(threshold)) {
+                    publisher.publish(
+                        FileUploadedEvent(
+                            fileId = file.id ?: -1,
+                            tenantId = file.tenantId,
+                            fileType = file.type,
+                            owner = file.ownerId?.let { id ->
+                                file.ownerType?.let { type -> ObjectReference(id, type) }
+                            },
+                        )
                     )
-                )
+                    reviewCount++
+                }
             }
         } catch (ex: Exception) {
             logger.setException(ex)
         } finally {
+            logger.add("file_review_count", reviewCount)
             logger.log()
         }
     }

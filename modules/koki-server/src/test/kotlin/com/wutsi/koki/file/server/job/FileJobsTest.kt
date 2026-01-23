@@ -17,8 +17,10 @@ import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.dto.TenantStatus
 import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.TenantService
+import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
+import java.util.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,6 +30,9 @@ class FileJobsTest {
     private val tenantService = mock<TenantService>()
     private val jobs = FileJobs(service, publisher, tenantService)
 
+    private val now = Date()
+    private val earlier = DateUtils.addHours(now, -2)
+
     private val tenants = listOf(
         TenantEntity(id = 1L, status = TenantStatus.ACTIVE),
         TenantEntity(id = 2L, status = TenantStatus.ACTIVE),
@@ -35,18 +40,61 @@ class FileJobsTest {
         TenantEntity(id = 4L, status = TenantStatus.NEW),
     )
     private val file1s = listOf(
-        FileEntity(id = 111L, tenantId = 1L, ownerId = 444L, ownerType = ObjectType.LISTING, type = FileType.FILE),
-        FileEntity(id = 112L, tenantId = 1L, ownerId = null, ownerType = null, type = FileType.IMAGE),
+        FileEntity(
+            id = 111L,
+            tenantId = 1L,
+            ownerId = 444L,
+            ownerType = ObjectType.LISTING,
+            type = FileType.FILE,
+            modifiedAt = earlier
+        ),
+        FileEntity(
+            id = 112L,
+            tenantId = 1L,
+            ownerId = null,
+            ownerType = null,
+            type = FileType.IMAGE,
+            modifiedAt = earlier
+        ),
+        FileEntity(id = 112L, tenantId = 1L, ownerId = null, ownerType = null, type = FileType.IMAGE, modifiedAt = now),
     )
     private val file2s = listOf(
-        FileEntity(id = 211L, tenantId = 2L, ownerId = null, ownerType = ObjectType.UNKNOWN, type = FileType.FILE),
-        FileEntity(id = 212L, tenantId = 2L, ownerId = 111L, ownerType = null, type = FileType.FILE),
+        FileEntity(
+            id = 211L,
+            tenantId = 2L,
+            ownerId = null,
+            ownerType = ObjectType.UNKNOWN,
+            type = FileType.FILE,
+            modifiedAt = earlier
+        ),
+        FileEntity(
+            id = 212L,
+            tenantId = 2L,
+            ownerId = 111L,
+            ownerType = null,
+            type = FileType.FILE,
+            modifiedAt = earlier
+        ),
     )
     private val file3s = listOf(
-        FileEntity(id = 311L, tenantId = 3L, ownerId = 444L, ownerType = ObjectType.LISTING, type = FileType.FILE),
+        FileEntity(
+            id = 311L,
+            tenantId = 3L,
+            ownerId = 444L,
+            ownerType = ObjectType.LISTING,
+            type = FileType.FILE,
+            modifiedAt = earlier
+        ),
     )
     private val file4s = listOf(
-        FileEntity(id = 411L, tenantId = 4L, ownerId = 444L, ownerType = ObjectType.LISTING, type = FileType.FILE),
+        FileEntity(
+            id = 411L,
+            tenantId = 4L,
+            ownerId = 444L,
+            ownerType = ObjectType.LISTING,
+            type = FileType.FILE,
+            modifiedAt = earlier
+        ),
     )
 
     @BeforeEach
@@ -97,7 +145,7 @@ class FileJobsTest {
     }
 
     @Test
-    fun `exception do not stop the process`() {
+    fun `underReview - exception do not stop the process`() {
         // GIVEN
         doAnswer { invocation ->
             {
