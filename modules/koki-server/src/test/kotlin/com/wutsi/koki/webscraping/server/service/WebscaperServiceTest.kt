@@ -28,7 +28,11 @@ class WebscaperServiceTest {
 
     private var id = System.currentTimeMillis()
     private val hash = "b32e5c02a626c9505a0f6ad797b92a3f"
-    private val request = ScrapeWebsiteRequest(testMode = false, limit = 100)
+    private val request = ScrapeWebsiteRequest(
+        testMode = false,
+        overwrite = false,
+        limit = 100,
+    )
 
     private val website = setupWebsite(
         name = "codecis",
@@ -66,12 +70,12 @@ class WebscaperServiceTest {
     }
 
     @Test
-    fun `scrage again`() {
+    fun `scape and overwrite`() {
         val webpage = WebpageEntity()
         doReturn(webpage).whenever(webpageService).getByUrlHash(any(), any())
 
         // WHEN
-        val webpages = service.scrape(website, request)
+        val webpages = service.scrape(website, request.copy(overwrite = true))
 
         // THEN
         assertEquals(12, webpages.size)
@@ -81,6 +85,21 @@ class WebscaperServiceTest {
         verify(webpageService, atLeast(1)).save(any())
         assertFalse(webpage.imageUrls.isEmpty())
         assertNotNull(webpage.content)
+    }
+
+    @Test
+    fun `scape without overwriting`() {
+        val webpage = WebpageEntity()
+        doReturn(webpage).whenever(webpageService).getByUrlHash(any(), any())
+
+        // WHEN
+        val webpages = service.scrape(website, request)
+
+        // THEN
+        assertEquals(0, webpages.size)
+
+        verify(webpageService, never()).new(any(), any(), any(), anyOrNull())
+        verify(webpageService, never()).save(any())
     }
 
     @Test

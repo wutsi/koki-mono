@@ -77,9 +77,11 @@ class WebscraperService(
                 images = extractImages(doc, website),
                 content = extractContent(doc, website),
             )
-        } else {
+        } else if (request.overwrite) {
             webpage.imageUrls = extractImages(doc, website)
             webpage.content = extractContent(doc, website)
+        } else {
+            return null
         }
 
         return if (request.testMode) {
