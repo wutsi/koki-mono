@@ -14,6 +14,7 @@ import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.springframework.http.MediaType
 import java.util.Date
 import java.util.Locale
@@ -21,13 +22,15 @@ import java.util.Locale
 class ListingContentParserAgent(
     private val amenityService: AmenityService,
     private val locationService: LocationService,
-    private val city: LocationEntity,
+    private val defaultCity: LocationEntity,
+    private val agentUser: UserEntity?,
     llm: LLM,
 ) : Agent(llm, responseType = MediaType.APPLICATION_JSON) {
     override fun systemInstructions(): String? = null
 
     override fun buildPrompt(query: String, memory: List<String>): String {
-        val country = Locale("en", city.country).displayCountry
+        val country = Locale("en", defaultCity.country).displayCountry
+        val agentAddress = agentUser?.let { user -> userAddress(user) }
 
         val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-content-parser.prompt.md")!!
             .reader()
@@ -35,7 +38,7 @@ class ListingContentParserAgent(
             .replace("{{query}}", query)
             .replace("{{amenities}}", loadAmenities())
             .replace("{{neighbourhoods}}", loadNeighbourhoods())
-            .replace("{{city}}", city.name + "," + country)
+            .replace("{{city}}", defaultCity.name + "," + country)
             .replace(
                 "{{propertyTypes}}",
                 PropertyType.entries.filter { it != PropertyType.UNKNOWN }.joinToString(",") { it.name })
@@ -54,8 +57,22 @@ class ListingContentParserAgent(
             .replace(
                 "{{mutationTypes}}",
                 MutationType.entries.filter { it != MutationType.UNKNOWN }.joinToString(",") { it.name })
+            .replace("{{agentName}}", agentUser?.displayName ?: "Unknown")
+            .replace("{{agentEmployer}}", agentUser?.employer ?: "Unknown")
+            .replace("{{agentAddress}}", agentAddress ?: "Unknown")
+            .replace("{{agentPhone}}", agentUser?.mobile ?: "Unknown")
 
         return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
+    }
+
+    private fun userAddress(user: UserEntity): String {
+        val city = if (user.cityId == defaultCity.id) {
+            defaultCity
+        } else {
+            user.cityId?.let { id -> locationService.get(id) }
+        }
+        return listOfNotNull(user.street, city?.name, city?.country)
+            .joinToString(separator = ", ")
     }
 
     private fun loadAmenities(): String {
@@ -65,7 +82,7 @@ class ListingContentParserAgent(
 
     private fun loadNeighbourhoods(): String {
         return locationService.search(
-            parentId = city.id,
+            parentId = defaultCity.id,
             types = listOf(LocationType.NEIGHBORHOOD),
             limit = 200
         ).joinToString(separator = "\n") { neighbourhood -> "${neighbourhood.id},${neighbourhood.name}" }

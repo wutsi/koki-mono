@@ -21,6 +21,7 @@ object UserFixtures {
         country = "ca",
         categoryId = RefDataFixtures.categories[0].id,
         cityId = RefDataFixtures.cities[0].id,
+        street = "3030 Linton",
         mobile = "+15147580000",
         status = UserStatus.ACTIVE,
         photoUrl = "https://picsum.photos/800/600",

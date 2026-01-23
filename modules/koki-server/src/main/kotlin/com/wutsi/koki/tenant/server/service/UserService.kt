@@ -161,6 +161,7 @@ class UserService(
         user.youtubeUrl = request.youtubeUrl?.ifEmpty { null }
         user.tiktokUrl = request.tiktokUrl?.ifEmpty { null }
         user.twitterUrl = request.twitterUrl?.ifEmpty { null }
+        user.street = request.street?.ifEmpty { null }
         user.modifiedAt = Date()
     }
 

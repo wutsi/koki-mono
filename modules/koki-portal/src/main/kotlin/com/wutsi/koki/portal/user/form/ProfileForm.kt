@@ -7,6 +7,7 @@ data class ProfileForm(
     val mobileFull: String? = null,
     val country: String? = null,
     val cityId: Long? = null,
+    val street: String? = null,
     val categoryId: Long? = null,
     val employer: String? = null,
     val photoUrl: String? = null,

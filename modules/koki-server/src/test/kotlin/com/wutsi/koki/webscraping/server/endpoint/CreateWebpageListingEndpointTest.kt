@@ -1,6 +1,7 @@
 package com.wutsi.koki.webscraping.server.endpoint
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.times
@@ -126,7 +127,7 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
     override fun setUp() {
         super.setUp()
 
-        doReturn(listingParserAgent).whenever(agentFactory).createListingContentParserAgent(any())
+        doReturn(listingParserAgent).whenever(agentFactory).createListingContentParserAgent(any(), anyOrNull())
         doReturn(jsonMapper.writeValueAsString(listingContentResult))
             .whenever(listingParserAgent)
             .run(any())

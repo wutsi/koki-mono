@@ -7,6 +7,7 @@ import com.wutsi.koki.platform.ai.agent.Agent
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
+import com.wutsi.koki.tenant.server.domain.UserEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,11 +35,12 @@ class ListingAgentFactory(
         )
     }
 
-    fun createListingContentParserAgent(city: LocationEntity): Agent {
+    fun createListingContentParserAgent(city: LocationEntity, agentUser: UserEntity?): Agent {
         return ListingContentParserAgent(
             amenityService = amenityService,
             locationService = locationService,
-            city = city,
+            defaultCity = city,
+            agentUser = agentUser,
             llm = llmProvider.chatLLM,
         )
     }

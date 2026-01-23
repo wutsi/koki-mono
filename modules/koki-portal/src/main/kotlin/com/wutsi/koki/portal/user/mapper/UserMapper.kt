@@ -58,6 +58,7 @@ class UserMapper(
             youtubeUrl = entity.youtubeUrl,
             twitterUrl = entity.twitterUrl,
             profileStrength = profileStrengthMapper.toProfileStrengthModel(entity.profileStrength),
+            street = entity.street,
         )
     }
 
