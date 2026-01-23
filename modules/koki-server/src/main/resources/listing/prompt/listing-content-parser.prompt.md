@@ -45,12 +45,12 @@ The listing information must be structured in the following JSON format:
     - id: ID of the amenity (integers)
     - name: Name of the amenity (string)
 - amenityReason: Explain the decision you made to select those amenities (string)
-- street: Address - Name of the street.
-- neighbourhood: Address - Name of the district or neighborhood
-- neighbourhoodId: ID of the neighborhood (integer)
+- street: Address of the property - Name of the street.
+- neighbourhood: Address of the property - Name of the district or neighborhood
+- neighbourhoodId: Address of the property - ID of the neighborhood (integer)
 - neighbourhoodIdReason: Explain the decision you made to select the neighbourhoodId (string)
-- city: Address - Name of the city
-- country: Address - 2 letter country code
+- city: Address of the property - Name of the city
+- country: Address of the property - 2 letter country code
 - phone: Agent phone number in E.164 format (string)
 - publicRemarks: Any additional remarks about the property that was not captured in other fields. Keep it under 1000
   characters, in the same language as the input.
@@ -77,6 +77,13 @@ Here are all the neighbourhoods {{city}} in CSV format:
 id,name
 {{neighbourhoods}}
 
+# Real Estate Agent Information
+
+- Name: {{agentName}}
+- Employer: {{agentEmployer}}
+- Phone: {{agentPhone}}
+- Address: {{agentAddress}}
+
 # Instructions
 
 - Assume that the property is located in {{city}}
@@ -99,7 +106,8 @@ id,name
 - DO NOT imply the date of availability, unless explicitly mentioned.
 - DO NOT include in the JSON any numeric field that was not provided or with zero value.
 - DO NOT imply the property or lot area if not explicitly mentioned.
-- DO NOT use the real-estate contact information (street, neighbourhood, city, phone number) as the property address.
+- When resolving the address of the property, ignore the address information of the agent.
+-
 
 # Ask:
 

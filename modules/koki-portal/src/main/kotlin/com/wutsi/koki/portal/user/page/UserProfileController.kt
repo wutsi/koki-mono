@@ -6,7 +6,6 @@ import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.user.model.ProfileForm
 import com.wutsi.koki.portal.user.service.UserService
 import com.wutsi.koki.refdata.dto.CategoryType
-import io.lettuce.core.KillArgs.Builder.id
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Controller
@@ -64,6 +63,7 @@ class UserProfileController(
             language = user.language ?: LocaleContextHolder.getLocale().language,
             country = (user.country ?: city?.country)?.uppercase(),
             cityId = user.city?.id ?: city?.id,
+            street = user.street,
             categoryId = user.category?.id,
             employer = user.employer,
             mobile = user.mobile,

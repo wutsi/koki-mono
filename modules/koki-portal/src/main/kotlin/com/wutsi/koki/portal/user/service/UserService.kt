@@ -120,6 +120,7 @@ class UserService(
                 categoryId = form.categoryId,
                 employer = form.employer,
                 cityId = form.cityId,
+                street = form.street,
                 country = form.country,
                 biography = form.biography,
                 websiteUrl = form.websiteUrl,

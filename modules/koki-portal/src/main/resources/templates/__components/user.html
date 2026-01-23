@@ -114,7 +114,7 @@
         </script>
     </div>
 
-    <div class="margin-top" th:if="${me.mobile} OR ${me.email} OR ${me.websiteUrl}">
+    <div class="margin-top text-small" th:if="${me.mobile} OR ${me.email} OR ${me.websiteUrl}">
         <div class="margin-top-small" th:if="${me.mobile}">
             <i class="fa-solid fa-mobile-screen-button"></i>
             <span th:text="${me.mobileText}">MOBILE</span>

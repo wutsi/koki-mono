@@ -19,3 +19,6 @@ INSERT INTO T_AMENITY(id, category_fk, name, active)
            (1103, 1100, 'AA3', false),
            (1201, 1200, 'BB1', false),
            (1202, 1200, 'BB2', true);
+
+INSERT INTO T_USER(id, tenant_fk, username, email, display_name, street, city_fk, salt, password)
+    VALUES (333, 1, 'agent1', 'ray@gmail.com', 'Ray Sponsible', '3030 Linton', 1110, '--', '---');
