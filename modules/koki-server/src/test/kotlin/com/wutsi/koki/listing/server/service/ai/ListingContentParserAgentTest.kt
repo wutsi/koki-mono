@@ -90,7 +90,7 @@ class ListingContentParserAgentTest {
         val text = """
             Ce magnifique appartement moderne haut Standing !
 
-            📍Situé à Simbock, Yaounde📍
+            📍Situé à Simbok, Yaounde📍
             250 du rond point damas !
             3 chambres
             3 douches
