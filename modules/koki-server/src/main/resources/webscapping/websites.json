@@ -57,8 +57,8 @@
         "https://www.camerounmaison.com/vip/9",
         "https://www.camerounmaison.com/vip/10"
       ],
-      "contentSelector": ".gauche p span p",
-      "imageSelector": ".imgitems img",
+      "contentSelector": ".gauche p span",
+      "imageSelector": ".imgitems img:not([src$='vip.png'])",
       "active": true
     },
     {
