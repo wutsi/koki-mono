@@ -10,6 +10,7 @@ data class UpdateUserProfileRequest(
     @get:Size(max = 2) val language: String? = null,
     @get:Size(max = 50) val employer: String? = null,
     @get:Size(max = 2) val country: String? = null,
+    @get:Size(max = 255) val street: String? = null,
     val cityId: Long? = null,
     val categoryId: Long? = null,
     val biography: String? = null,
