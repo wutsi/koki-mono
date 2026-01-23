@@ -77,5 +77,110 @@
     </div>
 </div>
 
+<div th:fragment="listing-price-trend(saleMetrics, rentalMetrics, landMetrics)">
+    <table class="table table-striped" th:if="${saleMetrics}">
+        <tr>
+            <th colspan="2" th:text="#{page.listing.metric.section.residential.sale}">Residential - Sales</th>
+        </tr>
+        <tr th:if="${saleMetrics}">
+            <td th:text="#{page.listing.metric.median_price}">Median Sale Price</td>
+            <td class="text-right">
+                <b th:text="${saleMetrics.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+        <tr th:each="metric : ${salesMetricsPerRoom}" th:if="${metric.bedrooms}">
+            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.median_price_1_bedroom}">
+                Bedroom Sale Price
+            </td>
+            <td th:if="${metric.bedrooms > 1}"
+                th:text="#{page.listing.metric.median_price_n_bedroom(${metric.bedrooms})}">
+                Bedroom Sale Price
+            </td>
+            <td class="text-right">
+                <b th:text="${metric.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped" th:if="${rentalMetrics}">
+        <tr>
+            <th colspan="2" th:text="#{page.listing.metric.section.residential.rental}">Residential - Rentals</th>
+        </tr>
+        <tr th:if="${rentalMetrics}">
+            <td th:text="#{page.listing.metric.median_price}">Median Rental Price</td>
+            <td class="text-right">
+                <b th:text="${rentalMetrics.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+        <tr th:each="metric : ${rentalMetricsPerRoom}" th:if="${metric.bedrooms}">
+            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing,metric.median_price_1_bedroom}">
+                Bedroom Sale Price
+            </td>
+            <td th:if="${metric.bedrooms > 1}"
+                th:text="#{page.listing.metric.median_price_n_bedroom(${metric.bedrooms})}">
+                Bedroom Sale Price
+            </td>
+            <td class="text-right">
+                <b th:text="${metric.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped" th:if="${landMetrics}">
+        <tr>
+            <th colspan="2" th:text="#{page.listing.metric.section.land}">Land</th>
+        </tr>
+        <tr>
+            <td th:text="#{page.listing.metric.median_price}">Median Sale Price</td>
+            <td class="text-right">
+                <b th:text="${landMetrics.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+        <tr th:if="${landMetrics?.pricePerSquareMeter}">
+            <td th:utext="#{page.listing.metric.median_price_per_m2}">Price per m<sup>2</sup></td>
+            <td class="text-right">
+                <b th:text="${landMetrics.pricePerSquareMeter.shortText}">$$$</b>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="listing-price-metrics(saleMetrics, rentalMetrics, landMetrics)">
+    <table class="w-100">
+        <tr th:if="${saleMetrics}">
+            <td class="text-center">
+                <span th:text="#{page.listing.metric.for_sale}">FOR_SALE</span>:
+                <b class="margin-right-small" th:text="${saleMetrics.total}">000</b>
+            </td>
+            <td class="text-center">
+                <span th:text="#{page.listing.metric.median_price}">AVERAGE PRICE</span>:
+                <b class="margin-right-small" th:text="${saleMetrics.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+        <tr th:if="${rentalMetrics}">
+            <td class="text-center">
+                <span th:text="#{page.listing.metric.for_rental}">RENTAL</span>:
+                <b class="margin-right-small" th:text="${rentalMetrics.total}">000</b>
+            </td>
+            <td class="text-center">
+                <span th:utext="#{page.listing.metric.median_price}">AVERAGE PRICE</span>:
+                <b class="margin-right-small"
+                   th:text="${rentalMetrics.averagePrice.shortText}">$$$</b>
+            </td>
+        </tr>
+        <tr th:if="${landMetrics}">
+            <td class="text-center">
+                <span th:text="#{page.listing.metric.section.land}">LAND</span>:
+                <b class="margin-right-small" th:text="${rentalMetrics.total}">000</b>
+            </td>
+            <td class="text-center">
+                <span th:utext="#{page.listing.metric.median_price_per_m2}">PRICE_PER_M2</span>:
+                <b class="margin-right-small"
+                   th:text="${landMetrics.pricePerSquareMeter.shortText}">$$$</b>
+            </td>
+        </tr>
+    </table>
+</div>
+
 </body>
 </html>

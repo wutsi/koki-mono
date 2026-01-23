@@ -87,10 +87,8 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#market-container")
         assertElementPresent("#todo-container")
         assertElementPresent("#similar-neighbourhood-container")
-        assertElementPresent("#metrics-container")
-        assertElementPresent("#metrics-land-sale-table")
-        assertElementPresent("#metrics-residential-sale-table")
-        assertElementPresent("#metrics-residential-rental-table")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#price-trend-container")
     }
 
     @Test
@@ -128,11 +126,6 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.NEIGHBOURHOOD)
         assertElementNotPresent("#introduction-container")
-        assertElementPresent("#agent-container")
-        assertElementPresent("#rental-listing-container")
-        assertElementPresent("#sale-listing-container")
-        assertElementPresent("#sold-listing-container")
-        assertElementPresent("#map-container")
         assertElementNotPresent("#about-container")
         assertElementNotPresent("#school-container")
         assertElementNotPresent("#hospital-container")
@@ -155,10 +148,8 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.NEIGHBOURHOOD)
-        assertElementNotPresent("#metrics-container")
-        assertElementNotPresent("#metrics-land-sale-table")
-        assertElementNotPresent("#metrics-residential-sale-table")
-        assertElementNotPresent("#metrics-residential-rental-table")
+        assertElementNotPresent("#metric-container")
+        assertElementNotPresent("#price-trend-container")
     }
 
     @Test

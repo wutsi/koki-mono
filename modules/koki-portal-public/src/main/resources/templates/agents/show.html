@@ -26,33 +26,12 @@
         </div>
 
         <!-- METRICS -->
-        <div class="margin-top" id="metric-container" th:if="${agent.activeSaleMetric} OR ${agent.activeRentalMetric}">
+        <div class="margin-top" id="metric-container"
+             th:if="${overallSalesMetrics} OR ${overallRentalMetrics} OR ${landMetrics}">
             <hr/>
-            <table class="w-100">
-                <tr th:if="${agent.activeSaleMetric}">
-                    <td class="text-center" th:classappend="${agent.activeRentalMetric} ? 'padding-bottom'">
-                        <span th:text="#{page.place.for_sale}">Sales</span>:
-                        <b class="margin-right-small" th:text="${agent.activeSaleMetric.total}">000</b>
-                    </td>
-                    <td class="text-center" th:classappend="${agent.activeRentalMetric} ? 'padding-bottom'">
-                        <span th:text="#{page.place.average_price}">Average Price</span>:
-                        <b class="margin-right-small" th:text="${agent.activeSaleMetric.averagePrice.shortText}">$$$</b>
-                    </td>
-                </tr>
-                <tr th:if="${agent.activeRentalMetric}">
-                    <td class="text-center">
-                        <span th:text="#{page.place.for_rent}">Rentals</span>:
-                        <b class="margin-right-small" th:text="${agent.activeRentalMetric.total}">000</b>
-                    </td>
-                    <td class="text-center">
-                        <span th:text="#{page.place.average_price}">Average Price</span>:
-                        <b class="margin-right-small"
-                           th:text="${agent.activeRentalMetric.averagePrice.shortText}">$$$</b>
-                    </td>
-                </tr>
-            </table>
+            <div
+                th:replace="~{__components/listing :: listing-price-metrics(${overallSalesMetrics}, ${overallRentalMetrics}, ${landMetrics})}"></div>
         </div>
-
 
         <!-- ABOUT -->
         <div class="margin-top">
@@ -132,6 +111,16 @@
                 </div>
             </div>
             <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
+        </div>
+
+        <!-- PRICE TRENDS -->
+        <div class="margin-top-2x" id="price-trend-container"
+             th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
+            <hr/>
+            <h2 th:text="#{page.agent.section.pricing}">Pricing Information</h2>
+
+            <div
+                th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
         </div>
 
         <!-- NEIGHBOURHOODS -->

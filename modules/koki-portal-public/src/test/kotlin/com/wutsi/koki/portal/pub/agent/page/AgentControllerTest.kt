@@ -3,6 +3,7 @@ package com.wutsi.koki.portal.pub.agent.page
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -10,6 +11,7 @@ import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
 import com.wutsi.koki.lead.dto.LeadSource
+import com.wutsi.koki.listing.dto.SearchListingMetricResponse
 import com.wutsi.koki.platform.geoip.GeoIp
 import com.wutsi.koki.platform.geoip.GeoIpService
 import com.wutsi.koki.platform.util.StringUtils
@@ -18,6 +20,7 @@ import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.RefDataFixtures.locations
+import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
@@ -93,6 +96,25 @@ class AgentControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sold-listing-container")
         assertElementPresent("#map-container")
+        assertElementPresent("#price-trend-container")
+    }
+
+    @Test
+    fun `error when fetching metrics`() {
+        // GIVEN
+        doThrow(IllegalStateException::class).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingMetricResponse::class.java)
+            )
+
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+
+        // THEN
+        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementNotPresent("#metrics-container")
+        assertElementNotPresent("#price-trend-container")
     }
 
     @Test

@@ -21,30 +21,11 @@
         </div>
 
         <!-- METRICS -->
-        <div class="margin-top" th:if="${saleCount} OR ${rentalCount}">
+        <div class="margin-top" id="metric-container"
+             th:if="${overallSalesMetrics} OR ${overallRentalMetrics} OR ${landMetrics}">
             <hr/>
-            <table class="w-100">
-                <tr th:if="${saleCount}">
-                    <td class="text-center" th:classappend="${rentalCount} ? 'padding-bottom'">
-                        <span th:text="#{page.place.for_sale}">Sales</span>:
-                        <b class="margin-right-small" th:text="${saleCount}">000</b>
-                    </td>
-                    <td class="text-center" th:classappend="${rentalCount} ? 'padding-bottom'">
-                        <span th:text="#{page.place.average_price}">Average Price</span>:
-                        <b class="margin-right-small" th:text="${saleAveragePrice.shortText}">$$$</b>
-                    </td>
-                </tr>
-                <tr th:if="${rentalCount}">
-                    <td class="text-center">
-                        <span th:text="#{page.place.for_rent}">Rentals</span>:
-                        <b class="margin-right-small" th:text="${rentalCount}">000</b>
-                    </td>
-                    <td class="text-center">
-                        <span th:text="#{page.place.average_price}">Average Price</span>:
-                        <b class="margin-right-small" th:text="${rentalAveragePrice.shortText}">$$$</b>
-                    </td>
-                </tr>
-            </table>
+            <div
+                th:replace="~{__components/listing :: listing-price-metrics(${overallSalesMetrics}, ${overallRentalMetrics}, ${landMetrics})}"></div>
         </div>
 
         <!-- SUMMARY -->
@@ -196,79 +177,13 @@
                 </table>
             </div>
 
-            <!-- METRICS -->
-            <div class="margin-top-2x" id="metrics-container"
+            <!-- PRICE_TRENDS -->
+            <div class="margin-top-2x" id="price-trend-container"
                  th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
                 <h3 th:text="#{page.neighbourhood.section.pricing}">Pricing Information</h3>
-                <table class="table table-striped" id="metrics-residential-sale-table" th:if="${salesMetrics}">
-                    <tr>
-                        <th colspan="2" th:text="#{page.neighbourhood.residential.sale}">
-                            Residential - Sales
-                        </th>
-                    </tr>
-                    <tr th:if="${salesMetrics}">
-                        <td th:text="#{page.neighbourhood.median_price}">Median Sale Price</td>
-                        <td class="text-right">
-                            <b th:text="${salesMetrics.averagePrice.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                    <tr th:each="metric : ${salesMetricsPerRoom}" th:if="${metric.bedrooms}">
-                        <td th:if="${metric.bedrooms == 1}" th:text="#{page.neighbourhood.median_price_1_bedroom}">
-                            Bedroom Sale Price
-                        </td>
-                        <td th:if="${metric.bedrooms > 1}"
-                            th:text="#{page.neighbourhood.median_price_n_bedroom(${metric.bedrooms})}">
-                            Bedroom Sale Price
-                        </td>
-                        <td class="text-right">
-                            <b th:text="${metric.averagePrice.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                </table>
 
-                <table class="table table-striped" id="metrics-residential-rental-table" th:if="${rentalMetrics}">
-                    <tr>
-                        <th colspan="2" th:text="#{page.neighbourhood.residential.rental}">
-                            Residential - Rentals
-                        </th>
-                    </tr>
-                    <tr th:if="${rentalMetrics}">
-                        <td th:text="#{page.neighbourhood.median_price}">Median Rental Price</td>
-                        <td class="text-right">
-                            <b th:text="${rentalMetrics.averagePrice.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                    <tr th:each="metric : ${rentalMetricsPerRoom}" th:if="${metric.bedrooms}">
-                        <td th:if="${metric.bedrooms == 1}" th:text="#{page.neighbourhood.median_price_1_bedroom}">
-                            Bedroom Sale Price
-                        </td>
-                        <td th:if="${metric.bedrooms > 1}"
-                            th:text="#{page.neighbourhood.median_price_n_bedroom(${metric.bedrooms})}">
-                            Bedroom Sale Price
-                        </td>
-                        <td class="text-right">
-                            <b th:text="${metric.averagePrice.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                </table>
-
-                <table class="table table-striped" id="metrics-land-sale-table" th:if="${landMetrics}">
-                    <tr>
-                        <th colspan="2" th:text="#{page.neighbourhood.land}">Land</th>
-                    </tr>
-                    <tr>
-                        <td th:text="#{page.neighbourhood.median_price}">Median Sale Price</td>
-                        <td class="text-right">
-                            <b th:text="${landMetrics.averagePrice.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                    <tr th:if="${landMetrics?.pricePerSquareMeter}">
-                        <td th:utext="#{page.neighbourhood.median_price_per_m2}">Price per m<sup>2</sup></td>
-                        <td class="text-right">
-                            <b th:text="${landMetrics.pricePerSquareMeter.shortText}">$$$</b>
-                        </td>
-                    </tr>
-                </table>
+                <div
+                    th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
             </div>
 
             <!-- SIMILAR NEIGHBOURHOODS -->

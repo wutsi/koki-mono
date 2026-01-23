@@ -1,8 +1,10 @@
 package com.wutsi.koki.portal.pub.agent.page
 
+import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
@@ -13,6 +15,7 @@ import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.refdata.dto.LocationType
+import io.hypersistence.utils.common.LogUtils.LOGGER
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -59,7 +62,9 @@ class AgentController(
         loadSoldListings(agent, model)
         loadNeighborhoods(rental + sold, model)
 
+        loadPriceTrendMetrics(id, model)
         loadToast(toast, timestamp, model)
+
         model.addAttribute(
             "page",
             createPageModel(
@@ -169,5 +174,54 @@ class AgentController(
             else -> null
         }
         model.addAttribute("toastMessage", message)
+    }
+
+    private fun loadPriceTrendMetrics(id: Long, model: Model) {
+        try {
+            // Per categories
+            val metrics = listingService.metrics(
+                sellerAgentUserIds = listOf(id),
+                listingStatus = ListingStatus.ACTIVE,
+                dimension = ListingMetricDimension.PROPERTY_CATEGORY,
+            )
+            model.addAttribute(
+                "overallRentalMetrics",
+                metrics.find { metric -> metric.listingType == ListingType.RENTAL },
+            )
+            model.addAttribute(
+                "overallSalesMetrics",
+                metrics.find { metric -> metric.listingType == ListingType.SALE },
+            )
+            model.addAttribute(
+                "rentalMetrics",
+                metrics.find { metric -> metric.propertyCategory == PropertyCategory.RESIDENTIAL && metric.listingType == ListingType.RENTAL },
+            )
+            model.addAttribute(
+                "salesMetrics",
+                metrics.find { metric -> metric.propertyCategory == PropertyCategory.RESIDENTIAL && metric.listingType == ListingType.SALE },
+            )
+            model.addAttribute(
+                "landMetrics",
+                metrics.find { metric -> metric.propertyCategory == PropertyCategory.LAND && metric.listingType == ListingType.SALE },
+            )
+
+            // Per room
+            val metricsPerRoom = listingService.metrics(
+                sellerAgentUserIds = listOf(id),
+                listingStatus = ListingStatus.ACTIVE,
+                propertyCategory = PropertyCategory.RESIDENTIAL,
+                dimension = ListingMetricDimension.BEDROOMS,
+            ).sortedBy { metric -> metric.bedrooms ?: 0 }
+            model.addAttribute(
+                "rentalMetricsPerRoom",
+                metricsPerRoom.filter { metric -> metric.listingType == ListingType.RENTAL }.take(5)
+            )
+            model.addAttribute(
+                "salesMetricsPerRoom",
+                metricsPerRoom.filter { metric -> metric.listingType == ListingType.SALE }.take(5)
+            )
+        } catch (e: Throwable) {
+            LOGGER.warn("Unable to load price trend metrics for agent $id", e)
+        }
     }
 }

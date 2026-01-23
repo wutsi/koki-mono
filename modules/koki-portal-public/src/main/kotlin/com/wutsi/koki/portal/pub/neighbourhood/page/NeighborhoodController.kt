@@ -9,7 +9,6 @@ import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
-import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
@@ -32,7 +31,6 @@ class NeighborhoodController(
     private val listingService: ListingService,
     private val agentService: AgentService,
     private val placeService: PlaceService,
-    private val moneyMapper: MoneyMapper,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(NeighborhoodController::class.java)
@@ -253,6 +251,14 @@ class NeighborhoodController(
                 dimension = ListingMetricDimension.PROPERTY_CATEGORY,
             )
             model.addAttribute(
+                "overallRentalMetrics",
+                metrics.find { metric -> metric.listingType == ListingType.RENTAL },
+            )
+            model.addAttribute(
+                "overallSalesMetrics",
+                metrics.find { metric -> metric.listingType == ListingType.SALE },
+            )
+            model.addAttribute(
                 "rentalMetrics",
                 metrics.find { metric -> metric.propertyCategory == PropertyCategory.RESIDENTIAL && metric.listingType == ListingType.RENTAL },
             )
@@ -264,29 +270,6 @@ class NeighborhoodController(
                 "landMetrics",
                 metrics.find { metric -> metric.propertyCategory == PropertyCategory.LAND && metric.listingType == ListingType.SALE },
             )
-
-            // Overall count
-            val rentalCount = metrics.filter { metric -> metric.listingType == ListingType.RENTAL }
-                .sumOf { metric -> metric.total }
-            if (rentalCount > 0) {
-                val totalPrice = metrics.filter { metric -> metric.listingType == ListingType.RENTAL }
-                    .sumOf { metric -> metric.totalPrice.amount }
-                val averagePriceMoney =
-                    moneyMapper.toMoneyModel(totalPrice / rentalCount, metrics[0].totalPrice.currency)
-                model.addAttribute("rentalCount", rentalCount)
-                model.addAttribute("rentalAveragePrice", averagePriceMoney)
-            }
-
-            val salesCount = metrics.filter { metric -> metric.listingType == ListingType.SALE }
-                .sumOf { metric -> metric.total }
-            if (salesCount > 0) {
-                val totalPrice = metrics.filter { metric -> metric.listingType == ListingType.SALE }
-                    .sumOf { metric -> metric.totalPrice.amount }
-                val averagePriceMoney =
-                    moneyMapper.toMoneyModel(totalPrice / salesCount, metrics[0].totalPrice.currency)
-                model.addAttribute("saleCount", salesCount)
-                model.addAttribute("saleAveragePrice", averagePriceMoney)
-            }
 
             // Per room
             val metricsPerRoom = listingService.metrics(
