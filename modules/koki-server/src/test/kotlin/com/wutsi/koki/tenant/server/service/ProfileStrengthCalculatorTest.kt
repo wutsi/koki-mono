@@ -52,6 +52,7 @@ class ProfileStrengthCalculatorTest {
             youtubeUrl = "https://youtube.com/johndoe",
             biography = "a".repeat(1000),
             cityId = 100L,
+            street = "123 Main St",
             categoryId = 200L,
         )
 
@@ -440,6 +441,7 @@ class ProfileStrengthCalculatorTest {
             username = "user1",
             status = UserStatus.ACTIVE,
             cityId = 100L,
+            street = "street",
         )
 
         val result = calculator.calculate(user)
@@ -510,6 +512,7 @@ class ProfileStrengthCalculatorTest {
             mobile = "+1234567890",
             photoUrl = "https://example.com/photo.jpg",
             cityId = 100L,
+            street = "street 1",
         )
 
         val result = calculator.calculate(user)
@@ -539,6 +542,7 @@ class ProfileStrengthCalculatorTest {
             twitterUrl = "https://twitter.com/johndoe",
             biography = "a".repeat(500),
             cityId = 100L,
+            street = "street 1",
         )
 
         val result = calculator.calculate(user)

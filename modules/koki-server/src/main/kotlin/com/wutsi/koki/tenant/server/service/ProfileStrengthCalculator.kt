@@ -110,11 +110,9 @@ class ProfileStrengthCalculator {
     }
 
     private fun calculateAddress(user: UserEntity): ProfileStrengthBreakdown {
-        val value = if (user.cityId != null) {
-            MAX_ADDRESS_SCORE
-        } else {
-            0
-        }
+        var value = 0
+        if (user.cityId != null) value += MAX_ADDRESS_SCORE / 2
+        if (!user.street.isNullOrEmpty()) value += MAX_ADDRESS_SCORE / 2
 
         return ProfileStrengthBreakdown(
             value = value,
