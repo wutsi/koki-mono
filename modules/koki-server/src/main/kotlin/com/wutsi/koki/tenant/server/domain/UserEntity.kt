@@ -58,6 +58,7 @@ data class UserEntity(
     var twitterUrl: String? = null,
     var tiktokUrl: String? = null,
     var youtubeUrl: String? = null,
+    var street: String? = null,
 
     @ManyToMany
     @JoinTable(

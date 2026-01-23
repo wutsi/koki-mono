@@ -10,9 +10,9 @@ INSERT INTO T_ROLE(id, tenant_fk, name)
            (20, 2, 'accountant'),
            (21, 2, 'technician');
 
-INSERT INTO T_USER(id, device_id, tenant_fk, username, email, password, display_name, status, language, employer, mobile, country, city_fk)
-    VALUES (11, 'xxx', 1, 'ray.sponsible', 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 3, 'fr', 'KOKI', '+15147580000', 'ca', 111),
-           (22, null, 2, 'roger.milla', 'roger.milla@gmail.com', '---', 'Roger Milla', 3, 'ru', null, null, null, null);
+INSERT INTO T_USER(id, device_id, tenant_fk, username, email, password, display_name, status, language, employer, mobile, country, city_fk, street)
+    VALUES (11, 'xxx', 1, 'ray.sponsible', 'ray.sponsible@gmail.com', '---', 'Ray Sponsible', 3, 'fr', 'KOKI', '+15147580000', 'ca', 111, '3333 Linton'),
+           (22, null, 2, 'roger.milla', 'roger.milla@gmail.com', '---', 'Roger Milla', 3, 'ru', null, null, null, null, null);
 
 INSERT INTO T_USER_ROLE(user_fk, role_fk)
     VALUES (11, 10),

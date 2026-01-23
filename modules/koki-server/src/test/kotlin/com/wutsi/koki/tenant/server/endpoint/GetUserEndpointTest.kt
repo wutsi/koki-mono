@@ -32,6 +32,7 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals("ca", user.country)
         assertEquals(111L, user.cityId)
         assertEquals("fr", user.language)
+        assertEquals("3333 Linton", user.street)
 
         assertEquals(3, user.roleIds.size)
         assertEquals(10, user.roleIds[0])

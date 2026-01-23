@@ -35,7 +35,8 @@ class UpdateUserProfileEndpointTest : TenantAwareEndpointTest() {
             tiktokUrl = "https://www.tiktok.com/user/thomas.knono",
             youtubeUrl = "https://www.youtube.com/user/thomas.knono",
             twitterUrl = "https://www.x.com/user/thomas.knono",
-            websiteUrl = "https://koki.com/agent/1320943"
+            websiteUrl = "https://koki.com/agent/1320943",
+            street = "3333 linton",
         )
 
         val result = rest.postForEntity("/v1/users/11/profile", request, Any::class.java)
@@ -59,6 +60,7 @@ class UpdateUserProfileEndpointTest : TenantAwareEndpointTest() {
         assertEquals(request.tiktokUrl, user.tiktokUrl)
         assertEquals(request.youtubeUrl, user.youtubeUrl)
         assertEquals(request.websiteUrl, user.websiteUrl)
+        assertEquals(request.street, user.street)
     }
 
     @Test
