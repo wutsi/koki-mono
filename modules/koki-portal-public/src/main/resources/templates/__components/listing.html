@@ -113,7 +113,7 @@
             </td>
         </tr>
         <tr th:each="metric : ${rentalMetricsPerRoom}" th:if="${metric.bedrooms}">
-            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing,metric.median_price_1_bedroom}">
+            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.median_price_1_bedroom}">
                 Bedroom Sale Price
             </td>
             <td th:if="${metric.bedrooms > 1}"
