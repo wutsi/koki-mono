@@ -212,6 +212,8 @@ koki:
                 expire: "0 0 1 * * *"     # Every date at 1AM
 
         file:
+            cron:
+                under-review: "0 0 * * * *"     # Every hour
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-file-queue
@@ -226,9 +228,8 @@ koki:
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
         listing:
-            metrics:
-                jobs:
-                    daily: "0 0 1 * * *"     # Every day at 1:00AM
+            cron:
+                listing-metrics: "0 0 1 * * *"     # Every day at 1:00AM
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-listing-queue
@@ -237,7 +238,7 @@ koki:
 
         offer:
             cron:
-                expire: "0 0 1 * * *"     # Every date at 1AM
+                expire: "0 0 1 * * *"     # Every day at 1AM
 
         place:
             mq:

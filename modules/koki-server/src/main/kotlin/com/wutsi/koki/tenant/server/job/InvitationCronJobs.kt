@@ -5,8 +5,12 @@ import com.wutsi.koki.tenant.server.service.InvitationService
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.util.Date
 
+@RestController
+@RequestMapping("/v1/invitations/jobs")
 @Service
 class InvitationCronJobs(private val service: InvitationService) {
     companion object {

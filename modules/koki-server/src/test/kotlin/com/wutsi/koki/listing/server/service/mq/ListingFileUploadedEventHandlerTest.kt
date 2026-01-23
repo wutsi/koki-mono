@@ -124,6 +124,34 @@ class ListingFileUploadedEventHandlerTest {
     }
 
     @Test
+    fun `onFileUploaded - File already rejected`() {
+        doReturn(file.copy(status = FileStatus.REJECTED))
+            .whenever(fileService).get(file.id!!, file.tenantId)
+
+        handler.handle(createFileEvent())
+
+        verify(fileService, never()).save(any())
+
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), eq(file.createdById))
+        assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
+    }
+
+    @Test
+    fun `onFileUploaded - File already approved`() {
+        doReturn(file.copy(status = FileStatus.APPROVED))
+            .whenever(fileService).get(file.id!!, file.tenantId)
+
+        handler.handle(createFileEvent())
+
+        verify(fileService, never()).save(any())
+
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), eq(file.createdById))
+        assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
+    }
+
+    @Test
     fun `onImageUploaded - Approved`() {
         val result = createImageReviewerResult(true)
         doReturn(jsonMapper.writeValueAsString(result)).whenever(agent).run(any(), any())
@@ -166,7 +194,7 @@ class ListingFileUploadedEventHandlerTest {
     }
 
     @Test
-    fun `onImageUploaded - Image not in REVIEW`() {
+    fun `onImageUploaded - Image already approved`() {
         doReturn(image.copy(status = FileStatus.APPROVED))
             .whenever(fileService).get(image.id!!, image.tenantId)
 
@@ -178,7 +206,22 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(image.id, listingArg.firstValue.heroImageId)
-        assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
+        assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+    }
+
+    @Test
+    fun `onImageUploaded - Image already rejected`() {
+        doReturn(image.copy(status = FileStatus.REJECTED))
+            .whenever(fileService).get(image.id!!, image.tenantId)
+
+        val event = createImageEvent()
+        handler.handle(event)
+
+        verify(agent, never()).run(any(), any())
+
+        val listingArg = argumentCaptor<ListingEntity>()
+        verify(listingService).save(listingArg.capture(), eq(image.createdById))
+        assertEquals(null, listingArg.firstValue.heroImageId)
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
     }
 
