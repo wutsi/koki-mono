@@ -62,7 +62,7 @@ class AgentController(
         loadSoldListings(agent, model)
         loadNeighborhoods(rental + sold, model)
 
-        loadPriceTrendMetrics(id, model)
+        loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)
 
         model.addAttribute(
@@ -176,21 +176,23 @@ class AgentController(
         model.addAttribute("toastMessage", message)
     }
 
-    private fun loadPriceTrendMetrics(id: Long, model: Model) {
+    private fun loadPriceTrendMetrics(agent: AgentModel, model: Model) {
+        val userId = agent.user.id
         try {
             // Per categories
             val metrics = listingService.metrics(
-                sellerAgentUserIds = listOf(id),
+                sellerAgentUserIds = listOf(userId),
                 listingStatus = ListingStatus.ACTIVE,
                 dimension = ListingMetricDimension.PROPERTY_CATEGORY,
             )
             model.addAttribute(
                 "overallRentalMetrics",
-                metrics.find { metric -> metric.listingType == ListingType.RENTAL },
+                listingService.sum(metrics.filter { metric -> metric.listingType == ListingType.RENTAL })
+
             )
             model.addAttribute(
                 "overallSalesMetrics",
-                metrics.find { metric -> metric.listingType == ListingType.SALE },
+                listingService.sum(metrics.filter { metric -> metric.listingType == ListingType.SALE }),
             )
             model.addAttribute(
                 "rentalMetrics",
@@ -207,7 +209,7 @@ class AgentController(
 
             // Per room
             val metricsPerRoom = listingService.metrics(
-                sellerAgentUserIds = listOf(id),
+                sellerAgentUserIds = listOf(userId),
                 listingStatus = ListingStatus.ACTIVE,
                 propertyCategory = PropertyCategory.RESIDENTIAL,
                 dimension = ListingMetricDimension.BEDROOMS,
@@ -221,7 +223,7 @@ class AgentController(
                 metricsPerRoom.filter { metric -> metric.listingType == ListingType.SALE }.take(5)
             )
         } catch (e: Throwable) {
-            LOGGER.warn("Unable to load price trend metrics for agent $id", e)
+            LOGGER.warn("Unable to load price trend metrics for agent: ${agent.id}", e)
         }
     }
 }

@@ -15,6 +15,7 @@ import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.refdata.dto.LocationType
 import org.slf4j.LoggerFactory
@@ -67,7 +68,7 @@ class NeighborhoodController(
             loadSimilarNeighborhoods(place, model)
         }
 
-        loadMetrics(id, model)
+        loadPriceTrendMetrics(neighbourhood, model)
 
         val tenant = tenantHolder.get()
         model.addAttribute(
@@ -242,21 +243,22 @@ class NeighborhoodController(
         }
     }
 
-    private fun loadMetrics(id: Long, model: Model) {
+    private fun loadPriceTrendMetrics(neighourhood: LocationModel, model: Model) {
         try {
             // Per categories
             val metrics = listingService.metrics(
-                neighbourhoodId = id,
+                neighbourhoodId = neighourhood.id,
                 listingStatus = ListingStatus.ACTIVE,
                 dimension = ListingMetricDimension.PROPERTY_CATEGORY,
             )
             model.addAttribute(
                 "overallRentalMetrics",
-                metrics.find { metric -> metric.listingType == ListingType.RENTAL },
+                listingService.sum(metrics.filter { metric -> metric.listingType == ListingType.RENTAL })
+
             )
             model.addAttribute(
                 "overallSalesMetrics",
-                metrics.find { metric -> metric.listingType == ListingType.SALE },
+                listingService.sum(metrics.filter { metric -> metric.listingType == ListingType.SALE }),
             )
             model.addAttribute(
                 "rentalMetrics",
@@ -273,7 +275,7 @@ class NeighborhoodController(
 
             // Per room
             val metricsPerRoom = listingService.metrics(
-                neighbourhoodId = id,
+                neighbourhoodId = neighourhood.id,
                 listingStatus = ListingStatus.ACTIVE,
                 propertyCategory = PropertyCategory.RESIDENTIAL,
                 dimension = ListingMetricDimension.BEDROOMS,
@@ -287,7 +289,7 @@ class NeighborhoodController(
                 metricsPerRoom.filter { metric -> metric.listingType == ListingType.SALE }.take(5)
             )
         } catch (e: Throwable) {
-            LOGGER.warn("Unable to load metrics for neighborhood $id", e)
+            LOGGER.warn("Unable to load metrics for neighborhood ${neighourhood.id}", e)
         }
     }
 }

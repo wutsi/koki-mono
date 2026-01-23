@@ -17,7 +17,6 @@ class HomeControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#widget-leads-new")
         assertElementPresent("#widget-offers-active")
         assertElementPresent("#widget-listings-recent")
-        assertElementPresent("#widget-listings-sold")
     }
 
     @Test

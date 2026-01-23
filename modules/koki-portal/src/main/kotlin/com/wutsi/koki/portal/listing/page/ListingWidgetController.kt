@@ -47,26 +47,11 @@ class ListingWidgetController(
         statuses: List<ListingStatus>,
         sortBy: ListingSort
     ): List<ListingModel> {
-        val city = userHolder.get()?.city ?: resolveCity()
-        val listings = if (city != null) {
-            service.search(
-                locationIds = city.let { city -> listOf(city.id) } ?: emptyList(),
-                statuses = statuses,
-                sortBy = sortBy
-            ).items.toMutableList()
-        } else {
-            mutableListOf()
-        }
-
-        if (listings.size < 5) {
-            val excludeIds = listings.map { listing -> listing.id }
-            listings.addAll(
-                service.search(
-                    statuses = statuses,
-                    sortBy = sortBy
-                ).items.filter { listing -> !excludeIds.contains(listing.id) }
-            )
-        }
-        return listings
+        val userId = userHolder.id() ?: return emptyList()
+        return service.search(
+            sellerAgentUserId = userId,
+            statuses = statuses,
+            sortBy = sortBy,
+        ).items.take(5)
     }
 }

@@ -10,6 +10,8 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.portal.pub.agent.service.AgentService
+import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
+import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.common.model.ResultSetModel
 import com.wutsi.koki.portal.pub.file.model.FileModel
 import com.wutsi.koki.portal.pub.file.service.FileService
@@ -35,6 +37,7 @@ class ListingService(
     private val amenityService: AmenityService,
     private val fileService: FileService,
     private val agentService: AgentService,
+    private val moneyMapper: MoneyMapper,
 ) {
     fun get(id: Long, fullGraph: Boolean = true): ListingModel {
         val listing = koki.get(id).listing
@@ -254,5 +257,37 @@ class ListingService(
             dimension = dimension,
         )
         return response.metrics.map { metric -> mapper.toListingMetricModel(metric) }
+    }
+
+    fun sum(metrics: List<ListingMetricModel>): ListingMetricModel? {
+        if (metrics.isEmpty()) {
+            return null
+        }
+
+        val currency = metrics[0].minPrice.currency
+        val total = metrics.sumOf { metric -> metric.total }
+        val totalPrice = metrics.sumOf { metric -> metric.totalPrice.amount }
+        val minPrice = metrics.minOf { metric -> metric.minPrice.amount }
+        val maxPrice = metrics.minOf { metric -> metric.maxPrice.amount }
+
+        val lotAreaCount = metrics.mapNotNull { metric -> metric.averageLotArea }.size
+        val totalLotArea = metrics.mapNotNull { metric -> metric.averageLotArea }.sumOf { it }
+
+        val pricePerM2Count = metrics.mapNotNull { metric -> metric.pricePerSquareMeter }.size
+        val totalPricePerM2 = metrics.mapNotNull { metric -> metric.pricePerSquareMeter?.amount }.sumOf { it }
+
+        return ListingMetricModel(
+            total = total,
+            minPrice = moneyMapper.toMoneyModel(minPrice, currency),
+            maxPrice = moneyMapper.toMoneyModel(maxPrice, currency),
+            totalPrice = moneyMapper.toMoneyModel(totalPrice, currency),
+            averagePrice = if (total > 0) moneyMapper.toMoneyModel(totalPrice / total, currency) else MoneyModel(),
+            averageLotArea = if (lotAreaCount > 0) totalLotArea / lotAreaCount else null,
+            pricePerSquareMeter = if (pricePerM2Count > 0) {
+                moneyMapper.toMoneyModel(totalPricePerM2 / pricePerM2Count, currency)
+            } else {
+                null
+            },
+        )
     }
 }
