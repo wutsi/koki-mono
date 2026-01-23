@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.BadRequestException
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.platform.logger.DefaultKVLogger
@@ -88,6 +89,23 @@ class WebscrapingMQConsumerTest {
         val ex = NotFoundException(
             error = Error(
                 code = ErrorCode.WEBPAGE_NOT_FOUND,
+            )
+        )
+        doThrow(ex).whenever(createWebpageListingCommandHandler).handle(any())
+
+        // WHEN
+        val result = consumer.consume(CreateWebpageListingCommand())
+
+        // THEN
+        assertFalse(result)
+    }
+
+    @Test
+    fun `createWebpageListing - when webpage content is invalid, ignore error`() {
+        // GIVEN
+        val ex = BadRequestException(
+            error = Error(
+                code = ErrorCode.LISTING_INVALID_TEXT,
             )
         )
         doThrow(ex).whenever(createWebpageListingCommandHandler).handle(any())

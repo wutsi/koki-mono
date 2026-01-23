@@ -21,6 +21,7 @@ class WebscrapingMQConsumer(
                 when (ex.error.code) {
                     ErrorCode.LISTING_ALREADY_CREATED,
                     ErrorCode.LOCATION_NOT_FOUND,
+                    ErrorCode.LISTING_INVALID_TEXT,
                     ErrorCode.WEBPAGE_NOT_FOUND -> logger.add("warning", ex.error.code)
 
                     else -> throw ex
