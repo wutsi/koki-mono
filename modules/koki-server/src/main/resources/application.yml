@@ -229,7 +229,7 @@ koki:
 
         listing:
             cron:
-                listing-metrics: "0 0 1 * * *"     # Every day at 1:00AM
+                aggregate-metrics: "0 0 1 * * *"     # Every day at 1:00AM
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
                 queue: koki-listing-queue

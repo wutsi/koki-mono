@@ -7,17 +7,19 @@ import com.wutsi.koki.tenant.server.domain.TenantEntity
 import com.wutsi.koki.tenant.server.service.TenantService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/listing/jobs")
+@RequestMapping("/v1/listings/jobs")
 @Service
 class ListingJobs(
     private val listingMetricService: ListingMetricService,
     private val tenantService: TenantService,
 ) {
-    @Scheduled(cron = "\${koki.module.listing.cron.listing-metrics}")
+    @PostMapping("/aggregate-metrics")
+    @Scheduled(cron = "\${koki.module.listing.cron.aggregate-metrics}")
     fun aggregateMetrics() {
         tenantService.all().forEach { tenant ->
             if (tenant.status == TenantStatus.ACTIVE) {
