@@ -43,7 +43,11 @@
                     <h1 th:text="#{page.listing.publish.title}">TITLE</h1>
                     <div th:utext="#{page.listing.publish.description}">DESCRIPTION</div>
 
-                    <form class="form" method="post" th:action="@{/listings/publish}" th:object="${form}">
+                    <div th:if="${error}">
+                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                    </div>
+
+                    <form class="form margin-top" method="post" th:action="@{/listings/publish}" th:object="${form}">
                         <input th:field="*{id}" type="hidden"/>
 
                         <div class="alert alert-warning">
