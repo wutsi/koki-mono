@@ -16,21 +16,21 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
+        <!-- SUMMARY -->
+        <div class="col-12 col-md-6 col-lg-8">
             <div class="widget">
                 <div class="widget-body">
-                    <h1 th:text="#{page.listing.publish.title}">TITLE</h1>
-                    <div th:utext="#{page.listing.publish.description}">DESCRIPTION</div>
+                    <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="margin" th:if="${error}">
-                        <div class="alert alert-danger" th:utext="${error}">ERROR</div>
-                    </div>
-
-                    <hr/>
-
-                    <div data-callback="on_details_loaded" data-component-id="ajax-fragment"
-                         id="listing-details-container"
-                         th:data-url="'/listings/tab/details?id=' + ${listing.id} "></div>
+        <!-- PRICE TREND -->
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="widget background-highlight" th:if="${priceTrendMetric}">
+                <div class="widget-body">
+                    <div
+                        th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${priceTrendMetric}, ${priceTrendLocation})}"></div>
                 </div>
             </div>
         </div>
@@ -40,6 +40,9 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
+                    <h1 th:text="#{page.listing.publish.title}">TITLE</h1>
+                    <div th:utext="#{page.listing.publish.description}">DESCRIPTION</div>
+
                     <form class="form" method="post" th:action="@{/listings/publish}" th:object="${form}">
                         <input th:field="*{id}" type="hidden"/>
 

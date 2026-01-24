@@ -58,6 +58,10 @@ pre {
     background: white;
 }
 
+.background-highlight {
+    background: #e4edf7 !important;
+}
+
 .text-center {
     text-align: center;
 }

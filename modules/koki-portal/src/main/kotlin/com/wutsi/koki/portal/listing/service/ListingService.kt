@@ -5,9 +5,11 @@ import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
@@ -27,6 +29,7 @@ import com.wutsi.koki.portal.listing.form.AIListingForm
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.mapper.ListingMapper
 import com.wutsi.koki.portal.listing.model.AIListingModel
+import com.wutsi.koki.portal.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.LocationModel
@@ -92,7 +95,7 @@ class ListingService(
             )
         }
 
-        val contactIds = listOf(listing.sellerContactId, listing.buyerContactId).filterNotNull()
+        val contactIds = listOfNotNull(listing.sellerContactId, listing.buyerContactId)
         val contacts = if (contactIds.isEmpty() || !fullGraph) {
             emptyMap()
         } else {
@@ -421,5 +424,28 @@ class ListingService(
             val exact = value.toInt()
             Pair(exact, exact)
         }
+    }
+
+    fun metrics(
+        neighbourhoodId: Long? = null,
+        sellerAgentUserIds: List<Long> = emptyList(),
+        cityId: Long? = null,
+        bedrooms: Int? = null,
+        propertyCategory: PropertyCategory? = null,
+        listingType: ListingType? = null,
+        listingStatus: ListingStatus? = null,
+        dimension: ListingMetricDimension? = null,
+    ): List<ListingMetricModel> {
+        val response = koki.metrics(
+            neighbourhoodId = neighbourhoodId,
+            sellerAgentUserIds = sellerAgentUserIds,
+            cityId = cityId,
+            bedrooms = bedrooms,
+            propertyCategory = propertyCategory,
+            listingType = listingType,
+            listingStatus = listingStatus,
+            dimension = dimension,
+        )
+        return response.metrics.map { metric -> mapper.toListingMetricModel(metric) }
     }
 }

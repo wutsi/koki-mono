@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.listing.page.AbstractListingController.Companion.loadPriceTrendMetrics
 import com.wutsi.koki.portal.offer.service.OfferService
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
@@ -64,6 +65,9 @@ class ListingController(
             if (canViewLeadTab(listing)) null else "lead",
         )
         model.addAttribute("excludedTabs", excludedTabs)
+
+        // Price trend
+        loadPriceTrendMetrics(listing, model, listingService)
 
         model.addAttribute(
             "page",

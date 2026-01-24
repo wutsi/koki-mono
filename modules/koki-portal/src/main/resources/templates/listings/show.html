@@ -50,16 +50,59 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-6 col-lg-8">
             <!-- SUMMARY -->
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
                 </div>
             </div>
+        </div>
 
-            <!-- PUBLIC URL -->
-            <div class="widget margin-top-small" th:if="${listing.publicUrl} AND !${listing.statusDraft}">
+        <!-- AGENT CARD -->
+        <div class="col-12 col-md-6 col-lg-4" th:if="${listing.sellerAgentUser}">
+            <div class="widget">
+                <div class="widget-body">
+                    <div
+                        th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${toggles.modules.message} AND ${listing.canSendMessage(user)})}"></div>
+
+                    <div class="flex margin-top-small" th:if="!${listing.statusDraft} AND ${toggles.modules.offer}">
+                        <div>
+                            <img class="user-photo-empty" th:src="${page.assetUrl} + '/image/empty.png'"/>
+                        </div>
+                        <div class="w-100 margin-left-small">
+                            <a class="btn btn-sm btn-light w-100" id="btn-offer"
+                               th:href="'/offers/create?listing-id=' + ${listing.id}"
+                               th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}"
+                               th:text="#{button.make_offer}">
+                                MAKE_OFFER
+                            </a>
+                            <div class="urgency text-small margin-top-small" th:if="${totalActiveOffers > 0}">
+                                <span th:if="${totalActiveOffers == 1}"
+                                      th:text="#{page.listing.show.1-active-offer}">000</span>
+                                <span th:if="${totalActiveOffers > 1} AND ${totalActiveOffers <= 9}"
+                                      th:text="#{page.listing.show.n-active-offers(${totalActiveOffers})}">000</span>
+                                <span th:if="${totalActiveOffers > 9}"
+                                      th:text="#{page.listing.show.n-plus-active-offers(${totalActiveOffers - 1})}">000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget background-highlight" th:if="${priceTrendMetric}">
+                <div class="widget-body">
+                    <div
+                        th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${priceTrendMetric}, ${priceTrendLocation})}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PUBLIC URL -->
+    <div class="row" th:if="${listing.publicUrl} AND !${listing.statusDraft}">
+        <div class="col-12">
+            <div class="widget margin-top-small">
                 <div class="widget-body">
                     <div class="flex flex-wrap">
                         <div class="text-small margin-bottom-small">
@@ -89,38 +132,6 @@
                                 <i class="fa-solid fa-share-nodes"></i>
                                 <span th:text="#{button.share}">SHARE</span>
                             </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AGENT CARD -->
-        <div class="col-12 col-md-4" th:if="${listing.sellerAgentUser}">
-            <div class="widget">
-                <div class="widget-body">
-                    <div
-                        th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${toggles.modules.message} AND ${listing.canSendMessage(user)})}"></div>
-
-                    <div class="flex margin-top-small" th:if="!${listing.statusDraft} AND ${toggles.modules.offer}">
-                        <div>
-                            <img class="user-photo-empty" th:src="${page.assetUrl} + '/image/empty.png'"/>
-                        </div>
-                        <div class="w-100 margin-left-small">
-                            <a class="btn btn-sm btn-light w-100" id="btn-offer"
-                               th:href="'/offers/create?listing-id=' + ${listing.id}"
-                               th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}"
-                               th:text="#{button.make_offer}">
-                                MAKE_OFFER
-                            </a>
-                            <div class="urgency text-small margin-top-small" th:if="${totalActiveOffers > 0}">
-                                <span th:if="${totalActiveOffers == 1}"
-                                      th:text="#{page.listing.show.1-active-offer}">000</span>
-                                <span th:if="${totalActiveOffers > 1} AND ${totalActiveOffers <= 9}"
-                                      th:text="#{page.listing.show.n-active-offers(${totalActiveOffers})}">000</span>
-                                <span th:if="${totalActiveOffers > 9}"
-                                      th:text="#{page.listing.show.n-plus-active-offers(${totalActiveOffers - 1})}">000</span>
-                            </div>
                         </div>
                     </div>
                 </div>

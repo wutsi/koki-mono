@@ -22,6 +22,8 @@ class PublishListingController : AbstractEditListingController() {
         model.addAttribute("listing", listing)
         model.addAttribute("form", ListingForm(id = id))
 
+        loadPriceTrendMetrics(listing, model, listingService)
+
         model.addAttribute(
             "page",
             createPageModel(

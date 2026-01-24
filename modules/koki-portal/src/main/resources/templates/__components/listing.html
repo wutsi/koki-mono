@@ -410,5 +410,59 @@
     </div>
 </div>
 
+<div th:fragment="listing-price-trend-table(listing, metric, location)">
+    <h2 class="text-small" th:if="${listing.propertyTypeResidential}">
+        <span th:if="!${listing.bedrooms}" th:text="#{page.listing.metrics.price-trend}">TITLE</span>
+        <span th:if="${listing.bedrooms == 1}" th:text="#{page.listing.metrics.price-trend.1_bedroom}">TITLE</span>
+        <span th:if="${listing.bedrooms > 1}"
+              th:text="#{page.listing.metrics.price-trend.n_bedroom(${listing.bedrooms})}">TITLE</span>
+    </h2>
+    <h2 class="text-small" th:if="!${listing.propertyTypeResidential}">
+        <span th:text="#{page.listing.metrics.price-trend}">TITLE</span>
+        -
+        <span th:text="#{'property-category.' + ${listing.propertyType.category.name}}">TITLE</span>
+    </h2>
+    <table class="w-100 text-small">
+        <tr>
+            <th></th>
+            <th class="text-center" th:text="#{page.listing.metrics.min}">MIN</th>
+            <th class="text-center" th:text="#{page.listing.metrics.average}">MEDIAN</th>
+            <th class="text-center" th:text="#{page.listing.metrics.max}">MAX</th>
+        </tr>
+        <tr th:if="${location}">
+            <td class="border-top padding-small margin-top-small" th:text="${location?.name}">LOCATION</td>
+            <td class="border-top padding-small margin-top-small text-center"
+                th:text="${metric.minPrice.shortText} ">$$$
+            </td>
+            <td class="border-top padding-small margin-top-small text-center"
+                th:text="${metric.averagePrice.shortText}">$$$
+            </td>
+            <td class="border-top padding-small margin-top-small text-center"
+                th:text="${metric.maxPrice.shortText} ">$$$
+            </td>
+        </tr>
+        <tr th:if="${metric} AND ${listing.statusDraft}">
+            <td class="border-top padding-small margin-top-small" colspan="4">
+                <div th:if="${listing.price.amount < metric.minPrice.amount}">
+                    <i class="warning fa-solid fa-triangle-exclamation"></i>
+                    <span
+                        th:utext="#{page.listing.metrics.price-trend.below-market(${listing.price.shortText}, ${location?.name})}"></span>
+                </div>
+                <div th:if="${listing.price.amount > metric.maxPrice.amount}">
+                    <i class="error fa-solid fa-triangle-exclamation"></i>
+                    <span
+                        th:utext="#{page.listing.metrics.price-trend.above-market(${listing.price.shortText}, ${location?.name})}"></span>
+                </div>
+                <div
+                    th:if="${listing.price.amount >= metric.minPrice.amount} AND ${listing.price.amount <= metric.maxPrice.amount}">
+                    <i class="success fa-solid fa-circle-check"></i>
+                    <span
+                        th:utext="#{page.listing.metrics.price-trend.in-market(${listing.price.shortText}, ${location?.name})}"></span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
 </body>
 </html>
