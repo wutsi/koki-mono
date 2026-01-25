@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.pub.tracking.form
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.track.dto.TrackEvent
 
 data class TrackForm(
@@ -14,4 +15,5 @@ data class TrackForm(
     val page: String? = null,
     val component: String? = null,
     val rank: Int? = null,
+    val productType: ObjectType = ObjectType.UNKNOWN,
 )

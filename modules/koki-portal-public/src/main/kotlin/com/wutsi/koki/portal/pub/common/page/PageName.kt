@@ -11,4 +11,5 @@ object PageName {
     val HOME: String = "page.home"
     val LISTING: String = "page.listing"
     val NEIGHBOURHOOD: String = "page.neighbourhood"
+    val QR = "page.qr"
 }
