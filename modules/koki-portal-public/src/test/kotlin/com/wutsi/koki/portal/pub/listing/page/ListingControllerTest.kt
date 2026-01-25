@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.reset
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.lead.dto.CreateLeadRequest
 import com.wutsi.koki.lead.dto.CreateLeadResponse
@@ -340,6 +341,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.long)
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
+        assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
     }
 
     @Test
@@ -369,6 +371,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertEquals(null, event.firstValue.track.long)
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
+        assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
     }
 
     @Test

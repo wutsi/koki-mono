@@ -27,7 +27,7 @@ class TrackService(
                     time = form.time,
                     correlationId = form.hitId,
                     accountId = null,
-                    tenantId = tenant.get()?.id,
+                    tenantId = tenant.get().id,
                     productId = form.productId,
                     deviceId = deviceIdProvider.get(request),
                     event = form.event,
@@ -39,7 +39,8 @@ class TrackService(
                     referrer = form.referrer,
                     ip = remoteIp(),
                     channelType = channelType,
-                    rank = form.rank
+                    rank = form.rank,
+                    productType = form.productType,
                 )
             )
         )

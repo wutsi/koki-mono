@@ -13,7 +13,7 @@ class KokiTrackWidget {
         elt.addEventListener('click', kokiTracking.on_click);
     }
 
-    track(event, productId, component, value, rank) {
+    track(event, productId, productType, component, value, rank) {
         console.log('track()', event, productId, value, component, rank);
 
         const data = {
@@ -21,13 +21,14 @@ class KokiTrackWidget {
             event: event,
             component: component,
             productId: productId,
+            productType: productType,
             value: (value ? value : null),
             page: document.head.querySelector("[name=wutsi\\:page_name]").content,
             hitId: document.head.querySelector("[name=wutsi\\:hit_id]").content,
             ua: navigator.userAgent,
             url: window.location.href,
             referrer: document.referrer,
-            rank: rank
+            rank: rank,
         };
 
         // Track
