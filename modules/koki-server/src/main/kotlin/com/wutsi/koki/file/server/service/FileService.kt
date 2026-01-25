@@ -16,6 +16,7 @@ import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.tenant.server.service.StorageProvider
 import com.wutsi.koki.util.MimeUtils
 import jakarta.persistence.EntityManager
 import org.apache.commons.codec.digest.DigestUtils

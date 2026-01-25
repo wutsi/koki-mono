@@ -1,14 +1,16 @@
 package com.wutsi.koki.agent.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.agent.dto.event.AgentCreatedEvent
 import com.wutsi.koki.agent.server.domain.AgentEntity
 import com.wutsi.koki.agent.server.service.AgentService
-import com.wutsi.koki.agent.server.service.mq.AgentUserCreatedEventHandler
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.dto.InvitationType
 import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
 import com.wutsi.koki.tenant.server.domain.InvitationEntity
@@ -19,17 +21,20 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class AgentUserCreatedEventHandlerTest {
     private val userService = mock<UserService>()
     private val invitationService = mock<InvitationService>()
     private val agentService = mock<AgentService>()
     private val logger = DefaultKVLogger()
+    private val publisher = mock<Publisher>()
     private val handler = AgentUserCreatedEventHandler(
         userService = userService,
         invitationService = invitationService,
         agentService = agentService,
         logger = logger,
+        publisher = publisher,
     )
 
     val tenantId: Long = 1L
@@ -48,9 +53,14 @@ class AgentUserCreatedEventHandlerTest {
 
     @Test
     fun `handle user created from invitation to an AGENT`() {
+        // GIVEN
         setupUser(userId, invitationId)
         setupInvigation(invitationId, InvitationType.AGENT)
 
+        val agent = AgentEntity(id = 77L, tenantId = tenantId)
+        doReturn(agent).whenever(agentService).create(any(), any())
+
+        // WHEN
         handler.handle(
             UserCreatedEvent(
                 userId = userId,
@@ -59,7 +69,13 @@ class AgentUserCreatedEventHandlerTest {
             )
         )
 
+        // THEN
         verify(agentService).create(userId, tenantId)
+
+        val event = argumentCaptor<AgentCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(agent.id, event.firstValue.agentId)
+        assertEquals(agent.tenantId, event.firstValue.tenantId)
     }
 
     @Test
@@ -76,6 +92,7 @@ class AgentUserCreatedEventHandlerTest {
         )
 
         verify(agentService, never()).create(any(), any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -91,6 +108,7 @@ class AgentUserCreatedEventHandlerTest {
         )
 
         verify(agentService, never()).create(any(), any())
+        verify(publisher, never()).publish(any())
     }
 
     private fun setupUser(id: Long, invitationId: String? = null): UserEntity {

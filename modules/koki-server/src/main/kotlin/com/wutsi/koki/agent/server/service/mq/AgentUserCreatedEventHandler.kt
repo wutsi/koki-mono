@@ -1,7 +1,9 @@
 package com.wutsi.koki.agent.server.service.mq
 
+import com.wutsi.koki.agent.dto.event.AgentCreatedEvent
 import com.wutsi.koki.agent.server.service.AgentService
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.tenant.dto.InvitationType
 import com.wutsi.koki.tenant.dto.event.UserCreatedEvent
 import com.wutsi.koki.tenant.server.service.InvitationService
@@ -13,7 +15,8 @@ class AgentUserCreatedEventHandler(
     private val userService: UserService,
     private val invitationService: InvitationService,
     private val agentService: AgentService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
+    private val publisher: Publisher,
 ) {
     fun handle(event: UserCreatedEvent) {
         logger.add("event_user_id", event.userId)
@@ -29,6 +32,13 @@ class AgentUserCreatedEventHandler(
         if (invitation.type == InvitationType.AGENT) {
             val agent = agentService.create(event.userId, event.tenantId)
             logger.add("agent_id", agent.id)
+
+            publisher.publish(
+                AgentCreatedEvent(
+                    agentId = agent.id ?: -1,
+                    tenantId = agent.tenantId,
+                )
+            )
         }
     }
 }

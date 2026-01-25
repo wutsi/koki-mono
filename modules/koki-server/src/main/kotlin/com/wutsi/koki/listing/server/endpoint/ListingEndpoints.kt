@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
@@ -303,6 +304,18 @@ class ListingEndpoints(
                 tenantId = tenantId,
                 status = listing.status
             )
+        )
+    }
+
+    @PostMapping("/{id}/qr-code")
+    fun generateQrCode(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ): GenerateQrCodeResponse {
+        val listing = service.generateQrCode(id, tenantId)
+        return GenerateQrCodeResponse(
+            listingId = listing.id ?: -1,
+            qrCodeUrl = listing.qrCodeUrl ?: "",
         )
     }
 }

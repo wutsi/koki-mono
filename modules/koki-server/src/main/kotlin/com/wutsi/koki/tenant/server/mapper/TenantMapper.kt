@@ -22,6 +22,7 @@ class TenantMapper {
         numberFormat = entity.numberFormat,
         logoUrl = entity.logoUrl?.ifEmpty { null },
         iconUrl = entity.iconUrl?.ifEmpty { null },
+        qrCodeIconUrl = entity.qrCodeIconUrl?.ifEmpty { null },
         portalUrl = entity.portalUrl,
         websiteUrl = entity.websiteUrl,
         moduleIds = entity.modules.map { module -> module.id },

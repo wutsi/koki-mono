@@ -108,6 +108,7 @@ class ListingMapper {
 
             publicUrl = toPublicUrl(entity.id, entity.title, entity.status),
             publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
+            qrCodeUrl = entity.qrCodeUrl
         )
     }
 

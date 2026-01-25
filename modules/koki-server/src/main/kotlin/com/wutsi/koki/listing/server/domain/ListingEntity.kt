@@ -122,6 +122,7 @@ data class ListingEntity(
     var totalFiles: Int? = null,
     var totalOffers: Int? = null,
     var totalLeads: Int? = null,
+    var qrCodeUrl: String? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

@@ -6,8 +6,8 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileInfoExtractor
 import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.file.server.service.StorageProvider
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.tenant.server.service.StorageProvider
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File

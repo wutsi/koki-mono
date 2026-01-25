@@ -20,6 +20,7 @@ data class AgentEntity(
 
     @Column(name = "tenant_fk")
     val tenantId: Long = -1,
+    var qrCodeUrl: String? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

@@ -11,6 +11,7 @@ class AgentMapper {
         return Agent(
             id = entity.id ?: -1,
             userId = entity.userId,
+            qrCodeUrl = entity.qrCodeUrl,
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
         )

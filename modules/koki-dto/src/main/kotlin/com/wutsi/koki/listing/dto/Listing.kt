@@ -89,4 +89,5 @@ data class Listing(
     val finalBuyerAgentCommissionMoney: Money? = null,
     val publicUrl: String? = null,
     val publicUrlFr: String? = null,
+    val qrCodeUrl: String? = null,
 )

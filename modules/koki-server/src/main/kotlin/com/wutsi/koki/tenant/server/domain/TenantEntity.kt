@@ -32,6 +32,7 @@ data class TenantEntity(
     val dateTimeFormat: String = "",
     val logoUrl: String? = null,
     val iconUrl: String? = null,
+    val qrCodeIconUrl: String? = null, // IMPORTANT: must be 150x150
     val status: TenantStatus = TenantStatus.ACTIVE,
     val createdAt: Date = Date(),
     val portalUrl: String = "",

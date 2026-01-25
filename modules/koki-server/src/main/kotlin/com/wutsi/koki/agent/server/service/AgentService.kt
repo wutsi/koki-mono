@@ -5,15 +5,26 @@ import com.wutsi.koki.agent.server.domain.AgentEntity
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.tenant.server.service.QrCodeGenerator
+import com.wutsi.koki.tenant.server.service.StorageProvider
+import com.wutsi.koki.tenant.server.service.TenantService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Date
+import java.util.UUID
 
 @Service
 class AgentService(
     private val dao: AgentRepository,
     private val em: EntityManager,
+    private val tenantService: TenantService,
+    private val storageProvider: StorageProvider,
+    private val qrCodeGenerator: QrCodeGenerator,
+    private val logger: KVLogger,
 ) {
     fun get(id: Long, tenantId: Long): AgentEntity {
         val agent = dao.findById(id)
@@ -76,5 +87,46 @@ class AgentService(
                 tenantId = tenantId
             )
         )
+    }
+
+    @Transactional
+    fun generateQrCode(id: Long, tenantId: Long): AgentEntity {
+        val agent = get(id, tenantId)
+        return generateQrCode(agent)
+    }
+
+    private fun generateQrCode(agent: AgentEntity): AgentEntity {
+        val id = agent.id ?: -1
+        val tenantId = agent.tenantId
+        val tenant = tenantService.get(tenantId)
+        val file = File.createTempFile("qr-agent-$id", ".png")
+        val fout = FileOutputStream(file)
+        try {
+            // Generate the QR code
+            val data = tenant.clientPortalUrl.trimEnd('/') + "/agents/$id"
+            qrCodeGenerator.generate(data, tenant, fout)
+            logger.add("qr_code_file", file.absoluteFile)
+
+            // Store the QR code
+            val storage = storageProvider.get(tenantId)
+            val fin = file.inputStream()
+            val url = fin.use {
+                storage.store(
+                    path = "agent/$id/qr-code/" + UUID.randomUUID().toString() + ".png",
+                    content = fin,
+                    contentType = "image/png",
+                    contentLength = file.length()
+                )
+            }
+            logger.add("qr_code_url", url)
+
+            // Store it
+            agent.qrCodeUrl = url.toString()
+            agent.modifiedAt = Date()
+            return dao.save(agent)
+        } finally {
+            fout.close()
+            file.delete()
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.wutsi.koki.listing.server.service.mq
 
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
+import com.wutsi.koki.listing.server.service.ListingPublisher
+import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import org.springframework.stereotype.Service
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class ListingStatusChangedEventHandler(
     private val listingPublisher: ListingPublisher,
+    private val listingService: ListingService,
     private val publisher: Publisher,
     private val logger: KVLogger,
 ) {
@@ -28,6 +31,9 @@ class ListingStatusChangedEventHandler(
                     )
                 )
             }
+            return true
+        } else if (event.status == ListingStatus.ACTIVE) {
+            listingService.generateQrCode(event.listingId, event.tenantId)
             return true
         } else {
             return false

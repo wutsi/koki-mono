@@ -16,6 +16,7 @@ data class Tenant(
     val dateTimeFormat: String = "",
     val logoUrl: String? = null,
     val iconUrl: String? = null,
+    val qrCodeIconUrl: String? = null,
     val portalUrl: String = "",
     val websiteUrl: String? = null,
     val status: TenantStatus = TenantStatus.ACTIVE,

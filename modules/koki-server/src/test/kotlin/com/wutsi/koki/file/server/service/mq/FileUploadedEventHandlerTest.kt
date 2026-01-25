@@ -13,9 +13,9 @@ import com.wutsi.koki.file.server.service.FileInfo
 import com.wutsi.koki.file.server.service.FileInfoExtractor
 import com.wutsi.koki.file.server.service.FileInfoExtractorProvider
 import com.wutsi.koki.file.server.service.FileService
-import com.wutsi.koki.file.server.service.StorageProvider
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.storage.StorageService
+import com.wutsi.koki.tenant.server.service.StorageProvider
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

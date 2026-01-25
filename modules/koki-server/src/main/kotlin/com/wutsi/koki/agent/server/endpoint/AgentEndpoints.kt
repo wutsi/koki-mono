@@ -1,11 +1,14 @@
 package com.wutsi.koki.agent.server.endpoint
 
+import com.wutsi.koki.agent.dto.GenerateQrCodeResponse
 import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
 import com.wutsi.koki.agent.server.mapper.AgentMapper
 import com.wutsi.koki.agent.server.service.AgentService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -26,6 +29,16 @@ class AgentEndpoints(
         return GetAgentResponse(
             agent = mapper.toAgent(agent)
         )
+    }
+
+    @PostMapping("/{id}/qr-code")
+    @Operation(summary = "Generate the agent QR Code")
+    fun post(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ): GenerateQrCodeResponse {
+        val agent = service.generateQrCode(id, tenantId)
+        return GenerateQrCodeResponse(agent.id ?: -1, agent.qrCodeUrl ?: "")
     }
 
     @GetMapping

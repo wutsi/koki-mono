@@ -26,19 +26,26 @@ import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.domain.ListingSequenceEntity
 import com.wutsi.koki.listing.server.domain.ListingStatusEntity
+import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
 import com.wutsi.koki.tenant.dto.ConfigurationName
 import com.wutsi.koki.tenant.server.service.ConfigurationService
+import com.wutsi.koki.tenant.server.service.QrCodeGenerator
+import com.wutsi.koki.tenant.server.service.StorageProvider
+import com.wutsi.koki.tenant.server.service.TenantService
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import jakarta.validation.ValidationException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Collections.emptyList
 import java.util.Date
+import java.util.UUID
 
 @Service
 class ListingService(
@@ -50,7 +57,11 @@ class ListingService(
     private val locationService: LocationService,
     private val configurationService: ConfigurationService,
     private val publisherValidator: ListingPublisherValidator,
+    private val tenantService: TenantService,
+    private val qrCodeGenerator: QrCodeGenerator,
     private val em: EntityManager,
+    private val logger: KVLogger,
+    private val storageProvider: StorageProvider,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -742,6 +753,41 @@ class ListingService(
         )
 
         return listing
+    }
+
+    @Transactional
+    fun generateQrCode(id: Long, tenantId: Long): ListingEntity {
+        val file = File.createTempFile("qr-agent-$id", ".png")
+        val fout = FileOutputStream(file)
+        try {
+            // Generate the QR code
+            val tenant = tenantService.get(tenantId)
+            val data = tenant.clientPortalUrl.trimEnd('/') + "/listings/$id"
+            qrCodeGenerator.generate(data, tenant, fout)
+            logger.add("qr_code_file", file.absoluteFile)
+
+            // Store the QR code
+            val storage = storageProvider.get(tenantId)
+            val fin = file.inputStream()
+            val url = fin.use {
+                storage.store(
+                    path = "tenant/$tenantId/listing/$id/qr-code/" + UUID.randomUUID().toString() + ".png",
+                    content = fin,
+                    contentType = "image/png",
+                    contentLength = file.length()
+                )
+            }
+            logger.add("qr_code_url", url)
+
+            // Store it
+            val listing = get(id, tenantId)
+            listing.qrCodeUrl = url.toString()
+            listing.modifiedAt = Date()
+            return dao.save(listing)
+        } finally {
+            fout.close()
+            file.delete()
+        }
     }
 
     private fun computeCommission(price: Long?, percent: Double?): Long {
