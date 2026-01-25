@@ -6,5 +6,6 @@ enum class TrackEvent {
     IMPRESSION,
     CLICK,
     MESSAGE,
-    EXIT
+    EXIT,
+    QR_CODE_SCAN,
 }

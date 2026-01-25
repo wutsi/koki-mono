@@ -1,5 +1,7 @@
 package com.wutsi.koki.track.dto
 
+import com.wutsi.koki.common.dto.ObjectType
+
 data class Track(
     val time: Long = 0,
     val correlationId: String? = null,
@@ -19,4 +21,5 @@ data class Track(
     val url: String? = null,
     val channelType: ChannelType = ChannelType.UNKNOWN,
     val rank: Int? = null,
+    val productType: ObjectType? = null,
 )
