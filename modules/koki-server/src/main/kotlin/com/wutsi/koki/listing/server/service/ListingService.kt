@@ -45,7 +45,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Collections.emptyList
 import java.util.Date
-import java.util.UUID
 
 @Service
 class ListingService(
@@ -762,7 +761,7 @@ class ListingService(
         try {
             // Generate the QR code
             val tenant = tenantService.get(tenantId)
-            val data = tenant.clientPortalUrl.trimEnd('/') + "/listings/$id"
+            val data = tenant.clientPortalUrl.trimEnd('/') + "/qr-codes/listings/$id"
             qrCodeGenerator.generate(data, tenant, fout)
             logger.add("qr_code_file", file.absoluteFile)
 
@@ -771,7 +770,7 @@ class ListingService(
             val fin = file.inputStream()
             val url = fin.use {
                 storage.store(
-                    path = "tenant/$tenantId/listing/$id/qr-code/" + UUID.randomUUID().toString() + ".png",
+                    path = "tenant/$tenantId/listing/$id/qr-code/default.png",
                     content = fin,
                     contentType = "image/png",
                     contentLength = file.length()

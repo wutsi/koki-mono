@@ -55,9 +55,16 @@ class GenerateQrCodeEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(url.toString(), response.body?.qrCodeUrl)
 
         verify(qrCodeGenerator).generate(
-            eq("https://client.tenant-1.com/agents/100"),
+            eq("https://client.tenant-1.com/qr-codes/agents/100"),
             any(),
             any()
+        )
+
+        verify(storage).store(
+            eq("tenant/1/agent/100/qr-code/default.png"),
+            any(),
+            eq("image/png"),
+            any(),
         )
 
         val agent = dao.findById(100L).get()
