@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
-import java.util.UUID
 
 @Service
 class AgentService(
@@ -103,7 +102,7 @@ class AgentService(
         val fout = FileOutputStream(file)
         try {
             // Generate the QR code
-            val data = tenant.clientPortalUrl.trimEnd('/') + "/agents/$id"
+            val data = tenant.clientPortalUrl.trimEnd('/') + "/qr-codes/agents/$id"
             qrCodeGenerator.generate(data, tenant, fout)
             logger.add("qr_code_file", file.absoluteFile)
 
@@ -112,7 +111,7 @@ class AgentService(
             val fin = file.inputStream()
             val url = fin.use {
                 storage.store(
-                    path = "agent/$id/qr-code/" + UUID.randomUUID().toString() + ".png",
+                    path = "tenant/$tenantId/agent/$id/qr-code/default.png",
                     content = fin,
                     contentType = "image/png",
                     contentLength = file.length()

@@ -1,5 +1,6 @@
 package com.wutsi.koki.sdk
 
+import com.wutsi.koki.agent.dto.GenerateQrCodeResponse
 import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
 import org.springframework.web.client.RestTemplate
@@ -39,5 +40,10 @@ class KokiAgents(
             )
         )
         return rest.getForEntity(url, SearchAgentResponse::class.java).body!!
+    }
+
+    fun generateQrCode(agentId: Long): GenerateQrCodeResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$agentId/qr-code")
+        return rest.postForEntity(url, null, GenerateQrCodeResponse::class.java).body!!
     }
 }

@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetAIListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingMetricDimension
@@ -220,5 +221,10 @@ class KokiListings(
             ),
         )
         return rest.getForEntity(url, SearchListingMetricResponse::class.java).body!!
+    }
+
+    fun generateQrCode(listingId: Long): GenerateQrCodeResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$listingId/qr-code")
+        return rest.postForEntity(url, null, GenerateQrCodeResponse::class.java).body!!
     }
 }
