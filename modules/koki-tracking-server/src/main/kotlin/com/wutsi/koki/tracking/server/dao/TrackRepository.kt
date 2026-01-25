@@ -1,5 +1,6 @@
 package com.wutsi.koki.tracking.server.dao
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.DeviceType
@@ -48,6 +49,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
             "country",
             "rank",
             "component",
+            "product_type"
         )
     }
 
@@ -105,6 +107,13 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                 country = it.get("country"),
                 rank = toInt(it.get("rank")),
                 component = it.get("component"),
+                productType = it.get("product_type")?.ifEmpty { null }?.let { type ->
+                    try {
+                        ObjectType.valueOf(type.uppercase())
+                    } catch (ex: Exception) {
+                        null
+                    }
+                } ?: ObjectType.UNKNOWN,
             )
         }
     }
@@ -169,7 +178,8 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         it.ua,
                         it.country,
                         it.rank,
-                        it.component
+                        it.component,
+                        it.productType,
                     )
                 }
                 printer.flush()

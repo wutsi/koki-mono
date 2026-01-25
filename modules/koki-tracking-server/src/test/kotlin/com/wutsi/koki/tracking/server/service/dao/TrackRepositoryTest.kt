@@ -2,6 +2,7 @@ package com.wutsi.koki.tracking.server.service.dao
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.platform.storage.local.LocalStorageService
@@ -55,8 +56,8 @@ class TrackRepositoryTest {
         storage.get(url, out)
         assertEquals(
             """
-                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component
-                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
             """.trimIndent(),
             out.toString().trimIndent(),
         )
@@ -66,8 +67,8 @@ class TrackRepositoryTest {
     fun read() {
         // GIVEN
         val csv = """
-                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component
-                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
         """.trimIndent()
 
         // WHEN
@@ -103,6 +104,127 @@ class TrackRepositoryTest {
         assertEquals("CM", tracks[0].country)
         assertEquals(11, tracks[0].rank)
         assertEquals("map", tracks[0].component)
+        assertEquals(ObjectType.LISTING, tracks[0].productType)
+    }
+
+    @Test
+    fun `read - empty event`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(TrackEvent.UNKNOWN, tracks[0].event)
+    }
+
+    @Test
+    fun `read - invalid event`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,xxxxx,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(TrackEvent.UNKNOWN, tracks[0].event)
+    }
+
+    @Test
+    fun `read - invalid channel_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,xxx,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(ChannelType.UNKNOWN, tracks[0].channelType)
+    }
+
+    @Test
+    fun `read - empty channel_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(ChannelType.UNKNOWN, tracks[0].channelType)
+    }
+
+    @Test
+    fun `read - invalid device_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,xxx,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(DeviceType.UNKNOWN, tracks[0].deviceType)
+    }
+
+    @Test
+    fun `read - empty device_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(DeviceType.UNKNOWN, tracks[0].deviceType)
+    }
+
+    @Test
+    fun `read - invalid product_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,xxx
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(ObjectType.UNKNOWN, tracks[0].productType)
+    }
+
+    @Test
+    fun `read - empty product_type`() {
+        // GIVEN
+        val csv = """
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,DESKTOP,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,
+        """.trimIndent()
+
+        // WHEN
+        val tracks = dao.read(ByteArrayInputStream(csv.toByteArray()))
+
+        // THEN
+        assertEquals(ObjectType.UNKNOWN, tracks[0].productType)
     }
 
     private fun createTrack() = TrackEntity(
@@ -128,6 +250,7 @@ class TrackRepositoryTest {
         campaign = "12434554",
         country = "CM",
         rank = 11,
-        component = "map"
+        component = "map",
+        productType = ObjectType.LISTING,
     )
 }
