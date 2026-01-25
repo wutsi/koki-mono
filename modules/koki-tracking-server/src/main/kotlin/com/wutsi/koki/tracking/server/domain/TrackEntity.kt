@@ -1,5 +1,6 @@
 package com.wutsi.koki.tracking.server.domain
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.track.dto.ChannelType
 import com.wutsi.koki.track.dto.DeviceType
 import com.wutsi.koki.track.dto.TrackEvent
@@ -28,4 +29,5 @@ data class TrackEntity(
     val deviceType: DeviceType = DeviceType.UNKNOWN,
     val country: String? = null,
     val rank: Int? = null,
+    val productType: ObjectType? = ObjectType.UNKNOWN,
 )
