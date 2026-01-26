@@ -36,6 +36,8 @@ class TrackingConsumer(
         logger.add("track_ua", event.track.ua)
         logger.add("track_referrer", event.track.referrer)
         logger.add("track_rank", event.track.rank)
+        logger.add("track_product_type", event.track.productType)
+        logger.add("track_recipient_id", event.track.recipientId)
 
         val entities = toTrackEntity(event.track)
         entities.forEach { entity -> pipeline.filter(entity) }
@@ -61,6 +63,8 @@ class TrackingConsumer(
             value = track.value,
             channelType = track.channelType,
             rank = track.rank,
+            productType = track.productType,
+            recipientId = track.recipientId,
         )
         if (entity.productId == null) {
             return listOf(entity)

@@ -30,4 +30,5 @@ data class TrackEntity(
     val country: String? = null,
     val rank: Int? = null,
     val productType: ObjectType? = ObjectType.UNKNOWN,
+    val recipientId: Long? = null,
 )
