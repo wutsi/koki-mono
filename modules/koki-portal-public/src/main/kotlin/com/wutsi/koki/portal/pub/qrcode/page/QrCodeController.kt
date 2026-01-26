@@ -9,7 +9,6 @@ import com.wutsi.koki.portal.pub.tracking.service.TrackService
 import com.wutsi.koki.track.dto.TrackEvent
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,14 +23,14 @@ class QrCodeController(
     private val request: HttpServletRequest,
 ) {
     @GetMapping("/agents/{id}")
-    fun agent(@PathVariable id: Long, model: Model): String {
+    fun agent(@PathVariable id: Long): String {
         track(id, ObjectType.AGENT)
         val agent = agentService.get(id, false)
         return "redirect:${agent.publicUrl}"
     }
 
     @GetMapping("/listings/{id}")
-    fun listing(@PathVariable id: Long, model: Model): String {
+    fun listing(@PathVariable id: Long): String {
         track(id, ObjectType.LISTING)
         val listing = listingService.get(id, false)
         return listing.publicUrl?.let { url -> "redirect:$url" } ?: "redirect:/listings/$id"

@@ -129,6 +129,7 @@
 
 .listing-contact-details-inner .agent-info h2 {
     margin-bottom: 0;
+    font-size: 1.25em;
 }
 
 .listing-contact-details-inner .agent-info img {
@@ -147,8 +148,9 @@
     text-align: left;
 }
 
-.listing-contact-details-inner button {
+.listing-contact-details-inner .btn {
     width: 100%;
+    margin-top: 1em;
 }
 
 
@@ -324,8 +326,9 @@
         display: none;
     }
 
-    .listing-contact-details-inner button {
+    .listing-contact-details-inner .btn {
         width: auto;
+        margin-top: 0;
     }
 }
 
