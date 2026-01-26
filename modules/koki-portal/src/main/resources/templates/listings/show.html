@@ -15,11 +15,25 @@
         </div>
     </div>
 
-    <div>
+    <div class="row" th:if="${listing.canManage(user)}">
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body flex flex-space-between">
-                    <div>&nbsp;</div>
+                    <div class="flex">
+                        <div>
+                            <button class="btn btn-light btn-sm"
+                                    data-component-id="share-button"
+                                    id="btn-share"
+                                    th:data-modal-title="#{button.share}"
+                                    th:data-modal-url="'/share/modal?url=' + ${listing.publicUrl}"
+                                    th:data-url="${listing.publicUrl}"
+                                    th:if="${listing.publicUrl} AND (${listing.statusActive} OR ${listing.statusSold})"
+                            >
+                                <i class="fa-solid fa-share-nodes"></i>
+                                <span th:text="#{button.share}">SHARE</span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="flex flex-wrap">
                         <div>
                             <a class="btn btn-light btn-sm" id="btn-map" target="_blank"
@@ -50,8 +64,8 @@
     </div>
 
     <div class="row">
+        <!-- SUMMARY -->
         <div class="col-12 col-md-6 col-lg-8">
-            <!-- SUMMARY -->
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
@@ -64,7 +78,7 @@
             <div class="widget">
                 <div class="widget-body">
                     <div
-                        th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${toggles.modules.message} AND ${listing.canSendMessage(user)})}"></div>
+                        th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${messageUrl})}"></div>
 
                     <div class="flex margin-top-small" th:if="!${listing.statusDraft} AND ${toggles.modules.offer}">
                         <div>
@@ -94,46 +108,6 @@
                 <div class="widget-body">
                     <div
                         th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${priceTrendMetric}, ${priceTrendLocation})}"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PUBLIC URL -->
-    <div class="row" th:if="${listing.publicUrl} AND !${listing.statusDraft}">
-        <div class="col-12">
-            <div class="widget margin-top-small">
-                <div class="widget-body">
-                    <div class="flex flex-wrap">
-                        <div class="text-small margin-bottom-small">
-                            <b th:text="#{page.listing.public-url}">Public Address</b>
-                        </div>
-                        <a class="text-small margin-bottom-small margin-right-small" target="_blank"
-                           th:alt="${listing.publicUrl}"
-                           th:href="${listing.publicUrl}">
-                            <div class="background-lightgray padding-left-small padding-right-small"
-                                 th:text="${listing.publicUrl}">
-                            </div>
-                        </a>
-                        <div style="margin-top: -0.15em">
-                            <a class="text-small btn btn-sm btn-light" id="btn-open" target="_blank"
-                               th:alt="${listing.publicUrl}"
-                               th:href="${listing.publicUrl}"
-                               th:text="#{button.open}">
-                                ADDRESS
-                            </a>
-                            <button class="btn btn-light btn-sm" data-component-id="share-button"
-                                    id="btn-share"
-                                    th:data-modal-title="#{button.share}"
-                                    th:data-modal-url="'/share/modal?url=' + ${listing.publicUrl}"
-                                    th:data-url="${listing.publicUrl}"
-                                    th:if="${listing.publicUrl}"
-                            >
-                                <i class="fa-solid fa-share-nodes"></i>
-                                <span th:text="#{button.share}">SHARE</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -214,6 +188,7 @@
                                     <form method="post" th:action="'/listings/generate-qr-code?id=' + ${listing.id}">
                                         <div class="error" th:text="#{page.listing.show.qr-code-none}">No QR code</div>
                                         <button class="btn btn-sm btn-light margin-top" id="btn-generate-qr-code"
+                                                th:if="${listing.canManage(user)}"
                                                 type="submit">
                                             <i class="fa-solid fa-qrcode"></i>
                                             <span th:text="#{button.generate_qr_code}">Download</span>
@@ -244,25 +219,16 @@
 
     <!-- STICKY BAR -->
     <div class="d-block d-md-none border sticky-bar-bottom"
-         th:if="(${toggles.modules.message} AND ${listing.canSendMessage(user)}) OR (${toggles.modules.offer} AND ${listing.canMakeOffer(user)})">
+         th:if="${messageUrl} OR (${toggles.modules.offer} AND ${listing.canMakeOffer(user)})">
         <div class="flex flex-space-between">
-            <div class="w-100 padding-small" th:if="${listing.canSendMessage(user)} AND ${toggles.modules.message}">
+            <div class="w-100 padding-small" th:if="${messageUrl}">
                 <a class="btn btn-whatsapp w-100" data-component-id="modal-button"
                    id="btn-whatsapp-sticky"
                    target="_blank"
-                   th:href="${listing.sellerAgentUser.whatsappUrl}"
+                   th:href="${messageUrl}"
                 >
                     <i class="fa-brands fa-whatsapp"></i>
                     <span class="text-small" th:text="#{button.whatsapp}">WHATSAPP</span>
-                </a>
-            </div>
-            <div class="w-100 padding-small" th:if="${listing.canSendMessage(user)} AND ${toggles.modules.message}">
-                <a class="btn btn-primary w-100" data-component-id="modal-button"
-                   id="btn-call-sticky"
-                   th:href="${listing.sellerAgentUser.mobileUrl}"
-                >
-                    <i class="fa-solid fa-phone"></i>
-                    <span class="text-small" th:text="#{button.call}">CALL</span>
                 </a>
             </div>
             <div class="w-100 padding-small" th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}">

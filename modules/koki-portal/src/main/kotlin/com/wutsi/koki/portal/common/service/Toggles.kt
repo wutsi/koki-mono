@@ -18,7 +18,6 @@ class Toggles {
             "image" -> modules.image
             "lead" -> modules.lead
             "listing" -> modules.listing
-            "message" -> modules.message
             "offer" -> modules.offer
             else -> true
         }
@@ -33,6 +32,5 @@ class ModuleToggles {
     var image: Boolean = false
     var lead: Boolean = false
     var listing: Boolean = false
-    var message: Boolean = false
     var offer: Boolean = false
 }

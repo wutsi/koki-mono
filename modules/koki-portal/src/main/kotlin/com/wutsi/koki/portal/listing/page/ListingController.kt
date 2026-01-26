@@ -12,6 +12,7 @@ import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.security.RequiresPermission
 import com.wutsi.koki.portal.user.model.UserModel
 import com.wutsi.koki.portal.webscaping.service.WebpageService
+import com.wutsi.koki.portal.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.CategoryType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -29,6 +30,7 @@ class ListingController(
     private val categoryService: CategoryService,
     private val offerService: OfferService,
     private val websiteService: WebpageService,
+    private val whatsapp: WhatsappService,
 ) : AbstractListingDetailsController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
@@ -46,22 +48,13 @@ class ListingController(
         loadWebpage(listing, model)
 
         // Message URL
-        val user = getUser()
-        val toggles = getToggles()
-        if (
-            toggles.modules.message &&
-            listing.status != ListingStatus.DRAFT &&
-            listing.sellerAgentUser != null &&
-            listing.sellerAgentUser.id != user?.id
-        ) {
-            val userId = listing.sellerAgentUser.id
-            val type = ObjectType.LISTING
-            model.addAttribute("composeUrl", "/messages/compose?to-user-id=$userId&owner-id=$id&owner-type=$type")
+        if (listing.status != ListingStatus.DRAFT) {
+            model.addAttribute("messageUrl", whatsapp.toListingUrl(listing))
         }
 
         // Tab to exclude
+        val user = userHolder.get()
         val excludedTabs = listOfNotNull(
-            if (canViewMessageTab(listing)) null else "message",
             if (canViewOfferTab(listing, user)) null else "offer",
             if (canViewLeadTab(listing)) null else "lead",
         )
@@ -141,10 +134,6 @@ class ListingController(
         } else {
             return listing.sellerAgentUser?.id == user?.id
         }
-    }
-
-    private fun canViewMessageTab(listing: ListingModel): Boolean {
-        return !listing.statusDraft
     }
 
     private fun canViewLeadTab(listing: ListingModel): Boolean {
