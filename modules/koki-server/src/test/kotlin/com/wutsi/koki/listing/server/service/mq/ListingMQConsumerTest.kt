@@ -13,8 +13,6 @@ import com.wutsi.koki.file.dto.event.FileDeletedEvent
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.lead.dto.event.LeadMessageReceivedEvent
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
-import com.wutsi.koki.offer.dto.event.OfferStatusChangedEvent
-import com.wutsi.koki.offer.dto.event.OfferSubmittedEvent
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -95,30 +93,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler).handle(event)
-        verify(leadMessageReceivedEventHandler, never()).handle(any())
-    }
-
-    @Test
-    fun offerSubmitted() {
-        val event = OfferSubmittedEvent()
-        val result = consumer.consume(event)
-
-        assertEquals(true, result)
-        verify(fileUploadedEventHandler, never()).handle(any())
-        verify(fileDeletedEventHandler, never()).handle(any())
-        verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(leadMessageReceivedEventHandler, never()).handle(any())
-    }
-
-    @Test
-    fun offerStatusChanged() {
-        val event = OfferStatusChangedEvent()
-        val result = consumer.consume(event)
-
-        assertEquals(true, result)
-        verify(fileUploadedEventHandler, never()).handle(any())
-        verify(fileDeletedEventHandler, never()).handle(any())
-        verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
