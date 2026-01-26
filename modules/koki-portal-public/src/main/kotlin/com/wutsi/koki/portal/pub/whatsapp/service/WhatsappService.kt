@@ -2,7 +2,7 @@ package com.wutsi.koki.portal.pub.whatsapp.service
 
 import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
-import com.wutsi.koki.portal.pub.place.model.PlaceModel
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.user.model.UserModel
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -14,7 +14,7 @@ import java.util.Locale
 class WhatsappService(
     private val messages: MessageSource
 ) {
-    fun toListingUrl(listing: ListingModel): String? {
+    fun toListingUrl(listing: ListingModel, url: String): String? {
         /* Format: Villa a louer - 2 chambres, 1 salle de bain, 500m2 - 300000 XAF - https://koki.com/listings/12345 */
         val details = listOfNotNull(
             listOf(
@@ -37,7 +37,7 @@ class WhatsappService(
 
         val text = getMessage(
             "page.whatsapp.listing.text",
-            arrayOf(listing.sellerAgentUser?.firstName ?: "", details)
+            arrayOf(listing.sellerAgentUser?.firstName ?: "", details, url)
         )
         return toUrl(listing.sellerAgentUser, text)
     }
@@ -47,7 +47,7 @@ class WhatsappService(
         return toUrl(agent.user, text)
     }
 
-    fun toNeighbourhoodUrl(neighbourhood: PlaceModel, agent: AgentModel): String? {
+    fun toNeighbourhoodUrl(neighbourhood: LocationModel, agent: AgentModel): String? {
         val text = getMessage(
             "page.whatsapp.neighbourhood.text",
             arrayOf(agent.user.firstName, neighbourhood.name)

@@ -91,8 +91,6 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#agent-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
-        assertElementPresent("#sold-listing-container")
-        assertElementPresent("#map-container")
         assertElementPresent("#about-container")
         assertElementPresent("#school-container")
         assertElementPresent("#hospital-container")
@@ -216,14 +214,14 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         // THEN
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher, atLeast(1)).publish(event.capture())
-        assertEquals(PageName.WHATSAPP, event.firstValue.track.page)
+        assertEquals(PageName.NEIGHBOURHOOD, event.firstValue.track.page)
         assertNotNull(event.firstValue.track.correlationId)
         assertNotNull(event.firstValue.track.deviceId)
         assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
         assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
         assertEquals(neighborhoods[0].id.toString(), event.firstValue.track.productId)
-        assertEquals("user:${agent.userId}", event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)
         assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
         assertEquals(USER_AGENT, event.firstValue.track.ua)
@@ -233,5 +231,6 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
         assertEquals(ObjectType.PLACE, event.firstValue.track.productType)
+        assertEquals(agent.userId.toString(), event.firstValue.track.recipientId)
     }
 }

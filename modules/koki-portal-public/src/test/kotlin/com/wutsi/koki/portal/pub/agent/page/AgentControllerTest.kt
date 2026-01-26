@@ -129,14 +129,14 @@ class AgentControllerTest : AbstractPageControllerTest() {
         // THEN
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher, atLeast(1)).publish(event.capture())
-        assertEquals(PageName.WHATSAPP, event.firstValue.track.page)
+        assertEquals(PageName.AGENT, event.firstValue.track.page)
         assertNotNull(event.firstValue.track.correlationId)
         assertNotNull(event.firstValue.track.deviceId)
         assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
         assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
         assertEquals(agent.id.toString(), event.firstValue.track.productId)
-        assertEquals("user:${agent.userId}", event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)
         assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
         assertEquals(USER_AGENT, event.firstValue.track.ua)
@@ -146,5 +146,6 @@ class AgentControllerTest : AbstractPageControllerTest() {
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
         assertEquals(ObjectType.AGENT, event.firstValue.track.productType)
+        assertEquals(agent.userId.toString(), event.firstValue.track.recipientId)
     }
 }

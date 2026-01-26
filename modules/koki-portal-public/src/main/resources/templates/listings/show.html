@@ -468,11 +468,14 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary" data-component-id="track" data-event="MESSAGE"
-               data-product-id="${listing.id}"
+            <a class="btn btn-primary"
+               data-component-id="track"
+               data-event="MESSAGE"
                data-product-type="LISTING"
                id="btn-send-message"
+               rel="nofollow"
                target="_blank"
+               th:data-product-id="${listing.id}"
                th:data-recipient-id="${listing.sellerAgentUser?.id}"
                th:href="${messageUrl}"
                th:if="${listing.statusActive} AND ${messageUrl}"

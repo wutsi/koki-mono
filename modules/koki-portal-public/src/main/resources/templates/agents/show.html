@@ -42,14 +42,15 @@
                 <div class="margin-top-small" th:if="${agent.user.mobile}">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                     <span th:text="${agent.user.mobileText}">MOBILE</span>
+                    <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">PHONE</a>
                 </div>
                 <div th:if="${agent.user.email}">
                     <i class="fa-solid fa-envelope"></i>
-                    <a th:href="'mailto:' + ${agent.user.email}" th:text="${agent.user.email}">EMAIL</a>
+                    <a th:href="${agent.user.emailUrl}" th:text="${agent.user.email}">EMAIL</a>
                 </div>
-                <div class="margin-top-small" target="_blank" th:if="${agent.user.websiteUrl}">
+                <div class="margin-top-small" th:if="${agent.user.mobile}">
                     <i class="fa-solid fa-link"></i>
-                    <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">WEBSITE</a>
+                    <a th:href="${agent.user.mobileUrl}" th:text="${agent.user.mobileText}">WEBSITE</a>
                 </div>
             </div>
 
@@ -146,8 +147,18 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary" id="btn-send-message" target="_blank"
-               th:href="'/whatsapp/agents/' + ${agent.id}">
+            <a class="btn btn-primary"
+               data-component-id="track"
+               data-event="MESSAGE"
+               data-product-type="AGENT"
+               id="btn-send-message"
+               rel="nofollow"
+               target="_blank"
+               th:data-product-id="${agent.id}"
+               th:data-recipient-id="${agent.user.id}"
+               th:href="${messageUrl}"
+               th:if="${messageUrl}"
+            >
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.send_message}"> Send Message</span>
             </a>

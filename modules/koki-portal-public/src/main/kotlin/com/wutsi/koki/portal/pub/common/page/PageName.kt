@@ -12,5 +12,7 @@ object PageName {
     val LISTING: String = "page.listing"
     val NEIGHBOURHOOD: String = "page.neighbourhood"
     val QR = "page.qr"
+
+    @Deprecated("")
     val WHATSAPP: String = "page.whatsapp"
 }
