@@ -37,30 +37,35 @@ object UserFixtures {
             displayName = "Ray Sponsible",
             photoUrl = "https://picsum.photos/1005/200",
             employer = "REIMAX Inc.",
+            mobile = "+15147580000",
         ),
         UserSummary(
             id = 12L,
             displayName = "Roger Milla",
             photoUrl = "https://picsum.photos/1005/200",
             employer = "REIMAX Inc.",
+            mobile = "+15147580000",
         ),
         UserSummary(
             id = 13L,
             displayName = "Omam Mbiyick",
             photoUrl = "https://picsum.photos/1005/200",
             employer = "REIMAX Inc.",
+            mobile = "+15147580000",
         ),
         UserSummary(
             id = 14L,
             displayName = "Roger Milla",
             photoUrl = "https://picsum.photos/1005/200",
             employer = "REIMAX Inc.",
+            mobile = "+15147580000",
         ),
         UserSummary(
             id = 15L,
             displayName = "Thomas Nkono",
             photoUrl = "https://picsum.photos/1005/200",
             employer = "REIMAX Inc.",
+            mobile = "+15147580000",
         ),
     )
 }

@@ -33,14 +33,15 @@ class TrackService(
                     event = form.event,
                     url = form.url,
                     ua = form.ua,
-                    value = form.value,
+                    value = form.value?.ifEmpty { null },
                     page = form.page,
-                    component = form.component,
-                    referrer = form.referrer,
+                    component = form.component?.ifEmpty { null },
+                    referrer = form.referrer?.ifEmpty { null },
                     ip = remoteIp(),
                     channelType = channelType,
                     rank = form.rank,
                     productType = form.productType,
+                    recipientId = form.recipientId,
                 )
             )
         )

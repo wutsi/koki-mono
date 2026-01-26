@@ -124,16 +124,17 @@ class ListingControllerTest : AbstractPageControllerTest() {
         click("#btn-send-message")
 
         // THEN
+        Thread.sleep(1000)
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher, atLeast(1)).publish(event.capture())
-        assertEquals(PageName.WHATSAPP, event.firstValue.track.page)
+        assertEquals(PageName.LISTING, event.firstValue.track.page)
         assertNotNull(event.firstValue.track.correlationId)
         assertNotNull(event.firstValue.track.deviceId)
         assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
         assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
         assertEquals(listing.id.toString(), event.firstValue.track.productId)
-        assertEquals("user:${listing.sellerAgentUserId}", event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)
         assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
         assertEquals(USER_AGENT, event.firstValue.track.ua)
@@ -143,6 +144,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
         assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
+        assertEquals(listing.sellerAgentUserId?.toString(), event.firstValue.track.recipientId)
     }
 
     @Test

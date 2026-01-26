@@ -14,6 +14,7 @@ import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
+import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.LocationType
 import io.hypersistence.utils.common.LogUtils.LOGGER
 import org.springframework.stereotype.Controller
@@ -29,6 +30,7 @@ class AgentController(
     private val agentService: AgentService,
     private val listingService: ListingService,
     private val locationService: LocationService,
+    private val whatsapp: WhatsappService,
 ) : AbstractPageController() {
     companion object {
         const val TOAST_TIMEOUT_MILLIS = 60 * 1000L
@@ -64,6 +66,8 @@ class AgentController(
 
         loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)
+
+        model.addAttribute("messageUrl", whatsapp.toAgentUrl(agent))
 
         model.addAttribute(
             "page",

@@ -17,6 +17,7 @@ import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
+import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.LocationType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -32,6 +33,7 @@ class NeighborhoodController(
     private val listingService: ListingService,
     private val agentService: AgentService,
     private val placeService: PlaceService,
+    private val whatsapp: WhatsappService,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(NeighborhoodController::class.java)
@@ -52,13 +54,11 @@ class NeighborhoodController(
 
         val rentals = loadActiveListings("rental", neighbourhood.id, ListingType.RENTAL, model)
         val sales = loadActiveListings("sale", neighbourhood.id, ListingType.SALE, model)
-        val sold = loadSoldListings(neighbourhood.id, model)
-        if (sold.isNotEmpty()) {
-            loadMap(sold, model)
-        }
-        val all = rentals + sales + sold
-        if (all.isNotEmpty()) {
-            loadAgents(all, model)
+        val all = rentals + sales
+        val agents = loadAgents(all, model)
+        val topAgent = loadTopAgent(agents, model)
+        topAgent?.let { agent ->
+            model.addAttribute("messageUrl", whatsapp.toNeighbourhoodUrl(neighbourhood, agent))
         }
 
         val places = loadPlaces(neighbourhood.id, model)
@@ -111,29 +111,6 @@ class NeighborhoodController(
         }
     }
 
-    private fun loadSoldListings(
-        neighbourhoodId: Long,
-        model: Model,
-    ): List<ListingModel> {
-        try {
-            val listings = listingService.search(
-                locationIds = listOf(neighbourhoodId),
-                statuses = listOf(ListingStatus.RENTED, ListingStatus.SOLD),
-                sortBy = ListingSort.TRANSACTION_DATE,
-                limit = 100,
-            )
-            if (listings.isEmpty()) {
-                return emptyList()
-            }
-
-            model.addAttribute("soldListings", listings.items.take(20))
-            return listings.items
-        } catch (ex: Throwable) {
-            LOGGER.warn("Failed to load SOLD listings", ex)
-            return emptyList()
-        }
-    }
-
     private fun loadAgents(listings: List<ListingModel>, model: Model): List<AgentModel> {
         val agentUserIdsMap = listings.filter { listing -> listing.sellerAgentUser != null }
             .groupBy { listing -> listing.sellerAgentUser?.id ?: -1L }
@@ -149,18 +126,13 @@ class NeighborhoodController(
             limit = topAgentUserIds.size,
         )
         model.addAttribute("agents", agents)
-
-        val topAgentUserId = topAgentUserIds[0]
-        model.addAttribute("topAgent", agents.find { agent -> agent.user.id == topAgentUserId })
         return agents
     }
 
-    private fun loadMap(listings: List<ListingModel>, model: Model) {
-        val markersJson = toMapMarkersJson(listings)
-
-        model.addAttribute("mapMarkersJson", markersJson)
-        val centerPoint = listings.firstNotNullOfOrNull { listing -> listing.geoLocation }
-        model.addAttribute("mapCenterPoint", centerPoint)
+    private fun loadTopAgent(agents: List<AgentModel>, model: Model): AgentModel? {
+        val topAgent = agents.firstOrNull()
+        model.addAttribute("topAgent", topAgent)
+        return topAgent
     }
 
     private fun loadNeighbourhoodPlace(placeId: Long, model: Model): PlaceModel? {

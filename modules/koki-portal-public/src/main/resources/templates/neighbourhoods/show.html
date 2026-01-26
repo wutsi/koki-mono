@@ -61,25 +61,6 @@
             <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
         </div>
 
-        <!-- SOLD -->
-        <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
-            <hr/>
-            <h2 th:text="#{page.neighbourhood.section.sold(${neighbourhood.name})}">TITLE</h2>
-            <div class="margin-bottom" id="map-container">
-                <div data-component-id="map"
-                     data-disable-scroll-wheel-zoom="true"
-                     id="map"
-                     th:data-latitude="${mapCenterPoint?.latitude}"
-                     th:data-longitude="${mapCenterPoint?.longitude}"
-                     th:data-on-ready="on_map_ready"
-                     th:data-show-marker="${mapCenterPoint} ? true : false"
-                     th:data-zoom="14"
-                >
-                </div>
-            </div>
-            <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
-        </div>
-
         <!-- ABOUT -->
         <div class="margin-top" id="about-container" th:if="${place?.description}">
             <hr/>
@@ -214,8 +195,18 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary" id="btn-send-message" target="_blank"
-               th:href="'/whatsapp/neighbourhoods/' + ${neighbourhood.id} + '?agent-id='+ ${topAgent.id}">
+            <a class="btn btn-primary"
+               data-component-id="track"
+               data-event="MESSAGE"
+               data-product-type="PLACE"
+               id="btn-send-message"
+               rel="nofollow"
+               target="_blank"
+               th:data-product-id="${neighbourhood.id}"
+               th:data-recipient-id="${topAgent.user.id}"
+               th:href="${messageUrl}"
+               th:if="${messageUrl}"
+            >
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.send_message}"> Send Message</span>
             </a>
