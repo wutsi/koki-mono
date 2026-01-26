@@ -1,25 +1,37 @@
 package com.wutsi.koki.portal.pub.neighbourhood.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.atLeast
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.SearchListingMetricResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
+import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.PlaceFixtures.neighborhood
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
+import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.refdata.dto.GetLocationResponse
+import com.wutsi.koki.track.dto.ChannelType
+import com.wutsi.koki.track.dto.TrackEvent
+import com.wutsi.koki.track.dto.event.TrackSubmittedEvent
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class NeighborhoodControllerTest : AbstractPageControllerTest() {
     @BeforeEach
@@ -190,5 +202,36 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#sale-listing-container")
         assertElementNotPresent("#sold-listing-container")
         assertElementNotPresent("#map-container")
+    }
+
+    @Test
+    fun sendMessage() {
+        // WHEN
+        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        scroll(.33)
+
+        reset(publisher)
+        click("#btn-send-message")
+
+        // THEN
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher, atLeast(1)).publish(event.capture())
+        assertEquals(PageName.WHATSAPP, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
+        assertEquals(neighborhoods[0].id.toString(), event.firstValue.track.productId)
+        assertEquals("user:${agent.userId}", event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertNotNull(event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
+        assertEquals(ObjectType.PLACE, event.firstValue.track.productType)
     }
 }

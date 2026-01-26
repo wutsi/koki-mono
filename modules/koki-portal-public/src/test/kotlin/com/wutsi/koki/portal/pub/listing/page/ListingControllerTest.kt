@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.pub.listing.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.atLeast
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
@@ -10,9 +11,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.SearchFileResponse
-import com.wutsi.koki.lead.dto.CreateLeadRequest
-import com.wutsi.koki.lead.dto.CreateLeadResponse
-import com.wutsi.koki.lead.dto.LeadSource
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
@@ -25,7 +23,6 @@ import com.wutsi.koki.portal.pub.ListingFixtures.listing
 import com.wutsi.koki.portal.pub.ListingFixtures.similar
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.TenantFixtures
-import com.wutsi.koki.portal.pub.UserFixtures.user
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.user.service.UserIdProvider
 import com.wutsi.koki.refdata.dto.Address
@@ -119,104 +116,33 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun sendMessage() {
+        // WHEN
         navigateTo(listing.publicUrl!!)
-
         scroll(.33)
+
+        reset(publisher)
         click("#btn-send-message")
-        assertElementVisible("#koki-modal")
 
-        input("#firstName", "Ray")
-        input("#lastName", "Sponsible")
-        input("#email", "ray.sponsible@gmail.com")
-        input("#message", "I am interested in your property. Please contact me.")
-        input("#phone", "5147580100")
-        click("#btn-send")
-
-        val request = argumentCaptor<CreateLeadRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/leads"),
-            request.capture(),
-            eq(CreateLeadResponse::class.java)
-        )
-        assertEquals(listing.id, request.firstValue.listingId)
-        assertEquals(null, request.firstValue.agentUserId)
-        assertEquals(LeadSource.LISTING, request.firstValue.source)
-        assertEquals("Ray", request.firstValue.firstName)
-        assertEquals("Sponsible", request.firstValue.lastName)
-        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
-        assertEquals("I am interested in your property. Please contact me.", request.firstValue.message)
-        assertEquals("+15147580100", request.firstValue.phoneNumber)
-        assertEquals("CA", request.firstValue.country)
-        assertNotNull(request.firstValue.cityId)
-
-        assertCurrentPageIs(PageName.LISTING)
-        assertElementVisible("#toast-message")
-    }
-
-    @Test
-    fun `sendMessage no IP - country resolved from IP`() {
-        doReturn(null).whenever(ipService).resolve(any())
-
-        navigateTo(listing.publicUrl!!)
-
-        scroll(.33)
-        click("#btn-send-message")
-        assertElementVisible("#koki-modal")
-
-        input("#firstName", "Ray")
-        input("#lastName", "Sponsible")
-        input("#email", "ray.sponsible@gmail.com")
-        input("#message", "I am interested in your property. Please contact me.")
-        input("#phone", "6467580100")
-        click("#btn-send")
-
-        val request = argumentCaptor<CreateLeadRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/leads"),
-            request.capture(),
-            eq(CreateLeadResponse::class.java)
-        )
-        assertEquals("Ray", request.firstValue.firstName)
-        assertEquals("Sponsible", request.firstValue.lastName)
-        assertEquals("ray.sponsible@gmail.com", request.firstValue.email)
-        assertEquals("I am interested in your property. Please contact me.", request.firstValue.message)
-        assertEquals("+16467580100", request.firstValue.phoneNumber)
-        assertEquals("US", request.firstValue.country)
-        assertEquals(null, request.firstValue.cityId)
-
-        assertCurrentPageIs(PageName.LISTING)
-        assertElementVisible("#toast-message")
-    }
-
-    @Test
-    fun `sendMessage for logged in user`() {
-        doReturn(USER_ID).whenever(userIdProvider).get()
-
-        navigateTo("${listing.publicUrl}?lang=fr")
-
-        scroll(.33)
-        click("#btn-send-message")
-        assertElementVisible("#koki-modal")
-
-        assertElementAttribute("#email", "disabled", "true")
-        click("#btn-send")
-
-        val request = argumentCaptor<CreateLeadRequest>()
-        verify(rest).postForEntity(
-            eq("$sdkBaseUrl/v1/leads"),
-            request.capture(),
-            eq(CreateLeadResponse::class.java)
-        )
-        assertEquals("Ray", request.firstValue.firstName)
-        assertEquals("Sponsible", request.firstValue.lastName)
-        assertEquals(user.email, request.firstValue.email)
-        assertEquals("Bonjour, je suis intéressé par cette propriété.", request.firstValue.message)
-        assertEquals(user.mobile, request.firstValue.phoneNumber)
-        assertEquals("CA", request.firstValue.country)
-        assertNotNull(request.firstValue.cityId)
-
-        assertCurrentPageIs(PageName.LISTING)
-        assertElementVisible("#toast-message")
+        // THEN
+        val event = argumentCaptor<TrackSubmittedEvent>()
+        verify(publisher, atLeast(1)).publish(event.capture())
+        assertEquals(PageName.WHATSAPP, event.firstValue.track.page)
+        assertNotNull(event.firstValue.track.correlationId)
+        assertNotNull(event.firstValue.track.deviceId)
+        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(null, event.firstValue.track.component)
+        assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
+        assertEquals(listing.id.toString(), event.firstValue.track.productId)
+        assertEquals("user:${listing.sellerAgentUserId}", event.firstValue.track.value)
+        assertEquals(null, event.firstValue.track.accountId)
+        assertEquals(ChannelType.WEB, event.firstValue.track.channelType)
+        assertEquals(USER_AGENT, event.firstValue.track.ua)
+        assertEquals("0:0:0:0:0:0:0:1", event.firstValue.track.ip)
+        assertEquals(null, event.firstValue.track.lat)
+        assertEquals(null, event.firstValue.track.long)
+        assertNotNull(event.firstValue.track.url)
+        assertEquals(null, event.firstValue.track.rank)
+        assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
     }
 
     @Test

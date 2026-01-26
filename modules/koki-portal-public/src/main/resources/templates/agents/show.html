@@ -146,16 +146,11 @@
                 </div>
             </div>
 
-            <div class="message" th:text="#{page.lead.agent-message-default}">
-                MESSAGE
-            </div>
-
-            <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
-                    th:data-modal-body-url="'/leads/create?agent-id=' + ${agent.id}"
-                    th:data-modal-title="#{page.lead.modal.title}"
-                    th:text="#{button.send_message}">
-                Send Message
-            </button>
+            <a class="btn btn-primary" id="btn-send-message" target="_blank"
+               th:href="'/whatsapp/agents/' + ${agent.id}" th:if="${agent.user.whatsappUrl}">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.send_message}"> Send Message</span>
+            </a>
         </div>
     </div>
 </div>

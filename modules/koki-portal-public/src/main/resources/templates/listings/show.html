@@ -468,17 +468,13 @@
                 </div>
             </div>
 
-            <div class="message" th:if="${listing.statusActive}" th:text="#{page.lead.listing-message-default}">
-                MESSAGE
-            </div>
-
-            <button class="btn btn-primary" data-component-id="modal-button" href="#" id="btn-send-message"
-                    th:data-modal-body-url="'/leads/create?listing-id=' + ${listing.id}"
-                    th:data-modal-title="#{page.lead.modal.title}"
-                    th:if="${listing.statusActive}"
-                    th:text="#{button.send_message}">
-                Send Message
-            </button>
+            <a class="btn btn-primary" id="btn-send-message" target="_blank"
+               th:href="'/whatsapp/listings/' + ${listing.id}"
+               th:if="${listing.statusActive} AND ${listing.sellerAgentUser?.whatsappUrl}"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.send_message}"> Send Message</span>
+            </a>
         </div>
     </div>
 </div>

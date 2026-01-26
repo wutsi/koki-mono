@@ -371,6 +371,7 @@ class ListingMapper(
         val locale = LocaleContextHolder.getLocale()
         val details = listOfNotNull(
             messages.getMessage("property-type.$propertyType", arrayOf(), locale),
+            messages.getMessage("page.whatsapp.$propertyType", arrayOf(), locale),
 
             address?.toText(includeCountry = false)?.ifEmpty { null },
 
@@ -378,8 +379,7 @@ class ListingMapper(
                 bedrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bedrooms-abbreviation") },
                 bathrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bathrooms-abbreviation") },
                 area?.let { area -> area.toString() + "m2" }
-            ).joinToString(separator = " ")
-                .ifEmpty { null }
+            ).joinToString(separator = " ").ifEmpty { null }
         ).joinToString(separator = " - ")
         val text = getMessage("page.listing.whatsapp.body", arrayOf(listingNumber, details))
         return "https://wa.me/" + mobile.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
