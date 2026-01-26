@@ -10,7 +10,6 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
-import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.contact.model.ContactModel
@@ -94,11 +93,9 @@ data class ListingModel(
     val description: String? = null,
     val publicUrl: String? = null,
     val totalImages: Int? = null,
-    val totalOffers: Int? = null,
     val totalFiles: Int? = null,
     val totalLeads: Int? = null,
     val totalActiveMessages: Int? = null,
-    val transactionParty: OfferParty? = null,
     val qrCodeUrl: String? = null,
 ) {
     val publicRemarksHtml: String?

@@ -70,8 +70,6 @@ koki:
             file: false
             lead: false
             listing: true
-            message: true
-            offer: false
 
 wutsi:
     platform:
