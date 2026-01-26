@@ -94,11 +94,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 9)
 
         assertElementNotPresent("#btn-whatsapp")
-        assertElementNotPresent("#btn-call")
-        assertElementNotPresent("#btn-offer")
         assertElementNotPresent("#btn-whatsapp-sticky")
-        assertElementNotPresent("#btn-call-sticky")
-        assertElementNotPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
@@ -121,9 +117,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
@@ -146,12 +140,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementPresent("#btn-offer-sticky")
-
         assertElementsAttributeSame("#btn-whatsapp", "#btn-whatsapp-sticky", "href")
-        assertElementsAttributeSame("#btn-offer", "#btn-offer-sticky", "href")
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
@@ -189,9 +179,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementNotPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementNotPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
@@ -228,9 +216,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementNotPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementNotPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
