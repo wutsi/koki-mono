@@ -40,9 +40,8 @@
             <div th:utext="${agent.user.biographyHtml}">BIO</div>
             <div class="margin-top">
                 <div class="margin-top-small" th:if="${agent.user.mobile}">
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-                    <span th:text="${agent.user.mobileText}">MOBILE</span>
-                    <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">PHONE</a>
+                    <i class="fa-solid fa-phone"></i>
+                    <a th:href="${agent.user.mobileUrl}" th:text="${agent.user.mobileText}">WEBSITE</a>
                 </div>
                 <div th:if="${agent.user.email}">
                     <i class="fa-solid fa-envelope"></i>
@@ -50,7 +49,7 @@
                 </div>
                 <div class="margin-top-small" th:if="${agent.user.mobile}">
                     <i class="fa-solid fa-link"></i>
-                    <a th:href="${agent.user.mobileUrl}" th:text="${agent.user.mobileText}">WEBSITE</a>
+                    <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">PHONE</a>
                 </div>
             </div>
 

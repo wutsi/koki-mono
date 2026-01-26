@@ -194,7 +194,7 @@
     <div class="margin-left-small w-100">
         <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>
         <div th:text="${me.employer}">EMPLOYER</div>
-        <div class="flex flex-space-between w-100" th:if="${messageUrl}">
+        <div class="margin-top" th:if="${messageUrl}">
             <a class="btn btn-sm btn-whatsapp w-100" id="btn-whatsapp" target="_blank" th:href="${messageUrl}">
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.whatsapp}">Whatsapp</span>
