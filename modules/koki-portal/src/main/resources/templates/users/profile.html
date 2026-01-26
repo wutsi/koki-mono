@@ -25,9 +25,9 @@
                 <div class="form-body">
                     <div class="section">
                         <div class="section-item">
-                            <h1 th:text="#{page.profile.title}">TITLE</h1>
+                            <div th:replace="~{__components/user :: user-profile-nav('profile')}"></div>
                         </div>
-                        <div class="section" th:if="${error}">
+                        <div class="section-item" th:if="${error}">
                             <div class="alert alert-danger" th:utext="${error}">ERROR</div>
                         </div>
                         <div class="section-item">

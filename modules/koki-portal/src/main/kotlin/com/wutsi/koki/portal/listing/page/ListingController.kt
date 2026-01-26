@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -85,6 +86,12 @@ class ListingController(
         model.addAttribute("listing", listing)
         model.addAttribute("amenityCategories", findAmenityCategories())
         return "listings/details"
+    }
+
+    @PostMapping("/generate-qr-code")
+    fun generateQrCode(@RequestParam id: Long): String {
+        listingService.generateQrCode(id)
+        return "redirect:/listings/$id?tab=qr-code"
     }
 
     private fun loadWebpage(listing: ListingModel, model: Model) {

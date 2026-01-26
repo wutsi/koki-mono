@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.agent.mapper
 
 import com.wutsi.koki.agent.dto.Agent
 import com.wutsi.koki.agent.dto.AgentSummary
+import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.common.mapper.TenantAwareMapper
@@ -16,6 +17,7 @@ class AgentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     ): AgentModel {
         return AgentModel(
             id = entity.id,
+            publicUrl = toPublicUrl(entity.id, users[entity.userId]?.displayName),
             user = users[entity.userId] ?: UserModel(id = entity.userId),
         )
     }
@@ -26,7 +28,15 @@ class AgentMapper(private val moneyMapper: MoneyMapper) : TenantAwareMapper() {
     ): AgentModel {
         return AgentModel(
             id = entity.id,
+            publicUrl = toPublicUrl(entity.id, user.displayName),
+            qrCodeUrl = entity.qrCodeUrl,
             user = user,
         )
+    }
+
+    private fun toPublicUrl(id: Long, displayName: String?): String {
+        return displayName?.let { name ->
+            currentTenant.get().clientPortalUrl + StringUtils.toSlug("/agents/$id", name)
+        } ?: (currentTenant.get().clientPortalUrl + "/agents/$id")
     }
 }

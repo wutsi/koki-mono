@@ -147,7 +147,7 @@
                     <!-- PILLS -->
                     <ul class="nav nav-pills mb-3" id="tab-main" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button aria-controls="pills-content" aria-selected="true" class="nav-link active"
+                            <button aria-controls="pills-details" aria-selected="true" class="nav-link active"
                                     data-bs-target="#pills-details" data-bs-toggle="pill" id="pills-details-tab"
                                     role="tab" type="button">
                                 Details
@@ -164,15 +164,25 @@
                                 <div th:replace="~{__components/module :: tab-counter-badge(${listing}, ${tab})}"></div>
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation" th:if="${listing.statusActive}">
+                            <button aria-controls="pills-qr-code" class="nav-link"
+                                    data-bs-target="#pills-qr-code" data-bs-toggle="pill" id="pills-qr-code-tab"
+                                    role="tab" type="button">
+                                QR Code
+                            </button>
+                        </li>
                     </ul>
 
                     <!-- CONTENT -->
                     <div class="tab-content" th:id="'tab-' + ${name} + '-content'">
+                        <!-- DETAILS TAB -->
                         <div aria-labelledby="pills-details-tab" class="tab-pane fade show active"
                              id="pills-details"
-                             role="tabpanel" th:data-url="'/listings/tab/details?id=' + ${listing.id}">
+                             role="tabpanel"
+                             th:data-url="'/listings/tab/details?id=' + ${listing.id}">
                         </div>
 
+                        <!-- MODULE TABS -->
                         <div class="tab-pane fade" role="tabpanel"
                              th:aria-labelledby="'pills-' + ${tab.name} + '-tab'"
                              th:data-url="${tab.toTabUrl(listing.id, module, listing.readOnly)}"
@@ -180,6 +190,37 @@
                              th:id="'pills-' + ${tab.name}"
                              th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
                         >
+                        </div>
+
+                        <!-- QR CODE TAB -->
+                        <div aria-labelledby="pills-qr-code-tab" class="tab-pane fade" id="pills-qr-code"
+                             role="tabpanel"
+                             th:if="${listing.statusActive}">
+
+                            <div class="text-center" th:fragment="listing-qr-code(listing)">
+                                <div class="margin-top" th:if="${listing.qrCodeUrl}">
+                                    <img class="qr-code padding border" height="300"
+                                         th:src="${listing.qrCodeUrl}"
+                                         width="300"/>
+                                    <div class="margin-top">
+                                        <a class="btn btn-sm btn-light" download="" id="btn-download-qr-code"
+                                           th:href="${listing.qrCodeUrl}">
+                                            <i class="fa-solid fa-download"></i>
+                                            <span th:text="#{button.download}">Download</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="margin-top" th:if="!${listing.qrCodeUrl}">
+                                    <form method="post" th:action="'/listings/generate-qr-code?id=' + ${listing.id}">
+                                        <div class="error" th:text="#{page.listing.show.qr-code-none}">No QR code</div>
+                                        <button class="btn btn-sm btn-light margin-top" id="btn-generate-qr-code"
+                                                type="submit">
+                                            <i class="fa-solid fa-qrcode"></i>
+                                            <span th:text="#{button.generate_qr_code}">Download</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

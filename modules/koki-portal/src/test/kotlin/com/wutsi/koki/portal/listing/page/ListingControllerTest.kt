@@ -1,11 +1,14 @@
 package com.wutsi.koki.portal.listing.page
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.ListingFixtures.listing
 import com.wutsi.koki.UserFixtures.users
+import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
@@ -38,6 +41,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#listing-seller-section")
         assertElementNotPresent("#listing-sale-section")
 
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementPresent("#pills-qr-code-tab")
+        assertElementPresent("#pills-qr-code")
+
         assertElementPresent("#debug-container")
         assertElementAttribute("#debug-container a.webpage-source", "href", webpage.url)
     }
@@ -62,6 +70,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#seller-agent-commission")
         assertElementPresent("#listing-seller-section")
         assertElementNotPresent("#listing-sale-section")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementPresent("#pills-qr-code-tab")
+        assertElementPresent("#pills-qr-code")
 
         assertElementPresent("#debug-container")
     }
@@ -88,6 +101,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-whatsapp-sticky")
         assertElementNotPresent("#btn-call-sticky")
         assertElementNotPresent("#btn-offer-sticky")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementNotPresent("#pills-qr-code-tab")
+        assertElementNotPresent("#pills-qr-code")
     }
 
     @Test
@@ -112,6 +130,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-whatsapp-sticky")
         assertElementNotPresent("#btn-call-sticky")
         assertElementPresent("#btn-offer-sticky")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementPresent("#pills-qr-code-tab")
+        assertElementPresent("#pills-qr-code")
     }
 
     @Test
@@ -140,6 +163,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementsAttributeSame("#btn-whatsapp", "#btn-whatsapp-sticky", "href")
         assertElementsAttributeSame("#btn-call", "#btn-call-sticky", "href")
         assertElementsAttributeSame("#btn-offer", "#btn-offer-sticky", "href")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementPresent("#pills-qr-code-tab")
+        assertElementPresent("#pills-qr-code")
     }
 
     @Test
@@ -179,6 +207,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#btn-whatsapp-sticky")
         assertElementNotPresent("#btn-call-sticky")
         assertElementNotPresent("#btn-offer-sticky")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementNotPresent("#pills-qr-code-tab")
+        assertElementNotPresent("#pills-qr-code")
     }
 
     @Test
@@ -217,6 +250,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-whatsapp-sticky")
         assertElementPresent("#btn-call-sticky")
         assertElementNotPresent("#btn-offer-sticky")
+
+        assertElementPresent("#pills-details-tab")
+        assertElementPresent("#pills-details")
+        assertElementNotPresent("#pills-qr-code-tab")
+        assertElementNotPresent("#pills-qr-code")
     }
 
     @Test
@@ -288,10 +326,47 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#btn-share-email")
     }
 
+    @Test
+    fun `qr-code`() {
+        // GIVEN
+        setupListing(status = ListingStatus.ACTIVE)
+
+        // WHEN
+        navigateTo("/listings/${listing.id}?tab=qr-code")
+
+        assertElementPresent("img.qr-code")
+        assertElementAttribute("img.qr-code", "src", listing.qrCodeUrl)
+        assertElementPresent("#btn-download-qr-code")
+        assertElementNotPresent("#btn-generate-qr-code")
+    }
+
+    @Test
+    fun `generate qr-code`() {
+        // GIVEN
+        setupListing(status = ListingStatus.ACTIVE, qrCodeUrl = null)
+
+        // WHEN
+        navigateTo("/listings/${listing.id}?tab=qr-code")
+
+        // THEN
+        assertElementNotPresent("img.qr-code")
+        assertElementNotPresent("#btn-download-qr-code")
+        assertElementPresent("#btn-generate-qr-code")
+
+        click("#btn-generate-qr-code")
+        verify(rest).postForEntity(
+            eq("$sdkBaseUrl/v1/listings/${listing.id}/qr-code"),
+            anyOrNull(),
+            eq(GenerateQrCodeResponse::class.java),
+        )
+        assertCurrentPageIs(PageName.LISTING)
+    }
+
     private fun setupListing(
         status: ListingStatus = ListingStatus.ACTIVE,
         sellerAgentUserId: Long = USER_ID,
         listingType: ListingType = ListingType.RENTAL,
+        qrCodeUrl: String? = listing.qrCodeUrl
     ) {
         doReturn(
             ResponseEntity(
@@ -300,6 +375,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
                         status = status,
                         sellerAgentUserId = sellerAgentUserId,
                         listingType = listingType,
+                        qrCodeUrl = qrCodeUrl
                     )
                 ),
                 HttpStatus.OK,

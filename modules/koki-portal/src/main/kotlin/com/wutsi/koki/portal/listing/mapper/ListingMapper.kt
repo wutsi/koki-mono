@@ -205,6 +205,7 @@ class ListingMapper(
             morcelable = entity.morcelable,
 
             transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
+            qrCodeUrl = entity.qrCodeUrl,
         )
     }
 
@@ -402,7 +403,7 @@ class ListingMapper(
 
     private fun toPublicUrl(publicUrl: String?): String? {
         return publicUrl?.let { url ->
-            currentTenant.get()?.let { tenant -> tenant.clientPortalUrl + url }
+            currentTenant.get().clientPortalUrl + url
         }
     }
 
