@@ -468,9 +468,14 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary" id="btn-send-message" target="_blank"
-               th:href="'/whatsapp/listings/' + ${listing.id}"
-               th:if="${listing.statusActive}"
+            <a class="btn btn-primary" data-component-id="track" data-event="MESSAGE"
+               data-product-id="${listing.id}"
+               data-product-type="LISTING"
+               id="btn-send-message"
+               target="_blank"
+               th:data-recipient-id="${listing.sellerAgentUser?.id}"
+               th:href="${messageUrl}"
+               th:if="${listing.statusActive} AND ${messageUrl}"
             >
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.send_message}"> Send Message</span>

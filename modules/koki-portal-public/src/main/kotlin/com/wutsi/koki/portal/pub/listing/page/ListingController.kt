@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
+import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.CategoryType
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
@@ -26,6 +27,7 @@ class ListingController(
     private val service: ListingService,
     private val categoryService: CategoryService,
     private val placeService: PlaceService,
+    private val whatsapp: WhatsappService,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
@@ -90,6 +92,9 @@ class ListingController(
         if (listing.address?.neighbourhood?.id != null) {
             loadPlaces(listing.address.neighbourhood.id, model)
         }
+
+        /* Message URL */
+        model.addAttribute("messageUrl", whatsapp.toListingUrl(listing))
 
         /* Page */
         val titleAndPrice = listOf(listing.title, listing.price?.displayText).joinToString(" - ")

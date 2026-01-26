@@ -1,6 +1,6 @@
 class KokiTrackWidget {
     init() {
-        const elts = document.querySelectorAll('[koki-track]');
+        const elts = document.querySelectorAll('[data-component-id=track]');
         console.log(elts.length + ' element(s) tracked');
 
         elts.forEach((elt) => {
@@ -13,7 +13,7 @@ class KokiTrackWidget {
         elt.addEventListener('click', kokiTracking.on_click);
     }
 
-    track(event, productId, productType, component, value, rank) {
+    track(event, productId, productType, recipientId, component, value, rank) {
         console.log('track()', event, productId, value, component, rank);
 
         const data = {
@@ -29,6 +29,7 @@ class KokiTrackWidget {
             url: window.location.href,
             referrer: document.referrer,
             rank: rank,
+            recipientId: recipientId,
         };
 
         // Track
@@ -53,11 +54,14 @@ class KokiTrackWidget {
             elt = elt.parentElement;
         }
         if (elt != null) {
-            const productId = elt.getAttribute("koki-track-product-id");
-            const component = elt.getAttribute("koki-track-component");
-            const value = elt.getAttribute("koki-track-value");
-            const rank = elt.getAttribute("koki-track-rank");
-            kokiTracking.track('CLICK', productId, component, value, rank)
+            const event = elt.getAttribute("data-event");
+            const productId = elt.getAttribute("data-product-id");
+            const productType = elt.getAttribute("data-product-type");
+            const component = elt.getAttribute("data-component");
+            const value = elt.getAttribute("data-value");
+            const rank = elt.getAttribute("data-rank");
+            const recipientId = elt.getAttribute("data-recipient-id");
+            kokiTracking.track(event, productId, productType, recipientId, component, value, rank)
         }
     }
 }

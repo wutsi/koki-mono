@@ -143,6 +143,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertNotNull(event.firstValue.track.url)
         assertEquals(null, event.firstValue.track.rank)
         assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
+        assertEquals(ObjectType.LISTING, event.firstValue.track.productType)
     }
 
     @Test

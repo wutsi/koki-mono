@@ -16,4 +16,5 @@ data class TrackForm(
     val component: String? = null,
     val rank: Int? = null,
     val productType: ObjectType = ObjectType.UNKNOWN,
+    val recipientId: String? = null,
 )
