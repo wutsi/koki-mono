@@ -105,7 +105,7 @@ class TrackRepositoryTest {
         assertEquals(11, tracks[0].rank)
         assertEquals("map", tracks[0].component)
         assertEquals(ObjectType.LISTING, tracks[0].productType)
-        assertEquals(7777L, tracks[0].recipientId)
+        assertEquals("7777", tracks[0].recipientId)
     }
 
     @Test
@@ -187,8 +187,8 @@ class TrackRepositoryTest {
     fun `read - empty device_type`() {
         // GIVEN
         val csv = """
-                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type
-                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING
+                time,correlation_id,tenant_id,device_id,account_id,product_id,page,event,value,ip,long,lat,bot,device_type,channel_type,source,campaign,url,referrer,ua,country,rank,component,product_type,recipient_id
+                3333,123,1,sample-device,333,1234,SR,VIEW,yo,1.1.2.3,111.0,222.0,false,,WEB,facebook,12434554,https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email,https://www.google.ca,Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0),CM,11,map,LISTING,
         """.trimIndent()
 
         // WHEN
@@ -253,6 +253,6 @@ class TrackRepositoryTest {
         rank = 11,
         component = "map",
         productType = ObjectType.LISTING,
-        recipientId = 777,
+        recipientId = "777",
     )
 }
