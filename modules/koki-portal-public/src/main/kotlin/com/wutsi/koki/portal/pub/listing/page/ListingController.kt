@@ -96,7 +96,7 @@ class ListingController(
         }
 
         /* Message URL */
-        model.addAttribute("messageUrl", whatsapp.toListingUrl(listing, request.requestURL.toString()))
+        model.addAttribute("messageUrl", whatsapp.toListingUrl(listing))
 
         /* Page */
         val titleAndPrice = listOf(listing.title, listing.price?.displayText).joinToString(" - ")

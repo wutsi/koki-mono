@@ -220,10 +220,6 @@
         <div class="text-larger" th:if="${listing.address}" th:utext="${listing.address.toHtml(false)}">
             ADDRESS
         </div>
-        <div class="text-small margin-top-small">
-            <span th:text="#{page.listing.number}">#</span>:
-            <span th:text="${listing.listingNumber}">00000</span>
-        </div>
         <div class="margin-top-small flex flex-space-between">
             <div>
                 <div th:if="${listing.price} AND ${listing.commission(user)}">
@@ -249,6 +245,9 @@
                     <div class="text-small">m<sup>2</sup></div>
                 </div>
             </div>
+        </div>
+        <div th:if="${listing.publicUrl}">
+            <a target=_blank th:href="${listing.publicUrl}" th:text="#{page.listing.public-url}">PUBLIC_URL</a>
         </div>
     </div>
 </div>

@@ -86,9 +86,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
         assertElementNotPresent("#btn-share")
-        assertElementNotPresent("#btn-open")
         assertElementPresent("#btn-publish")
         assertElementPresent("#btn-status")
 
@@ -115,20 +113,16 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
         assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-publish")
         assertElementPresent("#btn-status")
 
         Thread.sleep(1000)
         assertElementCount(".btn-section-edit", 0)
 
-        assertElementNotPresent("#btn-whatsapp")
-        assertElementNotPresent("#btn-call")
+        assertElementPresent("#btn-whatsapp")
         assertElementPresent("#btn-offer")
-        assertElementNotPresent("#btn-whatsapp-sticky")
-        assertElementNotPresent("#btn-call-sticky")
+        assertElementPresent("#btn-whatsapp-sticky")
         assertElementPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
@@ -144,9 +138,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
-        assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
+        assertElementNotPresent("#btn-share")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
@@ -154,14 +146,11 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementPresent("#btn-call")
         assertElementPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementPresent("#btn-call-sticky")
         assertElementPresent("#btn-offer-sticky")
 
         assertElementsAttributeSame("#btn-whatsapp", "#btn-whatsapp-sticky", "href")
-        assertElementsAttributeSame("#btn-call", "#btn-call-sticky", "href")
         assertElementsAttributeSame("#btn-offer", "#btn-offer-sticky", "href")
 
         assertElementPresent("#pills-details-tab")
@@ -177,9 +166,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
         assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
@@ -201,11 +188,9 @@ class ListingControllerTest : AbstractPageControllerTest() {
         // assertElementPresent("#final-buyer-agent-commission")
         assertElementCount(".btn-section-edit", 0)
 
-        assertElementNotPresent("#btn-whatsapp")
-        assertElementNotPresent("#btn-call")
+        assertElementPresent("#btn-whatsapp")
         assertElementNotPresent("#btn-offer")
-        assertElementNotPresent("#btn-whatsapp-sticky")
-        assertElementNotPresent("#btn-call-sticky")
+        assertElementPresent("#btn-whatsapp-sticky")
         assertElementNotPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
@@ -221,9 +206,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
-        assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
+        assertElementNotPresent("#btn-share")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
@@ -245,10 +228,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementCount(".btn-section-edit", 0)
 
         assertElementPresent("#btn-whatsapp")
-        assertElementPresent("#btn-call")
         assertElementNotPresent("#btn-offer")
         assertElementPresent("#btn-whatsapp-sticky")
-        assertElementPresent("#btn-call-sticky")
         assertElementNotPresent("#btn-offer-sticky")
 
         assertElementPresent("#pills-details-tab")
@@ -264,9 +245,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         navigateTo("/listings/${listing.id}")
         assertCurrentPageIs(PageName.LISTING)
 
-        assertElementPresent("#btn-map")
-        assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
+        assertElementNotPresent("#btn-share")
         assertElementNotPresent("#btn-publish")
         assertElementNotPresent("#btn-status")
 
@@ -281,11 +260,6 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#seller-agent-commission")
         assertElementNotPresent("#listing-seller-section")
 
-        assertElementPresent("#btn-map")
-        assertElementPresent("#btn-share")
-        assertElementPresent("#btn-open")
-        assertElementNotPresent("#btn-publish")
-        assertElementNotPresent("#btn-status")
         assertElementCount(".btn-section-edit", 0)
     }
 
