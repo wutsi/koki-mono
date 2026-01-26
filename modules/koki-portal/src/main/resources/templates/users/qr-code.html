@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="widget agent-summary">
+                <div class="widget-body">
+                    <div th:replace="~{__components/user :: user-summary(${user}, false)}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row padding-bottom-8x">
+        <div class="col-12">
+            <div class="section">
+                <div class="section-body">
+                    <div class="section-item">
+                        <div th:replace="~{__components/user :: user-profile-nav('qr-code')}"></div>
+                    </div>
+                    <div class="section-item text-center" th:if="${qrCodeUrl}">
+                        <img class="qr-code padding border" height="300" th:src="${qrCodeUrl}" width="300"/>
+                        <div class="margin-top">
+                            <a class="btn btn-sm btn-primary" download="" id="btn-download-qr-code"
+                               th:href="${qrCodeUrl}">
+                                <i class="fa-solid fa-download"></i>
+                                <span th:text="#{button.download}">Download</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="section-item text-center" th:if="${generateQrCodeUrl}">
+                        <form method="post" th:action="${generateQrCodeUrl}">
+                            <div class="error" th:text="#{page.profile.qr-code-none}">No QR code</div>
+                            <button class="btn btn-sm btn-light margin-top" id="btn-generate-qr-code" type="submit">
+                                <i class="fa-solid fa-qrcode"></i>
+                                <span th:text="#{button.generate_qr_code}">Download</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -26,6 +26,19 @@ class AgentService(
         return mapper.toAgentModel(agent, user)
     }
 
+    fun getByUserId(
+        userId: Long,
+        fullGraph: Boolean = true
+    ): AgentModel {
+        val agent = koki.getByUser(userId).agent
+        val user = if (fullGraph) {
+            userService.get(agent.userId)
+        } else {
+            UserModel(id = agent.userId)
+        }
+        return mapper.toAgentModel(agent, user)
+    }
+
     fun search(
         ids: List<Long> = emptyList(),
         userIds: List<Long> = emptyList(),
@@ -56,5 +69,9 @@ class AgentService(
                 users = users,
             )
         }
+    }
+
+    fun generateQrCode(agentId: Long): String {
+        return koki.generateQrCode(agentId).qrCodeUrl
     }
 }

@@ -448,4 +448,8 @@ class ListingService(
         )
         return response.metrics.map { metric -> mapper.toListingMetricModel(metric) }
     }
+
+    fun generateQrCode(id: Long): String {
+        return koki.generateQrCode(id).qrCodeUrl
+    }
 }

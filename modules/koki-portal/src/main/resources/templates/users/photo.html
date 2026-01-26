@@ -19,13 +19,14 @@
     </div>
 
     <div class="row padding-bottom-8x">
-        <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+        <div class="col-12">
             <div class="form-body">
                 <div class="section">
                     <div class="section-body">
-                        <div class="section-item text-center">
-                            <h1 class="text-center" th:text="#{page.profile.photo.title}">TITLE</h1>
-                            <div class="text-center" th:utext="#{page.profile.photo.description}">TITLE</div>
+                        <div class="section-item">
+                            <div th:replace="~{__components/user :: user-profile-nav('photo')}"></div>
+
+                            <div class="margin-top" th:utext="#{page.profile.photo.description}">TITLE</div>
                         </div>
                         <div class="section-item text-center">
                             <div>

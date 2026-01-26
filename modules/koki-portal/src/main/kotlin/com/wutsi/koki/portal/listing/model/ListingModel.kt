@@ -99,6 +99,7 @@ data class ListingModel(
     val totalLeads: Int? = null,
     val totalActiveMessages: Int? = null,
     val transactionParty: OfferParty? = null,
+    val qrCodeUrl: String? = null,
 ) {
     val publicRemarksHtml: String?
         get() = publicRemarks?.let { str -> HtmlUtils.toHtml(str) }

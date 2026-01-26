@@ -211,4 +211,21 @@
     </div>
 </div>
 
+<nav class="nav nav-pills nav-fill" th:fragment="user-profile-nav(active)">
+    <a class="nav-link" href="/users/profile"
+       th:aria-current="${active == 'profile'} ? 'page'"
+       th:classappend="${active == 'profile'} ? 'active'"
+       th:text="#{page.profile.nav.profile}">PROFILE</a>
+
+    <a class="nav-link" href="/users/photo"
+       th:aria-current="${active == 'photo'} ? 'page'"
+       th:classappend="${active == 'photo'} ? 'active'"
+       th:text="#{page.profile.nav.photo}">PHOTO</a>
+
+    <a class="nav-link" href="/users/qr-code"
+       th:aria-current="${active == 'qr-code'} ? 'page'"
+       th:classappend="${active == 'qr-code'} ? 'active'"
+       th:text="#{page.profile.nav.qr-code}"
+    >QR_CODE</a>
+</nav>
 </body>

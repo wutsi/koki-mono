@@ -8,6 +8,7 @@ object AgentFixtures {
     val agent = Agent(
         id = 100,
         userId = users[0].id,
+        qrCodeUrl = "https://www.freepnglogos.com/uploads/qr-code-png/qr-code-blackberry-code-variant-technology-icons-32.png"
     )
 
     val agents = listOf(

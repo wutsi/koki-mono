@@ -26,6 +26,7 @@ import com.wutsi.koki.account.dto.GetAccountResponse
 import com.wutsi.koki.account.dto.GetAttributeResponse
 import com.wutsi.koki.account.dto.SearchAccountResponse
 import com.wutsi.koki.account.dto.SearchAttributeResponse
+import com.wutsi.koki.agent.dto.GenerateQrCodeResponse
 import com.wutsi.koki.agent.dto.GetAgentResponse
 import com.wutsi.koki.agent.dto.SearchAgentResponse
 import com.wutsi.koki.contact.dto.CreateContactRequest
@@ -699,6 +700,21 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 eq(GetAgentResponse::class.java)
             )
+
+        doReturn(
+            ResponseEntity(
+                GenerateQrCodeResponse(
+                    agentId = -1,
+                    qrCodeUrl = "https://www.freepnglogos.com/uploads/qr-code-png/qr-code-blackberry-code-variant-technology-icons-32.png"
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                anyOrNull(),
+                eq(GenerateQrCodeResponse::class.java)
+            )
     }
 
     private fun setupContactModule() {
@@ -783,6 +799,21 @@ abstract class AbstractPageControllerTest {
                 any<String>(),
                 any(),
                 eq(CreateListingResponse::class.java)
+            )
+
+        doReturn(
+            ResponseEntity(
+                com.wutsi.koki.listing.dto.GenerateQrCodeResponse(
+                    listingId = -1,
+                    qrCodeUrl = "https://www.freepnglogos.com/uploads/qr-code-png/qr-code-blackberry-code-variant-technology-icons-32.png"
+                ),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .postForEntity(
+                any<String>(),
+                anyOrNull(),
+                eq(com.wutsi.koki.listing.dto.GenerateQrCodeResponse::class.java)
             )
     }
 
