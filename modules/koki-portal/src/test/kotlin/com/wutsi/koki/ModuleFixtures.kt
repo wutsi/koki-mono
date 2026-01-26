@@ -37,16 +37,6 @@ object ModuleFixtures {
             jsUrl = "/js/emails.js",
         ),
         Module(
-            id = 140L,
-            name = "note",
-            title = "Notes",
-            homeUrl = null,
-            tabUrl = "/notes/tab",
-            settingsUrl = "/settings/notes",
-            objectType = ObjectType.NOTE,
-            jsUrl = "/js/notes.js",
-        ),
-        Module(
             id = 150L,
             name = "file",
             title = "Files",
@@ -155,10 +145,6 @@ object ModuleFixtures {
         Permission(id = 1104, moduleId = 110, name = "contact:full_access", description = "Full access to contacts"),
 
         Permission(id = 1300, moduleId = 130, name = "email:admin", description = "Configure emails"),
-
-        Permission(id = 1401, moduleId = 140, name = "note", description = "Access notes"),
-        Permission(id = 1402, moduleId = 140, name = "note:manage", description = "Manage notes"),
-        Permission(id = 1403, moduleId = 140, name = "note:delete", description = "Delete notes"),
 
         Permission(id = 1501, moduleId = 150, name = "file", description = "Access files"),
         Permission(id = 1502, moduleId = 150, name = "file:admin", description = "Configure files"),

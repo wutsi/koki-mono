@@ -17,7 +17,6 @@ import com.wutsi.koki.sdk.KokiLeadMessages
 import com.wutsi.koki.sdk.KokiLeads
 import com.wutsi.koki.sdk.KokiListings
 import com.wutsi.koki.sdk.KokiModules
-import com.wutsi.koki.sdk.KokiNotes
 import com.wutsi.koki.sdk.KokiOfferVersion
 import com.wutsi.koki.sdk.KokiOffers
 import com.wutsi.koki.sdk.KokiRefData
@@ -113,11 +112,6 @@ class KokiSDKConfiguration(
     @Bean
     fun kokiModules(): KokiModules {
         return KokiModules(urlBuilder(), restWithoutTenantHeader())
-    }
-
-    @Bean
-    fun kokiNotes(): KokiNotes {
-        return KokiNotes(urlBuilder(), rest())
     }
 
     @Bean
