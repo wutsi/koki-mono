@@ -1,12 +1,9 @@
 package com.wutsi.koki.portal.listing.page
 
-import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.offer.dto.OfferStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.listing.page.AbstractListingController.Companion.loadPriceTrendMetrics
-import com.wutsi.koki.portal.offer.service.OfferService
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequiresPermission(["listing", "listing:full_access"])
 class ListingController(
     private val categoryService: CategoryService,
-    private val offerService: OfferService,
     private val websiteService: WebpageService,
     private val whatsapp: WhatsappService,
 ) : AbstractListingDetailsController() {
@@ -40,9 +36,6 @@ class ListingController(
     fun show(@PathVariable id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-
-        // Offers
-        loadOfferCount(listing, model)
 
         // Webpage info
         loadWebpage(listing, model)
@@ -97,23 +90,6 @@ class ListingController(
             model.addAttribute("webpage", webpage)
         } catch (e: Exception) {
             LOGGER.warn("Unable to load webpage for listing=${listing.id}", e)
-        }
-    }
-
-    private fun loadOfferCount(listing: ListingModel, model: Model) {
-        if (!listing.statusActive || !getToggles().modules.offer) {
-            return
-        }
-
-        val offers = offerService.search(
-            ownerId = listing.id,
-            ownerType = ObjectType.LISTING,
-            statuses = listOf(OfferStatus.SUBMITTED),
-            limit = 10,
-            fullGraph = false,
-        )
-        if (offers.isNotEmpty()) {
-            model.addAttribute("totalActiveOffers", offers.size)
         }
     }
 

@@ -79,28 +79,6 @@
                 <div class="widget-body">
                     <div
                         th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${messageUrl})}"></div>
-
-                    <div class="flex margin-top-small" th:if="!${listing.statusDraft} AND ${toggles.modules.offer}">
-                        <div>
-                            <img class="user-photo-empty" th:src="${page.assetUrl} + '/image/empty.png'"/>
-                        </div>
-                        <div class="w-100 margin-left-small">
-                            <a class="btn btn-sm btn-light w-100" id="btn-offer"
-                               th:href="'/offers/create?listing-id=' + ${listing.id}"
-                               th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}"
-                               th:text="#{button.make_offer}">
-                                MAKE_OFFER
-                            </a>
-                            <div class="urgency text-small margin-top-small" th:if="${totalActiveOffers > 0}">
-                                <span th:if="${totalActiveOffers == 1}"
-                                      th:text="#{page.listing.show.1-active-offer}">000</span>
-                                <span th:if="${totalActiveOffers > 1} AND ${totalActiveOffers <= 9}"
-                                      th:text="#{page.listing.show.n-active-offers(${totalActiveOffers})}">000</span>
-                                <span th:if="${totalActiveOffers > 9}"
-                                      th:text="#{page.listing.show.n-plus-active-offers(${totalActiveOffers - 1})}">000</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -218,27 +196,15 @@
     </div>
 
     <!-- STICKY BAR -->
-    <div class="d-block d-md-none border sticky-bar-bottom"
-         th:if="${messageUrl} OR (${toggles.modules.offer} AND ${listing.canMakeOffer(user)})">
-        <div class="flex flex-space-between">
-            <div class="w-100 padding-small" th:if="${messageUrl}">
-                <a class="btn btn-whatsapp w-100" data-component-id="modal-button"
-                   id="btn-whatsapp-sticky"
-                   target="_blank"
-                   th:href="${messageUrl}"
-                >
-                    <i class="fa-brands fa-whatsapp"></i>
-                    <span class="text-small" th:text="#{button.whatsapp}">WHATSAPP</span>
-                </a>
-            </div>
-            <div class="w-100 padding-small" th:if="${listing.canMakeOffer(user)} AND ${toggles.modules.offer}">
-                <a class="btn btn-light w-100" id="btn-offer-sticky"
-                   th:href="'/offers/create?listing-id=' + ${listing.id}">
-                    <i class="fa-solid fa-plus"></i>
-                    <span class="text-small" th:text="#{button.offer}">OFFER</span>
-                </a>
-            </div>
-        </div>
+    <div class="d-block d-md-none border sticky-bar-bottom padding" th:if="${messageUrl}">
+        <a class="btn btn-whatsapp w-100" data-component-id="modal-button"
+           id="btn-whatsapp-sticky"
+           target="_blank"
+           th:href="${messageUrl}"
+        >
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="text-small" th:text="#{button.whatsapp}">WHATSAPP</span>
+        </a>
     </div>
 </div>
 

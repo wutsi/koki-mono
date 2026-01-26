@@ -96,7 +96,6 @@ class ListingMapper {
 
             totalImages = entity.totalImages,
             totalFiles = entity.totalFiles,
-            totalOffers = entity.totalOffers,
             totalLeads = entity.totalLeads,
 
             sellerAgentUserId = entity.sellerAgentUserId,

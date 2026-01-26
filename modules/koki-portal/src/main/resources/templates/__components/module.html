@@ -64,10 +64,6 @@
           th:text="${entity.totalImages}"
     >000</span>
     <span class="badge rounded-pill bg-secondary"
-          th:if="${tab.name == 'offer'} AND ${entity.totalOffers} AND ${entity.totalOffers > 0}"
-          th:text="${entity.totalOffers}"
-    >000</span>
-    <span class="badge rounded-pill bg-secondary"
           th:if="${tab.name == 'lead'} AND ${entity.totalLeads} AND ${entity.totalLeads > 0}"
           th:text="${entity.totalLeads}"
     >000</span>

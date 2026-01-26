@@ -8,5 +8,3 @@ koki:
             file: true
             lead: true
             listing: true
-            message: true
-            offer: true

@@ -144,9 +144,6 @@
     <td class="d-none d-md-table-cell">
         <a th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
-            <!--
-                <div th:replace="~{__components/offer :: offer-party-badge(${listing.transactionParty})}"></div>
-            -->
         </a>
     </td>
     <td class="d-none d-md-table-cell" th:if="${showAgent}">

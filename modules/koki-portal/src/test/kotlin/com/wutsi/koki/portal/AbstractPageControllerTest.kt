@@ -14,7 +14,6 @@ import com.wutsi.koki.InvitationFixtures
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.ListingFixtures.aiListing
 import com.wutsi.koki.ModuleFixtures
-import com.wutsi.koki.OfferFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.TenantFixtures
@@ -49,14 +48,6 @@ import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
-import com.wutsi.koki.offer.dto.CreateOfferRequest
-import com.wutsi.koki.offer.dto.CreateOfferResponse
-import com.wutsi.koki.offer.dto.CreateOfferVersionRequest
-import com.wutsi.koki.offer.dto.CreateOfferVersionResponse
-import com.wutsi.koki.offer.dto.GetOfferResponse
-import com.wutsi.koki.offer.dto.GetOfferVersionResponse
-import com.wutsi.koki.offer.dto.SearchOfferResponse
-import com.wutsi.koki.offer.dto.SearchOfferVersionResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.portal.WebscrapingFixtures.webpage
 import com.wutsi.koki.portal.WebscrapingFixtures.webpages
@@ -229,7 +220,6 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupListingModule()
         setupLeadModule()
-        setupOfferModule()
         setupWebscapingModule()
 
         setupAccountModule()
@@ -832,78 +822,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(SearchLeadMessageResponse::class.java)
-            )
-    }
-
-    private fun setupOfferModule() {
-        // Offer
-        doReturn(
-            ResponseEntity(
-                SearchOfferResponse(offers = OfferFixtures.offers),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchOfferResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetOfferResponse(OfferFixtures.offer),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetOfferResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateOfferResponse(1111),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateOfferRequest>(),
-                eq(CreateOfferResponse::class.java)
-            )
-
-        // OfferVersion
-        doReturn(
-            ResponseEntity(
-                SearchOfferVersionResponse(offerVersions = OfferFixtures.offerVersions),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchOfferVersionResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetOfferVersionResponse(OfferFixtures.offerVersion),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetOfferVersionResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateOfferVersionResponse(2222),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateOfferVersionRequest>(),
-                eq(CreateOfferVersionResponse::class.java)
             )
     }
 
