@@ -30,7 +30,6 @@ class QrCodeGenerator {
         val builder = QRCode.ofSquares()
             .withBackgroundColor(Colors.TRANSPARENT)
             .withShape(QRCodeShapesEnum.ROUNDED_SQUARE)
-            .withInformationDensity(6)
             .withErrorCorrectionLevel(ErrorCorrectionLevel.VERY_HIGH)
             .withMargin(MARGIN)
 

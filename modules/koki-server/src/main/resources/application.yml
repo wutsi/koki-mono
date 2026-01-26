@@ -102,10 +102,6 @@ springdoc:
             display-name: Note API
             paths-to-match: /v1/notes, /v1/notes/*
 
-        -   group: offer
-            display-name: Offer API
-            paths-to-match: /v1/offers, /v1/offers/**, /v1/offer-versions, /v1/offer-versions/**
-
         -   group: place
             display-name: Place API
             paths-to-match: /v1/places, /v1/places/**
@@ -236,10 +232,6 @@ koki:
                 queue: koki-listing-queue
                 dlq: koki-listing-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
-
-        offer:
-            cron:
-                expire: "0 0 1 * * *"     # Every day at 1AM
 
         place:
             mq:

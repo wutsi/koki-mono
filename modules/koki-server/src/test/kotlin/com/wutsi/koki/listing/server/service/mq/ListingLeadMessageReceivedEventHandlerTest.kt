@@ -38,7 +38,6 @@ class ListingLeadMessageReceivedEventHandlerTest {
     private val listing = ListingEntity(
         id = 333L,
         tenantId = tenantId,
-        totalOffers = null,
         status = ListingStatus.ACTIVE,
         sellerAgentUserId = 11L,
         sellerAgentCommission = 5.0,
