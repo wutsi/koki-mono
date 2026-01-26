@@ -470,7 +470,7 @@
 
             <a class="btn btn-primary" id="btn-send-message" target="_blank"
                th:href="'/whatsapp/listings/' + ${listing.id}"
-               th:if="${listing.statusActive} AND ${listing.sellerAgentUser?.whatsappUrl}"
+               th:if="${listing.statusActive}"
             >
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.send_message}"> Send Message</span>

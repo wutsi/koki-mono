@@ -215,8 +215,7 @@
             </div>
 
             <a class="btn btn-primary" id="btn-send-message" target="_blank"
-               th:href="'/whatsapp/neighbourhoods/' + ${neighbourhood.id} + '?agent-id='+ ${topAgent.id}"
-               th:if="${agent.user.whatsappUrl}">
+               th:href="'/whatsapp/neighbourhoods/' + ${neighbourhood.id} + '?agent-id='+ ${topAgent.id}">
                 <i class="fa-brands fa-whatsapp"></i>
                 <span th:text="#{button.send_message}"> Send Message</span>
             </a>
