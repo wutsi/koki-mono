@@ -14,7 +14,6 @@ import com.wutsi.koki.InvitationFixtures
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.ListingFixtures.aiListing
 import com.wutsi.koki.ModuleFixtures
-import com.wutsi.koki.NoteFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
 import com.wutsi.koki.TenantFixtures
@@ -49,10 +48,6 @@ import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
-import com.wutsi.koki.note.dto.CreateNoteRequest
-import com.wutsi.koki.note.dto.CreateNoteResponse
-import com.wutsi.koki.note.dto.GetNoteResponse
-import com.wutsi.koki.note.dto.SearchNoteResponse
 import com.wutsi.koki.platform.security.AccessTokenHolder
 import com.wutsi.koki.portal.WebscrapingFixtures.webpage
 import com.wutsi.koki.portal.WebscrapingFixtures.webpages
@@ -221,7 +216,6 @@ abstract class AbstractPageControllerTest {
         setupInvitationModule()
         setupFileModule()
         setupFileUploads()
-        setupNoteModule()
         setupAgentModule()
         setupContactModule()
         setupListingModule()
@@ -521,42 +515,6 @@ abstract class AbstractPageControllerTest {
             .getForEntity(
                 any<String>(),
                 eq(GetFileResponse::class.java)
-            )
-    }
-
-    private fun setupNoteModule() {
-        doReturn(
-            ResponseEntity(
-                SearchNoteResponse(NoteFixtures.notes),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(SearchNoteResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                GetNoteResponse(NoteFixtures.note),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .getForEntity(
-                any<String>(),
-                eq(GetNoteResponse::class.java)
-            )
-
-        doReturn(
-            ResponseEntity(
-                CreateNoteResponse(NoteFixtures.NEW_NOTE_ID),
-                HttpStatus.OK,
-            )
-        ).whenever(rest)
-            .postForEntity(
-                any<String>(),
-                any<CreateNoteRequest>(),
-                eq(CreateNoteResponse::class.java)
             )
     }
 

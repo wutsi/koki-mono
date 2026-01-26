@@ -2,11 +2,7 @@
   "tabs": {
     "main": [
       "contact",
-      "room",
-      "file",
-      "tax",
-      "invoice",
-      "note"
+      "file"
     ]
   }
 }
