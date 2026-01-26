@@ -68,10 +68,8 @@ koki:
             contact: false
             image: true
             file: false
-            lead: true
+            lead: false
             listing: true
-            message: true
-            offer: false
 
 wutsi:
     platform:

@@ -86,7 +86,6 @@ data class ListingModel(
     var closedAtMoment: String? = null,
 
     val totalImages: Int? = null,
-    val totalOffers: Int? = null,
     val totalFiles: Int? = null,
     val totalActiveMessages: Int? = null,
 
