@@ -26,16 +26,12 @@ class ListingMQConsumerTest {
     private val fileUploadedEventHandler = mock<ListingFileUploadedEventHandler>()
     private val fileDeletedEventHandler = mock<ListingFileDeletedEventHandler>()
     private val listingStatusChangedEventHandler = mock<ListingStatusChangedEventHandler>()
-    private val offerSubmittedEventHandler = mock<ListingOfferSubmittedEventHandler>()
-    private val offerStatusChangedEventHandler = mock<ListingOfferStatusChangedEventHandler>()
     private val leadMessageReceivedEventHandler = mock<ListingLeadMessageReceivedEventHandler>()
     private val logger = DefaultKVLogger()
     private val consumer = ListingMQConsumer(
         fileUploadedEventHandler = fileUploadedEventHandler,
         fileDeletedEventHandler = fileDeletedEventHandler,
         listingStatusChangedEventHandler = listingStatusChangedEventHandler,
-        offerSubmittedEventHandler = offerSubmittedEventHandler,
-        offerStatusChangedEventHandler = offerStatusChangedEventHandler,
         leadMessageReceivedEventHandler = leadMessageReceivedEventHandler,
         logger = logger,
     )
@@ -45,8 +41,6 @@ class ListingMQConsumerTest {
         doReturn(true).whenever(fileUploadedEventHandler).handle(any())
         doReturn(true).whenever(fileDeletedEventHandler).handle(any())
         doReturn(true).whenever(listingStatusChangedEventHandler).handle(any())
-        doReturn(true).whenever(offerSubmittedEventHandler).handle(any())
-        doReturn(true).whenever(offerStatusChangedEventHandler).handle(any())
         doReturn(true).whenever(leadMessageReceivedEventHandler).handle(any())
     }
 
@@ -64,8 +58,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler).handle(event)
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
@@ -91,8 +83,6 @@ class ListingMQConsumerTest {
         verify(fileDeletedEventHandler).handle(event)
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
@@ -105,8 +95,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler).handle(event)
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
@@ -119,8 +107,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler).handle(event)
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
@@ -133,8 +119,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler).handle(event)
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 
@@ -147,8 +131,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler).handle(event)
     }
 
@@ -160,8 +142,6 @@ class ListingMQConsumerTest {
         verify(fileUploadedEventHandler, never()).handle(any())
         verify(fileDeletedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
-        verify(offerSubmittedEventHandler, never()).handle(any())
-        verify(offerStatusChangedEventHandler, never()).handle(any())
         verify(leadMessageReceivedEventHandler, never()).handle(any())
     }
 }
