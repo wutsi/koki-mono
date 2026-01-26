@@ -5,12 +5,10 @@ import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingMetricSummary
-import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
-import com.wutsi.koki.offer.dto.OfferParty
 import com.wutsi.koki.platform.util.Moment
 import com.wutsi.koki.portal.agent.model.AgentModel
 import com.wutsi.koki.portal.common.mapper.MoneyMapper
@@ -33,7 +31,6 @@ import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
-import java.net.URLEncoder
 import java.util.Locale
 
 @Service
@@ -170,24 +167,9 @@ class ListingMapper(
             },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
-            totalOffers = entity.totalOffers,
             totalLeads = entity.totalLeads,
 
-            sellerAgentUser = entity.sellerAgentUserId
-                ?.let { id ->
-                    users[id]?.copy(
-                        whatsappUrl = whatsappUrl(
-                            listingNumber = entity.listingNumber.toString(),
-                            propertyType = entity.propertyType,
-                            address = address,
-                            bathrooms = entity.bathrooms,
-                            bedrooms = entity.bedrooms,
-                            area = entity.propertyArea ?: entity.lotArea,
-                            mobile = users[id]?.mobile,
-                        ),
-                        agentId = toAgentId(id, agents)
-                    )
-                },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             createdBy = entity.createdById?.let { id -> users[id] },
             createdAt = entity.createdAt,
             modifiedAt = entity.modifiedAt,
@@ -204,7 +186,6 @@ class ListingMapper(
             subdivided = entity.subdivided,
             morcelable = entity.morcelable,
 
-            transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
             qrCodeUrl = entity.qrCodeUrl,
         )
     }
@@ -247,20 +228,7 @@ class ListingMapper(
                 )
             },
             buyerAgentCommissionMoney = entity.buyerAgentCommissionMoney?.let { money -> moneyMapper.toMoneyModel(money) },
-            sellerAgentUser = entity.sellerAgentUserId?.let { id ->
-                users[id]?.copy(
-                    whatsappUrl = whatsappUrl(
-                        listingNumber = entity.listingNumber.toString(),
-                        propertyType = entity.propertyType,
-                        address = address,
-                        bathrooms = entity.bathrooms,
-                        bedrooms = entity.bedrooms,
-                        area = entity.propertyArea ?: entity.lotArea,
-                        mobile = users[id]?.mobile,
-                    )
-
-                )
-            },
+            sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id] },
             soldAt = entity.transactionDate,
             soldAtText = entity.transactionDate?.let { date -> df.format(date) },
             salePrice = toPrice(entity.transactionPrice, entity.listingType),
@@ -290,7 +258,6 @@ class ListingMapper(
             } else {
                 toPublicUrl(entity.publicUrl)
             },
-            transactionParty = toTransactionParty(entity.status, entity.sellerAgentUserId, entity.buyerAgentUserId),
         )
     }
 
@@ -355,36 +322,6 @@ class ListingMapper(
         }
     }
 
-    private fun whatsappUrl(
-        listingNumber: String,
-        propertyType: PropertyType?,
-        address: AddressModel?,
-        bedrooms: Int?,
-        bathrooms: Int?,
-        area: Int?,
-        mobile: String?,
-    ): String? {
-        if (mobile.isNullOrEmpty()) {
-            return null
-        }
-
-        val locale = LocaleContextHolder.getLocale()
-        val details = listOfNotNull(
-            messages.getMessage("property-type.$propertyType", arrayOf(), locale),
-            messages.getMessage("page.whatsapp.$propertyType", arrayOf(), locale),
-
-            address?.toText(includeCountry = false)?.ifEmpty { null },
-
-            listOfNotNull(
-                bedrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bedrooms-abbreviation") },
-                bathrooms?.let { rooms -> rooms.toString() + getMessage("page.listing.bathrooms-abbreviation") },
-                area?.let { area -> area.toString() + "m2" }
-            ).joinToString(separator = " ").ifEmpty { null }
-        ).joinToString(separator = " - ")
-        val text = getMessage("page.listing.whatsapp.body", arrayOf(listingNumber, details))
-        return "https://wa.me/" + mobile.substring(1) + "?text=" + URLEncoder.encode(text, "utf-8")
-    }
-
     private fun getMessage(key: String, args: Array<Any> = arrayOf()): String {
         val locale = LocaleContextHolder.getLocale()
         return messages.getMessage(key, args, locale)
@@ -404,23 +341,6 @@ class ListingMapper(
     private fun toPublicUrl(publicUrl: String?): String? {
         return publicUrl?.let { url ->
             currentTenant.get().clientPortalUrl + url
-        }
-    }
-
-    private fun toTransactionParty(
-        status: ListingStatus,
-        sellerAgentUserId: Long?,
-        buyerContactId: Long?
-    ): OfferParty? {
-        val user = currentUser.get() ?: return null
-        return if (status != ListingStatus.SOLD && status != ListingStatus.RENTED) {
-            null
-        } else if (user.id == sellerAgentUserId) {
-            OfferParty.SELLER
-        } else if (user.id == buyerContactId) {
-            OfferParty.BUYER
-        } else {
-            null
         }
     }
 

@@ -1,9 +1,7 @@
-package com.wutsi.koki.portal.pub.whatsapp.service
+package com.wutsi.koki.portal.whatsapp.service
 
-import com.wutsi.koki.portal.pub.agent.model.AgentModel
-import com.wutsi.koki.portal.pub.listing.model.ListingModel
-import com.wutsi.koki.portal.pub.refdata.model.LocationModel
-import com.wutsi.koki.portal.pub.user.model.UserModel
+import com.wutsi.koki.portal.listing.model.ListingModel
+import com.wutsi.koki.portal.user.model.UserModel
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
@@ -15,7 +13,7 @@ class WhatsappService(
     private val messages: MessageSource
 ) {
     fun toListingUrl(listing: ListingModel): String? {
-        /* Format: Villa a louer - 2 chambres, 1 salle de bain, 500m2 - 300000 XAF - https://koki.com/listings/12345 */
+        /* Format: Villa a louer - 2 chambres, 1 salle de bain, 500m2 - 300000 XAF */
         val details = listOfNotNull(
             listOf(
                 getMessage("property-type.${listing.propertyType}"),
@@ -31,28 +29,13 @@ class WhatsappService(
             ).joinToString(separator = ", ").ifEmpty { null },
 
             listing.price?.displayText,
-
-            listing.publicUrl,
         ).joinToString(separator = " - ")
 
         val text = getMessage(
             "page.listing.whatsapp.text",
-            arrayOf(listing.sellerAgentUser?.firstName ?: "", details, listing.publicUrl ?: "")
+            arrayOf(listing.sellerAgentUser?.firstName ?: "", details)
         )
         return toUrl(listing.sellerAgentUser, text)
-    }
-
-    fun toAgentUrl(agent: AgentModel): String? {
-        val text = getMessage("page.agent.whatsapp.text", arrayOf(agent.user.firstName))
-        return toUrl(agent.user, text)
-    }
-
-    fun toNeighbourhoodUrl(neighbourhood: LocationModel, agent: AgentModel): String? {
-        val text = getMessage(
-            "page.neighbourhood.whatsapp.text",
-            arrayOf(agent.user.firstName, neighbourhood.name)
-        )
-        return toUrl(agent.user, text)
     }
 
     private fun toUrl(recipient: UserModel?, text: String): String? {

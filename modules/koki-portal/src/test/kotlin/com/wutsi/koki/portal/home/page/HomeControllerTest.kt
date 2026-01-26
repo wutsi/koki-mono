@@ -15,7 +15,6 @@ class HomeControllerTest : AbstractPageControllerTest() {
 
         Thread.sleep(1000)
         assertElementPresent("#widget-leads-new")
-        assertElementPresent("#widget-offers-active")
         assertElementPresent("#widget-listings-recent")
     }
 

@@ -41,6 +41,9 @@ data class UserModel(
     val profileStrength: ProfileStrengthModel? = null,
     val street: String? = null,
 ) {
+    val firstName: String
+        get() = displayName?.split(" ")?.firstOrNull() ?: ""
+
     fun hasRole(roleId: Long): Boolean {
         return roles.find { role -> role.id == roleId } != null
     }
@@ -83,6 +86,9 @@ data class UserModel(
 
     val mobileUrl: String?
         get() = mobile?.let { "tel:" + mobile }
+
+    val emailUrl: String?
+        get() = email?.let { "mailto:" + email }
 
     val biographyHtml: String?
         get() = biography?.let { bio -> HtmlUtils.toHtml(bio) }

@@ -140,7 +140,6 @@ class ListingMapper(
             },
             totalFiles = entity.totalFiles,
             totalImages = entity.totalImages,
-            totalOffers = entity.totalOffers,
 
             sellerAgentUser = entity.sellerAgentUserId?.let { id -> users[id]?.copy(agentId = toAgentId(id, agents)) },
             createdAt = entity.createdAt,
