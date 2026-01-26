@@ -56,7 +56,7 @@ class ListingService(
         val userIds = listOfNotNull(listing.createdById, listing.sellerAgentUserId, listing.buyerAgentUserId)
             .distinct()
         val users = if (!fullGraph || userIds.isEmpty()) {
-            emptyMap<Long, UserModel>()
+            userIds.map { id -> UserModel(id = id) }.associateBy { user -> user.id }
         } else {
             userService.search(
                 ids = userIds, limit = userIds.size
