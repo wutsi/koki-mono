@@ -22,4 +22,5 @@ data class Track(
     val channelType: ChannelType = ChannelType.UNKNOWN,
     val rank: Int? = null,
     val productType: ObjectType? = null,
+    val recipientId: Long? = null,
 )
