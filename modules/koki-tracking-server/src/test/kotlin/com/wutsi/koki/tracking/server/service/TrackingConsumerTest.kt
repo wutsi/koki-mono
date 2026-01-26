@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.track.dto.ChannelType
@@ -56,6 +57,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.firstValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.firstValue.deviceType)
         assertEquals(track.rank, entity.firstValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
     }
 
     @Test
@@ -86,6 +89,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.firstValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.firstValue.deviceType)
         assertEquals(track.rank, entity.firstValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
     }
 
     @Test
@@ -116,6 +121,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.firstValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.firstValue.deviceType)
         assertEquals(track.rank, entity.firstValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
 
         assertEquals(track.time, entity.secondValue.time)
         assertEquals(track.ua, entity.secondValue.ua)
@@ -137,6 +144,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.secondValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.secondValue.deviceType)
         assertEquals(track.rank, entity.firstValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
     }
 
     @Test
@@ -167,6 +176,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.firstValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.firstValue.deviceType)
         assertEquals(0, entity.firstValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
 
         assertEquals(track.time, entity.secondValue.time)
         assertEquals(track.ua, entity.secondValue.ua)
@@ -188,6 +199,8 @@ class TrackingConsumerTest {
         assertEquals(null, entity.secondValue.campaign)
         assertEquals(DeviceType.UNKNOWN, entity.secondValue.deviceType)
         assertEquals(1, entity.secondValue.rank)
+        assertEquals(track.productType, entity.firstValue.productType)
+        assertEquals(track.recipientId, entity.firstValue.recipientId)
     }
 
     @Test
@@ -215,5 +228,7 @@ class TrackingConsumerTest {
         url = "https://www.wutsi.com/read/123/this-is-nice?utm_source=email&utm_campaign=test&utm_medium=email",
         channelType = ChannelType.WEB,
         rank = 33,
+        productType = ObjectType.LISTING,
+        recipientId = 777L
     )
 }

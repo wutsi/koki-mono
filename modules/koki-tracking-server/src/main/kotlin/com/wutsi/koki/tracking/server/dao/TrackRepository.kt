@@ -49,7 +49,8 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
             "country",
             "rank",
             "component",
-            "product_type"
+            "product_type",
+            "recipient_id",
         )
     }
 
@@ -66,7 +67,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
         )
         return parser.map {
             TrackEntity(
-                time = toLong(it.get("time")),
+                time = toLong(it.get("time")) ?: -1L,
                 correlationId = it.get("correlation_id"),
                 tenantId = toLong(it.get("tenant_id")),
                 deviceId = it.get("device_id"),
@@ -114,6 +115,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         null
                     }
                 } ?: ObjectType.UNKNOWN,
+                recipientId = toLong(it.get("recipient_id")),
             )
         }
     }
@@ -180,6 +182,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         it.rank,
                         it.component,
                         it.productType,
+                        it.recipientId,
                     )
                 }
                 printer.flush()
@@ -192,18 +195,18 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
         return storageServiceBuilder.default().store("$folder/$filename", input, "text/csv", filesize)
     }
 
-    protected fun toLong(str: String): Long =
+    protected fun toLong(str: String): Long? =
         try {
             str.toLong()
         } catch (ex: Exception) {
-            0L
+            null
         }
 
-    protected fun toInt(str: String): Int =
+    protected fun toInt(str: String): Int? =
         try {
             str.toInt()
         } catch (ex: Exception) {
-            0
+            null
         }
 
     protected fun toDouble(str: String): Double =
