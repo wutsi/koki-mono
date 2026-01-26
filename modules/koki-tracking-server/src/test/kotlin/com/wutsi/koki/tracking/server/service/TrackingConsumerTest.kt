@@ -229,6 +229,6 @@ class TrackingConsumerTest {
         channelType = ChannelType.WEB,
         rank = 33,
         productType = ObjectType.LISTING,
-        recipientId = 777L
+        recipientId = "777",
     )
 }

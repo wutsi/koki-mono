@@ -115,7 +115,7 @@ class TrackRepository(private val storageServiceBuilder: StorageServiceBuilder) 
                         null
                     }
                 } ?: ObjectType.UNKNOWN,
-                recipientId = toLong(it.get("recipient_id")),
+                recipientId = it.get("recipient_id"),
             )
         }
     }
