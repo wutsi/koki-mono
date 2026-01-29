@@ -9,7 +9,6 @@ data class Listing(
     val id: Long = -1,
     val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    @Deprecated("") val listingNumber: Long = -1,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,
