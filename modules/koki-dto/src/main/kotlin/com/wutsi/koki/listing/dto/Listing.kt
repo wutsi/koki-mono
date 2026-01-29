@@ -9,7 +9,6 @@ data class Listing(
     val id: Long = -1,
     val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    @Deprecated("") val listingNumber: Long = -1,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,
@@ -42,6 +41,9 @@ data class Listing(
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: Money? = null,
     val buyerAgentCommissionMoney: Money? = null,
+
+    val units: Int? = null,
+    val revenue: Money? = null,
 
     val securityDeposit: Int? = null,
     val advanceRent: Int? = null,

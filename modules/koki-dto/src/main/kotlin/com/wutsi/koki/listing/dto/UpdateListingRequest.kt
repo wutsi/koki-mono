@@ -22,4 +22,6 @@ data class UpdateListingRequest(
     val availableAt: Date? = null,
     val roadPavement: RoadPavement? = null,
     val distanceFromMainRoad: Int? = null,
+    val units: Int? = null,
+    val revenue: Long? = null,
 )

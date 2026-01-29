@@ -31,10 +31,11 @@ data class CreateListingRequest(
 
     val price: Long? = null,
     val visitFees: Long? = null,
+    val revenue: Long? = null,
     @get:Size(max = 3) val currency: String? = null,
     var sellerAgentCommission: Double? = null,
     var buyerAgentCommission: Double? = null,
-
+    val units: Int? = null,
     val leaseTerm: Int? = null,
     val noticePeriod: Int? = null,
     val advanceRent: Int? = null,
