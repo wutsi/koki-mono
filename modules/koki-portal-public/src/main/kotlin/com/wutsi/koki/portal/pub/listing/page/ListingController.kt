@@ -11,7 +11,6 @@ import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.CategoryType
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -29,7 +28,6 @@ class ListingController(
     private val categoryService: CategoryService,
     private val placeService: PlaceService,
     private val whatsapp: WhatsappService,
-    private val request: HttpServletRequest,
 ) : AbstractPageController() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
