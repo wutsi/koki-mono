@@ -108,7 +108,6 @@ class KokiListings(
 
     fun search(
         ids: List<Long> = emptyList(),
-        listingNumber: Long? = null,
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
@@ -137,7 +136,6 @@ class KokiListings(
             PATH_PREFIX,
             mapOf(
                 "id" to ids,
-                "listing-number" to listingNumber,
                 "location-id" to locationIds,
                 "listing-type" to listingType,
                 "property-type" to propertyTypes,
