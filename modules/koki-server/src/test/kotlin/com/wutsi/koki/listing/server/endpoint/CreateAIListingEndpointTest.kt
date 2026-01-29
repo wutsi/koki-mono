@@ -83,6 +83,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         halfBathrooms = 1,
         bedrooms = 4,
         bathrooms = 3,
+        units = 7,
         fenceType = FenceType.CONCRETE,
         floors = 3,
         year = 1990,
@@ -98,6 +99,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         price = 350000,
         visitFees = 5000,
+        revenue = 1000,
         currency = "XAF",
 
         leaseTerm = 12,
@@ -153,6 +155,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.halfBathrooms, listing.halfBathrooms)
         assertEquals(result.bedrooms, listing.bedrooms)
         assertEquals(result.bathrooms, listing.bathrooms)
+        assertEquals(result.units, listing.units)
         assertEquals(result.fenceType, listing.fenceType)
         assertEquals(result.floors, listing.floors)
         assertEquals(result.year, listing.year)
@@ -165,6 +168,7 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(result.country, listing.country?.uppercase())
         assertEquals(result.price, listing.price)
         assertEquals(result.visitFees, listing.visitFees)
+        assertEquals(result.revenue, listing.revenue)
         assertEquals(result.currency, listing.currency)
         assertEquals(result.leaseTerm, listing.leaseTerm)
         assertEquals(result.securityDeposit, listing.securityDeposit)

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertNotNull
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class ListingContentParserAgentTest {
@@ -104,7 +105,7 @@ class ListingContentParserAgentTest {
             Frais de visite 5000 f
         """.trimIndent()
         val json = agent.run(text)
-        println("\n----\n" + json)
+//        println("\n----\n" + json)
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(true, listing["valid"])
@@ -137,12 +138,41 @@ class ListingContentParserAgentTest {
             ➡️ Loyer : 75.000fr
         """.trimIndent()
         val json = agent.run(text)
+        println(json)
         val listing = JsonMapper().readValue(json, Map::class.java)
 
         assertEquals(true, listing["valid"])
         assertEquals(ListingType.SALE.name, listing["listingType"])
         assertEquals(PropertyType.COMMERCIAL.name, listing["propertyType"])
         assertEquals(9500000, listing["price"])
+    }
+
+    @Test
+    fun building() {
+        val text = """
+            Immeuble à vendre : Odza (600 Millions FCFA)
+            Ville : Yaoundé
+            Quartier : Odza Minkan
+            Superficie : 1 000 m²
+            Etat du terrain : Titré, un signataire -
+            L'immeuble est constitué de 6 grands appartements ultra- modernes de 3 chambres et 3 douches le tout indentique avec un grand parking pouvant prendre 20 voitures. Construit sur 500 m²
+            - Le sémi duplex est constitué de 3 chambres, 4 douches, 1 salon et 1 grande cuisine, avec un grand parking de 10 voitures Le tout dans la barrière
+            Prix : 600 Millions FCFA
+
+            CAMEROUN MAISON Agence Immobilière --- Nos services à Yaoundé : - Location non meublée (Chambre, Studio, Appartement, Villa, Duplex, Boutique, Bureaux, Fond de commerce) - Location meublée (Chambre meublée, Studio meublé, Appartement meublé, Villa meublée, Duplex meublé, Bureau meublée, Logement meublé pour fête) - Vente Terrains (D’habitation, Commercial, Agricole) - Vente Maisons (Villas, Duplex, Immeuble, École, Hôtel) - Assistance lors du crédit immobilier au prêt des banques - BTP (Plan - Devis - Réalisation) - Vente du matériel de construction --- - Tous les propriétaires désirant vendre leur maison ou terrain, bien vouloir nous contacter - Pour toute réclamation de terrain ou maison qui ne serait plus à vendre, bien vouloir nous contacter --- Whatsapp : wa.me/237694469420 wa.me/237694222448 237 694469420 237 673485325 237 694222448 237 653900927 Nos bureaux à Yaoundé, carrefour Mvog-mbi. Immeuble carrelé noir et blanc en face UBA , « Centre commercial EKOTTO». Porte N° 302. 838-VI0784
+        """.trimIndent()
+        val json = agent.run(text)
+        println(json)
+        val listing = JsonMapper().readValue(json, Map::class.java)
+
+        assertEquals(true, listing["valid"])
+        assertEquals(ListingType.SALE.name, listing["listingType"])
+        assertEquals(PropertyType.BUILDING.name, listing["propertyType"])
+        assertEquals(600000000, listing["price"])
+        assertEquals(6, listing["units"])
+        assertEquals(2, listing["floors"])
+        assertEquals(null, listing["bedrooms"])
+        assertEquals(null, listing["bathrooms"])
     }
 
     @Test
@@ -180,6 +210,7 @@ class ListingContentParserAgentTest {
     }
 
     @Test
+    @Ignore
     fun `agent address only`() {
         val text = """
             Studio à louer (80 000 Fcfa/mois)

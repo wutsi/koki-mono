@@ -45,6 +45,8 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         roadPavement = RoadPavement.CONCRETE,
         availableAt = DateUtils.addMonths(Date(), 3),
         distanceFromMainRoad = 150,
+        revenue = 1000,
+        units = 7,
     )
 
     @Test
@@ -76,6 +78,8 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.year, listing.year)
         assertEquals(request.roadPavement, listing.roadPavement)
         assertEquals(request.distanceFromMainRoad, listing.distanceFromMainRoad)
+        assertEquals(request.units, listing.units)
+        assertEquals(request.revenue, listing.revenue)
         assertEquals(df.format(request.availableAt), df.format(listing.availableAt))
         assertEquals(USER_ID, listing.modifiedById)
     }

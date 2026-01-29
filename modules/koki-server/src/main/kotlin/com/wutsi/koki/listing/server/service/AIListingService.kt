@@ -81,6 +81,7 @@ class AIListingService(
                 bathrooms = result.bathrooms,
                 halfBathrooms = result.halfBathrooms,
                 floors = result.floors,
+                units = result.units,
                 basementType = result.basementType,
                 level = result.level,
                 parkingType = result.parkingType,
@@ -95,6 +96,7 @@ class AIListingService(
 
                 price = result.price,
                 visitFees = result.visitFees,
+                revenue = result.revenue,
                 currency = result.currency ?: tenant.currency,
 
                 leaseTerm = result.leaseTerm,

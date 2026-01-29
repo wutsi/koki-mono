@@ -430,6 +430,7 @@ class ListingService(
                 bedrooms = request.bedrooms,
                 bathrooms = request.bathrooms,
                 halfBathrooms = request.halfBathrooms,
+                units = request.units,
                 floors = request.floors,
                 basementType = request.basementType,
                 level = request.level,
@@ -445,6 +446,7 @@ class ListingService(
                 roadPavement = request.roadPavement,
 
                 price = request.price,
+                revenue = request.revenue,
                 visitFees = request.visitFees,
                 currency = request.currency?.uppercase()?.ifEmpty { null },
                 sellerAgentCommission = request.sellerAgentCommission,
@@ -513,10 +515,12 @@ class ListingService(
         listing.bedrooms = request.bedrooms
         listing.bathrooms = request.bathrooms
         listing.halfBathrooms = request.halfBathrooms
+        listing.units = request.units
         listing.floors = request.floors
         listing.basementType = request.basementType
         listing.level = request.level
         listing.unit = request.unit?.uppercase()?.ifEmpty { null }
+        listing.revenue = request.revenue
         listing.parkings = request.parkings
         listing.parkingType = request.parkingType
         listing.fenceType = request.fenceType
@@ -574,6 +578,7 @@ class ListingService(
 
         listing.price = request.price
         listing.visitFees = request.visitFees
+        listing.revenue = request.revenue
         listing.currency = request.currency?.uppercase()?.ifEmpty { null }
         listing.sellerAgentCommission = request.sellerAgentCommission
         listing.buyerAgentCommission = request.buyerAgentCommission

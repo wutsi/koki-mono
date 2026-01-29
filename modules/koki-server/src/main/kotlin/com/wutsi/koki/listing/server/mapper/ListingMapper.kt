@@ -134,6 +134,8 @@ class ListingMapper {
             buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
             buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
+            units = entity.units,
+            revenue = toMoney(entity.revenue, entity.currency),
 
             transactionDate = entity.soldAt,
             transactionPrice = toMoney(entity.salePrice, entity.currency),

@@ -92,6 +92,9 @@ data class ListingEntity(
     var sellerAgentCommissionAmount: Long? = null,
     var buyerAgentCommissionAmount: Long? = null,
 
+    var units: Int? = null,
+    var revenue: Long? = null,
+
     var securityDeposit: Int? = null,
     var advanceRent: Int? = null,
     var leaseTerm: Int? = null,
