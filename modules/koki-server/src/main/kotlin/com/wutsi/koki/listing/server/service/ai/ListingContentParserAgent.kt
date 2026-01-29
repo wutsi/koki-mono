@@ -6,6 +6,7 @@ import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.ai.agent.Agent
@@ -42,6 +43,10 @@ class ListingContentParserAgent(
             .replace(
                 "{{propertyTypes}}",
                 PropertyType.entries.filter { it != PropertyType.UNKNOWN }.joinToString(",") { it.name })
+            .replace(
+                "{{nonResidentialPropertyTypes}}",
+                PropertyType.entries.filter { it != PropertyType.UNKNOWN && it.category != PropertyCategory.RESIDENTIAL }
+                    .joinToString(",") { it.name })
             .replace(
                 "{{parkingTypes}}",
                 ParkingType.entries.filter { it != ParkingType.UNKNOWN }.joinToString(",") { it.name })
@@ -138,4 +143,6 @@ data class ListingContentParserResult(
     val transactionWithNotary: Boolean? = null,
     val subdivided: Boolean? = null,
     val morcelable: Boolean? = null,
+    val revenue: Long? = null,
+    val units: Int? = null,
 )

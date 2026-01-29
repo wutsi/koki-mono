@@ -16,9 +16,15 @@ The listing information must be structured in the following JSON format:
 - reason: If valid is false, reason for invalidity
 - listingType: (REQUIRED) Type of listing. Values can be SALE or RENTAL
 - propertyType: (REQUIRED) Type of property. Values can be {{propertyTypes}}.
-- bedrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bedrooms (integer)
-- bathrooms: (REQUIRED for HOUSE, APARTMENT, STUDIO) Number of bathrooms (integer)
+- bedrooms: Number of bedrooms (integer) - Ignore this field for {{nonResidentialPropertyTypes}}
+- bathrooms: Number of bathrooms (integer) - Ignore this field for {{nonResidentialPropertyTypes}}
+  field
+  commercial properties
 - halfBathrooms: Number of half bathrooms (integer)
+- units: (integer) Number of units in the property
+    - For buildings, this refers to number of apartments or offices in the building
+    - For land, this refers to number of lots available
+    - For offices, this refers to number of office spaces available
 - floors: Number of floors (integer)
 - parkingType: Type of parking available (when property has parking). Values can be {{parkingTypes}}.
 - parkings: Number of parking spaces (integer)
@@ -33,6 +39,7 @@ The listing information must be structured in the following JSON format:
     - For rental properties, accept only monthly prices, reject daily or weekly prices as those are for short term
       rentals.
     - If the price is provided per square meter, multiply it by the lotArea to get the total price
+- revenue: For rental properties, the expected monthly revenue from renting the property (integer)
 - currency: Currency of the price in 3 letter ISO 4217 format (string)
 - visitFees: Fees for visiting the property (integer)
 - securityDeposit: Security deposit amount in months (integer)
@@ -107,7 +114,6 @@ id,name
 - DO NOT include in the JSON any numeric field that was not provided or with zero value.
 - DO NOT imply the property or lot area if not explicitly mentioned.
 - When resolving the address of the property, ignore the address information of the agent.
--
 
 # Ask:
 

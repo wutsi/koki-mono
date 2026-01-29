@@ -20,6 +20,7 @@ class UpdateListingPriceEndpointTest : AuthorizationAwareEndpointTest() {
         val request = UpdateListingPriceRequest(
             price = 150000,
             visitFees = 1000,
+            revenue = 5000,
             currency = "xaf",
             sellerAgentCommission = 6.0,
             buyerAgentCommission = 3.0,
@@ -31,6 +32,7 @@ class UpdateListingPriceEndpointTest : AuthorizationAwareEndpointTest() {
         val listing = dao.findById(id).get()
         assertEquals(request.price, listing.price)
         assertEquals(request.visitFees, listing.visitFees)
+        assertEquals(request.revenue, listing.revenue)
         assertEquals(request.currency?.uppercase(), listing.currency)
         assertEquals(request.sellerAgentCommission, listing.sellerAgentCommission)
         assertEquals(request.buyerAgentCommission, listing.buyerAgentCommission)

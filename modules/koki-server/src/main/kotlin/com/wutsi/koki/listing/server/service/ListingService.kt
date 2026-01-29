@@ -578,6 +578,7 @@ class ListingService(
 
         listing.price = request.price
         listing.visitFees = request.visitFees
+        listing.revenue = request.revenue
         listing.currency = request.currency?.uppercase()?.ifEmpty { null }
         listing.sellerAgentCommission = request.sellerAgentCommission
         listing.buyerAgentCommission = request.buyerAgentCommission
