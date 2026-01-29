@@ -60,7 +60,7 @@ class ListingController(
             "page",
             createPageModel(
                 name = PageName.LISTING,
-                title = getMessage("page.listing.show.meta.title", arrayOf(listing.listingNumber)),
+                title = getMessage("page.listing.show.meta.title", arrayOf(listing.id)),
             )
         )
         return "listings/show"

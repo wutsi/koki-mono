@@ -1,8 +1,8 @@
-INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listing_number, seller_agent_user_fk)
-    VALUES (111, 1, 3, 1, 2, 1000000, null),
-           (222, 1, 3, 1, 2, 2000000, null),
-           (333, 1, 3, 1, 2, 3000000, 3),
-           (555, 1, 3, 1, 2, 30000555, null);
+INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, seller_agent_user_fk)
+    VALUES (111, 1, 3, 1, 2, null),
+           (222, 1, 3, 1, 2, null),
+           (333, 1, 3, 1, 2, 3),
+           (555, 1, 3, 1, 2, null);
 
 INSERT INTO T_LEAD(id, tenant_fk, user_fk, listing_fk, status, agent_user_fk)
     VALUES (100, 1, 1, 111, 1, 1),

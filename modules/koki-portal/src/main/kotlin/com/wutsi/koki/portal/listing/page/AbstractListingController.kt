@@ -67,7 +67,6 @@ abstract class AbstractListingController : AbstractModulePageController() {
         val df = SimpleDateFormat("yyyy-MM-dd")
         return ListingForm(
             id = listing.id,
-            listingNumber = listing.listingNumber.toString(),
             listingType = listing.listingType,
             propertyType = listing.propertyType,
             bedrooms = listing.bedrooms,

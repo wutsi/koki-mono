@@ -62,7 +62,6 @@ class ListingMapper(
         return ListingModel(
             id = entity.id,
             status = entity.status,
-            listingNumber = entity.listingNumber.toString(),
             listingType = entity.listingType,
             propertyType = entity.propertyType,
             bedrooms = entity.bedrooms,
@@ -166,7 +165,6 @@ class ListingMapper(
         return ListingModel(
             id = entity.id,
             status = entity.status,
-            listingNumber = entity.listingNumber.toString(),
             listingType = entity.listingType,
             propertyType = entity.propertyType,
             bedrooms = entity.bedrooms,

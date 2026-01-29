@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service
 @Service
 class TenantProviderImpl(private val currentTenantHolder: CurrentTenantHolder) : TenantProvider {
     override fun id(): Long? {
-        return currentTenantHolder.get()?.id
+        return currentTenantHolder.get().id
     }
 }

@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 import tools.jackson.databind.json.JsonMapper
+import java.util.concurrent.ExecutorService
 
 @Configuration
 class ListingMQConfiguration(
     private val consumer: ListingMQConsumer,
+    executorService: ExecutorService,
     channel: Channel,
     jsonMapper: JsonMapper,
     publisher: Publisher,
@@ -21,7 +23,7 @@ class ListingMQConfiguration(
     @param:Value("\${koki.module.listing.mq.queue}") private val queue: String,
     @param:Value("\${koki.module.listing.mq.dlq}") private val dlq: String,
     @param:Value("\${koki.module.listing.mq.consumer-delay-seconds}") private val consumerDelay: Int,
-) : AbstractRabbitMQConsumerConfiguration(channel, jsonMapper, publisher) {
+) : AbstractRabbitMQConsumerConfiguration(channel, jsonMapper, publisher, executorService) {
     @PostConstruct
     fun init() {
         setupExchange(exchangeName)

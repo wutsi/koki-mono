@@ -32,8 +32,8 @@ class ListingClosedMailet(
     private val logger: KVLogger,
 ) : AbstractListingMailet(locationService, fileService, messages) {
     companion object {
-        const val SUBJECT_SOLD = "Listing #{{listingNumber}}: La propriété est VENDU!"
-        const val SUBJECT_RENTED = "Listing #{{listingNumber}}: La propriété est LOUÉE!"
+        const val SUBJECT_SOLD = "La propriété est VENDUE!"
+        const val SUBJECT_RENTED = "La propriété est LOUÉE!"
     }
 
     override fun service(event: Any): Boolean {
@@ -60,7 +60,7 @@ class ListingClosedMailet(
         val sellerAgent = userService.get(sellerAgentId!!, event.tenantId)
         val data = getData(listing, tenant, buyerAgent, sellerAgent)
         val body = templateResolver.resolve("/listing/email/closed-buyer.html", data)
-        val subject = getSubject(event).replace("{{listingNumber}}", listing.listingNumber.toString())
+        val subject = getSubject(event)
 
         return sender.send(
             recipient = buyerAgent,

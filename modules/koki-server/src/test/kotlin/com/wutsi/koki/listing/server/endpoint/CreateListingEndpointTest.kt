@@ -11,10 +11,7 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.server.dao.ListingRepository
-import com.wutsi.koki.listing.server.dao.ListingSequenceRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
-import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.dao.ConfigurationRepository
 import org.apache.commons.lang3.time.DateUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -29,12 +26,6 @@ import kotlin.test.assertEquals
 class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ListingRepository
-
-    @Autowired
-    private lateinit var sequenceDao: ListingSequenceRepository
-
-    @Autowired
-    private lateinit var configDao: ConfigurationRepository
 
     @Autowired
     private lateinit var statusDao: ListingStatusRepository
@@ -93,14 +84,7 @@ class CreateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, listing.createdById)
         assertEquals(USER_ID, listing.modifiedById)
         assertEquals(TENANT_ID, listing.tenantId)
-        assertEquals(250011L, listing.listingNumber)
         assertEquals(ListingStatus.DRAFT, listing.status)
-
-        val seq = sequenceDao.findByTenantId(1L)
-        assertEquals(11L, seq?.current)
-
-        val config = configDao.findByTenantIdAndNameIn(1L, listOf(ConfigurationName.LISTING_START_NUMBER)).first()
-        assertEquals("250000", config.value)
 
         val statuses = statusDao.findByListing(listing)
         assertEquals(1, statuses.size)

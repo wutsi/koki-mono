@@ -21,18 +21,14 @@ import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import com.wutsi.koki.listing.server.dao.ListingRepository
-import com.wutsi.koki.listing.server.dao.ListingSequenceRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.listing.server.domain.ListingSequenceEntity
 import com.wutsi.koki.listing.server.domain.ListingStatusEntity
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.security.server.service.SecurityService
-import com.wutsi.koki.tenant.dto.ConfigurationName
-import com.wutsi.koki.tenant.server.service.ConfigurationService
 import com.wutsi.koki.tenant.server.service.QrCodeGenerator
 import com.wutsi.koki.tenant.server.service.StorageProvider
 import com.wutsi.koki.tenant.server.service.TenantService
@@ -49,12 +45,10 @@ import java.util.Date
 @Service
 class ListingService(
     private val dao: ListingRepository,
-    private val sequenceDao: ListingSequenceRepository,
     private val statusDao: ListingStatusRepository,
     private val securityService: SecurityService,
     private val amenityService: AmenityService,
     private val locationService: LocationService,
-    private val configurationService: ConfigurationService,
     private val publisherValidator: ListingPublisherValidator,
     private val tenantService: TenantService,
     private val qrCodeGenerator: QrCodeGenerator,
@@ -78,7 +72,6 @@ class ListingService(
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),
-        listingNumber: Long? = null,
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
@@ -108,9 +101,6 @@ class ListingService(
         // WHERE
         if (ids.isNotEmpty()) {
             jql.append(" AND L.id IN :ids")
-        }
-        if (listingNumber != null) {
-            jql.append(" AND L.listingNumber = :listingNumber")
         }
         if (locationIds.isNotEmpty()) {
             jql.append(" AND (L.cityId IN :locationIds OR L.neighbourhoodId IN :locationIds)")
@@ -194,9 +184,6 @@ class ListingService(
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
         }
-        if (listingNumber != null) {
-            query.setParameter("listingNumber", listingNumber)
-        }
         if (locationIds.isNotEmpty()) {
             query.setParameter("locationIds", locationIds)
         }
@@ -266,7 +253,6 @@ class ListingService(
     fun count(
         tenantId: Long,
         ids: List<Long> = emptyList(),
-        listingNumber: Long? = null,
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
@@ -293,9 +279,6 @@ class ListingService(
         // WHERE
         if (ids.isNotEmpty()) {
             jql.append(" AND L.id IN :ids")
-        }
-        if (listingNumber != null) {
-            jql.append(" AND L.listingNumber = :listingNumber")
         }
         if (locationIds.isNotEmpty()) {
             jql.append(" AND (L.cityId IN :locationIds OR L.neighbourhoodId IN :locationIds)")
@@ -366,9 +349,6 @@ class ListingService(
         query.setParameter("tenantId", tenantId)
         if (ids.isNotEmpty()) {
             query.setParameter("ids", ids)
-        }
-        if (listingNumber != null) {
-            query.setParameter("listingNumber", listingNumber)
         }
         if (locationIds.isNotEmpty()) {
             query.setParameter("locationIds", locationIds)
@@ -443,7 +423,6 @@ class ListingService(
         val listing = dao.save(
             ListingEntity(
                 tenantId = tenantId,
-                listingNumber = generateListingNumber(tenantId),
                 status = ListingStatus.DRAFT,
                 listingType = request.listingType,
                 propertyType = request.propertyType,
@@ -791,39 +770,6 @@ class ListingService(
 
     private fun computeCommission(price: Long?, percent: Double?): Long {
         return ((price ?: 0) * (percent ?: 0.0) / 100.0).toLong()
-    }
-
-    private fun generateListingNumber(tenantId: Long): Long {
-        // Generate number
-        var seq = sequenceDao.findByTenantId(tenantId)
-        if (seq == null) {
-            seq = sequenceDao.save(
-                ListingSequenceEntity(
-                    tenantId = tenantId,
-                    current = 1,
-                )
-            )
-        } else {
-            seq.current = seq.current + 1
-            sequenceDao.save(seq)
-        }
-
-        // Start
-        val configs = configurationService.search(
-            tenantId = tenantId,
-            names = listOf(ConfigurationName.LISTING_START_NUMBER)
-        )
-        val start = if (configs.isEmpty()) {
-            0L
-        } else {
-            try {
-                configs[0].value.toLong()
-            } catch (ex: Exception) {
-                LOGGER.warn("Invalid configuration. ${configs[0].name}=${configs[0].value}", ex)
-                0L
-            }
-        }
-        return start + seq.current
     }
 
     private fun throwInvalidStatus(message: String) {

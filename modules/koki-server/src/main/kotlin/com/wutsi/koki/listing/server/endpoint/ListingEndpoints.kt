@@ -156,7 +156,6 @@ class ListingEndpoints(
     fun search(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
-        @RequestParam(required = false, name = "listing-number") listingNumber: Long? = null,
         @RequestParam(required = false, name = "location-id") locationIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "listing-type") listingType: ListingType? = null,
         @RequestParam(required = false, name = "property-type") propertyTypes: List<PropertyType> = emptyList(),
@@ -184,7 +183,6 @@ class ListingEndpoints(
         val listings = service.search(
             tenantId = tenantId,
             ids = ids,
-            listingNumber = listingNumber,
             locationIds = locationIds,
             listingType = listingType,
             propertyTypes = propertyTypes,
@@ -212,7 +210,6 @@ class ListingEndpoints(
         val total = service.count(
             tenantId = tenantId,
             ids = ids,
-            listingNumber = listingNumber,
             locationIds = locationIds,
             listingType = listingType,
             propertyTypes = propertyTypes,

@@ -9,6 +9,7 @@ object ConfigurationName {
     const val EMAIL_DECORATOR = "email.decorator"
 
     // LISTINGS
+    @Deprecated("No longer used")
     const val LISTING_START_NUMBER = "listing.start.number"
 
     // ROLE

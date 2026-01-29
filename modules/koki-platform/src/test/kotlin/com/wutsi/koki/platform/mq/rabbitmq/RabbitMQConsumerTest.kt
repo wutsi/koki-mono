@@ -12,6 +12,7 @@ import com.wutsi.koki.platform.mq.Consumer
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import tools.jackson.databind.json.JsonMapper
+import java.util.concurrent.Executors
 import kotlin.test.Test
 
 class RabbitMQConsumerTest {
@@ -21,7 +22,8 @@ class RabbitMQConsumerTest {
     private val properties = mock<AMQP.BasicProperties>()
     private val jsonMapper: JsonMapper = JsonMapper()
     private val deliveryTag = 111L
-    private val consumer = RabbitMQConsumer(jsonMapper, delegate, channel)
+    private val executorService = Executors.newFixedThreadPool(1)
+    private val consumer = RabbitMQConsumer(jsonMapper, delegate, executorService, channel)
 
     private val payload = TestEvent("foo", 11)
     val json = jsonMapper.writeValueAsString(
@@ -40,6 +42,7 @@ class RabbitMQConsumerTest {
     fun consume() {
         consumer.handleDelivery("foo", envelope, properties, json.toByteArray())
 
+        Thread.sleep(500)
         verify(delegate).consume(payload)
         verify(channel).basicAck(deliveryTag, false)
     }
@@ -50,6 +53,7 @@ class RabbitMQConsumerTest {
 
         consumer.handleDelivery("foo", envelope, properties, json.toByteArray())
 
+        Thread.sleep(500)
         verify(channel).basicReject(deliveryTag, false)
     }
 }

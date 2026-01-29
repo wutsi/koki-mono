@@ -13,7 +13,7 @@ data class ListingSummary(
     val summaryFr: String? = null,
     val heroImageId: Long? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    val listingNumber: Long = -1,
+    @Deprecated("") val listingNumber: Long = -1,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,

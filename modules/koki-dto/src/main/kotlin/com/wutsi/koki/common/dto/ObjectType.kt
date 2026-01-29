@@ -5,6 +5,8 @@ enum class ObjectType {
     ACCOUNT,
     CONTACT,
     FILE,
+
+    @Deprecated("Module retired")
     NOTE,
 
     @Deprecated("Module retired")
@@ -34,9 +36,13 @@ enum class ObjectType {
     @Deprecated("Module retired")
     ROOM_UNIT,
 
+    @Deprecated("Module retired")
     MESSAGE,
     LISTING,
+
+    @Deprecated("Module retired")
     OFFER,
+
     AGENT,
     LEAD,
     PLACE,

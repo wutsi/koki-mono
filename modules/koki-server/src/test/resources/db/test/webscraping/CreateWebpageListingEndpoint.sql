@@ -37,5 +37,5 @@ INSERT INTO T_WEBPAGE(id, tenant_fk, website_fk, listing_fk, url, url_hash, cont
         (105, 1, 100, null, 'https://example.com/listings/6', 'c4ca4238a0b923820dcc509a6f758477', 'invalid city', null, true, now()),
         (106, 1, 100, 106, 'https://example.com/listings/7', 'c4ca4238a0b923820dcc509a6f758488', 'invalid city', null, true, now());
 
-INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listing_number)
-    VALUES (106, 1, 3, 1, 2, 1000000);
+INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type)
+    VALUES (106, 1, 3, 1, 2);

@@ -23,7 +23,6 @@ data class ListingModel(
     val heroImageUrl: String? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
-    val listingNumber: String = "",
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
     val bedrooms: Int? = null,

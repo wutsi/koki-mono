@@ -137,7 +137,6 @@ class ListingService(
 
     fun search(
         ids: List<Long> = emptyList(),
-        listingNumber: Long? = null,
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
@@ -163,7 +162,6 @@ class ListingService(
     ): ResultSetModel<ListingModel> {
         val response = koki.search(
             ids = ids,
-            listingNumber = listingNumber,
             locationIds = locationIds,
             listingType = listingType,
             propertyTypes = propertyTypes,
