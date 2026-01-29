@@ -29,6 +29,8 @@ data class ListingSummary(
     val buyerAgentCommission: Double? = null,
     val sellerAgentCommissionMoney: Money? = null,
     val buyerAgentCommissionMoney: Money? = null,
+    val units: Int? = null,
+    val revenue: Money? = null,
     val sellerAgentUserId: Long? = null,
     val buyerAgentUserId: Long? = null,
     val transactionDate: Date? = null,

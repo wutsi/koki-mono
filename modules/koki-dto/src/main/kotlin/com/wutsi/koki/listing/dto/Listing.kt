@@ -43,6 +43,9 @@ data class Listing(
     val sellerAgentCommissionMoney: Money? = null,
     val buyerAgentCommissionMoney: Money? = null,
 
+    val units: Int? = null,
+    val revenue: Money? = null,
+
     val securityDeposit: Int? = null,
     val advanceRent: Int? = null,
     val leaseTerm: Int? = null,
