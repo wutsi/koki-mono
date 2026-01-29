@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 import tools.jackson.databind.json.JsonMapper
+import java.util.concurrent.ExecutorService
 
 @Configuration
 class TrackingMQConfiguration(
     private val consumer: TrackingConsumer,
+    executorService: ExecutorService,
     channel: Channel,
     jsonMapper: JsonMapper,
     publisher: Publisher,
@@ -20,7 +22,7 @@ class TrackingMQConfiguration(
     @Value("\${koki.module.tracking.mq.queue}") private val queue: String,
     @Value("\${koki.module.tracking.mq.dlq}") private val dlq: String,
     @Value("\${koki.module.tracking.mq.consumer-delay-seconds}") private val consumerDelay: Int,
-) : AbstractRabbitMQConsumerConfiguration(channel, jsonMapper, publisher) {
+) : AbstractRabbitMQConsumerConfiguration(channel, jsonMapper, publisher, executorService) {
     @PostConstruct
     fun init() {
         setupExchange(exchangeName)

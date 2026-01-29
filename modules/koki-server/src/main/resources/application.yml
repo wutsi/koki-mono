@@ -267,7 +267,7 @@ wutsi:
         executor:
             thread-pool:
                 name: ${koki.webapp.client-id}
-                size: 32
+                size: 16
         mq:
             type: rabbitmq
             rabbitmq:

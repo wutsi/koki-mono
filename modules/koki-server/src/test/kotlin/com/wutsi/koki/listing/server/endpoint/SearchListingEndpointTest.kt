@@ -35,19 +35,6 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun `by listing-number`() {
-        val response = rest.getForEntity(
-            "/v1/listings?listing-number=1000000",
-            SearchListingResponse::class.java
-        )
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        val listings = response.body!!.listings
-        assertEquals(1, listings.size)
-        assertEquals(100L, listings[0].id)
-    }
-
-    @Test
     fun `by location`() {
         val response = rest.getForEntity(
             "/v1/listings?location-id=2222&location-id=3333&sort-by=PRICE_HIGH_LOW",

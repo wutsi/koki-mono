@@ -65,7 +65,6 @@ abstract class AbstractListingMailetTest {
     )
     protected val listing = ListingEntity(
         id = 111L,
-        listingNumber = 111L,
         tenantId = tenant.id!!,
         status = ListingStatus.ACTIVE,
         listingType = ListingType.RENTAL,

@@ -11,9 +11,9 @@ INSERT INTO T_AMENITY(id, category_fk, name, active)
            (1201, 1200, 'BB1', false),
            (1202, 1200, 'BB2', true);
 
-INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listing_number)
-    VALUES(100, 1, 1, 1, 2, 2400001),
-          (101, 1, 2, 1, 2, 2400002);
+INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type)
+    VALUES(100, 1, 1, 1, 2),
+          (101, 1, 2, 1, 2);
 
 INSERT INTO T_LISTING_AMENITY(listing_fk, amenity_fk)
     VALUES(101, 1101),

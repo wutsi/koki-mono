@@ -92,7 +92,6 @@ class ListingJobsTest {
                 anyOrNull(),
                 anyOrNull(),
                 anyOrNull(),
-                anyOrNull(),
             )
     }
 

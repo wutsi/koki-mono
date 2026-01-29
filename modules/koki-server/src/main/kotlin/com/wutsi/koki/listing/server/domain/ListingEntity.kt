@@ -35,7 +35,6 @@ data class ListingEntity(
     @Column("hero_image_fk") var heroImageId: Long? = null,
 
     var status: ListingStatus = ListingStatus.UNKNOWN,
-    val listingNumber: Long = -1,
     var listingType: ListingType? = null,
     var propertyType: PropertyType? = null,
     var propertyCategory: PropertyCategory? = null,

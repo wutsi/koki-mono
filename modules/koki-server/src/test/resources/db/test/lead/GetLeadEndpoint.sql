@@ -1,5 +1,5 @@
-INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type, listing_number)
-    VALUES (111, 1, 3, 1, 2, 1000000);
+INSERT INTO T_LISTING(id, tenant_fk, status, listing_type, property_type)
+    VALUES (111, 1, 3, 1, 2);
 
 INSERT INTO T_LEAD(id, tenant_fk, listing_fk, device_id, user_fk, agent_user_fk, status, next_visit_at, next_contact_at)
     VALUES (100, 1, 111, 'xxx', 11, 222, 2, '2026-12-30', '2026-11-30'),

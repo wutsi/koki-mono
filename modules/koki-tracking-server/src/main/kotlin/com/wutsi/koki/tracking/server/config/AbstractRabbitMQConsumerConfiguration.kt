@@ -11,11 +11,13 @@ import org.slf4j.LoggerFactory
 import tools.jackson.databind.json.JsonMapper
 import java.util.Timer
 import java.util.TimerTask
+import java.util.concurrent.ExecutorService
 
 abstract class AbstractRabbitMQConsumerConfiguration(
     private val channel: Channel,
     private val jsonMapper: JsonMapper,
     private val publisher: Publisher,
+    private val executorService: ExecutorService,
 ) {
     protected fun processDlq(queue: String, dlq: String) {
         getLogger().info("Processing DLQ: $dlq -> $queue")
@@ -43,6 +45,7 @@ abstract class AbstractRabbitMQConsumerConfiguration(
                         jsonMapper = jsonMapper,
                         delegate = consumer,
                         channel = channel,
+                        executorService = executorService,
                     ),
                 )
             }

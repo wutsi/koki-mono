@@ -27,7 +27,7 @@ class ListingPublishedMailet(
     private val logger: KVLogger,
 ) : AbstractListingMailet(locationService, fileService, messages) {
     companion object {
-        const val SUBJECT = "Listing #{{listingNumber}}: Votre listing a été publiée"
+        const val SUBJECT = "Votre listing a été publiée"
     }
 
     override fun service(event: Any): Boolean {
@@ -49,7 +49,7 @@ class ListingPublishedMailet(
         val recipient = listing.sellerAgentUserId?.let { id -> userService.get(id, event.tenantId) } ?: return false
         val data = getListingData(listing, tenant, recipient)
         val body = templateResolver.resolve("/listing/email/published.html", data)
-        val subject = SUBJECT.replace("{{listingNumber}}", listing.listingNumber.toString())
+        val subject = SUBJECT
 
         sender.send(
             recipient = recipient,

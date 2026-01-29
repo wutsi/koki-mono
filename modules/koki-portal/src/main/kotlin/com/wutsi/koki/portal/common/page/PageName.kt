@@ -12,15 +12,6 @@ object PageName {
     const val AGENT = "page.agent"
     const val AGENT_LIST = "page.agent.list"
 
-    const val OFFER = "page.offer"
-    const val OFFER_LIST = "page.offer.list"
-    const val OFFER_CREATE = "page.offer.create"
-    const val OFFER_CREATE_DONE = "page.offer.create.done"
-    const val OFFER_COUNTER = "page.offer.counter"
-    const val OFFER_COUNTER_DONE = "page.offer.counter.done"
-    const val OFFER_STATUS = "page.offer.status"
-    const val OFFER_STATUS_DONE = "page.offer.status.done"
-
     const val CONTACT = "page.contact"
     const val CONTACT_LIST = "page.contact.list"
     const val CONTACT_EDIT = "page.contact.edit"
@@ -85,13 +76,6 @@ object PageName {
     const val LISTING_STATUS_DONE = "page.listing.status.done"
 
     const val LOGIN = "page.login"
-
-    const val NOTE_EDIT = "page.note.edit"
-
-    const val MESSAGE = "page.message"
-    const val MESSAGE_COMPOSE = "page.message.compose"
-    const val MESSAGE_TAB = "page.message.tab"
-    const val MESSAGE_WIDGET = "page.message.widget"
 
     const val TENANT_SETTINGS = "page.settings.tenant"
     const val TENANT_SETTINGS_ABOUT = "page.settings.tenant.about"

@@ -43,7 +43,6 @@ abstract class AbstractListingMailet(
         val fmt = DecimalFormat(tenant.monetaryFormat)
 
         return mapOf(
-            "listingNumber" to listing.listingNumber,
             "listingUrl" to "${tenant.portalUrl}/listings/${listing.id}",
             "listingImageUrl" to imageUrl,
             "listingDescription" to description,

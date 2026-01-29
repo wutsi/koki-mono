@@ -3,7 +3,7 @@
     {
       "userId": 1,
       "baseUrl": "https://www.ereshomes.com",
-      "listingUrlPrefix": "/property-details",
+      "listingUrlPrefix": "/property-details/",
       "homeUrls": [
         "https://www.ereshomes.com/realestateforrent",
         "https://www.ereshomes.com/realestateforrent?page=2",
@@ -17,7 +17,7 @@
     {
       "userId": 1,
       "baseUrl": "https://codecis.com",
-      "listingUrlPrefix": "/property",
+      "listingUrlPrefix": "/property/",
       "homeUrls": [
         "https://codecis.com/status/a-louer/",
         "https://codecis.com/status/a-louer/page/2/",
@@ -31,11 +31,17 @@
     {
       "userId": 1,
       "baseUrl": "https://adpmrealestate.com",
-      "listingUrlPrefix": "/property",
+      "listingUrlPrefix": "/property/",
       "homeUrls": [
         "https://adpmrealestate.com/city/yaounde/",
         "https://adpmrealestate.com/city/yaounde/page/2/",
-        "https://adpmrealestate.com/city/yaounde/page/3/"
+        "https://adpmrealestate.com/city/yaounde/page/3/",
+        "https://adpmrealestate.com/city/douala/",
+        "https://adpmrealestate.com/city/douala/page/2/",
+        "https://adpmrealestate.com/city/douala/page/3/",
+        "https://adpmrealestate.com/city/douala/page/4/",
+        "https://adpmrealestate.com/city/douala/page/5/",
+        "https://adpmrealestate.com/city/kribi/"
       ],
       "contentSelector": "h1, .property-description-wrap, .property-address-wrap, .property-detail-wrap",
       "imageSelector": "img.houzez-gallery-img",

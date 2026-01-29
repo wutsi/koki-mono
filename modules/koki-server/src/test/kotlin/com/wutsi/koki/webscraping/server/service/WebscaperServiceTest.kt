@@ -424,14 +424,14 @@ Security system
             name = "adpmrealestate",
             baseUrl = "https://adpmrealestate.com",
             homeUrl = "https://adpmrealestate.com/city/yaounde/",
-            listingUrlPrefix = "/property",
+            listingUrlPrefix = "/property/",
             contentSelector = "h1, .property-description-wrap, .property-address-wrap, .property-detail-wrap",
             imageSelector = "img.houzez-gallery-img",
         )
 
         // WHEN
         val webpages = service.scrape(website, request)
-        assertEquals(17, webpages.size)
+        assertEquals(10, webpages.size)
 
         // THEN
         val url = argumentCaptor<String>()

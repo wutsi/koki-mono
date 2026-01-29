@@ -13,7 +13,7 @@
                     <a href="/listings" th:text="#{module.listing}">MODULE</a>
                 </li>
                 <li class="breadcrumb-item active" th:if="${listing}">
-                    <span th:text="${listing.listingNumber}">NUMBER</span>
+                    <span th:text="${listing.id}">NUMBER</span>
                 </li>
                 <li class="breadcrumb-item active" th:if="!${listing}" th:text="#{module.listing}">MODULE</li>
             </ol>
@@ -257,10 +257,6 @@
         </div>
         <div class="margin-left text-small">
             <div th:if="${listing.address}" th:utext="${listing.address.toHtml(false)}">ADDRESS</div>
-            <div>
-                <span th:text="#{page.listing.number}">#</span>
-                <span th:text="${listing.listingNumber}">###</span>
-            </div>
             <div>
                 <div th:replace="~{__components/listing :: listing-bed-bath-area(${listing})}"></div>
             </div>
