@@ -115,10 +115,10 @@
         <kotlinpoet.version>1.18.1</kotlinpoet.version>
         <ktlint.version>1.8.0</ktlint.version>
         <lettuce.version>7.2.1.RELEASE</lettuce.version>
-        <libphonenumber.version>9.0.22</libphonenumber.version>
+        <libphonenumber.version>9.0.23</libphonenumber.version>
         <mobiledetect.version>1.1.1</mobiledetect.version>
         <mustache.version>0.9.14</mustache.version>
-        <mysql.version>9.5.0</mysql.version>
+        <mysql.version>9.6.0</mysql.version>
         <pdfbox.vesion>3.0.6</pdfbox.vesion>
         <plexus-utils.version>4.0.2</plexus-utils.version>
         <poi.version>5.5.1</poi.version>
