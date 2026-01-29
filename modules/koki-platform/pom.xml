@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>koki-platform</artifactId>
-    <version>0.0.69-SNAPSHOT</version>
+    <version>0.0.72-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <scm>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>io.hypersistence</groupId>
             <artifactId>hypersistence-utils-hibernate-71</artifactId>
-            <version>3.14.1</version>
+            <version>3.15.1</version>
             <!--
             <version>${hypersistence-utils-hibernate-71.version}</version>
             -->
