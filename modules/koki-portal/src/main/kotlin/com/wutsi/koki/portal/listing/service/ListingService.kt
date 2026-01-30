@@ -266,7 +266,7 @@ class ListingService(
                 listingType = form.listingType,
                 propertyType = form.propertyType,
                 fenceType = form.fenceType,
-                unit = form.unit,
+                units = form.units,
                 level = form.level,
                 year = form.year,
                 propertyArea = form.propertyArea,
@@ -341,6 +341,7 @@ class ListingService(
             UpdateListingPriceRequest(
                 price = form.price,
                 visitFees = form.visitFees,
+                revenue = form.revenue,
                 currency = form.currency,
                 buyerAgentCommission = form.buyerAgentCommission,
                 sellerAgentCommission = form.sellerAgentCommission,

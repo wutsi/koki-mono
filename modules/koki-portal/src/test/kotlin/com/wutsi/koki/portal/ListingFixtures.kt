@@ -77,7 +77,6 @@ object ListingFixtures {
 
     val listing = Listing(
         id = 1115,
-        listingNumber = 243001,
         status = ListingStatus.DRAFT,
         listingType = ListingType.SALE,
         propertyType = PropertyType.APARTMENT,
@@ -106,6 +105,7 @@ object ListingFixtures {
         halfBathrooms = 1,
         basementType = BasementType.NONE,
         unit = "303",
+        units = 7,
         propertyArea = 1200,
         lotArea = 850,
         floors = 1,
@@ -142,6 +142,7 @@ object ListingFixtures {
 
         price = Money(175000.0, "CAD"),
         visitFees = Money(10.0, "CAD"),
+        revenue = Money(5000.0, "CAD"),
         sellerAgentCommission = 6.0,
         buyerAgentCommission = 3.0,
         sellerAgentCommissionMoney = Money(40000.0, "CAD"),
@@ -187,7 +188,6 @@ object ListingFixtures {
     val listings = listOf(
         ListingSummary(
             id = 1115,
-            listingNumber = 243001,
             status = ListingStatus.ACTIVE,
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
@@ -222,7 +222,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1116,
-            listingNumber = 243002,
             status = ListingStatus.DRAFT,
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
@@ -257,7 +256,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1117,
-            listingNumber = 243003,
             status = ListingStatus.PUBLISHING,
             listingType = ListingType.RENTAL,
             propertyType = PropertyType.APARTMENT,
@@ -292,7 +290,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1117,
-            listingNumber = 243003,
             status = ListingStatus.ACTIVE,
             listingType = ListingType.SALE,
             propertyType = PropertyType.LAND,

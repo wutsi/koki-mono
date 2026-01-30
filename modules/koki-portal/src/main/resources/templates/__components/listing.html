@@ -336,9 +336,9 @@
     </div>
 
     <!-- Property Types -->
-    <div class="listing-filter" th:if="!${form.propertyTypes.isEmpty()}">
+    <div class="listing-filter" th:if="!${form.propertyType.isEmpty()}">
         <span class="listing-filter-badge"
-              th:each="propertyType : ${form.propertyTypes}"
+              th:each="propertyType : ${form.propertyType}"
               th:text="#{'property-type.' + ${propertyType}}">
             TYPE
         </span>

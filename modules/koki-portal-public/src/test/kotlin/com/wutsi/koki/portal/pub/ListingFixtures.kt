@@ -28,7 +28,6 @@ import java.util.Date
 object ListingFixtures {
     val listing = Listing(
         id = 1115,
-        listingNumber = 243001,
         status = ListingStatus.ACTIVE,
         listingType = ListingType.SALE,
         propertyType = PropertyType.APARTMENT,
@@ -55,6 +54,7 @@ object ListingFixtures {
         bedrooms = 3,
         bathrooms = 2,
         halfBathrooms = 1,
+        units = 7,
         basementType = BasementType.NONE,
         unit = "303",
         propertyArea = 1200,
@@ -99,6 +99,7 @@ object ListingFixtures {
         ),
 
         price = Money(175000.0, "CAD"),
+        revenue = Money(5000.0, "CAD"),
         visitFees = Money(10.0, "CAD"),
         sellerAgentCommission = 6.0,
         buyerAgentCommission = 3.0,
@@ -145,7 +146,6 @@ object ListingFixtures {
     val listings = listOf(
         ListingSummary(
             id = 1115,
-            listingNumber = 243001,
             status = ListingStatus.ACTIVE,
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
@@ -180,7 +180,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1116,
-            listingNumber = 243002,
             status = ListingStatus.DRAFT,
             listingType = ListingType.SALE,
             propertyType = PropertyType.APARTMENT,
@@ -215,7 +214,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1117,
-            listingNumber = 243003,
             status = ListingStatus.PUBLISHING,
             listingType = ListingType.RENTAL,
             propertyType = PropertyType.APARTMENT,
@@ -250,7 +248,6 @@ object ListingFixtures {
         ),
         ListingSummary(
             id = 1117,
-            listingNumber = 243003,
             status = ListingStatus.ACTIVE,
             listingType = ListingType.SALE,
             propertyType = PropertyType.LAND,

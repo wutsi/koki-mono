@@ -19,6 +19,8 @@ data class ListingForm(
     val bedrooms: Int? = null,
     val bathrooms: Int? = null,
     val halfBathrooms: Int? = null,
+    val revenue: Long? = null,
+    val units: Int? = null,
     val floors: Int? = null,
     val basementType: BasementType? = null,
     val level: Int? = null,

@@ -41,17 +41,17 @@ abstract class TenantAwareMapper {
 
     protected fun createTimeFormat(): DateFormat {
         val tenant = currentTenant.get()
-        return SimpleDateFormat(tenant?.timeFormat ?: "HH:mm")
+        return SimpleDateFormat(tenant.timeFormat)
     }
 
     protected fun createNumberFormat(): DecimalFormat {
         val tenant = currentTenant.get()
-        return DecimalFormat(tenant?.numberFormat ?: "##.#")
+        return DecimalFormat(tenant.numberFormat)
     }
 
     protected fun createMoneyFormat(): NumberFormat {
         val tenant = currentTenant.get()
-        return DecimalFormat(tenant?.monetaryFormat ?: "##.#")
+        return DecimalFormat(tenant.monetaryFormat)
     }
 
     protected fun formatMoment(date: Date, dateTimeFormat: DateFormat, timeFormat: DateFormat): String {

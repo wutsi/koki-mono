@@ -47,72 +47,21 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.bedrooms}">TYPE</label>
+                            <div class="section-item" data-property-type-commercial>
+                                <label class="title" th:text="#{page.listing.units}">UNITS</label>
+                                <input class="form-control" step="0" th:field="*{units}" type="number"/>
+                            </div>
+                            <div class="section-item" data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.bedrooms}">BEDROOMS</label>
                                 <input class="form-control" step="0" th:field="*{bedrooms}" type="number"/>
                             </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.bathrooms}">TYPE</label>
+                            <div class="section-item" data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.bathrooms}">BATHROOMS</label>
                                 <input class="form-control" step="0" th:field="*{bathrooms}" type="number"/>
                             </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.half-bathrooms}">TYPE</label>
+                            <div class="section-item" data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.half-bathrooms}">TOILET</label>
                                 <input class="form-control" step="0" th:field="*{halfBathrooms}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.floors}">TYPE</label>
-                                <input class="form-control" step="0" th:field="*{floors}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.basement}">TYPE</label>
-                                <select class="form-select" th:field="*{basementType}">
-                                    <option th:each="basementType : ${basementTypes}"
-                                            th:text="#{'basement-type.' + ${basementType}}"
-                                            th:value="${basementType}">
-                                        TYPE
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.level}">TYPE</label>
-                                <select class="form-select" th:field="*{level}">
-                                    <option value=""></option>
-                                    <option th:each="level,it : ${levels}"
-                                            th:text="${levelTexts.get(it.index)}"
-                                            th:value="${level}">
-                                        LEVEL
-                                    </option>
-                                </select>
-                            </div>
-                            <!--
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.unit}">TYPE</label>
-                                <input class="form-control" maxlength="5" th:field="*{unit}"/>
-                            </div>
-                            -->
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.parking-type}">TYPE</label>
-                                <select class="form-select" th:field="*{parkingType}">
-                                    <option th:each="parkingType : ${parkingTypes}"
-                                            th:text="#{'parking-type.' + ${parkingType}}"
-                                            th:value="${parkingType}">
-                                        TYPE
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.parkings}">TYPE</label>
-                                <input class="form-control" step="0" th:field="*{parkings}" type="number"/>
-                            </div>
-                            <div class="section-item">
-                                <label class="title" th:text="#{page.listing.fence}">TYPE</label>
-                                <select class="form-select" th:field="*{fenceType}">
-                                    <option th:each="fenceType : ${fenceTypes}"
-                                            th:text="#{'fence-type.' + ${fenceType}}"
-                                            th:value="${fenceType}">
-                                        TYPE
-                                    </option>
-                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.lot-area}">TYPE</label>
@@ -125,7 +74,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="section-item">
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
                                 <label class="title" th:text="#{page.listing.property-area}">TYPE</label>
                                 <div class="input-group">
                                     <input class="form-control" step="0" th:field="*{propertyArea}" type="number"/>
@@ -135,6 +84,55 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.floors}">FLOORS</label>
+                                <input class="form-control" step="0" th:field="*{floors}" type="number"/>
+                            </div>
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.level}">TYPE</label>
+                                <select class="form-select" th:field="*{level}">
+                                    <option value=""></option>
+                                    <option th:each="level,it : ${levels}"
+                                            th:text="${levelTexts.get(it.index)}"
+                                            th:value="${level}">
+                                        LEVEL
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.parkings}">PARKINGS</label>
+                                <input class="form-control" step="0" th:field="*{parkings}" type="number"/>
+                            </div>
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.parking-type}">TYPE</label>
+                                <select class="form-select" th:field="*{parkingType}">
+                                    <option th:each="parkingType : ${parkingTypes}"
+                                            th:text="#{'parking-type.' + ${parkingType}}"
+                                            th:value="${parkingType}">
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item">
+                                <label class="title" th:text="#{page.listing.fence}">TYPE</label>
+                                <select class="form-select" th:field="*{fenceType}">
+                                    <option th:each="fenceType : ${fenceTypes}"
+                                            th:text="#{'fence-type.' + ${fenceType}}"
+                                            th:value="${fenceType}">
+                                        TYPE
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
+                                <label class="title" th:text="#{page.listing.basement}">TYPE</label>
+                                <select class="form-select" th:field="*{basementType}">
+                                    <option th:each="basementType : ${basementTypes}"
+                                            th:text="#{'basement-type.' + ${basementType}}"
+                                            th:value="${basementType}">
+                                        TYPE
+                                    </option>
+                                </select>
                             </div>
                             <div class="section-item">
                                 <label class="title" th:text="#{page.listing.distance-from-main-road}">TYPE</label>
@@ -162,7 +160,7 @@
                                 <label class="title" th:text="#{page.listing.available-at}">YEAR</label>
                                 <input class="form-control" th:field="*{availableAt}" type="date"/>
                             </div>
-                            <div class="section-item">
+                            <div class="section-item" data-property-type-commercial data-property-type-residential>
                                 <label class="title" th:text="#{page.listing.year}">YEAR</label>
                                 <input class="form-control" step="0" th:field="*{year}" type="number"/>
                             </div>
@@ -185,5 +183,41 @@
     </div>
 </div>
 
+<script>
+    function property_type_changed() {
+        console.log('property_type_changed');
+
+        const propertyType = document.querySelector('#propertyType').value;
+        const propertyTypeCommercial = (propertyType === 'BUILDING' || propertyType === 'COMMERCIAL' || propertyType === 'INDUSTRIAL');
+        const propertyTypeLand = (propertyType === 'LAND');
+        const propertyTypeResidential = (!propertyTypeLand && !propertyTypeCommercial);
+
+        document.querySelectorAll('.section-item').forEach(function (div) {
+            if (div.hasAttribute('data-property-type-commercial') || div.hasAttribute('data-property-type-land') || div.hasAttribute('data-property-type-residential')) {
+                console.log('>>> found', div);
+                var show = false;
+                if (div.hasAttribute('data-property-type-commercial')) {
+                    show |= propertyTypeCommercial;
+                }
+                if (div.hasAttribute('data-property-type-land')) {
+                    show |= propertyTypeLand;
+                }
+                if (div.hasAttribute('data-property-type-residential')) {
+                    show |= propertyTypeResidential;
+                }
+                div.style.display = show ? 'block' : 'none';
+
+                div.querySelectorAll('input, select').forEach(function (element) {
+                    element.disabled = !show;
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        property_type_changed();
+        document.querySelector('#propertyType').addEventListener('change', property_type_changed);
+    });
+</script>
 </body>
 </html>

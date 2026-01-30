@@ -8,7 +8,7 @@ data class ListingFilterForm(
     val listingNumber: String? = null,
     val locationIds: List<Long> = emptyList(),
     val listingType: String = ListingType.RENTAL.name,
-    val propertyTypes: List<PropertyType> = emptyList(),
+    val propertyType: List<PropertyType> = emptyList(),
     val bedrooms: String = "",
     val bathrooms: String = "",
     val minPrice: Long? = null,
@@ -21,7 +21,7 @@ data class ListingFilterForm(
     val submitted: Boolean = false,
 ) {
     fun containsPropertyType(type: PropertyType): Boolean {
-        return propertyTypes.isNotEmpty() && propertyTypes.contains(type)
+        return propertyType.isNotEmpty() && propertyType.contains(type)
     }
 
     val minPriceText: String?
