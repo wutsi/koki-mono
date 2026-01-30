@@ -10,7 +10,7 @@ enum class PropertyType(val category: PropertyCategory) {
     ROOM(PropertyCategory.RESIDENTIAL),
     BUILDING(PropertyCategory.COMMERCIAL),
     LAND(PropertyCategory.LAND),
-    COMMERCIAL(PropertyCategory.COMMERCIAL),
+    RETAIL(PropertyCategory.COMMERCIAL),
     INDUSTRIAL(PropertyCategory.COMMERCIAL),
     OFFICE(PropertyCategory.COMMERCIAL),
 }
