@@ -1,10 +1,10 @@
 package com.wutsi.koki.webscraping.dto
 
-import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
 
 data class UpdateWebsiteRequest(
-    @get:NotBlank
-    val listingUrlPrefix: String = "",
+    @get:NotEmpty
+    val listingUrlPrefixes: List<String> = emptyList(),
 
     val contentSelector: String? = null,
     val imageSelector: String? = null,

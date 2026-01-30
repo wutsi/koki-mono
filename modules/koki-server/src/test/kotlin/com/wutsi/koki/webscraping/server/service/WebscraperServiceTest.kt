@@ -276,6 +276,79 @@ Visits by appointment only. Contact us now to book or for more information!
     }
 
     @Test
+    fun campiole() {
+        // GIVEN
+        val website = setupWebsite(
+            name = "campiole",
+            baseUrl = "https://campiole.com/author/yannickimmo/",
+            homeUrl = "https://campiole.com/author/yannickimmo/",
+            listingUrlPrefix = "https://campiole.com/*-a-louer/**",
+            contentSelector = "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+            imageSelector = "ul.lSGallery li img",
+        )
+
+        // WHEN
+        val webpages = service.scrape(website, request)
+        assertEquals(10, webpages.size)
+
+        // THEN
+        val url = argumentCaptor<String>()
+        val images = argumentCaptor<List<String>>()
+        val content = argumentCaptor<String>()
+        verify(webpageService, times(webpages.size))
+            .new(
+                eq(website),
+                url.capture(),
+                images.capture(),
+                content.capture(),
+            )
+
+        assertEquals(
+            "https://campiole.com/studio-a-louer/yaounde/studio-moderne-au-rond-point-express-superette-38515/",
+            url.firstValue
+        )
+        assertEquals(7, images.firstValue.size)
+        assertEquals(
+            """
+Studio moderne au rond-point Express Superette
+
+Description
+Studio moderne au rond-point express ( superette )
+Prix :65.000f
+Chambre avec placard
+Douche
+Cuisine aménagée
+Salon
+Bien sécurisé dans la barrière. Moto:100f
+Note importante : Des frais d'agence sont à prévoir.
+Coordonnées \& Bureau
+Bureau : 620239318
+WhatsApp : 620 239 318
+Localisation : Acacia, en face de l'immeuble Mercedes
+Pour tous vos besoins en logement (chambres, studios, appartements), contactez-nous dès maintenant sur WhatsApp.
+Avec Yannick Immobilier, trouvez rapidement le logement qui vous correspond.
+
+Details Mis à jour le 17 janvier 2026 à 12:23
+* **ID Propriété** CMR38515
+* **Prix** 65 000 Fcfa/mois
+* **Surface** 44 m²
+* **Chambres** 1
+* **Pièces** 3
+* **Salle de bain** 1
+* **Type** Studio
+* **Statut** A LOUER
+
+Caractéristiques
+* [Barrière](https://campiole.com/feature/barriere/)
+
+            """.trimIndent(),
+            content.firstValue.replace("  \n", "\n")
+        )
+
+        verify(webpageService, times(webpages.size)).save(any())
+    }
+
+    @Test
     fun mapiole() {
         // GIVEN
         val website = setupWebsite(
@@ -562,7 +635,7 @@ Studio à louer : Ngousso (100 000 Fcfa/mois) Ville : Yaoundé Quartier : Ngouss
             tenantId = 1L,
             baseUrl = baseUrl,
             homeUrls = listOf(homeUrl),
-            listingUrlPrefix = listingUrlPrefix,
+            listingUrlPrefixes = listOf(listingUrlPrefix),
             contentSelector = contentSelector,
             imageSelector = imageSelector
         )
