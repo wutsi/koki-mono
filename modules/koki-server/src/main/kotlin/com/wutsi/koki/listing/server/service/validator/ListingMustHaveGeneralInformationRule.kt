@@ -17,7 +17,7 @@ class ListingMustHaveGeneralInformationRule : ListingPublishRule {
     }
 
     fun validateResidential(listing: ListingEntity) {
-        if (undefined(listing.bedrooms) || undefined(listing.bathrooms)) {
+        if (undefined(listing.bedrooms)) {
             throw ValidationException(ErrorCode.LISTING_MISSING_GENERAL_INFORMATION_HOUSE)
         }
     }

@@ -2,6 +2,7 @@ package com.wutsi.koki.listing.server.service
 
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.similarity.ListingSimilarityStrategy
@@ -15,14 +16,6 @@ class ListingSimilarityService(
     private val listingService: ListingService,
     private val similarityStrategy: ListingSimilarityStrategy,
 ) {
-    companion object {
-        private val EXCLUSIVE_TYPES = setOf(
-            PropertyType.LAND,
-            PropertyType.COMMERCIAL,
-            PropertyType.INDUSTRIAL
-        )
-    }
-
     /**
      * Finds similar listings for a given reference listing.
      *
@@ -140,20 +133,14 @@ class ListingSimilarityService(
 
     /**
      * Determines which property types to search for based on the reference type.
+     * The property types returned belong to the same category as the reference type.
      */
     private fun determinePropertyTypes(refType: PropertyType?): List<PropertyType> {
         if (refType == null) {
             return emptyList()
         }
 
-        return if (EXCLUSIVE_TYPES.contains(refType)) {
-            // LAND, COMMERCIAL, INDUSTRIAL only match themselves
-            listOf(refType)
-        } else {
-            // Other types match any type that's not LAND, COMMERCIAL, or INDUSTRIAL
-            PropertyType.entries
-                .filter { !EXCLUSIVE_TYPES.contains(it) && it != PropertyType.UNKNOWN }
-        }
+        return PropertyType.entries.filter { type -> type.category == refType.category }
     }
 
     /**
@@ -163,7 +150,7 @@ class ListingSimilarityService(
         val refType = reference.propertyType
         val refBedrooms = reference.bedrooms
 
-        return if (refType != null && !EXCLUSIVE_TYPES.contains(refType) && refBedrooms != null) {
+        return if (refType != null && refType.category == PropertyCategory.RESIDENTIAL && refBedrooms != null) {
             Pair(refBedrooms - 1, refBedrooms + 1)
         } else {
             Pair(null, null)

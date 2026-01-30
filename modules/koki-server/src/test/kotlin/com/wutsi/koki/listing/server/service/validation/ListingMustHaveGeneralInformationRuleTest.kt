@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 class ListingMustHaveGeneralInformationRuleTest {
     private val rule = ListingMustHaveGeneralInformationRule()
 
-    private val house = ListingEntity(bedrooms = 3, bathrooms = 3, propertyType = PropertyType.HOUSE)
+    private val house = ListingEntity(bedrooms = 3, bathrooms = null, propertyType = PropertyType.HOUSE)
     private val land = ListingEntity(lotArea = 1000, propertyType = PropertyType.LAND)
 
     @Test
