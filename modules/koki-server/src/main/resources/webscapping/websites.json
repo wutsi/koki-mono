@@ -77,6 +77,17 @@
       "contentSelector": "h1, .mh-estate__section h3, .mh-estate__section p, .mh-estate__section .mh-estate__list",
       "imageSelector": ".swiper-wrapper img",
       "active": true
+    },
+    {
+      "userId": -1,
+      "baseUrl": "https://campiole.com/author/yannickimmo/",
+      "listingUrlPrefix": "https://campiole.com/*-a-louer/,https://campiole.com/*-a-vendre/",
+      "homeUrls": [
+        "https://campiole.com/author/yannickimmo/"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "ul.lSGallery li img",
+      "active": true
     }
   ]
 }
