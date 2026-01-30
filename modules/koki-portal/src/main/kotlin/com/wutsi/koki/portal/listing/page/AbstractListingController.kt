@@ -73,6 +73,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
             bathrooms = listing.bathrooms,
             halfBathrooms = listing.halfBathrooms,
             floors = listing.floors,
+            units = listing.units,
             basementType = listing.basementType,
             level = listing.level,
             unit = listing.unit,
@@ -102,6 +103,7 @@ abstract class AbstractListingController : AbstractModulePageController() {
 
             price = listing.price?.amount?.toLong(),
             visitFees = listing.visitFees?.amount?.toLong(),
+            revenue = listing.revenue?.amount?.toLong(),
             buyerAgentCommission = listing.buyerAgentCommission,
             sellerAgentCommission = listing.sellerAgentCommission,
 

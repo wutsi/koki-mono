@@ -49,7 +49,7 @@ class SearchListingController : AbstractListingController() {
         val urlBuilder = URLBuilder("")
         val params = mapOf(
             "listingNumber" to form.listingNumber,
-            "propertyType" to form.propertyTypes,
+            "propertyType" to form.propertyType,
             "listingType" to form.listingType,
             "locationId" to form.locationIds,
             "bedrooms" to form.bedrooms,
@@ -113,6 +113,7 @@ class SearchListingController : AbstractListingController() {
                 ListingStatus.SOLD.name -> listOf(ListingStatus.SOLD, ListingStatus.RENTED)
                 else -> listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES, ListingStatus.PENDING)
             },
+            propertyTypes = form.propertyType,
             bedrooms = form.bedrooms.ifEmpty { null },
             bathrooms = form.bathrooms.ifEmpty { null },
             locationIds = form.locationIds,

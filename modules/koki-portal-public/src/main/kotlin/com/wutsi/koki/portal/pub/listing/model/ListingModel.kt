@@ -28,6 +28,7 @@ data class ListingModel(
     val bedrooms: Int? = null,
     val bathrooms: Int? = null,
     val halfBathrooms: Int? = null,
+    val units: Int? = null,
     val floors: Int? = null,
     val basementType: BasementType? = null,
     val level: Int? = null,
@@ -49,6 +50,7 @@ data class ListingModel(
     val geoLocation: GeoLocationModel? = null,
     val publicRemarks: String? = null,
     val price: MoneyModel? = null,
+    val revenue: MoneyModel? = null,
     val pricePerSquareMeter: MoneyModel? = null,
     var visitFees: MoneyModel? = null,
     val leaseTerm: Int? = null,
@@ -100,6 +102,12 @@ data class ListingModel(
 
     val propertyTypeResidential: Boolean
         get() = propertyType?.category == PropertyCategory.RESIDENTIAL
+
+    val propertyTypeLand: Boolean
+        get() = propertyType?.category == PropertyCategory.LAND
+
+    val propertyTypeCommercial: Boolean
+        get() = propertyType?.category == PropertyCategory.COMMERCIAL
 
     val hasTermsAndConditions: Boolean
         get() = listingType == ListingType.RENTAL &&

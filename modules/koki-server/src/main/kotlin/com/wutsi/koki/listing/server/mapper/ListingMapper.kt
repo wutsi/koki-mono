@@ -30,6 +30,7 @@ class ListingMapper {
             bedrooms = entity.bedrooms,
             bathrooms = entity.bathrooms,
             halfBathrooms = entity.halfBathrooms,
+            units = entity.units,
             floors = entity.floors,
             basementType = entity.basementType?.takeIf { type -> type != BasementType.UNKNOWN },
             level = entity.level,
@@ -60,6 +61,7 @@ class ListingMapper {
 
             price = toMoney(entity.price, entity.currency),
             visitFees = toMoney(entity.visitFees, entity.currency),
+            revenue = toMoney(entity.revenue, entity.currency),
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
@@ -120,6 +122,7 @@ class ListingMapper {
             bedrooms = entity.bedrooms,
             bathrooms = entity.bathrooms,
             halfBathrooms = entity.halfBathrooms,
+            units = entity.units,
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
 
@@ -134,7 +137,6 @@ class ListingMapper {
             buyerAgentCommission = entity.buyerAgentCommission,
             sellerAgentCommissionMoney = toMoney(entity.sellerAgentCommissionAmount, entity.currency),
             buyerAgentCommissionMoney = toMoney(entity.buyerAgentCommissionAmount, entity.currency),
-            units = entity.units,
             revenue = toMoney(entity.revenue, entity.currency),
 
             transactionDate = entity.soldAt,

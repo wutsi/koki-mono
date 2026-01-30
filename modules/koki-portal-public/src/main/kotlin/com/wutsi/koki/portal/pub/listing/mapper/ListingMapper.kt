@@ -67,6 +67,7 @@ class ListingMapper(
             bedrooms = entity.bedrooms,
             bathrooms = entity.bathrooms,
             halfBathrooms = entity.halfBathrooms,
+            units = entity.units,
             floors = entity.floors,
             basementType = entity.basementType,
             level = entity.level,
@@ -92,6 +93,7 @@ class ListingMapper(
             geoLocation = toGeoLocation(entity.geoLocation),
 
             price = price,
+            revenue = toRevenue(entity.revenue),
             pricePerSquareMeter = pricePerSquareMeter,
             visitFees = entity.visitFees?.let { money -> moneyMapper.toMoneyModel(money) },
             sellerAgentCommission = entity.sellerAgentCommission,
@@ -170,12 +172,14 @@ class ListingMapper(
             bedrooms = entity.bedrooms,
             bathrooms = entity.bathrooms,
             halfBathrooms = entity.halfBathrooms,
+            units = entity.units,
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
             furnitureType = entity.furnitureType,
             address = address,
             price = price,
+            revenue = toRevenue(entity.revenue),
             buyerAgentUser = entity.buyerAgentUserId?.let { id -> users[id] },
             sellerAgentCommission = entity.sellerAgentCommission,
             buyerAgentCommission = entity.buyerAgentCommission,
@@ -220,6 +224,18 @@ class ListingMapper(
             averagePrice = moneyMapper.toMoneyModel(entity.averagePrice, entity.currency),
             pricePerSquareMeter = entity.pricePerSquareMeter?.let { moneyMapper.toMoneyModel(it, entity.currency) },
             totalPrice = moneyMapper.toMoneyModel(entity.totalPrice, entity.currency),
+        )
+    }
+
+    private fun toRevenue(price: Money?): MoneyModel? {
+        price ?: return null
+
+        val price = moneyMapper.toMoneyModel(price)
+        val locale = LocaleContextHolder.getLocale()
+        return price.copy(
+            displayText = price.text +
+                " " +
+                messages.getMessage("page.listing.rental-price-suffix", emptyArray(), locale)
         )
     }
 
