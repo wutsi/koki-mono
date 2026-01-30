@@ -28,7 +28,7 @@ class SearchListingControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LISTING_SEARCH)
         assertElementCount(".listing", ListingFixtures.listings.size)
-        assertElementCount(".listing-filter", 6)
+        assertElementCount(".listing-filter", 7)
 
         click(".listing-filter:first-child")
         assertElementVisible("#koki-modal")
