@@ -22,7 +22,9 @@ data class WebsiteEntity(
 
     var baseUrl: String = "",
     val baseUrlHash: String = "",
-    var listingUrlPrefix: String = "",
+
+    @Convert(converter = StringListConverter::class)
+    var listingUrlPrefixes: List<String> = emptyList(),
 
     @Convert(converter = StringListConverter::class)
     var homeUrls: List<String> = emptyList(),

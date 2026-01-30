@@ -3,7 +3,9 @@
     {
       "userId": 1,
       "baseUrl": "https://www.ereshomes.com",
-      "listingUrlPrefix": "/property-details/",
+      "listingUrlPrefixes": [
+        "/property-details/"
+      ],
       "homeUrls": [
         "https://www.ereshomes.com/realestateforrent",
         "https://www.ereshomes.com/realestateforrent?page=2",
@@ -17,7 +19,9 @@
     {
       "userId": 1,
       "baseUrl": "https://codecis.com",
-      "listingUrlPrefix": "/property/",
+      "listingUrlPrefixes": [
+        "/property/"
+      ],
       "homeUrls": [
         "https://codecis.com/status/a-louer/",
         "https://codecis.com/status/a-louer/page/2/",
@@ -31,7 +35,9 @@
     {
       "userId": 8,
       "baseUrl": "https://adpmrealestate.com",
-      "listingUrlPrefix": "/property/",
+      "listingUrlPrefixes": [
+        "/property/"
+      ],
       "homeUrls": [
         "https://adpmrealestate.com/city/yaounde/",
         "https://adpmrealestate.com/city/yaounde/page/2/",
@@ -50,7 +56,9 @@
     {
       "userId": 1,
       "baseUrl": "https://www.camerounmaison.com",
-      "listingUrlPrefix": "/detail_maison",
+      "listingUrlPrefixes": [
+        "/detail_maison"
+      ],
       "homeUrls": [
         "https://www.camerounmaison.com/vip/1",
         "https://www.camerounmaison.com/vip/2",
@@ -70,7 +78,9 @@
     {
       "userId": 1,
       "baseUrl": "https://mav-sarl.com",
-      "listingUrlPrefix": "/properties",
+      "listingUrlPrefixes": [
+        "/properties"
+      ],
       "homeUrls": [
         "https://mav-sarl.com/featured"
       ],
@@ -81,12 +91,83 @@
     {
       "userId": -1,
       "baseUrl": "https://campiole.com/author/yannickimmo/",
-      "listingUrlPrefix": "https://campiole.com/*-a-louer/,https://campiole.com/*-a-vendre/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
       "homeUrls": [
-        "https://campiole.com/author/yannickimmo/"
+        "https://campiole.com/author/yannickimmo/",
+        "https://campiole.com/author/yannickimmo/page/2"
       ],
       "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
-      "imageSelector": "ul.lSGallery li img",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": -1,
+      "baseUrl": "https://campiole.com/author/lessyimmo/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/lessyimmo/"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": -1,
+      "baseUrl": "https://campiole.com/author/patrickimmolux/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/patrickimmolux/",
+        "https://campiole.com/author/patrickimmolux/page/2",
+        "https://campiole.com/author/patrickimmolux/page/3",
+        "https://campiole.com/author/patrickimmolux/page/4"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": -1,
+      "baseUrl": "https://campiole.com/author/leaimmobilier/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/leaimmobilier/",
+        "https://campiole.com/author/leaimmobilier/page/2",
+        "https://campiole.com/author/leaimmobilier/page/3",
+        "https://campiole.com/author/leaimmobilier/page/4"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "userId": -1,
+      "baseUrl": "https://campiole.com/author/stephmoudy/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/stephmoudy/",
+        "https://campiole.com/author/stephmoudy/page/2",
+        "https://campiole.com/author/stephmoudy/page/3",
+        "https://campiole.com/author/stephmoudy/page/4",
+        "https://campiole.com/author/stephmoudy/page/5",
+        "https://campiole.com/author/stephmoudy/page/6"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
       "active": true
     }
   ]

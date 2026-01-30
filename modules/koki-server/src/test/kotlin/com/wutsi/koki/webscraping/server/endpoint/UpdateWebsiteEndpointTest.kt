@@ -20,7 +20,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
     fun update() {
         // When
         val request = UpdateWebsiteRequest(
-            listingUrlPrefix = "/properties/",
+            listingUrlPrefixes = listOf("/properties/"),
             homeUrls = listOf("https://www.example.com/properties/page-1", "https://www.example.com/properties/page-2"),
             contentSelector = ".description",
             imageSelector = "img.photo",
@@ -37,7 +37,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val website = dao.findById(100).get()
-        assertEquals(request.listingUrlPrefix, website.listingUrlPrefix)
+        assertEquals(request.listingUrlPrefixes, website.listingUrlPrefixes)
         assertEquals(request.contentSelector, website.contentSelector)
         assertEquals(request.imageSelector, website.imageSelector)
         assertEquals(request.active, website.active)
@@ -48,7 +48,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
     fun `update with minimal fields`() {
         // When
         val request = UpdateWebsiteRequest(
-            listingUrlPrefix = "https://example.com/homes/",
+            listingUrlPrefixes = listOf("https://example.com/homes/"),
             active = true
         )
         val response = rest.postForEntity(
@@ -61,7 +61,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val website = dao.findById(100).get()
-        assertEquals(request.listingUrlPrefix, website.listingUrlPrefix)
+        assertEquals(request.listingUrlPrefixes, website.listingUrlPrefixes)
         assertEquals(null, website.contentSelector)
         assertEquals(null, website.imageSelector)
         assertEquals(true, website.active)
@@ -72,7 +72,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
     fun `update non-existent website`() {
         // When
         val request = UpdateWebsiteRequest(
-            listingUrlPrefix = "https://example.com/properties/",
+            listingUrlPrefixes = listOf("https://example.com/properties/"),
             active = true
         )
         val response = rest.postForEntity(
@@ -90,7 +90,7 @@ class UpdateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
     fun `update without listing url prefix`() {
         // When
         val request = UpdateWebsiteRequest(
-            listingUrlPrefix = "", // Empty prefix
+            listingUrlPrefixes = emptyList(), // Empty prefix
             active = true
         )
         val response = rest.postForEntity(

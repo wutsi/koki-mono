@@ -31,7 +31,7 @@ class ListingContentParserAgent(
 
     override fun buildPrompt(query: String, memory: List<String>): String {
         val country = Locale("en", defaultCity.country).displayCountry
-        val agentAddress = agentUser?.let { user -> userAddress(user) }
+        val agentCity = agentUser?.let { user -> userCity(user) }
 
         val prompt = this::class.java.getResourceAsStream("/listing/prompt/listing-content-parser.prompt.md")!!
             .reader()
@@ -64,20 +64,20 @@ class ListingContentParserAgent(
                 MutationType.entries.filter { it != MutationType.UNKNOWN }.joinToString(",") { it.name })
             .replace("{{agentName}}", agentUser?.displayName ?: "Unknown")
             .replace("{{agentEmployer}}", agentUser?.employer ?: "Unknown")
-            .replace("{{agentAddress}}", agentAddress ?: "Unknown")
+            .replace("{{agentAddressStreet}}", agentUser?.street ?: "Unknown")
+            .replace("{{agentAddressCity}}", agentCity?.name ?: "Unknown")
+            .replace("{{agentAddressCountry}}", agentUser?.country ?: "Unknown")
             .replace("{{agentPhone}}", agentUser?.mobile ?: "Unknown")
 
         return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
     }
 
-    private fun userAddress(user: UserEntity): String {
-        val city = if (user.cityId == defaultCity.id) {
+    private fun userCity(user: UserEntity): LocationEntity? {
+        return if (user.cityId == defaultCity.id) {
             defaultCity
         } else {
             user.cityId?.let { id -> locationService.get(id) }
         }
-        return listOfNotNull(user.street, city?.name, city?.country)
-            .joinToString(separator = ", ")
     }
 
     private fun loadAmenities(): String {

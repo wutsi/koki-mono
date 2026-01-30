@@ -69,8 +69,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Listing URL Prefix</th>
-                            <td><code th:text="${website.listingUrlPrefix}">XXX</code></td>
+                            <th>Listing URL Prefixes</th>
+                            <td>
+                                <code th:each="prefix : ${website.listingUrlPrefixes}" th:text="${prefix}">XXX</code>
+                            </td>
                         </tr>
                         <tr>
                             <th>Content CSS Selector</th>

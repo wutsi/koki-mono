@@ -24,7 +24,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateWebsiteRequest(
             userId = USER_ID,
             baseUrl = "https://newsite.com",
-            listingUrlPrefix = "https://newsite.com/listings/",
+            listingUrlPrefixes = listOf("https://newsite.com/listings/", "https://newsite.com/listings-2/"),
             homeUrls = listOf("https://newsite.com?page=1", "https://newsite.com?page=2"),
             contentSelector = ".content",
             imageSelector = "img.gallery",
@@ -45,7 +45,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val website = dao.findById(websiteId).get()
         assertEquals(request.userId, website.userId)
         assertEquals(request.baseUrl, website.baseUrl)
-        assertEquals(request.listingUrlPrefix, website.listingUrlPrefix)
+        assertEquals(request.listingUrlPrefixes, website.listingUrlPrefixes)
         assertEquals(request.contentSelector, website.contentSelector)
         assertEquals(request.imageSelector, website.imageSelector)
         assertEquals(request.active, website.active)
@@ -58,7 +58,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateWebsiteRequest(
             userId = USER_ID,
             baseUrl = "https://minimal.com",
-            listingUrlPrefix = "https://minimal.com/listings/",
+            listingUrlPrefixes = listOf("https://minimal.com/listings/"),
         )
         val response = rest.postForEntity(
             "/v1/websites",
@@ -75,7 +75,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val website = dao.findById(websiteId).get()
         assertEquals(request.userId, website.userId)
         assertEquals(request.baseUrl, website.baseUrl)
-        assertEquals(request.listingUrlPrefix, website.listingUrlPrefix)
+        assertEquals(request.listingUrlPrefixes, website.listingUrlPrefixes)
         assertEquals(null, website.contentSelector)
         assertEquals(null, website.imageSelector)
         assertEquals(true, website.active)
@@ -88,7 +88,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateWebsiteRequest(
             userId = USER_ID,
             baseUrl = "https://example.com",
-            listingUrlPrefix = "https://example.com/listings/",
+            listingUrlPrefixes = listOf("https://minimal.com/listings/"),
             contentSelector = ".content",
             imageSelector = "img.gallery",
             active = true
@@ -110,7 +110,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateWebsiteRequest(
             userId = USER_ID,
             baseUrl = "",
-            listingUrlPrefix = "https://newsite.com/listings/",
+            listingUrlPrefixes = listOf("https://minimal.com/listings/"),
             active = true
         )
         val response = rest.postForEntity(
@@ -129,7 +129,7 @@ class CreateWebsiteEndpointTest : AuthorizationAwareEndpointTest() {
         val request = CreateWebsiteRequest(
             userId = USER_ID,
             baseUrl = "https://newsite.com",
-            listingUrlPrefix = "",
+            listingUrlPrefixes = listOf(),
             active = true
         )
         val response = rest.postForEntity(

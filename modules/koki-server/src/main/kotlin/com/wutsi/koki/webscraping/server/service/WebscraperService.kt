@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element
 import org.jsoup.nodes.TextNode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.util.AntPathMatcher
 
 @Service
 class WebscraperService(
@@ -26,14 +27,17 @@ class WebscraperService(
     }
 
     private val sanitizerFilter = HtmlSanitizeFilter()
+    private val antMatcher = AntPathMatcher()
 
     fun scrape(website: WebsiteEntity, request: ScrapeWebsiteRequest): List<WebpageEntity> {
         val homeUrls = website.homeUrls.ifEmpty { listOf(website.baseUrl) }
         val result = mutableListOf<WebpageEntity>()
-        val listingUrlPrefix = if (website.listingUrlPrefix.startsWith(website.baseUrl)) {
-            website.listingUrlPrefix
-        } else {
-            website.baseUrl.trimEnd('/') + "/" + website.listingUrlPrefix.trimStart('/')
+        val listingUrlPrefixes = website.listingUrlPrefixes.map { prefix ->
+            if (prefix.startsWith("http://") || prefix.startsWith("https://")) {
+                prefix
+            } else {
+                website.baseUrl.trimEnd('/') + "/" + prefix.trimStart('/')
+            }
         }
 
         homeUrls.forEach { homeUrl ->
@@ -42,9 +46,9 @@ class WebscraperService(
                 val doc = get(homeUrl, website.baseUrl)
                 val urls = doc.select("a[href]")
                     .map { elt -> elt.absUrl("href") }
-                    .filter { href -> href.startsWith(listingUrlPrefix, ignoreCase = true) }
+                    .filter { url -> hasPrefix(url, listingUrlPrefixes) }
                     .distinct()
-                LOGGER.info("${urls.size} URLs with prefix $listingUrlPrefix")
+                LOGGER.info("${urls.size} URLs with prefix $listingUrlPrefixes")
 
                 urls.forEach { url ->
                     if (result.size < request.limit) {
@@ -64,6 +68,21 @@ class WebscraperService(
             }
         }
         return result
+    }
+
+    private fun hasPrefix(url: String, listingUrlPrefixes: List<String>): Boolean {
+        listingUrlPrefixes.forEach { prefix ->
+            if (prefix.contains("*")) {
+                if (antMatcher.match(prefix, url)) {
+                    return true
+                }
+            } else {
+                if (url.startsWith(prefix, ignoreCase = true)) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun scrape(url: String, website: WebsiteEntity, request: ScrapeWebsiteRequest): WebpageEntity? {
