@@ -89,7 +89,7 @@
       "active": true
     },
     {
-      "userId": -1,
+      "userId": 10,
       "baseUrl": "https://campiole.com/author/yannickimmo/",
       "listingUrlPrefixes": [
         "https://campiole.com/*-a-louer/**",
@@ -135,7 +135,7 @@
       "active": true
     },
     {
-      "userId": -1,
+      "userId": 11,
       "baseUrl": "https://campiole.com/author/leaimmobilier/",
       "listingUrlPrefixes": [
         "https://campiole.com/*-a-louer/**",

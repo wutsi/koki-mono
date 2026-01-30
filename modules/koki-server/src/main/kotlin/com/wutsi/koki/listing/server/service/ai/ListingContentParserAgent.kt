@@ -63,11 +63,11 @@ class ListingContentParserAgent(
                 "{{mutationTypes}}",
                 MutationType.entries.filter { it != MutationType.UNKNOWN }.joinToString(",") { it.name })
             .replace("{{agentName}}", agentUser?.displayName ?: "Unknown")
-            .replace("{{agentEmployer}}", agentUser?.employer ?: "Unknown")
-            .replace("{{agentAddressStreet}}", agentUser?.street ?: "Unknown")
-            .replace("{{agentAddressCity}}", agentCity?.name ?: "Unknown")
-            .replace("{{agentAddressCountry}}", agentUser?.country ?: "Unknown")
-            .replace("{{agentPhone}}", agentUser?.mobile ?: "Unknown")
+            .replace("{{agentEmployer}}", agentUser?.employer ?: "")
+            .replace("{{agentAddressStreet}}", agentUser?.street ?: "")
+            .replace("{{agentAddressCity}}", agentCity?.name ?: "")
+            .replace("{{agentAddressCountry}}", agentUser?.country ?: "")
+            .replace("{{agentPhone}}", agentUser?.mobile ?: "")
 
         return prompt + memory.joinToString(separator = "\n", prefix = "\n", postfix = "\n")
     }

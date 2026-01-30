@@ -107,10 +107,6 @@ springdoc:
             display-name: Module API
             paths-to-match: /v1/modules, /v1/modules/**, /v1/permissions
 
-        -   group: notes
-            display-name: Note API
-            paths-to-match: /v1/notes, /v1/notes/*
-
         -   group: place
             display-name: Place API
             paths-to-match: /v1/places, /v1/places/**

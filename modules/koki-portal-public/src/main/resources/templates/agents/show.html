@@ -38,8 +38,8 @@
             <hr/>
             <h2 th:text="#{page.agent.show.about(${agent.user.firstName})}">ABOUT</h2>
             <div th:utext="${agent.user.biographyHtml}">BIO</div>
-            <div class="margin-top">
-                <div class="margin-top-small" th:if="${agent.user.mobile}">
+            <div class="margin-top flex flex-wrap flex-space-between">
+                <div th:if="${agent.user.mobile}">
                     <i class="fa-solid fa-phone"></i>
                     <a th:href="${agent.user.mobileUrl}" th:text="${agent.user.mobileText}">WEBSITE</a>
                 </div>
@@ -47,7 +47,7 @@
                     <i class="fa-solid fa-envelope"></i>
                     <a th:href="${agent.user.emailUrl}" th:text="${agent.user.email}">EMAIL</a>
                 </div>
-                <div class="margin-top-small" th:if="${agent.user.mobile}">
+                <div th:if="${agent.user.mobile}">
                     <i class="fa-solid fa-link"></i>
                     <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">PHONE</a>
                 </div>
