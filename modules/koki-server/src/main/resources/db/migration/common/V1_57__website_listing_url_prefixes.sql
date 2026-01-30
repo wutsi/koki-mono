@@ -1,4 +1,3 @@
 -- Add commercial property fields to listing table
-ALTER TABLE T_LISTING ADD COLUMN units INT;
-ALTER TABLE T_LISTING ADD COLUMN revenue BIGINT;
+ALTER TABLE T_WEBSITE RENAME COLUMN listing_url_prefix TO listing_url_prefixes;
 

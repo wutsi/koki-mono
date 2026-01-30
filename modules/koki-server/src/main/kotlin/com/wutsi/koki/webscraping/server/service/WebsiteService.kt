@@ -44,7 +44,7 @@ class WebsiteService(
                 userId = request.userId,
                 baseUrl = request.baseUrl,
                 baseUrlHash = baseUrlHash,
-                listingUrlPrefix = request.listingUrlPrefix,
+                listingUrlPrefixes = request.listingUrlPrefixes,
                 contentSelector = request.contentSelector,
                 imageSelector = request.imageSelector,
                 homeUrls = request.homeUrls,
@@ -58,7 +58,7 @@ class WebsiteService(
     fun update(id: Long, request: UpdateWebsiteRequest, tenantId: Long) {
         val website = get(id, tenantId)
 
-        website.listingUrlPrefix = request.listingUrlPrefix
+        website.listingUrlPrefixes = request.listingUrlPrefixes
         website.contentSelector = request.contentSelector
         website.imageSelector = request.imageSelector
         website.active = request.active

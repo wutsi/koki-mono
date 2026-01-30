@@ -9,7 +9,7 @@ object WebscrapingFixtures {
     val website = Website(
         id = 1L,
         baseUrl = "https://www.realtor.com",
-        listingUrlPrefix = "/property",
+        listingUrlPrefixes = listOf("/property"),
         homeUrls = listOf("https://www.realtor.com/for-rent", "https://www.realtor.com/for-sale"),
         contentSelector = ".property-description",
         imageSelector = ".property-image-gallery img",

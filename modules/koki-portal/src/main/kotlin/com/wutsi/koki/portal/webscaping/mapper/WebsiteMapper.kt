@@ -11,7 +11,7 @@ class WebsiteMapper {
             id = entity.id,
             userId = entity.userId,
             baseUrl = entity.baseUrl,
-            listingUrlPrefix = entity.listingUrlPrefix,
+            listingUrlPrefixes = entity.listingUrlPrefixes,
             homeUrls = entity.homeUrls,
             contentSelector = entity.contentSelector,
             imageSelector = entity.imageSelector,

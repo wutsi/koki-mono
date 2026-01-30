@@ -21,7 +21,7 @@ import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WebscaperServiceTest {
+class WebscraperServiceTest {
     private val webpageService = mock<WebpageService>()
     private val http = mock<Http>()
     private val service: WebscraperService = WebscraperService(webpageService, http)
@@ -642,7 +642,7 @@ Studio à louer : Ngousso (100 000 Fcfa/mois) Ville : Yaoundé Quartier : Ngouss
     }
 
     private fun getHtml(path: String): String {
-        return WebscaperServiceTest::class.java
+        return WebscraperServiceTest::class.java
             .getResourceAsStream(path)!!
             .bufferedReader(Charsets.UTF_8).use { it.readText() }
     }

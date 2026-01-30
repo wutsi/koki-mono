@@ -76,7 +76,7 @@ class WebsiteEndpoints(
         logger.add("request_user_id", request.userId)
         logger.add("request_active", request.active)
         logger.add("request_base_url", request.baseUrl)
-        logger.add("request_listing_url_prefix", request.listingUrlPrefix)
+        logger.add("request_listing_url_prefix", request.listingUrlPrefixes)
         logger.add("request_content_selector", request.contentSelector)
         logger.add("request_image_selector", request.imageSelector)
 
@@ -93,7 +93,7 @@ class WebsiteEndpoints(
         @Valid @RequestBody request: UpdateWebsiteRequest
     ) {
         logger.add("request_active", request.active)
-        logger.add("request_listing_url_prefix", request.listingUrlPrefix)
+        logger.add("request_listing_url_prefix", request.listingUrlPrefixes)
         logger.add("request_content_selector", request.contentSelector)
         logger.add("request_image_selector", request.imageSelector)
 
