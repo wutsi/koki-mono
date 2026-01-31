@@ -20,7 +20,7 @@ class CreateWebpageListingCommandHandler(
         logger.add("command_webpage_id", command.webpageId)
         logger.add("command_tenant_id", command.tenantId)
 
-        // Create
+        // Create Listing from Webpage
         val webpage = service.listing(command.webpageId, command.tenantId)
         logger.add("listing_id", webpage.listingId)
 

@@ -5,18 +5,27 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.server.dao.AmenityRepository
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
-import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class AmenityService(
     private val dao: AmenityRepository,
-    private val em: EntityManager,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(AmenityService::class.java)
+    }
+
+    /**
+     * In-memory cache of locations to reduce database hits.
+     * TODO: This should be moved to a distributed cache like Redis.
+     */
+    @Suppress("ktlint:standard:backing-property-naming")
+    private var __cache: MutableMap<Long, AmenityEntity>? = null
+
     fun all(): List<AmenityEntity> {
-        return dao.findAll().toList()
+        return loadCache().values.toList()
     }
 
     fun get(id: Long): AmenityEntity {
@@ -25,12 +34,14 @@ class AmenityService(
     }
 
     fun getByIdOrNull(id: Long): AmenityEntity? {
-        return dao.findById(id).getOrNull()
+        return loadCache()[id]
     }
 
     @Transactional
     fun save(amenity: AmenityEntity): AmenityEntity {
-        return dao.save(amenity)
+        val saved = dao.save(amenity)
+        cache(saved)
+        return saved
     }
 
     fun search(
@@ -40,31 +51,34 @@ class AmenityService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<AmenityEntity> {
-        val jql = StringBuilder("SELECT C FROM AmenityEntity C WHERE C.id>0")
+        return loadCache().values.filter {
+            (ids.isEmpty() || ids.contains(it.id)) &&
+                (categoryId == null || it.categoryId == categoryId) &&
+                (active == null || it.active == active)
+        }.drop(offset).take(limit)
+    }
 
-        if (ids.isNotEmpty()) {
-            jql.append(" AND C.id IN :ids")
-        }
-        if (categoryId != null) {
-            jql.append(" AND C.categoryId = :categoryId")
-        }
-        if (active != null) {
-            jql.append(" AND C.active = :active")
-        }
+    fun imported() {
+        clearCache()
+    }
 
-        val query = em.createQuery(jql.toString(), AmenityEntity::class.java)
-        if (ids.isNotEmpty()) {
-            query.setParameter("ids", ids)
-        }
-        if (categoryId != null) {
-            query.setParameter("categoryId", categoryId)
-        }
-        if (active != null) {
-            query.setParameter("active", active)
-        }
+    private fun cacheKey(entity: AmenityEntity): Long {
+        return entity.id
+    }
 
-        query.firstResult = offset
-        query.maxResults = limit
-        return query.resultList
+    private fun cache(entity: AmenityEntity) {
+        loadCache()[cacheKey(entity)] = entity
+    }
+
+    private fun loadCache(): MutableMap<Long, AmenityEntity> {
+        if (__cache == null || __cache!!.isEmpty()) {
+            __cache = dao.findAll().associateBy { entity -> cacheKey(entity) }.toMutableMap()
+            LOGGER.info("${__cache?.size} amenities put the cache")
+        }
+        return __cache!!
+    }
+
+    private fun clearCache() {
+        __cache = null
     }
 }

@@ -52,7 +52,14 @@ spring:
             max-request-size: 10240KB
     task:
         scheduling:
-            thread-name-prefix: "${koki.webapp.client-id}-task"
+            thread-name-prefix: "${koki.webapp.client-id}-job-"
+            pool:
+                size: 4
+        task:
+            executor:
+                core-pool-size: 4
+                max-pool-size: 4
+                thread-name-prefix: "${koki.webapp.client-id}-task-"
 
 
 server:

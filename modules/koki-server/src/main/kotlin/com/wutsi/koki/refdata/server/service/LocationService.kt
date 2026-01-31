@@ -7,35 +7,38 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.dao.LocationRepository
 import com.wutsi.koki.refdata.server.domain.LocationEntity
-import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.text.Normalizer
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class LocationService(
     private val dao: LocationRepository,
-    private val em: EntityManager,
 ) {
     companion object {
         private val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+        private val LOGGER = LoggerFactory.getLogger(LocationService::class.java)
     }
 
+    /**
+     * In-memory cache of locations to reduce database hits.
+     * TODO: This should be moved to a distributed cache like Redis.
+     */
+    @Suppress("ktlint:standard:backing-property-naming")
+    private var __cache: MutableMap<Long, LocationEntity>? = null
+
     fun get(id: Long): LocationEntity {
-        return dao.findById(id).orElseThrow {
-            NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
-        }
+        return getOrNull(id)
+            ?: throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
     }
 
     fun getOrNull(id: Long): LocationEntity? {
-        return dao.findById(id).getOrNull()
+        return loadCache().get(id)
     }
 
     fun get(id: Long, type: LocationType): LocationEntity {
-        val location = dao.findById(id).getOrNull()
-            ?: throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
-
+        val location = get(id)
         if (location.type != type) {
             throw NotFoundException(error = Error(ErrorCode.LOCATION_NOT_FOUND, parameter = Parameter(value = id)))
         }
@@ -45,17 +48,20 @@ class LocationService(
     @Transactional
     fun save(location: LocationEntity): LocationEntity {
         location.asciiName = toAscii(location.name)
-        return dao.save(location)
+        val saved = dao.save(location)
+
+        cache(saved)
+        return saved
     }
 
     @Transactional
     fun link(parentId: Long, childId: Long): Boolean {
-        val child = dao.findById(childId).getOrNull() ?: return false
-        val parent = dao.findById(parentId).getOrNull()
+        val child = getOrNull(childId) ?: return false
+        val parent = getOrNull(parentId) ?: return false
 
-        child.parentId = parent?.id
+        child.parentId = parent.id
         dao.save(child)
-        return false
+        return true
     }
 
     fun search(
@@ -67,50 +73,48 @@ class LocationService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<LocationEntity> {
-        val jql = StringBuilder("SELECT L FROM LocationEntity L WHERE L.id>0")
-
-        if (keyword != null) {
-            jql.append(" AND UPPER(L.asciiName) LIKE :keyword")
+        return loadCache().values.filter { location ->
+            (keyword == null || location.asciiName.uppercase().startsWith(toAscii(keyword).uppercase())) &&
+                (ids.isEmpty() || ids.contains(location.id)) &&
+                (parentId == null || location.parentId == parentId) &&
+                (types.isEmpty() || types.contains(location.type)) &&
+                (country == null || location.country == country)
         }
-        if (ids.isNotEmpty()) {
-            jql.append(" AND L.id IN :ids")
-        }
-        if (parentId != null) {
-            jql.append(" AND L.parentId = :parentId")
-        }
-        if (types.isNotEmpty()) {
-            jql.append(" AND L.type IN :types")
-        }
-        if (country != null) {
-            jql.append(" AND L.country = :country")
-        }
-        jql.append(" ORDER BY L.name, L.population DESC")
-
-        val query = em.createQuery(jql.toString(), LocationEntity::class.java)
-        if (keyword != null) {
-            query.setParameter("keyword", "${toAscii(keyword).uppercase()}%")
-        }
-        if (ids.isNotEmpty()) {
-            query.setParameter("ids", ids)
-        }
-        if (parentId != null) {
-            query.setParameter("parentId", parentId)
-        }
-        if (types.isNotEmpty()) {
-            query.setParameter("types", types)
-        }
-        if (country != null) {
-            query.setParameter("country", country)
-        }
-
-        query.firstResult = offset
-        query.maxResults = limit
-        return query.resultList
+            .sortedWith(
+                compareBy<LocationEntity> { it.name }
+                    .thenByDescending { it.population }
+            )
+            .drop(offset)
+            .take(limit)
     }
 
     fun toAscii(str: String): String {
         val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
         return REGEX_UNACCENT.replace(temp, "")
             .replace(" ", "-")
+    }
+
+    fun imported() {
+        clearCache()
+    }
+
+    private fun cacheKey(entity: LocationEntity): Long {
+        return entity.id ?: -1L
+    }
+
+    private fun cache(entity: LocationEntity) {
+        loadCache()[cacheKey(entity)] = entity
+    }
+
+    private fun loadCache(): MutableMap<Long, LocationEntity> {
+        if (__cache == null || __cache!!.isEmpty()) {
+            __cache = dao.findAll().associateBy { entity -> entity.id ?: -1 }.toMutableMap()
+            LOGGER.info("${__cache?.size} locations put the cache")
+        }
+        return __cache!!
+    }
+
+    private fun clearCache() {
+        __cache = null
     }
 }

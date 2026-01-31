@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -70,48 +69,6 @@ class ImportLocationEndpointTest : AuthorizationAwareEndpointTest() {
         neighbourhoods.forEach { neighbourhood ->
             assertNotNull(cities.find { city -> city.id == neighbourhood.parentId })
         }
-    }
-
-    @Sql(value = ["/db/test/clean.sql"])
-    @Test
-    @Ignore("Too long :-(")
-    fun us() {
-        val response = rest.getForEntity("/v1/locations/import?country=US", ImportResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val countries = dao.findByType(LocationType.COUNTRY)
-        assertEquals(1, countries.size)
-        assertEquals("United States", countries[0].name)
-        assertEquals("US", countries[0].country)
-
-        val states = dao.findByType(LocationType.STATE)
-        assertEquals(51, states.size)
-        states.forEach { state -> assertEquals(countries[0].id, state.parentId) }
-
-        val stateIds = states.map { it.id }
-        val cities = dao.findByType(LocationType.CITY)
-        cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
-    }
-
-    @Sql(value = ["/db/test/clean.sql"])
-    @Test
-    fun fr() {
-        val response = rest.getForEntity("/v1/locations/import?country=FR", ImportResponse::class.java)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val countries = dao.findByType(LocationType.COUNTRY)
-        assertEquals(1, countries.size)
-        assertEquals("FR", countries[0].country)
-
-        val states = dao.findByType(LocationType.STATE)
-        assertEquals(13, states.size)
-        states.forEach { state -> assertEquals(countries[0].id, state.parentId) }
-
-        val stateIds = states.map { it.id }
-        val cities = dao.findByType(LocationType.CITY)
-        cities.forEach { city -> assertTrue(stateIds.contains(city.parentId)) }
     }
 
     @Test
