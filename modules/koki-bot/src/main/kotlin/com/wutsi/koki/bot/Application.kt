@@ -3,11 +3,9 @@ package com.wutsi.koki.bot
 import com.wutsi.koki.platform.KokiApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @KokiApplication
-@EnableAsync
 @EnableScheduling
 @SpringBootApplication
 class KokiBotApplication
