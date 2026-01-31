@@ -110,12 +110,6 @@ koki:
 
 wutsi:
     platform:
-        cache:
-            name: koki
-            type: redis
-            ttl: 86400
-            redis:
-                url: redis://:test@localhost:6379
         executor:
             thread-pool:
                 name: ${koki.webapp.client-id}
