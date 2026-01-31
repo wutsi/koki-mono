@@ -11,9 +11,6 @@ koki:
 
 wutsi:
     platform:
-        cache:
-            redis:
-                url: ${REDISCLOUD_URL}
         storage:
             type: s3
             s3:

@@ -9,21 +9,11 @@ logging:
         com.wutsi: INFO
 
 koki:
-    smtp:
-        host: ${SMTP_HOST}
-        port: ${SMTP_PORT}
-        username: ${SMTP_USER}
-        password: ${SMTP_PASSWORD}
-        from: no-reply@wutsi.com
-
     module:
         consumer-delay-seconds: 60
 
 wutsi:
     platform:
-        cache:
-            redis:
-                url: ${REDISCLOUD_URL}
         storage:
             type: s3
             s3:
