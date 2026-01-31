@@ -53,11 +53,6 @@ spring:
     task:
         scheduling:
             thread-name-prefix: "${koki.webapp.client-id}-task"
-            pool:
-                size: 4
-            shutdown:
-                await-termination: true
-                await-termination-period: 30s
 
 
 server:

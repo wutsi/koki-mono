@@ -1,0 +1,174 @@
+{
+  "websites": [
+    {
+      "name": "ereshomes.com",
+      "baseUrl": "https://www.ereshomes.com",
+      "listingUrlPrefixes": [
+        "/property-details/"
+      ],
+      "homeUrls": [
+        "https://www.ereshomes.com/realestateforrent",
+        "https://www.ereshomes.com/realestateforrent?page=2",
+        "https://www.ereshomes.com/realestateforrent?page=3",
+        "https://www.ereshomes.com/realestateforsale"
+      ],
+      "contentSelector": ".sp-lg-title, .price, .ps-widget:nth-child(2) h4:first-child, .ps-widget:nth-child(2) p.text-justify, .ps-widget:nth-child(3) h4, .ps-widget:nth-child(3) p.text, .ps-widget:nth-child(4) h4, .ps-widget:nth-child(4) p.text",
+      "imageSelector": ".sp-img-content img",
+      "active": true
+    },
+    {
+      "name": "codecis.com",
+      "baseUrl": "https://codecis.com",
+      "listingUrlPrefixes": [
+        "/property/"
+      ],
+      "homeUrls": [
+        "https://codecis.com/status/a-louer/",
+        "https://codecis.com/status/a-louer/page/2/",
+        "https://codecis.com/status/a-vendre/",
+        "https://codecis.com/status/a-vendre/page/2/"
+      ],
+      "contentSelector": ".property-title-price-wrap, .page-title-wrap .item-address, .property-description-wrap, .property-features-wrap, property-address-wrap",
+      "imageSelector": "#property-gallery-js img",
+      "active": true
+    },
+    {
+      "name": "adpmrealestate.com",
+      "baseUrl": "https://adpmrealestate.com",
+      "listingUrlPrefixes": [
+        "/property/"
+      ],
+      "homeUrls": [
+        "https://adpmrealestate.com/city/yaounde/",
+        "https://adpmrealestate.com/city/yaounde/page/2/",
+        "https://adpmrealestate.com/city/yaounde/page/3/",
+        "https://adpmrealestate.com/city/douala/",
+        "https://adpmrealestate.com/city/douala/page/2/",
+        "https://adpmrealestate.com/city/douala/page/3/",
+        "https://adpmrealestate.com/city/douala/page/4/",
+        "https://adpmrealestate.com/city/douala/page/5/",
+        "https://adpmrealestate.com/city/kribi/"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-address-wrap, .property-detail-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "name": "camerounmaison.com",
+      "baseUrl": "https://www.camerounmaison.com",
+      "listingUrlPrefixes": [
+        "/detail_maison"
+      ],
+      "homeUrls": [
+        "https://www.camerounmaison.com/vip/1",
+        "https://www.camerounmaison.com/vip/2",
+        "https://www.camerounmaison.com/vip/3",
+        "https://www.camerounmaison.com/vip/4",
+        "https://www.camerounmaison.com/vip/5",
+        "https://www.camerounmaison.com/vip/6",
+        "https://www.camerounmaison.com/vip/7",
+        "https://www.camerounmaison.com/vip/8",
+        "https://www.camerounmaison.com/vip/9",
+        "https://www.camerounmaison.com/vip/10"
+      ],
+      "contentSelector": ".gauche p span",
+      "imageSelector": ".imgitems img:not([src$='vip.png'])",
+      "active": true
+    },
+    {
+      "name": "mav-sarl.com",
+      "baseUrl": "https://mav-sarl.com",
+      "listingUrlPrefixes": [
+        "/properties"
+      ],
+      "homeUrls": [
+        "https://mav-sarl.com/featured"
+      ],
+      "contentSelector": "h1, .mh-estate__section h3, .mh-estate__section p, .mh-estate__section .mh-estate__list",
+      "imageSelector": ".swiper-wrapper img",
+      "active": true
+    },
+    {
+      "name": "yannickimmo",
+      "baseUrl": "https://campiole.com/author/yannickimmo/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/yannickimmo/",
+        "https://campiole.com/author/yannickimmo/page/2"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "name": "lessyimmo",
+      "baseUrl": "https://campiole.com/author/lessyimmo/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/lessyimmo/"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "name": "patrickimmolux",
+      "baseUrl": "https://campiole.com/author/patrickimmolux/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/patrickimmolux/",
+        "https://campiole.com/author/patrickimmolux/page/2",
+        "https://campiole.com/author/patrickimmolux/page/3",
+        "https://campiole.com/author/patrickimmolux/page/4"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "name": "leaimmobilier",
+      "baseUrl": "https://campiole.com/author/leaimmobilier/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/leaimmobilier/",
+        "https://campiole.com/author/leaimmobilier/page/2",
+        "https://campiole.com/author/leaimmobilier/page/3",
+        "https://campiole.com/author/leaimmobilier/page/4"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    },
+    {
+      "name": "stephmoudy",
+      "baseUrl": "https://campiole.com/author/stephmoudy/",
+      "listingUrlPrefixes": [
+        "https://campiole.com/*-a-louer/**",
+        "https://campiole.com/*-a-vendre/**"
+      ],
+      "homeUrls": [
+        "https://campiole.com/author/stephmoudy/",
+        "https://campiole.com/author/stephmoudy/page/2",
+        "https://campiole.com/author/stephmoudy/page/3",
+        "https://campiole.com/author/stephmoudy/page/4",
+        "https://campiole.com/author/stephmoudy/page/5",
+        "https://campiole.com/author/stephmoudy/page/6"
+      ],
+      "contentSelector": "h1, .property-description-wrap, .property-detail-wrap, .property-features-wrap",
+      "imageSelector": "img.houzez-gallery-img",
+      "active": true
+    }
+  ]
+}

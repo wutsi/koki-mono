@@ -1,0 +1,141 @@
+database:
+    pool-size: 4
+
+spring:
+    jackson:
+        default-property-inclusion: non_null
+        use-jackson2-defaults: true
+        deserialization:
+            FAIL_ON_UNKNOWN_PROPERTIES: false
+            FAIL_ON_NULL_FOR_PRIMITIVES: false
+            ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
+        mapper:
+            ACCEPT_CASE_INSENSITIVE_ENUMS: true
+            ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+
+    mvc:
+        pathmatch:
+            matching-strategy: ANT_PATH_MATCHER
+    servlet:
+        multipart:
+            max-file-size: 10240KB
+            max-request-size: 10240KB
+    task:
+        scheduling:
+            thread-name-prefix: "${koki.webapp.client-id}-task"
+
+server:
+    port: 8084
+    compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+        min-response-size: 512
+
+springdoc:
+    packages-to-scan: com.wutsi.koki
+    show-actuator: true
+    swagger-ui:
+        path: /api.html
+        operations-sorter: alpha
+        tags-sorter: alpha
+    group-configs:
+        -   group: bot
+            display-name: Web Bot API
+            paths-to-match: /v1/bot, /v1/bot/**
+
+management:
+    endpoint:
+        health:
+            show-details: always
+        info:
+            git:
+                mode: full
+    endpoints:
+        web:
+            exposure:
+                include: "beans,flyway,health,info,scheduledtasks,mappings"
+
+logging:
+    level:
+        root: INFO
+        com.amazonaws: ERROR
+        org.springframework: INFO
+        com.wutsi: DEBUG
+        springfox: ERROR
+
+    pattern:
+        console: "%d Type=%level Logger=%c Thread=%thread %m%n"
+        file: "%d Type=%level Logger=%c Thread=%thread %m%n"
+
+koki:
+    webapp:
+        client-id: koki-bot
+        server-url: http://localhost:${server.port}
+
+    ai:
+        chat:
+            type: deepseek
+            api-key: ${DEEPSEEK_API_KEY}
+            model: deepseek-chat
+            rest:
+                read-timeout-millis: 600000 # 1 minute
+                connect-timeout-millis: 15000 # 15 second
+        chat-with-tools:
+            type: deepseek
+            api-key: ${DEEPSEEK_API_KEY}
+            model: deepseek-chat
+            rest:
+                read-timeout-millis: 120000 # 2 minute
+                connect-timeout-millis: 15000  # 15 second
+        vision:
+            type: kimi
+            api-key: ${KIMI_API_KEY}
+            model: moonshot-v1-128k-vision-preview
+            rest:
+                read-timeout-millis: 60000 # 1 minute
+                connect-timeout-millis: 15000  # 15 second
+
+    module:
+        consumer-delay-seconds: 1
+
+        bot:
+            cron:
+                scape: "0 0 0 * * *"  # Every day at midnight
+
+            mq:
+                consumer-delay-seconds: ${koki.module.consumer-delay-seconds}
+                queue: koki-bot-queue
+                dlq: koki-bot-dlq
+                dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+
+wutsi:
+    platform:
+        cache:
+            name: koki
+            type: redis
+            ttl: 86400
+            redis:
+                url: redis://:test@localhost:6379
+        executor:
+            thread-pool:
+                name: ${koki.webapp.client-id}
+                size: 4
+        mq:
+            type: rabbitmq
+            rabbitmq:
+                url: amqp://localhost
+                exchange-name: koki
+                max-retries: 24
+                ttl-seconds: 84600
+        storage:
+            enabled: true
+            type: local # local | s3
+            local:
+                directory: ${user.home}/__wutsi
+                base-url: http://localhost:${server.port}
+                servlet-path: /local-storage
+            s3:
+                bucket: koki-test
+                region: us-east-1
+                access-key: ""
+                secret-key: ""
