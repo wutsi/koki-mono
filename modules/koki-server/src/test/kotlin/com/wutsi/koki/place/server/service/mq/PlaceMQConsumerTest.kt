@@ -2,13 +2,19 @@ package com.wutsi.koki.place.server.service.mq
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.error.dto.Error
+import com.wutsi.koki.error.dto.ErrorCode
+import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.place.dto.event.PlaceCreatedEvent
 import com.wutsi.koki.place.dto.event.PlaceUpdatedEvent
+import com.wutsi.koki.platform.logger.DefaultKVLogger
+import org.junit.jupiter.api.AfterEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -18,11 +24,18 @@ class PlaceMQConsumerTest {
     private val listingStatusChangedEventHandler = mock<PlaceListingStatusChangedEventHandler>()
     private val placeCreatedEventHandler = mock<PlaceCreatedEventHandler>()
     private val placeUpdatedEventHandler = mock<UpdatePlaceEventHandler>()
+    private val logger = DefaultKVLogger()
     private val consumer = PlaceMQConsumer(
         listingStatusChangedEventHandler = listingStatusChangedEventHandler,
         placeCreatedEventHandler = placeCreatedEventHandler,
         placeUpdatedEventHandler = placeUpdatedEventHandler,
+        logger = logger,
     )
+
+    @AfterEach
+    fun tearDown() {
+        logger.log()
+    }
 
     @Test
     fun `should consume ListingStatusChangedEvent and return true when handler returns true`() {
@@ -126,6 +139,34 @@ class PlaceMQConsumerTest {
         verify(placeCreatedEventHandler, never()).handle(any())
         verify(listingStatusChangedEventHandler, never()).handle(any())
         verify(placeUpdatedEventHandler).handle(event)
+    }
+
+    @Test
+    fun `should return false when PLACE_NOT_FOUND error`() {
+        // Given
+        val event = PlaceUpdatedEvent(placeId = 200L)
+        doThrow(NotFoundException(error = Error(ErrorCode.PLACE_NOT_FOUND)))
+            .whenever(placeUpdatedEventHandler).handle(event)
+
+        // When
+        val result = consumer.consume(event)
+
+        // Then
+        assertFalse(result)
+    }
+
+    @Test
+    fun `should return false when PLACE_DUPLICATE_NAME error`() {
+        // Given
+        val event = PlaceCreatedEvent(placeId = 200L)
+        doThrow(NotFoundException(error = Error(ErrorCode.PLACE_DUPLICATE_NAME)))
+            .whenever(placeCreatedEventHandler).handle(event)
+
+        // When
+        val result = consumer.consume(event)
+
+        // Then
+        assertFalse(result)
     }
 
     @Test
