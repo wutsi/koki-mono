@@ -7,6 +7,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.dao.LocationRepository
 import com.wutsi.koki.refdata.server.domain.LocationEntity
+import jakarta.annotation.PostConstruct
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -27,6 +28,11 @@ class LocationService(
      */
     @Suppress("ktlint:standard:backing-property-naming")
     private var __cache: MutableMap<Long, LocationEntity>? = null
+
+    @PostConstruct
+    fun init() {
+        clearCache()
+    }
 
     fun get(id: Long): LocationEntity {
         return getOrNull(id)
@@ -74,11 +80,11 @@ class LocationService(
         offset: Int = 0,
     ): List<LocationEntity> {
         return loadCache().values.filter { location ->
-            (keyword == null || location.asciiName.uppercase().startsWith(toAscii(keyword).uppercase())) &&
-                (ids.isEmpty() || ids.contains(location.id)) &&
-                (parentId == null || location.parentId == parentId) &&
-                (types.isEmpty() || types.contains(location.type)) &&
-                (country == null || location.country == country)
+            (keyword != null && location.asciiName.uppercase().startsWith(toAscii(keyword).uppercase())) ||
+                (ids.isNotEmpty() && ids.contains(location.id)) ||
+                (parentId != null && location.parentId == parentId) ||
+                (types.isNotEmpty() && types.contains(location.type)) ||
+                (country != null && location.country == country)
         }
             .sortedWith(
                 compareBy<LocationEntity> { it.name }
@@ -92,10 +98,6 @@ class LocationService(
         val temp = Normalizer.normalize(str, Normalizer.Form.NFD)
         return REGEX_UNACCENT.replace(temp, "")
             .replace(" ", "-")
-    }
-
-    fun imported() {
-        clearCache()
     }
 
     private fun cacheKey(entity: LocationEntity): Long {

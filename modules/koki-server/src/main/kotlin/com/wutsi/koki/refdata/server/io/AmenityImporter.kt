@@ -66,9 +66,6 @@ class AmenityImporter(
         amenities.filter { amenity -> !amenityIds.contains(amenity.id) }
             .forEach { amenity -> deactivate(amenity) }
 
-        /* Notify */
-        service.imported()
-
         LOGGER.info("${added + updated} amenity(ies) imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,

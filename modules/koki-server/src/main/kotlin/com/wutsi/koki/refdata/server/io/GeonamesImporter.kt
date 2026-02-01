@@ -92,9 +92,6 @@ class GeonamesImporter(
         // Link states -> countries
         stateIds.forEach { stateId -> service.link(countryId, stateId) }
 
-        // Notify
-        service.imported()
-
         LOGGER.info("${added + updated} location(s) imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,

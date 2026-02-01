@@ -87,9 +87,6 @@ class NeighbourhoodImporter(
             }
         }
 
-        // Notify
-        locationService.imported()
-
         LOGGER.info("${added + updated} neighborhood(s) for $country imported with ${errors.size} error(s)")
         return ImportResponse(
             added = added,
