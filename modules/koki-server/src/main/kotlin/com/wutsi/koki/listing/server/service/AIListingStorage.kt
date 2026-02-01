@@ -26,7 +26,7 @@ class AIListingStorage(
         result: ListingContentParserResult,
         listing: ListingEntity,
     ) {
-        val path = "tenant/${listing.tenantId}/listing/${listing.id}/__ai"
+        val path = "tenant/${listing.tenantId}/listing/${listing.id}/ai"
         val storage = storageProvider.get(listing.tenantId)
         store("$path/request.json", request, storage)
         store("$path/result.json", result, storage)

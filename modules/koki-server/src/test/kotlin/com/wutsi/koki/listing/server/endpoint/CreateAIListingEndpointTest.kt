@@ -202,13 +202,13 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         Thread.sleep(1000) // Wait for async process
         verify(storage).store(
-            eq("tenant/$TENANT_ID/listing/$id/__ai/request.json"),
+            eq("tenant/$TENANT_ID/listing/$id/ai/request.json"),
             any(),
             eq("application/json"),
             any()
         )
         verify(storage).store(
-            eq("tenant/$TENANT_ID/listing/$id/__ai/result.json"),
+            eq("tenant/$TENANT_ID/listing/$id/ai/result.json"),
             any(),
             eq("application/json"),
             any()
