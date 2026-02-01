@@ -5,13 +5,13 @@ import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.PlaceType
-import com.wutsi.koki.place.server.domain.PlaceEntity
+import com.wutsi.koki.place.dto.event.PlaceCreatedEvent
+import com.wutsi.koki.place.dto.event.PlaceUpdatedEvent
 import com.wutsi.koki.place.server.service.PlaceService
-import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.LocationService
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,24 +20,15 @@ class PlaceListingStatusChangedEventHandler(
     private val placeService: PlaceService,
     private val listingService: ListingService,
     private val logger: KVLogger,
+    private val publisher: Publisher,
 ) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(PlaceListingStatusChangedEventHandler::class.java)
-    }
-
     fun handle(event: ListingStatusChangedEvent): Boolean {
         logger.add("event_status", event.status)
         logger.add("event_listing_id", event.listingId)
         logger.add("event_tenant_id", event.tenantId)
 
         if (event.status == ListingStatus.ACTIVE) {
-            try {
-                return createNeighbourhoodContent(event)
-            } catch (ex: LLMException) {
-                logger.add("llm_error", true)
-                logger.add("llm_error_message", ex.message)
-                return false
-            }
+            return createNeighbourhoodContent(event)
         } else {
             return false
         }
@@ -48,40 +39,29 @@ class PlaceListingStatusChangedEventHandler(
         logger.add("neighbourhood_id", listing.neighbourhoodId)
 
         val neighbourhoodId = listing.neighbourhoodId ?: return false
-        val place = placeService.search(
+        var place = placeService.search(
             types = listOf(PlaceType.NEIGHBORHOOD),
             neighbourhoodIds = listOf(neighbourhoodId),
             limit = 1
         ).firstOrNull()
-            ?: createNeighbourhood(neighbourhoodId)
-        logger.add("place_id", place.id)
 
-        if (!hasContent(place)) {
-            LOGGER.info("Generating content for neighbourhood #${place.id} - ${place.name}")
-            placeService.update(place.id ?: -1)
-            logger.add("content_generated", true)
-        } else {
-            logger.add("content_generated", true)
-            logger.add("reason", "already_has_content")
+        if (place == null) {
+            val location = locationService.get(neighbourhoodId, LocationType.NEIGHBORHOOD)
+            place = placeService.create(
+                CreatePlaceRequest(
+                    name = location.name,
+                    neighbourhoodId = neighbourhoodId,
+                    type = PlaceType.NEIGHBORHOOD,
+                )
+            )
+            logger.add("place_id", place.id)
+
+            publisher.publish(PlaceCreatedEvent(place.id ?: -1))
+        } else if (!place.hasContent()) {
+            val placeId = place.id ?: -1
+            placeService.update(placeId)
+            publisher.publish(PlaceUpdatedEvent(placeId)) // This will fire the content generation
         }
         return true
-    }
-
-    private fun createNeighbourhood(neighbourhoodId: Long): PlaceEntity {
-        val location = locationService.get(neighbourhoodId, LocationType.NEIGHBORHOOD)
-        return placeService.create(
-            CreatePlaceRequest(
-                name = location.name,
-                neighbourhoodId = neighbourhoodId,
-                type = PlaceType.NEIGHBORHOOD,
-                generateContent = false
-            )
-        )
-    }
-
-    private fun hasContent(place: PlaceEntity): Boolean {
-        return !place.summary.isNullOrEmpty() &&
-            !place.introduction.isNullOrEmpty() &&
-            !place.description.isNullOrEmpty()
     }
 }

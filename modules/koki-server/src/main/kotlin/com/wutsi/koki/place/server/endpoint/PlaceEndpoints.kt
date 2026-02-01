@@ -7,6 +7,8 @@ import com.wutsi.koki.place.dto.GetPlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
+import com.wutsi.koki.place.dto.event.PlaceCreatedEvent
+import com.wutsi.koki.place.dto.event.PlaceUpdatedEvent
 import com.wutsi.koki.place.server.io.HospitalImporter
 import com.wutsi.koki.place.server.io.MarketImporter
 import com.wutsi.koki.place.server.io.SchoolImporter
@@ -14,6 +16,7 @@ import com.wutsi.koki.place.server.io.ToDoImporter
 import com.wutsi.koki.place.server.mapper.PlaceMapper
 import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -34,6 +37,7 @@ class PlaceEndpoints(
     private val hospitalImporter: HospitalImporter,
     private val marketImporter: MarketImporter,
     private val parkImporter: ToDoImporter,
+    private val publisher: Publisher,
 ) {
     @PostMapping
     fun create(
@@ -44,7 +48,11 @@ class PlaceEndpoints(
         logger.add("request_neighbourhood_id", request.neighbourhoodId)
 
         val place = service.create(request)
-
+        publisher.publish(
+            PlaceCreatedEvent(
+                placeId = place.id ?: -1L,
+            )
+        )
         logger.add("response_place_id", place.id)
         return CreatePlaceResponse(placeId = place.id!!)
     }
@@ -54,6 +62,7 @@ class PlaceEndpoints(
         @PathVariable id: Long,
     ) {
         service.update(id)
+        publisher.publish(PlaceUpdatedEvent(placeId = id))
     }
 
     @GetMapping("/{id}")

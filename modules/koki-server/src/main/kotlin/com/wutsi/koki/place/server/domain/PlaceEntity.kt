@@ -85,4 +85,10 @@ data class PlaceEntity(
     @OneToMany
     @JoinColumn(name = "place_fk")
     val ratings: List<PlaceRatingEntity> = emptyList()
-)
+) {
+    fun hasContent(): Boolean {
+        return !summary.isNullOrEmpty() &&
+            !introduction.isNullOrEmpty() &&
+            !description.isNullOrEmpty()
+    }
+}
