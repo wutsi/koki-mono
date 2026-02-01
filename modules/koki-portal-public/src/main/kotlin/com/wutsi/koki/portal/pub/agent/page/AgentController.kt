@@ -62,7 +62,7 @@ class AgentController(
         val rental = loadActiveListings("rental", ListingType.RENTAL, agent, model)
         val sold = loadActiveListings("sale", ListingType.SALE, agent, model)
         loadSoldListings(agent, model)
-        loadNeighborhoods(rental + sold, model)
+        loadNeighborhoods(agent, rental + sold, model)
 
         loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)
@@ -131,18 +131,18 @@ class AgentController(
         return listings
     }
 
-    private fun loadNeighborhoods(listings: List<ListingModel>, model: Model): List<LocationModel> {
+    private fun loadNeighborhoods(agent: AgentModel, listings: List<ListingModel>, model: Model): List<LocationModel> {
         val neighbourhoodIds = listings.mapNotNull { listing -> listing.address?.neighbourhood?.id }
             .distinct()
-            .take(12)
 
         val neighbourhoods = locationService.search(
             ids = neighbourhoodIds,
             types = listOf(LocationType.NEIGHBORHOOD),
+            parentId = agent.user.city?.id,
             limit = neighbourhoodIds.size,
         )
         model.addAttribute("neighbourhoods", neighbourhoods)
-        return neighbourhoods
+        return neighbourhoods.take(12)
     }
 
     private fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
