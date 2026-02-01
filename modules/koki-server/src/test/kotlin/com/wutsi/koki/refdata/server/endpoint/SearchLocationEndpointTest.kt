@@ -33,6 +33,14 @@ class SearchLocationEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
+    fun `by parent-id and type`() {
+        val response = rest.getForEntity("/v1/locations?parent-id=23701&type=CITY", SearchLocationResponse::class.java)
+
+        val locations = response.body!!.locations
+        assertEquals(2, locations.size)
+    }
+
+    @Test
     fun `by keyword`() {
         val response = rest.getForEntity("/v1/locations?q=baf", SearchLocationResponse::class.java)
 

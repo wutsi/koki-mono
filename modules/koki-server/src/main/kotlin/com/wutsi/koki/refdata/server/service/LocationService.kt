@@ -80,11 +80,11 @@ class LocationService(
         offset: Int = 0,
     ): List<LocationEntity> {
         return loadCache().values.filter { location ->
-            (keyword != null && location.asciiName.uppercase().startsWith(toAscii(keyword).uppercase())) ||
-                (ids.isNotEmpty() && ids.contains(location.id)) ||
-                (parentId != null && location.parentId == parentId) ||
-                (types.isNotEmpty() && types.contains(location.type)) ||
-                (country != null && location.country == country)
+            (keyword.isNullOrEmpty() || location.asciiName.uppercase().startsWith(toAscii(keyword).uppercase())) &&
+                (ids.isEmpty() || ids.contains(location.id)) &&
+                (parentId == null || location.parentId == parentId) &&
+                (types.isEmpty() || types.contains(location.type)) &&
+                (country.isNullOrEmpty() || location.country == country)
         }
             .sortedWith(
                 compareBy<LocationEntity> { it.name }

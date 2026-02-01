@@ -52,9 +52,9 @@ class AmenityService(
         offset: Int = 0,
     ): List<AmenityEntity> {
         return loadCache().values.filter {
-            (ids.isNotEmpty() && ids.contains(it.id)) ||
-                (categoryId != null && it.categoryId == categoryId) ||
-                (active != null && it.active == active)
+            (ids.isEmpty() || ids.contains(it.id)) &&
+                (categoryId == null || it.categoryId == categoryId) &&
+                (active == null || it.active == active)
         }.drop(offset).take(limit)
     }
 
