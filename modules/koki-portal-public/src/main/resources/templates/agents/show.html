@@ -117,7 +117,7 @@
         <div class="margin-top-2x" id="price-trend-container"
              th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
             <hr/>
-            <h2 th:text="#{page.agent.section.pricing}">Pricing Information</h2>
+            <h2 th:text="#{page.agent.section.pricing(${agent.user.firstName})}">Pricing Information</h2>
 
             <div
                 th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
@@ -159,7 +159,7 @@
                th:if="${messageUrl}"
             >
                 <i class="fa-brands fa-whatsapp"></i>
-                <span th:text="#{button.send_message}"> Send Message</span>
+                <span th:text="#{button.contact}">CONTACT</span>
             </a>
         </div>
     </div>

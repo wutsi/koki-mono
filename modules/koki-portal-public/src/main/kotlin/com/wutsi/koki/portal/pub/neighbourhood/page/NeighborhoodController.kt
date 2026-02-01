@@ -55,7 +55,7 @@ class NeighborhoodController(
         val rentals = loadActiveListings("rental", neighbourhood.id, ListingType.RENTAL, model)
         val sales = loadActiveListings("sale", neighbourhood.id, ListingType.SALE, model)
         val all = rentals + sales
-        val agents = loadAgents(all, model)
+        val agents = loadAgents(neighbourhood, all, model)
         val topAgent = loadTopAgent(agents, model)
         topAgent?.let { agent ->
             model.addAttribute("messageUrl", whatsapp.toNeighbourhoodUrl(neighbourhood, agent))
@@ -111,11 +111,12 @@ class NeighborhoodController(
         }
     }
 
-    private fun loadAgents(listings: List<ListingModel>, model: Model): List<AgentModel> {
+    private fun loadAgents(neighbourhood: LocationModel, listings: List<ListingModel>, model: Model): List<AgentModel> {
         val agentUserIdsMap = listings.filter { listing -> listing.sellerAgentUser != null }
             .groupBy { listing -> listing.sellerAgentUser?.id ?: -1L }
 
         val topAgentUserIds = listings
+            .filter { listing -> listing.sellerAgentUser?.city?.id == neighbourhood.parentId }
             .mapNotNull { listing -> listing.sellerAgentUser?.id }
             .toList()
             .distinct()
