@@ -140,9 +140,9 @@ class AgentController(
             types = listOf(LocationType.NEIGHBORHOOD),
             parentId = agent.user.city?.id,
             limit = neighbourhoodIds.size,
-        )
+        ).take(12)
         model.addAttribute("neighbourhoods", neighbourhoods)
-        return neighbourhoods.take(12)
+        return neighbourhoods
     }
 
     private fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
