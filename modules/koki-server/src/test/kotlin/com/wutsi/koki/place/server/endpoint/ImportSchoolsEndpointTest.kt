@@ -3,8 +3,6 @@ package com.wutsi.koki.place.server.endpoint
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.refdata.server.io.NeighbourhoodImporter
-import com.wutsi.koki.refdata.server.service.LocationService
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -16,16 +14,6 @@ import kotlin.test.assertTrue
 class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var neighbourhoodImporter: NeighbourhoodImporter
-
-    @Autowired
-    private lateinit var locationService: LocationService
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-
-        locationService.init()
-    }
 
     @Test
     fun `import schools successfully`() {

@@ -84,7 +84,7 @@ class LocationService(
                 (ids.isEmpty() || ids.contains(location.id)) &&
                 (parentId == null || location.parentId == parentId) &&
                 (types.isEmpty() || types.contains(location.type)) &&
-                (country.isNullOrEmpty() || location.country == country)
+                (country.isNullOrEmpty() || location.country.equals(country, ignoreCase = true))
         }
             .sortedWith(
                 compareBy<LocationEntity> { it.name }
