@@ -44,7 +44,7 @@ class ListingMapper(
         return AIListingModel(
             id = entity.id,
             listingId = entity.listingId,
-            text = entity.text,
+            text = jsonPrettyPrint(entity.text),
             result = jsonPrettyPrint(entity.result),
             createdAt = entity.createdAt,
         )

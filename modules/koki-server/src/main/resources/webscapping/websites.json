@@ -152,7 +152,7 @@
       "active": true
     },
     {
-      "userId": -1,
+      "userId": 12,
       "baseUrl": "https://campiole.com/author/stephmoudy/",
       "listingUrlPrefixes": [
         "https://campiole.com/*-a-louer/**",

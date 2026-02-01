@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.refdata.dto.Address
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
@@ -61,6 +62,11 @@ class AIListingService(
         result: ListingContentParserResult,
         tenantId: Long,
     ): ListingEntity {
+        val neighbourhoodIdAndCityId = resolveNeighborhoodIdAndCityId(
+            neighbourhoodId = result.neighbourhoodId,
+            cityId = request.cityId,
+        )
+
         return listingService.create(
             request = CreateListingRequest(
                 listingType = result.listingType,
@@ -94,8 +100,8 @@ class AIListingService(
 
                 address = Address(
                     street = result.street,
-                    neighborhoodId = result.neighbourhoodId,
-                    cityId = request.cityId,
+                    neighborhoodId = neighbourhoodIdAndCityId.first,
+                    cityId = neighbourhoodIdAndCityId.second,
                     country = result.country,
                 ),
 
@@ -116,5 +122,25 @@ class AIListingService(
             ),
             tenantId = tenantId,
         )
+    }
+
+    private fun resolveNeighborhoodIdAndCityId(neighbourhoodId: Long?, cityId: Long?): Pair<Long?, Long?> {
+        val ids = listOfNotNull(neighbourhoodId, cityId)
+        if (ids.isEmpty()) {
+            return Pair(null, null)
+        }
+
+        val locations = locationService.search(
+            ids = ids,
+            limit = ids.size
+        )
+
+        val neighbourhood = locations.find { it.type == LocationType.NEIGHBORHOOD }
+        if (neighbourhood != null) {
+            return Pair(neighbourhood.id, neighbourhood.parentId)
+        }
+
+        val city = locations.find { it.type == LocationType.CITY }
+        return Pair(null, city?.id)
     }
 }

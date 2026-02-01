@@ -29,7 +29,6 @@ class AIListingEndpoints(
         return CreateListingResponse(listingId = listing.id ?: -1)
     }
 
-    @Deprecated("AI data now stored in S3")
     @GetMapping("/{id}/ai")
     fun get(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
