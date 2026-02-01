@@ -337,6 +337,7 @@ class FileService(
         val path = StringBuilder("tenant/$tenantId")
         path.append("/").append(ownerType.name.lowercase())
         path.append("/").append(ownerId)
+        path.append("/uploads")
         path.append("/$fileId")
         path.append("/$filename")
         return path.toString()
