@@ -15,7 +15,6 @@ import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.server.service.LocationService
 import com.wutsi.koki.tenant.server.service.TenantService
 import com.wutsi.koki.tenant.server.service.UserService
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import tools.jackson.databind.json.JsonMapper
 
@@ -28,6 +27,7 @@ class AIListingService(
     private val listingService: ListingService,
     private val tenantService: TenantService,
     private val dao: AIListingRepository,
+    private val aiStorage: AIListingStorage,
 ) {
     fun getByListing(listingId: Long, tenant: Long): AIListingEntity {
         val listing = listingService.get(listingId, tenant)
@@ -40,11 +40,10 @@ class AIListingService(
             )
     }
 
-    @Transactional
     fun create(request: CreateAIListingRequest, tenantId: Long): ListingEntity {
         val result = parse(request, tenantId)
         val listing = createListing(request, result, tenantId)
-        storePrompt(request, result, listing)
+        aiStorage.store(request, result, listing)
         return listing
     }
 
@@ -71,8 +70,6 @@ class AIListingService(
         result: ListingContentParserResult,
         tenantId: Long,
     ): ListingEntity {
-        val tenant = tenantService.get(tenantId)
-
         return listingService.create(
             request = CreateListingRequest(
                 listingType = result.listingType,
@@ -97,7 +94,7 @@ class AIListingService(
                 price = result.price,
                 visitFees = result.visitFees,
                 revenue = result.revenue,
-                currency = result.currency ?: tenant.currency,
+                currency = result.currency ?: tenantService.get(tenantId).currency,
 
                 leaseTerm = result.leaseTerm,
                 noticePeriod = result.noticePeriod,
@@ -127,22 +124,6 @@ class AIListingService(
                 sellerAgentUserId = request.sellerAgentUserId,
             ),
             tenantId = tenantId,
-        )
-    }
-
-    private fun storePrompt(
-        request: CreateAIListingRequest,
-        result: ListingContentParserResult,
-        listing: ListingEntity,
-    ) {
-        dao.save(
-            AIListingEntity(
-                tenantId = listing.tenantId,
-                listing = listing,
-                text = request.text,
-                result = jsonMapper.writeValueAsString(result),
-                createdAt = listing.createdAt,
-            )
         )
     }
 }

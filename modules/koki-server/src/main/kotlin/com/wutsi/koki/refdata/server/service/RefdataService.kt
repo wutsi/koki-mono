@@ -9,6 +9,7 @@ import com.wutsi.koki.refdata.server.io.AmenityImporter
 import com.wutsi.koki.refdata.server.io.CategoryImporter
 import com.wutsi.koki.refdata.server.io.GeonamesImporter
 import com.wutsi.koki.refdata.server.io.NeighbourhoodImporter
+import com.wutsi.koki.tenant.server.service.TenantService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -21,14 +22,11 @@ class RefdataService(
     private val schoolImporter: SchoolImporter,
     private val hospitalImporter: HospitalImporter,
     private val marketImporter: MarketImporter,
-    private val toDoImporter: ToDoImporter
+    private val toDoImporter: ToDoImporter,
+    private val tenantService: TenantService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RefdataService::class.java)
-
-        val COUNTRIES = listOf(
-            "CM", "CA"
-        )
     }
 
     fun import() {
@@ -55,7 +53,8 @@ class RefdataService(
     }
 
     private fun importCountryData() {
-        COUNTRIES.forEach { country ->
+        val countries = getCountries()
+        countries.forEach { country ->
             LOGGER.info("$country - Loading locations")
             geonamesImporter.import(country)
 
@@ -74,5 +73,9 @@ class RefdataService(
             LOGGER.info("$country - Loading todos")
             toDoImporter.import(country)
         }
+    }
+
+    private fun getCountries(): List<String> {
+        return tenantService.all().map { it.country }.distinct()
     }
 }

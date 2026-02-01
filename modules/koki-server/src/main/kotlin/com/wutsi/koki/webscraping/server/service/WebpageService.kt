@@ -103,7 +103,6 @@ class WebpageService(
         return dao.save(webpage)
     }
 
-    @Transactional
     fun listing(webpageId: Long, tenantId: Long): WebpageEntity {
         // Webpage
         val webpage = get(webpageId, tenantId)

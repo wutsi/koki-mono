@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 @Sql(value = ["/db/test/clean.sql", "/db/test/place/ImportSchoolsEndpoint.sql"])
 class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
-    protected lateinit var neighbourhoodImporter: NeighbourhoodImporter
+    private lateinit var neighbourhoodImporter: NeighbourhoodImporter
 
     @Test
     fun `import schools successfully`() {
@@ -27,8 +27,8 @@ class ImportSchoolsEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val result = response.body!!
-        assertEquals(99, result.added) // 38 schools - 1 existing = 37 new
-        assertEquals(1, result.updated) // 1 existing school should be updated
+        assertEquals(99, result.added)
+        assertEquals(1, result.updated)
         assertEquals(0, result.errors)
         assertTrue(result.errorMessages.isEmpty())
     }

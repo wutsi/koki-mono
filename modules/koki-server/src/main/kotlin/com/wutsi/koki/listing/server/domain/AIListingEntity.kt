@@ -10,6 +10,7 @@ import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import java.util.Date
 
+@Deprecated("Persistence will be done in S3")
 @Entity
 @Table(name = "T_AI_LISTING")
 data class AIListingEntity(
