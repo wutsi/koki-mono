@@ -4,9 +4,11 @@ import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.webscraping.dto.CreateWebpageListingResponse
 import com.wutsi.koki.webscraping.dto.GetWebpageResponse
 import com.wutsi.koki.webscraping.dto.SearchWebpageResponse
+import com.wutsi.koki.webscraping.server.command.CreateWebpageImagesCommand
 import com.wutsi.koki.webscraping.server.command.CreateWebpageListingCommand
 import com.wutsi.koki.webscraping.server.mapper.WebpageMapper
 import com.wutsi.koki.webscraping.server.service.WebpageService
+import com.wutsi.koki.webscraping.server.service.mq.CreateWebpageImagesCommandHandler
 import com.wutsi.koki.webscraping.server.service.mq.CreateWebpageListingCommandHandler
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,6 +26,7 @@ class WebpageEndpoints(
     private val mapper: WebpageMapper,
     private val logger: KVLogger,
     private val createWebpageListingCommandHandler: CreateWebpageListingCommandHandler,
+    private val createWebpageImagesCommandHandler: CreateWebpageImagesCommandHandler,
 ) {
     @GetMapping
     fun search(
@@ -61,8 +64,8 @@ class WebpageEndpoints(
     }
 
     @PostMapping("/{id}/listing")
-    @Operation(summary = "Create the listing of the webpage")
-    fun listing(
+    @Operation(summary = "Create the listing from the webpage description")
+    fun createListing(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
     ): CreateWebpageListingResponse {
@@ -76,6 +79,20 @@ class WebpageEndpoints(
         return CreateWebpageListingResponse(
             listingId = webpage.listingId ?: -1,
             webpageId = id
+        )
+    }
+
+    @PostMapping("/{id}/images")
+    @Operation(summary = "Import all the images of the  listing associated with the webpage")
+    fun importImages(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ) {
+        createWebpageImagesCommandHandler.handle(
+            CreateWebpageImagesCommand(
+                tenantId = tenantId,
+                webpageId = id,
+            )
         )
     }
 }

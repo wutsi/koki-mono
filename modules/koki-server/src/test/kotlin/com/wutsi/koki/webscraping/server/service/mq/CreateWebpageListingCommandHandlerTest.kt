@@ -30,7 +30,16 @@ class CreateWebpageListingCommandHandlerTest {
     private val service = mock<WebpageService>()
     private val publisher = mock<Publisher>()
     private val logger = DefaultKVLogger()
-    private val handler = CreateWebpageListingCommandHandler(service, publisher, logger)
+    private val imageImporter = CreateWebpageImagesCommandHandler(
+        publisher = publisher,
+        service = service,
+        logger = logger,
+    )
+    private val handler = CreateWebpageListingCommandHandler(
+        service = service,
+        logger = logger,
+        imageImporter = imageImporter
+    )
 
     @AfterEach
     fun tearDown() {

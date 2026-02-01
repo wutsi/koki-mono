@@ -13,6 +13,7 @@ import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.webscraping.server.command.CreateWebpageImagesCommand
 import com.wutsi.koki.webscraping.server.command.CreateWebpageListingCommand
 import com.wutsi.koki.webscraping.server.domain.WebpageEntity
 import org.junit.jupiter.api.AfterEach
@@ -24,9 +25,11 @@ import org.mockito.Mockito.mock
 
 class WebscrapingMQConsumerTest {
     private val createWebpageListingCommandHandler = mock<CreateWebpageListingCommandHandler>()
+    private val createWebpageImagesCommandHandler = mock<CreateWebpageImagesCommandHandler>()
     private val logger: KVLogger = DefaultKVLogger()
     private val consumer = WebscrapingMQConsumer(
         createWebpageListingCommandHandler = createWebpageListingCommandHandler,
+        createWebpageImagesCommandHandler = createWebpageImagesCommandHandler,
         logger = logger
     )
 
@@ -47,6 +50,7 @@ class WebscrapingMQConsumerTest {
         // THEN
         assertTrue(result)
         verify(createWebpageListingCommandHandler).handle(cmd)
+        verify(createWebpageImagesCommandHandler, never()).handle(any<CreateWebpageImagesCommand>())
     }
 
     @Test
@@ -125,6 +129,21 @@ class WebscrapingMQConsumerTest {
 
         // WHEN
         assertThrows<ConflictException> { consumer.consume(CreateWebpageListingCommand()) }
+    }
+
+    @Test
+    fun `createWebpageImages successful`() {
+        // GIVEN
+        val cmd = CreateWebpageImagesCommand()
+        doReturn(true).whenever(createWebpageImagesCommandHandler).handle(cmd)
+
+        // WHEN
+        val result = consumer.consume(cmd)
+
+        // THEN
+        assertTrue(result)
+        verify(createWebpageListingCommandHandler, never()).handle(any())
+        verify(createWebpageImagesCommandHandler).handle(cmd)
     }
 
     @Test
