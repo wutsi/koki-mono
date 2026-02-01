@@ -3,10 +3,8 @@ package com.wutsi.koki.listing.server.service
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.BadRequestException
-import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.CreateAIListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
-import com.wutsi.koki.listing.server.dao.AIListingRepository
 import com.wutsi.koki.listing.server.domain.AIListingEntity
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
@@ -26,18 +24,11 @@ class AIListingService(
     private val jsonMapper: JsonMapper,
     private val listingService: ListingService,
     private val tenantService: TenantService,
-    private val dao: AIListingRepository,
     private val aiStorage: AIListingStorage,
 ) {
     fun getByListing(listingId: Long, tenant: Long): AIListingEntity {
         val listing = listingService.get(listingId, tenant)
-        return dao.findByListing(listing)
-            ?: throw NotFoundException(
-                error = Error(
-                    code = ErrorCode.LISTING_AI_NOT_FOUND,
-                    message = "AI listing not found for listing ${listing.id}",
-                )
-            )
+        return aiStorage.get(listing)
     }
 
     fun create(request: CreateAIListingRequest, tenantId: Long): ListingEntity {

@@ -1,29 +1,14 @@
 package com.wutsi.koki.listing.server.domain
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
 import java.util.Date
 
-@Deprecated("Persistence will be done in S3")
-@Entity
-@Table(name = "T_AI_LISTING")
+/**
+ * IMPORTANT: This is not persisted in the DB, but in S3
+ */
 data class AIListingEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-
-    @Column(name = "tenant_fk") val tenantId: Long = -1,
-
-    @OneToOne
-    @JoinColumn(name = "listing_fk")
+    val tenantId: Long = -1,
     val listing: ListingEntity = ListingEntity(),
-
     val text: String = "",
     val result: String = "",
     val createdAt: Date = Date(),
