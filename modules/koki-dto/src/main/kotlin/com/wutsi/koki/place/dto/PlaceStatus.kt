@@ -5,5 +5,4 @@ enum class PlaceStatus {
     DRAFT,
     PUBLISHING,
     PUBLISHED,
-    ARCHIVED,
 }
