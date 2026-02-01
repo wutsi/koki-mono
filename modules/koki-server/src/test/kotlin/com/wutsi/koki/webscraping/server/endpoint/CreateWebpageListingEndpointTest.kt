@@ -87,7 +87,7 @@ class CreateWebpageListingEndpointTest : AuthorizationAwareEndpointTest() {
         street = "Derriere ambassade de chine",
         city = "yaounde",
         neighbourhood = "bastos",
-        neighbourhoodId = 5555L,
+        neighbourhoodId = 1111L,
         country = "CM",
 
         price = 350000,
