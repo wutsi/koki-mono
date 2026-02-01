@@ -3,8 +3,6 @@ package com.wutsi.koki.listing.server.endpoint
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
@@ -22,12 +20,11 @@ import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
+import com.wutsi.koki.listing.server.service.AIListingStorage
 import com.wutsi.koki.listing.server.service.ai.AmenityResult
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingContentParserResult
 import com.wutsi.koki.platform.ai.agent.Agent
-import com.wutsi.koki.platform.storage.StorageService
-import com.wutsi.koki.tenant.server.service.StorageProvider
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
@@ -57,13 +54,12 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var jsonMapper: JsonMapper
 
+    @Autowired
+    private lateinit var aiStorage: AIListingStorage
+
     @MockitoBean
     private lateinit var agentFactory: ListingAgentFactory
 
-    @MockitoBean
-    private lateinit var storageProvider: StorageProvider
-
-    private val storage = mock<StorageService>()
     private val agent = mock<Agent>()
 
     private val request = CreateAIListingRequest(
@@ -133,13 +129,12 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         df.timeZone = TimeZone.getTimeZone("UTC")
         doReturn(agent).whenever(agentFactory).createListingContentParserAgent(any(), anyOrNull())
-        doReturn(storage).whenever(storageProvider).get(any())
     }
 
     @Test
     fun create() {
-        val json = jsonMapper.writeValueAsString(result)
-        doReturn(json).whenever(agent).run(any())
+        val jsonResult = jsonMapper.writeValueAsString(result)
+        doReturn(jsonResult).whenever(agent).run(any())
 
         val response = rest.postForEntity("/v1/listings/ai", request, CreateListingResponse::class.java)
 
@@ -201,18 +196,9 @@ class CreateAIListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(listing.createdById, statuses[0].createdById)
 
         Thread.sleep(1000) // Wait for async process
-        verify(storage).store(
-            eq("tenant/$TENANT_ID/listing/$id/ai/request.json"),
-            any(),
-            eq("application/json"),
-            any()
-        )
-        verify(storage).store(
-            eq("tenant/$TENANT_ID/listing/$id/ai/result.json"),
-            any(),
-            eq("application/json"),
-            any()
-        )
+        val ai = aiStorage.get(listing)
+        assertEquals(true, ai.text.contains(request.text))
+        assertEquals(jsonResult, ai.result)
     }
 
     @Test
