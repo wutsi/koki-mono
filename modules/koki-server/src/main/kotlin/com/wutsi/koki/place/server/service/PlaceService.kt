@@ -22,10 +22,10 @@ import java.util.UUID
 @Service
 class PlaceService(
     private val dao: PlaceRepository,
+    private val locationService: LocationService,
     private val securityService: SecurityService,
     private val contentGeneratorFactory: ContentGeneratorAgentFactory,
     private val em: EntityManager,
-    private val locationService: LocationService,
 ) {
     fun get(id: Long): PlaceEntity {
         return dao.findByIdAndDeleted(id, false)
@@ -133,18 +133,9 @@ class PlaceService(
                 type = request.type,
                 neighbourhoodId = request.neighbourhoodId,
                 cityId = city.id ?: -1,
-                status = if (request.generateContent) PlaceStatus.PUBLISHING else PlaceStatus.PUBLISHED,
+                status = PlaceStatus.DRAFT,
             )
         )
-
-        // Content
-        if (request.generateContent) {
-            val generator = contentGeneratorFactory.get(request.type)
-            generator.generate(place, neighbourhood, city)
-
-            place.status = PlaceStatus.PUBLISHED
-            dao.save(place)
-        }
 
         return place
     }
@@ -152,13 +143,8 @@ class PlaceService(
     @Transactional
     fun update(id: Long): PlaceEntity {
         val place = get(id)
-        val neighbourhood = locationService.get(place.neighbourhoodId)
-        val city = locationService.get(place.cityId)
-        place.modifiedById = securityService.getCurrentUserIdOrNull()
-
-        val generator = contentGeneratorFactory.get(place.type)
-        generator.generate(place, neighbourhood, city)
-        return dao.save(place)
+        // Nothing to update for now
+        return place
     }
 
     @Transactional
@@ -186,19 +172,6 @@ class PlaceService(
         place.asciiName = toAscii(place.name)
         place.modifiedAt = Date()
         return dao.save(place)
-    }
-
-    /**
-     * Find existing school by name and city, or return null if not found.
-     * Used by SchoolImporter for idempotent school creation/updates.
-     * Schools are uniquely identified by name + cityId + type=SCHOOL.
-     *
-     * @param name The school name (will be normalized to ASCII)
-     * @param cityId The ID of the city where the school is located
-     * @return Existing school entity or null if not found
-     */
-    fun findSchool(name: String, cityId: Long): PlaceEntity? {
-        return findPlace(name, cityId, PlaceType.SCHOOL)
     }
 
     /**

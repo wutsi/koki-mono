@@ -1,10 +1,7 @@
 package com.wutsi.koki.place.server.endpoint
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.AuthorizationAwareEndpointTest
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.dto.ErrorResponse
@@ -12,22 +9,15 @@ import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
-import com.wutsi.koki.place.dto.RatingCriteria
-import com.wutsi.koki.place.server.dao.PlaceRatingRepository
+import com.wutsi.koki.place.dto.event.PlaceCreatedEvent
 import com.wutsi.koki.place.server.dao.PlaceRepository
-import com.wutsi.koki.place.server.service.ai.NeighborhoodRatingResult
-import com.wutsi.koki.place.server.service.ai.NeighbourhoodContentGeneratorResult
-import com.wutsi.koki.place.server.service.ai.PlaceAgentFactory
-import com.wutsi.koki.place.server.service.ai.RatingCriteraResult
-import com.wutsi.koki.platform.ai.agent.Agent
+import com.wutsi.koki.platform.mq.Publisher
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.jdbc.Sql
-import tools.jackson.databind.json.JsonMapper
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -36,40 +26,11 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: PlaceRepository
 
-    @Autowired
-    private lateinit var ratingDao: PlaceRatingRepository
-
-    @Autowired
-    private lateinit var jsonMapper: JsonMapper
-
     @MockitoBean
-    private lateinit var placeAgentFactory: PlaceAgentFactory
-
-    private val agent = mock<Agent>()
+    private lateinit var publisher: Publisher
 
     @Test
     fun neighborhood() {
-        // GIVEN
-        val result = NeighbourhoodContentGeneratorResult(
-            summary = "Some summary",
-            summaryFr = "Résumé",
-            introduction = "Some introduction",
-            introductionFr = "Introduction",
-            description = "Some description",
-            descriptionFr = "Description",
-            ratings = NeighborhoodRatingResult(
-                security = RatingCriteraResult(4, "Safe area"),
-                amenities = RatingCriteraResult(5, "Many amenities"),
-                infrastructure = RatingCriteraResult(3, "Good infrastructure"),
-                commute = RatingCriteraResult(2, "Average commute"),
-                education = RatingCriteraResult(3, "Average commute"),
-            ),
-        )
-        val json = jsonMapper.writeValueAsString(result)
-        doReturn(json).whenever(agent).run(any())
-
-        doReturn(agent).whenever(placeAgentFactory).createNeighborhoodContentGeneratorAgent(any(), any())
-
         // WHEN
         val request = CreatePlaceRequest(
             name = "Côte-des-Neiges",
@@ -87,58 +48,12 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.type, place.type)
         assertEquals(request.neighbourhoodId, place.neighbourhoodId)
         assertEquals(111L, place.cityId)
-        assertEquals(PlaceStatus.PUBLISHED, place.status)
+        assertEquals(PlaceStatus.DRAFT, place.status)
         assertEquals("Côte-des-Neiges", place.name)
-        assertEquals(result.introduction, place.introduction)
-        assertEquals(result.summary, place.summary)
-        assertEquals(result.description, place.description)
-        assertEquals("cote-des-neiges", place.asciiName)
-        assertEquals(result.introductionFr, place.introductionFr)
-        assertEquals(result.summaryFr, place.summaryFr)
-        assertEquals(result.descriptionFr, place.descriptionFr)
-        assertEquals(3.4, place.rating)
-        assertEquals(45.4972159, place.latitude)
-        assertEquals(-73.6390246, place.longitude)
-        assertEquals(USER_ID, place.createdById)
-        assertEquals(USER_ID, place.modifiedById)
-        assertFalse(place.deleted)
-        assertNull(place.deletedAt)
-
-        assertRating(placeId, RatingCriteria.SECURITY, result.ratings.security.value)
-        assertRating(placeId, RatingCriteria.INFRASTRUCTURE, result.ratings.infrastructure.value)
-        assertRating(placeId, RatingCriteria.AMENITIES, result.ratings.amenities.value)
-        assertRating(placeId, RatingCriteria.COMMUTE, result.ratings.commute.value)
-    }
-
-    @Test
-    fun `do not generate content`() {
-        // GIVEN
-
-        // WHEN
-        val request = CreatePlaceRequest(
-            name = "Auteuil",
-            type = PlaceType.NEIGHBORHOOD,
-            neighbourhoodId = 444L,
-            generateContent = false,
-        )
-        val response = rest.postForEntity("/v1/places", request, CreatePlaceResponse::class.java)
-
-        // THEN
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        verify(placeAgentFactory, never()).createNeighborhoodContentGeneratorAgent(any(), any())
-
-        val placeId = response.body!!.placeId
-        val place = dao.findById(placeId).get()
-        assertEquals(request.type, place.type)
-        assertEquals(request.neighbourhoodId, place.neighbourhoodId)
-        assertEquals(111L, place.cityId)
-        assertEquals(PlaceStatus.PUBLISHED, place.status)
-        assertEquals("Auteuil", place.name)
         assertEquals(null, place.introduction)
         assertEquals(null, place.summary)
         assertEquals(null, place.description)
-        assertEquals("auteuil", place.asciiName)
+        assertEquals("cote-des-neiges", place.asciiName)
         assertEquals(null, place.introductionFr)
         assertEquals(null, place.summaryFr)
         assertEquals(null, place.descriptionFr)
@@ -149,6 +64,10 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(USER_ID, place.modifiedById)
         assertFalse(place.deleted)
         assertNull(place.deletedAt)
+
+        val event = argumentCaptor<PlaceCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(placeId, event.firstValue.placeId)
     }
 
     @Test
@@ -164,10 +83,5 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
         // THEN
         assertEquals(HttpStatus.CONFLICT, response.statusCode)
         assertEquals(ErrorCode.PLACE_DUPLICATE_NAME, response.body?.error?.code)
-    }
-
-    private fun assertRating(placeId: Long, criteria: RatingCriteria, expected: Int) {
-        val rating = ratingDao.findByPlaceIdAndCriteria(placeId, criteria)
-        assertEquals(expected, rating?.value)
     }
 }

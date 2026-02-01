@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.reset
@@ -16,10 +15,12 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.PlaceType
+import com.wutsi.koki.place.dto.event.PlaceCreatedEvent
+import com.wutsi.koki.place.dto.event.PlaceUpdatedEvent
 import com.wutsi.koki.place.server.domain.PlaceEntity
 import com.wutsi.koki.place.server.service.PlaceService
-import com.wutsi.koki.platform.ai.llm.LLMException
 import com.wutsi.koki.platform.logger.DefaultKVLogger
+import com.wutsi.koki.platform.mq.Publisher
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.server.domain.LocationEntity
 import com.wutsi.koki.refdata.server.service.LocationService
@@ -36,12 +37,14 @@ class PlaceListingStatusChangedEventHandlerTest {
     private val placeService = mock<PlaceService>()
     private val listingService = mock<ListingService>()
     private val logger = DefaultKVLogger()
+    private val publisher = mock<Publisher>()
 
     private val handler = PlaceListingStatusChangedEventHandler(
         locationService = locationService,
         placeService = placeService,
         listingService = listingService,
         logger = logger,
+        publisher = publisher,
     )
 
     private val tenantId = 1L
@@ -100,35 +103,6 @@ class PlaceListingStatusChangedEventHandlerTest {
     }
 
     @Test
-    fun `should return false when LLMException is thrown`() {
-        // Given
-        doThrow(LLMException::class).whenever(placeService).update(any())
-        doReturn(listOf(place)).whenever(placeService).search(
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull(),
-            anyOrNull()
-        )
-
-        val event = ListingStatusChangedEvent(
-            listingId = listingId,
-            tenantId = tenantId,
-            status = ListingStatus.ACTIVE
-        )
-
-        // When
-        val result = handler.handle(event)
-
-        // Then
-        assertFalse(result)
-    }
-
-    @Test
     fun `should return true and generate content when listing is active and place has no content`() {
         // Given
         doReturn(listOf(place)).whenever(placeService).search(
@@ -156,6 +130,10 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService).update(place.id!!)
+
+        val evt = argumentCaptor<PlaceUpdatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 
     @Test
@@ -186,6 +164,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -216,16 +195,15 @@ class PlaceListingStatusChangedEventHandlerTest {
         // Then
         assertTrue(result)
 
-        val requestCaptor = argumentCaptor<CreatePlaceRequest>()
-        verify(placeService).create(requestCaptor.capture())
+        val req = argumentCaptor<CreatePlaceRequest>()
+        verify(placeService).create(req.capture())
+        assertEquals("Downtown", req.firstValue.name)
+        assertEquals(neighbourhoodId, req.firstValue.neighbourhoodId)
+        assertEquals(PlaceType.NEIGHBORHOOD, req.firstValue.type)
 
-        val capturedRequest = requestCaptor.firstValue
-        assertEquals("Downtown", capturedRequest.name)
-        assertEquals(neighbourhoodId, capturedRequest.neighbourhoodId)
-        assertEquals(PlaceType.NEIGHBORHOOD, capturedRequest.type)
-        assertFalse(capturedRequest.generateContent)
-
-        verify(placeService).update(placeId)
+        val evt = argumentCaptor<PlaceCreatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 
     @Test
@@ -247,6 +225,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         verify(listingService).get(listingId, tenantId)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -265,6 +244,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertFalse(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -283,6 +263,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertFalse(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -301,6 +282,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertFalse(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -319,6 +301,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertFalse(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -337,6 +320,7 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertFalse(result)
         verify(placeService, never()).create(any())
         verify(placeService, never()).update(any())
+        verify(publisher, never()).publish(any())
     }
 
     @Test
@@ -372,6 +356,10 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService).update(placeId)
+
+        val evt = argumentCaptor<PlaceUpdatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 
     @Test
@@ -408,6 +396,10 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService).update(placeId)
+
+        val evt = argumentCaptor<PlaceUpdatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 
     @Test
@@ -443,6 +435,10 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService).update(placeId)
+
+        val evt = argumentCaptor<PlaceUpdatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 
     @Test
@@ -478,5 +474,9 @@ class PlaceListingStatusChangedEventHandlerTest {
         assertTrue(result)
         verify(placeService, never()).create(any())
         verify(placeService).update(placeId)
+
+        val evt = argumentCaptor<PlaceUpdatedEvent>()
+        verify(publisher).publish(evt.capture())
+        assertEquals(place.id, evt.firstValue.placeId)
     }
 }
