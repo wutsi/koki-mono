@@ -67,6 +67,15 @@
             <h2 th:text="#{page.neighbourhood.section.about(${neighbourhood.name})}">TITLE</h2>
             <div th:utext="${place.descriptionHtml}">DESCRIPTION</div>
 
+            <!-- PRICE_TRENDS -->
+            <div class="margin-top-2x" id="price-trend-container"
+                 th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
+                <h3 th:text="#{page.neighbourhood.section.pricing}">Pricing Information</h3>
+
+                <div
+                    th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
+            </div>
+
             <!-- SCHOOLS -->
             <div class="margin-top-2x" id="school-container" th:if="${schools}">
                 <h3 th:text="#{page.neighbourhood.section.schools}">TITLE</h3>
@@ -156,15 +165,6 @@
                         </td>
                     </tr>
                 </table>
-            </div>
-
-            <!-- PRICE_TRENDS -->
-            <div class="margin-top-2x" id="price-trend-container"
-                 th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
-                <h3 th:text="#{page.neighbourhood.section.pricing}">Pricing Information</h3>
-
-                <div
-                    th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
             </div>
 
             <!-- SIMILAR NEIGHBOURHOODS -->

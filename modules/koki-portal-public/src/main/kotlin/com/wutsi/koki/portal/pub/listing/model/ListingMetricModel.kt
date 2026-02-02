@@ -21,4 +21,12 @@ data class ListingMetricModel(
     val averageLotArea: Int? = null,
     val pricePerSquareMeter: MoneyModel? = null,
     val totalPrice: MoneyModel = MoneyModel(),
-)
+) {
+    val priceRangeText: String
+        get() = if (minPrice.amount == maxPrice.amount) {
+            minPrice.shortText
+        } else {
+            val parts = maxPrice.shortText.split(' ') // Currency and amount
+            "${minPrice.shortText} - ${parts[1]}"
+        }
+}
