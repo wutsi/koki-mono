@@ -13,6 +13,7 @@ import com.wutsi.koki.FileFixtures
 import com.wutsi.koki.InvitationFixtures
 import com.wutsi.koki.ListingFixtures
 import com.wutsi.koki.ListingFixtures.aiListing
+import com.wutsi.koki.ListingFixtures.listingMetrics
 import com.wutsi.koki.ModuleFixtures
 import com.wutsi.koki.RefDataFixtures
 import com.wutsi.koki.RoleFixtures
@@ -45,6 +46,7 @@ import com.wutsi.koki.lead.dto.SearchLeadResponse
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.GetAIListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.SearchListingMetricResponse
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.module.dto.SearchModuleResponse
 import com.wutsi.koki.module.dto.SearchPermissionResponse
@@ -220,7 +222,7 @@ abstract class AbstractPageControllerTest {
         setupContactModule()
         setupListingModule()
         setupLeadModule()
-        setupWebscapingModule()
+        setupWebscrapingModule()
 
         setupAccountModule()
     }
@@ -702,6 +704,18 @@ abstract class AbstractPageControllerTest {
     }
 
     private fun setupListingModule() {
+        // Metrics
+        doReturn(
+            ResponseEntity(
+                SearchListingMetricResponse(listingMetrics),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchListingMetricResponse::class.java)
+            )
+
         // AI Listing
         doReturn(
             ResponseEntity(
@@ -825,7 +839,7 @@ abstract class AbstractPageControllerTest {
             )
     }
 
-    private fun setupWebscapingModule() {
+    private fun setupWebscrapingModule() {
         // Webpage
         doReturn(
             ResponseEntity(
