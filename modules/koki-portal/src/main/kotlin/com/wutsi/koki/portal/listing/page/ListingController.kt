@@ -1,9 +1,9 @@
 package com.wutsi.koki.portal.listing.page
 
+import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.listing.model.ListingModel
-import com.wutsi.koki.portal.listing.page.AbstractListingController.Companion.loadPriceTrendMetrics
 import com.wutsi.koki.portal.refdata.model.CategoryModel
 import com.wutsi.koki.portal.refdata.service.CategoryService
 import com.wutsi.koki.portal.security.RequiresPermission
@@ -53,9 +53,6 @@ class ListingController(
         )
         model.addAttribute("excludedTabs", excludedTabs)
 
-        // Price trend
-        loadPriceTrendMetrics(listing, model, listingService)
-
         model.addAttribute(
             "page",
             createPageModel(
@@ -72,6 +69,41 @@ class ListingController(
         model.addAttribute("listing", listing)
         model.addAttribute("amenityCategories", findAmenityCategories())
         return "listings/details"
+    }
+
+    @GetMapping("/tab/trends")
+    fun trends(@RequestParam id: Long, model: Model): String {
+        val listing = findListing(id)
+        model.addAttribute("listing", listing)
+        model.addAttribute("neighborhoodLocation", listing.address?.neighbourhood)
+        model.addAttribute("cityLocation", listing.address?.city)
+
+        listing.address?.neighbourhood?.let { neighbourhood ->
+            listingService.metrics(
+                listingType = listing.listingType,
+                propertyCategory = listing.propertyType?.category,
+                listingStatus = ListingStatus.ACTIVE,
+                neighbourhoodId = neighbourhood.id,
+                bedrooms = if (listing.propertyTypeResidential) listing.bedrooms else null,
+                dimension = ListingMetricDimension.NEIGHBORHOOD,
+            )
+        }?.firstOrNull()?.let { metric ->
+            model.addAttribute("neighborhoodPriceTrendMetric", metric)
+        }
+
+        listing.address?.city?.let { city ->
+            listingService.metrics(
+                listingType = listing.listingType,
+                propertyCategory = listing.propertyType?.category,
+                listingStatus = ListingStatus.ACTIVE,
+                cityId = city.id,
+                dimension = ListingMetricDimension.CITY,
+                bedrooms = listing.bedrooms,
+            )
+        }?.firstOrNull()?.let { metric ->
+            model.addAttribute("cityPriceTrendMetric", metric)
+        }
+        return "listings/trends"
     }
 
     @PostMapping("/generate-qr-code")

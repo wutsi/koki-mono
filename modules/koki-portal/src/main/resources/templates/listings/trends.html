@@ -1,0 +1,23 @@
+<div id="listing-trends-container">
+    <h5 th:if="${listing.propertyTypeCommercial}" th:text="#{page.listing.metrics.price-trend.commercial}">TITLE</h5>
+
+    <h5 th:if="${listing.propertyTypeLand}" th:text="#{page.listing.metrics.price-trend.land}">TITLE</h5>
+
+    <h5 th:if="${listing.propertyTypeResidential} AND !${listing.bedrooms}"
+        th:text="#{page.listing.metrics.price-trend.redidential}">TITLE</h5>
+
+    <h5 th:if="${listing.propertyTypeResidential} AND ${listing.bedrooms == 1}"
+        th:text="#{page.listing.metrics.price-trend.1_bedroom}">TITLE</h5>
+
+    <h5 th:if="${listing.propertyTypeResidential} AND ${listing.bedrooms > 1}"
+        th:text="#{page.listing.metrics.price-trend.n_bedroom(${listing.bedrooms})}">TITLE</h5>
+
+    <div>
+        <span th:text="#{page.listing.price}">PRICE</span>:
+        <b th:text="${listing.price.displayText}">$$</b>
+    </div>
+    <div class="margin-top">
+        <div
+            th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${neighborhoodPriceTrendMetric}, ${neighborhoodLocation}, ${cityPriceTrendMetric}, ${cityLocation})}"></div>
+    </div>
+</div>

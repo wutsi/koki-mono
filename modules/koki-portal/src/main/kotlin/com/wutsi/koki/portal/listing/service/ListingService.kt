@@ -62,7 +62,7 @@ class ListingService(
             listOfNotNull(listing.address?.cityId, listing.address?.stateId, listing.address?.neighborhoodId)
                 .distinct()
         val locations = if (!fullGraph || locationIds.isEmpty()) {
-            emptyMap<Long, LocationModel>()
+            locationIds.map { id -> LocationModel(id) }.associateBy { location -> location.id }
         } else {
             locationService.search(
                 ids = locationIds, limit = locationIds.size

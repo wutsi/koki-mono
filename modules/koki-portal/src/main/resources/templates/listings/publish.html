@@ -17,20 +17,10 @@
 
     <div class="row">
         <!-- SUMMARY -->
-        <div class="col-12 col-md-6 col-lg-8">
+        <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
                     <div th:replace="~{__components/listing :: listing-summary(${listing})}"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PRICE TREND -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="widget background-highlight" th:if="${priceTrendMetric}">
-                <div class="widget-body">
-                    <div
-                        th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${priceTrendMetric}, ${priceTrendLocation})}"></div>
                 </div>
             </div>
         </div>
