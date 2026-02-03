@@ -1,6 +1,8 @@
 package com.wutsi.koki
 
 import com.wutsi.koki.ContactFixtures.contacts
+import com.wutsi.koki.RefDataFixtures.cities
+import com.wutsi.koki.RefDataFixtures.neighborhoods
 import com.wutsi.koki.UserFixtures.USER_ID
 import com.wutsi.koki.UserFixtures.users
 import com.wutsi.koki.listing.dto.AIListing
@@ -8,11 +10,13 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
+import com.wutsi.koki.listing.dto.ListingMetricSummary
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.refdata.dto.Address
@@ -317,5 +321,122 @@ object ListingFixtures {
             transactionPrice = Money(195000.0, "CAD"),
             transactionDate = DateUtils.addDays(Date(), -1)
         )
+    )
+
+    val listingMetrics = listOf(
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[0].id,
+            sellerAgentUserId = users[0].id,
+            cityId = cities[0].id,
+            bedrooms = 1,
+            propertyCategory = PropertyCategory.RESIDENTIAL,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.SALE,
+            total = 25,
+            minPrice = 150000L,
+            maxPrice = 750000L,
+            averagePrice = 450000L,
+            averageLotArea = 1200,
+            pricePerSquareMeter = 375L,
+            totalPrice = 11250000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[0].id,
+            sellerAgentUserId = users[0].id,
+            cityId = cities[0].id,
+            bedrooms = 2,
+            propertyCategory = PropertyCategory.RESIDENTIAL,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.SALE,
+            total = 18,
+            minPrice = 100000L,
+            maxPrice = 500000L,
+            averagePrice = 300000L,
+            averageLotArea = 900,
+            pricePerSquareMeter = 333L,
+            totalPrice = 5400000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[1].id,
+            sellerAgentUserId = users[1].id,
+            cityId = cities[0].id,
+            bedrooms = 4,
+            propertyCategory = PropertyCategory.RESIDENTIAL,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.SALE,
+            total = 12,
+            minPrice = 200000L,
+            maxPrice = 900000L,
+            averagePrice = 550000L,
+            averageLotArea = 1500,
+            pricePerSquareMeter = 367L,
+            totalPrice = 6600000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[0].id,
+            sellerAgentUserId = users[0].id,
+            cityId = cities[0].id,
+            bedrooms = 3,
+            propertyCategory = PropertyCategory.RESIDENTIAL,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.RENTAL,
+            total = 40,
+            minPrice = 800L,
+            maxPrice = 2500L,
+            averagePrice = 1650L,
+            averageLotArea = 1100,
+            pricePerSquareMeter = 2L,
+            totalPrice = 66000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[1].id,
+            sellerAgentUserId = users[2].id,
+            cityId = cities[1].id,
+            bedrooms = 5,
+            propertyCategory = PropertyCategory.LAND,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.SALE,
+            total = 8,
+            minPrice = 50000L,
+            maxPrice = 300000L,
+            averagePrice = 175000L,
+            averageLotArea = 5000,
+            pricePerSquareMeter = 35L,
+            totalPrice = 1400000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
+        ListingMetricSummary(
+            neighborhoodId = neighborhoods[2].id,
+            sellerAgentUserId = users[1].id,
+            cityId = cities[1].id,
+            bedrooms = null,
+            propertyCategory = PropertyCategory.COMMERCIAL,
+            listingStatus = ListingStatus.SOLD,
+            listingType = ListingType.SALE,
+            total = 5,
+            minPrice = 300000L,
+            maxPrice = 1200000L,
+            averagePrice = 750000L,
+            averageLotArea = 2500,
+            pricePerSquareMeter = 300L,
+            totalPrice = 3750000L,
+            currency = "CAD",
+            createdAt = Date(),
+            modifiedAt = Date(),
+        ),
     )
 }

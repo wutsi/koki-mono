@@ -18,7 +18,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(20, response.body!!.listings.size)
-        assertEquals(30, response.body!!.total)
+        assertEquals(33, response.body!!.total)
     }
 
     @Test
@@ -205,5 +205,18 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
         val listings = response.body!!.listings
         assertEquals(2, listings.size)
         assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(127L, 128L)))
+    }
+
+    @Test
+    fun `by property-category`() {
+        val response = rest.getForEntity(
+            "/v1/listings?property-category=RESIDENTIAL&property-category=LAND",
+            SearchListingResponse::class.java
+        )
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        val listings = response.body!!.listings
+        assertEquals(3, listings.size)
+        assertEquals(true, listings.map { listing -> listing.id }.containsAll(listOf(130L, 131L, 132L)))
     }
 }

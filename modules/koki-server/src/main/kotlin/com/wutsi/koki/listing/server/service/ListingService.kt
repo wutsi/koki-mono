@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.UpdateListingAddressRequest
 import com.wutsi.koki.listing.dto.UpdateListingAmenitiesRequest
@@ -74,6 +75,7 @@ class ListingService(
         ids: List<Long> = emptyList(),
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
+        propertyCategories: List<PropertyCategory> = emptyList(),
         propertyTypes: List<PropertyType> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
         statuses: List<ListingStatus> = emptyList(),
@@ -107,6 +109,9 @@ class ListingService(
         }
         if (listingType != null) {
             jql.append(" AND L.listingType = :listingType")
+        }
+        if (propertyCategories.isNotEmpty()) {
+            jql.append(" AND L.propertyCategory IN :propertyCategories")
         }
         if (propertyTypes.isNotEmpty()) {
             jql.append(" AND L.propertyType IN :propertyTypes")
@@ -190,6 +195,9 @@ class ListingService(
         if (listingType != null) {
             query.setParameter("listingType", listingType)
         }
+        if (propertyCategories.isNotEmpty()) {
+            query.setParameter("propertyCategories", propertyCategories)
+        }
         if (propertyTypes.isNotEmpty()) {
             query.setParameter("propertyTypes", propertyTypes)
         }
@@ -255,6 +263,7 @@ class ListingService(
         ids: List<Long> = emptyList(),
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
+        propertyCategories: List<PropertyCategory> = emptyList(),
         propertyTypes: List<PropertyType> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
         statuses: List<ListingStatus> = emptyList(),
@@ -288,6 +297,9 @@ class ListingService(
         }
         if (propertyTypes.isNotEmpty()) {
             jql.append(" AND L.propertyType IN :propertyTypes")
+        }
+        if (propertyCategories.isNotEmpty()) {
+            jql.append(" AND L.propertyCategory IN :propertyCategories")
         }
         if (furnitureTypes.isNotEmpty()) {
             jql.append(" AND L.furnitureType IN :furnitureTypes")
@@ -355,6 +367,9 @@ class ListingService(
         }
         if (listingType != null) {
             query.setParameter("listingType", listingType)
+        }
+        if (propertyCategories.isNotEmpty()) {
+            query.setParameter("propertyCategories", propertyCategories)
         }
         if (propertyTypes.isNotEmpty()) {
             query.setParameter("propertyTypes", propertyTypes)

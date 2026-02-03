@@ -43,6 +43,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementPresent("#pills-trends-tab")
+        assertElementPresent("#pills-trends")
         assertElementPresent("#pills-qr-code-tab")
         assertElementPresent("#pills-qr-code")
 
@@ -73,6 +75,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementPresent("#pills-trends-tab")
+        assertElementPresent("#pills-trends")
         assertElementPresent("#pills-qr-code-tab")
         assertElementPresent("#pills-qr-code")
 
@@ -98,6 +102,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementPresent("#pills-trends-tab")
+        assertElementPresent("#pills-trends")
         assertElementNotPresent("#pills-qr-code-tab")
         assertElementNotPresent("#pills-qr-code")
     }
@@ -121,6 +127,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementPresent("#pills-trends-tab")
+        assertElementPresent("#pills-trends")
         assertElementPresent("#pills-qr-code-tab")
         assertElementPresent("#pills-qr-code")
     }
@@ -145,6 +153,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementPresent("#pills-trends-tab")
+        assertElementPresent("#pills-trends")
         assertElementPresent("#pills-qr-code-tab")
         assertElementPresent("#pills-qr-code")
     }
@@ -183,6 +193,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementNotPresent("#pills-trends-tab")
+        assertElementNotPresent("#pills-trends")
         assertElementNotPresent("#pills-qr-code-tab")
         assertElementNotPresent("#pills-qr-code")
     }
@@ -220,6 +232,8 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent("#pills-details-tab")
         assertElementPresent("#pills-details")
+        assertElementNotPresent("#pills-trends-tab")
+        assertElementNotPresent("#pills-trends")
         assertElementNotPresent("#pills-qr-code-tab")
         assertElementNotPresent("#pills-qr-code")
     }
@@ -284,6 +298,18 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementVisible("#btn-share-facebook")
         assertElementVisible("#btn-share-twitter")
         assertElementVisible("#btn-share-email")
+    }
+
+    @Test
+    fun trends() {
+        // GIVEN
+        setupListing(status = ListingStatus.ACTIVE)
+
+        // WHEN
+        navigateTo("/listings/${listing.id}?tab=trends")
+
+        Thread.sleep(1000)
+        assertElementVisible("#listing-trends-container")
     }
 
     @Test
