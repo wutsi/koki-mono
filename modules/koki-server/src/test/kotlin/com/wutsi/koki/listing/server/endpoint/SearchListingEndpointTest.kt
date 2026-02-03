@@ -18,7 +18,7 @@ class SearchListingEndpointTest : AuthorizationAwareEndpointTest() {
 
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(20, response.body!!.listings.size)
-        assertEquals(30, response.body!!.total)
+        assertEquals(33, response.body!!.total)
     }
 
     @Test
