@@ -986,6 +986,10 @@ div.CodeMirror {
         margin-bottom: .5em;
     }
 
+    .text-small-mobile {
+        font-size: small;
+    }
+
     .w-100-mobile {
         width: 100%;
     }

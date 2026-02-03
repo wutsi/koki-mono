@@ -15,8 +15,8 @@ abstract class AbstractListingDetailsController : AbstractModuleDetailsPageContr
         return AbstractListingController.MODULE_NAME
     }
 
-    protected fun findListing(id: Long): ListingModel {
-        val listing = listingService.get(id)
+    protected fun findListing(id: Long, fullGraph: Boolean = true): ListingModel {
+        val listing = listingService.get(id, fullGraph)
         if (!listing.canAccess(getUser())) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(403))
         }

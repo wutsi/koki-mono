@@ -81,13 +81,6 @@
                         th:replace="~{__components/user :: user-card(${listing.sellerAgentUser}, ${messageUrl})}"></div>
                 </div>
             </div>
-
-            <div class="widget background-highlight" th:if="${priceTrendMetric}">
-                <div class="widget-body">
-                    <div
-                        th:replace="~{__components/listing :: listing-price-trend-table(${listing}, ${priceTrendMetric}, ${priceTrendLocation})}"></div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -116,11 +109,18 @@
                                 <div th:replace="~{__components/module :: tab-counter-badge(${listing}, ${tab})}"></div>
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation" th:if="!${listing.statusOffMarket}">
+                            <button aria-controls="pills-trends" class="nav-link"
+                                    data-bs-target="#pills-trends" data-bs-toggle="pill" id="pills-trends-tab"
+                                    role="tab" th:text="#{page.listing.show.tabs.trends}" type="button">
+                                TRENDS
+                            </button>
+                        </li>
                         <li class="nav-item" role="presentation" th:if="${listing.statusActive}">
                             <button aria-controls="pills-qr-code" class="nav-link"
                                     data-bs-target="#pills-qr-code" data-bs-toggle="pill" id="pills-qr-code-tab"
-                                    role="tab" type="button">
-                                QR Code
+                                    role="tab" th:text="#{page.listing.show.tabs.qr}" type="button">
+                                QR_CODE
                             </button>
                         </li>
                     </ul>
@@ -141,6 +141,15 @@
                              th:each="tab : ${page.tabs.get('main')}"
                              th:id="'pills-' + ${tab.name}"
                              th:if="${tab.tabUrl} AND !${excludedTabs?.contains(tab.name)}"
+                        >
+                        </div>
+
+                        <!-- TREND TAB -->
+                        <div aria-labelledby="pills-trends-tab" class="tab-pane fade"
+                             id="pills-trends"
+                             role="tabpanel"
+                             th:data-url="'/listings/tab/trends?id=' + ${listing.id}"
+                             th:if="!${listing.statusOffMarket}"
                         >
                         </div>
 
