@@ -107,6 +107,14 @@
     margin-right: 1em;
 }
 
+.listing-search-container .btn-light {
+    background: white !important;
+}
+
+.listing-search-container .btn-light:hover {
+    background: #d3d4d5 !important;
+}
+
 .listing-search-container .select2-selection__rendered {
     line-height: 33px !important;
 }

@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
+import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.service.ListingService
@@ -40,19 +41,20 @@ class SearchController(
         @RequestParam(required = false, name = "sort") sort: String? = null,
         model: Model,
     ): String {
+        // Filters
         val tenant = tenantHolder.get()
-
         model.addAttribute("locationId", locationId)
-        if (locationId != null) {
-            var location = locationService.get(locationId)
+        val location = locationId?.let { id ->
+            var location = locationService.get(id)
             if (location.type == LocationType.NEIGHBORHOOD) {
                 val parent = location.parentId?.let { id -> locationService.get(id) }
                 if (parent != null) {
                     location = location.copy(name = "${location.name}, ${parent.name}")
                 }
             }
-            model.addAttribute("location", location)
+            location
         }
+        model.addAttribute("location", location)
 
         model.addAttribute("propertyCategory", toPropertyCategory(propertyCategory))
         model.addAttribute("listingType", toListingType(listingType))
@@ -70,6 +72,7 @@ class SearchController(
         )
         model.addAttribute("country", tenant.country)
 
+        // Load data
         more(
             propertyCategory = propertyCategory,
             locationId = locationId,
@@ -147,6 +150,36 @@ class SearchController(
         }
 
         return "search/more"
+    }
+
+    private fun minMaxPrices(
+        propertyCategory: String? = null,
+        locationId: Long? = null,
+        listingType: String? = null,
+        bedrooms: String? = null,
+    ): Pair<MoneyModel, MoneyModel>? {
+        val bedroomPair = minmaxPair(bedrooms)
+        val min = listingService.search(
+            locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
+            listingType = toListingType(listingType),
+            minBedrooms = bedroomPair.first,
+            maxBedrooms = bedroomPair.second,
+            statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
+            limit = 1,
+            sortBy = ListingSort.PRICE_LOW_HIGH
+        ).items.firstOrNull()?.price ?: return null
+
+        val max = listingService.search(
+            locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
+            listingType = toListingType(listingType),
+            minBedrooms = bedroomPair.first,
+            maxBedrooms = bedroomPair.second,
+            statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
+            limit = 1,
+            sortBy = ListingSort.PRICE_HIGH_LOW
+        ).items.firstOrNull()?.price ?: return null
+
+        return Pair(min, max)
     }
 
     private fun minmaxPair(value: String?): Pair<Int?, Int?> {
