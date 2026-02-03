@@ -15,6 +15,12 @@
     </div>
 </div>
 
+<div class="listing-list" th:fragment="listing-list(listings, showSummary)">
+    <div th:each="listing : ${listings}" th:remove="tag">
+        <div th:replace="~{__components/listing :: listing-card(${listing}, ${showSummary})}"></div>
+    </div>
+</div>
+
 <div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing, showSummary)">
     <a th:href="${listing.publicUrl}">
         <div class="listing-status-container">

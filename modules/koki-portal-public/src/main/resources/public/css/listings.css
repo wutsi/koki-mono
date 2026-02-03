@@ -69,6 +69,7 @@
     color: #444;
 }
 
+/** ===== LISTING INFO STYLES ===== */
 .listing-info-container {
     width: 1200px;
     margin: 1em auto 0 auto;
@@ -92,6 +93,30 @@
 
 #listing-amenities-modal h3 {
     font-size: 1.25em;
+}
+
+
+/** ===== LISTING SEARCH STYLES ===== */
+.listing-search-container {
+    width: 1250px;
+    margin: 6em auto 0 auto;
+}
+
+.listing-search-container .location-filter {
+    width: 30%;
+    margin-right: 1em;
+}
+
+.listing-search-container .select2-selection__rendered {
+    line-height: 33px !important;
+}
+
+.listing-search-container .select2-container .select2-selection--single {
+    height: 33px !important;
+}
+
+.listing-search-container .select2-selection__arrow {
+    height: 33px !important;
 }
 
 /** ===== LISTING CONTACT DETAILS STYLES ===== */
@@ -171,19 +196,28 @@
     padding-bottom: 1em;
 }
 
-
-/* ===== LISTING CARD STYLES ===== */
-.listing-card {
-    border-radius: 1em;
-    background: white;
-}
-
 .listing-carousel .listing-card {
     margin-right: .5em;
 }
 
 .listing-carousel .listing-card:last-child {
     margin-right: 0;
+}
+
+.listing-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.listing-list .listing-card {
+    margin-right: .5em;
+    margin-bottom: .5em;
+}
+
+
+.listing-card {
+    border-radius: 1em;
+    background: white;
 }
 
 .listing-card .listing-status-container {
@@ -280,6 +314,11 @@
     .listing-info-container {
         display: block;
     }
+
+    .listing-search-container {
+        width: 100%;
+    }
+
 
     .listing-info-details {
         width: 100%;

@@ -70,6 +70,7 @@ class Koki {
                 .then(response => {
                     if (response.ok) {
                         response.text().then(html => {
+                            console.log('Replacing #' + targetId);
                             $('#' + targetId).replaceWith(html);
 
                             // Reinitialize all widgets

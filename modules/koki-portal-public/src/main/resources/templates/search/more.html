@@ -1,0 +1,14 @@
+<div th:if="${listings}">
+    <div th:replace="~{__components/listing :: listing-list(${listings.items}, false)}"></div>
+    <div class="text-center" id="listing-load-more" th:if="${moreUrl}">
+        <button
+            class="btn btn-sm btn-light w-100-mobile"
+            data-component-id="load-more"
+            data-container-id="listing-load-more"
+            th:data-url="${moreUrl}"
+            th:text="#{button.load_more}"
+        >
+            Load more...
+        </button>
+    </div>
+</div>

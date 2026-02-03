@@ -7,7 +7,7 @@
  *  - data-url: URL from where to fetch the items - This is for fetching the items from JSON source
  *  - data-parent-id: ID of the parent node. If not specified, it will be the document body - Must be provided in dropdown opened in modal
  *  - data-minimum-input-length: Minimum length to fire the search. Default=3
- * - data-on-change: Name of the global function to be called on change event
+ *  - data-on-change: Name of the global function to be called on change event
  */
 class Select2Widget {
     init() {
@@ -46,6 +46,7 @@ class Select2Widget {
                         dropdownParent: parentId ? $('#' + parentId) : $(document.body),
                         width: '100%'
                     });
+
                     if (onChange) {
                         $('#' + id).on('change', function () {
                             eval(onChange + '()');
