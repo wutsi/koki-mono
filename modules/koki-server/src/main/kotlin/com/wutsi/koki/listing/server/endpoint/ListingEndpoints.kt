@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
+import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.listing.dto.SearchSimilarListingResponse
@@ -158,6 +159,10 @@ class ListingEndpoints(
         @RequestParam(required = false, name = "id") ids: List<Long> = emptyList(),
         @RequestParam(required = false, name = "location-id") locationIds: List<Long> = emptyList(),
         @RequestParam(required = false, name = "listing-type") listingType: ListingType? = null,
+        @RequestParam(
+            required = false,
+            name = "property-category"
+        ) propertyCategories: List<PropertyCategory> = emptyList(),
         @RequestParam(required = false, name = "property-type") propertyTypes: List<PropertyType> = emptyList(),
         @RequestParam(required = false, name = "furniture-type") furnitureTypes: List<FurnitureType> = emptyList(),
         @RequestParam(required = false, name = "status") statuses: List<ListingStatus> = emptyList(),
@@ -185,6 +190,7 @@ class ListingEndpoints(
             ids = ids,
             locationIds = locationIds,
             listingType = listingType,
+            propertyCategories = propertyCategories,
             propertyTypes = propertyTypes,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
@@ -212,6 +218,7 @@ class ListingEndpoints(
             ids = ids,
             locationIds = locationIds,
             listingType = listingType,
+            propertyCategories = propertyCategories,
             propertyTypes = propertyTypes,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
