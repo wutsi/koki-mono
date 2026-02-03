@@ -4,12 +4,15 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
+import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
+import com.wutsi.koki.portal.pub.tenant.model.TenantModel
 import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.refdata.dto.Money
 import com.wutsi.koki.sdk.URLBuilder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class SearchController(
     private val listingService: ListingService,
     private val locationService: LocationService,
+    private val moneyMapper: MoneyMapper,
 ) : AbstractPageController() {
     companion object {
         const val LIMIT = 12
@@ -43,6 +47,15 @@ class SearchController(
     ): String {
         // Filters
         val tenant = tenantHolder.get()
+        val priceRance = loadPriceRange(
+            propertyCategory = propertyCategory,
+            locationId = locationId,
+            listingType = listingType,
+            bedrooms = bedrooms,
+            tenant = tenant,
+            model = model
+        )
+
         model.addAttribute("locationId", locationId)
         val location = locationId?.let { id ->
             var location = locationService.get(id)
@@ -60,7 +73,7 @@ class SearchController(
         model.addAttribute("listingType", toListingType(listingType))
         model.addAttribute("bedrooms", bedrooms)
         model.addAttribute("minPrice", minPrice)
-        model.addAttribute("maxPrice", maxPrice)
+        model.addAttribute("maxPrice", maxPrice ?: priceRance?.second?.amount)
         model.addAttribute("sort", toListingSort(sort))
 
         model.addAttribute("listingTypes", ListingType.entries.filter { it != ListingType.UNKNOWN })
@@ -152,11 +165,13 @@ class SearchController(
         return "search/more"
     }
 
-    private fun minMaxPrices(
+    private fun loadPriceRange(
         propertyCategory: String? = null,
         locationId: Long? = null,
         listingType: String? = null,
         bedrooms: String? = null,
+        tenant: TenantModel,
+        model: Model
     ): Pair<MoneyModel, MoneyModel>? {
         val bedroomPair = minmaxPair(bedrooms)
         val min = listingService.search(
@@ -168,8 +183,9 @@ class SearchController(
             limit = 1,
             sortBy = ListingSort.PRICE_LOW_HIGH
         ).items.firstOrNull()?.price ?: return null
+        val currencySymbol = min.shortText.split(" ")[0]
 
-        val max = listingService.search(
+        var max = listingService.search(
             locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
             listingType = toListingType(listingType),
             minBedrooms = bedroomPair.first,
@@ -178,8 +194,32 @@ class SearchController(
             limit = 1,
             sortBy = ListingSort.PRICE_HIGH_LOW
         ).items.firstOrNull()?.price ?: return null
+        max = adjustPrice(max, .25)
+
+        val step = if (min.amount / 1000000L > 0) {
+            100000
+        } else if (min.amount / 100000L > 0) {
+            10000
+        } else if (min.amount / 10000L > 0) {
+            1000
+        } else {
+            100
+        }
+
+        model.addAttribute("priceRangeMin", min)
+        model.addAttribute("priceRangeMax", max)
+        model.addAttribute("priceRangeStep", step)
+        model.addAttribute("currencySymbol", currencySymbol)
 
         return Pair(min, max)
+    }
+
+    private fun adjustPrice(value: MoneyModel, percent: Double): MoneyModel {
+        val money = Money(
+            amount = value.amount * (1.0 + percent / 100.0),
+            currency = value.currency,
+        )
+        return moneyMapper.toMoneyModel(money)
     }
 
     private fun minmaxPair(value: String?): Pair<Int?, Int?> {

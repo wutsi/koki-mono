@@ -14,6 +14,7 @@
         <input id="bedrooms" name="bedrooms" th:if="!${propertyCategory} OR ${propertyCategory.name() == 'RESIDENTIAL'}"
                th:value="${bedrooms}"
                type="hidden"/>
+        <input id="max-price" name="max-price" th:value="${maxPrice}" type="hidden"/>
         <input id="sort" name="sort" th:value="${sort}" type="hidden"/>
 
         <!-- Filters -->
@@ -92,6 +93,39 @@
                         </li>
                     </ul>
                 </div>
+                <div class="dropdown margin-right" th:if="${priceRangeMin} AND ${priceRangeMax}">
+                    <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            th:text="#{page.search.filter.price}"
+                            type="button">
+                        PRICE
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li class="padding-small">
+                            <div class="flex">
+                                <span class="text-small text-nowrap margin-right-small"
+                                      th:text="${priceRangeMin.shortText}">$$$</span>
+                                <input id="price-range"
+                                       th:data-currency-symbol="${currencySymbol}"
+                                       th:max="${priceRangeMax.amount}"
+                                       th:min="${priceRangeMin.amount}"
+                                       th:step="${priceRangeStep}"
+                                       th:value="${maxPrice}"
+                                       type="range"
+                                />
+                                <span class="text-small text-nowrap margin-left-small"
+                                      th:text="${priceRangeMax.shortText}">$$$</span>
+                            </div>
+                            <div class="text-center margin-top-small" id="price-range-value"></div>
+                            <div class="margin-top-small text-center">
+                                <button class="btn btn-sm btn-primary w-100-mobile" th:text="#{button.apply}"
+                                        type="submit">
+                                    APPLY
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -146,6 +180,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Handle filter link clicks
         const filterLinks = document.querySelectorAll('.dropdown-item[data-name]');
         filterLinks.forEach(function (link) {
             link.addEventListener('click', function (event) {
@@ -161,6 +196,16 @@
                 document.getElementById('form').submit()
             });
         });
+
+        // Handle price range input
+        const priceRange = document.getElementById('price-range');
+        priceRange.addEventListener('input', function () {
+            document.getElementById('max-price').value = BigInt(this.value);
+            document.getElementById('price-range-value').innerText = format_price(this.value);
+        });
+
+        const maxPrice = document.getElementById('max-price').value;
+        document.getElementById('price-range-value').innerText = format_price(maxPrice);
     });
 
     function location_changed() {
@@ -168,6 +213,44 @@
         document.getElementById('form').submit();
     }
 
+    function format_price(amount) {
+        const text = short_number(amount);
+        const currency = document.getElementById('price-range').getAttribute('data-currency-symbol');
+        if (text.length > 0) {
+            return currency + ' ' + text;
+        } else {
+            return currency + ' -';
+        }
+    }
+
+    function short_number(value, unit = "") {
+        if (!value || value === '') {
+            return ""
+        }
+
+        let bytes = Number(value);
+
+        if (bytes === 0) return "";
+        if (bytes > -1000 && bytes < 1000) return bytes.toString();
+
+        const units = "KMGTPE";
+        let index = 0;
+
+        while (bytes <= -999950 || bytes >= 999950) {
+            bytes /= 1000;
+            index++;
+        }
+
+        // Divide by 1000 for the final unit conversion
+        const result = bytes / 1000.0;
+        const currentUnit = units[index] || "";
+
+        // Format to 1 decimal place, but strip it if it's .0
+        // This perfectly mimics the "#.#" behavior
+        const formattedValue = Number(result.toFixed(1));
+
+        return formattedValue + currentUnit + unit;
+    }
 </script>
 </body>
 </html>
