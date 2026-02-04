@@ -60,11 +60,16 @@
                     <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
                             data-bs-toggle="dropdown"
                             id="btn-filter-property-category"
-                            th:text="#{'property-category.' + ${propertyCategory.name()}}"
+                            th:text="${propertyCategory} ? #{'property-category.' + ${propertyCategory?.name()}} : #{page.search.filter.category}"
                             type="button">
                         PROPERTY_CATEGORY
                     </button>
                     <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" data-name="property-category"
+                               data-value="" href="#" th:classappend="!${propertyCategory} ? 'active'"
+                               th:text="#{page.search.filter.category}">CATEGORY</a>
+                        </li>
                         <li th:each="category : ${propertyCategories}">
                             <a class="dropdown-item" data-name="property-category" href="#"
                                th:classappend="${propertyCategory} == ${category} ? 'active'"
@@ -86,7 +91,7 @@
                         <li>
                             <a class="dropdown-item" data-name="bedrooms"
                                data-value="" href="#" th:classappend="!${bedrooms} ? 'active'"
-                               th:text="#{page.search.filter.bedrooms}">Bedrooms</a>
+                               th:text="#{page.search.filter.bedrooms}">BEDROOM</a>
                         </li>
                         <li th:each="room : ${rooms}">
                             <a class="dropdown-item" data-name="bedrooms" href="#"

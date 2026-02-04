@@ -35,10 +35,7 @@ class SearchController(
     @GetMapping
     fun result(
         @RequestParam(name = "location-id", required = false) locationId: Long? = null,
-        @RequestParam(
-            name = "property-category",
-            required = false
-        ) propertyCategory: String? = PropertyCategory.RESIDENTIAL.name,
+        @RequestParam(name = "property-category", required = false) propertyCategory: String? = null,
         @RequestParam(name = "listing-type", required = false) listingType: String = ListingType.RENTAL.name,
         @RequestParam(required = false) bedrooms: String? = null,
         @RequestParam(required = false, name = "min-price") minPrice: Long? = null,
