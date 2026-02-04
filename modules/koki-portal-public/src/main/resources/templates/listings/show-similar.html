@@ -1,4 +1,9 @@
 <div class="margin-top border-top padding-top margin-bottom" id="similar-listing-container" th:if="${listings}">
     <h2 th:text="#{page.listing.section.similar.title}">TITLE</h2>
     <div th:replace="~{__components/listing :: listing-carousel(${listings}, false)}"></div>
+    <div class="text-right">
+        <b>
+            <a th:href="${moreUrl}" th:text="#{button.view_more_properties}">VIEW_ALL</a>
+        </b>
+    </div>
 </div>

@@ -11,6 +11,7 @@ import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
 import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.CategoryType
+import com.wutsi.koki.sdk.URLBuilder
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Controller
@@ -129,6 +130,20 @@ class ListingController(
                 listing.address?.neighbourhood != null
             }?.address?.neighbourhood
             model.addAttribute("neighborhood", neighborhood)
+
+            val listing = service.get(id, fullGraph = false)
+            val urlBuilder = URLBuilder("")
+            val bedrooms = listing.bedrooms?.let { rooms -> if (rooms > 1) "${rooms - 1}+" else null }
+            val moreUrl = urlBuilder.build(
+                "/search",
+                mapOf(
+                    "location-id" to neighborhood?.id,
+                    "property-category" to listing.propertyType?.category,
+                    "listing-type" to listing.listingType,
+                    "bedrooms" to bedrooms?.takeIf { listing.propertyTypeResidential }
+                )
+            )
+            model.addAttribute("moreUrl", moreUrl)
         }
         return "listings/show-similar"
     }

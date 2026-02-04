@@ -97,8 +97,6 @@ class AgentControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#metric-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#rental-listing-container")
-        assertElementPresent("#sold-listing-container")
-        assertElementPresent("#map-container")
         assertElementPresent("#price-trend-container")
     }
 

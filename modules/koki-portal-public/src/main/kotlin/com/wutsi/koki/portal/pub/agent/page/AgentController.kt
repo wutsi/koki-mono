@@ -11,11 +11,8 @@ import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
-import com.wutsi.koki.portal.pub.refdata.model.GeoLocationModel
-import com.wutsi.koki.portal.pub.refdata.model.LocationModel
-import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
-import com.wutsi.koki.refdata.dto.LocationType
+import com.wutsi.koki.sdk.URLBuilder
 import io.hypersistence.utils.common.LogUtils.LOGGER
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -29,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam
 class AgentController(
     private val agentService: AgentService,
     private val listingService: ListingService,
-    private val locationService: LocationService,
     private val whatsapp: WhatsappService,
 ) : AbstractPageController() {
     companion object {
@@ -60,9 +56,7 @@ class AgentController(
         model.addAttribute("agent", agent)
 
         val rental = loadActiveListings("rental", ListingType.RENTAL, agent, model)
-        val sold = loadActiveListings("sale", ListingType.SALE, agent, model)
-        loadSoldListings(agent, model)
-        loadNeighborhoods(agent, rental + sold, model)
+        val sale = loadActiveListings("sale", ListingType.SALE, agent, model)
 
         loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)
@@ -109,56 +103,17 @@ class AgentController(
         ).items
         if (listings.isNotEmpty()) {
             model.addAttribute("${prefix}Listings", listings.take(20))
+
+            val moreUrl = URLBuilder("").build(
+                "/search",
+                mapOf(
+                    "listing-type" to listingType,
+                    "location-id" to agent.user.city?.id,
+                )
+            )
+            model.addAttribute("${prefix}MoreUrl", moreUrl)
         }
         return listings
-    }
-
-    private fun loadSoldListings(agent: AgentModel, model: Model): List<ListingModel> {
-        val listings = listingService.search(
-            agentUserId = agent.user.id,
-            statuses = listOf(
-                ListingStatus.RENTED,
-                ListingStatus.SOLD,
-            ),
-            sortBy = ListingSort.TRANSACTION_DATE,
-            limit = 100,
-        ).items
-        if (listings.isNotEmpty()) {
-            model.addAttribute("soldListings", listings.take(20))
-            model.addAttribute("mapCenterPoint", toMapCenterPoint(listings))
-            model.addAttribute("mapMarkersJson", toMapMarkersJson(listings))
-        }
-        return listings
-    }
-
-    private fun loadNeighborhoods(agent: AgentModel, listings: List<ListingModel>, model: Model): List<LocationModel> {
-        val neighbourhoodIds = listings.mapNotNull { listing -> listing.address?.neighbourhood?.id }
-            .distinct()
-
-        val neighbourhoods = locationService.search(
-            ids = neighbourhoodIds,
-            types = listOf(LocationType.NEIGHBORHOOD),
-            parentId = agent.user.city?.id,
-            limit = neighbourhoodIds.size,
-        ).take(12)
-        model.addAttribute("neighbourhoods", neighbourhoods)
-        return neighbourhoods
-    }
-
-    private fun toMapCenterPoint(listings: List<ListingModel>): GeoLocationModel? {
-        // Listings by neighborhoods
-        val listingsByNeighborhood = listings
-            .filter { listing -> listing.address?.neighbourhood?.id != null && listing.geoLocation != null }
-            .groupBy { listing -> listing.address?.neighbourhood?.id ?: -1 }
-
-        // Top neighborhoods having the most listings
-        val topNeighborhoodId = listingsByNeighborhood.keys.maxByOrNull { neighbourhoodId ->
-            listingsByNeighborhood[neighbourhoodId]?.size ?: 0
-        } ?: -1
-
-        return listings.filter { listing -> listing.geoLocation != null }
-            .find { listing -> listing.address?.neighbourhood?.id == topNeighborhoodId }
-            ?.geoLocation
     }
 
     private fun loadToast(

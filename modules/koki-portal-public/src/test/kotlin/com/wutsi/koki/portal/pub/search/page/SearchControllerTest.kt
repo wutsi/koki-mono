@@ -69,7 +69,7 @@ class SearchControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#btn-filter-listing-type")
         assertElementPresent("#btn-filter-property-category")
         assertElementPresent("#btn-filter-bedroom")
-        assertElementNotPresent("#btn-filter-price")
+        assertElementPresent("#btn-filter-price")
 
         assertElementPresent("#listing-sort-container")
         assertElementPresent("#btn-sort-by")

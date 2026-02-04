@@ -86,6 +86,11 @@
             <hr/>
             <h2 th:text="#{page.agent.section.for_rent(${agent.user.firstName})}">ACTIVE</h2>
             <div th:replace="~{__components/listing :: listing-carousel(${rentalListings}, true)}"></div>
+            <div class="text-right">
+                <b>
+                    <a th:href="${rentalMoreUrl}" th:text="#{button.view_more_properties}">VIEW_ALL</a>
+                </b>
+            </div>
         </div>
 
         <!-- FOR SALE -->
@@ -93,9 +98,15 @@
             <hr/>
             <h2 th:text="#{page.agent.section.for_sale(${agent.user.firstName})}">ACTIVE</h2>
             <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
+            <div class="text-right">
+                <b>
+                    <a th:href="${saleMoreUrl}" th:text="#{button.view_more_properties}">VIEW_ALL</a>
+                </b>
+            </div>
         </div>
 
         <!-- SOLD -->
+        <!--
         <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
             <hr/>
             <h2 th:text="#{page.agent.section.sold(${agent.user.firstName})}">TITLE</h2>
@@ -112,6 +123,7 @@
             </div>
             <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
         </div>
+        -->
 
         <!-- PRICE TRENDS -->
         <div class="margin-top-2x" id="price-trend-container"
@@ -183,47 +195,48 @@
 </div>
 
 <div th:replace="~{__components/bootstrap :: modal}"></div>
+
 <script th:inline="javascript">
-    const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
+    //const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
+    /*
+        function on_map_ready(id, map) {
+            console.log(json);
 
-    function on_map_ready(id, map) {
-        console.log(json);
+            for (var i = 0; i < json.length; i++) {
+                let item = json[i];
+                const icon = L.AwesomeMarkers.icon({
+                    icon: 'home',
+                    markerColor: item.sold ? 'gray' : '#1d7edf',
+                    prefix: 'fa'
+                })
 
-        for (var i = 0; i < json.length; i++) {
-            let item = json[i];
-            const icon = L.AwesomeMarkers.icon({
-                icon: 'home',
-                markerColor: item.sold ? 'gray' : '#1d7edf',
-                prefix: 'fa'
-            })
-
-            let marker = L.marker([item.latitude, item.longitude], {icon: icon});
-            marker.on('mouseover', () => {
-                const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
-                    <a href="${item.url}" target="_blank">
-                        <div class="flex">
-                            <div class="listing-image">
-                                <img src="${item.heroImageUrl}" />
-                            </div>
-                            <div class="listing-details">
-                                <b class="listing-price">${item.price}</b>
-                                <div class="flex">
-                                   <div>${item.bedrooms}</div>
-                                   <div class="margin-left-small">${item.area}</div>
+                let marker = L.marker([item.latitude, item.longitude], {icon: icon});
+                marker.on('mouseover', () => {
+                    const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
+                        <a href="${item.url}" target="_blank">
+                            <div class="flex">
+                                <div class="listing-image">
+                                    <img src="${item.heroImageUrl}" />
                                 </div>
-                                <div class="gray">${item.location}</div>
-                                <div class="text-danger margin-top-small"><b>${item.status}</b></div>
+                                <div class="listing-details">
+                                    <b class="listing-price">${item.price}</b>
+                                    <div class="flex">
+                                       <div>${item.bedrooms}</div>
+                                       <div class="margin-left-small">${item.area}</div>
+                                    </div>
+                                    <div class="gray">${item.location}</div>
+                                    <div class="text-danger margin-top-small"><b>${item.status}</b></div>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>`;
-                marker.bindPopup(html);
-                marker.openPopup();
-            });
-            map.addLayer(marker);
+                        </a>
+                    </div>`;
+                    marker.bindPopup(html);
+                    marker.openPopup();
+                });
+                map.addLayer(marker);
+            }
         }
-    }
-
+    */
     document.addEventListener(
         'DOMContentLoaded',
         function () {

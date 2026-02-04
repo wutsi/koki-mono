@@ -103,6 +103,7 @@ class NeighborhoodController(
             )
             if (!listings.isEmpty()) {
                 model.addAttribute("${name}Listings", listings.items)
+                model.addAttribute("${name}MoreUrl", "/search?location-id=$neighbourhoodId&listing-type=$listingType")
             }
             return listings.items
         } catch (ex: Throwable) {
