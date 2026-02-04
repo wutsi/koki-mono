@@ -137,7 +137,7 @@ class ListingController(
             val moreUrl = urlBuilder.build(
                 "/search",
                 mapOf(
-                    "location-id" to neighborhood?.id,
+                    "location-id" to listing.address?.neighbourhood?.id,
                     "property-category" to listing.propertyType?.category,
                     "listing-type" to listing.listingType,
                     "bedrooms" to bedrooms?.takeIf { listing.propertyTypeResidential }

@@ -1,5 +1,9 @@
 <div th:if="${listings}">
-    <div th:replace="~{__components/listing :: listing-list(${listings.items}, false)}"></div>
+    <div class="listing-list">
+        <div th:each="listing : ${listings.items}" th:remove="tag">
+            <div th:replace="~{__components/listing :: listing-card(${listing}, false)}"></div>
+        </div>
+    </div>
     <div class="text-center" id="listing-load-more" th:if="${moreUrl}">
         <button
             class="btn btn-sm btn-light w-100-mobile"

@@ -174,7 +174,19 @@
 
     <!-- RESULT -->
     <div class="margin-top" id="listing-offer-container" th:if="${listings}">
-        <div th:replace="~{__components/listing :: listing-list(${listings.items}, false)}"></div>
+        <div class="listing-list">
+            <div th:each="listing,it : ${listings.items}" th:remove="tag">
+                <div th:replace="~{__components/listing :: listing-card(${listing}, false)}"></div>
+                <div th:if="${it.index == 2}" th:remove="tag">
+                    <div
+                        th:replace="~{__components/place :: place-neighbourhood-card(${neighbourhoodPlace}, ${neighbourhoodLocation})}"></div>
+                </div>
+            </div>
+            <div th:if="${listings.items.size() < 2}" th:remove="tag">
+                <div
+                    th:replace="~{__components/place :: place-neighbourhood-card(${neighbourhoodPlace}, ${neighbourhoodLocation})}"></div>
+            </div>
+        </div>
 
         <div class="text-center" id="listing-load-more" th:if="${moreUrl}">
             <button

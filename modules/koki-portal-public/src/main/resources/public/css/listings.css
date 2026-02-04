@@ -197,6 +197,35 @@
 }
 
 
+/* ===== PLACE CARD ===== */
+.place-card {
+    border-radius: 1em;
+    border: 1px solid lightgray;
+    background: #e4edf7;
+    text-overflow: clip;
+    width: 302px;
+    height: 308px;
+    padding: 1em
+}
+
+.place-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.place-card .place-name {
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+    margin-bottom: .5em;
+}
+
+.place-intro {
+    height: 211px;
+    overflow: hidden;
+    margin-bottom: .5em;
+}
+
 /* ===== LISTING CAROUSEL ===== */
 .listing-carousel {
     display: flex;
@@ -212,17 +241,20 @@
     margin-right: 0;
 }
 
+/* ===== LISTING LIST ===== */
 .listing-list {
     display: flex;
     flex-wrap: wrap;
 }
 
-.listing-list .listing-card {
+.listing-list .listing-card,
+.listing-list .place-card {
     margin-right: .5em;
     margin-bottom: .5em;
 }
 
 
+/* ===== LISTING CARD ===== */
 .listing-card {
     border-radius: 1em;
     background: white;

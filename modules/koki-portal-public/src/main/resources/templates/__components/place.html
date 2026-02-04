@@ -29,6 +29,19 @@
     </table>
 </div>
 
+<div class="place-card" th:data-id="${place.id}" th:fragment="place-neighbourhood-card(place, neighbourhood)"
+     th:if="${place} AND ${neighbourhood}">
+    <div class="place-details">
+        <a th:href="${neighbourhood.publicUrl}">
+            <b class="place-name" th:text="${place.name}">NAME</b>
+            <div class="place-intro" th:text="${place.introduction}"></div>
+        </a>
+        <div class="text-center">
+            <a class="btn btn-sm btn-light" th:href="${neighbourhood.publicUrl}"
+               th:text="#{button.explore_neighborhood}">EXPLORE</a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

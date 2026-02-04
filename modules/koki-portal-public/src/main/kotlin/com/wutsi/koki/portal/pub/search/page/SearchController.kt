@@ -4,6 +4,8 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
+import com.wutsi.koki.place.dto.PlaceStatus
+import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.common.model.ResultSetModel
@@ -11,6 +13,10 @@ import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
+import com.wutsi.koki.portal.pub.place.mapper.PlaceMapper
+import com.wutsi.koki.portal.pub.place.model.PlaceModel
+import com.wutsi.koki.portal.pub.place.service.PlaceService
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.Money
@@ -27,6 +33,8 @@ class SearchController(
     private val listingService: ListingService,
     private val locationService: LocationService,
     private val moneyMapper: MoneyMapper,
+    private val placeService: PlaceService,
+    private val placeMapper: PlaceMapper,
 ) : AbstractPageController() {
     companion object {
         const val LIMIT = 12
@@ -43,6 +51,23 @@ class SearchController(
         @RequestParam(required = false, name = "sort") sort: String? = null,
         model: Model,
     ): String {
+        // Location
+        val location = locationId?.let { id ->
+            var location = locationService.get(id)
+            if (location.type == LocationType.NEIGHBORHOOD) {
+                val parent = location.parentId?.let { id -> locationService.get(id) }
+                if (parent != null) {
+                    location = location.copy(name = "${location.name}, ${parent.name}")
+                }
+            }
+            location
+        }
+        val place = if (location != null && location.type == LocationType.NEIGHBORHOOD) {
+            loadNeighbourhoodPlace(location, model)
+        } else {
+            null
+        }
+
         // Data
         val tenant = tenantHolder.get()
         loadListings(
@@ -54,6 +79,7 @@ class SearchController(
             maxPrice = maxPrice,
             offset = 0,
             sort = sort,
+            limit = place?.let { LIMIT - 1 } ?: LIMIT,
             model = model
         )
         loadPriceRange(
@@ -65,16 +91,6 @@ class SearchController(
         )
 
         // Filters
-        val location = locationId?.let { id ->
-            var location = locationService.get(id)
-            if (location.type == LocationType.NEIGHBORHOOD) {
-                val parent = location.parentId?.let { id -> locationService.get(id) }
-                if (parent != null) {
-                    location = location.copy(name = "${location.name}, ${parent.name}")
-                }
-            }
-            location
-        }
         model.addAttribute("locationId", locationId)
         model.addAttribute("location", location)
         model.addAttribute("propertyCategory", toPropertyCategory(propertyCategory))
@@ -144,6 +160,7 @@ class SearchController(
         minPrice: Double?,
         maxPrice: Double?,
         sort: String?,
+        limit: Int = LIMIT,
         offset: Int,
         model: Model,
     ): ResultSetModel<ListingModel> {
@@ -157,7 +174,7 @@ class SearchController(
             statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
             minPrice = minPrice?.toLong(),
             maxPrice = maxPrice?.toLong(),
-            limit = LIMIT,
+            limit = limit,
             offset = offset,
             sortBy = toListingSort(sort)
         )
@@ -234,6 +251,20 @@ class SearchController(
         model.addAttribute("currencySymbol", currencySymbol)
 
         return Pair(min, max)
+    }
+
+    private fun loadNeighbourhoodPlace(neighbourhood: LocationModel, model: Model): PlaceModel? {
+        val placeId = placeService.search(
+            neighbourhoodIds = listOf(neighbourhood.id),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            types = listOf(PlaceType.NEIGHBORHOOD),
+            limit = 1,
+        ).firstOrNull()?.id ?: return null
+
+        val place = placeService.get(placeId)
+        model.addAttribute("neighbourhoodPlace", place)
+        model.addAttribute("neighbourhoodLocation", neighbourhood)
+        return place
     }
 
     private fun adjustPrice(value: MoneyModel, percent: Double): MoneyModel {
