@@ -1,6 +1,6 @@
-package com.wutsi.koki.portal.refdata.page
+package com.wutsi.koki.portal.pub.refdata.page
 
-import com.wutsi.koki.portal.refdata.service.LocationService
+import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.refdata.dto.LocationType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

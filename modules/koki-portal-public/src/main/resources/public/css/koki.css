@@ -616,6 +616,10 @@ a.btn-back {
     border: 1px solid gray;
 }
 
+.text-nowrap {
+    text-wrap: nowrap;
+}
+
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0

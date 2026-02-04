@@ -5,7 +5,7 @@
  *  - data-container-id: ID of the element where we will load the data
  *  - data-url: URL where to load the additionnal information
  */
-class LoadMoreWidget {
+class KokiLoadMoreWidget {
     init(root) {
         let count = 0;
         const base = root ? root : document;
@@ -29,7 +29,7 @@ class LoadMoreWidget {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-        const widget = new LoadMoreWidget();
+        const widget = new KokiLoadMoreWidget();
         koki.w['loadMore'] = widget;
         widget.init();
     }
