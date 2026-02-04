@@ -45,7 +45,7 @@ class SearchController(
     ): String {
         // Data
         val tenant = tenantHolder.get()
-        val listings = loadListings(
+        loadListings(
             locationId = locationId,
             listingType = listingType,
             propertyCategory = propertyCategory,
@@ -61,7 +61,6 @@ class SearchController(
             locationId = locationId,
             listingType = listingType,
             bedrooms = bedrooms,
-            listings = listings,
             model = model
         )
 
@@ -99,10 +98,12 @@ class SearchController(
             "page",
             createPageModel(
                 name = PageName.SEARCH,
-                title = if (listingType.uppercase() == ListingType.RENTAL.name) {
-                    getMessage("page.search.meta.title-for-rent")
+                title = if (location == null) {
+                    getMessage("listing-type.$listingType")
+                } else if (listingType.uppercase() == ListingType.RENTAL.name) {
+                    getMessage("page.search.meta.title-for-rent", arrayOf(location.name))
                 } else {
-                    getMessage("page.search.meta.title-for-sale")
+                    getMessage("page.search.meta.title-for-sale", arrayOf(location.name))
                 },
             ),
         )
@@ -191,7 +192,6 @@ class SearchController(
         locationId: Long? = null,
         listingType: String? = null,
         bedrooms: String? = null,
-        listings: ResultSetModel<ListingModel>,
         model: Model
     ): Pair<MoneyModel, MoneyModel>? {
         var min: MoneyModel
