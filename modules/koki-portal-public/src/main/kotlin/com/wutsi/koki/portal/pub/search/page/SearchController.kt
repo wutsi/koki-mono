@@ -6,11 +6,12 @@ import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.portal.pub.common.model.ResultSetModel
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.service.LocationService
-import com.wutsi.koki.portal.pub.tenant.model.TenantModel
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.refdata.dto.Money
 import com.wutsi.koki.sdk.URLBuilder
@@ -45,18 +46,33 @@ class SearchController(
         @RequestParam(required = false, name = "sort") sort: String? = null,
         model: Model,
     ): String {
-        // Filters
+        // Data
         val tenant = tenantHolder.get()
-        val priceRance = loadPriceRange(
-            propertyCategory = propertyCategory,
+        val listings = loadListings(
             locationId = locationId,
             listingType = listingType,
+            propertyCategory = propertyCategory,
             bedrooms = bedrooms,
-            tenant = tenant,
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            offset = 0,
+            sort = sort,
             model = model
         )
+        val priceRance = if (listings.items.size > 1) {
+            loadPriceRange(
+                propertyCategory = propertyCategory,
+                locationId = locationId,
+                listingType = listingType,
+                bedrooms = bedrooms,
+                listings = listings,
+                model = model
+            )
+        } else {
+            null
+        }
 
-        model.addAttribute("locationId", locationId)
+        // Filters
         val location = locationId?.let { id ->
             var location = locationService.get(id)
             if (location.type == LocationType.NEIGHBORHOOD) {
@@ -67,13 +83,13 @@ class SearchController(
             }
             location
         }
+        model.addAttribute("locationId", locationId)
         model.addAttribute("location", location)
-
         model.addAttribute("propertyCategory", toPropertyCategory(propertyCategory))
         model.addAttribute("listingType", toListingType(listingType))
-        model.addAttribute("bedrooms", bedrooms)
+        model.addAttribute("bedrooms", bedrooms?.ifEmpty { null })
         model.addAttribute("minPrice", minPrice)
-        model.addAttribute("maxPrice", maxPrice ?: priceRance?.second?.amount)
+        model.addAttribute("maxPrice", maxPrice ?: priceRance?.second?.amount?.toLong())
         model.addAttribute("sort", toListingSort(sort))
 
         model.addAttribute("listingTypes", ListingType.entries.filter { it != ListingType.UNKNOWN })
@@ -85,19 +101,7 @@ class SearchController(
         )
         model.addAttribute("country", tenant.country)
 
-        // Load data
-        more(
-            propertyCategory = propertyCategory,
-            locationId = locationId,
-            listingType = listingType,
-            bedrooms = bedrooms,
-            minPrice = minPrice,
-            maxPrice = maxPrice,
-            sort = sort,
-            offset = 0,
-            model = model,
-        )
-
+        // Page
         model.addAttribute(
             "page",
             createPageModel(
@@ -109,7 +113,6 @@ class SearchController(
                 },
             ),
         )
-
         return "search/result"
     }
 
@@ -125,10 +128,36 @@ class SearchController(
         offset: Int,
         model: Model,
     ): String {
+        loadListings(
+            locationId = locationId,
+            listingType = listingType,
+            propertyCategory = propertyCategory,
+            bedrooms = bedrooms,
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            offset = offset,
+            sort = sort,
+            model = model
+        )
+        return "search/more"
+    }
+
+    private fun loadListings(
+        propertyCategory: String?,
+        locationId: Long?,
+        listingType: String?,
+        bedrooms: String?,
+        minPrice: Long?,
+        maxPrice: Long?,
+        sort: String?,
+        offset: Int,
+        model: Model,
+    ): ResultSetModel<ListingModel> {
         val bedroomPair = minmaxPair(bedrooms)
         val listings = listingService.search(
             locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
             listingType = toListingType(listingType),
+            propertyCategories = toPropertyCategory(propertyCategory)?.let { it -> listOf(it) } ?: emptyList(),
             minBedrooms = bedroomPair.first,
             maxBedrooms = bedroomPair.second,
             statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
@@ -142,7 +171,7 @@ class SearchController(
         if (!listings.isEmpty()) {
             model.addAttribute("listings", listings)
 
-            if (listings.total >= LIMIT) {
+            if (listings.items.size >= LIMIT) {
                 val urlBuilder = URLBuilder("")
                 val moreUrl = urlBuilder.build(
                     "/search/more",
@@ -161,8 +190,7 @@ class SearchController(
                 model.addAttribute("moreUrl", moreUrl)
             }
         }
-
-        return "search/more"
+        return listings
     }
 
     private fun loadPriceRange(
@@ -170,31 +198,42 @@ class SearchController(
         locationId: Long? = null,
         listingType: String? = null,
         bedrooms: String? = null,
-        tenant: TenantModel,
+        listings: ResultSetModel<ListingModel>,
         model: Model
     ): Pair<MoneyModel, MoneyModel>? {
-        val bedroomPair = minmaxPair(bedrooms)
-        val min = listingService.search(
-            locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
-            listingType = toListingType(listingType),
-            minBedrooms = bedroomPair.first,
-            maxBedrooms = bedroomPair.second,
-            statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
-            limit = 1,
-            sortBy = ListingSort.PRICE_LOW_HIGH
-        ).items.firstOrNull()?.price ?: return null
-        val currencySymbol = min.shortText.split(" ")[0]
+        var min: MoneyModel
+        var max: MoneyModel
 
-        var max = listingService.search(
-            locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
-            listingType = toListingType(listingType),
-            minBedrooms = bedroomPair.first,
-            maxBedrooms = bedroomPair.second,
-            statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
-            limit = 1,
-            sortBy = ListingSort.PRICE_HIGH_LOW
-        ).items.firstOrNull()?.price ?: return null
+        if (listings.total > LIMIT) {
+            val bedroomPair = minmaxPair(bedrooms)
+            val propertyCategories = toPropertyCategory(propertyCategory)?.let { it -> listOf(it) } ?: emptyList()
+            min = listingService.search(
+                locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
+                propertyCategories = propertyCategories,
+                listingType = toListingType(listingType),
+                minBedrooms = bedroomPair.first,
+                maxBedrooms = bedroomPair.second,
+                statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
+                limit = 1,
+                sortBy = ListingSort.PRICE_LOW_HIGH
+            ).items.firstOrNull()?.price ?: return null
+
+            max = listingService.search(
+                locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
+                listingType = toListingType(listingType),
+                propertyCategories = propertyCategories,
+                minBedrooms = bedroomPair.first,
+                maxBedrooms = bedroomPair.second,
+                statuses = listOf(ListingStatus.ACTIVE, ListingStatus.ACTIVE_WITH_CONTINGENCIES),
+                limit = 1,
+                sortBy = ListingSort.PRICE_HIGH_LOW
+            ).items.firstOrNull()?.price ?: return null
+        } else {
+            min = listings.items.minBy { it.price?.amount ?: 0.0 }.price ?: return null
+            max = listings.items.maxBy { it.price?.amount ?: 0.0 }.price ?: return null
+        }
         max = adjustPrice(max, .25)
+        val currencySymbol = max.shortText.split(" ")[0]
 
         val step = if (min.amount / 1000000L > 0) {
             100000
@@ -224,7 +263,7 @@ class SearchController(
 
     private fun minmaxPair(value: String?): Pair<Int?, Int?> {
         try {
-            if (value == null || value.isEmpty()) {
+            if (value.isNullOrEmpty()) {
                 return Pair(null, null)
             } else if (value.endsWith("+")) {
                 return Pair(value.trimEnd('+').toInt(), null)

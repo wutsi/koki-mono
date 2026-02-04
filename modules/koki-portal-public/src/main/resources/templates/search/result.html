@@ -17,8 +17,8 @@
         <input id="max-price" name="max-price" th:value="${maxPrice}" type="hidden"/>
         <input id="sort" name="sort" th:value="${sort}" type="hidden"/>
 
-        <!-- Filters -->
-        <div class="flex flex-wrap">
+        <!-- FILTERS -->
+        <div class="flex flex-wrap" id="listing-filter-container">
             <div class="location-filter">
                 <select data-component-id="select2"
                         data-on-change="location_changed"
@@ -40,6 +40,7 @@
                 <div class="dropdown margin-right">
                     <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
                             data-bs-toggle="dropdown"
+                            id="btn-filter-listing-type"
                             th:text="#{'listing-type.' + ${listingType.name()}}"
                             type="button"
                     >
@@ -58,6 +59,7 @@
                 <div class="dropdown margin-right">
                     <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
                             data-bs-toggle="dropdown"
+                            id="btn-filter-property-category"
                             th:text="#{'property-category.' + ${propertyCategory.name()}}"
                             type="button">
                         PROPERTY_CATEGORY
@@ -75,14 +77,15 @@
                      th:if="!${propertyCategory} OR ${propertyCategory.name() == 'RESIDENTIAL'}">
                     <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
                             data-bs-toggle="dropdown"
+                            id="btn-filter-bedroom"
                             th:text="${bedrooms}? (#{page.search.filter.bedrooms} + ': ' + ${bedrooms}) : #{page.search.filter.bedrooms}"
                             type="button">
                         BEDROOMS
                     </button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="#"
-                               th:classappend="!${bedrooms} ? 'active'"
+                            <a class="dropdown-item" data-name="bedrooms"
+                               data-value="" href="#" th:classappend="!${bedrooms} ? 'active'"
                                th:text="#{page.search.filter.bedrooms}">Bedrooms</a>
                         </li>
                         <li th:each="room : ${rooms}">
@@ -96,6 +99,7 @@
                 <div class="dropdown margin-right" th:if="${priceRangeMin} AND ${priceRangeMax}">
                     <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
                             data-bs-toggle="dropdown"
+                            id="btn-filter-price"
                             th:text="#{page.search.filter.price}"
                             type="button">
                         PRICE
@@ -118,7 +122,8 @@
                             </div>
                             <div class="text-center margin-top-small" id="price-range-value"></div>
                             <div class="margin-top-small text-center">
-                                <button class="btn btn-sm btn-primary w-100-mobile" th:text="#{button.apply}"
+                                <button class="btn btn-sm btn-primary w-100-mobile" id="btn-apply-price-filter"
+                                        th:text="#{button.apply}"
                                         type="submit">
                                     APPLY
                                 </button>
@@ -130,13 +135,14 @@
         </div>
 
         <!-- SORT-->
-        <div class="flex flex-space-between margin-top" th:if="${listings}">
+        <div class="flex flex-space-between margin-top" id="listing-sort-container" th:if="${listings}">
             <div>
                 <span th:if="${listings.total == 1}" th:utext="#{page.search.result.1_property}">1_PROPERTY</span>
                 <span th:if="${listings.total > 1}" th:utext="#{page.search.result.n_properties(${listings.total})}">N_PROPERTY</span>
             </div>
             <div class="dropdown margin-right">
                 <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                        id="btn-sort-by"
                         th:text="${sort} ? #{'listing-sort.' + ${sort}} : #{page.search.filter.sort-by}"
                         type="button">
                     SORT_BY
@@ -161,7 +167,7 @@
     </form>
 
     <!-- RESULT -->
-    <div class="listing-result-container margin-top" th:if="${listings}">
+    <div class="margin-top" id="listing-offer-container" th:if="${listings}">
         <div th:replace="~{__components/listing :: listing-list(${listings.items}, false)}"></div>
 
         <div class="text-center" id="listing-load-more" th:if="${moreUrl}">
@@ -169,6 +175,7 @@
                 class="btn btn-sm btn-light w-100-mobile"
                 data-component-id="load-more"
                 data-container-id="listing-load-more"
+                id="btn-load-more"
                 th:data-url="${moreUrl}"
                 th:text="#{button.load_more}"
             >
@@ -176,6 +183,11 @@
             </button>
         </div>
     </div>
+    <div class="text-center margin-top" id="listing-no-offer-container" th:if="!${listings}"
+         th:text="#{page.search.result.none}">
+        NO_RESULT
+    </div>
+
 </div>
 
 <script>
@@ -188,10 +200,6 @@
                 const name = this.getAttribute('data-name');
                 const value = this.getAttribute('data-value');
 
-                const button = link.closest("button");
-                if (button) {
-                    button.innerText = value;
-                }
                 document.getElementById(name).value = value;
                 document.getElementById('form').submit()
             });
@@ -199,13 +207,15 @@
 
         // Handle price range input
         const priceRange = document.getElementById('price-range');
-        priceRange.addEventListener('input', function () {
-            document.getElementById('max-price').value = BigInt(this.value);
-            document.getElementById('price-range-value').innerText = format_price(this.value);
-        });
+        if (priceRange) {
+            priceRange.addEventListener('input', function () {
+                document.getElementById('max-price').value = Number(this.value);
+                document.getElementById('price-range-value').innerText = format_price(this.value);
+            });
 
-        const maxPrice = document.getElementById('max-price').value;
-        document.getElementById('price-range-value').innerText = format_price(maxPrice);
+            const maxPrice = document.getElementById('max-price').value;
+            document.getElementById('price-range-value').innerText = format_price(maxPrice);
+        }
     });
 
     function location_changed() {
@@ -245,9 +255,8 @@
         const result = bytes / 1000.0;
         const currentUnit = units[index] || "";
 
-        // Format to 1 decimal place, but strip it if it's .0
-        // This perfectly mimics the "#.#" behavior
-        const formattedValue = Number(result.toFixed(1));
+        // Format to 0 decimal place, but strip it if it's .0
+        const formattedValue = Number(result.toFixed(0));
 
         return formattedValue + currentUnit + unit;
     }

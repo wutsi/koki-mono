@@ -99,7 +99,7 @@
 /** ===== LISTING SEARCH STYLES ===== */
 .listing-search-container {
     width: 1250px;
-    margin: 6em auto 0 auto;
+    margin: 6em auto 10em auto;
 }
 
 .listing-search-container .location-filter {
@@ -245,6 +245,7 @@
     background: #f0f0f0;
     margin-top: -1.5em;
     border-radius: 1em 1em 0 0;
+    border: 1px solid lightgray;
 }
 
 .listing-card img.hero-image {
@@ -315,6 +316,16 @@
     .listing-contact-details {
         width: 25%;
     }
+
+    .listing-search-container {
+        width: 100%;
+        padding: 0 0.5em;
+    }
+
+    .listing-list {
+        width: 940px;
+        margin: 0 auto;
+    }
 }
 
 /* Mini Tablet */
@@ -323,10 +334,11 @@
         display: block;
     }
 
-    .listing-search-container {
+    .listing-search-container .location-filter {
         width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.5em;
     }
-
 
     .listing-info-details {
         width: 100%;
@@ -377,6 +389,10 @@
         width: auto;
         margin-top: 0;
     }
+
+    .listing-list {
+        width: 640px;
+    }
 }
 
 /* Mobile phone */
@@ -395,5 +411,9 @@
 
     .hero-image-container .hero-2 {
         display: none;
+    }
+
+    .listing-list {
+        width: 320px;
     }
 }
