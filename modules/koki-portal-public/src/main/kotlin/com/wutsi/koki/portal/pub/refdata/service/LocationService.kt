@@ -4,7 +4,9 @@ import com.wutsi.koki.portal.pub.refdata.mapper.LocationMapper
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
 import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.sdk.KokiRefData
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 
 @Service
 class LocationService(
@@ -34,6 +36,14 @@ class LocationService(
 
     fun get(id: Long): LocationModel {
         val location = koki.location(id).location
+        return mapper.toLocationModel(location)
+    }
+
+    fun get(id: Long, type: LocationType): LocationModel {
+        val location = koki.location(id).location
+        if (type != location.type) {
+            throw HttpClientErrorException(HttpStatus.NOT_FOUND, "Location $id is not of type $type")
+        }
         return mapper.toLocationModel(location)
     }
 }

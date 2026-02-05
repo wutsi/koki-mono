@@ -49,7 +49,15 @@ class WhatsappService(
 
     fun toNeighbourhoodUrl(neighbourhood: LocationModel, agent: AgentModel): String? {
         val text = getMessage(
-            "page.neighbourhood.whatsapp.text",
+            "page.local-guide.neighbourhood.whatsapp.text",
+            arrayOf(agent.user.firstName, neighbourhood.name)
+        )
+        return toUrl(agent.user, text)
+    }
+
+    fun toCityUrl(neighbourhood: LocationModel, agent: AgentModel): String? {
+        val text = getMessage(
+            "page.local-guide.city.whatsapp.text",
             arrayOf(agent.user.firstName, neighbourhood.name)
         )
         return toUrl(agent.user, text)

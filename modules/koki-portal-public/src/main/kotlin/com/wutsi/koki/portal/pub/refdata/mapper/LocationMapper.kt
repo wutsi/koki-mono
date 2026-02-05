@@ -23,10 +23,18 @@ class LocationMapper : TenantAwareMapper() {
             country = entity.country,
             countryName = Locale(locale.language, entity.country).displayCountry,
             geoLocation = toGeoLocationModel(entity),
-            publicUrl = if (entity.type == LocationType.NEIGHBORHOOD) {
-                StringUtils.toSlug("${tenant.clientPortalUrl}/neighbourhoods/${entity.id}", entity.name)
-            } else {
-                "/"
+            publicUrl = when (entity.type) {
+                LocationType.NEIGHBORHOOD -> StringUtils.toSlug(
+                    "${tenant.clientPortalUrl}/local-guides/neighbourhoods/${entity.id}",
+                    entity.name
+                )
+
+                LocationType.CITY -> StringUtils.toSlug(
+                    "${tenant.clientPortalUrl}/local-guides/cities/${entity.id}",
+                    entity.name
+                )
+
+                else -> ""
             },
         )
     }

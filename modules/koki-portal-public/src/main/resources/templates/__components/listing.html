@@ -141,8 +141,8 @@
                 <b class="margin-right-small" th:text="${saleMetrics.total}">000</b>
             </td>
             <td class="text-center">
-                <span th:text="#{page.listing.metric.median_price}">AVERAGE PRICE</span>:
-                <b class="margin-right-small" th:text="${saleMetrics.averagePrice.shortText}">$$$</b>
+                <span th:text="#{page.listing.metric.price}">PRICE</span>:
+                <b class="margin-right-small" th:text="${saleMetrics.priceRangeText}">$$$</b>
             </td>
         </tr>
         <tr th:if="${rentalMetrics}">
@@ -151,9 +151,9 @@
                 <b class="margin-right-small" th:text="${rentalMetrics.total}">000</b>
             </td>
             <td class="text-center">
-                <span th:utext="#{page.listing.metric.median_price}">AVERAGE PRICE</span>:
+                <span th:utext="#{page.listing.metric.price}">PRICE</span>:
                 <b class="margin-right-small"
-                   th:text="${rentalMetrics.averagePrice.shortText}">$$$</b>
+                   th:text="${rentalMetrics.priceRangeText}">$$$</b>
             </td>
         </tr>
         <tr th:if="${landMetrics}">

@@ -407,6 +407,10 @@
         text-wrap: nowrap;
     }
 
+    .listing-contact-details-inner .location-info {
+        display: none;
+    }
+
     .listing-contact-details-inner .agent-info img {
         width: 32px;
         height: 32px;

@@ -113,7 +113,7 @@ class AgentControllerTest : AbstractPageControllerTest() {
         navigateTo("/neighbourhoods/${neighborhoods[0].id}")
 
         // THEN
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
         assertElementNotPresent("#metrics-container")
         assertElementNotPresent("#price-trend-container")
     }

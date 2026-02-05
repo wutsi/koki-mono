@@ -4,6 +4,7 @@ import com.wutsi.koki.common.dto.ImportResponse
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.GetPlaceResponse
+import com.wutsi.koki.place.dto.PlaceSort
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
@@ -82,6 +83,7 @@ class PlaceEndpoints(
         @RequestParam(required = false, name = "q") keyword: String? = null,
         @RequestParam(required = false, name = "min-rating") minRating: Double? = null,
         @RequestParam(required = false, name = "max-rating") maxRating: Double? = null,
+        @RequestParam(required = false) sort: PlaceSort? = null,
         @RequestParam(required = false) limit: Int = 20,
         @RequestParam(required = false) offset: Int = 0,
     ): SearchPlaceResponse {
@@ -93,6 +95,7 @@ class PlaceEndpoints(
             keyword = keyword,
             minRating = minRating,
             maxRating = maxRating,
+            sort = sort,
             limit = limit,
             offset = offset,
         )
