@@ -4,7 +4,7 @@ import java.util.Date
 
 data class Place(
     val id: Long = -1,
-    val neighbourhoodId: Long = -1,
+    val neighbourhoodId: Long? = null,
     val cityId: Long = -1,
     val heroImageUrl: String? = null,
     val name: String = "",

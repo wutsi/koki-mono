@@ -9,4 +9,5 @@ enum class PlaceType {
     MARKET,
     SUPERMARKET,
     MUSEUM,
+    CITY,
 }
