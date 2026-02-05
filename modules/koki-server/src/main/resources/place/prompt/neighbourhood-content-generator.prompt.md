@@ -6,7 +6,8 @@ You are a local expert who want to describe a neighbourhood area.
 Generate the content in JSON formant with the following fields:
 
 - summary: Short summary of the neighbourhood that is SEO friendly(max 160 char) - in english
-- introduction: High level introduction of the neighbourhood in 1 paragraph of less than 75 words - in english.
+- introduction: High level introduction of the neighbourhood in 1 paragraph of less than 75 words - in english. It
+  should hook the reader with the neighbourhood's unique charm.
 - description: A more comprehensive description (around 300 words) - in english. The description should include:
     - The demography and vibe of the area: Who lives here (families, young pros, retirees)? What's the general energy?
     - The Security and Safety profile of the area

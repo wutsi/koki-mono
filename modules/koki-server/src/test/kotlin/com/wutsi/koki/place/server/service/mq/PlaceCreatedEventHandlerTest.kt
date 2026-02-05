@@ -13,8 +13,6 @@ import com.wutsi.koki.place.server.domain.PlaceEntity
 import com.wutsi.koki.place.server.service.ContentGeneratorAgentFactory
 import com.wutsi.koki.place.server.service.PlaceContentGenerator
 import com.wutsi.koki.place.server.service.PlaceService
-import com.wutsi.koki.refdata.server.domain.LocationEntity
-import com.wutsi.koki.refdata.server.service.LocationService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -25,30 +23,24 @@ import kotlin.test.assertFalse
 class PlaceCreatedEventHandlerTest {
     private val placeService = mock<PlaceService>()
     private val contentGeneratorFactory = mock<ContentGeneratorAgentFactory>()
-    private val locationService = mock<LocationService>()
     private val handler = PlaceCreatedEventHandler(
         placeService = placeService,
-        locationService = locationService,
         contentGeneratorFactory = contentGeneratorFactory,
     )
 
     private val generator = mock<PlaceContentGenerator>()
-    private val neighbourhood = LocationEntity(id = 111L, parentId = 333L, name = "Bastos")
-    private val city = LocationEntity(id = 333L, parentId = 1L, name = "Yaounde")
     private val place = PlaceEntity(
         id = 777L,
         name = "Bastos",
         type = PlaceType.NEIGHBORHOOD,
-        cityId = city.id!!,
-        neighbourhoodId = neighbourhood.id!!,
+        cityId = 111L,
+        neighbourhoodId = 333L,
         status = PlaceStatus.DRAFT
     )
 
     @BeforeEach
     fun setUp() {
         doReturn(generator).whenever(contentGeneratorFactory).get(any())
-        doReturn(neighbourhood).whenever(locationService).get(neighbourhood.id!!)
-        doReturn(city).whenever(locationService).get(city.id!!)
         doReturn(place).whenever(placeService).get(any())
     }
 
@@ -60,7 +52,7 @@ class PlaceCreatedEventHandlerTest {
         // THEN
         assertTrue(result)
 
-        verify(generator).generate(place, neighbourhood, city)
+        verify(generator).generate(place)
 
         verify(placeService, times(2)).save(any())
         assertEquals(PlaceStatus.PUBLISHED, place.status)
@@ -77,7 +69,7 @@ class PlaceCreatedEventHandlerTest {
         // THEN
         assertFalse(result)
 
-        verify(generator, never()).generate(place, neighbourhood, city)
+        verify(generator, never()).generate(place)
 
         verify(placeService, never()).save(any())
     }
@@ -93,7 +85,7 @@ class PlaceCreatedEventHandlerTest {
         // THEN
         assertFalse(result)
 
-        verify(generator, never()).generate(place, neighbourhood, city)
+        verify(generator, never()).generate(place)
 
         verify(placeService, never()).save(any())
     }

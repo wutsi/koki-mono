@@ -6,14 +6,12 @@ import com.wutsi.koki.place.server.domain.PlaceEntity
 import com.wutsi.koki.place.server.service.ContentGeneratorAgentFactory
 import com.wutsi.koki.place.server.service.PlaceService
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.stereotype.Service
 
 @Service
 class UpdatePlaceEventHandler(
     private val placeService: PlaceService,
     private val contentGeneratorFactory: ContentGeneratorAgentFactory,
-    private val locationService: LocationService,
     private val logger: KVLogger,
 ) {
     fun handle(event: PlaceUpdatedEvent): Boolean {
@@ -32,8 +30,6 @@ class UpdatePlaceEventHandler(
 
     private fun generateContent(place: PlaceEntity) {
         val generator = contentGeneratorFactory.get(place.type)
-        val neighbourhood = locationService.get(place.neighbourhoodId)
-        val city = locationService.get(place.cityId)
-        generator.generate(place, neighbourhood, city)
+        generator.generate(place)
     }
 }

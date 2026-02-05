@@ -17,4 +17,11 @@ class PlaceAgentFactory(private val llmProvider: LLMProvider) {
             llm = llmProvider.chatWithToolsLLM,
         )
     }
+
+    fun createCityContentGeneratorAgent(city: LocationEntity): Agent {
+        return CityContentGeneratorAgent(
+            city = city,
+            llm = llmProvider.chatWithToolsLLM,
+        )
+    }
 }

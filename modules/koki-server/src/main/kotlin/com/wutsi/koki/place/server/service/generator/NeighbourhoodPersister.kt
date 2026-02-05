@@ -19,7 +19,7 @@ class NeighbourhoodPersister(
     private val ratingDao: PlaceRatingRepository,
 ) {
     @Transactional
-    fun updateNeighbourhood(
+    fun persist(
         place: PlaceEntity,
         neighbourhood: LocationEntity,
         result: NeighbourhoodContentGeneratorResult,

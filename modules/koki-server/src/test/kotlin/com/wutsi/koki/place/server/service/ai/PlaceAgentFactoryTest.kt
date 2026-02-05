@@ -15,26 +15,36 @@ class PlaceAgentFactoryTest {
     private val vision = mock<LLM>()
     private val llmProvider = LLMProvider(chat, chatWithTools, vision)
 
+    private val factory = PlaceAgentFactory(llmProvider)
+
+    private val neighbourhood = LocationEntity(
+        id = 1L,
+        name = "Downtown",
+        type = LocationType.NEIGHBORHOOD
+    )
+    private val city = LocationEntity(
+        id = 2L,
+        name = "Montreal",
+        type = LocationType.CITY
+    )
+
     @Test
     fun createNeighborhoodContentGeneratorAgent() {
-        val factory = PlaceAgentFactory(llmProvider)
-
-        val neighbourhood = LocationEntity(
-            id = 1L,
-            name = "Downtown",
-            type = LocationType.NEIGHBORHOOD
-        )
-        val city = LocationEntity(
-            id = 2L,
-            name = "Montreal",
-            type = LocationType.CITY
-        )
-
         // WHEN
         val agent = factory.createNeighborhoodContentGeneratorAgent(neighbourhood, city)
 
         // THEN
         assertNotNull(agent)
         assertTrue(agent is NeighbourhoodContentGeneratorAgent)
+    }
+
+    @Test
+    fun createCityContentGeneratorAgent() {
+        // WHEN
+        val agent = factory.createCityContentGeneratorAgent(city)
+
+        // THEN
+        assertNotNull(agent)
+        assertTrue(agent is CityContentGeneratorAgent)
     }
 }

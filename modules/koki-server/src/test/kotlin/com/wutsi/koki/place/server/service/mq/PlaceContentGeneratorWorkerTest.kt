@@ -23,13 +23,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.mock
 import kotlin.test.Test
 
-class PlaceContentGeneratorHandlerWorkerTest {
+class PlaceContentGeneratorWorkerTest {
     private val locationService = mock<LocationService>()
     private val placeService = mock<PlaceService>()
     private val placeCreatedEventHandler = mock<PlaceCreatedEventHandler>()
     private val placeUpdatePlaceEventHandler = mock<UpdatePlaceEventHandler>()
 
-    private val worker = PlaceContentGeneratorHandlerWorker(
+    private val worker = PlaceContentGeneratorWorker(
         locationService = locationService,
         placeService = placeService,
         placeCreatedEventHandler = placeCreatedEventHandler,
@@ -83,7 +83,7 @@ class PlaceContentGeneratorHandlerWorkerTest {
         val request = argumentCaptor<CreatePlaceRequest>()
         verify(placeService).create(request.capture())
         assertEquals(city.id, request.firstValue.cityId)
-        assertEquals(-1, request.firstValue.neighbourhoodId)
+        assertEquals(null, request.firstValue.neighbourhoodId)
         assertEquals(PlaceType.CITY, request.firstValue.type)
         assertEquals(city.name, request.firstValue.name)
 

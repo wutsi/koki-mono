@@ -1,6 +1,7 @@
 package com.wutsi.koki.place.server.service
 
 import com.wutsi.koki.place.dto.PlaceType
+import com.wutsi.koki.place.server.service.generator.CityContentGenerator
 import com.wutsi.koki.place.server.service.generator.NeighbourhoodContentGenerator
 import com.wutsi.koki.place.server.service.generator.NullContentGenerator
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -9,7 +10,14 @@ import org.mockito.Mockito.mock
 
 class ContentGeneratorAgentFactoryTest {
     private val neighbourhood = mock<NeighbourhoodContentGenerator>()
-    private val factory = ContentGeneratorAgentFactory(neighbourhood)
+    private val city = mock<CityContentGenerator>()
+    private val factory = ContentGeneratorAgentFactory(neighbourhood, city)
+
+    @Test
+    fun `place - city`() {
+        val generator = factory.get(PlaceType.CITY)
+        assertTrue(generator is CityContentGenerator)
+    }
 
     @Test
     fun `place - neighbourhood`() {
