@@ -73,15 +73,15 @@
                 <div
                     th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
             </div>
+        </div>
 
-            <!-- NEIGHBOURHOODS -->
-            <div class="margin-top-2x" id="neighbourhood-container" th:if="${neighbourhoods}">
-                <hr/>
-                <h2 th:text="#{page.local-guide.section.neighbourhoods(${city?.name})}">TITLE</h2>
-                <div class="flex flex-wrap">
-                    <div class="col-6 col-lg-4 margin-bottom-small" th:each="neighbourhood:${neighbourhoods}">
-                        <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
-                    </div>
+        <!-- NEIGHBOURHOODS -->
+        <div class="margin-top-2x" id="neighbourhood-container" th:if="${neighbourhoods}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.neighbourhoods(${city?.name})}">TITLE</h2>
+            <div class="flex flex-wrap">
+                <div class="col-6 col-lg-4 margin-bottom-small" th:each="neighbourhood:${neighbourhoods}">
+                    <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
                 </div>
             </div>
         </div>

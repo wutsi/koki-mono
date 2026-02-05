@@ -87,17 +87,18 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
         assertElementPresent("#introduction-container")
+        assertElementPresent("#metric-container")
         assertElementPresent("#agent-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
-        assertElementPresent("#about-container")
         assertElementPresent("#school-container")
         assertElementPresent("#hospital-container")
         assertElementPresent("#market-container")
         assertElementPresent("#todo-container")
         assertElementPresent("#similar-neighbourhood-container")
-        assertElementPresent("#metric-container")
         assertElementPresent("#price-trend-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
@@ -135,12 +136,18 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
 
         assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
         assertElementNotPresent("#introduction-container")
-        assertElementNotPresent("#about-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
         assertElementNotPresent("#school-container")
         assertElementNotPresent("#hospital-container")
         assertElementNotPresent("#market-container")
         assertElementNotPresent("#todo-container")
         assertElementNotPresent("#similar-neighbourhood-container")
+        assertElementNotPresent("#price-trend-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
@@ -157,8 +164,19 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
+        assertElementPresent("#introduction-container")
         assertElementNotPresent("#metric-container")
+        assertElementNotPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
+        assertElementPresent("#school-container")
+        assertElementPresent("#hospital-container")
+        assertElementPresent("#market-container")
+        assertElementPresent("#todo-container")
+        assertElementPresent("#similar-neighbourhood-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#btn-send-message")
+        assertElementPresent("#btn-view-properties")
     }
 
     @Test
@@ -174,11 +192,19 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
         navigateTo("/local-guides/neighbourhoods/${neighborhoods[0].id}")
 
         // THEN
-        assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
+        assertElementNotPresent("#introduction-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
         assertElementNotPresent("#school-container")
         assertElementNotPresent("#hospital-container")
         assertElementNotPresent("#market-container")
         assertElementNotPresent("#todo-container")
+        assertElementNotPresent("#similar-neighbourhood-container")
+        assertElementNotPresent("#price-trend-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
@@ -195,10 +221,19 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.LOCAL_GUIDE_NEIGHBOURHOOD)
+        assertElementPresent("#introduction-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
         assertElementNotPresent("#rental-listing-container")
         assertElementNotPresent("#sale-listing-container")
-        assertElementNotPresent("#sold-listing-container")
-        assertElementNotPresent("#map-container")
+        assertElementPresent("#school-container")
+        assertElementPresent("#hospital-container")
+        assertElementPresent("#market-container")
+        assertElementPresent("#todo-container")
+        assertElementPresent("#similar-neighbourhood-container")
+        assertElementPresent("#price-trend-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test

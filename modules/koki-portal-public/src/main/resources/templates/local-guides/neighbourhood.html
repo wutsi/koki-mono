@@ -71,7 +71,7 @@
         </div>
 
         <!-- ABOUT -->
-        <div class="margin-top" id="about-container" th:if="${place?.description}">
+        <div class="margin-top" id="about-container" th:if="${place}">
             <hr/>
             <h2 th:text="#{page.local-guide.section.about(${neighbourhood.name})}">TITLE</h2>
             <div th:utext="${place.descriptionHtml}">DESCRIPTION</div>
@@ -175,23 +175,23 @@
                     </tr>
                 </table>
             </div>
+        </div>
 
-            <!-- SIMILAR NEIGHBOURHOODS -->
-            <div class="margin-top-2x" id="similar-neighbourhood-container" th:if="${similarNeighbourhoods}">
-                <hr/>
-                <h2 th:text="#{page.local-guide.section.similar_neighbourhoods(${city?.name})}">TITLE</h2>
-                <div class="flex flex-wrap">
-                    <div class="col-6 col-lg-4 margin-bottom-small" th:each="neighbourhood:${similarNeighbourhoods}">
-                        <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
-                    </div>
+        <!-- SIMILAR NEIGHBOURHOODS -->
+        <div class="margin-top-2x" id="similar-neighbourhood-container" th:if="${similarNeighbourhoods}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.similar_neighbourhoods(${city?.name})}">TITLE</h2>
+            <div class="flex flex-wrap">
+                <div class="col-6 col-lg-4 margin-bottom-small" th:each="neighbourhood:${similarNeighbourhoods}">
+                    <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- CONTACT AGENT -->
-    <div class="listing-contact-details" th:if="${topAgent}">
-        <div class="listing-contact-details-inner">
+    <div class="listing-contact-details">
+        <div class="listing-contact-details-inner" th:if="${topAgent}">
             <div class="agent-info">
                 <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
                     <img th:if="${topAgent.user.photoUrl}" th:src="${topAgent.user.photoUrl}"/>
@@ -220,6 +220,18 @@
                 <span th:text="#{button.contact}">CONTACT</span>
             </a>
         </div>
+
+        <div class="listing-contact-details-inner" th:if="!${topAgent}">
+            <h2 class="location-info" th:text="${neighbourhood.name}">CITY</h2>
+            <a class="btn btn-primary w-100"
+               id="btn-view-properties"
+               th:href="${messageUrl}"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.view_more_properties}">VIEW MORE</span>
+            </a>
+        </div>
+
     </div>
 </div>
 

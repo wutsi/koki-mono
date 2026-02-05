@@ -69,6 +69,7 @@ class PlaceContentGeneratorWorkerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull()
         )
 
         val place = PlaceEntity(id = 777L, type = PlaceType.CITY)
@@ -108,6 +109,7 @@ class PlaceContentGeneratorWorkerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull()
         )
 
         // WHEN
@@ -141,6 +143,7 @@ class PlaceContentGeneratorWorkerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull()
         )
 
         // WHEN
@@ -166,6 +169,7 @@ class PlaceContentGeneratorWorkerTest {
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull()
         )
 
         val place = PlaceEntity(id = 777L, type = PlaceType.NEIGHBORHOOD)

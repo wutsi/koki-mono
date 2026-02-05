@@ -87,8 +87,8 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#about-container")
-        assertElementPresent("#neighbourhood-container")
         assertElementPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -136,8 +136,8 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementNotPresent("#about-container")
-        assertElementNotPresent("#neighbourhood-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#neighbourhood-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -161,8 +161,8 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#about-container")
-        assertElementPresent("#neighbourhood-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
         assertElementNotPresent("#btn-send-message")
         assertElementPresent("#btn-view-properties")
     }
@@ -186,8 +186,8 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementNotPresent("#about-container")
-        assertElementNotPresent("#neighbourhood-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#neighbourhood-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -211,8 +211,8 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#rental-listing-container")
         assertElementNotPresent("#sale-listing-container")
         assertElementPresent("#about-container")
-        assertElementPresent("#neighbourhood-container")
         assertElementPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
