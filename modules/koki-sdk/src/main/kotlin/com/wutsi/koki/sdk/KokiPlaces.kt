@@ -3,6 +3,7 @@ package com.wutsi.koki.sdk
 import com.wutsi.koki.place.dto.CreatePlaceRequest
 import com.wutsi.koki.place.dto.CreatePlaceResponse
 import com.wutsi.koki.place.dto.GetPlaceResponse
+import com.wutsi.koki.place.dto.PlaceSort
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.dto.SearchPlaceResponse
@@ -39,6 +40,7 @@ class KokiPlaces(
         keyword: String? = null,
         minRating: Double? = null,
         maxRating: Double? = null,
+        sort: PlaceSort? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): SearchPlaceResponse {
@@ -52,6 +54,7 @@ class KokiPlaces(
                 "q" to keyword,
                 "min-rating" to minRating,
                 "max-rating" to maxRating,
+                "sort" to sort,
                 "limit" to limit,
                 "offset" to offset,
             )
