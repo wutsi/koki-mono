@@ -1,12 +1,16 @@
 package com.wutsi.koki.place.server.service
 
 import com.wutsi.koki.place.dto.PlaceType
+import com.wutsi.koki.place.server.service.generator.CityContentGenerator
 import com.wutsi.koki.place.server.service.generator.NeighbourhoodContentGenerator
 import com.wutsi.koki.place.server.service.generator.NullContentGenerator
 import org.springframework.stereotype.Service
 
 @Service
-class ContentGeneratorAgentFactory(private val neighborhood: NeighbourhoodContentGenerator) {
+class ContentGeneratorAgentFactory(
+    private val neighborhood: NeighbourhoodContentGenerator,
+    private val city: CityContentGenerator,
+) {
     companion object {
         private val NULL = NullContentGenerator()
     }
@@ -14,6 +18,7 @@ class ContentGeneratorAgentFactory(private val neighborhood: NeighbourhoodConten
     fun get(type: PlaceType): PlaceContentGenerator {
         return when (type) {
             PlaceType.NEIGHBORHOOD -> neighborhood
+            PlaceType.CITY -> city
             else -> NULL
         }
     }

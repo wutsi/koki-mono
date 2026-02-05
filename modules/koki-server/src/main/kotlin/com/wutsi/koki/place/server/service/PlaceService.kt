@@ -24,7 +24,6 @@ class PlaceService(
     private val dao: PlaceRepository,
     private val locationService: LocationService,
     private val securityService: SecurityService,
-    private val contentGeneratorFactory: ContentGeneratorAgentFactory,
     private val em: EntityManager,
 ) {
     fun get(id: Long): PlaceEntity {
@@ -108,12 +107,13 @@ class PlaceService(
     @Transactional
     fun create(request: CreatePlaceRequest): PlaceEntity {
         // Ensure its unique
-        val neighbourhood = locationService.get(request.neighbourhoodId, LocationType.NEIGHBORHOOD)
+        val neighbourhood = request.neighbourhoodId?.let { id -> locationService.get(id, LocationType.NEIGHBORHOOD) }
+        val cityId = neighbourhood?.let { neighbourhood.parentId } ?: request.cityId
         val asciiName = toAscii(request.name)
         val duplicate = findPlace(
-            name = request.name,
-            cityId = neighbourhood.parentId ?: -1,
             type = request.type,
+            name = request.name,
+            cityId = cityId,
         )
         if (duplicate != null) {
             throw ConflictException(
@@ -122,7 +122,7 @@ class PlaceService(
         }
 
         // Create
-        val city = locationService.get(neighbourhood.parentId ?: -1, LocationType.CITY)
+        val city = locationService.get(cityId, LocationType.CITY)
         val userId = securityService.getCurrentUserIdOrNull()
         val place = dao.save(
             PlaceEntity(

@@ -71,12 +71,69 @@ class CreatePlaceEndpointTest : AuthorizationAwareEndpointTest() {
     }
 
     @Test
-    fun duplicate() {
+    fun `neighbourhood - duplicate`() {
         // WHEN
         val request = CreatePlaceRequest(
             name = "Westmount",
             type = PlaceType.NEIGHBORHOOD,
             neighbourhoodId = 333L,
+        )
+        val response = rest.postForEntity("/v1/places", request, ErrorResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.CONFLICT, response.statusCode)
+        assertEquals(ErrorCode.PLACE_DUPLICATE_NAME, response.body?.error?.code)
+    }
+
+    @Test
+    fun city() {
+        // WHEN
+        val request = CreatePlaceRequest(
+            name = "Laval",
+            type = PlaceType.CITY,
+            neighbourhoodId = null,
+            cityId = 555L,
+        )
+        val response = rest.postForEntity("/v1/places", request, CreatePlaceResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val placeId = response.body!!.placeId
+        val place = dao.findById(placeId).get()
+
+        assertEquals(request.type, place.type)
+        assertEquals(null, place.neighbourhoodId)
+        assertEquals(request.cityId, place.cityId)
+        assertEquals(PlaceStatus.DRAFT, place.status)
+        assertEquals("Laval", place.name)
+        assertEquals(null, place.introduction)
+        assertEquals(null, place.summary)
+        assertEquals(null, place.description)
+        assertEquals("laval", place.asciiName)
+        assertEquals(null, place.introductionFr)
+        assertEquals(null, place.summaryFr)
+        assertEquals(null, place.descriptionFr)
+        assertEquals(null, place.rating)
+        assertEquals(null, place.latitude)
+        assertEquals(null, place.longitude)
+        assertEquals(USER_ID, place.createdById)
+        assertEquals(USER_ID, place.modifiedById)
+        assertFalse(place.deleted)
+        assertNull(place.deletedAt)
+
+        val event = argumentCaptor<PlaceCreatedEvent>()
+        verify(publisher).publish(event.capture())
+        assertEquals(placeId, event.firstValue.placeId)
+    }
+
+    @Test
+    fun `city - duplicate`() {
+        // WHEN
+        val request = CreatePlaceRequest(
+            name = "Montreal",
+            type = PlaceType.CITY,
+            cityId = 111L,
         )
         val response = rest.postForEntity("/v1/places", request, ErrorResponse::class.java)
 

@@ -36,7 +36,7 @@ data class PlaceEntity(
     var heroImageUrl: String? = null,
 
     @Column(name = "neighbourhood_fk")
-    var neighbourhoodId: Long = -1,
+    var neighbourhoodId: Long? = null,
 
     @Column(name = "city_fk")
     var cityId: Long = -1,
@@ -91,4 +91,6 @@ data class PlaceEntity(
             !introduction.isNullOrEmpty() &&
             !description.isNullOrEmpty()
     }
+
+    fun hasNoContent() = !hasContent()
 }

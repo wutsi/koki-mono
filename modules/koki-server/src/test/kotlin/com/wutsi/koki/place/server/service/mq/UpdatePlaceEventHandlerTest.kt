@@ -30,7 +30,6 @@ class UpdatePlaceEventHandlerTest {
     private val handler = UpdatePlaceEventHandler(
         placeService = placeService,
         contentGeneratorFactory = contentGeneratorFactory,
-        locationService = locationService,
         logger = logger,
     )
 
@@ -61,7 +60,7 @@ class UpdatePlaceEventHandlerTest {
 
         // THEN
         assertFalse(result)
-        verify(generator, never()).generate(any(), any(), any())
+        verify(generator, never()).generate(any())
     }
 
     @Test
@@ -75,7 +74,7 @@ class UpdatePlaceEventHandlerTest {
 
         // THEN
         assertTrue(result)
-        verify(generator, never()).generate(place, neighbourhood, city)
+        verify(generator).generate(place)
     }
 
     @Test
@@ -89,6 +88,6 @@ class UpdatePlaceEventHandlerTest {
 
         // THEN
         assertTrue(result)
-        verify(generator, never()).generate(place, neighbourhood, city)
+        verify(generator).generate(place)
     }
 }

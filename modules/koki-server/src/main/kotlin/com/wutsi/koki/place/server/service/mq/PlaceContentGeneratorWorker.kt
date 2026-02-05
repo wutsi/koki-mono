@@ -11,7 +11,7 @@ import com.wutsi.koki.refdata.server.service.LocationService
 import org.springframework.stereotype.Service
 
 @Service
-class PlaceContentGeneratorHandlerWorker(
+class PlaceContentGeneratorWorker(
     private val locationService: LocationService,
     private val placeService: PlaceService,
     private val placeCreatedEventHandler: PlaceCreatedEventHandler,
@@ -38,15 +38,14 @@ class PlaceContentGeneratorHandlerWorker(
             place = placeService.create(
                 CreatePlaceRequest(
                     name = location.name,
-                    neighbourhoodId = neighbourhoodId ?: -1,
+                    neighbourhoodId = neighbourhoodId,
                     cityId = (if (locationType == LocationType.NEIGHBORHOOD) location.parentId else cityId) ?: -1,
                     type = placeType,
                 )
             )
             placeCreatedEventHandler.handle(PlaceCreatedEvent(place.id!!))
         } else if (place.status != PlaceStatus.PUBLISHING && place.hasNoContent()) {
-            val placeId = place.id ?: -1
-            placeUpdatePlaceEventHandler.handle(PlaceUpdatedEvent(placeId))
+            placeUpdatePlaceEventHandler.handle(PlaceUpdatedEvent(place.id!!))
         }
         return true
     }
