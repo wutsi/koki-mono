@@ -125,7 +125,7 @@
             </td>
         </tr>
         <tr th:if="${landMetrics?.pricePerSquareMeter}">
-            <td th:utext="#{page.listing.metric.median_price_per_m2}">Price per m<sup>2</sup></td>
+            <td th:utext="#{page.listing.price_per_m2}">Price per m<sup>2</sup></td>
             <td class="text-right">
                 <b th:text="${landMetrics.pricePerSquareMeter.shortText}">$$$</b>
             </td>
@@ -162,7 +162,7 @@
                 <b class="margin-right-small" th:text="${landMetrics.total}">000</b>
             </td>
             <td class="text-center">
-                <span th:utext="#{page.listing.metric.median_price_per_m2}">PRICE_PER_M2</span>:
+                <span th:utext="#{page.listing.price_per_m2}">PRICE_PER_M2</span>:
                 <b class="margin-right-small"
                    th:text="${landMetrics.pricePerSquareMeter.shortText}">$$$</b>
             </td>

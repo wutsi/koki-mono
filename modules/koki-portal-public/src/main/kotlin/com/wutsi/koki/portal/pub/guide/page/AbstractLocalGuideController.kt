@@ -142,11 +142,12 @@ abstract class AbstractLocalGuideController(
         }
     }
 
-    protected fun loadPriceTrendMetrics(city: LocationModel, model: Model) {
+    protected fun loadPriceTrendMetrics(location: LocationModel, model: Model) {
         try {
             // Per categories
             val metrics = listingService.metrics(
-                cityId = city.id,
+                neighbourhoodId = if (location.type == LocationType.NEIGHBORHOOD) location.id else null,
+                cityId = if (location.type == LocationType.CITY) location.id else null,
                 listingStatus = ListingStatus.ACTIVE,
                 dimension = ListingMetricDimension.PROPERTY_CATEGORY,
             )
@@ -174,7 +175,7 @@ abstract class AbstractLocalGuideController(
 
             // Per room
             val metricsPerRoom = listingService.metrics(
-                cityId = city.id,
+                cityId = location.id,
                 listingStatus = ListingStatus.ACTIVE,
                 propertyCategory = PropertyCategory.RESIDENTIAL,
                 dimension = ListingMetricDimension.BEDROOMS,
@@ -188,7 +189,7 @@ abstract class AbstractLocalGuideController(
                 metricsPerRoom.filter { metric -> metric.listingType == ListingType.SALE }.take(5)
             )
         } catch (e: Throwable) {
-            LOGGER.warn("Unable to load metrics for city ${city.id}", e)
+            LOGGER.warn("Unable to load metrics for city ${location.id}", e)
         }
     }
 
