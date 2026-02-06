@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>koki-platform</artifactId>
-    <version>0.0.72-SNAPSHOT</version>
+    <version>0.0.73-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <scm>
