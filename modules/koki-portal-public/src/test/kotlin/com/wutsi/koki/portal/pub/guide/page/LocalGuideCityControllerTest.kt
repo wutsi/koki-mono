@@ -89,6 +89,7 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#about-container")
         assertElementPresent("#price-trend-container")
         assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#city-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -138,6 +139,7 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#about-container")
         assertElementNotPresent("#price-trend-container")
         assertElementNotPresent("#neighbourhood-container")
+        assertElementNotPresent("#city-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -163,6 +165,7 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#about-container")
         assertElementNotPresent("#price-trend-container")
         assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#city-container")
         assertElementNotPresent("#btn-send-message")
         assertElementPresent("#btn-view-properties")
     }
@@ -188,6 +191,7 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#about-container")
         assertElementNotPresent("#price-trend-container")
         assertElementNotPresent("#neighbourhood-container")
+        assertElementNotPresent("#city-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }
@@ -213,6 +217,7 @@ class LocalGuideCityControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#about-container")
         assertElementPresent("#price-trend-container")
         assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#city-container")
         assertElementPresent("#btn-send-message")
         assertElementNotPresent("#btn-view-properties")
     }

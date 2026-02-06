@@ -5,6 +5,7 @@ import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
+import com.wutsi.koki.place.dto.PlaceSort
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.agent.model.AgentMetricModel
@@ -215,6 +216,50 @@ abstract class AbstractLocalGuideController(
             return places
         } catch (ex: Exception) {
             LOGGER.warn("Failed to load neighbourhood places", ex)
+            return emptyList()
+        }
+    }
+
+    protected fun findLocations(places: List<PlaceModel>, locationType: LocationType): List<LocationModel> {
+        try {
+            val map = places.associateBy { place -> place.id }
+            val ids = places.mapNotNull { place ->
+                when (locationType) {
+                    LocationType.CITY -> place.cityId
+                    LocationType.NEIGHBORHOOD -> place.neighbourhoodId
+                    else -> null
+                }
+            }
+            if (ids.isEmpty()) {
+                return emptyList()
+            }
+            return locationService.search(
+                ids = ids,
+                types = listOf(locationType),
+                limit = ids.size,
+            ).sortedByDescending { location -> map[location.id]?.rating ?: 0.0 }
+        } catch (e: Throwable) {
+            LOGGER.warn("Failed to load locations", e)
+            return emptyList()
+        }
+    }
+
+    protected fun loadCities(currentCityId: Long?, model: Model): List<PlaceModel> {
+        try {
+            val places = placeService.search(
+                types = listOf(PlaceType.CITY),
+                statuses = listOf(PlaceStatus.PUBLISHED),
+                sort = PlaceSort.NAME,
+                limit = 12,
+            )
+            val locations = findLocations(places, LocationType.CITY)
+                .filter { location -> location.id != currentCityId }
+            if (locations.isNotEmpty()) {
+                model.addAttribute("cities", locations)
+            }
+            return places
+        } catch (e: Throwable) {
+            LOGGER.warn("Failed to load cities", e)
             return emptyList()
         }
     }

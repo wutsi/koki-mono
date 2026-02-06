@@ -46,7 +46,10 @@ class LocalGuideCityController(
 
         // Places
         val place = loadPlace(city, model)
-        loadNeighborhoods(city, model)
+        if (place != null) {
+            loadNeighborhoods(city, model)
+            loadCities(city.id, model)
+        }
 
         // Listings
         loadActiveListings("rental", city.id, ListingType.RENTAL, model)
@@ -83,19 +86,12 @@ class LocalGuideCityController(
                 statuses = listOf(PlaceStatus.PUBLISHED),
                 sort = PlaceSort.RATING_HIGH_LOW,
                 limit = 12,
-            ).associateBy { place -> place.id }
-            if (places.isNotEmpty()) {
-                val neighbourhoodIds = places.values.mapNotNull { place -> place.neighbourhoodId }
-                val neighbourhoods = locationService.search(
-                    ids = neighbourhoodIds,
-                    types = listOf(LocationType.NEIGHBORHOOD),
-                    limit = neighbourhoodIds.size,
-                ).sortedByDescending { neighbourhood -> places[neighbourhood.id]?.rating ?: 0.0 }
-                if (neighbourhoods.isNotEmpty()) {
-                    model.addAttribute("neighbourhoods", neighbourhoods)
-                }
+            )
+            val locations = findLocations(places, LocationType.NEIGHBORHOOD)
+            if (locations.isNotEmpty()) {
+                model.addAttribute("neighbourhoods", locations)
             }
-            return places.values.toList()
+            return places
         } catch (e: Throwable) {
             LOGGER.warn("Failed to load neighbourhoods of city ${city.id}", e)
             return emptyList()
