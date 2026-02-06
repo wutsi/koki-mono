@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 class ChannelTypeFilter(
     private val detector: ChannelTypeDetector,
-    private val logger: KVLogger,
+    private val kvLogger: KVLogger,
     private val provider: ChannelTypeProvider,
     private val serverUrl: String,
     private val ignoreURIPrefixes: List<String> = listOf(
@@ -42,7 +42,7 @@ class ChannelTypeFilter(
             val url = (request.requestURL?.toString() ?: "") + "?" + (request.queryString ?: "")
             val referer: String? = request.getHeader("Referer")
             val channelType = detector.detect(url, referer ?: "", ua)
-            logger.add("http_channel", channelType)
+            kvLogger.add("http_channel", channelType)
             provider.set(channelType, request, response)
         } catch (ex: Exception) {
             LOGGER.warn("Unexpected error", ex)

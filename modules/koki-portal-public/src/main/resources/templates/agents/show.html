@@ -47,7 +47,7 @@
                     <i class="fa-solid fa-envelope"></i>
                     <a th:href="${agent.user.emailUrl}" th:text="${agent.user.email}">EMAIL</a>
                 </div>
-                <div th:if="${agent.user.mobile}">
+                <div th:if="${agent.user.websiteUrl}">
                     <i class="fa-solid fa-link"></i>
                     <a target="_blank" th:href="${agent.user.websiteUrl}" th:text="#{page.agent.website}">PHONE</a>
                 </div>

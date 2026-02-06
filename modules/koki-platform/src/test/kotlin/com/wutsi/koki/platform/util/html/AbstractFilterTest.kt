@@ -8,12 +8,12 @@ abstract class AbstractFilterTest {
     @Throws(Exception::class)
     protected fun validateText(name: String?, filter: HtmlFilter) {
         // Given
-        val html = IOUtils.toString(javaClass.getResourceAsStream(name + ".html"))
-        val expected = IOUtils.toString(javaClass.getResourceAsStream(name + suffix()))
+        val html = IOUtils.toString(javaClass.getResourceAsStream("$name.html"), "utf-8")
+        val expected = IOUtils.toString(javaClass.getResourceAsStream(name + suffix()), "utf-8")
 
         // When
-        val result: String = filter.filter(html)!!
-        println(javaClass.toString() + " - " + name)
+        val result: String = filter.filter(html)
+        println("$javaClass - $name")
         println(result)
 
         // Then
@@ -25,12 +25,12 @@ abstract class AbstractFilterTest {
     @Throws(Exception::class)
     protected fun validateHtml(name: String?, filter: HtmlFilter) {
         // Given
-        val html = IOUtils.toString(javaClass.getResourceAsStream(name + ".html"))
-        val expected = IOUtils.toString(javaClass.getResourceAsStream(name + suffix()))
+        val html = IOUtils.toString(javaClass.getResourceAsStream("$name.html"), "utf-8")
+        val expected = IOUtils.toString(javaClass.getResourceAsStream(name + suffix()), "utf-8")
 
         // When
-        val result: String = filter.filter(html)!!
-        println(javaClass.toString() + " - " + name)
+        val result: String = filter.filter(html)
+        println("$javaClass - $name")
         println(result)
 
         // Then
