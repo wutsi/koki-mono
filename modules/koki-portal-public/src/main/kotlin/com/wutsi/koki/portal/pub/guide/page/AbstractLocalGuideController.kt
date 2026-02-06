@@ -222,7 +222,6 @@ abstract class AbstractLocalGuideController(
 
     protected fun findLocations(places: List<PlaceModel>, locationType: LocationType): List<LocationModel> {
         try {
-            val map = places.associateBy { place -> place.id }
             val ids = places.mapNotNull { place ->
                 when (locationType) {
                     LocationType.CITY -> place.cityId
@@ -237,7 +236,7 @@ abstract class AbstractLocalGuideController(
                 ids = ids,
                 types = listOf(locationType),
                 limit = ids.size,
-            ).sortedByDescending { location -> map[location.id]?.rating ?: 0.0 }
+            ).sortedBy { location -> ids.indexOf(location.id) }
         } catch (e: Throwable) {
             LOGGER.warn("Failed to load locations", e)
             return emptyList()
