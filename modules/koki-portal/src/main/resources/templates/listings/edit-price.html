@@ -56,7 +56,7 @@
                                 </label>
                                 <div class="text-small" th:text="#{page.listing.revenue-help}">HELP</div>
                                 <div class="input-group">
-                                    <input class="form-control" required step="0" th:field="*{revenue}" type="number"/>
+                                    <input class="form-control" step="0" th:field="*{revenue}" type="number"/>
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span th:text="${tenant.currencySymbol}">XXX</span>
