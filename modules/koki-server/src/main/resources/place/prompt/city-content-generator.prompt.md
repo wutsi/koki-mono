@@ -10,12 +10,12 @@ Generate the content in JSON formant with the following fields:
   the reader with the city's unique charm.
 - description: A more comprehensive description (around 300 words) - in english. The description should include:
     - The demography and vibe of the city
-    - Ideal For: Explicitly state who lives here—young professionals, retirees, or growing families.
+    - Explicitly state who lives here: young professionals, retirees, or growing families etc.?
     - The daily life and lifestyle offered by the city: markets, restaurants, shopping, entertainment, culture, outdoor
       activities, etc.
-        - The "Main Drag": Name-drop specific streets or districts where the action happens.
-        - Parks & Recreation: Where do people go on Saturday mornings?
-        - Food & Nightlife: Mention the type of food scene, night clubs etc.
+        - Name-drop specific streets or districts where the action happens.
+        - Where do people go on Saturday mornings?
+        - Mention the type of food scene, the nightlife scene.
     - The Security and Safety profile of the city
     - The quality of the infrastructure: roads, electricity, water supply, internet connectivity
 - summaryFr: The summary translated in french

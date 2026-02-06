@@ -244,18 +244,18 @@ abstract class AbstractLocalGuideController(
         }
     }
 
-    protected fun loadCities(currentCityId: Long?, model: Model): List<PlaceModel> {
+    protected fun loadCities(city: LocationModel?, model: Model): List<PlaceModel> {
         try {
             val places = placeService.search(
                 types = listOf(PlaceType.CITY),
                 statuses = listOf(PlaceStatus.PUBLISHED),
                 sort = PlaceSort.NAME,
-                limit = 12,
+                limit = 13,
             )
             val locations = findLocations(places, LocationType.CITY)
-                .filter { location -> location.id != currentCityId }
+                .filter { location -> location.id != city?.id }
             if (locations.isNotEmpty()) {
-                model.addAttribute("cities", locations)
+                model.addAttribute("cities", locations.take(12))
             }
             return places
         } catch (e: Throwable) {

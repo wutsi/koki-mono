@@ -21,7 +21,7 @@ class LocationMapper : TenantAwareMapper() {
             parentId = entity.parentId,
             type = entity.type,
             country = entity.country,
-            countryName = Locale(locale.language, entity.country).displayCountry,
+            countryName = Locale(locale.language, entity.country).getDisplayCountry(locale),
             geoLocation = toGeoLocationModel(entity),
             publicUrl = when (entity.type) {
                 LocationType.NEIGHBORHOOD -> StringUtils.toSlug(

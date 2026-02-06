@@ -50,7 +50,7 @@ class LocalGuideNeighborhoodController(
         val place = loadPlace(neighbourhood, model)
         if (place != null) {
             loadSimilarNeighborhoods(place, model)
-            loadCities(city?.id, model)
+            loadCities(city, model)
         }
 
         // Points of interest
@@ -96,12 +96,12 @@ class LocalGuideNeighborhoodController(
                 minRating = minRating,
                 maxRating = maxRating,
                 sort = PlaceSort.RATING_HIGH_LOW,
-                limit = 12,
-            )
+                limit = 13,
+            ).filter { similar -> similar.id == place.id }
 
             val locations = findLocations(places, LocationType.NEIGHBORHOOD)
             if (locations.isNotEmpty()) {
-                model.addAttribute("similarNeighbourhoods", locations)
+                model.addAttribute("similarNeighbourhoods", locations.take(12))
             }
             return places
         } catch (e: Throwable) {

@@ -191,10 +191,10 @@
         <!-- CITIES -->
         <div class="margin-top-2x" id="city-container" th:if="${cities}">
             <hr/>
+            <h2 th:text="#{page.local-guide.section.cities(${cities[0].countryName})}">TITLE</h2>
             <div class="flex flex-wrap">
                 <div class="col-12 col-md-6 margin-bottom-small" th:each="city:${cities}">
-                    <a th:href="${city.publicUrl}"
-                       th:text="#{page.local-guide.properties_in_city(${city.name})}">NAME</a>
+                    <a th:href="${city.publicUrl}" th:text="${city.name}">NAME</a>
                 </div>
             </div>
         </div>

@@ -48,7 +48,7 @@ class LocalGuideCityController(
         val place = loadPlace(city, model)
         if (place != null) {
             loadNeighborhoods(city, model)
-            loadCities(city.id, model)
+            loadCities(city, model)
         }
 
         // Listings
