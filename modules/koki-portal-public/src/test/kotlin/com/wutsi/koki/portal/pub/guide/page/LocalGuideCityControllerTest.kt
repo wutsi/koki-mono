@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.pub.neighbourhood.page
+package com.wutsi.koki.portal.pub.guide.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
@@ -16,10 +16,8 @@ import com.wutsi.koki.place.dto.SearchPlaceResponse
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
 import com.wutsi.koki.portal.pub.AgentFixtures.agent
-import com.wutsi.koki.portal.pub.PlaceFixtures.neighborhood
+import com.wutsi.koki.portal.pub.PlaceFixtures.place
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
-import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
-import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.refdata.dto.GetLocationResponse
@@ -33,17 +31,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class NeighborhoodControllerTest : AbstractPageControllerTest() {
+class LocalGuideCityControllerTest : AbstractPageControllerTest() {
     @BeforeEach
     override fun setUp() {
         super.setUp()
 
         doReturn(
-            ResponseEntity(
-                GetLocationResponse(neighborhoods[0]),
-                HttpStatus.OK,
-            )
-        ).doReturn(
             ResponseEntity(
                 GetLocationResponse(cities[0]),
                 HttpStatus.OK,
@@ -58,51 +51,51 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
 
     @Test
     fun show() {
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        // WHEN
+        navigateTo("/local-guides/cities/${cities[0].id}")
 
         // Meta
         assertElementAttribute("html", "lang", "fr")
         assertElementAttribute(
             "head meta[name='description']",
             "content",
-            neighborhood.summaryFr
+            place.summaryFr
         )
 
         // Opengraph
         assertElementAttribute(
             "head meta[property='og:title']",
             "content",
-            "Guide du quartier ${neighborhoods[0].name},${cities[0].name} | Vivre à ${neighborhoods[0].name},${cities[0].name} | ${tenants[0].name}"
+            "Guide de la ville de ${cities[0].name} | Vivre à ${cities[0].name} | ${tenants[0].name}"
         )
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttribute(
             "head meta[property='og:description']",
             "content",
-            neighborhood.summaryFr
+            place.summaryFr
         )
         assertElementAttributeEndsWith(
             "head meta[property='og:url']",
             "content",
-            "/neighbourhoods/${neighborhoods[0].id}" + StringUtils.toSlug("", neighborhoods[0].name)
+            "/local-guides/cities/${cities[0].id}" + StringUtils.toSlug("", cities[0].name)
         )
 
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertCurrentPageIs(PageName.LOCAL_GUIDE_CITY)
         assertElementPresent("#introduction-container")
+        assertElementPresent("#metric-container")
         assertElementPresent("#agent-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#about-container")
-        assertElementPresent("#school-container")
-        assertElementPresent("#hospital-container")
-        assertElementPresent("#market-container")
-        assertElementPresent("#todo-container")
-        assertElementPresent("#similar-neighbourhood-container")
-        assertElementPresent("#metric-container")
         assertElementPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
     fun `no content`() {
+        // GIVEN
         doReturn(
             ResponseEntity(
                 SearchPlaceResponse(emptyList()),
@@ -114,8 +107,10 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
                 eq(SearchPlaceResponse::class.java)
             )
 
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        // WHEN
+        navigateTo("/local-guides/cities/${cities[0].id}")
 
+        // THEN
         // Meta
         assertElementAttribute("html", "lang", "fr")
         assertElementNotPresent("head meta[name='description']")
@@ -124,24 +119,27 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         assertElementAttribute(
             "head meta[property='og:title']",
             "content",
-            "Guide du quartier ${neighborhoods[0].name},${cities[0].name} | Vivre à ${neighborhoods[0].name},${cities[0].name} | ${tenants[0].name}"
+            "Guide de la ville de ${cities[0].name} | Vivre à ${cities[0].name} | ${tenants[0].name}"
         )
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementNotPresent("head meta[property='og:description']")
         assertElementAttributeEndsWith(
             "head meta[property='og:url']",
             "content",
-            "/neighbourhoods/${neighborhoods[0].id}" + StringUtils.toSlug("", neighborhoods[0].name)
+            "/local-guides/cities/${cities[0].id}" + StringUtils.toSlug("", cities[0].name)
         )
 
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertCurrentPageIs(PageName.LOCAL_GUIDE_CITY)
         assertElementNotPresent("#introduction-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
         assertElementNotPresent("#about-container")
-        assertElementNotPresent("#school-container")
-        assertElementNotPresent("#hospital-container")
-        assertElementNotPresent("#market-container")
-        assertElementNotPresent("#todo-container")
-        assertElementNotPresent("#similar-neighbourhood-container")
+        assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
@@ -154,12 +152,19 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
             )
 
         // WHEN
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        navigateTo("/local-guides/cities/${cities[0].id}")
 
         // THEN
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementPresent("#introduction-container")
         assertElementNotPresent("#metric-container")
+        assertElementNotPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
+        assertElementPresent("#about-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
+        assertElementNotPresent("#btn-send-message")
+        assertElementPresent("#btn-view-properties")
     }
 
     @Test
@@ -172,14 +177,19 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
             )
 
         // WHEN
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        navigateTo("/local-guides/cities/${cities[0].id}")
 
         // THEN
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
-        assertElementNotPresent("#school-container")
-        assertElementNotPresent("#hospital-container")
-        assertElementNotPresent("#market-container")
-        assertElementNotPresent("#todo-container")
+        assertElementNotPresent("#introduction-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
+        assertElementPresent("#rental-listing-container")
+        assertElementPresent("#sale-listing-container")
+        assertElementNotPresent("#about-container")
+        assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
@@ -192,20 +202,25 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
             )
 
         // WHEN
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        navigateTo("/local-guides/cities/${cities[0].id}")
 
         // THEN
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertElementPresent("#introduction-container")
+        assertElementPresent("#metric-container")
+        assertElementPresent("#agent-container")
         assertElementNotPresent("#rental-listing-container")
         assertElementNotPresent("#sale-listing-container")
-        assertElementNotPresent("#sold-listing-container")
-        assertElementNotPresent("#map-container")
+        assertElementPresent("#about-container")
+        assertElementPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
+        assertElementNotPresent("#btn-view-properties")
     }
 
     @Test
     fun sendMessage() {
         // WHEN
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        navigateTo("/local-guides/cities/${cities[0].id}")
         scroll(.33)
 
         reset(publisher)
@@ -214,13 +229,13 @@ class NeighborhoodControllerTest : AbstractPageControllerTest() {
         // THEN
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher, atLeast(1)).publish(event.capture())
-        assertEquals(PageName.NEIGHBOURHOOD, event.firstValue.track.page)
+        assertEquals(PageName.LOCAL_GUIDE_CITY, event.firstValue.track.page)
         assertNotNull(event.firstValue.track.correlationId)
         assertNotNull(event.firstValue.track.deviceId)
-        assertEquals(TenantFixtures.tenants[0].id, event.firstValue.track.tenantId)
+        assertEquals(tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
         assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
-        assertEquals(neighborhoods[0].id.toString(), event.firstValue.track.productId)
+        assertEquals(cities[0].id.toString(), event.firstValue.track.productId)
         assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)
         assertEquals(ChannelType.WEB, event.firstValue.track.channelType)

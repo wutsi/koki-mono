@@ -10,7 +10,8 @@ object PageName {
     val AGENT: String = "page.agent"
     val HOME: String = "page.home"
     val LISTING: String = "page.listing"
-    val NEIGHBOURHOOD: String = "page.neighbourhood"
+    val LOCAL_GUIDE_CITY: String = "page.local-guide.city"
+    val LOCAL_GUIDE_NEIGHBOURHOOD: String = "page.local-guide.neighbourhood"
     val QR = "page.qr"
     val SEARCH = "page.search"
 }

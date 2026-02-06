@@ -5,6 +5,7 @@ import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.place.dto.CreatePlaceRequest
+import com.wutsi.koki.place.dto.PlaceSort
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.place.server.dao.PlaceRepository
@@ -45,6 +46,7 @@ class PlaceService(
         keyword: String? = null,
         minRating: Double? = null,
         maxRating: Double? = null,
+        sort: PlaceSort? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<PlaceEntity> {
@@ -72,7 +74,11 @@ class PlaceService(
             jql.append(" AND P.rating <= :maxRating")
         }
 
-        jql.append(" ORDER BY P.name")
+        when (sort) {
+            PlaceSort.RATING_HIGH_LOW -> jql.append(" ORDER BY P.rating DESC NULLS LAST")
+            PlaceSort.RATING_LOW_HIGH -> jql.append(" ORDER BY P.rating ASC NULLS LAST")
+            else -> jql.append(" ORDER BY P.name")
+        }
 
         val query = em.createQuery(jql.toString(), PlaceEntity::class.java)
 

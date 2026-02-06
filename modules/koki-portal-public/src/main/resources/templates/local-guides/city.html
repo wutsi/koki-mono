@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="~{__components/layout :: head}"></div>
+</head>
+
+<body>
+<div th:replace="~{__components/layout :: navbar}"></div>
+
+<div class="agent-info-container">
+    <div class="agent-info-details">
+        <div class="margin-top">&nbsp;</div>
+
+        <h1 th:text="#{page.local-guide.city.title(${city.name})}">NAME</h1>
+
+        <!-- INTRO -->
+        <div class="margin-top" id="introduction-container" th:if="${place?.introduction}">
+            <div th:utext="${place.introductionHtml}">INTRODUCTION</div>
+        </div>
+
+        <!-- METRICS -->
+        <div class="margin-top" id="metric-container"
+             th:if="${overallSalesMetrics} OR ${overallRentalMetrics} OR ${landMetrics}">
+            <hr/>
+            <div
+                th:replace="~{__components/listing :: listing-price-metrics(${overallSalesMetrics}, ${overallRentalMetrics}, ${landMetrics})}"></div>
+        </div>
+
+        <!-- AGENTS -->
+        <div class="margin-top" id="agent-container" th:if="${agents}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.agents(${city.name})}">TITLE</h2>
+            <div class="row">
+                <div class="col-12 col-md-6 agent" th:each="agent : ${agents}">
+                    <div th:replace="~{__components/agent :: agent-card(${agent})}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVE LISTINGS -->
+        <div class="margin-top" id="rental-listing-container" th:if="${rentalListings}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.for_rent(${city.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${rentalListings}, true)}"></div>
+            <div class="text-right">
+                <b>
+                    <a th:href="${rentalMoreUrl}" th:text="#{button.view_more_properties}">VIEW_ALL</a>
+                </b>
+            </div>
+        </div>
+        <div class="margin-top" id="sale-listing-container" th:if="${saleListings}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.for_sale(${city.name})}">TITLE</h2>
+            <div th:replace="~{__components/listing :: listing-carousel(${saleListings}, true)}"></div>
+            <div class="text-right">
+                <b>
+                    <a th:href="${saleMoreUrl}" th:text="#{button.view_more_properties}">VIEW_ALL</a>
+                </b>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="margin-top" id="about-container" th:if="${place}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.about(${city.name})}">TITLE</h2>
+            <div th:if="${place?.description}" th:utext="${place.descriptionHtml}">DESCRIPTION</div>
+
+            <!-- PRICE_TRENDS -->
+            <div class="margin-top-2x" id="price-trend-container"
+                 th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
+                <h3 th:text="#{page.local-guide.section.pricing}">Pricing Information</h3>
+
+                <div
+                    th:replace="~{__components/listing :: listing-price-trend(${salesMetrics}, ${rentalMetrics}, ${landMetrics})}"></div>
+            </div>
+        </div>
+
+        <!-- NEIGHBOURHOODS -->
+        <div class="margin-top-2x" id="neighbourhood-container" th:if="${neighbourhoods}">
+            <hr/>
+            <h2 th:text="#{page.local-guide.section.neighbourhoods(${city?.name})}">TITLE</h2>
+            <div class="flex flex-wrap">
+                <div class="col-6 col-lg-4 margin-bottom-small" th:each="neighbourhood:${neighbourhoods}">
+                    <a th:href="${neighbourhood.publicUrl}" th:text="${neighbourhood.name}">NAME</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT AGENT -->
+    <div class="listing-contact-details">
+        <div class="listing-contact-details-inner" th:if="${topAgent}">
+            <div class="agent-info">
+                <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
+                    <img th:if="${topAgent.user.photoUrl}" th:src="${topAgent.user.photoUrl}"/>
+                </a>
+                <div>
+                    <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
+                        <h2 th:text="${topAgent.user.displayName}">AGENT</h2>
+                        <div th:text="${topAgent.user.employer}">EMPLOYER</div>
+                    </a>
+                </div>
+            </div>
+
+            <a class="btn btn-primary"
+               data-component-id="track"
+               data-event="MESSAGE"
+               data-product-type="PLACE"
+               id="btn-send-message"
+               rel="nofollow"
+               target="_blank"
+               th:data-product-id="${city.id}"
+               th:data-recipient-id="${topAgent.user.id}"
+               th:href="${messageUrl}"
+               th:if="${messageUrl}"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.contact}">CONTACT</span>
+            </a>
+        </div>
+
+        <div class="listing-contact-details-inner" th:if="!${topAgent}">
+            <h2 class="location-info" th:text="${city.name}">CITY</h2>
+            <a class="btn btn-primary w-100"
+               id="btn-view-properties"
+               th:href="${messageUrl}"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                <span th:text="#{button.view_more_properties}">VIEW MORE</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            const elt = document.getElementById('toast-message');
+            if (elt) {
+                const toast = new bootstrap.Toast(elt);
+                toast.show();
+            }
+        },
+        false
+    );
+</script>
+</body>
+</html>

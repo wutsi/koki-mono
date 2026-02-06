@@ -495,7 +495,7 @@ abstract class AbstractPageControllerTest {
     private fun setupPlaceModule() {
         doReturn(
             ResponseEntity(
-                GetPlaceResponse(PlaceFixtures.neighborhood),
+                GetPlaceResponse(PlaceFixtures.place),
                 HttpStatus.OK,
             )
         ).whenever(restWithoutTenantHeader)

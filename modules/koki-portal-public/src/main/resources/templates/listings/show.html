@@ -345,18 +345,21 @@
              th:if="${listing.address} AND (${place} OR ${listing.geoLocation})">
             <h2 th:text="#{page.listing.section.neighbourhood.title}">Map &amp; Neighborhood</h2>
             <ul class="breadcrumb" th:if="${listing.address}">
-                <li>
-                    <span th:text="${listing.address.city.name}">CITY</span>
+                <li th:if="${listing.address?.city}">
+                    <a th:href="${listing.address.city.publicUrl}"
+                       th:text="${listing.address.city.name}">
+                        CITY
+                    </a>
                 </li>
-                <li th:if="${listing.address.neighbourhood}">
-                    <span>&#x2022;</span>
+                <li th:if="${listing.address?.neighbourhood}">
+                    <span th:if="${listing.address.city}">&#x2022;</span>
                     <a th:href="${listing.address.neighbourhood.publicUrl}"
                        th:text="${listing.address.neighbourhood.name}">
                         NEIGHBORHOOD
                     </a>
                 </li>
-                <li th:if="${listing.address.street}">
-                    <span>&#x2022;</span>
+                <li th:if="${listing.address?.street}">
+                    <span th:if="${listing.address?.city} OR ${listing.address?.neighbourhood}">&#x2022;</span>
                     <span th:text="${listing.address.street}">NEIGHBORHOOD</span>
                 </li>
             </ul>

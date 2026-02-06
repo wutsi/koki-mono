@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.pub.place.service
 
+import com.wutsi.koki.place.dto.PlaceSort
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.place.mapper.PlaceMapper
@@ -25,6 +26,7 @@ class PlaceService(
         keyword: String? = null,
         minRating: Double? = null,
         maxRating: Double? = null,
+        sort: PlaceSort? = null,
         limit: Int = 20,
         offset: Int = 0,
     ): List<PlaceModel> {
@@ -36,6 +38,7 @@ class PlaceService(
             keyword = keyword,
             minRating = minRating,
             maxRating = maxRating,
+            sort = sort,
             limit = limit,
             offset = offset,
         ).places

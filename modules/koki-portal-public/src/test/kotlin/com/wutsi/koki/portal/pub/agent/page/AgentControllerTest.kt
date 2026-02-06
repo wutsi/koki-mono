@@ -19,7 +19,6 @@ import com.wutsi.koki.portal.pub.AgentFixtures.agent
 import com.wutsi.koki.portal.pub.FileFixtures
 import com.wutsi.koki.portal.pub.RefDataFixtures.cities
 import com.wutsi.koki.portal.pub.RefDataFixtures.locations
-import com.wutsi.koki.portal.pub.RefDataFixtures.neighborhoods
 import com.wutsi.koki.portal.pub.TenantFixtures
 import com.wutsi.koki.portal.pub.TenantFixtures.tenants
 import com.wutsi.koki.portal.pub.UserFixtures.user
@@ -110,10 +109,10 @@ class AgentControllerTest : AbstractPageControllerTest() {
             )
 
         // WHEN
-        navigateTo("/neighbourhoods/${neighborhoods[0].id}")
+        navigateTo("/agents/${agent.id}/slug-of-agent")
 
         // THEN
-        assertCurrentPageIs(PageName.NEIGHBOURHOOD)
+        assertCurrentPageIs(PageName.AGENT)
         assertElementNotPresent("#metrics-container")
         assertElementNotPresent("#price-trend-container")
     }

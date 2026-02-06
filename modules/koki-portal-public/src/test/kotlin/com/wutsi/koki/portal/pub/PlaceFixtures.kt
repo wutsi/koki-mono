@@ -13,8 +13,7 @@ import org.apache.commons.lang3.time.DateUtils
 import java.util.Date
 
 object PlaceFixtures {
-    // Schools
-    val neighborhood = Place(
+    val place = Place(
         id = 1000,
         heroImageUrl = "https://picsum.photos/800/600",
         name = "International School of Montreal",
@@ -208,24 +207,24 @@ object PlaceFixtures {
     )
 
     // Place Summaries for search results
-    val places = listOf(neighborhood, catholicSchool, park, communityPark)
+    val places = listOf(place, catholicSchool, park, communityPark)
 
     val placeSummaries = listOf(
         PlaceSummary(
-            id = neighborhood.id,
-            heroImageUrl = neighborhood.heroImageUrl,
-            neighbourhoodId = neighborhood.neighbourhoodId,
-            type = neighborhood.type,
-            name = neighborhood.name,
-            summary = neighborhood.summary,
-            summaryFr = neighborhood.summaryFr,
-            rating = neighborhood.rating,
-            status = neighborhood.status,
-            academicSystems = neighborhood.academicSystems,
-            diplomas = neighborhood.diplomas,
-            faith = neighborhood.faith,
-            levels = neighborhood.levels,
-            websiteUrl = neighborhood.websiteUrl,
+            id = place.id,
+            heroImageUrl = place.heroImageUrl,
+            neighbourhoodId = place.neighbourhoodId,
+            type = place.type,
+            name = place.name,
+            summary = place.summary,
+            summaryFr = place.summaryFr,
+            rating = place.rating,
+            status = place.status,
+            academicSystems = place.academicSystems,
+            diplomas = place.diplomas,
+            faith = place.faith,
+            levels = place.levels,
+            websiteUrl = place.websiteUrl,
             international = true,
             private = true
         ),
