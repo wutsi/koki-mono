@@ -101,7 +101,7 @@ data class ListingModel(
     val qrCodeUrl: String? = null,
 ) {
     val heroImageUrl: String?
-        get() = heroImage?.url
+        get() = heroImage?.thumbnailUrl
 
     val publicRemarksHtml: String?
         get() = publicRemarks?.let { str -> HtmlUtils.toHtml(str) }

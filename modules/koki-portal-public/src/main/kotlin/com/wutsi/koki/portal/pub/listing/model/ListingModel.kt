@@ -93,7 +93,7 @@ data class ListingModel(
     val images: List<FileModel> = emptyList()
 ) {
     val heroImageUrl: String?
-        get() = heroImage?.url
+        get() = heroImage?.thumbnailUrl
 
     val hasLegalInformation: Boolean
         get() = listingType == ListingType.SALE &&

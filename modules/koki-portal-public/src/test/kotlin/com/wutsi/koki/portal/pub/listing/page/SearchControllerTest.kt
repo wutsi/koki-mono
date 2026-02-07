@@ -62,7 +62,7 @@ class SearchControllerTest : AbstractPageControllerTest() {
             "src",
             images[0].thumbnailUrl!!
         )
-        assertElementAttribute("#listing-offer-container .listing-card:first-child img", "with", "300")
+        assertElementAttribute("#listing-offer-container .listing-card:first-child img", "width", "300")
         assertElementAttribute("#listing-offer-container .listing-card:first-child img", "height", "200")
         assertElementAttribute("#listing-offer-container .listing-card:first-child img", "loading", "lazy")
         assertElementNotPresent("#btn-load-more")
