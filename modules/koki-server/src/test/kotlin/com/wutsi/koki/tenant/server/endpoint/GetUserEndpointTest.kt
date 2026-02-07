@@ -49,6 +49,7 @@ class GetUserEndpointTest : TenantAwareEndpointTest() {
         assertEquals(111L, user.cityId)
         assertEquals("fr", user.language)
         assertEquals("3333 Linton", user.street)
+        assertEquals("https://img.com/1.png", user.photoUrl)
         assertEquals("https://www.resizer.com/tiny.png", user.photoTinyUrl)
         assertEquals("https://www.resizer.com/thumbnail.png", user.photoThumbnailUrl)
         assertEquals("https://www.resizer.com/preview.png", user.photoPreviewUrl)

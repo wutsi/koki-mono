@@ -16,6 +16,9 @@ object UserFixtures {
         mobile = "+15147580000",
         cityId = cities[0].id,
         photoUrl = "https://picsum.photos/800/600",
+        photoTinyUrl = "https://picsum.photos/64/64",
+        photoThumbnailUrl = "https://picsum.photos/240/240",
+        photoPreviewUrl = "https://picsum.photos/500/500",
         websiteUrl = "https://www.linktree.com/ray",
         facebookUrl = "https://www.facebook.com/ray",
         instagramUrl = "https://www.instagram.com/ray",
@@ -28,7 +31,7 @@ object UserFixtures {
             In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
 
             Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
-        """.trimIndent()
+        """.trimIndent(),
     )
 
     val users = listOf(
@@ -36,6 +39,8 @@ object UserFixtures {
             id = USER_ID,
             displayName = "Ray Sponsible",
             photoUrl = "https://picsum.photos/1005/200",
+            photoTinyUrl = "https://picsum.photos/64/64",
+            photoThumbnailUrl = "https://picsum.photos/240/240",
             employer = "REIMAX Inc.",
             mobile = "+15147580000",
         ),
@@ -43,6 +48,8 @@ object UserFixtures {
             id = 12L,
             displayName = "Roger Milla",
             photoUrl = "https://picsum.photos/1005/200",
+            photoTinyUrl = "https://picsum.photos/64/64",
+            photoThumbnailUrl = "https://picsum.photos/240/240",
             employer = "REIMAX Inc.",
             mobile = "+15147580000",
         ),
@@ -50,6 +57,8 @@ object UserFixtures {
             id = 13L,
             displayName = "Omam Mbiyick",
             photoUrl = "https://picsum.photos/1005/200",
+            photoTinyUrl = "https://picsum.photos/64/64",
+            photoThumbnailUrl = "https://picsum.photos/240/240",
             employer = "REIMAX Inc.",
             mobile = "+15147580000",
         ),
@@ -57,6 +66,8 @@ object UserFixtures {
             id = 14L,
             displayName = "Roger Milla",
             photoUrl = "https://picsum.photos/1005/200",
+            photoTinyUrl = "https://picsum.photos/64/64",
+            photoThumbnailUrl = "https://picsum.photos/240/240",
             employer = "REIMAX Inc.",
             mobile = "+15147580000",
         ),
@@ -64,6 +75,8 @@ object UserFixtures {
             id = 15L,
             displayName = "Thomas Nkono",
             photoUrl = "https://picsum.photos/1005/200",
+            photoTinyUrl = "https://picsum.photos/64/64",
+            photoThumbnailUrl = "https://picsum.photos/240/240",
             employer = "REIMAX Inc.",
             mobile = "+15147580000",
         ),
