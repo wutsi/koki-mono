@@ -14,6 +14,7 @@ data class FileSummary(
     val thumbnailUrl: String? = null,
     val previewUrl: String? = null,
     val tinyUrl: String? = null,
+    val openGraphUrl: String? = null,
     val contentType: String = "",
     val contentLength: Long = -1,
     val createdAt: Date = Date(),

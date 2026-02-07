@@ -14,6 +14,7 @@ data class File(
     val thumbnailUrl: String? = null,
     val previewUrl: String? = null,
     val tinyUrl: String? = null,
+    val openGraphUrl: String? = null,
     val createdAt: Date = Date(),
     val modifiedAt: Date = Date(),
     val title: String? = null,
