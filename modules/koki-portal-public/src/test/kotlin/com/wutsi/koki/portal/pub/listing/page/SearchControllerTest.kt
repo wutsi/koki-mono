@@ -6,17 +6,36 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.file.dto.SearchFileResponse
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
+import com.wutsi.koki.portal.pub.FileFixtures.images
 import com.wutsi.koki.portal.pub.ListingFixtures
 import com.wutsi.koki.portal.pub.common.page.PageName
+import org.junit.jupiter.api.BeforeEach
 import org.openqa.selenium.Keys
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import kotlin.test.Test
 
 class SearchControllerTest : AbstractPageControllerTest() {
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+
+        doReturn(
+            ResponseEntity(
+                SearchFileResponse(images),
+                HttpStatus.OK,
+            )
+        ).whenever(rest)
+            .getForEntity(
+                any<String>(),
+                eq(SearchFileResponse::class.java)
+            )
+    }
+
     @Test
     fun result() {
         // WHEN
@@ -38,6 +57,14 @@ class SearchControllerTest : AbstractPageControllerTest() {
         assertElementNotPresent("#listing-no-offer-container")
         assertElementPresent("#listing-offer-container")
         assertElementCount("#listing-offer-container .listing-card", ListingFixtures.listings.size)
+        assertElementAttribute(
+            "#listing-offer-container .listing-card:first-child img",
+            "src",
+            images[0].thumbnailUrl!!
+        )
+        assertElementAttribute("#listing-offer-container .listing-card:first-child img", "with", "300")
+        assertElementAttribute("#listing-offer-container .listing-card:first-child img", "height", "200")
+        assertElementAttribute("#listing-offer-container .listing-card:first-child img", "loading", "lazy")
         assertElementNotPresent("#btn-load-more")
     }
 

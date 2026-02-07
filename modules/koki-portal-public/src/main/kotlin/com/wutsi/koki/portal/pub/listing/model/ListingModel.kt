@@ -20,6 +20,7 @@ import com.wutsi.koki.portal.pub.user.model.UserModel
 import java.util.Date
 
 data class ListingModel(
+    val heroImage: FileModel? = null,
     val heroImageUrl: String? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,

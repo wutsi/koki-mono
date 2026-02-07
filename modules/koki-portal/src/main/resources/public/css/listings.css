@@ -59,6 +59,7 @@ ul.amenities li {
 
 .listing-card {
     border-radius: 1em;
+    border: 1px solid lightgray;
 }
 
 .listing-card .listing-status-container {
@@ -70,8 +71,8 @@ ul.amenities li {
 }
 
 .listing-card .hero-image-container {
-    width: 302px;
-    height: 202px;
+    width: 300px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,14 +82,13 @@ ul.amenities li {
 }
 
 .listing-card img.hero-image {
-    width: 302px;
-    height: 202px;
+    width: 300px;
+    height: 200px;
     object-fit: cover;
     border-radius: 1em 1em 0 0;
 }
 
 .listing-card .listing-details {
-    border: 1px solid lightgray;
     border-radius: 0 0 1em 1em;
 }
 
@@ -101,6 +101,7 @@ ul.amenities li {
     overflow: hidden;
     height: 1.25em;
 }
+
 
 a.listing-item {
     text-decoration: none;

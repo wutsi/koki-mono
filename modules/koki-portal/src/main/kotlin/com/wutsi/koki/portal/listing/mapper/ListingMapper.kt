@@ -92,7 +92,7 @@ class ListingMapper(
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
             year = entity.year,
-            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.thumbnailUrl },
             distanceFromMainRoad = entity.distanceFromMainRoad,
             roadPavement = entity.roadPavement,
             availableAt = entity.availableAt,
@@ -212,7 +212,7 @@ class ListingMapper(
             units = entity.units,
             lotArea = entity.lotArea,
             propertyArea = entity.propertyArea,
-            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.contentUrl },
+            heroImageUrl = entity.heroImageId?.let { id -> images[id]?.thumbnailUrl },
             furnitureType = entity.furnitureType,
 
             address = address,

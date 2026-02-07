@@ -7,7 +7,7 @@
    th:id="'image-' + ${image.id}"
 >
     <div class="image-frame">
-        <img th:src="${image.contentUrl}"/>
+        <img height="200" loading="lazy" th:src="${image.thumbnailUrl}" th:title="${image.title}" width="300"/>
     </div>
     <div th:if="!${image.approved}" th:remove="tag">
         <div th:replace="~{__components/file :: status(${image.status})}"></div>
