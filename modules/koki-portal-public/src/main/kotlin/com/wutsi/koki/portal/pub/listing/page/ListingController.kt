@@ -1,14 +1,15 @@
 package com.wutsi.koki.portal.pub.listing.page
 
+import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.place.dto.PlaceStatus
 import com.wutsi.koki.place.dto.PlaceType
-import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.service.CategoryService
+import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
 import com.wutsi.koki.refdata.dto.CategoryType
 import com.wutsi.koki.sdk.URLBuilder
@@ -25,11 +26,12 @@ import org.springframework.web.client.HttpClientErrorException
 @Controller
 @RequestMapping("/listings")
 class ListingController(
-    private val service: ListingService,
+    listingService: ListingService,
+    locationService: LocationService,
+    placeService: PlaceService,
     private val categoryService: CategoryService,
-    private val placeService: PlaceService,
     private val whatsapp: WhatsappService,
-) : AbstractPageController() {
+) : AbstractListingController(listingService, locationService, placeService) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingController::class.java)
 
@@ -55,7 +57,7 @@ class ListingController(
         @RequestParam(name = "_ts", required = false) timestamp: Long? = null,
         model: Model,
     ): String {
-        val listing = service.get(id)
+        val listing = listingService.get(id)
         if (!listing.statusActive && !listing.statusSold) {
             throw HttpClientErrorException(HttpStatusCode.valueOf(404))
         }
@@ -90,12 +92,22 @@ class ListingController(
         }
 
         /* Place */
-        if (listing.address?.neighbourhood?.id != null) {
+        val places = if (listing.address?.neighbourhood?.id != null) {
             loadPlaces(listing.address.neighbourhood.id, model)
+        } else {
+            emptyList()
         }
 
         /* Message URL */
         model.addAttribute("messageUrl", whatsapp.toListingUrl(listing))
+
+        /* Footer links */
+        loadFooterLinks(
+            listing.address?.city,
+            places.find { place -> place.type == PlaceType.NEIGHBORHOOD },
+            listing.listingType ?: ListingType.UNKNOWN,
+            model,
+        )
 
         /* Page */
         val titleAndPrice = listOf(listing.title, listing.price?.displayText).joinToString(" - ")
@@ -131,7 +143,7 @@ class ListingController(
             }?.address?.neighbourhood
             model.addAttribute("neighborhood", neighborhood)
 
-            val listing = service.get(id, fullGraph = false)
+            val listing = listingService.get(id, fullGraph = false)
             val urlBuilder = URLBuilder("")
             val bedrooms = listing.bedrooms?.let { rooms -> if (rooms > 1) "${rooms - 1}+" else null }
             val moreUrl = urlBuilder.build(
@@ -151,7 +163,7 @@ class ListingController(
     private fun findSimilarListings(id: Long): List<ListingModel> {
         // Get similar listing from neighborhood
         val limit = 10
-        val neighborhood = service.getSimilar(
+        val neighborhood = listingService.getSimilar(
             id,
             sameNeighborhood = true,
             limit = limit,
@@ -162,7 +174,7 @@ class ListingController(
 
         // Supplement with city similar listings
         val excludeIds = neighborhood.map { listing -> listing.id }.toMutableSet()
-        val city = service.getSimilar(
+        val city = listingService.getSimilar(
             id,
             sameCity = true,
             limit = 2 * limit,

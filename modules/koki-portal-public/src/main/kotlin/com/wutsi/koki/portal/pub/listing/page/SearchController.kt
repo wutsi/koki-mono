@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.pub.search.page
+package com.wutsi.koki.portal.pub.listing.page
 
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
@@ -9,11 +9,9 @@ import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.common.mapper.MoneyMapper
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
 import com.wutsi.koki.portal.pub.common.model.ResultSetModel
-import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
-import com.wutsi.koki.portal.pub.place.mapper.PlaceMapper
 import com.wutsi.koki.portal.pub.place.model.PlaceModel
 import com.wutsi.koki.portal.pub.place.service.PlaceService
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
@@ -30,12 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam
 @Controller
 @RequestMapping("/search")
 class SearchController(
-    private val listingService: ListingService,
-    private val locationService: LocationService,
+    listingService: ListingService,
+    locationService: LocationService,
+    placeService: PlaceService,
     private val moneyMapper: MoneyMapper,
-    private val placeService: PlaceService,
-    private val placeMapper: PlaceMapper,
-) : AbstractPageController() {
+) : AbstractListingController(listingService, locationService, placeService) {
     companion object {
         const val LIMIT = 12
     }
@@ -51,24 +48,29 @@ class SearchController(
         @RequestParam(required = false, name = "sort") sort: String? = null,
         model: Model,
     ): String {
-        // Location
-        val location = locationId?.let { id ->
-            var location = locationService.get(id)
+        /* Location */
+        var location = locationId?.let { id -> locationService.get(id) }
+        val city = location?.let {
             if (location.type == LocationType.NEIGHBORHOOD) {
                 val parent = location.parentId?.let { id -> locationService.get(id) }
                 if (parent != null) {
                     location = location.copy(name = "${location.name}, ${parent.name}")
                 }
+                parent
+            } else if (location.type == LocationType.CITY) {
+                location
+            } else {
+                null
             }
-            location
-        }
-        val place = if (location != null && location.type == LocationType.NEIGHBORHOOD) {
-            loadNeighbourhoodPlace(location, model)
-        } else {
-            null
         }
 
-        // Data
+        /* Place */
+        val place = location?.let { loadPlace(it, model) }
+
+        /* Footer links */
+        loadFooterLinks(city, place, toListingType(listingType), model)
+
+        /* Data */
         val tenant = tenantHolder.get()
         loadListings(
             locationId = locationId,
@@ -123,7 +125,7 @@ class SearchController(
                 },
             ),
         )
-        return "search/result"
+        return "listings/search"
     }
 
     @GetMapping("/more")
@@ -149,7 +151,7 @@ class SearchController(
             sort = sort,
             model = model
         )
-        return "search/more"
+        return "listings/search-more"
     }
 
     private fun loadListings(
@@ -253,17 +255,33 @@ class SearchController(
         return Pair(min, max)
     }
 
-    private fun loadNeighbourhoodPlace(neighbourhood: LocationModel, model: Model): PlaceModel? {
+    private fun loadPlace(location: LocationModel, model: Model): PlaceModel? {
+        val locationType = location.type
+        if (locationType != LocationType.NEIGHBORHOOD && locationType != LocationType.CITY) {
+            return null
+        }
+
         val placeId = placeService.search(
-            neighbourhoodIds = listOf(neighbourhood.id),
+            neighbourhoodIds = when (locationType) {
+                LocationType.NEIGHBORHOOD -> listOf(location.id)
+                else -> emptyList()
+            },
+            cityIds = when (locationType) {
+                LocationType.CITY -> listOf(location.id)
+                else -> emptyList()
+            },
+            types = when (locationType) {
+                LocationType.NEIGHBORHOOD -> listOf(PlaceType.NEIGHBORHOOD)
+                LocationType.CITY -> listOf(PlaceType.CITY)
+                else -> emptyList()
+            },
             statuses = listOf(PlaceStatus.PUBLISHED),
-            types = listOf(PlaceType.NEIGHBORHOOD),
             limit = 1,
         ).firstOrNull()?.id ?: return null
 
         val place = placeService.get(placeId)
-        model.addAttribute("neighbourhoodPlace", place)
-        model.addAttribute("neighbourhoodLocation", neighbourhood)
+        model.addAttribute("place", place)
+        model.addAttribute("location", location)
         return place
     }
 
@@ -290,11 +308,11 @@ class SearchController(
         }
     }
 
-    private fun toListingType(value: String?): ListingType? {
+    private fun toListingType(value: String?): ListingType {
         return try {
-            value?.let { ListingType.valueOf(it.uppercase()) }
+            value?.let { ListingType.valueOf(it.uppercase()) } ?: ListingType.RENTAL
         } catch (ex: Exception) {
-            null
+            ListingType.RENTAL
         }
     }
 

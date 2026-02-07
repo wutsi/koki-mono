@@ -126,12 +126,24 @@ text-nowrap {
     padding-top: 1em;
 }
 
+.padding-top-2x {
+    padding-top: 2em;
+}
+
 .padding-top-small {
     padding-top: 0.5em;
 }
 
 .padding-bottom {
     padding-bottom: 1em;
+}
+
+.padding-bottom-2x {
+    padding-bottom: 2em;
+}
+
+.padding-bottom-4x {
+    padding-bottom: 4em;
 }
 
 .padding-left {
@@ -192,6 +204,14 @@ text-nowrap {
 
 .margin-bottom-small {
     margin-top: 0.5em;
+}
+
+.margin-bottom-2x {
+    margin-bottom: 2em;
+}
+
+.margin-bottom-4x {
+    margin-bottom: 4em;
 }
 
 .margin-left {
@@ -279,6 +299,14 @@ text-nowrap {
 #menubar .nav-link {
     border: 0;
     margin-right: 0;
+}
+
+#footer {
+    border-top: 1px solid lightgray;
+    padding: 2em 0 4em 0;
+    margin-top: 4em;
+    background: #f0f0f0;
+    font-size: small;
 }
 
 /* === FORMS ====== */

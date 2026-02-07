@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service
 class ListingMetricMapper {
     fun toListingLocationMetricSummary(entity: ListingMetricEntity): ListingMetricSummary {
         return ListingMetricSummary(
-            neighborhoodId = entity.neighborhoodId,
-            sellerAgentUserId = entity.sellerAgentUserId,
-            cityId = entity.cityId,
+            neighborhoodId = entity.neighborhoodId?.takeIf { id -> id > 0 },
+            cityId = entity.cityId?.takeIf { id -> id > 0 },
+            sellerAgentUserId = entity.sellerAgentUserId?.takeIf { id -> id > 0 },
             bedrooms = if (entity.bedrooms != null && entity.bedrooms < 0) null else entity.bedrooms,
             propertyCategory = entity.propertyCategory,
             listingStatus = entity.listingStatus,

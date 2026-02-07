@@ -183,18 +183,29 @@ class ListingMetricService(
         return groups.map { entry -> sum(entry.value, dimension) }
     }
 
-    private fun sum(metrics: List<ListingMetricEntity>, dimension: ListingMetricDimension): ListingMetricEntity {
+    private fun sum(
+        metrics: List<ListingMetricEntity>,
+        dimension: ListingMetricDimension,
+    ): ListingMetricEntity {
+        val currency = metrics.map { it.currency }.distinct().singleOrNull()
+        val listingType = metrics.map { it.listingType }.distinct().singleOrNull()
+        val listingStatus = metrics.map { it.listingStatus }.distinct().singleOrNull()
+        val cityId = metrics.map { it.cityId }.distinct().singleOrNull()
+        val neighbourhoodId = metrics.map { it.neighborhoodId }.distinct().singleOrNull()
+        val sellerAgentUserId = metrics.map { it.sellerAgentUserId }.distinct().singleOrNull()
+        val bedrooms = metrics.map { it.bedrooms }.distinct().singleOrNull()
+        val propertyCategory = metrics.map { it.propertyCategory }.distinct().singleOrNull()
         val result = metrics.reduce { acc, metric ->
             acc.copy(
-                currency = metric.currency,
-                listingType = metric.listingType,
-                listingStatus = metric.listingStatus,
+                currency = currency,
+                listingType = listingType ?: ListingType.UNKNOWN,
+                listingStatus = listingStatus ?: ListingStatus.UNKNOWN,
 
-                cityId = if (dimension == ListingMetricDimension.CITY) metric.cityId else -1,
-                neighborhoodId = if (dimension == ListingMetricDimension.NEIGHBORHOOD) metric.neighborhoodId else -1,
-                sellerAgentUserId = if (dimension == ListingMetricDimension.SELLER_AGENT) metric.sellerAgentUserId else -1,
-                bedrooms = if (dimension == ListingMetricDimension.BEDROOMS) metric.bedrooms else -1,
-                propertyCategory = if (dimension == ListingMetricDimension.PROPERTY_CATEGORY) metric.propertyCategory else PropertyCategory.UNKNOWN,
+                cityId = cityId,
+                neighborhoodId = neighbourhoodId,
+                sellerAgentUserId = sellerAgentUserId,
+                bedrooms = bedrooms,
+                propertyCategory = propertyCategory ?: PropertyCategory.UNKNOWN,
 
                 totalListings = acc.totalListings + metric.totalListings,
                 minPrice = minOf(acc.minPrice, metric.minPrice),

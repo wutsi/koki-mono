@@ -4,6 +4,7 @@ import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.portal.pub.common.model.MoneyModel
+import com.wutsi.koki.sdk.URLBuilder
 
 data class ListingMetricModel(
     val neighborhoodId: Long? = null,
@@ -28,5 +29,21 @@ data class ListingMetricModel(
         } else {
             val parts = maxPrice.shortText.split(' ') // Currency and amount
             "${minPrice.shortText} - ${parts[1]}"
+        }
+
+    val searchUrl: String
+        get() {
+            val urlBuilder = URLBuilder("")
+            return urlBuilder.build(
+                "/search",
+                mapOf(
+                    "location-id" to (neighborhoodId ?: cityId),
+                    "listing-type" to listingType.takeIf { it != ListingType.UNKNOWN },
+                    "property-category" to propertyCategory.takeIf { it != PropertyCategory.UNKNOWN },
+                    "bedrooms" to bedrooms
+                        ?.takeIf { propertyCategory == PropertyCategory.RESIDENTIAL }
+                        ?.let { rooms -> if (rooms > 5) "5+" else rooms },
+                )
+            )
         }
 }

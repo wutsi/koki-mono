@@ -175,7 +175,8 @@ abstract class AbstractLocalGuideController(
 
             // Per room
             val metricsPerRoom = listingService.metrics(
-                cityId = location.id,
+                neighbourhoodId = if (location.type == LocationType.NEIGHBORHOOD) location.id else null,
+                cityId = if (location.type == LocationType.CITY) location.id else null,
                 listingStatus = ListingStatus.ACTIVE,
                 propertyCategory = PropertyCategory.RESIDENTIAL,
                 dimension = ListingMetricDimension.BEDROOMS,

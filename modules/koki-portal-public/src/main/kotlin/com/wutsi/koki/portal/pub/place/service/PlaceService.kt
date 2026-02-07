@@ -45,4 +45,20 @@ class PlaceService(
 
         return places.map { place -> mapper.toPlaceModel(entity = place) }
     }
+
+    fun similarNeighbourhoods(neighbourhood: PlaceModel, limit: Int): List<PlaceModel> {
+        val rating = neighbourhood.rating ?: 0.0
+        val minRating = if (rating.toInt() >= 4) 4.0 else rating - .25
+        val maxRating = if (rating.toInt() >= 4) null else rating + .25
+
+        return search(
+            cityIds = listOf(neighbourhood.cityId),
+            types = listOf(PlaceType.NEIGHBORHOOD),
+            statuses = listOf(PlaceStatus.PUBLISHED),
+            minRating = minRating,
+            maxRating = maxRating,
+            sort = PlaceSort.RATING_HIGH_LOW,
+            limit = limit,
+        ).filter { similar -> similar.id != neighbourhood.id }
+    }
 }
