@@ -83,12 +83,11 @@
             <th colspan="2" th:text="#{page.listing.metric.section.residential.sale}">Residential - Sales</th>
         </tr>
         <tr th:each="metric : ${salesMetricsPerRoom}" th:if="${metric.bedrooms}">
-            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.1_bedroom}">
-                Bedroom Sale Price
-            </td>
-            <td th:if="${metric.bedrooms > 1}"
-                th:text="#{page.listing.metric.n_bedroom(${metric.bedrooms})}">
-                Bedroom Sale Price
+            <td>
+                <a th:href="${metric.searchUrl}">
+                    <span th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.1_bedroom}">1_BEDROOM</span>
+                    <span th:if="${metric.bedrooms > 1}" th:text="#{page.listing.metric.n_bedroom(${metric.bedrooms})}">>N_BEDROOM</span>
+                </a>
             </td>
             <td class="text-right">
                 <b th:text="${metric.priceRangeText}">$$$</b>
@@ -101,12 +100,11 @@
             <th colspan="2" th:text="#{page.listing.metric.section.residential.rental}">Residential - Rentals</th>
         </tr>
         <tr th:each="metric : ${rentalMetricsPerRoom}" th:if="${metric.bedrooms}">
-            <td th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.1_bedroom}">
-                Bedroom Sale Price
-            </td>
-            <td th:if="${metric.bedrooms > 1}"
-                th:text="#{page.listing.metric.n_bedroom(${metric.bedrooms})}">
-                Bedroom Sale Price
+            <td>
+                <a th:href="${metric.searchUrl}">
+                    <span th:if="${metric.bedrooms == 1}" th:text="#{page.listing.metric.1_bedroom}">1_BEDROOM</span>
+                    <span th:if="${metric.bedrooms > 1}" th:text="#{page.listing.metric.n_bedroom(${metric.bedrooms})}">>N_BEDROOM</span>
+                </a>
             </td>
             <td class="text-right">
                 <b th:text="${metric.priceRangeText}">$$$</b>
@@ -116,10 +114,12 @@
 
     <table class="table table-striped" th:if="${landMetrics}">
         <tr>
-            <th colspan="2" th:text="#{page.listing.metric.section.land}">Land</th>
+            <th colspan="2" th:text="#{page.listing.metric.section.land}">LAND</th>
         </tr>
         <tr>
-            <td th:text="#{page.listing.metric.price}">Price</td>
+            <td>
+                <a th:href="${landMetrics.searchUrl}" th:text="#{page.listing.metric.price}">PRICE</a>
+            </td>
             <td class="text-right">
                 <b th:text="${landMetrics.priceRangeText}">$$$</b>
             </td>
@@ -170,5 +170,75 @@
     </table>
 </div>
 
+<div th:fragment="listing-footer-links(listingType, city, cities, neighbourhoods, similarNeighbourhoods)"
+     th:remove="tag">
+    <!-- SIMILAR NEIGHBOURHOODS -->
+    <div class="similar-neighbourhood-container margin-bottom-2x" th:if="${similarNeighbourhoods}">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h6 th:text="#{'page.listing.footer.similar_neighbourhoods.' + ${listingType.name()}}">TITLE</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-lg-4" th:each="neighbourhood: ${similarNeighbourhoods}">
+                    <a th:href="'/search?listing-type=' + ${listingType} + '&location-id=' + ${neighbourhood.id}">
+                        <b th:if="${listingType.name() == 'RENTAL'}"
+                           th:text="#{page.listing.footer.properties_at_area.RENTAL(${neighbourhood.name})}">PLACE</b>
+                        <b th:if="${listingType.name() == 'SALE'}"
+                           th:text="#{page.listing.footer.properties_at_area.SALE(${neighbourhood.name})}">PLACE</b>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEIGHBORHOOD -->
+    <div class="other-cities-container margin-bottom-2x" th:if="${neighbourhoods} AND ${city}">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h6>
+                        <span th:if="${listingType.name() == 'RENTAL'}"
+                              th:text="#{page.listing.footer.neighbourhoods.RENTAL(${city.name})}"></span>
+                        <span th:if="${listingType.name() == 'SALE'}"
+                              th:text="#{page.listing.footer.neighbourhoods.SALE(${city.name})}"></span>
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-lg-4" th:each="neighbourhood: ${neighbourhoods}">
+                    <a th:href="'/search?listing-type=' + ${listingType} + '&location-id=' + ${neighbourhood.id}">
+                        <b th:if="${listingType.name() == 'RENTAL'}"
+                           th:text="#{page.listing.footer.properties_at_area.RENTAL(${neighbourhood.name})}">PLACE</b>
+                        <b th:if="${listingType.name() == 'SALE'}"
+                           th:text="#{page.listing.footer.properties_at_area.SALE(${neighbourhood.name})}">PLACE</b>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTHER CITIES -->
+    <div class="other-cities-container" th:if="${cities}">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h6 th:text="#{'page.listing.footer.cities.' + ${listingType}}">TITLE</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-lg-4" th:each="cc: ${cities}">
+                    <a th:href="'/search?listing-type=' + ${listingType} + '&location-id=' + ${cc.id}">
+                        <b th:if="${listingType.name() == 'RENTAL'}"
+                           th:text="#{page.listing.footer.properties_at_area.RENTAL(${cc.name})}">PLACE</b>
+                        <b th:if="${listingType.name() == 'SALE'}"
+                           th:text="#{page.listing.footer.properties_at_area.SALE(${cc.name})}">PLACE</b>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

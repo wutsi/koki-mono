@@ -1,9 +1,6 @@
 package com.wutsi.koki.portal.pub.guide.page
 
 import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.place.dto.PlaceSort
-import com.wutsi.koki.place.dto.PlaceStatus
-import com.wutsi.koki.place.dto.PlaceType
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.service.ListingService
@@ -85,19 +82,10 @@ class LocalGuideNeighborhoodController(
 
     private fun loadSimilarNeighborhoods(place: PlaceModel, model: Model): List<PlaceModel> {
         try {
-            val rating = place.rating ?: 0.0
-            val minRating = if (rating.toInt() >= 4) 4.0 else rating - .25
-            val maxRating = if (rating.toInt() >= 4) null else rating + .25
-
-            val places = placeService.search(
-                cityIds = listOf(place.cityId),
-                types = listOf(PlaceType.NEIGHBORHOOD),
-                statuses = listOf(PlaceStatus.PUBLISHED),
-                minRating = minRating,
-                maxRating = maxRating,
-                sort = PlaceSort.RATING_HIGH_LOW,
+            val places = placeService.similarNeighbourhoods(
+                neighbourhood = place,
                 limit = 13,
-            ).filter { similar -> similar.id == place.id }
+            ).filter { similar -> similar.id != place.id }
 
             val locations = findLocations(places, LocationType.NEIGHBORHOOD)
             if (locations.isNotEmpty()) {

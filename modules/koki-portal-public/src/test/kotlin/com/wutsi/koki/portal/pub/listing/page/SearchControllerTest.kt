@@ -1,4 +1,4 @@
-package com.wutsi.koki.portal.pub.search.page
+package com.wutsi.koki.portal.pub.listing.page
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeast
@@ -9,7 +9,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.koki.listing.dto.ListingSummary
 import com.wutsi.koki.listing.dto.SearchListingResponse
 import com.wutsi.koki.portal.pub.AbstractPageControllerTest
-import com.wutsi.koki.portal.pub.ListingFixtures.listings
+import com.wutsi.koki.portal.pub.ListingFixtures
 import com.wutsi.koki.portal.pub.common.page.PageName
 import org.openqa.selenium.Keys
 import org.springframework.http.HttpStatus
@@ -37,7 +37,7 @@ class SearchControllerTest : AbstractPageControllerTest() {
 
         assertElementNotPresent("#listing-no-offer-container")
         assertElementPresent("#listing-offer-container")
-        assertElementCount("#listing-offer-container .listing-card", listings.size)
+        assertElementCount("#listing-offer-container .listing-card", ListingFixtures.listings.size)
         assertElementNotPresent("#btn-load-more")
     }
 
@@ -47,8 +47,8 @@ class SearchControllerTest : AbstractPageControllerTest() {
         doReturn(
             ResponseEntity(
                 SearchListingResponse(
-                    listings = listOf(listings[0]),
-                    total = listings.size.toLong(),
+                    listings = listOf(ListingFixtures.listings[0]),
+                    total = ListingFixtures.listings.size.toLong(),
                 ),
                 HttpStatus.OK,
             )
@@ -218,21 +218,21 @@ class SearchControllerTest : AbstractPageControllerTest() {
         val entries = mutableListOf<ListingSummary>()
         var seed = System.currentTimeMillis()
         repeat(SearchController.LIMIT) {
-            entries.add(listings[0].copy(id = ++seed))
+            entries.add(ListingFixtures.listings[0].copy(id = ++seed))
         }
         doReturn(
             ResponseEntity(
                 SearchListingResponse(
                     listings = entries,
-                    total = entries.size.toLong() + listings.size,
+                    total = entries.size.toLong() + ListingFixtures.listings.size,
                 ),
                 HttpStatus.OK,
             )
         ).doReturn(
             ResponseEntity(
                 SearchListingResponse(
-                    listings = listings,
-                    total = listings.size.toLong() + listings.size,
+                    listings = ListingFixtures.listings,
+                    total = ListingFixtures.listings.size.toLong() + ListingFixtures.listings.size,
                 ),
                 HttpStatus.OK,
             )
@@ -252,6 +252,6 @@ class SearchControllerTest : AbstractPageControllerTest() {
         assertCurrentPageIs(PageName.SEARCH)
 
         assertElementNotPresent("#btn-load-more")
-        assertElementCount("#listing-offer-container .listing-card", entries.size + listings.size)
+        assertElementCount("#listing-offer-container .listing-card", entries.size + ListingFixtures.listings.size)
     }
 }

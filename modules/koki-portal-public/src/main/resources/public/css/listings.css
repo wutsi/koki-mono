@@ -79,7 +79,6 @@
 
 .listing-info-details {
     width: 800px;
-    margin-bottom: 10em;
 }
 
 .listing-info-container #listing-map {
@@ -99,7 +98,7 @@
 /** ===== LISTING SEARCH STYLES ===== */
 .listing-search-container {
     width: 1250px;
-    margin: 6em auto 10em auto;
+    margin: 6em auto 0 auto;
 }
 
 .listing-search-container .location-filter {

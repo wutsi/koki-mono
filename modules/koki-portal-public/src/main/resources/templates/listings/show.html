@@ -388,7 +388,7 @@
                 </a>
                 <a class="btn btn-sm btn-light margin-top"
                    th:href="${listing.address.neighbourhood.publicUrl}"
-                   th:text="#{button.explore_neighborhood}">Explore</a>
+                   th:text="#{button.explore_location(${place.name})}">EXPLORE</a>
             </div>
         </div>
 
@@ -516,6 +516,11 @@
             </a>
         </div>
     </div>
+</div>
+
+<div id="footer">
+    <div
+        th:replace="~{__components/listing :: listing-footer-links(${listing.listingType}, ${footerCity}, ${footerCities}, ${footerNeighbourhoods}, ${similarNeighbourhoods})}"></div>
 </div>
 
 <!-- TOAST -->
