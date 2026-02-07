@@ -7,7 +7,6 @@ import com.wutsi.koki.tenant.dto.Tenant
 import com.wutsi.koki.tenant.dto.Type
 import com.wutsi.koki.tenant.dto.TypeSummary
 import org.springframework.stereotype.Service
-import kotlin.text.ifEmpty
 
 @Service
 class TenantMapper {
@@ -27,8 +26,10 @@ class TenantMapper {
             locale = entity.locale,
             currency = entity.currency,
             domainName = entity.domainName,
-            iconUrl = entity.iconUrl?.ifEmpty { null },
-            logoUrl = entity.logoUrl?.ifEmpty { null },
+            iconUrl = entity.iconUrl,
+            iconTinyUrl = entity.iconTinyUrl,
+            logoUrl = entity.logoUrl,
+            logoTinyUrl = entity.logoTinyUrl,
             portalUrl = entity.portalUrl,
             websiteUrl = entity.websiteUrl,
             modules = modules.values.filter { module ->

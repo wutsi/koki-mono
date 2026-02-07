@@ -31,7 +31,7 @@
                         <div class="section-item text-center">
                             <div>
                                 <img class="border" height="128" id="my-photo"
-                                     th:src="${user.photoUrl} ? ${user.photoUrl} : ${page.assetUrl} + '/image/no-photo.png'"
+                                     th:src="${user.photoPreviewUrl} ? ${user.photoPreviewUrl} : ${page.assetUrl} + '/image/no-photo.png'"
                                      width="128"/>
                             </div>
                             <div class="margin-top">

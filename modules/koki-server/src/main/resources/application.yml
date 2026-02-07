@@ -260,6 +260,21 @@ koki:
                 dlq: koki-place-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
 
+        user:
+            image:
+                tiny:
+                    width: 64
+                    height: 64
+                thumbnail:
+                    width: 240
+                    height: 240
+                preview:
+                    width: 500
+                    height: 500
+                opengraph:
+                    width: 1200
+                    height: 630
+
         webscraping:
             mq:
                 consumer-delay-seconds: ${koki.module.consumer-delay-seconds}

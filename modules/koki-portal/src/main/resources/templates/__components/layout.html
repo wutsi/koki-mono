@@ -54,15 +54,15 @@
           th:if="${modulz.cssUrl}"
     />
 
-    <link rel="shortcut icon" th:href="${tenant.iconUrl}" th:if="${tenant?.iconUrl}"/>
+    <link rel="shortcut icon" th:href="${tenant.iconTinyUrl}" th:if="${tenant?.iconTinyUrl}"/>
 </div>
 
 <nav class="navbar navbar-expand navbar-light fixed-top" id="navbar" th:fragment="navbar">
     <a class="navbar-brand" href="/">
         <span class="brand-name" th:if="!${tenant?.logoUrl}">KOKI</span>
         <img class="brand-logo" th:alt="${tenant.name}"
-             th:if="${tenant?.logoUrl}"
-             th:src="${tenant.logoUrl}"
+             th:if="${tenant?.logoTinyUrl}"
+             th:src="${tenant.logoTinyUrl}"
              th:title="${tenant.name}"
         />
     </a>

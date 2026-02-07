@@ -55,8 +55,8 @@ class AgentController(
         val agent = agentService.get(id)
         model.addAttribute("agent", agent)
 
-        val rental = loadActiveListings("rental", ListingType.RENTAL, agent, model)
-        val sale = loadActiveListings("sale", ListingType.SALE, agent, model)
+        loadActiveListings("rental", ListingType.RENTAL, agent, model)
+        loadActiveListings("sale", ListingType.SALE, agent, model)
 
         loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)

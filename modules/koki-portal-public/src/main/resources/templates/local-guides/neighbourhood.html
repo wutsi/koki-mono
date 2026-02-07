@@ -205,7 +205,7 @@
         <div class="listing-contact-details-inner" th:if="${topAgent}">
             <div class="agent-info">
                 <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
-                    <img th:if="${topAgent.user.photoUrl}" th:src="${topAgent.user.photoUrl}"/>
+                    <img th:if="${topAgent.user.photoTinyUrl}" th:src="${topAgent.user.photoTinyUrl}"/>
                 </a>
                 <div>
                     <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">

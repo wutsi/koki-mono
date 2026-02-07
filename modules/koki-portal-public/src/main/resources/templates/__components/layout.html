@@ -61,7 +61,7 @@
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/listings.css'"/>
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/leads.css'"/>
 
-    <link rel="shortcut icon" th:href="${tenant.iconUrl}" th:if="${tenant?.iconUrl}"/>
+    <link rel="shortcut icon" th:href="${tenant.iconTinyUrl}" th:if="${tenant?.iconTinyUrl}"/>
     <link href="/manifest.json" rel="manifest">
 </div>
 
@@ -69,8 +69,8 @@
     <div class="navbar-brand" href="/">
         <span class="brand-name" th:if="!${tenant?.logoUrl}">KOKI</span>
         <img class="brand-logo" th:alt="${tenant.name}"
-             th:if="${tenant?.logoUrl}"
-             th:src="${tenant.logoUrl}"
+             th:if="${tenant?.logoTinyUrl}"
+             th:src="${tenant.logoTinyUrl}"
              th:title="${tenant.name}"
         />
     </div>

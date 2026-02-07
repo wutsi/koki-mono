@@ -6,7 +6,7 @@
     <a th:href="${agent.publicUrl}" th:title="${agent.user.displayName}">
         <div class="flex border padding border-rounded margin-bottom background-white">
             <img class="user-photo"
-                 th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"/>
+                 th:src="${agent.user.photoTinyUrl} ? ${agent.user.photoTinyUrl} : '/image/no-photo.png'"/>
 
             <div class="margin-left">
                 <b class="text-larger" th:text="${agent.user.displayName}">NAME</b><br/>
