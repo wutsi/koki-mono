@@ -44,6 +44,7 @@ class FileMapper(
             thumbnailUrl = resizer?.thumbnailUrl(entity.url),
             previewUrl = resizer?.previewUrl(entity.url),
             tinyUrl = resizer?.tinyUrl(entity.url),
+            openGraphUrl = resizer?.openGraphUrl(entity.url),
         )
     }
 
@@ -70,6 +71,7 @@ class FileMapper(
             thumbnailUrl = resizer?.thumbnailUrl(entity.url),
             previewUrl = resizer?.previewUrl(entity.url),
             tinyUrl = resizer?.tinyUrl(entity.url),
+            openGraphUrl = resizer?.openGraphUrl(entity.url)
         )
     }
 

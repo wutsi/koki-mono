@@ -32,6 +32,7 @@ data class FileModel(
     val thumbnailUrl: String? = null,
     val previewUrl: String? = null,
     val tinyUrl: String? = null,
+    val openGraphUrl: String? = null,
 ) {
     val rejected: Boolean
         get() = status == FileStatus.REJECTED

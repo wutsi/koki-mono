@@ -15,6 +15,7 @@ class ImageResizerProviderTest {
             override fun tinyUrl(url: String): String = url
             override fun thumbnailUrl(url: String): String = url
             override fun previewUrl(url: String): String = url
+            override fun openGraphUrl(url: String): String = url
         }
         factory.register(ObjectType.LISTING, resizer)
 

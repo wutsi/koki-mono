@@ -23,6 +23,8 @@ class ListingImageResizer(
     @Value("\${koki.module.listing.image.thumbnail.height}") private val thumbnailHeight: Int,
     @Value("\${koki.module.listing.image.preview.width}") private val previewWidth: Int,
     @Value("\${koki.module.listing.image.preview.height}") private val previewHeight: Int,
+    @Value("\${koki.module.listing.image.opengraph.width}") private val openGraphWidth: Int,
+    @Value("\${koki.module.listing.image.opengraph.height}") private val openGraphHeight: Int,
 ) : ImageResizer {
     @PostConstruct
     fun init() {
@@ -41,12 +43,16 @@ class ListingImageResizer(
         return transform(url, previewWidth, previewHeight)
     }
 
-    private fun transform(url: String, width: Int, height: Int): String {
+    override fun openGraphUrl(url: String): String {
+        return transform(url, openGraphWidth, openGraphHeight, Format.PNG)
+    }
+
+    private fun transform(url: String, width: Int, height: Int, format: Format = Format.WEBP): String {
         return imageService.transform(
             url,
             Transformation(
                 focus = Focus.AUTO,
-                format = Format.WEBP,
+                format = format,
                 dimension = Dimension(width, height),
             )
         )

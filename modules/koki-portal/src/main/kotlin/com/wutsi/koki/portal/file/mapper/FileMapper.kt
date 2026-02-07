@@ -44,6 +44,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             thumbnailUrl = entity.thumbnailUrl,
             previewUrl = entity.previewUrl,
             tinyUrl = entity.tinyUrl,
+            openGraphUrl = entity.openGraphUrl,
         )
     }
 
@@ -85,6 +86,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             thumbnailUrl = entity.thumbnailUrl,
             previewUrl = entity.previewUrl,
             tinyUrl = entity.tinyUrl,
+            openGraphUrl = entity.openGraphUrl,
         )
     }
 

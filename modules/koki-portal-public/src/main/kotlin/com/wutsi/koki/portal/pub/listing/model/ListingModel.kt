@@ -21,7 +21,6 @@ import java.util.Date
 
 data class ListingModel(
     val heroImage: FileModel? = null,
-    val heroImageUrl: String? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingType: ListingType? = null,
@@ -93,6 +92,9 @@ data class ListingModel(
 
     val images: List<FileModel> = emptyList()
 ) {
+    val heroImageUrl: String?
+        get() = heroImage?.url
+
     val hasLegalInformation: Boolean
         get() = listingType == ListingType.SALE &&
             (landTitle == true ||

@@ -4,4 +4,5 @@ interface ImageResizer {
     fun tinyUrl(url: String): String
     fun thumbnailUrl(url: String): String
     fun previewUrl(url: String): String
+    fun openGraphUrl(url: String): String
 }

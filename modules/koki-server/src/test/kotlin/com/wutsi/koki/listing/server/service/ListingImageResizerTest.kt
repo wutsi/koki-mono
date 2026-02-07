@@ -26,8 +26,10 @@ class ListingImageResizerTest {
         tinyHeight = 66,
         thumbnailWidth = 300,
         thumbnailHeight = 200,
-        previewWidth = 1200,
-        previewHeight = 800,
+        previewWidth = 800,
+        previewHeight = 600,
+        openGraphWidth = 1200,
+        openGraphHeight = 630
     )
 
     @Test
@@ -81,9 +83,26 @@ class ListingImageResizerTest {
         verify(imageService).transform(eq("https://ima.com/1.png"), transformation.capture())
 
         assertEquals("https://ima.com/1.webp", result)
-        assertEquals(1200, transformation.firstValue.dimension?.width)
-        assertEquals(800, transformation.firstValue.dimension?.height)
+        assertEquals(800, transformation.firstValue.dimension?.width)
+        assertEquals(600, transformation.firstValue.dimension?.height)
         assertEquals(Format.WEBP, transformation.firstValue.format)
+        assertEquals(Focus.AUTO, transformation.firstValue.focus)
+        assertEquals(null, transformation.firstValue.aspectRatio)
+    }
+
+    @Test
+    fun openGraph() {
+        doReturn("https://ima.com/1.png").whenever(imageService).transform(any(), any())
+
+        val result = resizer.openGraphUrl("https://ima.com/1.png")
+
+        val transformation = argumentCaptor<Transformation>()
+        verify(imageService).transform(eq("https://ima.com/1.png"), transformation.capture())
+
+        assertEquals("https://ima.com/1.png", result)
+        assertEquals(1200, transformation.firstValue.dimension?.width)
+        assertEquals(630, transformation.firstValue.dimension?.height)
+        assertEquals(Format.PNG, transformation.firstValue.format)
         assertEquals(Focus.AUTO, transformation.firstValue.focus)
         assertEquals(null, transformation.firstValue.aspectRatio)
     }

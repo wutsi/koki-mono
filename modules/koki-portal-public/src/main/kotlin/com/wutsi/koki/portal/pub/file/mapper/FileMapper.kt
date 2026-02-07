@@ -25,6 +25,7 @@ class FileMapper : TenantAwareMapper() {
             thumbnailUrl = entity.thumbnailUrl,
             previewUrl = entity.previewUrl,
             tinyUrl = entity.tinyUrl,
+            openGraphUrl = entity.openGraphUrl,
         )
     }
 }

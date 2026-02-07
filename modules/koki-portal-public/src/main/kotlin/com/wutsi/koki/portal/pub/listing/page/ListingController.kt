@@ -117,7 +117,7 @@ class ListingController(
                 name = PageName.LISTING,
                 title = titleAndPrice,
                 description = listing.summary,
-                image = listing.heroImageUrl,
+                image = listing.heroImage?.openGraphUrl,
                 url = listing.publicUrl,
                 updatedTime = listing.publishedAt?.time ?: listing.createdAt.time
             )

@@ -46,6 +46,7 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertNull(file.tinyUrl)
         assertNull(file.thumbnailUrl)
         assertNull(file.previewUrl)
+        assertNull(file.openGraphUrl)
     }
 
     @Test
@@ -73,6 +74,7 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertNull(file.tinyUrl)
         assertNull(file.thumbnailUrl)
         assertNull(file.previewUrl)
+        assertNull(file.openGraphUrl)
     }
 
     @Test
@@ -82,6 +84,7 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         doReturn("https://www.resizer.com/tiny.png").whenever(resizer).tinyUrl(any())
         doReturn("https://www.resizer.com/thumbnail.png").whenever(resizer).thumbnailUrl(any())
         doReturn("https://www.resizer.com/preview.png").whenever(resizer).previewUrl(any())
+        doReturn("https://www.resizer.com/og.png").whenever(resizer).openGraphUrl(any())
 
         doReturn(resizer).whenever(resizerProvider).get(any())
 
@@ -105,6 +108,7 @@ class GetFileEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals("https://www.resizer.com/tiny.png", file.tinyUrl)
         assertEquals("https://www.resizer.com/thumbnail.png", file.thumbnailUrl)
         assertEquals("https://www.resizer.com/preview.png", file.previewUrl)
+        assertEquals("https://www.resizer.com/og.png", file.openGraphUrl)
     }
 
     @Test
