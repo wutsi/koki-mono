@@ -52,7 +52,7 @@
         <div>
             <img class="user-photo"
                  th:alt="${me.displayName}"
-                 th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"
+                 th:src="${me.photoTinyUrl} ? ${me.photoTinyUrl} : '/image/no-photo.png'"
             />
         </div>
         <div class="margin-left margin-right">
@@ -165,7 +165,7 @@
 </div>
 
 <div class="text-small flex user-card-small" th:fragment="user-small-card(me, sendMessage)" th:if="${me}">
-    <img class="user-photo-small" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    <img class="user-photo-small" th:src="${me.photoTinyUrl} ? ${me.photoTinyUrl} : '/image/no-photo.png'"/>
 
     <div class="margin-left-small">
         <b th:text="${me.displayName}">NAME</b><br/>
@@ -189,7 +189,7 @@
 </div>
 
 <div class="flex user-card" th:fragment="user-card(me, messageUrl)" th:if="${me}">
-    <img class="user-photo" th:src="${me.photoUrl} ? ${me.photoUrl} : '/image/no-photo.png'"/>
+    <img class="user-photo" th:src="${me.photoTinyUrl} ? ${me.photoTinyUrl} : '/image/no-photo.png'"/>
 
     <div class="margin-left-small w-100">
         <h5 class="margin-none" th:text="${me.displayName}">NAME</h5>

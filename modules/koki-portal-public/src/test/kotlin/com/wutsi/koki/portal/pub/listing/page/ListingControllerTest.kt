@@ -231,6 +231,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementVisible("#koki-modal")
         assertElementCount("#koki-modal .modal-body img", FileFixtures.images.size)
+        assertElementAttribute("#koki-modal .modal-body img:first-child", "src", FileFixtures.images[0].previewUrl)
         click("#koki-modal .btn-close")
     }
 

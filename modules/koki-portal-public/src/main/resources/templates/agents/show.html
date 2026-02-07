@@ -16,7 +16,7 @@
         <div class="flex">
             <img class="user-photo"
                  th:alt="${agent.user.displayName}"
-                 th:src="${agent.user.photoUrl} ? ${agent.user.photoUrl} : '/image/no-photo.png'"
+                 th:src="${agent.user.photoThumbnailUrl} ? ${agent.user.photoThumbnailUrl} : '/image/no-photo.png'"
             />
             <div class="margin-left">
                 <h1 th:text="${agent.user.displayName}">NAME</h1>
@@ -151,7 +151,7 @@
     <div class="listing-contact-details">
         <div class="listing-contact-details-inner">
             <div class="agent-info">
-                <img th:if="${agent.user.photoUrl}" th:src="${agent.user.photoUrl}"/>
+                <img th:if="${agent.user.photoTinyUrl}" th:src="${agent.user.photoTinyUrl}"/>
                 <div>
                     <h2 th:text="${agent.user.displayName}">AGENT</h2>
                     <div th:text="${agent.user.employer}">EMPLOYER</div>

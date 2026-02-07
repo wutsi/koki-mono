@@ -68,9 +68,9 @@ class FileMapper(
             createdById = entity.createdById,
             modifiedAt = entity.modifiedAt,
             status = entity.status,
+            tinyUrl = resizer?.tinyUrl(entity.url),
             thumbnailUrl = resizer?.thumbnailUrl(entity.url),
             previewUrl = resizer?.previewUrl(entity.url),
-            tinyUrl = resizer?.tinyUrl(entity.url),
             openGraphUrl = resizer?.openGraphUrl(entity.url)
         )
     }

@@ -16,7 +16,11 @@
            href="#"
            th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
            th:data-modal-title="#{page.listing.section.photo.title}">
-            <img th:alt="${listing.title}" th:src="${listing.heroImage?.previewUrl}" th:title="${listing.title}"/>
+            <img fetchpriority="high"
+                 th:alt="${listing.title}"
+                 th:src="${listing.heroImage?.previewUrl}"
+                 th:title="${listing.title}"
+            />
         </a>
     </div>
     <div class="hero-2">
@@ -27,7 +31,10 @@
                    href="#"
                    th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
                    th:data-modal-title="#{page.listing.section.photo.title}">
-                    <img th:alt="${img.title}" th:src="${img.previewUrl}" th:time="${img.title}"/>
+                    <img th:alt="${img.title}"
+                         th:src="${img.previewUrl}"
+                         th:title="${img.title}"
+                    />
                 </a>
             </div>
         </div>
@@ -38,7 +45,10 @@
                    href="#"
                    th:data-modal-body-url="'/images/modal?owner-type=LISTING&owner-id=' + ${listing.id}"
                    th:data-modal-title="#{page.listing.section.photo.title}">
-                    <img th:alt="${img.title}" th:src="${img.previewUrl}" th:time="${img.title}"/>
+                    <img th:alt="${img.title}"
+                         th:src="${img.previewUrl}"
+                         th:title="${img.title}"
+                    />
                 </a>
             </div>
         </div>
@@ -489,7 +499,8 @@
         <div class="listing-contact-details-inner">
             <div class="agent-info">
                 <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
-                    <img th:if="${listing.sellerAgentUser.photoUrl}" th:src="${listing.sellerAgentUser.photoUrl}"/>
+                    <img th:if="${listing.sellerAgentUser.photoTinyUrl}"
+                         th:src="${listing.sellerAgentUser.photoTinyUrl}"/>
                 </a>
                 <div>
                     <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
