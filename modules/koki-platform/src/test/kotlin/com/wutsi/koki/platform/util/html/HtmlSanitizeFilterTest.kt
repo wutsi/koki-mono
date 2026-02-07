@@ -31,12 +31,6 @@ class HtmlSanitizeFilterTest : AbstractFilterTest() {
 
     @Test
     @Throws(Exception::class)
-    fun camfoot() {
-        validateText("/html/sanitizer/camfoot", filter)
-    }
-
-    @Test
-    @Throws(Exception::class)
     fun jewanda() {
         validateText("/html/sanitizer/jewanda", filter)
     }

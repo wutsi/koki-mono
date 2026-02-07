@@ -3,6 +3,8 @@ package com.wutsi.koki.platform
 import com.wutsi.koki.platform.cache.config.LocalCacheConfiguration
 import com.wutsi.koki.platform.cache.config.NoCacheConfiguration
 import com.wutsi.koki.platform.cache.config.RedisCacheConfiguration
+import com.wutsi.koki.platform.core.image.config.ImageKitConfiguration
+import com.wutsi.koki.platform.core.image.config.NullImageServiceConfiguration
 import com.wutsi.koki.platform.executor.config.ExecutorConfiguration
 import com.wutsi.koki.platform.geoip.config.GeoIpConfiguration
 import com.wutsi.koki.platform.logger.config.LoggerConfiguration
@@ -21,6 +23,9 @@ import org.springframework.context.annotation.Import
         ExecutorConfiguration::class,
 
         GeoIpConfiguration::class,
+
+        NullImageServiceConfiguration::class,
+        ImageKitConfiguration::class,
 
         LoggerConfiguration::class,
 
