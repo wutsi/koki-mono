@@ -239,6 +239,19 @@ koki:
                 queue: koki-listing-queue
                 dlq: koki-listing-dlq
                 dlq-cron: "0 */5 * * * *"  # Process DLQ Every 5 mins
+            image:
+                tiny:
+                    width: 92
+                    height: 61
+                thumbnail:
+                    width: 300
+                    height: 200
+                preview:
+                    width: 800
+                    height: 533
+                opengraph:
+                    width: 1200
+                    height: 630
 
         place:
             mq:
@@ -271,10 +284,18 @@ wutsi:
             ttl: 86400
             redis:
                 url: redis://:test@localhost:6379
+
         executor:
             thread-pool:
                 name: ${koki.webapp.client-id}
                 size: 4
+
+        image:
+            type: image-kit
+            image-kit:
+                endpoint-url: https://ik.imagekit.io/cx8qxsgz4d/koki-test
+                origin-url: https://s3.amazonaws.com/com-wutsi-koki-test
+
         mq:
             type: rabbitmq
             rabbitmq:
@@ -282,6 +303,7 @@ wutsi:
                 exchange-name: koki
                 max-retries: 24
                 ttl-seconds: 84600
+
         storage:
             enabled: true
             type: local # local | s3

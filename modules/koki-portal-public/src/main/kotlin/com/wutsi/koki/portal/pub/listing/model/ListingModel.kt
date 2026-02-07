@@ -20,7 +20,7 @@ import com.wutsi.koki.portal.pub.user.model.UserModel
 import java.util.Date
 
 data class ListingModel(
-    val heroImageUrl: String? = null,
+    val heroImage: FileModel? = null,
     val id: Long = -1,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingType: ListingType? = null,
@@ -92,6 +92,9 @@ data class ListingModel(
 
     val images: List<FileModel> = emptyList()
 ) {
+    val heroImageUrl: String?
+        get() = heroImage?.thumbnailUrl
+
     val hasLegalInformation: Boolean
         get() = listingType == ListingType.SALE &&
             (landTitle == true ||

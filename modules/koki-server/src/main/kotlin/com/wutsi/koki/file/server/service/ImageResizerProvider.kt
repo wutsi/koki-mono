@@ -4,7 +4,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import org.springframework.stereotype.Service
 
 @Service
-class ImageResizerFactory {
+class ImageResizerProvider {
     private val resizers: MutableMap<ObjectType, ImageResizer> = mutableMapOf()
 
     fun register(objectType: ObjectType, transformer: ImageResizer) {

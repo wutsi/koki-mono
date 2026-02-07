@@ -13,6 +13,7 @@ import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.platform.util.HtmlUtils
 import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.contact.model.ContactModel
+import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
 import com.wutsi.koki.portal.refdata.model.GeoLocationModel
@@ -20,8 +21,8 @@ import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
 
 data class ListingModel(
-    val heroImageUrl: String? = null,
     val id: Long = -1,
+    val heroImage: FileModel? = null,
     val status: ListingStatus = ListingStatus.UNKNOWN,
     val listingType: ListingType? = null,
     val propertyType: PropertyType? = null,
@@ -99,6 +100,9 @@ data class ListingModel(
     val totalActiveMessages: Int? = null,
     val qrCodeUrl: String? = null,
 ) {
+    val heroImageUrl: String?
+        get() = heroImage?.thumbnailUrl
+
     val publicRemarksHtml: String?
         get() = publicRemarks?.let { str -> HtmlUtils.toHtml(str) }
 

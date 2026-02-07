@@ -47,7 +47,7 @@ class SignupPhotoController(
     @ResponseBody
     fun file(@RequestParam id: Long): Map<String, String> {
         val file = fileService.get(id)
-        return mapOf("url" to file.contentUrl)
+        return mapOf("url" to file.url)
     }
 
     @PostMapping

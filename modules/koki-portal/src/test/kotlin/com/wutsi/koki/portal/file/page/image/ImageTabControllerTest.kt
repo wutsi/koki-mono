@@ -48,6 +48,7 @@ class ImageTabControllerTest : AbstractPageControllerTest() {
         navigateTo("/images/tab?owner-id=111&owner-type=ACCOUNT&test-mode=true")
 
         assertElementCount(".tab-images .image", images.size)
+        assertElementAttribute(".tab-images .image:first-child img", "src", images[0].thumbnailUrl)
 //        assertElementPresent(".btn-refresh")
     }
 

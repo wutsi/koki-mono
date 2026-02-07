@@ -84,7 +84,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         assertElementAttribute("head meta[property='og:description']", "content", listing.summaryFr)
         assertElementAttribute("head meta[property='og:type']", "content", "website")
         assertElementAttributeEndsWith("head meta[property='og:url']", "content", (listing.publicUrlFr ?: ""))
-        assertElementAttribute("head meta[property='og:image']", "content", FileFixtures.images[0].url)
+        assertElementAttribute("head meta[property='og:image']", "content", FileFixtures.images[0].openGraphUrl)
         assertElementAttribute("head meta[property='og:updated_time']", "content", listing.publishedAt?.time.toString())
 
         // Property infos

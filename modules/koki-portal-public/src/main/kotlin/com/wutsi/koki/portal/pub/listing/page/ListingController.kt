@@ -84,7 +84,7 @@ class ListingController(
 
         /* Images */
         val heroImages = listing.images
-            .filter { image -> image.contentUrl != listing.heroImageUrl }
+            .filter { image -> image.url != listing.heroImageUrl }
             .take(4)
         model.addAttribute("heroImages21", heroImages.take(2))
         if (heroImages.size >= 4) {
@@ -117,7 +117,7 @@ class ListingController(
                 name = PageName.LISTING,
                 title = titleAndPrice,
                 description = listing.summary,
-                image = listing.heroImageUrl,
+                image = listing.heroImage?.openGraphUrl,
                 url = listing.publicUrl,
                 updatedTime = listing.publishedAt?.time ?: listing.createdAt.time
             )

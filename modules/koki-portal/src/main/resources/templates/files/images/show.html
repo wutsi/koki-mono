@@ -20,8 +20,10 @@
             >DELETE</a>
         </div>
     </div>
-    <div class="image-body padding flex flex-center">
-        <img class="img-fluid" th:src="${image.contentUrl}" th:title="${image.title}"/>
+    <div class="image-body padding text-center">
+        <img
+            th:src="${image.previewUrl} ? ${image.previewUrl} : '/image/no-image.png'"
+            th:title="${image.title}"/>
     </div>
     <div class="image-footer padding" th:if="${image.description} OR !${image.approved}">
         <div class="text-center" th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>

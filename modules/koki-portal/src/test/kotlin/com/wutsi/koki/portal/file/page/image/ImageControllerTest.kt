@@ -28,6 +28,7 @@ class ImageControllerTest : AbstractPageControllerTest() {
         navigateTo("/images/$imageId")
 
         assertCurrentPageIs(PageName.IMAGE)
+        assertElementAttribute(".image-body img", "src", image.previewUrl)
         assertElementVisible("#btn-delete")
     }
 

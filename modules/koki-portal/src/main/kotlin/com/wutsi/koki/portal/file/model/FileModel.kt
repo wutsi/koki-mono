@@ -11,7 +11,7 @@ data class FileModel(
     val type: FileType = FileType.UNKNOWN,
     val name: String = "",
     val title: String? = null,
-    val contentUrl: String = "",
+    val url: String = "",
     val contentType: String = "",
     val contentLength: Long = -1,
     val contentLengthText: String = "",
@@ -28,7 +28,11 @@ data class FileModel(
     val numberOfPages: Int? = null,
     val status: FileStatus = FileStatus.UNKNOWN,
     val rejectionReason: String? = null,
-    val owner: ObjectReferenceModel? = null
+    val owner: ObjectReferenceModel? = null,
+    val thumbnailUrl: String? = null,
+    val previewUrl: String? = null,
+    val tinyUrl: String? = null,
+    val openGraphUrl: String? = null,
 ) {
     val rejected: Boolean
         get() = status == FileStatus.REJECTED

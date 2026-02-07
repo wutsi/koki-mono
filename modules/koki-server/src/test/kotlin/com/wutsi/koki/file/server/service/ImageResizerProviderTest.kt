@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import kotlin.test.Test
 
-class ImageResizerFactoryTest {
-    private val factory = ImageResizerFactory()
+class ImageResizerProviderTest {
+    private val factory = ImageResizerProvider()
 
     @Test
     fun `register and get`() {
@@ -15,6 +15,7 @@ class ImageResizerFactoryTest {
             override fun tinyUrl(url: String): String = url
             override fun thumbnailUrl(url: String): String = url
             override fun previewUrl(url: String): String = url
+            override fun openGraphUrl(url: String): String = url
         }
         factory.register(ObjectType.LISTING, resizer)
 

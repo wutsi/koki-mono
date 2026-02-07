@@ -105,7 +105,7 @@ class FileController(
             // Download the file
             val output = FileOutputStream(f)
             output.use {
-                getStorageService().get(URL(file.contentUrl), output)
+                getStorageService().get(URL(file.url), output)
             }
 
             // Stream result

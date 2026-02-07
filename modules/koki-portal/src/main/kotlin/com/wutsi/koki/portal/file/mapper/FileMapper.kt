@@ -29,7 +29,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
                 "fr" -> entity.titleFr ?: entity.title
                 else -> entity.title
             },
-            contentUrl = entity.url,
+            url = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
             contentLengthText = toFileSizeText(entity.contentLength),
@@ -40,11 +40,11 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             extension = FilenameUtils.getExtension(entity.name).lowercase(),
             modifiedAt = entity.modifiedAt,
             modifiedAtText = fmt.format(entity.modifiedAt),
-            numberOfPages = entity.numberOfPages,
-            language = entity.language,
-            languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
             status = entity.status,
-            rejectionReason = entity.rejectionReason,
+            thumbnailUrl = entity.thumbnailUrl,
+            previewUrl = entity.previewUrl,
+            tinyUrl = entity.tinyUrl,
+            openGraphUrl = entity.openGraphUrl,
         )
     }
 
@@ -66,7 +66,7 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
                 "fr" -> entity.descriptionFr ?: entity.description?.ifEmpty { null }
                 else -> entity.description?.ifEmpty { null }
             },
-            contentUrl = entity.url,
+            url = entity.url,
             contentType = entity.contentType,
             contentLength = entity.contentLength,
             contentLengthText = toFileSizeText(entity.contentLength),
@@ -82,7 +82,11 @@ class FileMapper(private val moment: Moment) : TenantAwareMapper() {
             languageText = entity.language?.let { lang -> Locale(lang).displayLanguage },
             status = entity.status,
             rejectionReason = entity.rejectionReason,
-            owner = entity.owner?.let { owner -> ObjectReferenceModel(id = owner.id, type = owner.type) }
+            owner = entity.owner?.let { owner -> ObjectReferenceModel(id = owner.id, type = owner.type) },
+            thumbnailUrl = entity.thumbnailUrl,
+            previewUrl = entity.previewUrl,
+            tinyUrl = entity.tinyUrl,
+            openGraphUrl = entity.openGraphUrl,
         )
     }
 
