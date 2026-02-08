@@ -3,7 +3,7 @@
         <div class="widget-title" th:text="${title}">Offers</div>
     </div>
     <div class="widget-body">
-        <div th:replace="~{__components/listing :: listing-carousel(${listings})}"></div>
+        <div th:replace="~{__components/listing :: listing-carousel(${listings}, false)}"></div>
     </div>
 </div>
 

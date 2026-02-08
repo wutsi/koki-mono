@@ -269,7 +269,7 @@
     </div>
 </div>
 
-<div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing)">
+<div class="listing-card" th:data-id="${listing.id}" th:fragment="listing-card(listing, showAgent)">
     <a th:href="'/listings/' + ${listing.id}">
         <div class="listing-status-container">
             <div th:if="!${listing.statusSold}" th:remove="tag">
@@ -310,16 +310,16 @@
                 <span th:text="${listing.address?.city?.name}">XXX</span>
             </div>
 
-            <div class="margin-top" th:if="${listing.sellerAgentUser}">
+            <div class="margin-top" th:if="${showAgent} AND ${listing.sellerAgentUser}">
                 <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
             </div>
         </a>
     </div>
 </div>
 
-<div class="listing-carousel" th:fragment="listing-carousel(listings)">
+<div class="listing-carousel" th:fragment="listing-carousel(listings, showAgent)">
     <div th:each="listing : ${listings}" th:remove="tag">
-        <div th:replace="~{__components/listing :: listing-card(${listing})}"></div>
+        <div th:replace="~{__components/listing :: listing-card(${listing}, ${showAgent})}"></div>
     </div>
 </div>
 
