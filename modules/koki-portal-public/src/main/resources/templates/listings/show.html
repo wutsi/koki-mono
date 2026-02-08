@@ -512,36 +512,8 @@
 
     <!-- CONTACT AGENT -->
     <div class="listing-contact-details" th:if="${listing.sellerAgentUser.agentId}">
-        <div class="listing-contact-details-inner">
-            <div class="agent-info">
-                <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
-                    <img th:if="${listing.sellerAgentUser.photoTinyUrl}"
-                         th:src="${listing.sellerAgentUser.photoTinyUrl}"/>
-                </a>
-                <div>
-                    <a th:href="'/agents/' + ${listing.sellerAgentUser.agentId} + '/' + ${listing.sellerAgentUser.slug}">
-                        <h2 th:text="${listing.sellerAgentUser.displayName}">AGENT</h2>
-                        <div th:text="${listing.sellerAgentUser.employer}">EMPLOYER</div>
-                    </a>
-                </div>
-            </div>
-
-            <a class="btn btn-primary"
-               data-component-id="track"
-               data-event="MESSAGE"
-               data-product-type="LISTING"
-               id="btn-send-message"
-               rel="nofollow"
-               target="_blank"
-               th:data-product-id="${listing.id}"
-               th:data-recipient-id="${listing.sellerAgentUser?.id}"
-               th:href="${messageUrl}"
-               th:if="${listing.statusActive} AND ${messageUrl}"
-            >
-                <i class="fa-brands fa-whatsapp"></i>
-                <span th:text="#{button.contact}"> Send Message</span>
-            </a>
-        </div>
+        <div
+            th:replace="~{__components/agent :: agent-contact-sidebar(${listing.sellerAgentUser.agentId}, ${listing.sellerAgentUser}, ${messageUrl}, ${listing.id}, 'LISTING')}"></div>
     </div>
 </div>
 
@@ -573,7 +545,7 @@
         'DOMContentLoaded',
         function () {
             const productId = /*[[${listing.id}]]*/ '0';
-            
+
             setTimeout(() => {
                 koki.w.track.track('VIEW', productId, 'LISTING');
             }, 5000);

@@ -100,34 +100,9 @@
 
     <!-- CONTACT AGENT -->
     <div class="listing-contact-details">
-        <div class="listing-contact-details-inner" th:if="${topAgent}">
-            <div class="agent-info">
-                <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
-                    <img th:if="${topAgent.user.photoTinyUrl}" th:src="${topAgent.user.photoTinyUrl}"/>
-                </a>
-                <div>
-                    <a th:href="${topAgent.publicUrl}" th:title="${topAgent.user.displayName}">
-                        <h2 th:text="${topAgent.user.displayName}">AGENT</h2>
-                        <div th:text="${topAgent.user.employer}">EMPLOYER</div>
-                    </a>
-                </div>
-            </div>
-
-            <a class="btn btn-primary"
-               data-component-id="track"
-               data-event="MESSAGE"
-               data-product-type="PLACE"
-               id="btn-send-message"
-               rel="nofollow"
-               target="_blank"
-               th:data-product-id="${city.id}"
-               th:data-recipient-id="${topAgent.user.id}"
-               th:href="${messageUrl}"
-               th:if="${messageUrl}"
-            >
-                <i class="fa-brands fa-whatsapp"></i>
-                <span th:text="#{button.contact}">CONTACT</span>
-            </a>
+        <div th:if="${topAgent}" th:remove="tag">
+            <div
+                th:replace="~{__components/agent :: agent-contact-sidebar(${topAgent.id}, ${topAgent.user}, ${messageUrl}, ${place?.id}, 'PLACE')}"></div>
         </div>
 
         <div class="listing-contact-details-inner" th:if="!${topAgent}">

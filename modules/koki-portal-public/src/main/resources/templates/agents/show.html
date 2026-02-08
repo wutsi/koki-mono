@@ -105,26 +105,6 @@
             </div>
         </div>
 
-        <!-- SOLD -->
-        <!--
-        <div class="margin-top" id="sold-listing-container" th:if="${soldListings}">
-            <hr/>
-            <h2 th:text="#{page.agent.section.sold(${agent.user.firstName})}">TITLE</h2>
-            <div class="margin-bottom" id="map-container">
-                <div data-component-id="map"
-                     data-disable-scroll-wheel-zoom="true"
-                     id="map" th:data-latitude="${mapCenterPoint?.latitude}"
-                     th:data-longitude="${mapCenterPoint?.longitude}"
-                     th:data-on-ready="on_map_ready"
-                     th:data-show-marker="${mapCenterPoint} ? true : false"
-                     th:data-zoom="14"
-                >
-                </div>
-            </div>
-            <div th:replace="~{__components/listing :: listing-carousel(${soldListings}, false)}"></div>
-        </div>
-        -->
-
         <!-- PRICE TRENDS -->
         <div class="margin-top-2x" id="price-trend-container"
              th:if="${salesMetrics} OR ${rentalMetrics} OR ${landMetrics}">
@@ -149,31 +129,8 @@
 
     <!-- CONTACT AGENT -->
     <div class="listing-contact-details">
-        <div class="listing-contact-details-inner">
-            <div class="agent-info">
-                <img th:if="${agent.user.photoTinyUrl}" th:src="${agent.user.photoTinyUrl}"/>
-                <div>
-                    <h2 th:text="${agent.user.displayName}">AGENT</h2>
-                    <div th:text="${agent.user.employer}">EMPLOYER</div>
-                </div>
-            </div>
-
-            <a class="btn btn-primary"
-               data-component-id="track"
-               data-event="MESSAGE"
-               data-product-type="AGENT"
-               id="btn-send-message"
-               rel="nofollow"
-               target="_blank"
-               th:data-product-id="${agent.id}"
-               th:data-recipient-id="${agent.user.id}"
-               th:href="${messageUrl}"
-               th:if="${messageUrl}"
-            >
-                <i class="fa-brands fa-whatsapp"></i>
-                <span th:text="#{button.contact}">CONTACT</span>
-            </a>
-        </div>
+        <div
+            th:replace="~{__components/agent :: agent-contact-sidebar(${agent.id}, ${agent.user}, ${messageUrl}, ${agent.id}, 'AGENT')}"></div>
     </div>
 </div>
 
@@ -197,46 +154,6 @@
 <div th:replace="~{__components/bootstrap :: modal}"></div>
 
 <script th:inline="javascript">
-    //const json = JSON.parse(/*[[${mapMarkersJson}]]*/ '');
-    /*
-        function on_map_ready(id, map) {
-            console.log(json);
-
-            for (var i = 0; i < json.length; i++) {
-                let item = json[i];
-                const icon = L.AwesomeMarkers.icon({
-                    icon: 'home',
-                    markerColor: item.sold ? 'gray' : '#1d7edf',
-                    prefix: 'fa'
-                })
-
-                let marker = L.marker([item.latitude, item.longitude], {icon: icon});
-                marker.on('mouseover', () => {
-                    const html = `<div class="map-listing-card" id="map-listing-card-${item.id}">
-                        <a href="${item.url}" target="_blank">
-                            <div class="flex">
-                                <div class="listing-image">
-                                    <img src="${item.heroImageUrl}" />
-                                </div>
-                                <div class="listing-details">
-                                    <b class="listing-price">${item.price}</b>
-                                    <div class="flex">
-                                       <div>${item.bedrooms}</div>
-                                       <div class="margin-left-small">${item.area}</div>
-                                    </div>
-                                    <div class="gray">${item.location}</div>
-                                    <div class="text-danger margin-top-small"><b>${item.status}</b></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>`;
-                    marker.bindPopup(html);
-                    marker.openPopup();
-                });
-                map.addLayer(marker);
-            }
-        }
-    */
     document.addEventListener(
         'DOMContentLoaded',
         function () {

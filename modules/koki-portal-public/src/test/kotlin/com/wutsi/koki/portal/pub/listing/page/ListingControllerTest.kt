@@ -178,8 +178,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
 
         assertElementPresent(".listing-status")
         assertElementNotPresent("#listing-price")
-        assertElementNotPresent(".listing-contact-details .message")
-        assertElementNotPresent(".listing-contact-details #btn-send-message")
+        assertElementPresent(".listing-contact-details #btn-send-message")
     }
 
     @Test

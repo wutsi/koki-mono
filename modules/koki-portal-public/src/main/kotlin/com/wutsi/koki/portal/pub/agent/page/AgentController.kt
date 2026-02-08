@@ -11,7 +11,10 @@ import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
+import com.wutsi.koki.portal.pub.refdata.model.LocationModel
+import com.wutsi.koki.portal.pub.refdata.service.LocationService
 import com.wutsi.koki.portal.pub.whatsapp.service.WhatsappService
+import com.wutsi.koki.refdata.dto.LocationType
 import com.wutsi.koki.sdk.URLBuilder
 import io.hypersistence.utils.common.LogUtils.LOGGER
 import org.springframework.stereotype.Controller
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam
 class AgentController(
     private val agentService: AgentService,
     private val listingService: ListingService,
+    private val locationService: LocationService,
     private val whatsapp: WhatsappService,
 ) : AbstractPageController() {
     companion object {
@@ -57,7 +61,7 @@ class AgentController(
 
         loadActiveListings("rental", ListingType.RENTAL, agent, model)
         loadActiveListings("sale", ListingType.SALE, agent, model)
-
+        loadNeighborhoods(agent, model)
         loadPriceTrendMetrics(agent, model)
         loadToast(toast, timestamp, model)
 
@@ -184,5 +188,21 @@ class AgentController(
         } catch (e: Throwable) {
             LOGGER.warn("Unable to load price trend metrics for agent: ${agent.id}", e)
         }
+    }
+
+    private fun loadNeighborhoods(agent: AgentModel, model: Model): List<LocationModel> {
+        val neighbourhoodIds = listingService.metrics(
+            sellerAgentUserIds = listOf(agent.user.id),
+            listingStatus = ListingStatus.ACTIVE,
+            dimension = ListingMetricDimension.NEIGHBORHOOD,
+        ).mapNotNull { metric -> metric.neighborhoodId }.distinct()
+
+        val neighbourhoods = locationService.search(
+            ids = neighbourhoodIds,
+            types = listOf(LocationType.NEIGHBORHOOD),
+            limit = neighbourhoodIds.size,
+        )
+        model.addAttribute("neighbourhoods", neighbourhoods)
+        return neighbourhoods
     }
 }

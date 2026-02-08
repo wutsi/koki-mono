@@ -309,6 +309,10 @@ text-nowrap {
     font-size: small;
 }
 
+#footer h2 {
+    font-size: 1.25em;
+}
+
 /* === FORMS ====== */
 textarea:read-only,
 input:read-only {

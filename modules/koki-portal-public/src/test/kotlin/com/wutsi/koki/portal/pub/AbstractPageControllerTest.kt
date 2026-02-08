@@ -471,7 +471,7 @@ abstract class AbstractPageControllerTest {
     private fun setupFileModule() {
         doReturn(
             ResponseEntity(
-                SearchFileResponse(FileFixtures.files),
+                SearchFileResponse(FileFixtures.images),
                 HttpStatus.OK,
             )
         ).whenever(rest)

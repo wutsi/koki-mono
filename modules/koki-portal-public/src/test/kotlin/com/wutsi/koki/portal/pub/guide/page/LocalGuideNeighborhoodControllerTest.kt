@@ -259,7 +259,7 @@ class LocalGuideNeighborhoodControllerTest : AbstractPageControllerTest() {
         assertEquals(tenants[0].id, event.firstValue.track.tenantId)
         assertEquals(null, event.firstValue.track.component)
         assertEquals(TrackEvent.MESSAGE, event.firstValue.track.event)
-        assertEquals(neighborhoods[0].id.toString(), event.firstValue.track.productId)
+        assertEquals(place.id.toString(), event.firstValue.track.productId)
         assertEquals(null, event.firstValue.track.value)
         assertEquals(null, event.firstValue.track.accountId)
         assertEquals(ChannelType.WEB, event.firstValue.track.channelType)

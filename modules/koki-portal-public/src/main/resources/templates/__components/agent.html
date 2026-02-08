@@ -29,5 +29,39 @@
     </a>
 </div>
 
+<div th:fragment="agent-contact-sidebar(agentId, usr, whatsappUrl, ownerId, ownerType)" th:remove="tag">
+    <div class="listing-contact-details-inner">
+        <div class="agent-info">
+            <a th:href="'/agents/' + ${agentId} + '/' + ${usr.slug}" th:name="${usr.displayName}">
+                <img th:if="${usr.photoTinyUrl}"
+                     th:src="${usr.photoTinyUrl}"
+                     th:title="${usr.displayName}"/>
+            </a>
+            <div>
+                <a th:href="'/agents/' + ${agentId} + '/' + ${usr.slug}" th:name="${usr.displayName}">
+                    <h2 th:text="${usr.displayName}">AGENT</h2>
+                    <div th:text="${usr.employer}">EMPLOYER</div>
+                </a>
+            </div>
+        </div>
+
+        <a class="btn btn-primary"
+           data-component-id="track"
+           data-event="MESSAGE"
+           id="btn-send-message"
+           rel="nofollow"
+           target="_blank"
+           th:data-product-id="${ownerId}"
+           th:data-product-type="${ownerType}"
+           th:data-recipient-id="${usr.id}"
+           th:href="${whatsappUrl}"
+           th:if="${whatsappUrl}"
+        >
+            <i class="fa-brands fa-whatsapp"></i>
+            <span th:text="#{button.contact}"> Send Message</span>
+        </a>
+    </div>
+</div>
+
 </body>
 </html>
