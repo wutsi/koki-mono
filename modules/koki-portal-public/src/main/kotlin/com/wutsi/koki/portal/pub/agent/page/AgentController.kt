@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.pub.agent.model.AgentModel
 import com.wutsi.koki.portal.pub.agent.service.AgentService
 import com.wutsi.koki.portal.pub.common.page.AbstractPageController
 import com.wutsi.koki.portal.pub.common.page.PageName
+import com.wutsi.koki.portal.pub.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.pub.listing.model.ListingModel
 import com.wutsi.koki.portal.pub.listing.service.ListingService
 import com.wutsi.koki.portal.pub.refdata.model.LocationModel
@@ -61,8 +62,8 @@ class AgentController(
 
         loadActiveListings("rental", ListingType.RENTAL, agent, model)
         loadActiveListings("sale", ListingType.SALE, agent, model)
-        loadNeighborhoods(agent, model)
-        loadPriceTrendMetrics(agent, model)
+        val metrics = loadPriceTrendMetrics(agent, model)
+        loadNeighborhoods(agent, metrics, model)
         loadToast(toast, timestamp, model)
 
         model.addAttribute("messageUrl", whatsapp.toAgentUrl(agent))
@@ -139,7 +140,7 @@ class AgentController(
         model.addAttribute("toastMessage", message)
     }
 
-    private fun loadPriceTrendMetrics(agent: AgentModel, model: Model) {
+    private fun loadPriceTrendMetrics(agent: AgentModel, model: Model): List<ListingMetricModel> {
         val userId = agent.user.id
         try {
             // Per categories
@@ -185,24 +186,35 @@ class AgentController(
                 "salesMetricsPerRoom",
                 metricsPerRoom.filter { metric -> metric.listingType == ListingType.SALE }.take(5)
             )
+            return metrics
         } catch (e: Throwable) {
             LOGGER.warn("Unable to load price trend metrics for agent: ${agent.id}", e)
+            return emptyList()
         }
     }
 
-    private fun loadNeighborhoods(agent: AgentModel, model: Model): List<LocationModel> {
-        val neighbourhoodIds = listingService.metrics(
-            sellerAgentUserIds = listOf(agent.user.id),
-            listingStatus = ListingStatus.ACTIVE,
-            dimension = ListingMetricDimension.NEIGHBORHOOD,
-        ).mapNotNull { metric -> metric.neighborhoodId }.distinct()
-
-        val neighbourhoods = locationService.search(
-            ids = neighbourhoodIds,
-            types = listOf(LocationType.NEIGHBORHOOD),
-            limit = neighbourhoodIds.size,
-        )
-        model.addAttribute("neighbourhoods", neighbourhoods)
-        return neighbourhoods
+    private fun loadNeighborhoods(
+        agent: AgentModel,
+        metrics: List<ListingMetricModel>,
+        model: Model
+    ): List<LocationModel> {
+        try {
+            val neighbourhoodIds = metrics.mapNotNull { metric -> metric.neighborhoodId }.distinct()
+            if (neighbourhoodIds.isEmpty()) {
+                return emptyList()
+            }
+            val neighbourhoods = locationService.search(
+                ids = neighbourhoodIds,
+                types = listOf(LocationType.NEIGHBORHOOD),
+                limit = neighbourhoodIds.size,
+            )
+            if (neighbourhoods.isNotEmpty()) {
+                model.addAttribute("neighbourhoods", neighbourhoods)
+            }
+            return neighbourhoods
+        } catch (ex: Throwable) {
+            LOGGER.warn("Unable to load neighborhoods for agent: ${agent.id}", ex)
+            return emptyList()
+        }
     }
 }

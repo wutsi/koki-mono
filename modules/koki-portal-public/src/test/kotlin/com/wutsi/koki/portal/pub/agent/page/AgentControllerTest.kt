@@ -97,6 +97,8 @@ class AgentControllerTest : AbstractPageControllerTest() {
         assertElementPresent("#sale-listing-container")
         assertElementPresent("#rental-listing-container")
         assertElementPresent("#price-trend-container")
+        assertElementPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
     }
 
     @Test
@@ -113,8 +115,12 @@ class AgentControllerTest : AbstractPageControllerTest() {
 
         // THEN
         assertCurrentPageIs(PageName.AGENT)
-        assertElementNotPresent("#metrics-container")
+        assertElementNotPresent("#metric-container")
+        assertElementPresent("#sale-listing-container")
+        assertElementPresent("#rental-listing-container")
         assertElementNotPresent("#price-trend-container")
+        assertElementNotPresent("#neighbourhood-container")
+        assertElementPresent("#btn-send-message")
     }
 
     @Test
