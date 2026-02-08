@@ -34,9 +34,6 @@
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="prefetch"
-          th:href="${page.assetUrl} + '/js/koki-all-' + ${page.assetBundleVersion} + '.min.js'"
-          th:if="${page.assetBundleVersion}"/>
     <script th:if="${page.assetBundleVersion}"
             th:src="${page.assetUrl} + '/js/koki-all-' + ${page.assetBundleVersion} + '.min.js'"></script>
 
@@ -55,17 +52,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet"/>
 
     <link as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="preload">
-    <link as="font" crossorigin
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/webfonts/fa-brand-400.woff2"
-          rel="preload" type="font/woff2">
-    <link as="font" crossorigin
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/webfonts/fa-brand-900.woff2"
-          rel="preload" type="font/woff2">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
 
-    <link rel="prefetch"
-          th:href="${page.assetUrl} + '/css/koki-all-' + ${page.assetBundleVersion} + '.min.css'"
-          th:if="${page.assetBundleVersion}"/>
     <link rel="stylesheet"
           th:href="${page.assetUrl} + '/css/koki-all-' + ${page.assetBundleVersion} + '.min.css'"
           th:if="${page.assetBundleVersion}"/>
