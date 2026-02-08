@@ -54,14 +54,19 @@
             th:src="${page.assetUrl} + '/js/widgets/koki-select2.js'"></script>
     <script defer th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-track.js'"></script>
 
+    <link as="style" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" rel="preload">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet"/>
 
     <link as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="preload">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
 
+    <link as="style" rel="preload"
+          th:href="${page.assetUrl} + '/css/koki-all-' + ${page.assetBundleVersion} + '.min.css'"
+          th:if="${page.assetBundleVersion}"/>
     <link rel="stylesheet"
           th:href="${page.assetUrl} + '/css/koki-all-' + ${page.assetBundleVersion} + '.min.css'"
           th:if="${page.assetBundleVersion}"/>
+
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/koki.css'" th:if="!${page.assetBundleVersion}"/>
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/agents.css'" th:if="!${page.assetBundleVersion}"/>
     <link rel="stylesheet" th:href="${page.assetUrl} + '/css/listings.css'" th:if="!${page.assetBundleVersion}"/>
