@@ -10,15 +10,15 @@
     <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet"
           th:if="!${page.mobileDevice}">
 
-    <script defer src="hhttps://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
             th:if="${listing.geoLocation}"></script>
-    <link href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" rel="stylesheet"
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" rel="stylesheet"
           th:if="${listing.geoLocation}"/>
-    
+
     <script defer
-            src="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.min.js"
+            src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"
             th:if="${listing.geoLocation}"></script>
-    <link href="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.min.css"
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.css"
           rel="stylesheet"
           th:if="${listing.geoLocation}"/>
 </head>
