@@ -3,6 +3,22 @@
 
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
+
+    <script defer
+            src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/intlTelInputWithUtils.min.js"
+            th:if="!${page.mobileDevice}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/css/intlTelInput.css" rel="stylesheet"
+          th:if="!${page.mobileDevice}">
+
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" th:if="${listing.geoLocation}"></script>
+    <script defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"
+            th:if="${listing.geoLocation}"></script>
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" th:if="${listing.geoLocation}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+          rel="stylesheet"
+          th:if="${listing.geoLocation}"/>
+
 </head>
 
 <body>

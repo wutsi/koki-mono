@@ -9,6 +9,7 @@ import com.wutsi.koki.portal.pub.tenant.model.TenantModel
 import com.wutsi.koki.portal.pub.tenant.service.CurrentTenantHolder
 import com.wutsi.koki.portal.pub.user.model.UserModel
 import com.wutsi.koki.portal.pub.user.service.CurrentUserHolder
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
@@ -19,6 +20,13 @@ import tools.jackson.databind.json.JsonMapper
 import java.util.Locale
 
 abstract class AbstractPageController {
+    companion object {
+        private val MOBILE_REGEX = Regex(
+            "Mobile|Android|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)",
+            RegexOption.IGNORE_CASE
+        )
+    }
+
     @Autowired
     protected lateinit var jsonMapper: JsonMapper
 
@@ -36,6 +44,9 @@ abstract class AbstractPageController {
 
     @Autowired
     protected lateinit var messages: MessageSource
+
+    @Autowired
+    protected lateinit var httpRequest: HttpServletRequest
 
     /**
      * @see com.wutsi.koki.portal.pub.config.KokiPropertiesConfiguration
@@ -71,7 +82,12 @@ abstract class AbstractPageController {
             language = LocaleContextHolder.getLocale().language,
             updatedTime = updatedTime,
             assetBundleVersion = assetBundleVersion.ifEmpty { null },
+            mobileDevice = isMobile(httpRequest.getHeader("User-Agent"))
         )
+    }
+
+    private fun isMobile(userAgent: String?): Boolean {
+        return userAgent != null && MOBILE_REGEX.containsMatchIn(userAgent)
     }
 
     protected fun toErrorResponse(ex: HttpClientErrorException): ErrorResponse {
