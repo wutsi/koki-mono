@@ -34,20 +34,25 @@
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 
-    <script th:if="${page.assetBundleVersion}"
+    <script defer th:if="${page.assetBundleVersion}"
             th:src="${page.assetUrl} + '/js/koki-all-' + ${page.assetBundleVersion} + '.min.js'"></script>
 
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/koki.js'"></script>
-    <script th:if="!${page.assetBundleVersion}"
+    <script defer th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/koki.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
             th:src="${page.assetUrl} + '/js/widgets/koki-ajax-fragment.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-intl-tel.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-map.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-load-more.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-modal.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-modal-button.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-share-button.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-select2.js'"></script>
-    <script th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-track.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
+            th:src="${page.assetUrl} + '/js/widgets/koki-intl-tel.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-map.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
+            th:src="${page.assetUrl} + '/js/widgets/koki-load-more.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-modal.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
+            th:src="${page.assetUrl} + '/js/widgets/koki-modal-button.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
+            th:src="${page.assetUrl} + '/js/widgets/koki-share-button.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}"
+            th:src="${page.assetUrl} + '/js/widgets/koki-select2.js'"></script>
+    <script defer th:if="!${page.assetBundleVersion}" th:src="${page.assetUrl} + '/js/widgets/koki-track.js'"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet"/>
 
