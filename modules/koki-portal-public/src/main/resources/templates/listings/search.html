@@ -2,6 +2,11 @@
 <html th:lang="${page.language}" xmlns:th="https://www.thymeleaf.org">
 <head>
     <div th:replace="~{__components/layout :: head}"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script th:src="${page.assetUrl} + '/js/widgets/koki-select2.js'"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
 </head>
 
 <body>
