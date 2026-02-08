@@ -122,6 +122,7 @@ jobs:
                     aws s3 sync \
                       --acl public-read \
                       --region us-east-1 \
+                      --cache-control "max-age=315360000, public, immutable"
                       modules/koki-portal-public/target/classes/public/ s3://com-wutsi-koki-test/static/koki-portal-public
 
             -   name: Health check

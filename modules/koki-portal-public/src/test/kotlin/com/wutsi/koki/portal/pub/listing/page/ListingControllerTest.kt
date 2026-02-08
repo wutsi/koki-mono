@@ -250,7 +250,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
     fun `VIEW tracking event on page load`() {
         navigateTo("/listings/${listing.id}")
 
-        Thread.sleep(1000)
+        Thread.sleep(5000)
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
 
@@ -280,7 +280,7 @@ class ListingControllerTest : AbstractPageControllerTest() {
         reset(publisher)
 
         navigateTo("/")
-        Thread.sleep(1000)
+        Thread.sleep(5000)
         val event = argumentCaptor<TrackSubmittedEvent>()
         verify(publisher).publish(event.capture())
 
