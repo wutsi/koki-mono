@@ -23,7 +23,6 @@ class KokiIntlTelWidget {
                             .catch(() => callback("us"));
                     },
                     hiddenInput: () => ({phone: name + "Full", country: name + "Country"}),
-                    loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js")
                 });
 
                 count++;

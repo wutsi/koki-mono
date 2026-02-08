@@ -43,6 +43,8 @@
     <properties>
         <jacoco.threshold.line>0.86</jacoco.threshold.line>
         <jacoco.threshold.class>0.86</jacoco.threshold.class>
+
+        <koki.asset.version>1</koki.asset.version>
     </properties>
 
     <dependencies>
@@ -160,6 +162,71 @@
                         <goals>
                             <goal>build-info</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Minify -->
+            <plugin>
+                <groupId>com.samaxes.maven</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>${maven.minify-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-minify</id>
+                        <configuration>
+                            <jsEngine>CLOSURE</jsEngine>
+                            <webappSourceDir>${project.basedir}/src/main/resources</webappSourceDir>
+                            <cssSourceDir>public/css</cssSourceDir>
+                            <jsSourceDir>public/js</jsSourceDir>
+                            <cssSourceIncludes>
+                                <cssSourceInclude>*.css</cssSourceInclude>
+                            </cssSourceIncludes>
+                            <jsSourceIncludes>
+                                <jsSourceInclude>**/*.js</jsSourceInclude>
+                            </jsSourceIncludes>
+
+                            <webappTargetDir>${project.build.directory}/classes</webappTargetDir>
+                            <cssTargetDir>public/css</cssTargetDir>
+                            <jsTargetDir>public/js</jsTargetDir>
+                            <jsFinalFile>koki-all-${koki.asset.version}.js</jsFinalFile>
+                            <cssFinalFile>koki-all-${koki.asset.version}.css</cssFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-utils</artifactId>
+                        <version>${plexus-utils.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- Generate asset version file -->
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <version>${maven-exec-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-asset-version</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>/bin/echo</executable>
+                            <arguments>
+                                <argument>koki.asset.version=${koki.asset.version}</argument>
+                            </arguments>
+                            <outputFile>
+                                ${project.build.directory}/classes/koki.properties
+                            </outputFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

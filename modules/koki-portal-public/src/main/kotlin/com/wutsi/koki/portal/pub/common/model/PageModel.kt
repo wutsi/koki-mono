@@ -13,4 +13,5 @@ data class PageModel(
     val url: String? = null,
     val hitId: String = UUID.randomUUID().toString(),
     val updatedTime: Long? = null,
+    val assetBundleVersion: String? = null,
 )

@@ -37,6 +37,12 @@ abstract class AbstractPageController {
     @Autowired
     protected lateinit var messages: MessageSource
 
+    /**
+     * @see com.wutsi.koki.portal.pub.config.KokiPropertiesConfiguration
+     */
+    @Value("\${koki.asset.version:}")
+    protected lateinit var assetBundleVersion: String
+
     @ModelAttribute("tenant")
     fun getTenant(): TenantModel {
         return tenantHolder.get()
@@ -64,6 +70,7 @@ abstract class AbstractPageController {
             assetUrl = assetUrl,
             language = LocaleContextHolder.getLocale().language,
             updatedTime = updatedTime,
+            assetBundleVersion = assetBundleVersion.ifEmpty { null },
         )
     }
 
