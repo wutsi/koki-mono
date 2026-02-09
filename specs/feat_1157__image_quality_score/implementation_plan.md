@@ -570,7 +570,7 @@ Use this checklist to track implementation progress:
 
 ### Database Layer
 
-- [ ] Create migration `V1_61__listing_average_image_quality_score.sql`
+- [x] Create migration `V1_61__listing_average_image_quality_score.sql`
 - [ ] Verify migration runs successfully
 
 ### Domain Layer
