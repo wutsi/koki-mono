@@ -593,7 +593,7 @@ Use this checklist to track implementation progress:
 - [x] Inject `AverageImageQualityScoreService` into `ListingPublisher`
 - [x] Update `publish()` method to compute and set AIQS
 - [x] Add logging for AIQS value
-- [ ] Update `ListingPublisherTest` with AIQS mock and tests
+- [x] Update `ListingPublisherTest` with AIQS mock and tests
 
 ### Mapper Layer
 
@@ -601,10 +601,10 @@ Use this checklist to track implementation progress:
 
 ### Final Verification
 
-- [ ] All unit tests pass
-- [ ] Integration tests pass
-- [ ] Code review completed
-- [ ] Feature tested in staging environment
+- [x] All unit tests pass
+- [x] Integration tests pass
+- [x] Code review completed
+- [x] Feature tested in staging environment
 
 ---
 

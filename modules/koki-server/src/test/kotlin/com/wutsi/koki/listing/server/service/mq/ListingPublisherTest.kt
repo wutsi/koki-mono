@@ -89,6 +89,8 @@ class ListingPublisherTest {
             anyOrNull(), anyOrNull(), anyOrNull()
         )
         doReturn(File("/foo/bar")).whenever(fileService).download(any())
+
+        doReturn(3.25).whenever(averageImageQualityScoreService).compute(any())
     }
 
     @AfterEach
@@ -113,6 +115,9 @@ class ListingPublisherTest {
         assertEquals(result.titleFr, listingArg.firstValue.titleFr)
         assertEquals(result.summaryFr, listingArg.firstValue.summaryFr)
         assertEquals(result.descriptionFr, listingArg.firstValue.descriptionFr)
+        assertEquals(3.25, listingArg.firstValue.averageImageQualityScore)
+
+        verify(averageImageQualityScoreService).compute(images)
     }
 
     @Test
