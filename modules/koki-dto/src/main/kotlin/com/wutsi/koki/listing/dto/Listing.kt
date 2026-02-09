@@ -91,4 +91,5 @@ data class Listing(
     val publicUrl: String? = null,
     val publicUrlFr: String? = null,
     val qrCodeUrl: String? = null,
+    val averageImageQualityScore: Double? = null,
 )

@@ -579,7 +579,7 @@ Use this checklist to track implementation progress:
 
 ### DTO Layer
 
-- [ ] Add `averageImageQualityScore` field to `Listing` DTO
+- [x] Add `averageImageQualityScore` field to `Listing` DTO
 
 ### Service Layer
 
