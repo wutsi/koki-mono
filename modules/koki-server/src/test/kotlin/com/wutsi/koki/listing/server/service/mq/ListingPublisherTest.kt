@@ -10,6 +10,7 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
 import com.wutsi.koki.listing.server.service.ListingPublisher
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
@@ -32,6 +33,7 @@ class ListingPublisherTest {
     private val fileService = mock<FileService>()
     private val listingService = mock<ListingService>()
     private val locationService = mock<LocationService>()
+    private val averageImageQualityScoreService = mock<AverageImageQualityScoreService>()
     private val jsonMapper = JsonMapper()
     private val logger = DefaultKVLogger()
     private val handler = ListingPublisher(
@@ -40,7 +42,8 @@ class ListingPublisherTest {
         fileService = fileService,
         jsonMapper = jsonMapper,
         logger = logger,
-        locationService = locationService
+        locationService = locationService,
+        averageImageQualityScoreService = averageImageQualityScoreService,
     )
 
     private val tenantId = 1L

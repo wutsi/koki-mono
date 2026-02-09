@@ -571,11 +571,11 @@ Use this checklist to track implementation progress:
 ### Database Layer
 
 - [x] Create migration `V1_61__listing_average_image_quality_score.sql`
-- [ ] Verify migration runs successfully
+- [x] Verify migration runs successfully
 
 ### Domain Layer
 
-- [ ] Add `averageImageQualityScore` field to `ListingEntity`
+- [x] Add `averageImageQualityScore` field to `ListingEntity`
 
 ### DTO Layer
 
@@ -583,21 +583,21 @@ Use this checklist to track implementation progress:
 
 ### Service Layer
 
-- [ ] Create `AverageImageQualityScoreService` class
-- [ ] Implement `compute()` method with proper rounding
-- [ ] Implement `getScore()` helper method
-- [ ] Create unit tests for `AverageImageQualityScoreService`
+- [x] Create `AverageImageQualityScoreService` class
+- [x] Implement `compute()` method with proper rounding
+- [x] Implement `getScore()` helper method
+- [x] Create unit tests for `AverageImageQualityScoreService`
 
 ### Publication Layer
 
-- [ ] Inject `AverageImageQualityScoreService` into `ListingPublisher`
-- [ ] Update `publish()` method to compute and set AIQS
-- [ ] Add logging for AIQS value
+- [x] Inject `AverageImageQualityScoreService` into `ListingPublisher`
+- [x] Update `publish()` method to compute and set AIQS
+- [x] Add logging for AIQS value
 - [ ] Update `ListingPublisherTest` with AIQS mock and tests
 
 ### Mapper Layer
 
-- [ ] Update `ListingMapper.toListing()` to include `averageImageQualityScore`
+- [x] Update `ListingMapper.toListing()` to include `averageImageQualityScore`
 
 ### Final Verification
 
