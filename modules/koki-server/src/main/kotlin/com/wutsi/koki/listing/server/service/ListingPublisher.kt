@@ -23,7 +23,8 @@ class ListingPublisher(
     private val fileService: FileService,
     private val jsonMapper: JsonMapper,
     private val logger: KVLogger,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val averageImageQualityScoreService: AverageImageQualityScoreService,
 ) {
     @Transactional
     fun publish(listingId: Long, tenantId: Long): ListingEntity? {
@@ -43,6 +44,12 @@ class ListingPublisher(
             type = FileType.IMAGE,
             limit = 100,
         )
+
+        // Compute Average Image Quality Score
+        val aiqs = averageImageQualityScoreService.compute(images)
+        listing.averageImageQualityScore = aiqs
+        logger.add("average_image_quality_score", aiqs)
+
         val city = listing.cityId?.let { id -> locationService.get(id) }
         val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }
         val agent = agentFactory.createListingContentGenerator(listing, images, city, neighbourhood)
