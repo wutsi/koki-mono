@@ -536,34 +536,34 @@ fun `publish - with no images returns zero AIQS`() {
 
 ## 9. Test Cases Summary
 
-| Test Case ID | Description                                  | Input                                         | Expected Output |
-|--------------|----------------------------------------------|-----------------------------------------------|-----------------|
-| TC01         | Empty image list                             | `[]`                                          | `0.0`           |
-| TC02         | Single HIGH quality APPROVED image           | `[HIGH/APPROVED]`                             | `4.0`           |
-| TC03         | Single UNKNOWN quality APPROVED image        | `[UNKNOWN/APPROVED]`                          | `0.0`           |
-| TC04         | Single null quality APPROVED image           | `[null/APPROVED]`                             | `0.0`           |
-| TC05         | Mixed qualities APPROVED (HIGH, MEDIUM, LOW) | `[HIGH, MEDIUM, LOW]/APPROVED`                | `3.0`           |
-| TC06         | All image qualities APPROVED                 | `[HIGH, MEDIUM, LOW, POOR]/APPROVED`          | `2.5`           |
-| TC07         | Rounding test (2.666... → 2.67)              | `[HIGH, LOW, LOW]/APPROVED`                   | `2.67`          |
-| TC08         | All POOR quality APPROVED images             | `[POOR, POOR, POOR]/APPROVED`                 | `1.0`           |
-| TC09         | All HIGH quality APPROVED images             | `[HIGH, HIGH, HIGH]/APPROVED`                 | `4.0`           |
-| TC10         | All UNKNOWN quality APPROVED images          | `[UNKNOWN, UNKNOWN]/APPROVED`                 | `0.0`           |
-| TC11         | Mixed with null and UNKNOWN APPROVED         | `[null, UNKNOWN, HIGH]/APPROVED`              | `1.33`          |
-| TC12         | Ignores REJECTED images                      | `[HIGH/APPROVED, MEDIUM/REJECTED]`            | `4.0`           |
-| TC13         | Ignores PENDING images                       | `[LOW/APPROVED, HIGH/PENDING]`                | `2.0`           |
-| TC14         | Ignores UNKNOWN status images                | `[MEDIUM/APPROVED, POOR/UNKNOWN_STATUS]`      | `3.0`           |
-| TC15         | Returns 0 when all images are REJECTED       | `[HIGH/REJECTED, HIGH/REJECTED]`              | `0.0`           |
-| TC16         | Mixed statuses only counts APPROVED          | `[HIGH, LOW]/APPROVED + others/REJECTED,etc.` | `3.0`           |
-| TC17         | getScore - UNKNOWN                           | `UNKNOWN`                                     | `0`             |
-| TC18         | getScore - POOR                              | `POOR`                                        | `1`             |
-| TC19         | getScore - LOW                               | `LOW`                                         | `2`             |
-| TC20         | getScore - MEDIUM                            | `MEDIUM`                                      | `3`             |
-| TC21         | getScore - HIGH                              | `HIGH`                                        | `4`             |
-| TC22         | getScore - null                              | `null`                                        | `0`             |
-| TC23         | Integration - publish computes AIQS          | Listing with images                           | AIQS is saved   |
-| TC24         | Integration - publish with no images         | Listing without images                        | AIQS = 0.0      |
-| TC25         | Batch endpoint - computes AIQS for all listings | POST /v1/files/aiqs                        | 202 Accepted    |
-| TC26         | Batch endpoint - updates listings with AIQS  | Listings with approved images                 | All AIQS updated|
+| Test Case ID | Description                                     | Input                                         | Expected Output  |
+|--------------|-------------------------------------------------|-----------------------------------------------|------------------|
+| TC01         | Empty image list                                | `[]`                                          | `0.0`            |
+| TC02         | Single HIGH quality APPROVED image              | `[HIGH/APPROVED]`                             | `4.0`            |
+| TC03         | Single UNKNOWN quality APPROVED image           | `[UNKNOWN/APPROVED]`                          | `0.0`            |
+| TC04         | Single null quality APPROVED image              | `[null/APPROVED]`                             | `0.0`            |
+| TC05         | Mixed qualities APPROVED (HIGH, MEDIUM, LOW)    | `[HIGH, MEDIUM, LOW]/APPROVED`                | `3.0`            |
+| TC06         | All image qualities APPROVED                    | `[HIGH, MEDIUM, LOW, POOR]/APPROVED`          | `2.5`            |
+| TC07         | Rounding test (2.666... → 2.67)                 | `[HIGH, LOW, LOW]/APPROVED`                   | `2.67`           |
+| TC08         | All POOR quality APPROVED images                | `[POOR, POOR, POOR]/APPROVED`                 | `1.0`            |
+| TC09         | All HIGH quality APPROVED images                | `[HIGH, HIGH, HIGH]/APPROVED`                 | `4.0`            |
+| TC10         | All UNKNOWN quality APPROVED images             | `[UNKNOWN, UNKNOWN]/APPROVED`                 | `0.0`            |
+| TC11         | Mixed with null and UNKNOWN APPROVED            | `[null, UNKNOWN, HIGH]/APPROVED`              | `1.33`           |
+| TC12         | Ignores REJECTED images                         | `[HIGH/APPROVED, MEDIUM/REJECTED]`            | `4.0`            |
+| TC13         | Ignores PENDING images                          | `[LOW/APPROVED, HIGH/PENDING]`                | `2.0`            |
+| TC14         | Ignores UNKNOWN status images                   | `[MEDIUM/APPROVED, POOR/UNKNOWN_STATUS]`      | `3.0`            |
+| TC15         | Returns 0 when all images are REJECTED          | `[HIGH/REJECTED, HIGH/REJECTED]`              | `0.0`            |
+| TC16         | Mixed statuses only counts APPROVED             | `[HIGH, LOW]/APPROVED + others/REJECTED,etc.` | `3.0`            |
+| TC17         | getScore - UNKNOWN                              | `UNKNOWN`                                     | `0`              |
+| TC18         | getScore - POOR                                 | `POOR`                                        | `1`              |
+| TC19         | getScore - LOW                                  | `LOW`                                         | `2`              |
+| TC20         | getScore - MEDIUM                               | `MEDIUM`                                      | `3`              |
+| TC21         | getScore - HIGH                                 | `HIGH`                                        | `4`              |
+| TC22         | getScore - null                                 | `null`                                        | `0`              |
+| TC23         | Integration - publish computes AIQS             | Listing with images                           | AIQS is saved    |
+| TC24         | Integration - publish with no images            | Listing without images                        | AIQS = 0.0       |
+| TC25         | Batch endpoint - computes AIQS for all listings | POST /v1/listings/aiqs                        | 202 Accepted     |
+| TC26         | Batch endpoint - updates listings with AIQS     | Listings with approved images                 | All AIQS updated |
 
 ---
 
@@ -574,67 +574,44 @@ fun `publish - with no images returns zero AIQS`() {
 Create an endpoint to asynchronously compute the AIQS for all active listings stored in the database. This is useful for
 backfilling AIQS values for existing listings that were published before the AIQS feature was implemented.
 
+The endpoint uses Spring's `@Async` annotation to execute the computation in a separate thread, allowing the endpoint
+to return immediately with a `202 Accepted` response.
+
 ### 10.2 Endpoint Specification
 
-| Property     | Value                                                    |
-|--------------|----------------------------------------------------------|
-| Method       | `POST`                                                   |
-| Path         | `/v1/files/aiqs`                                         |
-| Request Body | None                                                     |
-| Response     | `202 Accepted` (processing happens asynchronously)       |
-| Auth         | Required (admin only)                                    |
+| Property     | Value                                              |
+|--------------|----------------------------------------------------|
+| Method       | `POST`                                             |
+| Path         | `/v1/listings/aiqs`                                |
+| Request Body | None                                               |
+| Response     | `202 Accepted` (processing happens asynchronously) |
+| Auth         | Required (admin only)                              |
 
-### 10.3 Implementation Details
+### 10.3 Async Service
 
-**File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/file/server/endpoint/FileEndpoints.kt`
+Create a service that performs the batch AIQS computation asynchronously using Spring's `@Async` annotation.
 
-```kotlin
-@PostMapping("/aiqs")
-fun computeAllAiqs(
-    @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
-): ResponseEntity<Void> {
-    publisher.publish(ComputeAllAiqsEvent(tenantId = tenantId))
-    return ResponseEntity.accepted().build()
-}
-```
-
-### 10.4 Event and Handler
-
-**Event File:** `modules/koki-dto/src/main/kotlin/com/wutsi/koki/file/dto/event/ComputeAllAiqsEvent.kt`
+**File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/listing/server/service/AiqsBatchService.kt`
 
 ```kotlin
-package com.wutsi.koki.file.dto.event
-
-data class ComputeAllAiqsEvent(
-    val tenantId: Long = -1,
-)
-```
-
-**Handler File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/file/server/service/mq/ComputeAllAiqsEventHandler.kt`
-
-```kotlin
-package com.wutsi.koki.file.server.service.mq
+package com.wutsi.koki.listing.server.service
 
 import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.file.dto.event.ComputeAllAiqsEvent
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
-import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
-import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.KVLogger
-import com.wutsi.koki.platform.mq.EventHandler
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
 @Service
-class ComputeAllAiqsEventHandler(
+class AiqsBatchService(
     private val listingService: ListingService,
     private val fileService: FileService,
     private val averageImageQualityScoreService: AverageImageQualityScoreService,
     private val logger: KVLogger,
-) : EventHandler<ComputeAllAiqsEvent> {
-
+) {
     companion object {
         private const val BATCH_SIZE = 100
         private val VALID_STATUSES = listOf(
@@ -646,57 +623,92 @@ class ComputeAllAiqsEventHandler(
         )
     }
 
-    override fun handle(event: ComputeAllAiqsEvent) {
+    @Async
+    fun computeAll(tenantId: Long) {
         var offset = 0
         var totalProcessed = 0
         var totalUpdated = 0
 
-        do {
-            val listings = listingService.search(
-                tenantId = event.tenantId,
-                statuses = VALID_STATUSES,
-                limit = BATCH_SIZE,
-                offset = offset,
-            )
-
-            listings.forEach { listing ->
-                val images = fileService.search(
-                    tenantId = event.tenantId,
-                    ownerId = listing.id,
-                    ownerType = ObjectType.LISTING,
-                    status = FileStatus.APPROVED,
-                    type = FileType.IMAGE,
-                    limit = 100,
+        try {
+            do {
+                val listings = listingService.search(
+                    tenantId = tenantId,
+                    statuses = VALID_STATUSES,
+                    limit = BATCH_SIZE,
+                    offset = offset,
                 )
 
-                val aiqs = averageImageQualityScoreService.compute(images)
-                if (listing.averageImageQualityScore != aiqs) {
-                    listing.averageImageQualityScore = aiqs
-                    listingService.save(listing)
-                    totalUpdated++
+                listings.forEach { listing ->
+                    val images = fileService.search(
+                        tenantId = tenantId,
+                        ownerId = listing.id,
+                        ownerType = ObjectType.LISTING,
+                        status = FileStatus.APPROVED,
+                        type = FileType.IMAGE,
+                        limit = 100,
+                    )
+
+                    val aiqs = averageImageQualityScoreService.compute(images)
+                    if (listing.averageImageQualityScore != aiqs) {
+                        listing.averageImageQualityScore = aiqs
+                        listingService.save(listing)
+                        totalUpdated++
+                    }
+                    totalProcessed++
                 }
-                totalProcessed++
-            }
 
-            offset += BATCH_SIZE
-        } while (listings.size == BATCH_SIZE)
+                offset += BATCH_SIZE
+            } while (listings.size == BATCH_SIZE)
 
-        logger.add("total_processed", totalProcessed)
-        logger.add("total_updated", totalUpdated)
+            logger.add("aiqs_batch_total_processed", totalProcessed)
+            logger.add("aiqs_batch_total_updated", totalUpdated)
+            logger.add("aiqs_batch_success", true)
+        } catch (ex: Exception) {
+            logger.add("aiqs_batch_success", false)
+            logger.add("aiqs_batch_error", ex.message)
+            throw ex
+        }
     }
 }
 ```
 
-### 10.5 Event Handler Registration
+### 10.4 Endpoint Implementation
 
-Register the event handler in the MQ configuration to listen for `ComputeAllAiqsEvent`.
-
-### 10.6 Test Cases for Batch Endpoint
-
-**File:** `modules/koki-server/src/test/kotlin/com/wutsi/koki/file/server/service/mq/ComputeAllAiqsEventHandlerTest.kt`
+**File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/listing/server/endpoint/ListingEndpoints.kt`
 
 ```kotlin
-package com.wutsi.koki.file.server.service.mq
+// Add to constructor
+private val aiqsBatchService: AiqsBatchService,
+
+// Add endpoint
+@PostMapping("/aiqs")
+fun computeAllAiqs(
+    @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+): ResponseEntity<Void> {
+    aiqsBatchService.computeAll(tenantId)
+    return ResponseEntity.accepted().build()
+}
+```
+
+### 10.5 Async Configuration
+
+Ensure that `@EnableAsync` is present in the Spring configuration. This is typically already configured in the
+application.
+
+**File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/Application.kt` (if not already present)
+
+```kotlin
+@SpringBootApplication
+@EnableAsync
+class Application
+```
+
+### 10.6 Test Cases for Batch Service
+
+**File:** `modules/koki-server/src/test/kotlin/com/wutsi/koki/listing/server/service/AiqsBatchServiceTest.kt`
+
+```kotlin
+package com.wutsi.koki.listing.server.service
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
@@ -704,26 +716,23 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.wutsi.koki.file.dto.event.ComputeAllAiqsEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
-import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 
-class ComputeAllAiqsEventHandlerTest {
+class AiqsBatchServiceTest {
 
     private val listingService = mock<ListingService>()
     private val fileService = mock<FileService>()
     private val averageImageQualityScoreService = mock<AverageImageQualityScoreService>()
     private val logger = DefaultKVLogger()
 
-    private val handler = ComputeAllAiqsEventHandler(
+    private val service = AiqsBatchService(
         listingService = listingService,
         fileService = fileService,
         averageImageQualityScoreService = averageImageQualityScoreService,
@@ -741,7 +750,7 @@ class ComputeAllAiqsEventHandlerTest {
     }
 
     @Test
-    fun `handle - updates listings with new AIQS`() {
+    fun `computeAll - updates listings with new AIQS`() {
         val listing = ListingEntity(
             id = 100L,
             tenantId = tenantId,
@@ -761,13 +770,13 @@ class ComputeAllAiqsEventHandlerTest {
         )
         doReturn(3.5).whenever(averageImageQualityScoreService).compute(any())
 
-        handler.handle(ComputeAllAiqsEvent(tenantId = tenantId))
+        service.computeAll(tenantId)
 
         verify(listingService).save(any(), anyOrNull())
     }
 
     @Test
-    fun `handle - skips listings with unchanged AIQS`() {
+    fun `computeAll - skips listings with unchanged AIQS`() {
         val listing = ListingEntity(
             id = 100L,
             tenantId = tenantId,
@@ -786,9 +795,45 @@ class ComputeAllAiqsEventHandlerTest {
         )
         doReturn(3.5).whenever(averageImageQualityScoreService).compute(any())
 
-        handler.handle(ComputeAllAiqsEvent(tenantId = tenantId))
+        service.computeAll(tenantId)
 
         verify(listingService, never()).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `computeAll - processes multiple batches`() {
+        val listings1 = (1..100).map { i ->
+            ListingEntity(
+                id = i.toLong(),
+                tenantId = tenantId,
+                status = ListingStatus.ACTIVE,
+                averageImageQualityScore = null
+            )
+        }
+        val listings2 = (101..150).map { i ->
+            ListingEntity(
+                id = i.toLong(),
+                tenantId = tenantId,
+                status = ListingStatus.ACTIVE,
+                averageImageQualityScore = null
+            )
+        }
+
+        doReturn(listings1).doReturn(listings2).doReturn(emptyList<ListingEntity>())
+            .whenever(listingService).search(
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+            )
+        doReturn(emptyList<FileEntity>()).whenever(fileService).search(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
+        doReturn(2.5).whenever(averageImageQualityScoreService).compute(any())
+
+        service.computeAll(tenantId)
+
+        // Verify save was called for all 150 listings
+        verify(listingService, times(150)).save(any(), anyOrNull())
     }
 }
 ```
@@ -832,12 +877,11 @@ Use this checklist to track implementation progress:
 
 ### Endpoint Layer (Batch AIQS Computation)
 
-- [ ] Create `ComputeAllAiqsEvent` event class
-- [ ] Create `ComputeAllAiqsEventHandler` handler class
-- [ ] Add `POST /v1/files/aiqs` endpoint to `FileEndpoints`
-- [ ] Register event handler in MQ configuration
-- [ ] Create unit tests for `ComputeAllAiqsEventHandler`
-- [ ] Create integration test for the endpoint
+- [x] Create `AiqsBatchService` class with `@Async` annotation
+- [x] Add `POST /v1/listings/aiqs` endpoint to `ListingEndpoints`
+- [x] Ensure `@EnableAsync` is configured in the application
+- [x] Create unit tests for `AiqsBatchService`
+- [x] Create integration test for the endpoint
 
 ### Final Verification
 
@@ -850,20 +894,20 @@ Use this checklist to track implementation progress:
 
 ## 12. File Changes Summary
 
-| File                                             | Action | Description                              |
-|--------------------------------------------------|--------|------------------------------------------|
-| `V1_61__listing_average_image_quality_score.sql` | Create | Database migration                       |
-| `ListingEntity.kt`                               | Modify | Add `averageImageQualityScore` field     |
-| `Listing.kt` (DTO)                               | Modify | Add `averageImageQualityScore` field     |
-| `AverageImageQualityScoreService.kt`             | Create | Service for AIQS computation             |
-| `ListingPublisher.kt`                            | Modify | Integrate AIQS computation               |
-| `ListingMapper.kt`                               | Modify | Map AIQS to DTO                          |
-| `AverageImageQualityScoreServiceTest.kt`         | Create | Unit tests for service                   |
-| `ListingPublisherTest.kt`                        | Modify | Add tests for AIQS integration           |
-| `ComputeAllAiqsEvent.kt`                         | Create | Event for batch AIQS computation         |
-| `ComputeAllAiqsEventHandler.kt`                  | Create | Handler for batch AIQS processing        |
-| `FileEndpoints.kt`                               | Modify | Add POST /v1/files/aiqs endpoint         |
-| `ComputeAllAiqsEventHandlerTest.kt`              | Create | Unit tests for batch handler             |
+| File                                             | Action | Description                          |
+|--------------------------------------------------|--------|--------------------------------------|
+| `V1_61__listing_average_image_quality_score.sql` | Create | Database migration                   |
+| `ListingEntity.kt`                               | Modify | Add `averageImageQualityScore` field |
+| `Listing.kt` (DTO)                               | Modify | Add `averageImageQualityScore` field |
+| `AverageImageQualityScoreService.kt`             | Create | Service for AIQS computation         |
+| `ListingPublisher.kt`                            | Modify | Integrate AIQS computation           |
+| `ListingMapper.kt`                               | Modify | Map AIQS to DTO                      |
+| `AverageImageQualityScoreServiceTest.kt`         | Create | Unit tests for service               |
+| `ListingPublisherTest.kt`                        | Modify | Add tests for AIQS integration       |
+| `AiqsBatchService.kt`                            | Create | Async service for batch AIQS         |
+| `AiqsBatchServiceTest.kt`                        | Create | Unit tests for batch service         |
+| `ListingEndpoints.kt`                            | Modify | Add POST /v1/listings/aiqs endpoint  |
+| `ComputeAllAiqsEndpointTest.kt`                  | Create | Integration test for batch endpoint  |
 
 ---
 
