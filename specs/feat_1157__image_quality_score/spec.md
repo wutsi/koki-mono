@@ -2,6 +2,7 @@
 
 We want to build a feature that compute the Average Image Quality Score (AIQS) for each listing.
 This score evaluates the quality of the images uploaded by the users to a listing.
+We also want to update all listing by computing their AIQS score
 
 # Core Feature and Logic
 
@@ -31,9 +32,12 @@ We can compute the Image Quality Score (IQS) of each image as follows:
 - The AIQS should be returned as part of the listing details DTO.
 - Create a separate service that computes the AIQS for a listing, which can be called during the publication process.
 - Use unit testing to validate the correctness of the AIQS computation logic.
+- Create an endpoint to compute asynchronously the AIQS for all valid listings stored in the DB.
 
 # Boundaries & Constraints
 
 - The image is represented in the domain layer by the class `FileEntity`
 - The image quality is represented by the field `FileEntity.imageQuality`
 - The AIQS will not be displayed in the UI
+- The endpoint for computing the AIQS of all listings should be /v1/listings/aiqs
+- Use springboot `@Async` annotation for running all the listings AIQS

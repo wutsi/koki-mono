@@ -25,11 +25,13 @@ import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
+import com.wutsi.koki.listing.server.service.AiqsBatchService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ListingSimilarityService
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.mq.Publisher
 import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -47,6 +49,7 @@ class ListingEndpoints(
     private val mapper: ListingMapper,
     private val publisher: Publisher,
     private val logger: KVLogger,
+    private val aiqsBatchService: AiqsBatchService,
 ) {
     @PostMapping
     fun create(
@@ -321,5 +324,13 @@ class ListingEndpoints(
             listingId = listing.id ?: -1,
             qrCodeUrl = listing.qrCodeUrl ?: "",
         )
+    }
+
+    @PostMapping("/aiqs")
+    fun computeAllAiqs(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+    ): ResponseEntity<Void> {
+        aiqsBatchService.computeAll(tenantId)
+        return ResponseEntity.accepted().build()
     }
 }
