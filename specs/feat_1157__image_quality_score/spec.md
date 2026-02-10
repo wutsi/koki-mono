@@ -33,6 +33,7 @@ We can compute the Image Quality Score (IQS) of each image as follows:
 - Create a separate service that computes the AIQS for a listing, which can be called during the publication process.
 - Use unit testing to validate the correctness of the AIQS computation logic.
 - Create an endpoint to compute asynchronously the AIQS for all valid listings stored in the DB.
+- Update the Listing SDK to expose the endpoint to compute all listing AIQS
 
 # Boundaries & Constraints
 

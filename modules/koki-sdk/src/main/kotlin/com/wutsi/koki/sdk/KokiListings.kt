@@ -227,4 +227,13 @@ class KokiListings(
         val url = urlBuilder.build("$PATH_PREFIX/$listingId/qr-code")
         return rest.postForEntity(url, null, GenerateQrCodeResponse::class.java).body!!
     }
+
+    /**
+     * Triggers asynchronous computation of Average Image Quality Score (AIQS) for all active listings.
+     * This endpoint returns immediately with a 202 Accepted response while processing happens in the background.
+     */
+    fun computeAllAiqs() {
+        val url = urlBuilder.build("$PATH_PREFIX/aiqs")
+        rest.postForEntity(url, null, Void::class.java)
+    }
 }

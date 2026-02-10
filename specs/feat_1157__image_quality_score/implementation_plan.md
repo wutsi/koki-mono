@@ -11,15 +11,16 @@ the average quality score of all approved images associated with a listing.
 
 The implementation will span across multiple layers:
 
-| Layer       | Module        | Component(s)                             |
-|-------------|---------------|------------------------------------------|
-| Domain      | `koki-server` | `ListingEntity`                          |
-| Service     | `koki-server` | `AverageImageQualityScoreService`        |
-| Publication | `koki-server` | `ListingPublisher`                       |
-| Mapper      | `koki-server` | `ListingMapper`                          |
-| DTO         | `koki-dto`    | `Listing`, `ListingSummary` (optional)   |
-| Database    | `koki-server` | Flyway migration                         |
-| Endpoint    | `koki-server` | `FileEndpoints` (batch AIQS computation) |
+| Layer       | Module        | Component(s)                                |
+|-------------|---------------|---------------------------------------------|
+| Domain      | `koki-server` | `ListingEntity`                             |
+| Service     | `koki-server` | `AverageImageQualityScoreService`           |
+| Publication | `koki-server` | `ListingPublisher`                          |
+| Mapper      | `koki-server` | `ListingMapper`                             |
+| DTO         | `koki-dto`    | `Listing`, `ListingSummary` (optional)      |
+| Database    | `koki-server` | Flyway migration                            |
+| Endpoint    | `koki-server` | `ListingEndpoints` (batch AIQS computation) |
+| SDK         | `koki-sdk`    | `KokiListings` (expose batch AIQS method)   |
 
 ---
 
@@ -840,7 +841,33 @@ class AiqsBatchServiceTest {
 
 ---
 
-## 11. Implementation Checklist
+## 11. SDK Layer
+
+### 11.1 Overview
+
+Update the `KokiListings` SDK class to expose a method for triggering the batch AIQS computation. This allows client
+applications to call the endpoint through the SDK.
+
+### 11.2 Update KokiListings
+
+**File:** `modules/koki-sdk/src/main/kotlin/com/wutsi/koki/sdk/KokiListings.kt`
+
+Add the `computeAllAiqs()` method to the `KokiListings` class:
+
+```kotlin
+/**
+ * Triggers asynchronous computation of Average Image Quality Score (AIQS) for all active listings.
+ * This endpoint returns immediately with a 202 Accepted response while processing happens in the background.
+ */
+fun computeAllAiqs() {
+    val url = urlBuilder.build("$PATH_PREFIX/aiqs")
+    rest.postForEntity(url, null, Void::class.java)
+}
+```
+
+---
+
+## 12. Implementation Checklist
 
 Use this checklist to track implementation progress:
 
@@ -883,6 +910,10 @@ Use this checklist to track implementation progress:
 - [x] Create unit tests for `AiqsBatchService`
 - [x] Create integration test for the endpoint
 
+### SDK Layer
+
+- [x] Add `computeAllAiqs()` method to `KokiListings`
+
 ### Final Verification
 
 - [x] All unit tests pass
@@ -892,7 +923,7 @@ Use this checklist to track implementation progress:
 
 ---
 
-## 12. File Changes Summary
+## 13. File Changes Summary
 
 | File                                             | Action | Description                          |
 |--------------------------------------------------|--------|--------------------------------------|
@@ -908,10 +939,11 @@ Use this checklist to track implementation progress:
 | `AiqsBatchServiceTest.kt`                        | Create | Unit tests for batch service         |
 | `ListingEndpoints.kt`                            | Modify | Add POST /v1/listings/aiqs endpoint  |
 | `ComputeAllAiqsEndpointTest.kt`                  | Create | Integration test for batch endpoint  |
+| `KokiListings.kt`                                | Modify | Add `computeAllAiqs()` SDK method    |
 
 ---
 
-## 13. Risks and Considerations
+## 14. Risks and Considerations
 
 1. **Performance**: The AIQS computation is lightweight (O(n) where n is the number of images). No performance concerns
    expected.
@@ -928,7 +960,7 @@ Use this checklist to track implementation progress:
 
 ---
 
-## 14. Dependencies
+## 15. Dependencies
 
 - No new external dependencies required
 - Uses existing `BigDecimal` for precise rounding
