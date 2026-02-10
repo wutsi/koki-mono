@@ -11,14 +11,15 @@ the average quality score of all approved images associated with a listing.
 
 The implementation will span across multiple layers:
 
-| Layer       | Module        | Component(s)                           |
-|-------------|---------------|----------------------------------------|
-| Domain      | `koki-server` | `ListingEntity`                        |
-| Service     | `koki-server` | `AverageImageQualityScoreService`      |
-| Publication | `koki-server` | `ListingPublisher`                     |
-| Mapper      | `koki-server` | `ListingMapper`                        |
-| DTO         | `koki-dto`    | `Listing`, `ListingSummary` (optional) |
-| Database    | `koki-server` | Flyway migration                       |
+| Layer       | Module        | Component(s)                             |
+|-------------|---------------|------------------------------------------|
+| Domain      | `koki-server` | `ListingEntity`                          |
+| Service     | `koki-server` | `AverageImageQualityScoreService`        |
+| Publication | `koki-server` | `ListingPublisher`                       |
+| Mapper      | `koki-server` | `ListingMapper`                          |
+| DTO         | `koki-dto`    | `Listing`, `ListingSummary` (optional)   |
+| Database    | `koki-server` | Flyway migration                         |
+| Endpoint    | `koki-server` | `FileEndpoints` (batch AIQS computation) |
 
 ---
 
@@ -561,10 +562,240 @@ fun `publish - with no images returns zero AIQS`() {
 | TC22         | getScore - null                              | `null`                                        | `0`             |
 | TC23         | Integration - publish computes AIQS          | Listing with images                           | AIQS is saved   |
 | TC24         | Integration - publish with no images         | Listing without images                        | AIQS = 0.0      |
+| TC25         | Batch endpoint - computes AIQS for all listings | POST /v1/files/aiqs                        | 202 Accepted    |
+| TC26         | Batch endpoint - updates listings with AIQS  | Listings with approved images                 | All AIQS updated|
 
 ---
 
-## 10. Implementation Checklist
+## 10. Batch AIQS Computation Endpoint
+
+### 10.1 Overview
+
+Create an endpoint to asynchronously compute the AIQS for all active listings stored in the database. This is useful for
+backfilling AIQS values for existing listings that were published before the AIQS feature was implemented.
+
+### 10.2 Endpoint Specification
+
+| Property     | Value                                                    |
+|--------------|----------------------------------------------------------|
+| Method       | `POST`                                                   |
+| Path         | `/v1/files/aiqs`                                         |
+| Request Body | None                                                     |
+| Response     | `202 Accepted` (processing happens asynchronously)       |
+| Auth         | Required (admin only)                                    |
+
+### 10.3 Implementation Details
+
+**File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/file/server/endpoint/FileEndpoints.kt`
+
+```kotlin
+@PostMapping("/aiqs")
+fun computeAllAiqs(
+    @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+): ResponseEntity<Void> {
+    publisher.publish(ComputeAllAiqsEvent(tenantId = tenantId))
+    return ResponseEntity.accepted().build()
+}
+```
+
+### 10.4 Event and Handler
+
+**Event File:** `modules/koki-dto/src/main/kotlin/com/wutsi/koki/file/dto/event/ComputeAllAiqsEvent.kt`
+
+```kotlin
+package com.wutsi.koki.file.dto.event
+
+data class ComputeAllAiqsEvent(
+    val tenantId: Long = -1,
+)
+```
+
+**Handler File:** `modules/koki-server/src/main/kotlin/com/wutsi/koki/file/server/service/mq/ComputeAllAiqsEventHandler.kt`
+
+```kotlin
+package com.wutsi.koki.file.server.service.mq
+
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.file.dto.event.ComputeAllAiqsEvent
+import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
+import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.platform.logger.KVLogger
+import com.wutsi.koki.platform.mq.EventHandler
+import org.springframework.stereotype.Service
+
+@Service
+class ComputeAllAiqsEventHandler(
+    private val listingService: ListingService,
+    private val fileService: FileService,
+    private val averageImageQualityScoreService: AverageImageQualityScoreService,
+    private val logger: KVLogger,
+) : EventHandler<ComputeAllAiqsEvent> {
+
+    companion object {
+        private const val BATCH_SIZE = 100
+        private val VALID_STATUSES = listOf(
+            ListingStatus.ACTIVE,
+            ListingStatus.ACTIVE_WITH_CONTINGENCIES,
+            ListingStatus.SOLD,
+            ListingStatus.RENTED,
+            ListingStatus.PENDING,
+        )
+    }
+
+    override fun handle(event: ComputeAllAiqsEvent) {
+        var offset = 0
+        var totalProcessed = 0
+        var totalUpdated = 0
+
+        do {
+            val listings = listingService.search(
+                tenantId = event.tenantId,
+                statuses = VALID_STATUSES,
+                limit = BATCH_SIZE,
+                offset = offset,
+            )
+
+            listings.forEach { listing ->
+                val images = fileService.search(
+                    tenantId = event.tenantId,
+                    ownerId = listing.id,
+                    ownerType = ObjectType.LISTING,
+                    status = FileStatus.APPROVED,
+                    type = FileType.IMAGE,
+                    limit = 100,
+                )
+
+                val aiqs = averageImageQualityScoreService.compute(images)
+                if (listing.averageImageQualityScore != aiqs) {
+                    listing.averageImageQualityScore = aiqs
+                    listingService.save(listing)
+                    totalUpdated++
+                }
+                totalProcessed++
+            }
+
+            offset += BATCH_SIZE
+        } while (listings.size == BATCH_SIZE)
+
+        logger.add("total_processed", totalProcessed)
+        logger.add("total_updated", totalUpdated)
+    }
+}
+```
+
+### 10.5 Event Handler Registration
+
+Register the event handler in the MQ configuration to listen for `ComputeAllAiqsEvent`.
+
+### 10.6 Test Cases for Batch Endpoint
+
+**File:** `modules/koki-server/src/test/kotlin/com/wutsi/koki/file/server/service/mq/ComputeAllAiqsEventHandlerTest.kt`
+
+```kotlin
+package com.wutsi.koki.file.server.service.mq
+
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.koki.file.dto.event.ComputeAllAiqsEvent
+import com.wutsi.koki.file.server.domain.FileEntity
+import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.listing.dto.ListingStatus
+import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
+import com.wutsi.koki.listing.server.service.ListingService
+import com.wutsi.koki.platform.logger.DefaultKVLogger
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
+
+class ComputeAllAiqsEventHandlerTest {
+
+    private val listingService = mock<ListingService>()
+    private val fileService = mock<FileService>()
+    private val averageImageQualityScoreService = mock<AverageImageQualityScoreService>()
+    private val logger = DefaultKVLogger()
+
+    private val handler = ComputeAllAiqsEventHandler(
+        listingService = listingService,
+        fileService = fileService,
+        averageImageQualityScoreService = averageImageQualityScoreService,
+        logger = logger,
+    )
+
+    private val tenantId = 1L
+
+    @BeforeEach
+    fun setUp() {
+        doReturn(emptyList<ListingEntity>()).whenever(listingService).search(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
+    }
+
+    @Test
+    fun `handle - updates listings with new AIQS`() {
+        val listing = ListingEntity(
+            id = 100L,
+            tenantId = tenantId,
+            status = ListingStatus.ACTIVE,
+            averageImageQualityScore = null
+        )
+        val images = listOf(FileEntity(id = 1L, tenantId = tenantId))
+
+        doReturn(listOf(listing)).doReturn(emptyList<ListingEntity>())
+            .whenever(listingService).search(
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+            )
+        doReturn(images).whenever(fileService).search(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
+        doReturn(3.5).whenever(averageImageQualityScoreService).compute(any())
+
+        handler.handle(ComputeAllAiqsEvent(tenantId = tenantId))
+
+        verify(listingService).save(any(), anyOrNull())
+    }
+
+    @Test
+    fun `handle - skips listings with unchanged AIQS`() {
+        val listing = ListingEntity(
+            id = 100L,
+            tenantId = tenantId,
+            status = ListingStatus.ACTIVE,
+            averageImageQualityScore = 3.5
+        )
+
+        doReturn(listOf(listing)).doReturn(emptyList<ListingEntity>())
+            .whenever(listingService).search(
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+                anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+            )
+        doReturn(emptyList<FileEntity>()).whenever(fileService).search(
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
+            anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()
+        )
+        doReturn(3.5).whenever(averageImageQualityScoreService).compute(any())
+
+        handler.handle(ComputeAllAiqsEvent(tenantId = tenantId))
+
+        verify(listingService, never()).save(any(), anyOrNull())
+    }
+}
+```
+
+---
+
+## 11. Implementation Checklist
 
 Use this checklist to track implementation progress:
 
@@ -599,6 +830,15 @@ Use this checklist to track implementation progress:
 
 - [x] Update `ListingMapper.toListing()` to include `averageImageQualityScore`
 
+### Endpoint Layer (Batch AIQS Computation)
+
+- [ ] Create `ComputeAllAiqsEvent` event class
+- [ ] Create `ComputeAllAiqsEventHandler` handler class
+- [ ] Add `POST /v1/files/aiqs` endpoint to `FileEndpoints`
+- [ ] Register event handler in MQ configuration
+- [ ] Create unit tests for `ComputeAllAiqsEventHandler`
+- [ ] Create integration test for the endpoint
+
 ### Final Verification
 
 - [x] All unit tests pass
@@ -608,22 +848,26 @@ Use this checklist to track implementation progress:
 
 ---
 
-## 11. File Changes Summary
+## 12. File Changes Summary
 
-| File                                             | Action | Description                          |
-|--------------------------------------------------|--------|--------------------------------------|
-| `V1_61__listing_average_image_quality_score.sql` | Create | Database migration                   |
-| `ListingEntity.kt`                               | Modify | Add `averageImageQualityScore` field |
-| `Listing.kt` (DTO)                               | Modify | Add `averageImageQualityScore` field |
-| `AverageImageQualityScoreService.kt`             | Create | Service for AIQS computation         |
-| `ListingPublisher.kt`                            | Modify | Integrate AIQS computation           |
-| `ListingMapper.kt`                               | Modify | Map AIQS to DTO                      |
-| `AverageImageQualityScoreServiceTest.kt`         | Create | Unit tests for service               |
-| `ListingPublisherTest.kt`                        | Modify | Add tests for AIQS integration       |
+| File                                             | Action | Description                              |
+|--------------------------------------------------|--------|------------------------------------------|
+| `V1_61__listing_average_image_quality_score.sql` | Create | Database migration                       |
+| `ListingEntity.kt`                               | Modify | Add `averageImageQualityScore` field     |
+| `Listing.kt` (DTO)                               | Modify | Add `averageImageQualityScore` field     |
+| `AverageImageQualityScoreService.kt`             | Create | Service for AIQS computation             |
+| `ListingPublisher.kt`                            | Modify | Integrate AIQS computation               |
+| `ListingMapper.kt`                               | Modify | Map AIQS to DTO                          |
+| `AverageImageQualityScoreServiceTest.kt`         | Create | Unit tests for service                   |
+| `ListingPublisherTest.kt`                        | Modify | Add tests for AIQS integration           |
+| `ComputeAllAiqsEvent.kt`                         | Create | Event for batch AIQS computation         |
+| `ComputeAllAiqsEventHandler.kt`                  | Create | Handler for batch AIQS processing        |
+| `FileEndpoints.kt`                               | Modify | Add POST /v1/files/aiqs endpoint         |
+| `ComputeAllAiqsEventHandlerTest.kt`              | Create | Unit tests for batch handler             |
 
 ---
 
-## 12. Risks and Considerations
+## 13. Risks and Considerations
 
 1. **Performance**: The AIQS computation is lightweight (O(n) where n is the number of images). No performance concerns
    expected.
@@ -640,7 +884,7 @@ Use this checklist to track implementation progress:
 
 ---
 
-## 13. Dependencies
+## 14. Dependencies
 
 - No new external dependencies required
 - Uses existing `BigDecimal` for precise rounding
