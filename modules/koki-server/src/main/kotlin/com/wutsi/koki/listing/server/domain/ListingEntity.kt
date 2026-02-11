@@ -10,6 +10,7 @@ import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
+import com.wutsi.koki.listing.dto.VideoType
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -125,6 +126,8 @@ data class ListingEntity(
     var totalLeads: Int? = null,
     var qrCodeUrl: String? = null,
     var averageImageQualityScore: Double? = null,
+    var videoId: String? = null,
+    var videoType: VideoType? = null,
 
     val createdAt: Date = Date(),
     var modifiedAt: Date = Date(),

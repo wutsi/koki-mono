@@ -1123,7 +1123,7 @@ fun `get listing with video returns video fields`() {
 
 ### Phase 1: Database & DTO Layer
 
-- [ ] Create Flyway migration `V1_62__listing_video.sql`
+- [x] Create Flyway migration `V1_62__listing_video.sql`
 - [x] Create `VideoType` enum in koki-dto
 - [x] Create `LinkListingVideoRequest` DTO in koki-dto
 - [x] Add `videoId`, `videoType`, `videoEmbedUrl` fields to `Listing` DTO
@@ -1132,7 +1132,7 @@ fun `get listing with video returns video fields`() {
 
 ### Phase 2: Domain Layer
 
-- [ ] Add `videoId` and `videoType` fields to `ListingEntity`
+- [x] Add `videoId` and `videoType` fields to `ListingEntity`
 
 ### Phase 3: Service Layer
 
