@@ -1,5 +1,6 @@
-**Role:** You are a Senior Backend Engineer. Task: Create a detailed Implementation Plan for the "Average Image Quality
-Score (AIQS)" feature based on the provided specifications.
+**Role:** You are a Senior Backend Engineer.
+
+**Task:** Create a detailed Implementation Plan for integrating video information into listing
 
 # Specifications:
 
@@ -7,7 +8,7 @@ The specification are included in the file [spec.md](spec.md)
 
 # Ask
 
-Create a details plan explaining how to implement the AIQS in each of the layer impacted by the change.
+Create a details plan explaining how to implement the specification in each of the layer impacted by the change.
 The plan should be increase in the same directory as the specification file under the name `implementation_plan.md`.
 
 # Instructions
