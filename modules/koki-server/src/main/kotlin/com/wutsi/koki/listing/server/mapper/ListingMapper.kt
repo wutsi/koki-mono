@@ -11,7 +11,9 @@ import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
+import com.wutsi.koki.listing.dto.VideoType
 import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.listing.server.service.video.VideoEmbedUrlGenerator
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
 import com.wutsi.koki.refdata.dto.GeoLocation
@@ -19,7 +21,9 @@ import com.wutsi.koki.refdata.dto.Money
 import org.springframework.stereotype.Service
 
 @Service
-class ListingMapper {
+class ListingMapper(
+    private val videoEmbedUrlGenerator: VideoEmbedUrlGenerator,
+) {
     fun toListing(entity: ListingEntity): Listing {
         return Listing(
             id = entity.id ?: -1,
@@ -110,6 +114,9 @@ class ListingMapper {
             publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
             qrCodeUrl = entity.qrCodeUrl,
             averageImageQualityScore = entity.averageImageQualityScore,
+            videoId = entity.videoId,
+            videoType = entity.videoType?.takeIf { it != VideoType.UNKNOWN },
+            videoEmbedUrl = videoEmbedUrlGenerator.generate(entity.videoId, entity.videoType),
         )
     }
 
@@ -155,6 +162,8 @@ class ListingMapper {
 
             publicUrl = toPublicUrl(entity.id, entity.title, entity.status),
             publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
+            videoId = entity.videoId,
+            videoType = entity.videoType?.takeIf { it != VideoType.UNKNOWN },
         )
     }
 

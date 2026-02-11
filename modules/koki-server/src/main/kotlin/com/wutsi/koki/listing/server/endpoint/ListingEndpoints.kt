@@ -6,6 +6,7 @@ import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
@@ -143,6 +144,15 @@ class ListingEndpoints(
         @Valid @RequestBody request: UpdateListingLegalInfoRequest,
     ) {
         service.legalInfo(id, request, tenantId)
+    }
+
+    @PostMapping("/{id}/video")
+    fun linkVideo(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+        @Valid @RequestBody request: LinkListingVideoRequest,
+    ) {
+        service.video(id, request, tenantId)
     }
 
     @GetMapping("/{id}")

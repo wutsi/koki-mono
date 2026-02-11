@@ -8,6 +8,7 @@ import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetAIListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
+import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
@@ -88,6 +89,11 @@ class KokiListings(
 
     fun updateLegalInfo(id: Long, request: UpdateListingLegalInfoRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/legal-info")
+        rest.postForEntity(url, request, Any::class.java)
+    }
+
+    fun linkVideo(id: Long, request: LinkListingVideoRequest) {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/video")
         rest.postForEntity(url, request, Any::class.java)
     }
 

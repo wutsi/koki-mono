@@ -1136,32 +1136,32 @@ fun `get listing with video returns video fields`() {
 
 ### Phase 3: Service Layer
 
-- [ ] Create `VideoURLParser` interface
-- [ ] Create `YouTubeURLParser` implementation
-- [ ] Create `TikTokURLParser` implementation
-- [ ] Create `InstagramURLParser` implementation
-- [ ] Create `VideoURLParserFactory`
-- [ ] Create `VideoEmbedUrlGenerator`
-- [ ] Add unit tests for all parser implementations
-- [ ] Add unit tests for `VideoURLParserFactory`
-- [ ] Add unit tests for `VideoEmbedUrlGenerator`
+- [x] Create `VideoURLParser` interface
+- [x] Create `YouTubeURLParser` implementation
+- [x] Create `TikTokURLParser` implementation
+- [x] Create `InstagramURLParser` implementation
+- [x] Create `VideoURLParserFactory`
+- [x] Create `VideoEmbedUrlGenerator`
+- [x] Add unit tests for all parser implementations
+- [x] Add unit tests for `VideoURLParserFactory`
+- [x] Add unit tests for `VideoEmbedUrlGenerator`
 
 ### Phase 4: Mapper Layer
 
-- [ ] Update `ListingMapper` to inject `VideoEmbedUrlGenerator`
-- [ ] Update `toListing()` to map video fields
-- [ ] Update `toListingSummary()` to map video fields
+- [x] Update `ListingMapper` to inject `VideoEmbedUrlGenerator`
+- [x] Update `toListing()` to map video fields
+- [x] Update `toListingSummary()` to map video fields
 
 ### Phase 5: API Layer
 
-- [ ] Add `linkVideo()` endpoint to `ListingEndpoints`
-- [ ] Add `video()` method to `ListingService`
-- [ ] Create integration test `LinkListingVideoEndpointTest`
-- [ ] Create test SQL data file
+- [x] Add `linkVideo()` endpoint to `ListingEndpoints`
+- [x] Add `video()` method to `ListingService`
+- [x] Create integration test `LinkListingVideoEndpointTest`
+- [x] Create test SQL data file
 
 ### Phase 6: SDK Layer
 
-- [ ] Add `linkVideo()` method to `KokiListings`
+- [x] Add `linkVideo()` method to `KokiListings`
 
 ### Phase 7: Final Validation
 
