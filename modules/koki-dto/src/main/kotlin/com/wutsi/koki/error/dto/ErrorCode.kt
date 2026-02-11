@@ -76,6 +76,7 @@ object ErrorCode {
     val LISTING_MISSING_SELLER: String = "$PREFIX:listing:missing-seller"
     val LISTING_MISSING_SELLER_COMMISSION: String = "$PREFIX:listing:missing-seller-commission"
     val LISTING_FAILED_VALIDATION: String = "$PREFIX:listing:failed-validation"
+    val LISTING_VIDEO_NOT_SUPPORTED: String = "$PREFIX:listing:video-not-supported"
 
     val LOCATION_NOT_FOUND = "$PREFIX:location:not-found"
     val LOCATION_FEED_NOT_FOUND = "$PREFIX:location:feed-not-found"
