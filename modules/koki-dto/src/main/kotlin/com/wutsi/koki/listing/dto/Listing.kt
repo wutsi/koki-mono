@@ -92,4 +92,7 @@ data class Listing(
     val publicUrlFr: String? = null,
     val qrCodeUrl: String? = null,
     val averageImageQualityScore: Double? = null,
+    val videoId: String? = null,
+    val videoType: VideoType? = null,
+    val videoEmbedUrl: String? = null,
 )
