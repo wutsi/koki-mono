@@ -1,5 +1,7 @@
-**Role:** You are a Senior Backend Engineer. Task: Create a detailed Implementation Plan for the "Average Image Quality
-Score (AIQS)" feature based on the provided specifications.
+**Role:** You are a Senior Backend Engineer.
+
+**Task:** Create a detailed Implementation Plan for the "Average Image Quality Score (AIQS)" feature based on the
+provided specifications.
 
 # Specifications:
 
