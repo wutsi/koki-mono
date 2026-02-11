@@ -46,10 +46,13 @@ The platform that we want to support are
 - We want to add the endpoint for link the video
     - The endpoint:  `/v1/listings/video`
     - The request fields:
-        - videoUrl: String (REQUIRED)
+        - videoUrl: String
     - This endpoint should return HTTP status code `409` with the error code LISTING_VIDEO_NOT_SUPPORTED if the video
       URL is not supported
     - If the video already set, this endpoint will overwrite it.
+    - If the video URL is null or empty, it should set in `ListingEntity.videoId` and `ListingEntity.videoType` to
+      `null`
+    - The request class for updating the link should be called ``UpdateListingVideoRequest``
 
 ## DTO Layer
 
@@ -69,6 +72,19 @@ The platform that we want to support are
 ## SDK Layer
 
 - The endpoint for linking the video should be added into the listing SDK
+
+## Portal Web App
+
+- Add a section in `listings/details.html` the section `Video`
+    - The section showing the video link
+    - When the user click on the link, it opens it in a new window
+    - This section is after the `General` section
+    - This section should have a link to edit the section (like the other sections) that redirect to video editor
+
+- Add the video editor
+    - the video editor link is `/listings/edit-video`
+    - This page will have a form with an input for entering the URL
+    - When the user submit the form, the listing SDK will be used to save the video url
 
 # Boundaries & Constraints
 
