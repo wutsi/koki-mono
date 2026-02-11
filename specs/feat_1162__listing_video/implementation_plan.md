@@ -1136,15 +1136,15 @@ fun `get listing with video returns video fields`() {
 
 ### Phase 3: Service Layer
 
-- [ ] Create `VideoURLParser` interface
-- [ ] Create `YouTubeURLParser` implementation
-- [ ] Create `TikTokURLParser` implementation
-- [ ] Create `InstagramURLParser` implementation
-- [ ] Create `VideoURLParserFactory`
-- [ ] Create `VideoEmbedUrlGenerator`
-- [ ] Add unit tests for all parser implementations
-- [ ] Add unit tests for `VideoURLParserFactory`
-- [ ] Add unit tests for `VideoEmbedUrlGenerator`
+- [x] Create `VideoURLParser` interface
+- [x] Create `YouTubeURLParser` implementation
+- [x] Create `TikTokURLParser` implementation
+- [x] Create `InstagramURLParser` implementation
+- [x] Create `VideoURLParserFactory`
+- [x] Create `VideoEmbedUrlGenerator`
+- [x] Add unit tests for all parser implementations
+- [x] Add unit tests for `VideoURLParserFactory`
+- [x] Add unit tests for `VideoEmbedUrlGenerator`
 
 ### Phase 4: Mapper Layer
 

@@ -7,6 +7,7 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
@@ -25,6 +26,7 @@ import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.domain.ListingStatusEntity
+import com.wutsi.koki.listing.server.service.video.VideoURLParserFactory
 import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import com.wutsi.koki.refdata.server.service.AmenityService
@@ -56,6 +58,7 @@ class ListingService(
     private val em: EntityManager,
     private val logger: KVLogger,
     private val storageProvider: StorageProvider,
+    private val videoURLParserFactory: VideoURLParserFactory,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -649,6 +652,27 @@ class ListingService(
 
         LOGGER.info("Legal information updated for Listing#$id by User#$userId")
         return listing
+    }
+
+    @Transactional
+    fun video(id: Long, request: LinkListingVideoRequest, tenantId: Long): ListingEntity {
+        val listing = get(id, tenantId)
+
+        val parser = videoURLParserFactory.getParser(request.videoUrl)
+            ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
+
+        val videoId = parser.parse(request.videoUrl)
+            ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
+
+        listing.videoId = videoId
+        listing.videoType = parser.getType()
+        listing.modifiedAt = Date()
+        listing.modifiedById = securityService.getCurrentUserIdOrNull()
+
+        logger.add("video_id", videoId)
+        logger.add("video_type", parser.getType())
+
+        return dao.save(listing)
     }
 
     @Transactional
