@@ -233,4 +233,9 @@ class KokiListings(
         val url = urlBuilder.build("$PATH_PREFIX/$listingId/qr-code")
         return rest.postForEntity(url, null, GenerateQrCodeResponse::class.java).body!!
     }
+
+    fun computeAllCqs() {
+        val url = urlBuilder.build("$PATH_PREFIX/cqs")
+        rest.postForEntity(url, null, Void::class.java)
+    }
 }
