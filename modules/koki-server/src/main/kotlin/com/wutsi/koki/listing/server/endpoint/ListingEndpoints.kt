@@ -27,6 +27,7 @@ import com.wutsi.koki.listing.dto.UpdateListingVideoLinkRequest
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.AiqsBatchService
+import com.wutsi.koki.listing.server.service.CqsBatchService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ListingSimilarityService
 import com.wutsi.koki.platform.logger.KVLogger
@@ -51,6 +52,7 @@ class ListingEndpoints(
     private val publisher: Publisher,
     private val logger: KVLogger,
     private val aiqsBatchService: AiqsBatchService,
+    private val cqsBatchService: CqsBatchService,
 ) {
     @PostMapping
     fun create(
@@ -341,6 +343,14 @@ class ListingEndpoints(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
     ): ResponseEntity<Void> {
         aiqsBatchService.computeAll(tenantId)
+        return ResponseEntity.accepted().build()
+    }
+
+    @PostMapping("/cqs")
+    fun computeAllCqs(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+    ): ResponseEntity<Void> {
+        cqsBatchService.computeAll(tenantId)
         return ResponseEntity.accepted().build()
     }
 }
