@@ -87,6 +87,7 @@ class ContentQualityScoreService {
                 listing.year,
                 listing.furnitureType,
             )
+
             PropertyCategory.LAND -> listOf(
                 listing.propertyType,
                 listing.lotArea,
@@ -94,6 +95,7 @@ class ContentQualityScoreService {
                 listing.roadPavement,
                 listing.distanceFromMainRoad,
             )
+
             PropertyCategory.COMMERCIAL -> listOf(
                 listing.propertyType,
                 listing.floors,
@@ -106,6 +108,7 @@ class ContentQualityScoreService {
                 listing.revenue,
                 listing.furnitureType,
             )
+
             else -> emptyList()
         }
 

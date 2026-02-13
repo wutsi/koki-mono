@@ -62,8 +62,8 @@ class AgentController(
 
         loadActiveListings("rental", ListingType.RENTAL, agent, model)
         loadActiveListings("sale", ListingType.SALE, agent, model)
-        val metrics = loadPriceTrendMetrics(agent, model)
-        loadNeighborhoods(agent, metrics, model)
+        loadPriceTrendMetrics(agent, model)
+        loadNeighborhoods(agent, model)
         loadToast(toast, timestamp, model)
 
         model.addAttribute("messageUrl", whatsapp.toAgentUrl(agent))
@@ -195,11 +195,14 @@ class AgentController(
 
     private fun loadNeighborhoods(
         agent: AgentModel,
-        metrics: List<ListingMetricModel>,
         model: Model
     ): List<LocationModel> {
         try {
-            val neighbourhoodIds = metrics.mapNotNull { metric -> metric.neighborhoodId }.distinct()
+            val neighbourhoodIds = listingService.metrics(
+                sellerAgentUserIds = listOf(agent.user.id),
+                listingStatus = ListingStatus.ACTIVE,
+                dimension = ListingMetricDimension.NEIGHBORHOOD,
+            ).mapNotNull { metric -> metric.neighborhoodId }
             if (neighbourhoodIds.isEmpty()) {
                 return emptyList()
             }

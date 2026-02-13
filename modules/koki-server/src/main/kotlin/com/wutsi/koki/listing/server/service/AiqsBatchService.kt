@@ -6,6 +6,7 @@ import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.platform.logger.KVLogger
+import jakarta.transaction.Transactional
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
@@ -28,6 +29,7 @@ class AiqsBatchService(
     }
 
     @Async
+    @Transactional
     fun computeAll(tenantId: Long) {
         var offset = 0
         var totalProcessed = 0

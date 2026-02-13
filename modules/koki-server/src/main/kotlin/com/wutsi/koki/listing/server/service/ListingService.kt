@@ -176,13 +176,13 @@ class ListingService(
 
         // ORDER BY
         val orderBy = when (sortBy) {
-            ListingSort.NEWEST -> "ORDER BY L.publishedAt DESC, L.createdAt DESC"
-            ListingSort.OLDEST -> "ORDER BY L.publishedAt ASC, L.createdAt ASC"
-            ListingSort.PRICE_HIGH_LOW -> "ORDER BY L.price DESC"
-            ListingSort.PRICE_LOW_HIGH -> "ORDER BY L.price ASC"
-            ListingSort.TRANSACTION_DATE -> "ORDER BY L.soldAt DESC, L.publishedAt DESC"
-            ListingSort.MODIFIED_DATE -> "ORDER BY L.modifiedAt DESC"
-            else -> "ORDER BY L.price ASC"
+            ListingSort.NEWEST -> "ORDER BY L.publishedAt DESC, L.contentQualityScore DESC"
+            ListingSort.OLDEST -> "ORDER BY L.publishedAt ASC, L.contentQualityScore DESC"
+            ListingSort.PRICE_HIGH_LOW -> "ORDER BY L.price DESC, L.contentQualityScore DESC"
+            ListingSort.PRICE_LOW_HIGH -> "ORDER BY L.price ASC, L.contentQualityScore DESC"
+            ListingSort.TRANSACTION_DATE -> "ORDER BY L.soldAt DESC, L.contentQualityScore DESC"
+            ListingSort.MODIFIED_DATE -> "ORDER BY L.modifiedAt DESC, L.contentQualityScore DESC"
+            else -> "ORDER BY L.contentQualityScore DESC"
         }
         jql.append(" $orderBy")
 
