@@ -25,6 +25,7 @@ class ListingPublisher(
     private val logger: KVLogger,
     private val locationService: LocationService,
     private val averageImageQualityScoreService: AverageImageQualityScoreService,
+    private val contentQualityScoreService: ContentQualityScoreService,
 ) {
     @Transactional
     fun publish(listingId: Long, tenantId: Long): ListingEntity? {
@@ -49,6 +50,11 @@ class ListingPublisher(
         val aiqs = averageImageQualityScoreService.compute(images)
         listing.averageImageQualityScore = aiqs
         logger.add("average_image_quality_score", aiqs)
+
+        // Compute Content Quality Score
+        val cqs = contentQualityScoreService.compute(listing, images.size)
+        listing.contentQualityScore = cqs
+        logger.add("content_quality_score", cqs)
 
         val city = listing.cityId?.let { id -> locationService.get(id) }
         val neighbourhood = listing.neighbourhoodId?.let { id -> locationService.get(id) }

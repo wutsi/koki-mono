@@ -11,6 +11,7 @@ import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
+import com.wutsi.koki.listing.server.service.ContentQualityScoreService
 import com.wutsi.koki.listing.server.service.ListingPublisher
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
@@ -34,6 +35,7 @@ class ListingPublisherTest {
     private val listingService = mock<ListingService>()
     private val locationService = mock<LocationService>()
     private val averageImageQualityScoreService = mock<AverageImageQualityScoreService>()
+    private val contentQualityScoreService = mock<ContentQualityScoreService>()
     private val jsonMapper = JsonMapper()
     private val logger = DefaultKVLogger()
     private val handler = ListingPublisher(
@@ -44,6 +46,7 @@ class ListingPublisherTest {
         logger = logger,
         locationService = locationService,
         averageImageQualityScoreService = averageImageQualityScoreService,
+        contentQualityScoreService = contentQualityScoreService,
     )
 
     private val tenantId = 1L
@@ -91,6 +94,7 @@ class ListingPublisherTest {
         doReturn(File("/foo/bar")).whenever(fileService).download(any())
 
         doReturn(3.25).whenever(averageImageQualityScoreService).compute(any())
+        doReturn(75).whenever(contentQualityScoreService).compute(any(), any())
     }
 
     @AfterEach
@@ -116,8 +120,10 @@ class ListingPublisherTest {
         assertEquals(result.summaryFr, listingArg.firstValue.summaryFr)
         assertEquals(result.descriptionFr, listingArg.firstValue.descriptionFr)
         assertEquals(3.25, listingArg.firstValue.averageImageQualityScore)
+        assertEquals(75, listingArg.firstValue.contentQualityScore)
 
         verify(averageImageQualityScoreService).compute(images)
+        verify(contentQualityScoreService).compute(any(), any())
     }
 
     @Test

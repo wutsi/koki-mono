@@ -126,6 +126,7 @@ data class ListingEntity(
     var totalLeads: Int? = null,
     var qrCodeUrl: String? = null,
     var averageImageQualityScore: Double? = null,
+    var contentQualityScore: Int? = null,
     var videoId: String? = null,
     var videoType: VideoType? = null,
 
