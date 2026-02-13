@@ -8,7 +8,6 @@ import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetAIListingResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
-import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
@@ -27,6 +26,7 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
+import com.wutsi.koki.listing.dto.UpdateListingVideoLinkRequest
 import org.springframework.web.client.RestTemplate
 
 class KokiListings(
@@ -92,7 +92,7 @@ class KokiListings(
         rest.postForEntity(url, request, Any::class.java)
     }
 
-    fun linkVideo(id: Long, request: LinkListingVideoRequest) {
+    fun linkVideo(id: Long, request: UpdateListingVideoLinkRequest) {
         val url = urlBuilder.build("$PATH_PREFIX/$id/video")
         rest.postForEntity(url, request, Any::class.java)
     }
