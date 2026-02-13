@@ -940,7 +940,7 @@ import org.springframework.test.context.jdbc.Sql
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Sql(value = ["/db/test/clean.sql", "/db/test/listing/LinkListingVideoEndpoint.sql"])
+@Sql(value = ["/db/test/clean.sql", "/db/test/listing/UpdateListingVideoLinkEndpoint.sql"])
 class LinkListingVideoEndpointTest : AuthorizationAwareEndpointTest() {
     @Autowired
     private lateinit var dao: ListingRepository
@@ -1042,7 +1042,7 @@ class LinkListingVideoEndpointTest : AuthorizationAwareEndpointTest() {
 
 #### 9.2.2 Test Data SQL
 
-**File:** `modules/koki-server/src/test/resources/db/test/listing/LinkListingVideoEndpoint.sql`
+**File:** `modules/koki-server/src/test/resources/db/test/listing/UpdateListingVideoLinkEndpoint.sql`
 
 ```sql
 INSERT INTO T_TENANT(id, name, domain_name, locale, currency, number_format, monetary_format, date_format, time_format,
@@ -1193,7 +1193,7 @@ fun `get listing with video returns video fields`() {
 | `modules/koki-server/src/test/kotlin/com/wutsi/koki/listing/server/service/video/VideoURLParserFactoryTest.kt`  | Factory tests              |
 | `modules/koki-server/src/test/kotlin/com/wutsi/koki/listing/server/service/video/VideoEmbedUrlGeneratorTest.kt` | Embed generator tests      |
 | `modules/koki-server/src/test/kotlin/com/wutsi/koki/listing/server/endpoint/LinkListingVideoEndpointTest.kt`    | Endpoint integration tests |
-| `modules/koki-server/src/test/resources/db/test/listing/LinkListingVideoEndpoint.sql`                           | Test data SQL              |
+| `modules/koki-server/src/test/resources/db/test/listing/UpdateListingVideoLinkEndpoint.sql`                     | Test data SQL              |
 
 ### Files to Modify
 

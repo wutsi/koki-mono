@@ -6,7 +6,6 @@ import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
-import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
@@ -24,6 +23,7 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
+import com.wutsi.koki.listing.dto.UpdateListingVideoLinkRequest
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.AiqsBatchService
@@ -147,10 +147,10 @@ class ListingEndpoints(
     }
 
     @PostMapping("/{id}/video")
-    fun linkVideo(
+    fun updateVideoLink(
         @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
         @PathVariable id: Long,
-        @Valid @RequestBody request: LinkListingVideoRequest,
+        @Valid @RequestBody request: UpdateListingVideoLinkRequest,
     ) {
         service.video(id, request, tenantId)
     }

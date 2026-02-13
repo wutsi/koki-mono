@@ -7,7 +7,6 @@ import com.wutsi.koki.error.exception.NotFoundException
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.FurnitureType
-import com.wutsi.koki.listing.dto.LinkListingVideoRequest
 import com.wutsi.koki.listing.dto.ListingSort
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.listing.dto.ListingType
@@ -22,6 +21,7 @@ import com.wutsi.koki.listing.dto.UpdateListingPriceRequest
 import com.wutsi.koki.listing.dto.UpdateListingRemarksRequest
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.dto.UpdateListingSellerRequest
+import com.wutsi.koki.listing.dto.UpdateListingVideoLinkRequest
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import com.wutsi.koki.listing.server.dao.ListingStatusRepository
 import com.wutsi.koki.listing.server.domain.ListingEntity
@@ -655,22 +655,29 @@ class ListingService(
     }
 
     @Transactional
-    fun video(id: Long, request: LinkListingVideoRequest, tenantId: Long): ListingEntity {
+    fun video(id: Long, request: UpdateListingVideoLinkRequest, tenantId: Long): ListingEntity {
         val listing = get(id, tenantId)
+        val videoUrl = request.videoUrl
 
-        val parser = videoURLParserFactory.getParser(request.videoUrl)
-            ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
+        if (videoUrl.isNullOrEmpty()) {
+            listing.videoId = null
+            listing.videoType = null
+        } else {
+            val parser = videoURLParserFactory.getParser(videoUrl)
+                ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
 
-        val videoId = parser.parse(request.videoUrl)
-            ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
+            val videoId = parser.parse(videoUrl)
+                ?: throw ConflictException(Error(ErrorCode.LISTING_VIDEO_NOT_SUPPORTED))
 
-        listing.videoId = videoId
-        listing.videoType = parser.getType()
+            listing.videoId = videoId
+            listing.videoType = parser.getType()
+
+            logger.add("video_id", videoId)
+            logger.add("video_type", parser.getType())
+        }
+
         listing.modifiedAt = Date()
         listing.modifiedById = securityService.getCurrentUserIdOrNull()
-
-        logger.add("video_id", videoId)
-        logger.add("video_type", parser.getType())
 
         return dao.save(listing)
     }
