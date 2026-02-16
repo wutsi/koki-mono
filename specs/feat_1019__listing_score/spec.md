@@ -8,20 +8,18 @@ experience on our platform.
 
 The QCS values is from 0 to 100, where 0 is the lowest quality and 100 is the highest quality.
 The score will be calculated based on the completeness and accuracy of the listing information, as well as the quality
-of the images, videos and documents provided.
+of the images provided.
 The Content Quality Score (QCS) will be calculated based on several factors:
 
 - General Information
-- Legal Informations
+- Legal Information
 - Amenities
 - Address
 - Geo Location
 - Rental Information
 - Images
-- Video Tour
-- Documents
 
-## General Information (0-10)
+## General Information (0-20)
 
 The value is determined by the availability of the following information:
 
@@ -55,6 +53,14 @@ The value is determined by the availability of the following information:
     - Availability date
     - Year of construction
 
+Since the number of fields is different and do not have weight, the score will be calculated linearly as follows:
+
+```
+General Information Score = (Number of Available Fields / Total Number of Fields) * 20
+```
+
+Field is available if it is not null and not empty (for string fields).
+
 ## Legal Information (0-10)
 
 The value is determined by the availability of the following information:
@@ -65,6 +71,17 @@ The value is determined by the availability of the following information:
 - Morcelable?
 - Number of signers
 - Transaction with Notary?
+
+Since the number of fields is different and do not have weight, the score will be calculated linearly (like in General
+Information).
+
+## Amenities (0-10)
+
+The formula for calculating the amenities score is:
+
+```
+Amenities Score = MIN(Number of Listing Amenities, 10)
+```
 
 ## Address (0-5)
 
@@ -77,7 +94,7 @@ The value is determined by the availability of the following information:
 
 ## Geo Location (0-15)
 
-- 5 if both latitude and longitude are provided
+- 15 if both latitude and longitude are provided
 - 0 if either latitude or longitude is missing
 
 ## Rental information (0-10)
@@ -89,7 +106,7 @@ The value is determined by the availability of the following information:
     - Notice period
 - For no rental listings, the score will be 10.
 
-## Images (0-20)
+## Images (0-30)
 
 The score depends on 2 factors:
 
@@ -105,29 +122,51 @@ The score depends on 2 factors:
 So, the formula for calculating the image score is:
 
 ```
-Image Score = (MAX(Number of Images, 20) / 20) * 20 * (Average Image Quality Score / 4.0)
+Image Score = (MIN(Number of Images, 20) / 20) * 30 * (Average Image Quality Score / 4.0)
 ```
 
-## Video Tour (0-10)
-
-The availability of video tour will contribute to the score as follows:
-
-- If a video tour is provided, the score will be 10.
-- If no video tour is provided, the score will be 0.
-
-## Documents (0-20)
-
-The score depends on the documents provided.
-The document required for each listing type are as follows:
-
-- Land Title
-- The ID card of the property owner
-- The Technical File
-
-# Tech Stack and Architecture
+If Number of Images is 0 OR Average Image Quality Score is 0 or null, then Image Score is 0
 
 # Technical Requirements
 
+- The QCS is computed during the publication of the listing.
+- QCS should be stored in the database for each listing.
+- The QCS should be returned as part of the listing details and summary DTO.
+- The QCS breakdown by category (General Information, Legal Information, Amenities, Address, Geo Location, Rental
+  Information, Images) should NOT be sored in the DB, but should be returned as part of the
+  listing details DTO.
+- The QCS breakdown should include the following information for each category:
+    - The score for the category
+    - The maximum possible score for the category
+    - This is the proposed schema for the QCS breakdown in the listing details DTO:
+
+```json
+{
+    "general": {
+        "score": 18.0,
+        "max": 20
+    },
+    "legal": {
+        "score": 10,
+        "max": 10
+    },
+    "images": {
+        "score": 25.5,
+        "max": 30
+    },
+    ...
+}
+```
+
+- Create a separate service that computes the CQS for a listing, which can be called during the publication process.
+- Use unit testing to validate the correctness of the CQS computation logic.
+- Create an endpoint to compute asynchronously the CQS for all valid listings stored in the DB.
+- Round the final score of each category to two decimal places or the nearest integer.
+
 # Boundaries & Constraints
 
+- The listing is represented in the domain layer by the class `ListingEntity`
+- The listing publishing is handled by `ListingPublisher`
+- The endpoint for computing the QCS of all listings should be /v1/listings/cqs
+- Use springboot `@Async` annotation for running all the listings QCS
 

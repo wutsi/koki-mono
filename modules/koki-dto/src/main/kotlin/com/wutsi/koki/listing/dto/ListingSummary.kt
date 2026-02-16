@@ -40,4 +40,5 @@ data class ListingSummary(
     val publicUrlFr: String? = null,
     val videoId: String? = null,
     val videoType: VideoType? = null,
+    val contentQualityScore: Int? = null,
 )
