@@ -1,8 +1,6 @@
 package com.wutsi.koki.listing.server.service
 
 import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.file.dto.FileStatus
-import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.platform.logger.KVLogger
@@ -45,16 +43,12 @@ class CqsBatchService(
                 )
 
                 listings.forEach { listing ->
-                    val images = fileService.search(
+                    val validImageCount = fileService.countApprovedImages(
                         tenantId = tenantId,
-                        ownerId = listing.id,
+                        ownerId = listing.id!!,
                         ownerType = ObjectType.LISTING,
-                        status = FileStatus.APPROVED,
-                        type = FileType.IMAGE,
-                        limit = 100,
-                    )
-
-                    val cqs = contentQualityScoreService.compute(listing, images.size)
+                    )?.toInt()
+                    val cqs = contentQualityScoreService.compute(listing, validImageCount ?: 0)
                     if (listing.contentQualityScore != cqs) {
                         listing.contentQualityScore = cqs
                         listingService.save(listing)

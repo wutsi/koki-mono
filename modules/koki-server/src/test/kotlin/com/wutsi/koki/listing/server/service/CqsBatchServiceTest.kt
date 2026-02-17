@@ -83,6 +83,11 @@ class CqsBatchServiceTest {
     }
 
     private fun setupImageSearch(images: List<FileEntity>) {
+        doReturn(images.size.toLong()).whenever(fileService).countApprovedImages(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
         doReturn(images).whenever(fileService).search(
             any(),
             anyOrNull(),

@@ -60,6 +60,17 @@ class FileService(
         return dao.countByTenantIdAndTypeAndOwnerIdAndOwnerTypeAndDeleted(tenantId, type, ownerId, ownerType, false)
     }
 
+    fun countApprovedImages(tenantId: Long, ownerId: Long, ownerType: ObjectType): Long? {
+        return dao.countByTenantIdAndTypeAndOwnerIdAndOwnerTypeAndStatusAndDeleted(
+            tenantId = tenantId,
+            type = FileType.IMAGE,
+            ownerId = ownerId,
+            ownerType = ownerType,
+            status = FileStatus.APPROVED,
+            deleted = false,
+        )
+    }
+
     fun search(
         tenantId: Long,
         ids: List<Long> = emptyList(),

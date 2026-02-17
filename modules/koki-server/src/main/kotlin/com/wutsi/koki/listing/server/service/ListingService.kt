@@ -1,9 +1,11 @@
 package com.wutsi.koki.listing.server.service
 
+import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.error.dto.Error
 import com.wutsi.koki.error.dto.ErrorCode
 import com.wutsi.koki.error.exception.ConflictException
 import com.wutsi.koki.error.exception.NotFoundException
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.FurnitureType
@@ -60,6 +62,7 @@ class ListingService(
     private val storageProvider: StorageProvider,
     private val videoURLParserFactory: VideoURLParserFactory,
     private val cqsService: ContentQualityScoreService,
+    private val fileService: FileService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -549,7 +552,6 @@ class ListingService(
         listing.availableAt = request.availableAt
         listing.distanceFromMainRoad = request.distanceFromMainRoad
         listing.roadPavement = request.roadPavement
-        listing.contentQualityScore = cqsService.compute(listing, (listing.totalImages ?: 0))
         save(listing)
     }
 
@@ -686,6 +688,12 @@ class ListingService(
 
     @Transactional
     fun save(listing: ListingEntity, modifyById: Long? = null): ListingEntity {
+        val totalValidImages = fileService.countApprovedImages(
+            tenantId = listing.tenantId,
+            ownerId = listing.id ?: -1,
+            ownerType = ObjectType.LISTING,
+        )?.toInt()
+        listing.contentQualityScore = cqsService.compute(listing, totalValidImages ?: 0)
         listing.modifiedAt = Date()
         listing.modifiedById = modifyById ?: securityService.getCurrentUserIdOrNull()
         return dao.save(listing)
