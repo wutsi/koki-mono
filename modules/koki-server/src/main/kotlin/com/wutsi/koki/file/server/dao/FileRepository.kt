@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FileRepository : CrudRepository<FileEntity, Long> {
-    fun countByTypeAndOwnerIdAndOwnerTypeAndDeleted(
+    fun countByTenantIdAndTypeAndOwnerIdAndOwnerTypeAndDeleted(
+        tenantId: Long,
         type: FileType,
         ownerId: Long,
         ownerType: ObjectType,

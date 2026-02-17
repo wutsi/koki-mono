@@ -33,12 +33,14 @@ class ListingFileDeletedEventHandler(
                 listing.heroImageId = findHeroImage(listing)
             }
             listing.totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
+                listing.tenantId,
                 FileType.IMAGE,
                 listing.id ?: -1,
                 ObjectType.LISTING,
             )?.toInt()
         } else {
             listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
+                listing.tenantId,
                 FileType.FILE,
                 listing.id ?: -1,
                 ObjectType.LISTING,

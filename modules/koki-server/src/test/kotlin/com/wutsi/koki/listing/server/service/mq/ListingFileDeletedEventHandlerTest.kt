@@ -17,7 +17,6 @@ import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.listing.server.service.ListingService
-import com.wutsi.koki.listing.server.service.mq.ListingFileDeletedEventHandler
 import com.wutsi.koki.platform.logger.DefaultKVLogger
 import com.wutsi.koki.platform.logger.KVLogger
 import org.junit.jupiter.api.AfterEach
@@ -73,9 +72,9 @@ class ListingFileDeletedEventHandlerTest {
         )
 
         doReturn(totalImages).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.IMAGE), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(any(), eq(FileType.IMAGE), any(), any())
         doReturn(totalFiles).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.FILE), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(any(), eq(FileType.FILE), any(), any())
 
         doReturn(listing).whenever(listingService).get(any(), any())
     }

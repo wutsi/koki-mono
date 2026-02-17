@@ -59,6 +59,7 @@ class ListingService(
     private val logger: KVLogger,
     private val storageProvider: StorageProvider,
     private val videoURLParserFactory: VideoURLParserFactory,
+    private val cqsService: ContentQualityScoreService,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ListingService::class.java)
@@ -438,79 +439,79 @@ class ListingService(
         val userId = securityService.getCurrentUserIdOrNull()
         val city = request.address?.cityId?.let { id -> locationService.get(id) }
 
-        val listing = dao.save(
-            ListingEntity(
-                tenantId = tenantId,
-                status = ListingStatus.DRAFT,
-                listingType = request.listingType,
-                propertyType = request.propertyType,
-                propertyCategory = request.propertyType?.category,
-                bedrooms = request.bedrooms,
-                bathrooms = request.bathrooms,
-                halfBathrooms = request.halfBathrooms,
-                units = request.units,
-                floors = request.floors,
-                basementType = request.basementType,
-                level = request.level,
-                unit = request.unit?.uppercase()?.ifEmpty { null },
-                parkings = request.parkings,
-                parkingType = request.parkingType,
-                fenceType = request.fenceType,
-                lotArea = request.lotArea,
-                propertyArea = request.propertyArea,
-                year = request.year,
-                availableAt = request.availableAt,
-                distanceFromMainRoad = request.distanceFromMainRoad,
-                roadPavement = request.roadPavement,
+        val listing = ListingEntity(
+            tenantId = tenantId,
+            status = ListingStatus.DRAFT,
+            listingType = request.listingType,
+            propertyType = request.propertyType,
+            propertyCategory = request.propertyType?.category,
+            bedrooms = request.bedrooms,
+            bathrooms = request.bathrooms,
+            halfBathrooms = request.halfBathrooms,
+            units = request.units,
+            floors = request.floors,
+            basementType = request.basementType,
+            level = request.level,
+            unit = request.unit?.uppercase()?.ifEmpty { null },
+            parkings = request.parkings,
+            parkingType = request.parkingType,
+            fenceType = request.fenceType,
+            lotArea = request.lotArea,
+            propertyArea = request.propertyArea,
+            year = request.year,
+            availableAt = request.availableAt,
+            distanceFromMainRoad = request.distanceFromMainRoad,
+            roadPavement = request.roadPavement,
 
-                price = request.price,
-                revenue = request.revenue,
-                visitFees = request.visitFees,
-                currency = request.currency?.uppercase()?.ifEmpty { null },
-                sellerAgentCommission = request.sellerAgentCommission,
-                buyerAgentCommission = request.buyerAgentCommission,
-                buyerAgentCommissionAmount = computeCommission(request.price, request.buyerAgentCommission),
-                sellerAgentCommissionAmount = computeCommission(request.price, request.sellerAgentCommission),
+            price = request.price,
+            revenue = request.revenue,
+            visitFees = request.visitFees,
+            currency = request.currency?.uppercase()?.ifEmpty { null },
+            sellerAgentCommission = request.sellerAgentCommission,
+            buyerAgentCommission = request.buyerAgentCommission,
+            buyerAgentCommissionAmount = computeCommission(request.price, request.buyerAgentCommission),
+            sellerAgentCommissionAmount = computeCommission(request.price, request.sellerAgentCommission),
 
-                leaseTerm = request.leaseTerm,
-                noticePeriod = request.noticePeriod,
-                securityDeposit = request.securityDeposit,
-                advanceRent = request.advanceRent,
+            leaseTerm = request.leaseTerm,
+            noticePeriod = request.noticePeriod,
+            securityDeposit = request.securityDeposit,
+            advanceRent = request.advanceRent,
 
-                cityId = request.address?.cityId,
-                neighbourhoodId = request.address?.neighborhoodId,
-                stateId = city?.parentId,
-                country = request.address?.country?.lowercase()?.ifEmpty { null },
-                street = request.address?.street?.ifEmpty { null },
-                postalCode = request.address?.postalCode?.uppercase()?.ifEmpty { null },
+            cityId = request.address?.cityId,
+            neighbourhoodId = request.address?.neighborhoodId,
+            stateId = city?.parentId,
+            country = request.address?.country?.lowercase()?.ifEmpty { null },
+            street = request.address?.street?.ifEmpty { null },
+            postalCode = request.address?.postalCode?.uppercase()?.ifEmpty { null },
 
-                publicRemarks = request.publicRemarks,
+            publicRemarks = request.publicRemarks,
 
-                furnitureType = request.furnitureType,
-                amenities = if (request.amenityIds.isNotEmpty()) {
-                    amenityService.search(
-                        ids = request.amenityIds,
-                        limit = request.amenityIds.size,
-                    ).toMutableList()
-                } else {
-                    mutableListOf()
-                },
+            furnitureType = request.furnitureType,
+            amenities = if (request.amenityIds.isNotEmpty()) {
+                amenityService.search(
+                    ids = request.amenityIds,
+                    limit = request.amenityIds.size,
+                ).toMutableList()
+            } else {
+                mutableListOf()
+            },
 
-                landTitle = request.landTitle,
-                technicalFile = request.technicalFile,
-                numberOfSigners = request.numberOfSigners,
-                mutationType = request.mutationType,
-                transactionWithNotary = request.transactionWithNotary,
-                subdivided = request.subdivided,
-                morcelable = request.morcelable,
+            landTitle = request.landTitle,
+            technicalFile = request.technicalFile,
+            numberOfSigners = request.numberOfSigners,
+            mutationType = request.mutationType,
+            transactionWithNotary = request.transactionWithNotary,
+            subdivided = request.subdivided,
+            morcelable = request.morcelable,
 
-                sellerAgentUserId = request.sellerAgentUserId ?: userId,
-                createdAt = now,
-                modifiedAt = now,
-                createdById = userId,
-                modifiedById = userId,
-            )
+            sellerAgentUserId = request.sellerAgentUserId ?: userId,
+            createdAt = now,
+            modifiedAt = now,
+            createdById = userId,
+            modifiedById = userId,
         )
+        listing.contentQualityScore = cqsService.compute(listing, 0)
+        dao.save(listing)
         statusDao.save(
             ListingStatusEntity(
                 listing = listing,
@@ -548,6 +549,7 @@ class ListingService(
         listing.availableAt = request.availableAt
         listing.distanceFromMainRoad = request.distanceFromMainRoad
         listing.roadPavement = request.roadPavement
+        listing.contentQualityScore = cqsService.compute(listing, (listing.totalImages ?: 0))
         save(listing)
     }
 
