@@ -387,8 +387,8 @@ class ListingMapper(
             amenities = toCategoryScoreModel(entity.amenities),
             address = toCategoryScoreModel(entity.address),
             geo = toCategoryScoreModel(entity.geo),
-            rental = toCategoryScoreModel(entity.rental),
-            images = toCategoryScoreModel(entity.images),
+            leasing = toCategoryScoreModel(entity.rental),
+            image = toCategoryScoreModel(entity.images),
             total = entity.total,
         )
     }

@@ -25,16 +25,32 @@
             th:src="${image.previewUrl} ? ${image.previewUrl} : '/image/no-image.png'"
             th:title="${image.title}"/>
     </div>
-    <div class="image-footer padding" th:if="${image.description} OR !${image.approved}">
-        <div class="text-center" th:if="${image.description}" th:text="${image.description}">DESCRIPTION</div>
-
-        <div class="file-status-container" th:if="!${image.approved}">
-            <div th:replace="~{__components/file :: status(${image.status})}"></div>
-            <div class="alert alert-warning margin" th:if="${image.rejected} AND ${image.rejectionReason}"
-                 th:text="${image.rejectionReason}">
-                REASON
-            </div>
-        </div>
+    <div class="image-footer padding">
+        <table class="table table-striped">
+            <tr th:if="${image.title}">
+                <th class="text-center" colspan="2" th:text="${image.title}">TITLE</th>
+            </tr>
+            <tr th:if="${image.description}">
+                <td class="text-center" colspan="2" th:text="${image.description}"> DESCRIPTION</td>
+            </tr>
+            <tr th:if="${image.imageQuality}">
+                <td th:text="#{page.image.quality}" width="1%">QUALITY</td>
+                <td>
+                    <b th:class="#{'rating-' + ${image.imageQualityRating}}"
+                       th:text="#{'image-quality.' + ${image.imageQuality}}">QUALITY</b>
+                </td>
+            </tr>
+            <tr th:if="!${image.approved}">
+                <td>
+                    <div th:replace="~{__components/file :: status(${image.status})}"></div>
+                </td>
+                <td>
+                    <span class="error"
+                          th:if="${image.rejectionReason} AND ${image.rejected}"
+                          th:text="${image.rejectionReason}">REJECTION REASON</span>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>

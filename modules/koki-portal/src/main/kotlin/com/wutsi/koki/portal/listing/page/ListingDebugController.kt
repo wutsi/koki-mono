@@ -30,7 +30,7 @@ class ListingDebugController(
 
         loadAIListing(listing, model)
         loadWebpage(listing, model)
-
+        loadCQS(listing, model)
         model.addAttribute(
             "page",
             createPageModel(
@@ -61,5 +61,10 @@ class ListingDebugController(
 
         val website = websiteService.get(webpage.websiteId)
         model.addAttribute("website", website)
+    }
+
+    private fun loadCQS(listing: ListingModel, model: Model) {
+        val cqs = listingService.getCqs(listing.id)
+        model.addAttribute("cqs", cqs)
     }
 }

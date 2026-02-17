@@ -68,6 +68,8 @@ class ListingController(
         val listing = findListing(id)
         model.addAttribute("listing", listing)
         model.addAttribute("amenityCategories", findAmenityCategories())
+        model.addAttribute("contentQuality", listingService.getCqs(id))
+
         return "listings/details"
     }
 

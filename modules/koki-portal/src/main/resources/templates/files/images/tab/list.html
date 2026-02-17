@@ -1,4 +1,4 @@
-<div class="tab-images">
+<div class="tab-images" xmlns="http://www.w3.org/1999/html">
     <div class="flex"
          data-component-id="uploader"
          data-file-button-id="btn-file"
@@ -8,9 +8,9 @@
          data-upload-button-id="btn-upload"
          th:data-refresh-url="'/images/tab/more?owner-id=' + ${ownerId} + '&owner-type=' + ${ownerType}"
          th:data-upload-url="${uploadUrl}"
+         th:if="!${readOnly} AND (${user?.canManage('image')} OR ${user?.hasFullAccess('image')})"
     >
-        <button class="btn btn-sm btn-light margin-right-small" id="btn-upload"
-                th:if="!${readOnly} AND (${user?.canManage('image')} OR ${user?.hasFullAccess('image')})">
+        <button class="btn btn-sm btn-light margin-right-small" id="btn-upload">
             <i class="fa-solid fa-plus"></i>
             <span th:text="#{button.upload}">UPLOAD</span>
         </button>
@@ -28,6 +28,29 @@
     </div>
 
     <div class="container-fluid margin-top padding-none">
+        <div class="row" th:if="${listingImageCqs}">
+            <div class="col-12 margin-bottom">
+                <table class="table">
+                    <tr>
+                        <th class="text-nowrap" th:text="#{page.image.image-quality-score}" width="1%">SCORE</th>
+                        <td>
+                            <b th:class="#{'rating-' + ${listingImageCqs.rating}}"
+                               th:text="${listingImageCqs.score}">00</b>
+                            /
+                            <span th:text="${listingImageCqs.max}">00</span>
+                            -
+                            <b th:class="#{'rating-' + ${listingImageCqs.rating}}"
+                               th:text="#{'rating.' + ${listingImageCqs.rating}}">RATING</b>
+                        </td>
+                    </tr>
+                    <tr th:if="${listingImageCqs.rating != 'excellent'}">
+                        <td colspan="2">
+                            <span class="error text-small" th:text="#{page.image.image-quality-score-hint}">HINT</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div class="row" id="image-list">
             <div th:each="image : ${images}" th:remove="tag">
                 <div th:if="${images}" th:replace="~{__components/image :: image-card(${image})}"></div>

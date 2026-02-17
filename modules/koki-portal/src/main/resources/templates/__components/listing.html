@@ -452,5 +452,9 @@
     </td>
 </tr>
 
+<div th:fragment="listing-cqs-dot(cqs)" th:if="${cqs}">
+    <i class="fa-solid fa-circle" th:classappend="#{'rating-' + ${cqs.rating}}"></i>
+</div>
+
 </body>
 </html>

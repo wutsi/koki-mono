@@ -6,7 +6,7 @@ data class ContentQualityScoreBreakdownModel(
     val amenities: CategoryScoreModel = CategoryScoreModel(),
     val address: CategoryScoreModel = CategoryScoreModel(),
     val geo: CategoryScoreModel = CategoryScoreModel(),
-    val rental: CategoryScoreModel = CategoryScoreModel(),
-    val images: CategoryScoreModel = CategoryScoreModel(),
+    val leasing: CategoryScoreModel = CategoryScoreModel(),
+    val image: CategoryScoreModel = CategoryScoreModel(),
     val total: Int = 0,
 )
