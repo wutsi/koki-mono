@@ -1,8 +1,11 @@
 package com.wutsi.koki.portal.listing.mapper
 
 import com.wutsi.koki.listing.dto.AIListing
+import com.wutsi.koki.listing.dto.CategoryScore
+import com.wutsi.koki.listing.dto.ContentQualityScoreBreakdown
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
+import com.wutsi.koki.listing.dto.GetListingCqsResponse
 import com.wutsi.koki.listing.dto.Listing
 import com.wutsi.koki.listing.dto.ListingMetricSummary
 import com.wutsi.koki.listing.dto.ListingSummary
@@ -17,6 +20,9 @@ import com.wutsi.koki.portal.common.model.MoneyModel
 import com.wutsi.koki.portal.contact.model.ContactModel
 import com.wutsi.koki.portal.file.model.FileModel
 import com.wutsi.koki.portal.listing.model.AIListingModel
+import com.wutsi.koki.portal.listing.model.CategoryScoreModel
+import com.wutsi.koki.portal.listing.model.ContentQualityScoreBreakdownModel
+import com.wutsi.koki.portal.listing.model.ListingCqsModel
 import com.wutsi.koki.portal.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AddressModel
@@ -188,6 +194,7 @@ class ListingMapper(
             morcelable = entity.morcelable,
 
             qrCodeUrl = entity.qrCodeUrl,
+            contentQualityScore = entity.contentQualityScore,
         )
     }
 
@@ -260,6 +267,7 @@ class ListingMapper(
             } else {
                 toPublicUrl(entity.publicUrl)
             },
+            contentQualityScore = entity.contentQualityScore,
         )
     }
 
@@ -360,5 +368,35 @@ class ListingMapper(
 
     private fun toAgentId(userId: Long, agents: Map<Long, AgentModel>): Long? {
         return agents.values.find { agent -> agent.user.id == userId }?.id
+    }
+
+    fun toListingCqsModel(entity: GetListingCqsResponse): ListingCqsModel {
+        return ListingCqsModel(
+            listingId = entity.listingId,
+            overallCqs = entity.overallCqs,
+            cqsBreakdown = toContentQualityScoreBreakdownModel(entity.cqsBreakdown),
+        )
+    }
+
+    private fun toContentQualityScoreBreakdownModel(
+        entity: ContentQualityScoreBreakdown
+    ): ContentQualityScoreBreakdownModel {
+        return ContentQualityScoreBreakdownModel(
+            general = toCategoryScoreModel(entity.general),
+            legal = toCategoryScoreModel(entity.legal),
+            amenities = toCategoryScoreModel(entity.amenities),
+            address = toCategoryScoreModel(entity.address),
+            geo = toCategoryScoreModel(entity.geo),
+            rental = toCategoryScoreModel(entity.rental),
+            images = toCategoryScoreModel(entity.images),
+            total = entity.total,
+        )
+    }
+
+    private fun toCategoryScoreModel(entity: CategoryScore): CategoryScoreModel {
+        return CategoryScoreModel(
+            score = entity.score,
+            max = entity.max,
+        )
     }
 }

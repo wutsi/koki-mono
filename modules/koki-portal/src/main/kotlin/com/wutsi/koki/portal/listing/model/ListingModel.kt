@@ -99,6 +99,7 @@ data class ListingModel(
     val totalLeads: Int? = null,
     val totalActiveMessages: Int? = null,
     val qrCodeUrl: String? = null,
+    val contentQualityScore: Int? = null,
 ) {
     val heroImageUrl: String?
         get() = heroImage?.thumbnailUrl

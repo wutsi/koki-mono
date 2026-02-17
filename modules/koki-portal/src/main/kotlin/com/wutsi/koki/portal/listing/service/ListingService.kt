@@ -131,6 +131,11 @@ class ListingService(
         return mapper.toAIListingModel(koki.getAIListing(id).aiListing)
     }
 
+    fun getCqs(id: Long): com.wutsi.koki.portal.listing.model.ListingCqsModel {
+        val response = koki.getCqs(id)
+        return mapper.toListingCqsModel(response)
+    }
+
     fun search(
         ids: List<Long> = emptyList(),
         locationIds: List<Long> = emptyList(),

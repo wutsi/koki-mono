@@ -186,7 +186,8 @@ object ListingFixtures {
         transactionWithNotary = true,
         morcelable = true,
         subdivided = true,
-        qrCodeUrl = "https://www.freepnglogos.com/uploads/qr-code-png/qr-code-blackberry-code-variant-technology-icons-32.png"
+        qrCodeUrl = "https://www.freepnglogos.com/uploads/qr-code-png/qr-code-blackberry-code-variant-technology-icons-32.png",
+        contentQualityScore = 85,
     )
 
     val listings = listOf(
@@ -222,7 +223,8 @@ object ListingFixtures {
 
             buyerAgentUserId = UserFixtures.users[2].id,
             transactionPrice = Money(195000.0, "CAD"),
-            transactionDate = DateUtils.addDays(Date(), -10)
+            transactionDate = DateUtils.addDays(Date(), -10),
+            contentQualityScore = 85,
         ),
         ListingSummary(
             id = 1116,
@@ -256,7 +258,8 @@ object ListingFixtures {
 
             buyerAgentUserId = UserFixtures.users[2].id,
             transactionPrice = Money(195000.0, "CAD"),
-            transactionDate = DateUtils.addDays(Date(), -10)
+            transactionDate = DateUtils.addDays(Date(), -10),
+            contentQualityScore = 72,
         ),
         ListingSummary(
             id = 1117,
@@ -290,7 +293,8 @@ object ListingFixtures {
 
             buyerAgentUserId = UserFixtures.users[2].id,
             transactionPrice = Money(195000.0, "CAD"),
-            transactionDate = DateUtils.addDays(Date(), -1)
+            transactionDate = DateUtils.addDays(Date(), -1),
+            contentQualityScore = 90,
         ),
         ListingSummary(
             id = 1117,
@@ -319,7 +323,8 @@ object ListingFixtures {
 
             buyerAgentUserId = UserFixtures.USER_ID,
             transactionPrice = Money(195000.0, "CAD"),
-            transactionDate = DateUtils.addDays(Date(), -1)
+            transactionDate = DateUtils.addDays(Date(), -1),
+            contentQualityScore = 68,
         )
     )
 
@@ -438,5 +443,22 @@ object ListingFixtures {
             createdAt = Date(),
             modifiedAt = Date(),
         ),
+    )
+
+    val cqsBreakdown = com.wutsi.koki.listing.dto.ContentQualityScoreBreakdown(
+        general = com.wutsi.koki.listing.dto.CategoryScore(score = 15, max = 20),
+        legal = com.wutsi.koki.listing.dto.CategoryScore(score = 10, max = 10),
+        amenities = com.wutsi.koki.listing.dto.CategoryScore(score = 8, max = 10),
+        address = com.wutsi.koki.listing.dto.CategoryScore(score = 5, max = 5),
+        geo = com.wutsi.koki.listing.dto.CategoryScore(score = 15, max = 15),
+        rental = com.wutsi.koki.listing.dto.CategoryScore(score = 10, max = 10),
+        images = com.wutsi.koki.listing.dto.CategoryScore(score = 22, max = 30),
+        total = 85,
+    )
+
+    val cqsResponse = com.wutsi.koki.listing.dto.GetListingCqsResponse(
+        listingId = 1115,
+        overallCqs = 85,
+        cqsBreakdown = cqsBreakdown,
     )
 }

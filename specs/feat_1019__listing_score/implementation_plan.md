@@ -15,6 +15,7 @@ still required:
 5. **Service Layer**: CQS computation on publish (in `ListingPublisher`)
 6. **Batch Processing**: `CqsBatchService` with `@Async` support exists
 7. **Endpoint**: `POST /v1/listings/cqs` already implemented
+8. **koki-portal**: Updated to support CQS (see koki_portal_changes_summary.md)
 
 ### What's Missing ❌
 
