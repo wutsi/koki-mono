@@ -8,7 +8,7 @@
     <table class="w-100">
         <tr>
             <th class="text-nowrap" th:text="#{page.listing.content-quality-score}" width="1%">SCORE</th>
-            <td class="padding-left">
+            <td class="padding-left text-nowrap" width="1%">
                 <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
                    th:text="${listing.contentQualityScore}">00</b>
                 /
