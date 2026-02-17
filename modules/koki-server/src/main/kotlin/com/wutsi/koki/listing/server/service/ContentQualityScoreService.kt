@@ -1,5 +1,6 @@
 package com.wutsi.koki.listing.server.service
 
+import com.wutsi.koki.listing.dto.CategoryScore
 import com.wutsi.koki.listing.dto.ContentQualityScoreBreakdown
 import com.wutsi.koki.listing.dto.ListingType
 import com.wutsi.koki.listing.dto.PropertyCategory
@@ -41,23 +42,23 @@ class ContentQualityScoreService {
      * @return ContentQualityScoreBreakdown with all component scores
      */
     fun computeBreakdown(listing: ListingEntity, validImageCount: Int): ContentQualityScoreBreakdown {
-        val general = computeGeneralScore(listing)
-        val legal = computeLegalScore(listing)
-        val amenities = computeAmenitiesScore(listing)
-        val address = computeAddressScore(listing)
-        val geo = computeGeoScore(listing)
-        val rental = computeRentalScore(listing)
-        val images = computeImagesScore(validImageCount, listing.averageImageQualityScore)
-        val total = general + legal + amenities + address + geo + rental + images
+        val generalScore = computeGeneralScore(listing)
+        val legalScore = computeLegalScore(listing)
+        val amenitiesScore = computeAmenitiesScore(listing)
+        val addressScore = computeAddressScore(listing)
+        val geoScore = computeGeoScore(listing)
+        val rentalScore = computeRentalScore(listing)
+        val imagesScore = computeImagesScore(validImageCount, listing.averageImageQualityScore)
+        val total = generalScore + legalScore + amenitiesScore + addressScore + geoScore + rentalScore + imagesScore
 
         return ContentQualityScoreBreakdown(
-            general = general,
-            legal = legal,
-            amenities = amenities,
-            address = address,
-            geo = geo,
-            rental = rental,
-            images = images,
+            general = CategoryScore(score = generalScore, max = MAX_GENERAL_SCORE),
+            legal = CategoryScore(score = legalScore, max = MAX_LEGAL_SCORE),
+            amenities = CategoryScore(score = amenitiesScore, max = MAX_AMENITIES_SCORE),
+            address = CategoryScore(score = addressScore, max = MAX_ADDRESS_SCORE),
+            geo = CategoryScore(score = geoScore, max = MAX_GEO_SCORE),
+            rental = CategoryScore(score = rentalScore, max = MAX_RENTAL_SCORE),
+            images = CategoryScore(score = imagesScore, max = MAX_IMAGES_SCORE),
             total = total,
         )
     }

@@ -4,7 +4,6 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
@@ -13,7 +12,6 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.util.Date
 
 class ContentQualityScoreServiceTest {
     private val service = ContentQualityScoreService()
@@ -38,7 +36,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(20, breakdown.general)
+        assertEquals(20, breakdown.general.score)
     }
 
     @Test
@@ -54,7 +52,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.general)
+        assertEquals(10, breakdown.general.score)
     }
 
     @Test
@@ -64,7 +62,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.general)
+        assertEquals(0, breakdown.general.score)
     }
 
     // General Score Tests - Land
@@ -80,7 +78,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(20, breakdown.general)
+        assertEquals(20, breakdown.general.score)
     }
 
     @Test
@@ -93,7 +91,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(12, breakdown.general)
+        assertEquals(12, breakdown.general.score)
     }
 
     @Test
@@ -103,7 +101,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.general)
+        assertEquals(0, breakdown.general.score)
     }
 
     // General Score Tests - Commercial
@@ -124,7 +122,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(20, breakdown.general)
+        assertEquals(20, breakdown.general.score)
     }
 
     @Test
@@ -139,7 +137,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.general)
+        assertEquals(10, breakdown.general.score)
     }
 
     @Test
@@ -149,7 +147,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.general)
+        assertEquals(0, breakdown.general.score)
     }
 
     @Test
@@ -157,7 +155,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.general)
+        assertEquals(0, breakdown.general.score)
     }
 
     // Legal Score Tests
@@ -173,7 +171,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.legal)
+        assertEquals(10, breakdown.legal.score)
     }
 
     @Test
@@ -185,7 +183,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(5, breakdown.legal)
+        assertEquals(5, breakdown.legal.score)
     }
 
     @Test
@@ -193,7 +191,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.legal)
+        assertEquals(0, breakdown.legal.score)
     }
 
     // Amenities Score Tests
@@ -210,7 +208,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(5, breakdown.amenities)
+        assertEquals(5, breakdown.amenities.score)
     }
 
     @Test
@@ -231,7 +229,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.amenities)
+        assertEquals(10, breakdown.amenities.score)
     }
 
     @Test
@@ -257,7 +255,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.amenities)
+        assertEquals(10, breakdown.amenities.score)
     }
 
     @Test
@@ -265,7 +263,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.amenities)
+        assertEquals(0, breakdown.amenities.score)
     }
 
     // Address Score Tests
@@ -279,7 +277,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(5, breakdown.address)
+        assertEquals(5, breakdown.address.score)
     }
 
     @Test
@@ -290,7 +288,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(2, breakdown.address)
+        assertEquals(2, breakdown.address.score)
     }
 
     @Test
@@ -298,7 +296,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.address)
+        assertEquals(0, breakdown.address.score)
     }
 
     // Geo Score Tests
@@ -310,7 +308,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(15, breakdown.geo)
+        assertEquals(15, breakdown.geo.score)
     }
 
     @Test
@@ -320,7 +318,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.geo)
+        assertEquals(0, breakdown.geo.score)
     }
 
     @Test
@@ -330,7 +328,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.geo)
+        assertEquals(0, breakdown.geo.score)
     }
 
     @Test
@@ -338,7 +336,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.geo)
+        assertEquals(0, breakdown.geo.score)
     }
 
     // Rental Score Tests
@@ -353,7 +351,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.rental)
+        assertEquals(10, breakdown.rental.score)
     }
 
     @Test
@@ -365,7 +363,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(5, breakdown.rental)
+        assertEquals(5, breakdown.rental.score)
     }
 
     @Test
@@ -375,7 +373,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.rental)
+        assertEquals(0, breakdown.rental.score)
     }
 
     @Test
@@ -385,7 +383,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.rental)
+        assertEquals(10, breakdown.rental.score)
     }
 
     @Test
@@ -393,7 +391,7 @@ class ContentQualityScoreServiceTest {
         val listing = ListingEntity()
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(10, breakdown.rental)
+        assertEquals(10, breakdown.rental.score)
     }
 
     // Images Score Tests
@@ -404,7 +402,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 20)
-        assertEquals(30, breakdown.images)
+        assertEquals(30, breakdown.images.score)
     }
 
     @Test
@@ -414,7 +412,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 10)
-        assertEquals(15, breakdown.images)
+        assertEquals(15, breakdown.images.score)
     }
 
     @Test
@@ -424,7 +422,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 20)
-        assertEquals(15, breakdown.images)
+        assertEquals(15, breakdown.images.score)
     }
 
     @Test
@@ -434,7 +432,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 10)
-        assertEquals(7, breakdown.images)
+        assertEquals(7, breakdown.images.score)
     }
 
     @Test
@@ -444,7 +442,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 30)
-        assertEquals(30, breakdown.images)
+        assertEquals(30, breakdown.images.score)
     }
 
     @Test
@@ -454,7 +452,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 0)
-        assertEquals(0, breakdown.images)
+        assertEquals(0, breakdown.images.score)
     }
 
     @Test
@@ -464,7 +462,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 20)
-        assertEquals(0, breakdown.images)
+        assertEquals(0, breakdown.images.score)
     }
 
     @Test
@@ -474,7 +472,7 @@ class ContentQualityScoreServiceTest {
         )
 
         val breakdown = service.computeBreakdown(listing, 20)
-        assertEquals(0, breakdown.images)
+        assertEquals(0, breakdown.images.score)
     }
 
     @Test
@@ -485,7 +483,7 @@ class ContentQualityScoreServiceTest {
 
         val breakdown = service.computeBreakdown(listing, 5)
         // (5/20) * 30 * (3/4) = 0.25 * 30 * 0.75 = 5.625 -> 5
-        assertEquals(5, breakdown.images)
+        assertEquals(5, breakdown.images.score)
     }
 
     // Integration Tests
@@ -576,19 +574,19 @@ class ContentQualityScoreServiceTest {
         val breakdown = service.computeBreakdown(listing, 10)
 
         // General: 2/12 * 20 = 3
-        assertEquals(3, breakdown.general)
+        assertEquals(3, breakdown.general.score)
         // Legal: 1/6 * 10 = 1
-        assertEquals(1, breakdown.legal)
+        assertEquals(1, breakdown.legal.score)
         // Amenities: 2
-        assertEquals(2, breakdown.amenities)
+        assertEquals(2, breakdown.amenities.score)
         // Address: 1/4 * 5 = 1
-        assertEquals(1, breakdown.address)
+        assertEquals(1, breakdown.address.score)
         // Geo: 15
-        assertEquals(15, breakdown.geo)
+        assertEquals(15, breakdown.geo.score)
         // Rental: 10
-        assertEquals(10, breakdown.rental)
+        assertEquals(10, breakdown.rental.score)
         // Images: (10/20) * 30 * (2/4) = 7
-        assertEquals(7, breakdown.images)
+        assertEquals(7, breakdown.images.score)
         // Total: 3 + 1 + 2 + 1 + 15 + 10 + 7 = 39
         assertEquals(39, breakdown.total)
     }

@@ -1,15 +1,15 @@
 # Goal
 
-We want to build a feature that compute a Content Quality Score (QCS) for each listing.
+We want to build a feature that compute a Content Quality Score (CQS) for each listing.
 This score will be used to separate high-quality listings from low-quality ones, and to improve the overall user
 experience on our platform.
 
 # Core Feature and Logic
 
-The QCS values is from 0 to 100, where 0 is the lowest quality and 100 is the highest quality.
+The CQS values is from 0 to 100, where 0 is the lowest quality and 100 is the highest quality.
 The score will be calculated based on the completeness and accuracy of the listing information, as well as the quality
 of the images provided.
-The Content Quality Score (QCS) will be calculated based on several factors:
+The Content Quality Score (CQS) will be calculated based on several factors:
 
 - General Information
 - Legal Information
@@ -129,44 +129,77 @@ If Number of Images is 0 OR Average Image Quality Score is 0 or null, then Image
 
 # Technical Requirements
 
-- The QCS is computed during the publication of the listing.
-- QCS should be stored in the database for each listing.
-- The QCS should be returned as part of the listing details and summary DTO.
-- The QCS breakdown by category (General Information, Legal Information, Amenities, Address, Geo Location, Rental
-  Information, Images) should NOT be sored in the DB, but should be returned as part of the
-  listing details DTO.
-- The QCS breakdown should include the following information for each category:
-    - The score for the category
-    - The maximum possible score for the category
-    - This is the proposed schema for the QCS breakdown in the listing details DTO:
+## CQS Endpoints
 
-```json
-{
-    "general": {
-        "score": 18.0,
-        "max": 20
-    },
-    "legal": {
-        "score": 10,
-        "max": 10
-    },
-    "images": {
-        "score": 25.5,
-        "max": 30
-    },
-    ...
-}
-```
+- Endpoint: `POST /v1/listings/cqs`
+    - Description: This endpoint will trigger the computation of the CQS for all valid listings stored in the database.
+      The computation should be done asynchronously to avoid blocking the main thread.
+    - Request: None
 
-- Create a separate service that computes the CQS for a listing, which can be called during the publication process.
+- Endpoint: `GET /v1/listings/{id}/cqs`
+    - Description: This endpoint will return the CQS breakdown by category for a specific listing. The breakdown should
+      be computed on the fly when the endpoint is called, and should include the score and maximum possible score for
+      each category.
+    - Request: None
+    - Response: A JSON object containing the CQS breakdown by category, as shown in the proposed schema above. The
+      response class is `ListingCqsResponseDTO` that return the format shown below:
+      ```json
+      {
+          "listingId": "12345",
+          "overallCqs": 85.5,
+          "cqsBreakdown": {
+              "general": {
+              "score": 18.0,
+              "maxScore": 20.0
+              },
+              "legal": {
+              "score": 8.0,
+              "maxScore": 10.0
+              },
+              "amenities": {
+              "score": 9.0,
+              "maxScore": 10.0
+              },
+              "address": {
+              "score": 4.5,
+              "maxScore": 5.0
+              },
+              "geoLocation": {
+              "score": 15.0,
+              "maxScore": 15.0
+              },
+              "rentalInformation": {
+              "score": 10.0,
+              "maxScore": 10.0
+              },
+              "images": {
+              "score": 25.5,
+              "maxScore": 30.0
+              }
+          }
+      }
+      ```
+      The `cqsBreakdown` field contains the score and maximum possible score for each category.
+
+## Service Layer
+
+- The CQS is computed and updated whenever a listing is created, updated, and published.
+- Create a separate service that computes the CQS for a listing.
 - Use unit testing to validate the correctness of the CQS computation logic.
-- Create an endpoint to compute asynchronously the CQS for all valid listings stored in the DB.
-- Round the final score of each category to two decimal places or the nearest integer.
+
+## Domain Layer
+
+- CQS should be stored in the database for each listing
+- CQS should be mapped to the `ListingEntity.contentQualityScore`
+
+## DTO Layer
+
+- The `contentQualityScore` field should be added to the following the `Listing` and `ListingSummary` DTOs, and should
+  be returned in the listing details and summary responses.
+- The `Listing` DTO should not include the CQS breakdown by category, as this information is only relevant for the
+  `GET /v1/listings/{id}/cqs` endpoint.
 
 # Boundaries & Constraints
 
-- The listing is represented in the domain layer by the class `ListingEntity`
-- The listing publishing is handled by `ListingPublisher`
-- The endpoint for computing the QCS of all listings should be /v1/listings/cqs
-- Use springboot `@Async` annotation for running all the listings QCS
+- Use springboot `@Async` annotation for running all the listings CQS
 

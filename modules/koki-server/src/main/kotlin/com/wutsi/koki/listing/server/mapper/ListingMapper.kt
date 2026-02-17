@@ -1,11 +1,6 @@
 package com.wutsi.koki.listing.server.mapper
 
-import com.wutsi.koki.common.dto.ObjectType
-import com.wutsi.koki.file.dto.FileStatus
-import com.wutsi.koki.file.dto.FileType
-import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.BasementType
-import com.wutsi.koki.listing.dto.ContentQualityScoreBreakdown
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.Listing
@@ -18,7 +13,6 @@ import com.wutsi.koki.listing.dto.PropertyType
 import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.dto.VideoType
 import com.wutsi.koki.listing.server.domain.ListingEntity
-import com.wutsi.koki.listing.server.service.ContentQualityScoreService
 import com.wutsi.koki.listing.server.service.video.VideoEmbedUrlGenerator
 import com.wutsi.koki.platform.util.StringUtils
 import com.wutsi.koki.refdata.dto.Address
@@ -29,8 +23,6 @@ import org.springframework.stereotype.Service
 @Service
 class ListingMapper(
     private val videoEmbedUrlGenerator: VideoEmbedUrlGenerator,
-    private val contentQualityScoreService: ContentQualityScoreService,
-    private val fileService: FileService,
 ) {
     fun toListing(entity: ListingEntity): Listing {
         return Listing(
@@ -123,26 +115,10 @@ class ListingMapper(
             qrCodeUrl = entity.qrCodeUrl,
             averageImageQualityScore = entity.averageImageQualityScore,
             contentQualityScore = entity.contentQualityScore,
-            contentQualityScoreBreakdown = computeCqsBreakdown(entity),
             videoId = entity.videoId,
             videoType = entity.videoType?.takeIf { it != VideoType.UNKNOWN },
             videoEmbedUrl = videoEmbedUrlGenerator.generate(entity.videoId, entity.videoType),
         )
-    }
-
-    private fun computeCqsBreakdown(entity: ListingEntity): ContentQualityScoreBreakdown? {
-        if (entity.contentQualityScore == null) return null
-
-        val images = fileService.search(
-            tenantId = entity.tenantId,
-            ownerId = entity.id,
-            ownerType = ObjectType.LISTING,
-            status = FileStatus.APPROVED,
-            type = FileType.IMAGE,
-            limit = 100,
-        )
-
-        return contentQualityScoreService.computeBreakdown(entity, images.size)
     }
 
     fun toListingSummary(entity: ListingEntity): ListingSummary {
@@ -189,6 +165,7 @@ class ListingMapper(
             publicUrlFr = toPublicUrl(entity.id, entity.titleFr, entity.status),
             videoId = entity.videoId,
             videoType = entity.videoType?.takeIf { it != VideoType.UNKNOWN },
+            contentQualityScore = entity.contentQualityScore,
         )
     }
 
