@@ -12,6 +12,7 @@ import com.wutsi.koki.listing.dto.RoadPavement
 import com.wutsi.koki.listing.dto.UpdateListingRequest
 import com.wutsi.koki.listing.server.dao.ListingRepository
 import org.apache.commons.lang3.time.DateUtils
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
@@ -20,6 +21,7 @@ import java.util.Date
 import java.util.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @Sql(value = ["/db/test/clean.sql", "/db/test/listing/UpdateListingEndpoint.sql"])
 class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
@@ -82,6 +84,8 @@ class UpdateListingEndpointTest : AuthorizationAwareEndpointTest() {
         assertEquals(request.revenue, listing.revenue)
         assertEquals(df.format(request.availableAt), df.format(listing.availableAt))
         assertEquals(USER_ID, listing.modifiedById)
+        assertNotNull(listing.contentQualityScore)
+        assertTrue(listing.contentQualityScore!! > 0)
     }
 
     @Test

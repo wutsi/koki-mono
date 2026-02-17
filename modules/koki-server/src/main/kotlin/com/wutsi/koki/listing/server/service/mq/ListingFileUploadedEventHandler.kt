@@ -6,6 +6,7 @@ import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
+import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorAgent
@@ -20,6 +21,7 @@ class ListingFileUploadedEventHandler(
     private val fileService: FileService,
     private val listingService: ListingService,
     private val jsonMapper: JsonMapper,
+    private val aiqsService: AverageImageQualityScoreService,
     private val logger: KVLogger,
 ) {
     fun handle(event: FileUploadedEvent): Boolean {
@@ -82,13 +84,27 @@ class ListingFileUploadedEventHandler(
             if (listing.heroImageId == null && file.status == FileStatus.APPROVED) {
                 listing.heroImageId = file.id
             }
-            listing.totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
+            val totalImages = fileService.countByTypeAndOwnerIdAndOwnerType(
+                listing.tenantId,
                 file.type,
                 listingId,
                 ObjectType.LISTING,
-            )?.toInt()
+            )
+
+            listing.totalImages = totalImages?.toInt()
+            listing.averageImageQualityScore = aiqsService.compute(
+                fileService.search(
+                    tenantId = listing.tenantId,
+                    ownerId = listing.id,
+                    ownerType = ObjectType.LISTING,
+                    status = FileStatus.APPROVED,
+                    type = FileType.IMAGE,
+                    limit = 100,
+                )
+            )
         } else if (file.type == FileType.FILE) {
             listing.totalFiles = fileService.countByTypeAndOwnerIdAndOwnerType(
+                listing.tenantId,
                 file.type,
                 listingId,
                 ObjectType.LISTING,

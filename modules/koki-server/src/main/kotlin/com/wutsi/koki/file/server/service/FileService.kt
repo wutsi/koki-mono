@@ -11,7 +11,6 @@ import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.file.server.dao.FileRepository
 import com.wutsi.koki.file.server.domain.FileEntity
-import com.wutsi.koki.platform.logger.KVLogger
 import com.wutsi.koki.platform.storage.StorageService
 import com.wutsi.koki.platform.storage.StorageServiceBuilder
 import com.wutsi.koki.security.server.service.SecurityService
@@ -41,7 +40,6 @@ class FileService(
     private val configurationService: ConfigurationService,
     private val securityService: SecurityService,
     private val storageProvider: StorageProvider,
-    private val logger: KVLogger,
     private val em: EntityManager,
 ) {
     fun get(id: Long, tenantId: Long): FileEntity {
@@ -54,11 +52,12 @@ class FileService(
     }
 
     fun countByTypeAndOwnerIdAndOwnerType(
+        tenantId: Long,
         type: FileType,
         ownerId: Long,
         ownerType: ObjectType,
     ): Long? {
-        return dao.countByTypeAndOwnerIdAndOwnerTypeAndDeleted(type, ownerId, ownerType, false)
+        return dao.countByTenantIdAndTypeAndOwnerIdAndOwnerTypeAndDeleted(tenantId, type, ownerId, ownerType, false)
     }
 
     fun search(

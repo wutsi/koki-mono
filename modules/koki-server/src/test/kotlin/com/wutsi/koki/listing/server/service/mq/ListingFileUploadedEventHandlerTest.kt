@@ -20,6 +20,7 @@ import com.wutsi.koki.file.dto.event.FileUploadedEvent
 import com.wutsi.koki.file.server.domain.FileEntity
 import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.server.domain.ListingEntity
+import com.wutsi.koki.listing.server.service.AverageImageQualityScoreService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ai.ListingAgentFactory
 import com.wutsi.koki.listing.server.service.ai.ListingImageContentGeneratorAgent
@@ -38,6 +39,7 @@ class ListingFileUploadedEventHandlerTest {
     private val agentFactory = mock<ListingAgentFactory>()
     private val fileService = mock<FileService>()
     private val listingService = mock<ListingService>()
+    private val aiqsService = mock<AverageImageQualityScoreService>()
     private val jsonMapper = JsonMapper()
     private val logger = DefaultKVLogger()
     private val handler = ListingFileUploadedEventHandler(
@@ -45,6 +47,7 @@ class ListingFileUploadedEventHandlerTest {
         fileService = fileService,
         listingService = listingService,
         jsonMapper = jsonMapper,
+        aiqsService = aiqsService,
         logger = logger,
     )
 
@@ -56,7 +59,8 @@ class ListingFileUploadedEventHandlerTest {
         tenantId = tenantId,
         heroImageId = null,
         totalImages = null,
-        totalFiles = null
+        totalFiles = null,
+        averageImageQualityScore = null,
     )
 
     private val file = FileEntity(
@@ -84,15 +88,26 @@ class ListingFileUploadedEventHandlerTest {
 
     @BeforeEach
     fun setUp() {
+        doReturn(listOf(image)).whenever(fileService).search(
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
         doReturn(file).whenever(fileService).get(file.id!!, file.tenantId)
         doReturn(image).whenever(fileService).get(image.id!!, file.tenantId)
         doReturn(File("/foo/bar")).whenever(fileService).download(any())
         doReturn(totalFiles).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.FILE), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(any(), eq(FileType.FILE), any(), any())
         doReturn(totalImages).whenever(fileService)
-            .countByTypeAndOwnerIdAndOwnerType(eq(FileType.IMAGE), any(), any())
+            .countByTypeAndOwnerIdAndOwnerType(any(), eq(FileType.IMAGE), any(), any())
         doReturn(listing).whenever(listingService).get(any(), any())
         doReturn(agent).whenever(agentFactory).createImageContentGenerator()
+        doReturn(3.5).whenever(aiqsService).compute(any())
     }
 
     @AfterEach
@@ -121,6 +136,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(fileArg.firstValue.createdById))
         assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
         assertEquals(listing.totalImages, listingArg.firstValue.totalImages)
+        assertEquals(listing.averageImageQualityScore, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -135,6 +151,7 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(file.createdById))
         assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
+        assertEquals(listing.averageImageQualityScore, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -149,6 +166,7 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(file.createdById))
         assertEquals(totalFiles.toInt(), listingArg.firstValue.totalFiles)
+        assertEquals(listing.averageImageQualityScore, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -174,6 +192,7 @@ class ListingFileUploadedEventHandlerTest {
         assertEquals(imageArg.firstValue.id, listingArg.firstValue.heroImageId)
         assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(3.5, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -191,6 +210,7 @@ class ListingFileUploadedEventHandlerTest {
         assertEquals(555L, listingArg.firstValue.heroImageId)
         assertEquals(listing.totalFiles, listingArg.firstValue.totalFiles)
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(3.5, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -207,6 +227,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(image.id, listingArg.firstValue.heroImageId)
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(3.5, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -223,6 +244,7 @@ class ListingFileUploadedEventHandlerTest {
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(null, listingArg.firstValue.heroImageId)
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(3.5, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
@@ -246,6 +268,7 @@ class ListingFileUploadedEventHandlerTest {
         val listingArg = argumentCaptor<ListingEntity>()
         verify(listingService).save(listingArg.capture(), eq(image.createdById))
         assertEquals(totalImages.toInt(), listingArg.firstValue.totalImages)
+        assertEquals(3.5, listingArg.firstValue.averageImageQualityScore)
     }
 
     @Test
