@@ -93,7 +93,6 @@ data class Listing(
     val qrCodeUrl: String? = null,
     val averageImageQualityScore: Double? = null,
     val contentQualityScore: Int? = null,
-    val contentQualityScoreBreakdown: ContentQualityScoreBreakdown? = null,
     val videoId: String? = null,
     val videoType: VideoType? = null,
     val videoEmbedUrl: String? = null,
