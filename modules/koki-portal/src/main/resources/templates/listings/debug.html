@@ -18,21 +18,72 @@
                 </div>
             </div>
 
-            <!-- PUBLIC URL -->
-            <div class="widget margin-top-small" id="public-url" th:if="${listing.publicUrl}">
-                <div class="widget-header">
-                    <h3 class="widget-title">Public Address</h3>
-                </div>
+            <!-- CONTENT QUALITY -->
+            <div class="widget margin-top-small" th:if="${listing.contentQualityScore}">
                 <div class="widget-body">
-                    <table class="table-striped table">
+                    <h6>
+                        <span class="text-nowrap" th:text="#{page.listing.content-quality-score}">SCORE</span>
+                        <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
+                           th:text="${listing.contentQualityScore}">00</b>
+                        /
+                        <span>100</span>
+                        <span> - </span>
+                        <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
+                           th:text="#{'rating.' + ${listing.contentQualityRating}}">RATING</b>
+                    </h6>
+                    <table class="table-striped table text-small">
                         <tr>
-                            <th>Public URL</th>
+                            <th>Category</th>
+                            <th width="1%">Score</th>
+                            <th width="1%">Max</th>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.listing.show.general}">GENERAL</td>
                             <td>
-                                <a class="text-small" target="_blank" th:href="${listing.publicUrl}"
-                                   th:text="${listing.publicUrl}">
-                                    URL
-                                </a>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.general.rating}"
+                                   th:text="${cqs.cqsBreakdown.general.score}">00</b>
                             </td>
+                            <td th:text="${cqs.cqsBreakdown.general.max}">00</td>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.listing.show.legal}">LEGAL</td>
+                            <td>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.legal.rating}"
+                                   th:text="${cqs.cqsBreakdown.legal.score}">00</b>
+                            </td>
+                            <td th:text="${cqs.cqsBreakdown.legal.max}">00</td>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.listing.show.amenities}">AMENITIES</td>
+                            <td>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.amenities.rating}"
+                                   th:text="${cqs.cqsBreakdown.amenities.score}">00</b>
+                            </td>
+                            <td th:text="${cqs.cqsBreakdown.amenities.max}">00</td>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.listing.show.geo-location}">LOCALIZATION</td>
+                            <td>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.geo.rating}"
+                                   th:text="${cqs.cqsBreakdown.geo.score}">00</b>
+                            </td>
+                            <td th:text="${cqs.cqsBreakdown.geo.max}">00</td>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.listing.show.leasing}">LEASING/th>
+                            <td>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.leasing.rating}"
+                                   th:text="${cqs.cqsBreakdown.leasing.score}">00</b>
+                            </td>
+                            <td th:text="${cqs.cqsBreakdown.leasing.max}">00</td>
+                        </tr>
+                        <tr>
+                            <td>Image</td>
+                            <td>
+                                <b th:class="'rating-' + ${cqs.cqsBreakdown.image.rating}"
+                                   th:text="${cqs.cqsBreakdown.image.score}">00</b>
+                            </td>
+                            <td th:text="${cqs.cqsBreakdown.image.max}">00</td>
                         </tr>
                     </table>
                 </div>

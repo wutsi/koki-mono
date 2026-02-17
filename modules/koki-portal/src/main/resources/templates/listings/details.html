@@ -4,16 +4,38 @@
     <hr/>
 </div>
 
+<div th:if="${listing.contentQualityScore}">
+    <table class="w-100">
+        <tr>
+            <th class="text-nowrap" th:text="#{page.listing.content-quality-score}" width="1%">SCORE</th>
+            <td class="padding-left">
+                <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
+                   th:text="${listing.contentQualityScore}">00</b>
+                /
+                <span>100</span>
+            </td>
+            <td class="padding-left">
+                <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
+                   th:text="#{'rating.' + ${listing.contentQualityRating}}">RATING</b>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</div>
+
 <a name="listing-general-section"></a>
 <div id="listing-general-section">
-    <h4>
-        <span th:text="#{page.listing.show.general}">GENERAL</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.general}">GENERAL</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.general})}"></div>
+    </div>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 col-lg-3 padding-bottom-small">
             <b class="text-small" th:text="#{page.listing.property-type}">PROPERTY_TYPE</b>
@@ -105,14 +127,17 @@
 
 <a name="listing-legal-section"></a>
 <div id="listing-legal-section">
-    <h4>
-        <span th:text="#{page.listing.show.legal}">LEGAL</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/legal-info?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.legal}">LEGAL</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit/legal-info?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.legal})}"></div>
+    </div>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 col-lg-3  margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.land-title}">KEY</b>
@@ -151,14 +176,17 @@
 
 <a name="listing-amenity-section"></a>
 <div id="listing-amenity-section">
-    <h4>
-        <span th:text="#{page.listing.show.amenities}">AMENITIES</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/amenities?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.amenities}">AMENITIES</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit/amenities?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.amenities})}"></div>
+    </div>
     <div class="row">
         <div class="col-12">
             <b class="text-small" th:text="#{page.listing.furniture-type}">KEY</b>
@@ -188,14 +216,17 @@
 
 <a name="listing-address-section"></a>
 <div id="listing-address-section">
-    <h4>
-        <span th:text="#{page.listing.show.location}">ADDRESS</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/address?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.location}">ADDRESS</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit/address?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.address})}"></div>
+    </div>
     <div class="row">
         <b class="text-small" th:text="#{page.listing.street}">STREET</b>
         <div class="col-12 padding-bottom-small"
@@ -225,14 +256,18 @@
 
 <a name="listing-geolocation-section"></a>
 <div id="listing-geolocation-section">
-    <h4>
-        <span th:text="#{page.listing.show.geo-location}">ADDRESS</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/geo-location?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.geo-location}">ADDRESS</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit/geo-location?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.geo})}"></div>
+    </div>
+
     <div id="map-container" th:if="${listing.geoLocation}">
         <div data-component-id="map"
              data-disable-scroll-wheel-zoom="true"
@@ -325,14 +360,17 @@
 
 <a name="listing-leasing-section" th:if="${listing.listingTypeRental}"></a>
 <div id="listing-leasing-section" th:if="${listing.listingTypeRental}">
-    <h4>
-        <span th:text="#{page.listing.show.leasing}">LEASING</span>
-        <a class="text-small btn-section-edit"
-           th:href="'/listings/edit/leasing?id=' + ${listing.id}"
-           th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
-           th:text="#{button.edit}"
-        >EDIT</a>
-    </h4>
+    <div class="flex flex-space-between">
+        <h4>
+            <span th:text="#{page.listing.show.leasing}">LEASING</span>
+            <a class="text-small btn-section-edit"
+               th:href="'/listings/edit/leasing?id=' + ${listing.id}"
+               th:if="${listing.canManage(user)} AND ${listing.statusDraft}"
+               th:text="#{button.edit}"
+            >EDIT</a>
+        </h4>
+        <div th:replace="~{__components/listing :: listing-cqs-dot(${contentQuality?.cqsBreakdown?.leasing})}"></div>
+    </div>
     <div class="flex flex-wrap">
         <div class="col-6 col-md-4 col-lg-3 margin-bottom-small">
             <b class="text-small" th:text="#{page.listing.lease-terms}">KEY</b>

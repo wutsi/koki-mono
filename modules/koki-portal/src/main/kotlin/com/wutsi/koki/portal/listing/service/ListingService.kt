@@ -29,6 +29,7 @@ import com.wutsi.koki.portal.listing.form.AIListingForm
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.listing.mapper.ListingMapper
 import com.wutsi.koki.portal.listing.model.AIListingModel
+import com.wutsi.koki.portal.listing.model.ListingCqsModel
 import com.wutsi.koki.portal.listing.model.ListingMetricModel
 import com.wutsi.koki.portal.listing.model.ListingModel
 import com.wutsi.koki.portal.refdata.model.AmenityModel
@@ -129,6 +130,11 @@ class ListingService(
 
     fun getAIListing(id: Long): AIListingModel {
         return mapper.toAIListingModel(koki.getAIListing(id).aiListing)
+    }
+
+    fun getCqs(id: Long): ListingCqsModel {
+        val response = koki.getCqs(id)
+        return mapper.toListingCqsModel(response)
     }
 
     fun search(

@@ -2,6 +2,7 @@ package com.wutsi.koki.portal.file.model
 
 import com.wutsi.koki.file.dto.FileStatus
 import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.file.dto.ImageQuality
 import com.wutsi.koki.portal.common.model.ObjectReferenceModel
 import com.wutsi.koki.portal.user.model.UserModel
 import java.util.Date
@@ -33,7 +34,16 @@ data class FileModel(
     val previewUrl: String? = null,
     val tinyUrl: String? = null,
     val openGraphUrl: String? = null,
+    val imageQuality: ImageQuality? = null,
 ) {
+    val imageQualityRating: String?
+        get() = when (imageQuality) {
+            ImageQuality.LOW -> "poor"
+            ImageQuality.MEDIUM -> "medium"
+            ImageQuality.HIGH -> "excellent"
+            else -> null
+        }
+
     val rejected: Boolean
         get() = status == FileStatus.REJECTED
 

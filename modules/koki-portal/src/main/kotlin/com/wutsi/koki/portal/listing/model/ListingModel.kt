@@ -99,7 +99,21 @@ data class ListingModel(
     val totalLeads: Int? = null,
     val totalActiveMessages: Int? = null,
     val qrCodeUrl: String? = null,
+    val contentQualityScore: Int? = null,
 ) {
+    val contentQualityRating: String?
+        get() = if (contentQualityScore == null) {
+            null
+        } else if (contentQualityScore < 40) {
+            "poor"
+        } else if (contentQualityScore < 75) {
+            "medium"
+        } else if (contentQualityScore < 90) {
+            "good"
+        } else {
+            "excellent"
+        }
+
     val heroImageUrl: String?
         get() = heroImage?.thumbnailUrl
 

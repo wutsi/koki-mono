@@ -4,6 +4,7 @@ import com.wutsi.koki.common.dto.ObjectType
 import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.common.page.AbstractPageController
 import com.wutsi.koki.portal.file.service.FileService
+import com.wutsi.koki.portal.listing.service.ListingService
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,7 +17,10 @@ import org.springframework.web.client.RestClientException
 @Controller
 @RequestMapping("/images/tab")
 @RequiresPermission(["image"])
-class ImageTabController(private val service: FileService) : AbstractPageController() {
+class ImageTabController(
+    private val service: FileService,
+    private val listingService: ListingService,
+) : AbstractPageController() {
     @GetMapping
     fun list(
         @RequestParam(name = "owner-id") ownerId: Long,
@@ -39,6 +43,12 @@ class ImageTabController(private val service: FileService) : AbstractPageControl
         model.addAttribute("ownerId", ownerId)
         model.addAttribute("ownerType", ownerType)
         more(ownerId, ownerType, readOnly, limit, offset, model)
+
+        if (ownerType == ObjectType.LISTING) {
+            val cqs = listingService.getCqs(ownerId)
+            model.addAttribute("listingImageCqs", cqs.cqsBreakdown.image)
+        }
+
         return "files/images/tab/list"
     }
 

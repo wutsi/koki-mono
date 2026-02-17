@@ -41,8 +41,8 @@ body.image-viewer .image-header {
     background: white;
 }
 
-body.image-viewer .image-body {
-    margin-bottom: 8em;
+body.image-viewer .image-body img {
+    max-width: 800px;
 }
 
 body.image-viewer .image-footer {
@@ -67,6 +67,10 @@ body.image-viewer .image-footer {
 
 /* Small */
 @media only screen and (max-width: 768px) and (orientation: portrait) {
+    body.image-viewer .image-body img {
+        max-width: 600px;
+    }
+
     .tab-images .image {
         width: 350px;
     }
@@ -84,6 +88,10 @@ body.image-viewer .image-footer {
 
 /* Small */
 @media only screen and (max-width: 576px) {
+    body.image-viewer .image-body img {
+        max-width: 400px;
+    }
+
     .tab-images .image-frame {
         margin-left: 0;
     }

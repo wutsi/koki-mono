@@ -63,8 +63,8 @@
         <div class="flex-grow text-right">
             <div th:if="${me.profileStrength}">
                 <span th:text="#{page.home.profile_strength}">STRENGTH</span>:
-                <b th:class="'profile-strength-' + ${me.profileStrength.rating}"
-                   th:text="#{'profile-strength.' + ${me.profileStrength.rating}}">
+                <b th:class="'rating-' + ${me.profileStrength.rating}"
+                   th:text="#{'rating.' + ${me.profileStrength.rating}}">
                     MODERATE
                 </b>
             </div>
