@@ -1,10 +1,15 @@
 package com.wutsi.koki.listing.server.endpoint
 
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
+import com.wutsi.koki.file.server.service.FileService
 import com.wutsi.koki.listing.dto.CloseListingRequest
 import com.wutsi.koki.listing.dto.CreateListingRequest
 import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
+import com.wutsi.koki.listing.dto.GetListingCqsResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingSimilaritySummary
 import com.wutsi.koki.listing.dto.ListingSort
@@ -27,6 +32,7 @@ import com.wutsi.koki.listing.dto.UpdateListingVideoLinkRequest
 import com.wutsi.koki.listing.dto.event.ListingStatusChangedEvent
 import com.wutsi.koki.listing.server.mapper.ListingMapper
 import com.wutsi.koki.listing.server.service.AiqsBatchService
+import com.wutsi.koki.listing.server.service.ContentQualityScoreService
 import com.wutsi.koki.listing.server.service.CqsBatchService
 import com.wutsi.koki.listing.server.service.ListingService
 import com.wutsi.koki.listing.server.service.ListingSimilarityService
@@ -53,6 +59,8 @@ class ListingEndpoints(
     private val logger: KVLogger,
     private val aiqsBatchService: AiqsBatchService,
     private val cqsBatchService: CqsBatchService,
+    private val contentQualityScoreService: ContentQualityScoreService,
+    private val fileService: FileService,
 ) {
     @PostMapping
     fun create(
@@ -165,6 +173,35 @@ class ListingEndpoints(
         val listing = service.get(id, tenantId)
         return GetListingResponse(
             listing = mapper.toListing(listing)
+        )
+    }
+
+    @GetMapping("/{id}/cqs")
+    fun getListingCqs(
+        @RequestHeader(name = "X-Tenant-ID") tenantId: Long,
+        @PathVariable id: Long,
+    ): GetListingCqsResponse {
+        val listing = service.get(id, tenantId)
+
+        // Compute breakdown on-the-fly
+        val images = fileService.search(
+            tenantId = tenantId,
+            ownerId = listing.id,
+            ownerType = ObjectType.LISTING,
+            status = FileStatus.APPROVED,
+            type = FileType.IMAGE,
+            limit = 100,
+        )
+
+        val breakdown = contentQualityScoreService.computeBreakdown(listing, images.size)
+
+        logger.add("listing_id", id)
+        logger.add("overall_cqs", breakdown.total)
+
+        return GetListingCqsResponse(
+            listingId = listing.id ?: -1,
+            overallCqs = breakdown.total,
+            cqsBreakdown = breakdown,
         )
     }
 

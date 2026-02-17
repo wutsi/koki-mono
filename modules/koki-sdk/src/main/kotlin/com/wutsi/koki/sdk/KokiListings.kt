@@ -7,6 +7,7 @@ import com.wutsi.koki.listing.dto.CreateListingResponse
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.GenerateQrCodeResponse
 import com.wutsi.koki.listing.dto.GetAIListingResponse
+import com.wutsi.koki.listing.dto.GetListingCqsResponse
 import com.wutsi.koki.listing.dto.GetListingResponse
 import com.wutsi.koki.listing.dto.ListingMetricDimension
 import com.wutsi.koki.listing.dto.ListingSort
@@ -105,6 +106,11 @@ class KokiListings(
     fun get(id: Long): GetListingResponse {
         val url = urlBuilder.build("$PATH_PREFIX/$id")
         return rest.getForEntity(url, GetListingResponse::class.java).body!!
+    }
+
+    fun getCqs(id: Long): GetListingCqsResponse {
+        val url = urlBuilder.build("$PATH_PREFIX/$id/cqs")
+        return rest.getForEntity(url, GetListingCqsResponse::class.java).body!!
     }
 
     fun getAIListing(id: Long): GetAIListingResponse {

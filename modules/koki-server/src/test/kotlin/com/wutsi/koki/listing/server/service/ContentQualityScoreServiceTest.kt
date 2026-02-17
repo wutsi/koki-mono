@@ -4,7 +4,6 @@ import com.wutsi.koki.listing.dto.BasementType
 import com.wutsi.koki.listing.dto.FenceType
 import com.wutsi.koki.listing.dto.FurnitureType
 import com.wutsi.koki.listing.dto.ListingType
-import com.wutsi.koki.listing.dto.MutationType
 import com.wutsi.koki.listing.dto.ParkingType
 import com.wutsi.koki.listing.dto.PropertyCategory
 import com.wutsi.koki.listing.dto.PropertyType
@@ -13,7 +12,6 @@ import com.wutsi.koki.listing.server.domain.ListingEntity
 import com.wutsi.koki.refdata.server.domain.AmenityEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.util.Date
 
 class ContentQualityScoreServiceTest {
     private val service = ContentQualityScoreService()
