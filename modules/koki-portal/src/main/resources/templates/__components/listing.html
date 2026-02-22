@@ -10,7 +10,7 @@
                     <a href="/" th:text="#{module.home}">HOME</a>
                 </li>
                 <li class="breadcrumb-item" th:if="${listing}">
-                    <a th:href="'/listings?status=' + ${listing.status} + '&me=' + (${user.id == listing.sellerAgentUser.id})"
+                    <a th:href="'/listings?status=' + ${listing.status} + '&me=' + (${user?.id == listing.sellerAgentUser?.id})"
                        th:text="#{module.listing}">MODULE</a>
                 </li>
                 <li class="breadcrumb-item active" th:if="${listing}">
