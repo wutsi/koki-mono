@@ -171,75 +171,75 @@
         <div class="margin-top border-top padding-top" id="description-container">
             <div id="listing-description" th:utext="${listing.descriptionHtml}">DESCRIPTION</div>
             <div class="flex flex-wrap margin-top">
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.units}">
-                    <b th:text="#{page.listing.units}">Units</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.units}">
+                    <b class="listing-field-name" th:text="#{page.listing.units}">UNITS</b>
                     <span th:text="${listing.units}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bedrooms}">
-                    <b th:text="#{page.listing.bedrooms}">Bedrooms</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bedrooms}">
+                    <b class="listing-field-name" th:text="#{page.listing.bedrooms}">BED</b>
                     <span th:text="${listing.bedrooms}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bathrooms}">
-                    <b th:text="#{page.listing.bathrooms}">Bathrooms</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.bathrooms}">
+                    <b class="listing-field-name" th:text="#{page.listing.bathrooms}">BATH</b>
                     <span th:text="${listing.bathrooms}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.halfBathrooms}">
-                    <b th:text="#{page.listing.half-bathrooms}">Toilettes</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.halfBathrooms}">
+                    <b class="listing-field-name" th:text="#{page.listing.half-bathrooms}">TOILET</b>
                     <span th:text="${listing.halfBathrooms}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.lotArea}">
-                    <b th:text="#{page.listing.lot-area}">Superficie du terrain</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.lotArea}">
+                    <b class="listing-field-name" th:text="#{page.listing.lot-area}">AREA</b>
                     <span th:text="${listing.lotArea}">000</span>
                     <span>m<sup>2</sup></span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.propertyArea}">
-                    <b th:text="#{page.listing.property-area}">Superficie habitable</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.propertyArea}">
+                    <b class="listing-field-name" th:text="#{page.listing.property-area}">AREA</b>
                     <span th:text="${listing.propertyArea}">000</span>
                     <span>m<sup>2</sup></span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.floors}">
-                    <b th:text="#{page.listing.floors}">Etages</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.floors}">
+                    <b class="listing-field-name" th:text="#{page.listing.floors}">FLOORS</b>
                     <span th:text="${listing.floors}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.level}">
-                    <b th:text="#{page.listing.level}">Niveau</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.level}">
+                    <b class="listing-field-name" th:text="#{page.listing.level}">LEVEL</b>
                     <span th:utext="${listing.levelHtml}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.parkings}">
-                    <b th:text="#{page.listing.parkings}">Places de parking</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.parkings}">
+                    <b class="listing-field-name" th:text="#{page.listing.parkings}">PARKING</b>
                     <span th:text="${listing.parkings}">yyyy</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.parkingType}">
-                    <b th:text="#{page.listing.parking-type}">Type de parking</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.parkingType}">
+                    <b class="listing-field-name" th:text="#{page.listing.parking-type}">PARKING</b>
                     <span th:text="#{'parking-type.' + ${listing.parkingType}}">VALUE</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.fenceType}">
-                    <b th:text="#{page.listing.fence}">Clôture</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.fenceType}">
+                    <b class="listing-field-name" th:text="#{page.listing.fence}">FENCE</b>
                     <span th:text="#{'fence-type.' + ${listing.fenceType}}">VALUE</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.basementType}">
-                    <b th:text="#{page.listing.basement}">Sous-Sol</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.basementType}">
+                    <b class="listing-field-name" th:text="#{page.listing.basement}">BASEMENT</b>
                     <span th:text="#{'basement-type.' + ${listing.basementType}}">VALUE</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.distanceFromMainRoad}">
-                    <b th:text="#{page.listing.distance-from-main-road}">Distance de la route principale</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.distanceFromMainRoad}">
+                    <b class="listing-field-name" th:text="#{page.listing.distance-from-main-road}">DISTANCE</b>
                     <span th:text="${listing.distanceFromMainRoad}">00</span>
                     <span>m</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.roadPavement}">
-                    <b th:text="#{page.listing.road-pavement}">Route</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.roadPavement}">
+                    <b class="listing-field-name" th:text="#{page.listing.road-pavement}">Route</b>
                     <span th:text="#{'road-pavement.' + ${listing.roadPavement}}">VALUE</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.year}">
-                    <b th:text="#{page.listing.year}">Construction Year:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.year}">
+                    <b class="listing-field-name" th:text="#{page.listing.year}">Construction Year:</b>
                     <span th:text="${listing.year}">yyyy</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.revenue}">
-                    <b th:text="#{page.listing.revenue}">Revenus:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.revenue}">
+                    <b class="listing-field-name" th:text="#{page.listing.revenue}">Revenus:</b>
                     <span th:text="${listing.revenue.displayText}">$$</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.visitFees}">
-                    <b th:text="#{page.listing.visit-fees}">Visit Fees:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.visitFees}">
+                    <b class="listing-field-name" th:text="#{page.listing.visit-fees}">Visit Fees:</b>
                     <span th:text="${listing.visitFees.displayText}">$$</span>
                 </div>
             </div>
@@ -249,32 +249,32 @@
         <div class="margin-top border-top padding-top" id="legal-container" th:if="${listing.hasLegalInformation}">
             <h2 th:text="#{page.listing.section.legal.title}">Legal</h2>
             <div class="flex flex-wrap">
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.landTitle != null}">
-                    <b th:text="#{page.listing.land-title}">LandTitle</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.landTitle != null}">
+                    <b class="listing-field-name" th:text="#{page.listing.land-title}">LandTitle</b>
                     <span th:text="#{'yes-no.' + ${listing.landTitle}}">Y</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.technicalFile != null}">
-                    <b th:text="#{page.listing.technical-file}">Technical File</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.technicalFile != null}">
+                    <b class="listing-field-name" th:text="#{page.listing.technical-file}">Technical File</b>
                     <span th:text="#{'yes-no.' + ${listing.technicalFile}}">Y</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.subdivided != null}">
-                    <b th:text="#{page.listing.subdivided}">Subdivided</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.subdivided != null}">
+                    <b class="listing-field-name" th:text="#{page.listing.subdivided}">Subdivided</b>
                     <span th:text="#{'yes-no.' + ${listing.subdivided}}">Y</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.morcelable != null}">
-                    <b th:text="#{page.listing.morcelable}">Morcelable</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.morcelable != null}">
+                    <b class="listing-field-name" th:text="#{page.listing.morcelable}">Morcelable</b>
                     <span th:text="#{'yes-no.' + ${listing.morcelable}}">Y</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.numberOfSigners}">
-                    <b th:text="#{page.listing.number-of-signers}">Signers</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.numberOfSigners}">
+                    <b class="listing-field-name" th:text="#{page.listing.number-of-signers}">Signers</b>
                     <span th:text="${listing.numberOfSigners}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.mutationType}">
-                    <b th:text="#{page.listing.mutation-type}">Mutation</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.mutationType}">
+                    <b class="listing-field-name" th:text="#{page.listing.mutation-type}">Mutation</b>
                     <span th:text="#{'mutation-type.' + ${listing.mutationType}}">00</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.transactionWithNotary}">
-                    <b th:text="#{page.listing.transaction-with-notary}">Mutation</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.transactionWithNotary}">
+                    <b class="listing-field-name" th:text="#{page.listing.transaction-with-notary}">Mutation</b>
                     <span th:text="#{'yes-no.' + ${listing.transactionWithNotary}}">Y</span>
                 </div>
             </div>
@@ -284,8 +284,7 @@
         <div class="margin-top border-top padding-top" id="amenity-container" th:if="${listing.hasAmenities}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="flex flex-wrap">
-                <div class="col-6 col-lg-4 col-md-6" th:each="amenity:${topAmenities}">
-                    <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
+                <div class="col-6 col-lg-4 col-md-6 listing-amenity" th:each="amenity:${topAmenities}">
                     <span th:text="${amenity.name}">AMENITY</span>
                 </div>
             </div>
@@ -330,32 +329,32 @@
         <div class="margin-top border-top padding-top" id="terms-container" th:if="${listing.hasTermsAndConditions}">
             <h2 th:text="#{page.listing.section.terms.title}">Terms &amp; Condition</h2>
             <div class="flex flex-wrap">
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">
-                    <b th:text="#{page.listing.security-deposit}">Security Deposit:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.securityDeposit}">
+                    <b class="listing-field-name" th:text="#{page.listing.security-deposit}">Security Deposit:</b>
                     <span th:text="${listing.securityDeposit}">00</span>
                     <span th:if="${listing.securityDeposit == 1}" th:text="#{label.month}">month</span>
                     <span th:if="${listing.securityDeposit > 1}" th:text="#{label.months}">months</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.leaseTerm}">
-                    <b th:text="#{page.listing.lease-terms}">Lease Term:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.leaseTerm}">
+                    <b class="listing-field-name" th:text="#{page.listing.lease-terms}">Lease Term:</b>
                     <span th:text="${listing.leaseTerm}">00</span>
                     <span th:if="${listing.leaseTerm == 1}" th:text="#{label.month}">month</span>
                     <span th:if="${listing.leaseTerm > 1}" th:text="#{label.months}">months</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.advanceRent}">
-                    <b th:text="#{page.listing.advance-rent}">Advance Rent:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.advanceRent}">
+                    <b class="listing-field-name" th:text="#{page.listing.advance-rent}">Advance Rent:</b>
                     <span th:text="${listing.advanceRent}">00</span>
                     <span th:if="${listing.advanceRent == 1}" th:text="#{label.month}">month</span>
                     <span th:if="${listing.advanceRent > 1}" th:text="#{label.months}">months</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.noticePeriod}">
-                    <b th:text="#{page.listing.notice-period}">Advance Rent:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.noticePeriod}">
+                    <b class="listing-field-name" th:text="#{page.listing.notice-period}">Advance Rent:</b>
                     <span th:text="${listing.noticePeriod}">00</span>
                     <span th:if="${listing.noticePeriod == 1}" th:text="#{label.month}">month</span>
                     <span th:if="${listing.noticePeriod > 1}" th:text="#{label.months}">months</span>
                 </div>
-                <div class="col-12 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.availableAt}">
-                    <b th:text="#{page.listing.available-at}">Availability Date:</b>
+                <div class="col-6 col-lg-4 col-md-6 margin-bottom-small" th:if="${listing.availableAt}">
+                    <b class="listing-field-name" th:text="#{page.listing.available-at}">Availability Date:</b>
                     <span th:text="${listing.availableAtText}">yyyy-mm-dd</span>
                 </div>
             </div>

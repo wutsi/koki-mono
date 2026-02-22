@@ -219,6 +219,7 @@ class ListingController(
     private fun loadPlaces(name: String, types: List<PlaceType>, places: List<PlaceModel>, model: Model) {
         val items = places.filter { types.contains(it.type) }
             .sortedByDescending { (it.websiteUrl?.let { 10.0 } ?: 0.0) + (it.rating ?: 0.0) }
+            .take(5)
 
         if (items.isNotEmpty()) {
             model.addAttribute(name, items)

@@ -327,6 +327,7 @@
     border-bottom: none;
 }
 
+
 /* ======================================================================== */
 /*                                                                          */
 /*  MEDIA QUERIES                                                           */
@@ -431,6 +432,14 @@
 
 /* Mobile phone */
 @media only screen and (max-width: 576px) {
+    .listing-field-name {
+        display: block;
+    }
+
+    .listing-amenity:nth-child(even) {
+        text-align: right;
+    }
+
     .hero-image-container {
         height: 319px;
     }
