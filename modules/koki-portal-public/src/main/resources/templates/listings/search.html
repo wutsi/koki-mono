@@ -152,7 +152,7 @@
                 <span th:if="${listings.total > 1}" th:utext="#{page.search.result.n_properties(${listings.total})}">N_PROPERTY</span>
             </div>
             <div class="dropdown">
-                <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                <button aria-expanded="false" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
                         id="btn-sort-by"
                         th:text="${sort} ? #{'listing-sort.' + ${sort}} : #{page.search.filter.sort-by}"
                         type="button">

@@ -68,7 +68,9 @@ abstract class AbstractListingController(
             country = tenantHolder.get().country,
             limit = cityIds.size,
         )
-        model.addAttribute("footerCities", cities.take(12))
+        if (cities.isNotEmpty()) {
+            model.addAttribute("footerCities", cities.take(12))
+        }
     }
 
     private fun loadSimilarNeighbourhoods(

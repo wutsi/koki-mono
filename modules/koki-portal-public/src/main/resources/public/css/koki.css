@@ -1,9 +1,30 @@
 /* === VARIABLES ===== */
+:root {
+    --bg-main: #f8f8f8;
+    --bg-darker: #f0f0f0;
+    --bg-primary: #E4EDF7;
+    --bg-white: white;
+    --bg-whatsapp: #075E54;
+    --bg-whatsapp-hover: #25D366;
+
+    --border-main: gray;
+    --border-light: lightgray;
+
+    --text-main: #555;
+    --text-darker: #000;
+    --text-primary: #1D7EDF;
+    --text-white: white;
+
+    --color-success: darkgreen;
+    --color-danger: darkred;
+    --color-warning: darkorange;
+    --color-info: blue;
+}
 
 /* === CORE ===== */
 body {
-    background: #f8f8f8;
-    color: #555;
+    background: var(--bg-main);
+    color: var(--text-main);
     margin-top: 4.8em;
     font-family: "Outfit", sans-serif;
     font-optical-sizing: auto;
@@ -12,11 +33,11 @@ body {
 }
 
 a {
-    color: #1D7EDF;
+    color: var(--text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #000;
+    color: var(--text-darker);
     font-weight: 500 !important;
 }
 
@@ -53,12 +74,8 @@ b, strong {
     display: none;
 }
 
-.background-lightgray {
-    background: #f0f0f0;
-}
-
 .background-white {
-    background: white;
+    background: var(--bg-white);
 }
 
 .flex-center {
@@ -102,7 +119,7 @@ b, strong {
     text-transform: lowercase;
 }
 
-text-nowrap {
+.text-nowrap {
     text-wrap: nowrap;
 }
 
@@ -236,9 +253,8 @@ text-nowrap {
 
 /* === NAVBAR ====== */
 .navbar {
-    border-bottom: 1px solid gray;
-    background: white;
-    /*background: #f0f0f0;*/
+    border-bottom: 1px solid var(--border-main);
+    background: var(--bg-white);
 }
 
 .navbar .brand-name {
@@ -253,7 +269,7 @@ text-nowrap {
 }
 
 .navbar .nav-link {
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     margin-right: .5em;
 }
 
@@ -272,40 +288,17 @@ text-nowrap {
     font-size: 1.2em;
 }
 
-/* === ERROR ====== */
+/* === ERROR PAGE ====== */
 .error-container h1 {
     font-size: 8em;
 }
 
-/* === MENU ====== */
-#menubar {
-    padding-top: 0;
-    padding-bottom: 0;
-    background: #1D7EDF;
-}
-
-#menubar ul.navbar-nav li a {
-    color: white;
-}
-
-#menubar ul.navbar-nav li.active {
-    background: #f0f0f0;
-}
-
-#menubar ul.navbar-nav li.active a {
-    color: black;
-}
-
-#menubar .nav-link {
-    border: 0;
-    margin-right: 0;
-}
-
+/* === FOOTER ====== */
 #footer {
-    border-top: 1px solid lightgray;
+    border-top: 1px solid var(--border-main);
     padding: 2em 0 10em 0;
     margin-top: 4em;
-    background: #f0f0f0;
+    background: var(--bg-darker);
     font-size: small;
 }
 
@@ -316,53 +309,53 @@ text-nowrap {
 /* === FORMS ====== */
 textarea:read-only,
 input:read-only {
-    background: #f0f0f0;
+    background: var(--bg-darker);
 }
 
 *:user-invalid,
 .user-invalid,
 select:user-invalid + .select2-container > span.selection > span.select2-selection,
 select:user-invalid + .select2-container--focus > span.selection > span.select2-selection {
-    border: 2px solid red !important;
+    border: 2px solid var(--color-danger) !important;
 }
 
 @supports not selector(:user-invalid) {
     input:invalid,
     select:invalid,
-    textarea:invalid
+    textarea:invalid,
     select:invalid + .select2-container > span.selection > span.select2-selection,
     select:invalid + .select2-container--focus > span.selection > span.select2-selection {
-        border: 2px solid red;
+        border: 2px solid var(--color-danger);
     }
 }
 
 .error {
-    color: red;
+    color: var(--color-danger);
 }
 
 .success {
-    color: darkgreen;
+    color: var(--color-success);
 }
 
 .info {
-    color: blue;
+    color: var(--color-info);
 }
 
 .required {
-    color: darkred;
+    color: var(--color-danger);
 }
 
 .form-header {
-    background: white;
+    background: var(--bg-white);
     border-radius: 10px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     padding: 1em;
 }
 
 .form-footer {
-    background: white;
+    background: var(--bg-white);
     border-radius: 10px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     margin-top: 1em;
     padding: 1em;
 }
@@ -372,20 +365,20 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .section {
-    background: white;
+    background: var(--bg-white);
     border-radius: 10px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     margin-top: 1em;
 }
 
 .section-read-only {
-    background: #f0f0f0;
+    background: var(--bg-darker);
 }
 
 .section-header {
-    background: #f0f0f0;
+    background: var(--bg-darker);
     border-radius: .6em .6em 0 0;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-main);
     padding: .5em;
 }
 
@@ -399,7 +392,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .section-item {
     padding: 1em;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid var(--border-main);
 }
 
 .section-item:last-child {
@@ -477,16 +470,16 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 /* === WIDGET ===== */
 .widget {
-    background: white;
+    background: var(--bg-white);
     border-radius: 10px;
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     margin-top: 1em;
 }
 
 .widget-header {
-    background: #f0f0f0;
+    background: var(--bg-darker);
     border-radius: .6em .6em 0 0;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--border-main);
     padding: 0.5em;
 }
 
@@ -506,7 +499,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .widget-body .widget-toolbar {
-    background: #f0f0f0;
+    background: var(--bg-darker);
     margin-bottom: 1em;
     padding: 0.5em;
 }
@@ -535,8 +528,8 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 
 .navbar {
-    border-bottom: 1px solid gray;
-    background: white;
+    border-bottom: 1px solid var(--border-main);
+    background: var(--bg-white);
 }
 
 .navbar .brand-name {
@@ -551,7 +544,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .navbar .nav-link {
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
     margin-right: .5em;
 }
 
@@ -597,11 +590,11 @@ ul.breadcrumb li:first-child {
 .bg-success a,
 .bg-danger a,
 .bg-primary a {
-    color: white;
+    color: var(--text-white);
 }
 
 .border {
-    border: 1px solid gray !important;
+    border: 1px solid var(--border-main) !important;
 }
 
 .border-rounded {
@@ -609,30 +602,30 @@ ul.breadcrumb li:first-child {
 }
 
 .border-light {
-    border: 1px solid lightgray !important;
+    border: 1px solid var(--border-darker) !important;
 }
 
 .border-right {
-    border-right: 1px solid gray !important;
+    border-right: 1px solid var(--border-main) !important;
 }
 
 .border-top {
-    border-top: 1px solid gray !important;
+    border-top: 1px solid var(--border-main) !important;
 }
 
 .btn-light {
-    border: 1px solid gray;
+    border: 1px solid var(--border-main);
 }
 
 .btn-whatsapp {
-    background: #075E54;
-    color: white;
-    border: 1px solid gray;
+    background: var(--bg-whatsapp);
+    color: var(--text-white);
+    border: 1px solid var(--border-main);
 }
 
 .btn-whatsapp:hover {
-    background: #25D366;
-    color: black;
+    background: var(--bg-whatsapp-hover);
+    color: var(--text-main);
 }
 
 .form-control {
@@ -640,12 +633,12 @@ ul.breadcrumb li:first-child {
 }
 
 a.btn-back {
-    color: black
+    color: var(--text-main)
 }
 
 .text-bg-light {
-    color: black;
-    border: 1px solid gray;
+    color: var(--text-main);
+    border: 1px solid var(--border-main);
 }
 
 .text-nowrap {
@@ -664,11 +657,11 @@ a.btn-back {
 }
 
 .text-warning {
-    color: darkorange !important;
+    color: var(--color-warning) !important;
 }
 
 .text-info {
-    color: blue !important;
+    color: var(--color-info) !important;
 }
 
 /* ============================= */
@@ -681,9 +674,9 @@ a.btn-back {
 
 #map-container #map .map-listing-icon {
     padding: .5em;
-    color: #fff;
-    border: 1px solid #fff;
-    background: green;
+    color: var(--text-white);
+    border: 1px solid var(--border-main);
+    background: var(--color-success);
     width: auto !important;
     height: auto !important;
     text-wrap: nowrap;
@@ -707,7 +700,7 @@ a.btn-back {
 }
 
 .leaflet-popup-content .map-listing-card a {
-    color: #444;
+    color: var(--text-main);
     text-decoration: none;
 }
 
