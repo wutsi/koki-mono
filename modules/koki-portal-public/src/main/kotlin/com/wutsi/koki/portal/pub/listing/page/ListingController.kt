@@ -173,15 +173,14 @@ class ListingController(
         }
 
         // Supplement with city similar listings
-        val excludeIds = neighborhood.map { listing -> listing.id }.toMutableSet()
         val city = listingService.getSimilar(
             id,
             sameCity = true,
             limit = 2 * limit,
         )
         return (neighborhood + city)
+            .distinctBy { listing -> listing.id }
             .sortedByDescending { listing -> listing.contentQualityScore ?: 0 }
-            .filter { listing -> !excludeIds.contains(listing.id) }
     }
 
     private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {

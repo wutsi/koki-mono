@@ -102,41 +102,6 @@ class ListingController(
         return "listings/details"
     }
 
-    @GetMapping("/tab/trends")
-    fun trends(@RequestParam id: Long, model: Model): String {
-        val listing = findListing(id)
-        model.addAttribute("listing", listing)
-        model.addAttribute("neighborhoodLocation", listing.address?.neighbourhood)
-        model.addAttribute("cityLocation", listing.address?.city)
-
-        listing.address?.neighbourhood?.let { neighbourhood ->
-            listingService.metrics(
-                listingType = listing.listingType,
-                propertyCategory = listing.propertyType?.category,
-                listingStatus = ListingStatus.ACTIVE,
-                neighbourhoodId = neighbourhood.id,
-                bedrooms = if (listing.propertyTypeResidential) listing.bedrooms else null,
-                dimension = ListingMetricDimension.NEIGHBORHOOD,
-            )
-        }?.firstOrNull()?.let { metric ->
-            model.addAttribute("neighborhoodPriceTrendMetric", metric)
-        }
-
-        listing.address?.city?.let { city ->
-            listingService.metrics(
-                listingType = listing.listingType,
-                propertyCategory = listing.propertyType?.category,
-                listingStatus = ListingStatus.ACTIVE,
-                cityId = city.id,
-                dimension = ListingMetricDimension.CITY,
-                bedrooms = listing.bedrooms,
-            )
-        }?.firstOrNull()?.let { metric ->
-            model.addAttribute("cityPriceTrendMetric", metric)
-        }
-        return "listings/trends"
-    }
-
     @PostMapping("/generate-qr-code")
     fun generateQrCode(@RequestParam id: Long): String {
         listingService.generateQrCode(id)

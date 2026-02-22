@@ -284,7 +284,7 @@
         <div class="margin-top border-top padding-top" id="amenity-container" th:if="${listing.hasAmenities}">
             <h2 th:text="#{page.listing.section.amenity.title}">Features &amp; Amenities</h2>
             <div class="flex flex-wrap">
-                <div class="col-12 col-lg-4 col-md-6 " th:each="amenity:${topAmenities}">
+                <div class="col-6 col-lg-4 col-md-6" th:each="amenity:${topAmenities}">
                     <i th:class="${amenity.icon}" th:if="${amenity.icon}"></i>
                     <span th:text="${amenity.name}">AMENITY</span>
                 </div>
