@@ -9,4 +9,5 @@ data class ContentQualityScoreBreakdownModel(
     val leasing: CategoryScoreModel = CategoryScoreModel(),
     val image: CategoryScoreModel = CategoryScoreModel(),
     val total: Int = 0,
+    val rating: String = ""
 )

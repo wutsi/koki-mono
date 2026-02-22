@@ -195,6 +195,7 @@ class ListingMapper(
 
             qrCodeUrl = entity.qrCodeUrl,
             contentQualityScore = entity.contentQualityScore,
+            contentQualityRating = entity.contentQualityScore?.let { toContentQualityRating(it) },
         )
     }
 
@@ -268,6 +269,7 @@ class ListingMapper(
                 toPublicUrl(entity.publicUrl)
             },
             contentQualityScore = entity.contentQualityScore,
+            contentQualityRating = entity.contentQualityScore?.let { toContentQualityRating(it) },
         )
     }
 
@@ -390,6 +392,7 @@ class ListingMapper(
             leasing = toCategoryScoreModel(entity.rental),
             image = toCategoryScoreModel(entity.images),
             total = entity.total,
+            rating = toContentQualityRating(entity.total)
         )
     }
 
@@ -397,6 +400,19 @@ class ListingMapper(
         return CategoryScoreModel(
             score = entity.score,
             max = entity.max,
+            rating = if (entity.max > 0) toContentQualityRating(entity.score * 100 / entity.max) else ""
         )
+    }
+
+    fun toContentQualityRating(value: Int): String {
+        return if (value < 40) {
+            "poor"
+        } else if (value < 75) {
+            "medium"
+        } else if (value < 90) {
+            "good"
+        } else {
+            "excellent"
+        }
     }
 }

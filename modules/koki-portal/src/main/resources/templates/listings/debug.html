@@ -19,17 +19,17 @@
             </div>
 
             <!-- CONTENT QUALITY -->
-            <div class="widget margin-top-small" th:if="${listing.contentQualityScore}">
+            <div class="widget margin-top-small" th:if="${cqs}">
                 <div class="widget-body">
                     <h6>
                         <span class="text-nowrap" th:text="#{page.listing.content-quality-score}">SCORE</span>
-                        <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
-                           th:text="${listing.contentQualityScore}">00</b>
+                        <b th:class="#{'rating-' + ${cqs.cqsBreakdown.rating}}"
+                           th:text="${cqs.cqsBreakdown.total}">00</b>
                         /
                         <span>100</span>
                         <span> - </span>
-                        <b th:class="#{'rating-' + ${listing.contentQualityRating}}"
-                           th:text="#{'rating.' + ${listing.contentQualityRating}}">RATING</b>
+                        <b th:class="#{'rating-' + ${cqs.cqsBreakdown.rating}}"
+                           th:text="#{'rating.' + ${cqs.cqsBreakdown.rating}}">RATING</b>
                     </h6>
                     <table class="table-striped table text-small">
                         <tr>

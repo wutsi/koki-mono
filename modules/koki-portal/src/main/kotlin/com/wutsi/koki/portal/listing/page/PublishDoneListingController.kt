@@ -1,5 +1,6 @@
 package com.wutsi.koki.portal.listing.page
 
+import com.wutsi.koki.listing.dto.ListingStatus
 import com.wutsi.koki.portal.common.page.PageName
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -16,7 +17,7 @@ class PublishDoneListingController : AbstractEditListingController() {
     fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
-        model.addAttribute("continueUrl", "/listings?filter=" + ListListingController.FILTER_STATUS_DRAFT)
+        model.addAttribute("continueUrl", "/listings?status=" + ListingStatus.DRAFT)
         model.addAttribute(
             "page",
             createPageModel(
