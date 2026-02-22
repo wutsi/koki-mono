@@ -179,7 +179,9 @@ class ListingController(
             sameCity = true,
             limit = 2 * limit,
         )
-        return neighborhood + city.filter { listing -> !excludeIds.contains(listing.id) }
+        return (neighborhood + city)
+            .sortedByDescending { listing -> listing.contentQualityScore ?: 0 }
+            .filter { listing -> !excludeIds.contains(listing.id) }
     }
 
     private fun loadPlaces(neighbourhoodId: Long, model: Model): List<PlaceModel> {

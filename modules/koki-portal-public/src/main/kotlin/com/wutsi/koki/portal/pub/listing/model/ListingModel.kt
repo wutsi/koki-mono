@@ -90,7 +90,8 @@ data class ListingModel(
     val totalFiles: Int? = null,
     val totalActiveMessages: Int? = null,
 
-    val images: List<FileModel> = emptyList()
+    val images: List<FileModel> = emptyList(),
+    val contentQualityScore: Int? = null,
 ) {
     val heroImageUrl: String?
         get() = heroImage?.thumbnailUrl

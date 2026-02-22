@@ -438,9 +438,8 @@
 <tr th:fragment="listing-price-trend-row(listing, metric, location)" th:if="${location}">
     <td class="border-top padding-small margin-top-small">
         <a target="_blank"
-           th:href="'/listings?location-id=' + ${location?.id} +'&listing-type=' + ${listing.listingType} + '&property-category=' + ${listing.propertyType.category} + '&bedrooms=' + ${listing.bedrooms}">
-            <span th:text="${location?.name}">LOCATION</span>
-        </a>
+           th:href="'/listings?me=false&location-id=' + ${location?.id} +'&listing-type=' + ${listing.listingType} + '&property-category=' + ${listing.propertyType.category} + '&bedrooms=' + ${listing.bedrooms}">
+            <span th:text="${location?.name}">LOCATION</span></a>
         <span class="badge text-bg-secondary" th:if="${metric} AND ${metric.total > 0}"
               th:text="${metric.total}">New</span>
     </td>

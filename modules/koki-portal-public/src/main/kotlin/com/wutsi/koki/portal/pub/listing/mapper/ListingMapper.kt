@@ -150,6 +150,7 @@ class ListingMapper(
             closedAt = entity.closedAt,
             closedAtMoment = entity.closedAt?.let { date -> moment.format(date) },
             images = images.values.toList(),
+            contentQualityScore = entity.contentQualityScore,
         )
     }
 
@@ -203,6 +204,7 @@ class ListingMapper(
                 toPublicUrl(entity.publicUrl)
             },
             geoLocation = toGeoLocation(entity.geoLocation),
+            contentQualityScore = entity.contentQualityScore,
         )
     }
 

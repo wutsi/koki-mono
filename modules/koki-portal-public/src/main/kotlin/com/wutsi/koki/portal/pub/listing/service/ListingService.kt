@@ -126,13 +126,11 @@ class ListingService(
             return emptyList()
         }
 
-        val listings = search(
+        return search(
             ids = listingIds,
             limit = listingIds.size,
-        ).items.associateBy { listing -> listing.id }
-
-        // Respect the order of the similar listings
-        return similar.listings.mapNotNull { listing -> listings[listing.id] }
+            sortBy = ListingSort.RECOMMENDED,
+        ).items
     }
 
     fun search(
