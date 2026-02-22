@@ -226,6 +226,7 @@ class SearchController(
             limit = 1,
             sortBy = ListingSort.PRICE_LOW_HIGH
         ).items.firstOrNull()?.price ?: return null
+        min = adjustPrice(min, -.10)
 
         max = listingService.search(
             locationIds = locationId?.let { listOf(locationId) } ?: emptyList(),
@@ -238,7 +239,7 @@ class SearchController(
             sortBy = ListingSort.PRICE_HIGH_LOW
         ).items.firstOrNull()?.price ?: return null
 
-        max = adjustPrice(max, .25)
+        max = adjustPrice(max, .10)
         val currencySymbol = max.shortText.split(" ")[0]
 
         val step = if (min.amount / 10000L > 0) {
@@ -287,7 +288,7 @@ class SearchController(
 
     private fun adjustPrice(value: MoneyModel, percent: Double): MoneyModel {
         val money = Money(
-            amount = value.amount * (1.0 + percent / 100.0),
+            amount = value.amount * (1.0 + percent),
             currency = value.currency,
         )
         return moneyMapper.toMoneyModel(money)

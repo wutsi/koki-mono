@@ -15,8 +15,8 @@
         </div>
     </div>
 
+    <!-- SUMMARY -->
     <div class="row">
-        <!-- SUMMARY -->
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
@@ -35,6 +35,16 @@
 
                     <div th:if="${error}">
                         <div class="alert alert-danger" th:utext="${error}">ERROR</div>
+                    </div>
+
+                    <div class="container-fluid margin-top" th:if="${images}">
+                        <hr/>
+                        <div class="row" id="image-list" th:if="${images}">
+                            <div th:each="image : ${images}" th:remove="tag">
+                                <div th:if="${images}" th:replace="~{__components/image :: image-card(${image})}"></div>
+                            </div>
+                            <div th:if="${images}" th:replace="~{__components/image :: load-more(${moreUrl})}"></div>
+                        </div>
                     </div>
 
                     <form class="form margin-top" method="post" th:action="@{/listings/publish}" th:object="${form}">

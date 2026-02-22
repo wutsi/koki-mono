@@ -1,6 +1,10 @@
 package com.wutsi.koki.portal.listing.page
 
+import com.wutsi.koki.common.dto.ObjectType
+import com.wutsi.koki.file.dto.FileStatus
+import com.wutsi.koki.file.dto.FileType
 import com.wutsi.koki.portal.common.page.PageName
+import com.wutsi.koki.portal.file.service.FileService
 import com.wutsi.koki.portal.listing.form.ListingForm
 import com.wutsi.koki.portal.security.RequiresPermission
 import org.springframework.stereotype.Controller
@@ -15,12 +19,23 @@ import org.springframework.web.client.RestClientException
 @Controller
 @RequestMapping("/listings/publish")
 @RequiresPermission(["listing:manage", "listing:full_access"])
-class PublishListingController : AbstractEditListingController() {
+class PublishListingController(private val fileService: FileService) : AbstractEditListingController() {
     @GetMapping
     fun publish(@RequestParam id: Long, model: Model): String {
         val listing = findListing(id)
         model.addAttribute("listing", listing)
         model.addAttribute("form", ListingForm(id = id))
+
+        val images = fileService.search(
+            ownerType = ObjectType.LISTING,
+            ownerId = id,
+            type = FileType.IMAGE,
+            status = FileStatus.APPROVED,
+            limit = 100
+        )
+        if (images.isNotEmpty()) {
+            model.addAttribute("images", images)
+        }
 
         model.addAttribute(
             "page",

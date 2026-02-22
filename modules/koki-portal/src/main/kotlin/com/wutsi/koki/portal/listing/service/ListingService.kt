@@ -142,6 +142,7 @@ class ListingService(
         locationIds: List<Long> = emptyList(),
         listingType: ListingType? = null,
         propertyTypes: List<PropertyType> = emptyList(),
+        propertyCategories: List<PropertyCategory> = emptyList(),
         furnitureTypes: List<FurnitureType> = emptyList(),
         statuses: List<ListingStatus> = emptyList(),
         bedrooms: String? = null,
@@ -169,6 +170,7 @@ class ListingService(
             locationIds = locationIds,
             listingType = listingType,
             propertyTypes = propertyTypes,
+            propertyCategories = propertyCategories,
             furnitureTypes = furnitureTypes,
             statuses = statuses,
             minBedrooms = bedroomRange.first,
@@ -416,7 +418,7 @@ class ListingService(
      * - null -> (null, null) - no filter
      */
     private fun parseRoomParameter(value: String?): Pair<Int?, Int?> {
-        if (value == null) {
+        if (value.isNullOrEmpty()) {
             return Pair(null, null)
         }
 

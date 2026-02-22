@@ -10,7 +10,8 @@
                     <a href="/" th:text="#{module.home}">HOME</a>
                 </li>
                 <li class="breadcrumb-item" th:if="${listing}">
-                    <a href="/listings" th:text="#{module.listing}">MODULE</a>
+                    <a th:href="'/listings?status=' + ${listing.status} + '&me=' + (${user?.id == listing.sellerAgentUser?.id})"
+                       th:text="#{module.listing}">MODULE</a>
                 </li>
                 <li class="breadcrumb-item active" th:if="${listing}">
                     <span th:text="${listing.id}">NUMBER</span>
@@ -54,9 +55,11 @@
             <th colspan="2"></th>
             <th th:text="#{page.listing.status}">STATUS</th>
             <th th:if="${showAgent}" th:text="#{page.listing.agent}">AGENT</th>
-            <th class="text-right" th:if="${sold}" th:text="#{page.listing.sale-price}">PRICE</th>
-            <th class="text-right" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
-            <th class="text-right" th:if="${showCommission}" th:text="#{page.listing.commission}">COMMISSION</th>
+            <th class="text-right text-nowrap" th:if="${sold}" th:text="#{page.listing.sale-price}">PRICE</th>
+            <th class="text-right text-nowrap" th:if="!${sold}" th:text="#{page.listing.price}">PRICE</th>
+            <th class="text-right text-nowrap" th:if="${showCommission}" th:text="#{page.listing.commission}">
+                COMMISSION
+            </th>
         </tr>
         <tr class="listing" th:each="listing : ${items}">
             <div
@@ -141,24 +144,24 @@
             </table>
         </a>
     </td>
-    <td class="d-none d-md-table-cell">
-        <a th:href="'/listings/' + ${listing.id}">
+    <td class="d-none d-md-table-cell" width="1%">
+        <a class="text-nowrap" th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/listing :: listing-status-badge(${listing})}"></div>
         </a>
     </td>
-    <td class="d-none d-md-table-cell" th:if="${showAgent}">
-        <a th:href="'/listings/' + ${listing.id}">
+    <td class="d-none d-md-table-cell" th:if="${showAgent}" width="1%">
+        <a class="text-nowrap" th:href="'/listings/' + ${listing.id}">
             <div th:replace="~{__components/user :: user-small-card(${listing.sellerAgentUser}, false)}"></div>
         </a>
     </td>
-    <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}">
+    <td class="text-right text-nowrap d-none d-md-table-cell" th:if="${sold}" width="1%">
         <a class="text-nowrap listing-price"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.salePrice}">
             <b class="listing-price" th:text="${listing.salePrice.displayText}">$$</b>
         </a>
     </td>
-    <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}">
+    <td class="text-right text-nowrap d-none d-md-table-cell" th:if="!${sold}" width="1%">
         <a class="text-nowrap listing-price"
            th:href="'/listings/' + ${listing.id}"
            th:if="${listing.price}">
@@ -434,7 +437,10 @@
 
 <tr th:fragment="listing-price-trend-row(listing, metric, location)" th:if="${location}">
     <td class="border-top padding-small margin-top-small">
-        <span th:text="${location?.name}">LOCATION</span>
+        <a target="_blank"
+           th:href="'/listings?location-id=' + ${location?.id} +'&listing-type=' + ${listing.listingType} + '&property-category=' + ${listing.propertyType.category} + '&bedrooms=' + ${listing.bedrooms}">
+            <span th:text="${location?.name}">LOCATION</span>
+        </a>
         <span class="badge text-bg-secondary" th:if="${metric} AND ${metric.total > 0}"
               th:text="${metric.total}">New</span>
     </td>

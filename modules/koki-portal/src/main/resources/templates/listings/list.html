@@ -19,58 +19,245 @@
         <div class="col-12">
             <div class="widget">
                 <div class="widget-body">
-                    <div class="flex flex-space-between">
-                        <div class="btn-group" role="group">
-                            <a class="btn btn-sm btn-secondary" href="/listings" id="btn-my-listings"
-                               th:text="#{button.my_listings}">
-                                BUTTON
-                            </a>
-                            <button class="btn btn-sm btn-light"
-                                    data-component-id="modal-button"
-                                    data-modal-body-large="true"
-                                    id="btn-search"
-                                    th:data-modal-body-url="${filterUrl}"
-                            >
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span th:text="#{button.search}">SEARCH</span>
-                            </button>
-                        </div>
-                        <div>
-                            <a class="btn btn-primary btn-sm" href="/listings/create/ai" id="btn-create"
-                               th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
-                                <i class="fa-solid fa-plus"></i>
-                                <span th:text="#{button.listing}">CREATE</span>
-                            </a>
-                        </div>
-                    </div>
+                    <form action="/listings" id="listing-search-filter-form">
+                        <input id="me" name="me" th:value="${me}" type="hidden"/>
+                        <input id="status" name="status" th:value="${status}" type="hidden"/>
+                        <input id="property-category" name="property-category" th:value="${propertyCategory}"
+                               type="hidden"/>
+                        <input id="listing-type" name="listing-type" th:value="${listingType}" type="hidden"/>
+                        <input id="bedrooms" name="bedrooms" th:value="${bedrooms}" type="hidden"/>
+                        <input id="sort-by" name="sort-by" th:value="${sortBy}" type="hidden"/>
+                        <input id="max-price" name="max-price" th:value="${maxPrice?.amount}" type="hidden"/>
 
-                    <hr/>
+                        <div class="flex flex-space-between">
+                            <div class="flex">
+                                <!-- MY LISTINGS -->
+                                <div class="dropdown margin-right-small">
+                                    <button aria-expanded="false" class="btn btn-sm btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-me"
+                                            th:text="${me} ? #{page.listing.filter.listings-mine} : #{page.listing.filter.listings-all}"
+                                            type="button"
+                                    >
+                                        MY_LISTINGS
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" data-name="me"
+                                               data-value="true" href="#" th:classappend="${me} ? 'active'"
+                                               th:text="#{page.listing.filter.listings-mine}">MY_LISTINGS</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" data-name="me"
+                                               data-value="false" href="#" th:classappend="!${me} ? 'active'"
+                                               th:text="#{page.listing.filter.listings-all}">ALL_LISTINGS</a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                    <form action="/listings" id="filter-form">
-                        <select class="btn btn-sm btn-light" name="filter" onchange="this.form.submit()">
-                            <option th:selected="${filter == 0}" th:text="#{page.listing.list.filter.0}" value="0">
-                                DRAFT
-                            </option>
-                            <option th:selected="${filter == 1}" th:text="#{page.listing.list.filter.1}" value="1">
-                                ACTIVE
-                            </option>
-                            <option th:selected="${filter == 2}" th:text="#{page.listing.list.filter.2}" value="2">
-                                SOLD
-                            </option>
-                            <option th:selected="${filter == 3}" th:text="#{page.listing.list.filter.3}" value="3">
-                                CLOSED
-                            </option>
-                        </select>
+                                <!-- STATUS -->
+                                <div class="dropdown">
+                                    <button aria-expanded="false" class="btn btn-sm btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-status"
+                                            th:text="#{'listing-status.' + ${status.name()}}"
+                                            type="button"
+                                    >
+                                        STATUS
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li th:each="item : ${statuses}">
+                                            <a class="dropdown-item" data-name="status" href="#"
+                                               th:classappend="${status} == ${item} ? 'active'"
+                                               th:data-value="${item}"
+                                               th:text="#{'listing-status.' + ${item.name()}}"
+                                            >STATUS</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a class="btn btn-primary btn-sm" href="/listings/create/ai" id="btn-create"
+                                   th:if="${user?.canManage('listing')} OR ${user.hasFullAccess('listing')}">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span th:text="#{button.listing}">CREATE</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class="flex flex-wrap margin-bottom">
+                            <!-- LOCATION -->
+                            <div class="location-filter">
+                                <select data-component-id="select2"
+                                        data-on-change="location_changed"
+                                        id="location-id"
+                                        name="location-id"
+                                        th:data-placeholder="#{page.listing.filter.location}"
+                                        th:data-url="'/locations/selector/search?type=NEIGHBORHOOD&type=CITY&country=' + ${country}"
+                                >
+                                    <option selected="selected"
+                                            th:if="${location}"
+                                            th:text="${location.name}"
+                                            th:value="${location.id}"
+                                    >TITLE
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="flex flex-wrap">
+                                <!-- LISTING TYPE -->
+                                <div class="dropdown margin-right-small margin-bottom-small">
+                                    <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-listing-type"
+                                            th:text="${listingType} ? #{'listing-type.' + ${listingType}} : #{page.listing.filter.listing-type}"
+                                            type="button"
+                                    >
+                                        LISTING_TYPE
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" data-name="listing-type"
+                                               data-value="" href="#" th:classappend="!${listingType} ? 'active'"
+                                               th:text="#{page.listing.filter.listing-type}">LISTING_TYPE</a>
+                                        </li>
+                                        <li th:each="item : ${listingTypes}">
+                                            <a class="dropdown-item" data-name="listing-type" href="#"
+                                               th:classappend="${listingType} == ${item} ? 'active'"
+                                               th:data-value="${item}"
+                                               th:text="#{'listing-type.' + ${item.name()}}"
+                                            >FOR_RENT</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- PROPERTY CATEGORY -->
+                                <div class="dropdown margin-right-small margin-bottom-small">
+                                    <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-property-category"
+                                            th:text="${propertyCategory} ? #{'property-category.' + ${propertyCategory}} : #{page.listing.filter.property-category}"
+                                            type="button">
+                                        PROPERTY_CATEGORY
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" data-name="property-category"
+                                               data-value="" href="#" th:classappend="!${propertyCategory} ? 'active'"
+                                               th:text="#{page.listing.filter.property-category}">CATEGORY</a>
+                                        </li>
+                                        <li th:each="item : ${propertyCategories}">
+                                            <a class="dropdown-item" data-name="property-category" href="#"
+                                               th:classappend="${propertyCategory} == ${item} ? 'active'"
+                                               th:data-value="${item}"
+                                               th:text="#{'property-category.' + ${item.name()}}">CATEGORY</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- BEDROOMS (only for residential) -->
+                                <div class="dropdown margin-right-small margin-bottom-small"
+                                     th:if="!${propertyCategory} OR ${propertyCategory.name() == 'RESIDENTIAL'}">
+                                    <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-bedroom"
+                                            th:text="${bedrooms}? (#{page.listing.filter.bedrooms} + ': ' + ${bedrooms}) : #{page.listing.filter.bedrooms}"
+                                            type="button">
+                                        BEDROOMS
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" data-name="bedrooms"
+                                               data-value="" href="#" th:classappend="!${bedrooms} ? 'active'"
+                                               th:text="#{page.listing.filter.bedrooms}">BEDROOM</a>
+                                        </li>
+                                        <li th:each="room : ${rooms}">
+                                            <a class="dropdown-item" data-name="bedrooms" href="#"
+                                               th:classappend="${room} == ${bedrooms} ? 'active'"
+                                               th:data-value="${room}"
+                                               th:text="${room}">00</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- PRICE -->
+                                <div class="dropdown" th:if="${priceRangeMin} AND ${priceRangeMax}">
+                                    <button aria-expanded="false" class="btn btn-sm btn-light dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-filter-price"
+                                            type="button">
+                                        <span
+                                            th:text="${maxPrice} ? ${maxPrice.shortText} : #{page.listing.filter.price}"
+                                        >PRICE</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="padding-small">
+                                            <div class="flex">
+                                <span class="text-small text-nowrap margin-right-small"
+                                      th:text="${priceRangeMin.shortText}">$$$</span>
+                                                <input id="price-range"
+                                                       th:data-currency-symbol="${currencySymbol}"
+                                                       th:max="${priceRangeMax.amount}"
+                                                       th:min="${priceRangeMin.amount}"
+                                                       th:step="${priceRangeStep}"
+                                                       th:value="${maxPrice} ? ${maxPrice.amount} : ${priceRangeMax.amount}"
+                                                       type="range"
+                                                />
+                                                <span class="text-small text-nowrap margin-left-small"
+                                                      th:text="${priceRangeMax.shortText}">$$$</span>
+                                            </div>
+                                            <div class="text-center margin-top-small" id="price-range-value"></div>
+                                            <div class="margin-top-small text-center">
+                                                <button class="btn btn-sm btn-primary w-100-mobile"
+                                                        id="btn-apply-price-filter"
+                                                        th:text="#{button.apply}"
+                                                        type="submit">
+                                                    APPLY
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="margin-top" th:if="${listings}">
+                            <div class="flex flex-space-between">
+                                <div class="padding-top-small">
+                                    <span th:if="${listings.total==1}"
+                                          th:utext="#{page.listing.list.1_listing}">1</span>
+                                    <span th:if="${listings.total>1}"
+                                          th:utext="#{page.listing.list.n_listing(${listings.total})}">n</span>
+                                </div>
+                                <div>
+                                    <button aria-expanded="false" class="btn btn-sm btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            id="btn-sort-by"
+                                            th:text="#{'listing-sort.' + ${sortBy}}"
+                                            type="button">
+                                        SORT_BY
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li th:each="item : ${sortBys}">
+                                            <a class="dropdown-item" data-name="sort-by" href="#"
+                                               th:classappend="${sortBy} == ${item} ? 'active'"
+                                               th:data-value="${item}"
+                                               th:text="#{'listing-sort.' + ${item}}"
+                                            >SORT</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
                     </form>
 
                     <div class="margin-top" th:if="${listings?.total > 0}">
-                        <div class="border-bottom">
-                            <span th:if="${listings.total==1}" th:text="#{page.listing.list.1_listing}">1</span>
-                            <span th:if="${listings.total>1}"
-                                  th:text="#{page.listing.list.n_listing(${listings.total})}">n</span>
-                        </div>
                         <div
-                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${filter == 2}, ${filter == 2}, false, ${moreUrl})}"></div>
+                            th:replace="~{__components/listing :: listing-table(${listings.items}, ${sold}, !${me}, false, ${moreUrl})}"></div>
                     </div>
                 </div>
             </div>
@@ -78,6 +265,79 @@
     </div>
 </div>
 <div th:replace="~{__components/bootstrap :: modal}"></div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Handle filter link clicks
+        const filterLinks = document.querySelectorAll('.dropdown-item[data-name]');
+        filterLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const name = this.getAttribute('data-name');
+                const value = this.getAttribute('data-value');
+
+                document.getElementById(name).value = value;
+                document.getElementById('listing-search-filter-form').submit()
+            });
+        });
+
+        // Handle price range input
+        const priceRange = document.getElementById('price-range');
+        if (priceRange) {
+            priceRange.addEventListener('input', function () {
+                document.getElementById('max-price').value = this.value;
+                document.getElementById('price-range-value').innerText = format_price(this.value);
+            });
+
+            const initialValue = document.getElementById('price-range').value;
+            document.getElementById('price-range-value').innerText = format_price(initialValue);
+        }
+    });
+
+    function location_changed() {
+        console.log('location_changed()');
+        document.getElementById('listing-search-filter-form').submit();
+    }
+
+    function format_price(amount) {
+        const text = short_number(amount);
+        const currency = document.getElementById('price-range').getAttribute('data-currency-symbol');
+        if (text.length > 0) {
+            return currency + ' ' + text;
+        } else {
+            return currency + ' -';
+        }
+    }
+
+    function short_number(value, unit = "") {
+        if (!value || value === '') {
+            return ""
+        }
+
+        let bytes = Number(value);
+
+        if (bytes === 0) return "";
+        if (bytes > -1000 && bytes < 1000) return bytes.toString();
+
+        const units = "KMGTPE";
+        let index = 0;
+
+        while (bytes <= -999950 || bytes >= 999950) {
+            bytes /= 1000;
+            index++;
+        }
+
+        // Divide by 1000 for the final unit conversion
+        const result = bytes / 1000.0;
+        const currentUnit = units[index] || "";
+
+        // Format to 1 decimal place, but strip it if it's .0
+        const formattedValue = Number(result.toFixed(1));
+
+        return formattedValue + currentUnit + unit;
+    }
+</script>
 
 </body>
 </html>
