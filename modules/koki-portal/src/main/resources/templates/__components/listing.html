@@ -423,9 +423,8 @@
     <table class="table table-striped text-small-mobile">
         <tr>
             <th></th>
-            <th class="text-center" th:text="#{page.listing.metrics.min}">MIN</th>
+            <th class="text-center" th:text="#{page.listing.metrics.price}">MAX</th>
             <th class="text-center" th:text="#{page.listing.metrics.average}">MEDIAN</th>
-            <th class="text-center" th:text="#{page.listing.metrics.max}">MAX</th>
         </tr>
 
         <tr
@@ -438,21 +437,17 @@
 <tr th:fragment="listing-price-trend-row(listing, metric, location)" th:if="${location}">
     <td class="border-top padding-small margin-top-small">
         <a target="_blank"
-           th:href="'/listings?me=false&location-id=' + ${location?.id} +'&listing-type=' + ${listing.listingType} + '&property-category=' + ${listing.propertyType.category} + '&bedrooms=' + ${listing.bedrooms}">
+           th:href="'/listings?me=false&location-id=' + ${location?.id} +'&listing-type=' + ${listing.listingType} + '&property-category=' + ${listing.propertyType.category} + '&bedrooms=' + (${listing.bedrooms} ? ${listing.bedrooms} : '')">
             <span th:text="${location?.name}">LOCATION</span></a>
         <span class="badge text-bg-secondary" th:if="${metric} AND ${metric.total > 0}"
               th:text="${metric.total}">New</span>
     </td>
     <td class="border-top padding-small margin-top-small text-center"
-        th:text="${metric} ? ${metric.minPrice.shortText} : '-'">
+        th:text="${metric} ? ${metric.priceRangeText} : '-'">
         $$$
     </td>
     <td class="border-top padding-small margin-top-small text-center"
         th:text="${metric} ? ${metric.averagePrice.shortText}: '-'">
-        $$$
-    </td>
-    <td class="border-top padding-small margin-top-small text-center"
-        th:text="${metric} ? ${metric.maxPrice.shortText} : '-'">
         $$$
     </td>
 </tr>

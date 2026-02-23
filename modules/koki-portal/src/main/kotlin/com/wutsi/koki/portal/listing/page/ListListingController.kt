@@ -65,6 +65,7 @@ class ListListingController(private val moneyMapper: MoneyMapper) : AbstractList
                 !listOf(
                     ListingStatus.UNKNOWN,
                     if (!me) ListingStatus.DRAFT else null,
+                    if (!me) ListingStatus.PUBLISHING else null,
                     ListingStatus.ACTIVE_WITH_CONTINGENCIES,
                     ListingStatus.PENDING,
                 ).contains(it)

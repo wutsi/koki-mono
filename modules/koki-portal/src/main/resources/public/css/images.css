@@ -63,6 +63,10 @@ body.image-viewer .image-footer {
 /* ======================================================================== */
 /* Medium */
 @media only screen and (max-width: 992px) and (orientation: portrait) {
+    .tab-images #image-list {
+        max-width: 930px;
+        margin: 0 auto;
+    }
 }
 
 /* Small */
@@ -71,18 +75,9 @@ body.image-viewer .image-footer {
         max-width: 600px;
     }
 
-    .tab-images .image {
-        width: 350px;
-    }
-
-    .tab-images .image-frame {
-        width: 350px;
-        height: 233px;
-    }
-
-    .tab-images .image-frame img {
-        width: 400px;
-        height: 233px;
+    .tab-images #image-list {
+        max-width: 720px;
+        margin: 0 auto;
     }
 }
 
@@ -94,5 +89,10 @@ body.image-viewer .image-footer {
 
     .tab-images .image-frame {
         margin-left: 0;
+    }
+
+    .tab-images #image-list {
+        max-width: 320px;
+        margin: 0 auto;
     }
 }

@@ -45,7 +45,7 @@
                     </tr>
                     <tr th:if="${listingImageCqs.rating != 'excellent'}">
                         <td colspan="2">
-                            <span class="error text-small" th:text="#{page.image.image-quality-score-hint}">HINT</span>
+                            <span class="error text-small" th:utext="#{page.image.image-quality-score-hint}">HINT</span>
                         </td>
                     </tr>
                 </table>
