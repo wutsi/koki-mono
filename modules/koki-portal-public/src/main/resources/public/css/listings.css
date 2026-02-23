@@ -233,11 +233,13 @@
 .listing-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1240px;
+    margin: 0 auto;
 }
 
 .listing-list .listing-card,
 .listing-list .place-card {
-    margin-right: .5em;
     margin-bottom: .5em;
 }
 
@@ -350,8 +352,7 @@
     }
 
     .listing-list {
-        width: 940px;
-        margin: 0 auto;
+        max-width: 920px;
     }
 }
 
@@ -422,7 +423,7 @@
     }
 
     .listing-list {
-        width: 640px;
+        max-width: 620px;
     }
 }
 

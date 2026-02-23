@@ -682,6 +682,7 @@ a.btn-back {
 
 .leaflet-container {
     font-family: "Outfit", sans-serif;
+    border-radius: var(--border-radius);
 }
 
 .leaflet-popup-content {
