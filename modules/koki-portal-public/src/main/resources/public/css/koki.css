@@ -7,8 +7,10 @@
     --bg-whatsapp: #075E54;
     --bg-whatsapp-hover: #25D366;
 
-    --border-main: gray;
-    --border-light: lightgray;
+    --border-color-main: gray;
+    --border-color-light: lightgray;
+    --border-radius: 1em;
+    --border-radius-small: 0.5em;
 
     --text-main: #555;
     --text-darker: #000;
@@ -19,6 +21,55 @@
     --color-danger: darkred;
     --color-warning: darkorange;
     --color-info: blue;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-main: #1E1E1E;
+        --bg-darker: #000000;
+        --bg-primary: #E4EDF7;
+        --bg-white: #2A2E33;
+
+        --border-color-main: #545B64;
+
+        --text-main: #f8f8f8;
+        --text-darker: white;
+
+        --color-error: #FFBABA;
+        --color-info: #1D7EDF;
+    }
+
+    /*=== Bootstrap ===*/
+    .modal-content {
+        background-color: var(--bg-white);
+        color: var(--text-main)
+    }
+
+    .modal-header {
+        border-bottom: 1px solid var(--border-color-main);
+    }
+
+    .modal-header .btn-close {
+        filter: invert(1);
+    }
+
+    .modal-header .modal-title {
+        color: var(--text-darker);
+    }
+
+    .table {
+        border: 1px solid var(--border-color-main);
+    }
+
+    .table tr > * {
+        background: var(--bg-main) !important;
+        color: var(--text-main) !important;
+    }
+
+    .table-striped > tbody > tr:nth-child(odd) > * {
+        background: var(--bg-darker) !important;
+        color: var(--text-main) !important;
+    }
 }
 
 /* === CORE ===== */
@@ -253,7 +304,7 @@ b, strong {
 
 /* === NAVBAR ====== */
 .navbar {
-    border-bottom: 1px solid var(--border-main);
+    border-bottom: 1px solid var(--border-color-main);
     background: var(--bg-white);
 }
 
@@ -269,7 +320,7 @@ b, strong {
 }
 
 .navbar .nav-link {
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
     margin-right: .5em;
 }
 
@@ -295,7 +346,7 @@ b, strong {
 
 /* === FOOTER ====== */
 #footer {
-    border-top: 1px solid var(--border-main);
+    border-top: 1px solid var(--border-color-main);
     padding: 2em 0 10em 0;
     margin-top: 4em;
     background: var(--bg-darker);
@@ -347,15 +398,15 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .form-header {
     background: var(--bg-white);
-    border-radius: 10px;
-    border: 1px solid var(--border-main);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color-main);
     padding: 1em;
 }
 
 .form-footer {
     background: var(--bg-white);
-    border-radius: 10px;
-    border: 1px solid var(--border-main);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color-main);
     margin-top: 1em;
     padding: 1em;
 }
@@ -366,8 +417,8 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .section {
     background: var(--bg-white);
-    border-radius: 10px;
-    border: 1px solid var(--border-main);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color-main);
     margin-top: 1em;
 }
 
@@ -377,8 +428,8 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .section-header {
     background: var(--bg-darker);
-    border-radius: .6em .6em 0 0;
-    border-bottom: 1px solid var(--border-main);
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    border-bottom: 1px solid var(--border-color-main);
     padding: .5em;
 }
 
@@ -392,7 +443,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 
 .section-item {
     padding: 1em;
-    border-bottom: 1px solid var(--border-main);
+    border-bottom: 1px solid var(--border-color-main);
 }
 
 .section-item:last-child {
@@ -464,71 +515,12 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 .user-photo-small {
     width: 32px;
     height: 32px;
-    border-radius: .5em;
-}
-
-
-/* === WIDGET ===== */
-.widget {
-    background: var(--bg-white);
-    border-radius: 10px;
-    border: 1px solid var(--border-main);
-    margin-top: 1em;
-}
-
-.widget-header {
-    background: var(--bg-darker);
-    border-radius: .6em .6em 0 0;
-    border-bottom: 1px solid var(--border-main);
-    padding: 0.5em;
-}
-
-.widget-header .widget-title {
-    font-size: 1em;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
-.widget-body {
-    padding: 1em
-}
-
-.widget-body table.table:last-child {
-    margin-bottom: 0;
-}
-
-.widget-body .widget-toolbar {
-    background: var(--bg-darker);
-    margin-bottom: 1em;
-    padding: 0.5em;
-}
-
-.widget-toolbar a,
-.toolbar a {
-    margin-right: .5em;
-}
-
-.widget-toolbar a:last-child,
-.toolbar a:last-child {
-    margin-right: 0;
-}
-
-.widget .tab-content .widget {
-    border: 0;
-}
-
-.widget .tab-content .widget-header {
-    display: none
-}
-
-.widget .tab-content .widget-body {
-    padding: 0;
+    border-radius: var(--border-radius-small);
 }
 
 
 .navbar {
-    border-bottom: 1px solid var(--border-main);
+    border-bottom: 1px solid var(--border-color-main);
     background: var(--bg-white);
 }
 
@@ -544,7 +536,7 @@ select:user-invalid + .select2-container--focus > span.selection > span.select2-
 }
 
 .navbar .nav-link {
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
     margin-right: .5em;
 }
 
@@ -584,7 +576,7 @@ ul.breadcrumb li:first-child {
 /* bootstrap                     */
 /* ============================= */
 .badge {
-    border-radius: 1em;
+    border-radius: var(--border-radius);
 }
 
 .bg-success a,
@@ -594,33 +586,33 @@ ul.breadcrumb li:first-child {
 }
 
 .border {
-    border: 1px solid var(--border-main) !important;
+    border: 1px solid var(--border-color-main) !important;
 }
 
 .border-rounded {
-    border-radius: 1em;
+    border-radius: var(--border-radius);
 }
 
 .border-light {
-    border: 1px solid var(--border-darker) !important;
+    border: 1px solid var(--border-color-main) !important;
 }
 
 .border-right {
-    border-right: 1px solid var(--border-main) !important;
+    border-right: 1px solid var(--border-color-main) !important;
 }
 
 .border-top {
-    border-top: 1px solid var(--border-main) !important;
+    border-top: 1px solid var(--border-color-main) !important;
 }
 
 .btn-light {
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
 }
 
 .btn-whatsapp {
     background: var(--bg-whatsapp);
     color: var(--text-white);
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
 }
 
 .btn-whatsapp:hover {
@@ -638,7 +630,7 @@ a.btn-back {
 
 .text-bg-light {
     color: var(--text-main);
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
 }
 
 .text-nowrap {
@@ -648,6 +640,10 @@ a.btn-back {
 .widget-body ol.breadcrumb {
     margin-bottom: 0;
     padding-bottom: 0
+}
+
+.modal-dialog .form {
+    margin: -1em;
 }
 
 .modal-dialog form input,
@@ -675,12 +671,12 @@ a.btn-back {
 #map-container #map .map-listing-icon {
     padding: .5em;
     color: var(--text-white);
-    border: 1px solid var(--border-main);
+    border: 1px solid var(--border-color-main);
     background: var(--color-success);
     width: auto !important;
     height: auto !important;
     text-wrap: nowrap;
-    border-radius: .5em;
+    border-radius: var(--border-radius);
     font-weight: bold;
 }
 
@@ -707,14 +703,14 @@ a.btn-back {
 .leaflet-popup-content .map-listing-card .listing-image {
     height: 100px;
     width: 100px;
-    border-radius: 1em 0 0 1em
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
 .leaflet-popup-content .map-listing-card .listing-image img {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    border-radius: 1em 0 0 1em
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
 .leaflet-popup-content .map-listing-card .listing-details {

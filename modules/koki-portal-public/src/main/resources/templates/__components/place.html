@@ -18,7 +18,7 @@
             <span>/ 5</span>
         </div>
     </div>
-    <table class="table-striped table text-small" th:if="${showDetails}">
+    <table class="table-striped table text-small margin-top" th:if="${showDetails}">
         <tr th:each="ratingCriterion : ${place.ratingCriteria}">
             <td th:text="#{'rating-criteria.' + ${ratingCriterion.criteria}}">Security</td>
             <td class="margin-left">
@@ -32,8 +32,8 @@
 <div class="place-card" th:data-id="${place.id}" th:fragment="place-card(place, location)"
      th:if="${place} AND ${location}">
     <div class="place-details">
-        <a th:href="${location.publicUrl}">
-            <b class="place-name" th:text="${place.name}">NAME</b>
+        <a class="info" th:href="${location.publicUrl}">
+            <div class="place-name" th:text="${place.name}">NAME</div>
             <div class="place-intro" th:text="${place.introduction}"></div>
         </a>
         <div class="text-center">

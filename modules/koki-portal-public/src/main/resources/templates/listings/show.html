@@ -405,8 +405,8 @@
                 </div>
             </div>
 
-            <div class="margin-top border border-rounded background-white padding neighbourhood-card" th:if="${place}">
-                <a th:href="${listing.address.neighbourhood.publicUrl}">
+            <div class="margin-top neighbourhood-card" th:if="${place}">
+                <a class="info" th:href="${listing.address.neighbourhood.publicUrl}">
                     <h2 th:text="${place.name}">NAME</h2>
                     <div th:text="${place.introduction}">INTRO</div>
                     <div class="margin-top" id="rating-container" th:if="${place.rating}">

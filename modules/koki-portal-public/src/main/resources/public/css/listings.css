@@ -54,8 +54,8 @@
     background: var(--bg-white);
     color: var(--text-main);
     padding: 5px;
-    border: 1px solid var(--border-main);
-    border-radius: 5px 5px 5px 5px;
+    border: 1px solid var(--border-color-main);
+    border-radius: var(--border-radius-small);
     position: absolute;
     left: .5em;
     margin-top: -3em;
@@ -106,14 +106,6 @@
     margin-right: 1em;
 }
 
-.listing-search-container .btn-light {
-    background: var(--bg-white) !important;
-}
-
-.listing-search-container .btn-light:hover {
-    background: var(--bg-darker) !important;
-}
-
 .listing-search-container .select2-selection__rendered {
     line-height: 33px !important;
 }
@@ -135,8 +127,7 @@
     background: var(--bg-white);
     box-shadow: 0 4px 25px #00000014;
     border: none;
-    border-top: 1px solid lightgray;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: var(--border-radius);
     padding: 1em;
     position: sticky;
     top: 6.5em;
@@ -174,7 +165,7 @@
     padding: 1em;
     margin-bottom: 1em;
     background: var(--bg-darker);
-    border-radius: 0.5em;
+    border-radius: var(--border-radius);
     text-align: left;
 }
 
@@ -196,25 +187,25 @@
 
 /* ===== PLACE CARD ===== */
 .place-card {
-    border-radius: 1em;
-    border: 1px solid var(--border-light);
-    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color-light);
+    background: var(--bg-white);
     text-overflow: clip;
     width: 302px;
     height: 308px;
     padding: 1em
 }
 
-.place-card a {
+.place-card a.info {
     text-decoration: none;
-    color: inherit;
+    color: var(--text-main)
 }
 
 .place-card .place-name {
     text-align: center;
+    color: var(--text-darker);
     font-weight: bold;
     overflow: hidden;
-    margin-bottom: .5em;
 }
 
 .place-intro {
@@ -253,9 +244,9 @@
 
 /* ===== LISTING CARD ===== */
 .listing-card {
-    border-radius: 1em;
+    border-radius: var(--border-radius);
     background: var(--bg-white);
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border-color-light);
 }
 
 .listing-card .listing-status-container {
@@ -274,18 +265,18 @@
     justify-content: center;
     background: var(--bg-darker);
     margin-top: -1.5em;
-    border-radius: 1em 1em 0 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .listing-card img.hero-image {
     width: 300px;
     height: 200px;
     object-fit: cover;
-    border-radius: 1em 1em 0 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .listing-card .listing-details {
-    border-radius: 0 0 .5em .5em;
+    border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
     width: 300px;
 }
 
@@ -305,7 +296,14 @@
     height: 1.25em;
 }
 
-.neighbourhood-card a {
+.neighbourhood-card {
+    border-radius: var(--border-radius);
+    background: var(--bg-white);
+    border: 1px solid var(--border-color-main);
+    padding: 1em;
+}
+
+.neighbourhood-card a.info {
     color: var(--text-main);
     text-decoration: none;
 }
@@ -314,7 +312,7 @@
 .modal-body .image-container {
     margin: 0 -1em;
     padding: 0.5em;
-    border-bottom: 1px solid var(--border-main);
+    border-bottom: 1px solid var(--border-color-main);
 }
 
 .modal-body .image-container:first-child {
