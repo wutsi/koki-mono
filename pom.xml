@@ -120,7 +120,7 @@
         <mustache.version>0.9.14</mustache.version>
         <mysql.version>9.6.0</mysql.version>
         <pdfbox.vesion>3.0.7</pdfbox.vesion>
-        <plexus-utils.version>4.0.2</plexus-utils.version>
+        <plexus-utils.version>4.0.3</plexus-utils.version>
         <poi.version>5.5.1</poi.version>
         <qrcode-kotlin.version>4.5.0</qrcode-kotlin.version>
         <rome.version>2.1.0</rome.version>
